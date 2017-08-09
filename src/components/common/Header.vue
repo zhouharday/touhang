@@ -37,7 +37,7 @@
         }
     }
 </script>
-<style scoped>
+<style lang="sass" scoped>
     .header {
         position: relative;
         box-sizing: border-box;
@@ -48,11 +48,16 @@
         color: #fff;
         float: right;
         background: #2a3142;
-    }
-    .header .logo{
-        float: left;
+       .logo{
+            float: left;
         width:250px;
         text-align: center;
+       }
+    }
+    .header .logo{
+        /* float: left;
+        width:250px;
+        text-align: center; */
     }
     .user-info {
         float: right;
