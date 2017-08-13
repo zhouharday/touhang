@@ -73,7 +73,7 @@ export default {
         },
         submitForm() {
             if( this.valueData ){
-                this.$router.push('/home');
+                this.$router.push({name:'redrive'});
             }
             //console.log(this.valueData);
         }

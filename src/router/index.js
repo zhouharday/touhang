@@ -10,24 +10,33 @@ export default new Router({
         },
         {
             path: '/home',
+            name: 'home',
             component: resolve => require(['../components/Home.vue'], resolve),
             children: [{
-                    path: '',
+                    path: 'redrive',
+                    name: 'redrive',
                     component: resolve => require(['../views/shouye/shouye01.vue'], resolve)
                 },
                 {
                     path: 'shouye',
+                     name: 'shouye',
                     component: resolve => require(['../views/shouye/shouye01.vue'], resolve)
                 },
                 {
                     path: 'renwu',
+                    name: 'renwu',
                     component: resolve => require(['../views/renwu/renwu.vue'], resolve)
                 },
-
+                {
+                    path: 'richeng',
+                    name: 'richeng',
+                    component: resolve => require(['../views/richeng/richeng.vue'], resolve)
+                },
             ]
         },
         {
             path: '/login',
+            name: 'login',
             component: resolve => require(['../views/Login.vue'], resolve)
         },
     ]

@@ -18,8 +18,8 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
                         <span>日常办公</span>
                     </template>
-                    <el-menu-item index="/home/renwu" @click="addTab($event)">{{title1}}</el-menu-item>
-                    <el-menu-item index="1-2">日程</el-menu-item>
+                    <el-menu-item index="/home/renwu" @click="addTab(title1,'/home/renwu','renwu')">{{title1}}</el-menu-item>
+                    <el-menu-item index="/home/richeng" @click="addTab(title2,'/home/richeng','richeng')">{{title2}}</el-menu-item>
                     <el-menu-item index="1-3">通讯录</el-menu-item>
                     <el-menu-item index="1-4">消息公告</el-menu-item>
                 </el-submenu>
@@ -127,7 +127,9 @@ export default {
     },
     data() {
         return {
-            title1: '任务'
+            title1: '任务',
+            title2: '日程'
+
         }
     },
     methods: {
@@ -137,9 +139,8 @@ export default {
         handleClose(key, keyPath) {
             // console.log(key, keyPath);
         },
-        addTab(th) {
-            // console.log(th.index);
-            this.$store.commit({type: 'addTab', a: this.title1, b: th.index} );
+        addTab(th,url,name) {
+            this.$store.commit({type: 'addTab', title: th,url:url,name:name} );
         }
     }
 }

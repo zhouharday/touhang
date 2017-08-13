@@ -4,7 +4,7 @@
             
                 <!-- <span>{{title}}</span> -->
                 
-                <router-link to="/home/shouye" tag="li">
+                <router-link :to="{name:''}" tag="li">
                      {{title}} 
                 </router-link>
             
@@ -15,10 +15,10 @@
                         <img src="">
                     </router-link>
                 </li> -->
-            <router-link tag="li" v-for="item in ttaa" :key="item.index" :to="item.path">
+            <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,index)" :class="{active:$route.name == item.name}">
                 <span>{{item.title}}</span>
-                <img src="">
-            </router-link>
+                <img src="/static/img/close.png" >
+            </li>
         </ul>
     </div>
 </template>
@@ -39,6 +39,9 @@
             float: left;
             line-height: 35px; // text-align: center;
             border: 1px solid #ccc;
+            &.active{
+                background-color: red;
+            }
         }
     }
 }
@@ -53,6 +56,18 @@ export default {
     data() {
         return {
             title: '首页'
+        }
+    },
+    methods:{
+        linkFun($event,path,index){
+            
+            if( $event.target.tagName == 'IMG' ){
+             
+                this.$store.commit('deleTab',{index: index,self: this });
+                return;
+            }
+
+            this.$router.push({path:path});
         }
     }
 }
