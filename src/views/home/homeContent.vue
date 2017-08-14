@@ -1,7 +1,7 @@
 <template>
- <div>这是任务页内容</div> 
+ <section>这是首页内容</section>
+ 
 </template>
-
 
 <style lang="less" scoped>
 
@@ -12,3 +12,4 @@ export default {
   
 }
 </script>
+

@@ -13,24 +13,29 @@ export default new Router({
             name: 'home',
             component: resolve => require(['../components/Home.vue'], resolve),
             children: [{
-                    path: 'redrive',
-                    name: 'redrive',
-                    component: resolve => require(['../views/shouye/shouye01.vue'], resolve)
+                    path: 'homeContent', //home/首页
+                    name: 'homeContent',
+                    component: resolve => require(['../views/home/homeContent.vue'], resolve)
                 },
                 {
-                    path: 'shouye',
-                     name: 'shouye',
-                    component: resolve => require(['../views/shouye/shouye01.vue'], resolve)
+                    path: 'task', //home/任务页
+                    name: 'task',
+                    component: resolve => require(['../views/office/task.vue'], resolve)
                 },
                 {
-                    path: 'renwu',
-                    name: 'renwu',
-                    component: resolve => require(['../views/renwu/renwu.vue'], resolve)
+                    path: 'schedule', //home/日程页
+                    name: 'schedule',
+                    component: resolve => require(['../views/office/schedule.vue'], resolve)
                 },
                 {
-                    path: 'richeng',
-                    name: 'richeng',
-                    component: resolve => require(['../views/richeng/richeng.vue'], resolve)
+                    path: 'contacts', //home/通讯录页
+                    name: 'contacts',
+                    component: resolve => require(['../views/office/Contacts.vue'], resolve)
+                },
+                {
+                    path: 'messageShow', //home/消息公告页
+                    name: 'messageShow',
+                    component: resolve => require(['../views/office/messageShow.vue'], resolve)
                 },
             ]
         },

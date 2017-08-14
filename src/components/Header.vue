@@ -82,12 +82,6 @@ export default {
     }
 }
 
-.header .logo {
-    /* float: left;
-        width:250px;
-        text-align: center; */
-}
-
 .user-info {
     float: right;
     padding-right: 50px;

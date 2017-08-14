@@ -37,6 +37,10 @@ ul li {
     background: #f2f4f8;
 }
 
+.content section {
+    background: #fff;
+}
+
 .crumbs {
     margin-bottom: 20px;
 }

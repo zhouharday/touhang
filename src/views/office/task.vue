@@ -1,5 +1,5 @@
 <template>
- <div>这是日程内容</div> 
+ <section>这是任务页内容</section> 
 </template>
 
 
@@ -12,4 +12,3 @@ export default {
   
 }
 </script>
-

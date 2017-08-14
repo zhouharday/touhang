@@ -17,7 +17,7 @@
 <script>
 import vHead from './Header.vue';
 import vSidebar from './Sidebar.vue';
-import vShouye from '../views/shouye/shouye.vue';
+import vShouye from '../views/home/homeTab.vue';
 
 export default {
     components: {
