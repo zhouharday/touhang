@@ -28,8 +28,8 @@
                     </el-form-item>
                 </el-form>     -->
             <div class="find-pass">
-                <a href="#" class="pass-find">找回密码</a>
-                <a href="#" class="pass-zhuce">企业注册</a>
+                 <a href="#" class="pass-find">找回密码</a>
+                 <a href="#" class="pass-zhuce">企业注册</a> 
             </div>
             <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
             <hr class="hr" />
@@ -166,8 +166,6 @@ span {
 input::-webkit-input-placeholder {
     color: #a6a9ad;
 }
-
-.icon-fir {}
 
 .login-box {
     width: 466px;

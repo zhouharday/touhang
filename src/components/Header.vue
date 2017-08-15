@@ -63,7 +63,7 @@ export default {
             margin-left: 50px;
             margin-top: 8px;
             margin-right: 10px;
-            float: left;
+            // float: left;
         }
         div {
             height: 50px;

@@ -9,11 +9,11 @@ export default new Router({
             redirect: '/login'
         },
         {
-            path: '/home',
+            path: '/home', //首页
             name: 'home',
             component: resolve => require(['../components/Home.vue'], resolve),
             children: [{
-                    path: 'homeContent', //home/首页
+                    path: 'homeContent', //home/首页内容页
                     name: 'homeContent',
                     component: resolve => require(['../views/home/homeContent.vue'], resolve)
                 },
@@ -40,7 +40,7 @@ export default new Router({
             ]
         },
         {
-            path: '/login',
+            path: '/login', //登录页
             name: 'login',
             component: resolve => require(['../views/Login.vue'], resolve)
         },
