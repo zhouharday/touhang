@@ -205,7 +205,7 @@ export default {
     }
 }
 .scllor {
-    width: 200px;
+    width: 196px;
     height: 100%;
     overflow: hidden;
     position: absolute;
@@ -231,7 +231,7 @@ export default {
 }
 
 .sidebar>ul {
-    height: 100%;
+    // height: 100%;
 }
 
 .portrait-top {
