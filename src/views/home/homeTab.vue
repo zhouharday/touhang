@@ -23,7 +23,7 @@
             position: relative;
             padding-left: 20px;
             padding-right: 20px;
-            width: 80px;
+            // width: 80px;
             height: 35px;
             float: left;
             line-height: 35px;
@@ -35,7 +35,7 @@
             >img {
                 position: absolute;
                 top: 9px;
-                right: 15px;
+                right: 0;
             }
         }
     }

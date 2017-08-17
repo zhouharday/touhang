@@ -16,12 +16,54 @@
                             <span>{{item.noticeMessage}}</span>
                         </li>
                     </ul>
+                    <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
                 </div>
             </div>
     
             <div class="homeContent_botm">
-                <div></div>
-                <div></div>
+                <div>
+                    <div>
+                        <img src="/static/img/wait_sth.png" />
+                        <span>{{waitSth}}</span>
+                    </div>
+                    <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.index">
+                        <div>
+                            <img src="/static/img/cr_prject.png">
+                            <span>{{item.craetProject}}</span>
+                        </div>
+                        <div>【{{item.projectText1}}】</div>
+                        <div>
+                            <span>{{item.projectText2}}</span>
+                            <span>{{item.projectText3}}</span>
+                            <span>{{item.time}}</span>
+                        </div>
+                    </div>
+                    <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
+                        <div>
+                            <img src="/static/img/cr_prject.png">
+                            <span>{{item.craetProject1}}</span>
+                        </div>
+                        <div>【{{item.projectText2}}】</div>
+                        <div>
+                            <span>{{item.projectText3}}</span>
+                            <span>{{item.projectText4}}</span>
+                            <span>{{item.time}}</span>
+                        </div>
+                        <div>
+                            <span>{{item.projectText5}}</span>
+                            <span>{{item.projectText6}}</span>
+                            <span>{{item.time}}</span>
+                        </div>
+                    </div>
+                    <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                </div>
+                <div class="homeContentBot_r">
+                    <div>
+                        <img src="/static/img/sysPrompt.png">
+                        <span>{{sysPrompt}}</span>
+                    </div>
+                    <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div>
+                </div>
             </div>
         </div>
     </section>
@@ -75,8 +117,7 @@
             }
             >div:nth-child(2) {
                 position: absolute;
-                top: 26px;
-                // left: 3px;
+                top: 26px; // left: 3px;
                 width: 52px;
                 height: 24px;
                 line-height: 24px;
@@ -88,11 +129,15 @@
             }
         }
     }
+    .page {
+        float: right;
+        font-size: 14px;
+    }
 }
 
 .homeContent_botm {
     overflow: hidden;
-    margin-top: 10px;
+    margin-top: 24px;
     >div {
         // width: 586px;
         height: 416px;
@@ -103,18 +148,136 @@
     >div:nth-child(1) {
         width: 876px;
         margin-right: 24px; // margin-top: 24px;
+        >div {
+            position: relative;
+            >img {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+            }
+            >span {
+                margin-left: 30px;
+            }
+        }
+        .homeContentBot_a,
+        .homeContentBot_b {
+            overflow: hidden;
+            border-bottom: 2px solid #f2f4f8;
+            padding: 15px 0 15px 0;
+            color: #2a3142;
+            >div:nth-child(1) {
+                position: relative;
+                float: left;
+                width: 60px;
+                height: 23px;
+                line-height: 25px;
+                color: #fff;
+                background: #f05e5e;
+                border-radius: 16px 0 0 16px;
+                font-size: 10px; // margin-top: 16px;
+                >img {
+                    position: relative;
+                    top: 3px;
+                    left: 3px;
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+            >div:nth-child(2) {
+                margin-left: 76px;
+            }
+            >div:nth-child(3),
+            >div:nth-child(4) {
+                font-size: 14px;
+                margin-top: 10px;
+                >span:nth-child(2) {
+                    margin-left: 25px;
+                    color: red;
+                    text-decoration: underline;
+                    cursor: pointer;
+                }
+                >span:nth-child(3) {
+                    float: right;
+                    color: #a7aab0;
+                }
+            }
+        }
+        .homeContentBot_b {
+            >div:first-child {
+                background: #41578c;
+            }
+        }
     }
     >div:nth-child(2) {
         width: 294px;
     }
+    .page {
+        float: right;
+        font-size: 14px;
+        margin-top: 15px;
+    }
+}
+
+.homeContentBot_r {
+    position: relative;
+    >div:nth-child(1) {
+        >img {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            top: 3px;
+        }
+    }
+    .sysMessage {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 155px;
+        height: 20px;
+    }
 }
 </style>
-
 <script>
 export default {
     data() {
         return {
             RecentNotice: "最近通知",
+            waitSth: "待办事项",
+            sysPrompt: "系统提示",
+            sysMessage: true,
+            sysMessageTitle: "暂时没有系统提示哦~",
+            projectList: [
+                {
+                    craetProject: "立项",
+                    projectText1: "京东",
+                    projectText2: "您需要进行立项申请",
+                    projectText3: "立即申请",
+                    time: "2017-08-16"
+                }
+            ],
+            projectManger: [
+                {
+                    craetProject1: "管理+2",
+                    projectText2: "一号店",
+                    projectText3: "1.您的xxx正在审批中。",
+                    projectText4: "立即查看",
+                    projectText5: "2.您的c轮出资正在审批中。",
+                    projectText6: "立即查看",
+                    time: "2017-08-16"
+                },
+                {
+                    craetProject1: "管理+2",
+                    projectText2: "六号店",
+                    projectText3: "1.您的xxx正在审批中。",
+                    projectText4: "立即查看",
+                    projectText5: "2.您的c轮出资正在审批中。",
+                    projectText6: "立即查看",
+                    time: "2017-08-16"
+                }
+            ],
             messageShow: [
                 {
                     noRead: "未读",
@@ -138,7 +301,22 @@ export default {
                 }
             ],
         }
+    },
+    methods: {
+        changePages(pageIndex) {
+            this.$http.post('/user', { //此处ajax
+                pageIndex: pageIndex
+            })
+                .then(function (response) {
+
+                })
+                .catch(function (error) {
+
+                });
+            console.log(pageIndex);
+        }
     }
 }
+
 </script>
 

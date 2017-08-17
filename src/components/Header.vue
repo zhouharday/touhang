@@ -40,30 +40,29 @@ export default {
 </script>
 <style lang="less" scoped>
 .header {
-    position: relative;
+    position: fixed;
     box-sizing: border-box;
-    width: 90%;
-    height: 50px; 
-    // font-size: 22px;
+    width: 100%;
+    height: 50px; // font-size: 22px;
     line-height: 50px;
-    color: #fff;
-    float: right;
+    color: #fff; // float: right;
     background: #2a3142;
     .logo {
         float: left;
         width: 250px;
-        text-align: center;        
+        text-align: center;
     }
     >.hd_logo {
         float: left;
+        height: 50px;
+        margin-left: 196px;
         img {
             // width: 35px;
             height: 35px;
             display: inline-block;
             margin-left: 50px;
             margin-top: 8px;
-            margin-right: 10px;
-            // float: left;
+            margin-right: 10px; // float: left;
         }
         div {
             height: 50px;
@@ -75,9 +74,9 @@ export default {
                 font-size: 22px;
             }
             >span:last-child {
-                    display: block;
-                    font-size: 1px;
-                }
+                display: block;
+                font-size: 1px;
+            }
         }
     }
 }

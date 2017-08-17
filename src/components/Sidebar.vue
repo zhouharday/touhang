@@ -208,7 +208,7 @@ export default {
     width: 196px;
     height: 100%;
     overflow: hidden;
-    position: absolute;
+    position: fixed;
     
 }
 
