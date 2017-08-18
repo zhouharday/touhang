@@ -21,7 +21,7 @@
              <div class="register-ad">
                 <label>所在地：</label>
                 <select class="register-province"  @change="checkVata" ref="selec">
-                   <option v-for="( item,index ) in provinces" :key="item.index" :values="item.ProID"  v-model="plsSelect" style="color:black;">{{item.ProName}}             
+                   <option v-for="( item,index ) in provinces" :key="item.index" :values="item.ProID" v-model="plsSelect" style="color:black;">{{item.ProName}}             
                    </option>
                 </select>
                 <select class="register-city" >
@@ -100,12 +100,10 @@ body {
 }
 .register-wrap {
     position: relative;
-    width: 1440px;
-    height: 900px;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     color: #fff;
-    background: url(/static/img/register_bg.png) no-repeat;
-    background-size: 100% 100%;
+    background: url(/static/img/register_bg.png) no-repeat center;
 }
 .register-case {
     position: absolute;

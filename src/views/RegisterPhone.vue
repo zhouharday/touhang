@@ -125,12 +125,10 @@ body {
 }
 .register-wrap {
     position: relative;
-    width: 1440px;
-    height: 900px;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
     color: #fff;
-    background: url(/static/img/register_bg.png) no-repeat;
-    background-size: 100% 100%;
+    background: url(/static/img/register_bg.png) no-repeat center;
 }
 .register-case {
     position: absolute;
