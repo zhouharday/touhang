@@ -28,8 +28,10 @@
                     </el-form-item>
                 </el-form>     -->
             <div class="find-pass">
+                <!-- <router-link to=""></router-link:atom> -->
+                <router-link class="pass-zhuce" to="/register">企业注册</router-link>
                  <a href="#" class="pass-find">找回密码</a>
-                 <a href="#" class="pass-zhuce">企业注册</a> 
+                 <!-- <a href="#" class="pass-zhuce">企业注册</a>  -->
             </div>
             <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
             <hr class="hr" />

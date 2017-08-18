@@ -104,7 +104,7 @@ body {
     height: 900px;
     margin: 0 auto;
     color: #fff;
-    background: url(/static/img/register_bg.jpg) no-repeat;
+    background: url(/static/img/register_bg.png) no-repeat;
     background-size: 100% 100%;
 }
 .register-case {
