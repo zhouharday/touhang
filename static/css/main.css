@@ -15,6 +15,7 @@ body,
 
 body {
     font-family: "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+    font-size: 16px;
 }
 
 a {
@@ -27,14 +28,14 @@ ul li {
 
 .content {
     position: absolute;
-    left: 200px;
+    left: 195px;
     right: 0;
     top: 50px;
     bottom: 0;
     width: auto;
     padding: 24px;
     box-sizing: border-box;
-    /* overflow-y: scroll;  */
+    overflow: auto;
     background: #f2f4f8;
 }
 

@@ -1,9 +1,10 @@
 <template>
     <div class="navmenu">
         <ul>
-            <router-link :to="{ name:'homeContent' }" tag="li" :class="{active:$route.name == 'homeContent'}">
+              <router-link to="homeContent" tag="li" :class="{active:$route.name == 'homeContent'}">
                 {{title}}
-            </router-link>
+            </router-link>  
+              <!-- <a href="#homeContent">{{title}}</a>   -->
             <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,index)" :class="{active:$route.name == item.name}">
                 <span>{{item.title}}</span>
                 <img src="/static/img/close.png">
@@ -44,6 +45,12 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+    watch: {
+    '$route' (to, from) {
+      // 对路由变化作出响应...
+      console.log(from,to);
+    }
+  },
     computed: mapState({
         ttaa( state ) {
             // let localData = sessionStorage.getItem('key');

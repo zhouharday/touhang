@@ -18,10 +18,10 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
-                    <el-menu-item index="/home/task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
-                    <el-menu-item index="/home/schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item>
-                    <el-menu-item index="/home/contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
-                    <el-menu-item index="/home/messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
+                    <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
+                    <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item>
+                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
+                    <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>

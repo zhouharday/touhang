@@ -12,6 +12,7 @@ import 'element-ui/lib/theme-default/index.css'; // 默认主题
 // Vue.use(axios);
 Vue.use(iView);
 Vue.use(ElementUI);
+// Vue.prototype.$attrs = ajax;
 Vue.prototype.$http = axios;
 var vm = new Vue({
     router,

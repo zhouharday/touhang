@@ -1,79 +1,102 @@
 <template>
     <section>
         <!-- 这是首页内容 -->
-        <div>
-            <div class="homeContent_top">
-                <div>这是日期内容</div>
-                <div>
-                    <div>
-                        <img src="/static/img/Notice.png" />
-                        <span>{{RecentNotice}}</span>
-                    </div>
-                    <ul class="notice_ul">
-                        <li v-for="( item,index ) in messageShow" :key="item.index">
-                            <div>{{item.noRead}}</div>
-                            <div>{{item.data}}</div>
-                            <span>{{item.noticeMessage}}</span>
-                        </li>
-                    </ul>
-                    <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
-                </div>
-            </div>
     
-            <div class="homeContent_botm">
-                <div>
+        <el-row :gutter="20" style="margin:0;">
+            <el-col :span="12" style="padding:0;">
+                <div class="grid-content bg-purple">
                     <div>
-                        <img src="/static/img/wait_sth.png" />
-                        <span>{{waitSth}}</span>
-                    </div>
-                    <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.index">
-                        <div>
-                            <img src="/static/img/cr_prject.png">
-                            <span>{{item.craetProject}}</span>
-                        </div>
-                        <div>【{{item.projectText1}}】</div>
-                        <div>
-                            <span>{{item.projectText2}}</span>
-                            <span>{{item.projectText3}}</span>
-                            <span>{{item.time}}</span>
+                        <div class="homeContent_top_L">
+                            <div>这是日期内容</div>
                         </div>
                     </div>
-                    <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
-                        <div>
-                            <img src="/static/img/cr_prject.png">
-                            <span>{{item.craetProject1}}</span>
-                        </div>
-                        <div>【{{item.projectText2}}】</div>
-                        <div>
-                            <span>{{item.projectText3}}</span>
-                            <span>{{item.projectText4}}</span>
-                            <span>{{item.time}}</span>
-                        </div>
-                        <div>
-                            <span>{{item.projectText5}}</span>
-                            <span>{{item.projectText6}}</span>
-                            <span>{{item.time}}</span>
-                        </div>
-                    </div>
-                    <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
                 </div>
-                <div class="homeContentBot_r">
-                    <div>
-                        <img src="/static/img/sysPrompt.png">
-                        <span>{{sysPrompt}}</span>
+            </el-col>
+            <el-col :span="12" class="homeContent_top_R" style="padding:0;">
+                <div class="grid-content bg-purple">
+                    <div style="padding:16px 24px;">
+                        <div>
+                            <img src="/static/img/Notice.png" />
+                            <span>{{RecentNotice}}</span>
+                        </div>
+                        <ul class="notice_ul">
+                            <li v-for="( item,index ) in messageShow" :key="item.index">
+                                <div>{{item.noRead}}</div>
+                                <div>{{item.data}}</div>
+                                <span>{{item.noticeMessage}}</span>
+                            </li>
+                        </ul>
+                        <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
                     </div>
-                    <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div>
                 </div>
-            </div>
-        </div>
+                </div>
+            </el-col>
+        </el-row>
+    
+        <el-row :gutter="20" style="margin:0;">
+            <el-col :span="16" style="padding:0;">
+                <div class="grid-content bg-purple">
+                    <div class="homeContent_botm">
+                        <div>
+                            <div>
+                                <img src="/static/img/wait_sth.png" />
+                                <span>{{waitSth}}</span>
+                            </div>
+                            <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.index">
+                                <div>
+                                    <img src="/static/img/cr_prject.png">
+                                    <span>{{item.craetProject}}</span>
+                                </div>
+                                <div>【{{item.projectText1}}】</div>
+                                <div>
+                                    <span>{{item.projectText2}}</span>
+                                    <span>{{item.projectText3}}</span>
+                                    <span>{{item.time}}</span>
+                                </div>
+                            </div>
+                            <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
+                                <div>
+                                    <img src="/static/img/cr_prject.png">
+                                    <span>{{item.craetProject1}}</span>
+                                </div>
+                                <div>【{{item.projectText2}}】</div>
+                                <div>
+                                    <span>{{item.projectText3}}</span>
+                                    <span>{{item.projectText4}}</span>
+                                    <span>{{item.time}}</span>
+                                </div>
+                                <div>
+                                    <span>{{item.projectText5}}</span>
+                                    <span>{{item.projectText6}}</span>
+                                    <span>{{item.time}}</span>
+                                </div>
+                            </div>
+                            <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                        </div>
+                    </div>
+                </div>
+            </el-col>
+            <el-col :span="8" style="padding:0;">
+                <div class="grid-content bg-purple">
+                    <div class="homeContentBot_r">
+                        <div>
+                            <img src="/static/img/sysPrompt.png">
+                            <span>{{sysPrompt}}</span>
+                        </div>
+                        <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div>
+                    </div>
+                </div>
+            </el-col>
+        </el-row>
     </section>
 </template>
 
 <style lang="less" scoped>
-.homeContent_top {
+.homeContent_top_L {
     overflow: hidden;
+    margin-right: 24px;
     >div {
-        width: 586px;
+        width: 100%;
         height: 362px;
         background: #fff;
         padding: 16px 24px;
@@ -82,18 +105,21 @@
     >div:nth-child(1) {
         margin-right: 24px;
     }
-    >div:nth-child(2) {
-        // float: left;
-        >div {
-            position: relative;
-            >img {
-                position: absolute;
-                width: 20px;
-                height: 20px;
-            }
-            >span {
-                margin-left: 30px;
-            }
+}
+
+.homeContent_top_R {
+    background: #fff;
+    padding: 16px 24px;
+    height: 362px; // float: left;
+    >div>div>div {
+        position: relative;
+        >img {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+        }
+        >span {
+            margin-left: 30px;
         }
     }
     .notice_ul {
@@ -138,6 +164,7 @@
 .homeContent_botm {
     overflow: hidden;
     margin-top: 24px;
+    margin-right: 24px;
     >div {
         // width: 586px;
         height: 416px;
@@ -146,7 +173,7 @@
         float: left;
     }
     >div:nth-child(1) {
-        width: 876px;
+        width: 100%;
         margin-right: 24px; // margin-top: 24px;
         >div {
             position: relative;
@@ -220,6 +247,10 @@
 
 .homeContentBot_r {
     position: relative;
+    background: #fff;
+    height: 416px;
+    padding: 16px 24px;
+    margin-top: 24px;
     >div:nth-child(1) {
         >img {
             width: 20px;
