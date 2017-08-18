@@ -1,7 +1,6 @@
 <template>
     <section>
         <!-- 这是首页内容 -->
-    
         <el-row :gutter="20" style="margin:0;">
             <el-col :span="12" style="padding:0;">
                 <div class="grid-content bg-purple">

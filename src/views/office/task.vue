@@ -8,10 +8,51 @@
                 </Tab-pane>
                 <Tab-pane label="代办任务">代办任务</Tab-pane>
                 <Tab-pane label="已办任务">已办任务</Tab-pane>
-                <Tab-pane label="添加任务">添加任务</Tab-pane>
             </Tabs>
+            <button @click="dialogShow">
+                <span>添加任務</span>
+            </button>
             <div>
     
+            </div>
+        </div>
+    
+        <div v-show="dialogVisible" class="shadowBox">
+            <div>
+                <div>
+                    <!-- Table -->
+                    <table cellspacing="0" border="1">
+                        <tr>
+                            <td colspan="4">添加任务</td>
+    
+                        </tr>
+                        <tr>
+                            <td>任务名称</td>
+                            <td colspan="3">
+                                <input>
+                            </td>
+    
+                        </tr>
+                        <tr>
+                            <td>开始时间</td>
+                            <td><input></td>
+                            <td>完成时间</td>
+                            <td><input></td>
+                        </tr>
+                        <tr>
+                            <td>任务说明</td>
+                            <td colspan="3"><input></td>
+                        </tr>
+                        <tr>
+                            <td>接收人</td>
+                            <td><input></td>
+                            <td>指派人</td>
+                            <td><input></td>
+                        </tr>
+                    </table>
+                    <el-button>保存</el-button>
+                    <el-button>取消</el-button>
+                </div>
             </div>
         </div>
     </section>
@@ -22,6 +63,60 @@
 section {
     >div {
         background: #fff;
+        position: relative;
+        >button {
+            position: absolute;
+            top: 0;
+            right: 50px;
+        }
+    }
+}
+
+.shadowBox {
+    position: fixed;
+    left: 0;
+    top: 0;
+    opacity: 0.7;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    >div {
+        // position: relative;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        >div {
+            // position: absolute;
+            top: 50%;
+            left: 50%; // right: 0;
+            // bottom: 0;
+            // margin: auto;
+            color: #fff;
+            >table {
+                box-sizing: border-box;
+                height: 315px; // border: 1px solid #fff;
+                margin: 0 auto;
+                transform: translateY(50%);
+                >tr {
+                    // height: 50px;
+                    >td {
+                        border: 1px solid;
+                        text-align: center;
+                        width: 200px; // height: 30px;
+                        >input {
+                            width: 100%;
+                            height: 100%;
+                            background: transparent;
+                            border: none;
+                            outline: none;
+                            color: #fff;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 </style>
@@ -30,6 +125,7 @@ section {
 export default {
     data() {
         return {
+            dialogVisible: false,
             columns1: [
                 {
                     title: '指派时间',//1
@@ -106,6 +202,13 @@ export default {
                 // },
             ]
         }
+    },
+    methods: {
+        dialogShow() {
+            this.dialogVisible = true;
+            // console.log(this.dialogVisible);
+        }
     }
 }
+
 </script>
