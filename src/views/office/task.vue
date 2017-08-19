@@ -9,14 +9,43 @@
                 <Tab-pane label="代办任务">代办任务</Tab-pane>
                 <Tab-pane label="已办任务">已办任务</Tab-pane>
             </Tabs>
-            <button @click="dialogShow">
-                <span>添加任務</span>
-            </button>
+            <!-- <button @click="dialogVisible = true">
+                                <span>添加任务</span>
+                            </button> -->
+            <el-button type="text" @click="dialogFormVisible = true">
+                <span>添加任务</span>
+            </el-button>
+            <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+
+                <el-form :model="form">
+                    <el-row :gutter="20">
+                        <el-col :span="8">
+                            <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogFormVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                </div>
+            </el-dialog>
             <div>
-    
+
             </div>
         </div>
-    
+
         <div v-show="dialogVisible" class="shadowBox">
             <div>
                 <div>
@@ -24,14 +53,14 @@
                     <table cellspacing="0" border="1">
                         <tr>
                             <td colspan="4">添加任务</td>
-    
+
                         </tr>
                         <tr>
                             <td>任务名称</td>
                             <td colspan="3">
                                 <input>
                             </td>
-    
+
                         </tr>
                         <tr>
                             <td>开始时间</td>
@@ -70,6 +99,10 @@ section {
             right: 50px;
         }
     }
+}
+
+.el_input {
+    // width: 217px;
 }
 
 .shadowBox {
@@ -125,7 +158,20 @@ section {
 export default {
     data() {
         return {
+            dialogTableVisible: false,
+            dialogFormVisible: false,
             dialogVisible: false,
+            form: {
+                name: '',
+                region: '',
+                date1: '',
+                date2: '',
+                delivery: false,
+                type: [],
+                resource: '',
+                desc: ''
+            },
+            formLabelWidth: '68px',
             columns1: [
                 {
                     title: '指派时间',//1
@@ -204,10 +250,7 @@ export default {
         }
     },
     methods: {
-        dialogShow() {
-            this.dialogVisible = true;
-            // console.log(this.dialogVisible);
-        }
+
     }
 }
 
