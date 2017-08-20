@@ -6,15 +6,18 @@
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "start": "node build/build.js"
   },
   "dependencies": {
     "axios": "^0.15.3",
     "element-ui": "^1.4.1",
+    "extract-text-webpack-plugin": "^2.1.2",
     "iview": "^2.1.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "node-sass": "^4.5.3",
+    "postcss-cssnext": "^3.0.2",
     "sass-loader": "^6.0.6",
     "scss-loader": "^0.0.1",
     "vue": "^2.4.2",

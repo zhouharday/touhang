@@ -24,7 +24,7 @@ module.exports = {
             resolve('node_modules')
         ],
         alias: {
-            'vue$': 'vue/dist/vue.common.js',
+            'vue$': 'vue/dist/vue.min.js',
             'src': resolve('src'),
             'assets': resolve('src/assets'),
             'components': resolve('src/components')
@@ -32,38 +32,35 @@ module.exports = {
     },
     module: {
         rules: [{
-                test: /\.vue$/,
-                loader: 'vue-loader'
-            },
-            {
-                test: /\.js$/,
-                loader: 'babel-loader',
-                include: [resolve('src'), resolve('test')]
-            },
-            {
-                test: /\.css(scss|sass)$/,
-                loader: 'style-loader!css-loader!sass-loader'
-            },
-            // {
-            //     test: /\.less|.css$/,
-            //     loader: "style-loader!css-loader!less-loader",
-            // },
-            {
-                test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
-                loader: 'url-loader',
-                query: {
-                    limit: 10000,
-                    name: utils.assetsPath('img/[name].[hash:7].[ext]')
-                }
-            },
-            {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                loader: 'url-loader',
-                query: {
-                    limit: 10000,
-                    name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
-                }
+            test: /\.vue$/,
+            loader: 'vue-loader'
+        },
+        {
+            test: /\.js$/,
+            loader: 'babel-loader',
+            include: [resolve('src'), resolve('test')]
+        },
+
+        {
+            test: /\.less|.css$/,
+            loader: "style-loader!css-loader!less-loader",
+        },
+        {
+            test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+            loader: 'url-loader',
+            query: {
+                limit: 10000,
+                name: utils.assetsPath('img/[name].[hash:7].[ext]')
             }
+        },
+        {
+            test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+            loader: 'url-loader',
+            query: {
+                limit: 10000,
+                name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+            }
+        }
         ]
     }
 }

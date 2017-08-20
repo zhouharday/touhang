@@ -1,7 +1,7 @@
 <template>
     <section>
         <!-- 这是任务页内容 -->
-        <div>
+        <div class="Task">
             <Tabs size="small">
                 <Tab-pane label="指派任务">
                     <Table border :columns="columns1" :data="data1" align="center"></Table>
@@ -9,40 +9,50 @@
                 <Tab-pane label="代办任务">代办任务</Tab-pane>
                 <Tab-pane label="已办任务">已办任务</Tab-pane>
             </Tabs>
-            <!-- <button @click="dialogVisible = true">
-                                <span>添加任务</span>
-                            </button> -->
             <el-button type="text" @click="dialogFormVisible = true">
                 <span>添加任务</span>
             </el-button>
-            <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-
-                <el-form :model="form">
-                    <el-row :gutter="20">
-                        <el-col :span="8">
-                            <el-form-item label="活动名称" :label-width="formLabelWidth">
-                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="活动名称" :label-width="formLabelWidth">
-                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="活动名称" :label-width="formLabelWidth">
-                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
+            <el-dialog title="添加任务" :visible.sync="dialogFormVisible" class="taskDialog_title">
+                <!-- <el-form :model="form">
+                            <el-row :gutter="20">
+                                <el-col :span="8">
+                                    <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                        <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                        <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-form-item label="活动名称" :label-width="formLabelWidth">
+                                        <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form> -->
+                <el-table :data="tableData" border style="width: 100%">
+                    <el-table-column prop="date" label="日期" width="180">
+                    </el-table-column>
+                    <el-table-column prop="name" label="姓名" width="180">
+                        <template scope="scope">
+                            <input type="text" v-model="scope.row.name">
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="address" label="地址">
+                        <template scope="scope">
+                            <input type="text" v-model="scope.row.address">
+                        </template>
+                    </el-table-column>
+                </el-table>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="tabValue();dialogFormVisible = false">确 定</el-button>
                 </div>
             </el-dialog>
             <div>
-
+                
             </div>
         </div>
 
@@ -101,8 +111,10 @@ section {
     }
 }
 
-.el_input {
-    // width: 217px;
+.taskDialog_title {
+    .el-dialog {
+        width: 880px;
+    }
 }
 
 .shadowBox {
@@ -158,6 +170,23 @@ section {
 export default {
     data() {
         return {
+            tableData: [{
+                date: '项目名称',
+                name: '',
+                address: ''
+            }, {
+                date: '项目类型',
+                name: '',
+                address: ''
+            }, {
+                date: '项目来源',
+                name: '',
+                address: ''
+            }, {
+                date: '项目负责人',
+                name: '',
+                address: ''
+            }],
             dialogTableVisible: false,
             dialogFormVisible: false,
             dialogVisible: false,
@@ -209,48 +238,14 @@ export default {
                     align: "center"
                 }
             ],
-            data1: [
-                // {
-                //     time: '王小明',
-                //     taskName: 18,
-                //     Receiver: '北京市朝阳区芍药居',
-                //     assignPeople: '北京市朝阳区芍药居',
-                //     doneTime: '北京市朝阳区芍药居',
-                //     taskState: '北京市朝阳区芍药居',
-                //     operating: '北京市朝阳区芍药居'
-                // },
-                // {
-                //     time: '王小明',
-                //     taskName: 18,
-                //     Receiver: '北京市朝阳区芍药居',
-                //     assignPeople: '北京市朝阳区芍药居',
-                //     doneTime: '北京市朝阳区芍药居',
-                //     taskState: '北京市朝阳区芍药居',
-                //     operating: '北京市朝阳区芍药居'
-                // },
-                // {
-                //     time: '王小明',
-                //     taskName: 18,
-                //     Receiver: '北京市朝阳区芍药居',
-                //     assignPeople: '北京市朝阳区芍药居',
-                //     doneTime: '北京市朝阳区芍药居',
-                //     taskState: '北京市朝阳区芍药居',
-                //     operating: '北京市朝阳区芍药居'
-                // },
-                // {
-                //     time: '王小明',
-                //     taskName: 18,
-                //     Receiver: '北京市朝阳区芍药居',
-                //     assignPeople: '北京市朝阳区芍药居',
-                //     doneTime: '北京市朝阳区芍药居',
-                //     taskState: '北京市朝阳区芍药居',
-                //     operating: '北京市朝阳区芍药居'
-                // },
-            ]
         }
     },
     methods: {
-
+        tabValue(){
+            this.tableData.forEach(function(item) {
+                console.log(item.name);
+            });
+        }
     }
 }
 

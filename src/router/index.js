@@ -3,6 +3,11 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
+import r1 from "./r1";
+import r2 from "./r2";
+let arr = [];
+arr = arr.concat(r1,r2);
+
 export default new Router({
     routes: [{
             path: '/',
@@ -12,32 +17,7 @@ export default new Router({
             path: '/home',
             name: 'home',
             component: resolve => require(['../components/Home.vue'], resolve),
-            children: [{
-                    path: 'homeContent', //home/首页
-                    name: 'homeContent',
-                    component: resolve => require(['../views/home/homeContent.vue'], resolve)
-                },
-                {
-                    path: 'task', //home/任务页
-                    name: 'task',
-                    component: resolve => require(['../views/office/task.vue'], resolve)
-                },
-                {
-                    path: 'schedule', //home/日程页
-                    name: 'schedule',
-                    component: resolve => require(['../views/office/schedule.vue'], resolve)
-                },
-                {
-                    path: 'contacts', //home/通讯录页
-                    name: 'contacts',
-                    component: resolve => require(['../views/office/Contacts.vue'], resolve)
-                },
-                {
-                    path: 'messageShow', //home/消息公告页
-                    name: 'messageShow',
-                    component: resolve => require(['../views/office/messageShow.vue'], resolve)
-                },
-            ]
+            children: arr
         },
         {
             path: '/login',

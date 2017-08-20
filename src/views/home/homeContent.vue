@@ -6,7 +6,11 @@
                 <div class="grid-content bg-purple">
                     <div>
                         <div class="homeContent_top_L">
-                            <div>这是日期内容</div>
+                            <!-- <div>这是日期内容</div> -->
+                            <div>
+
+                            <datatime title="" :month-date="monthDate" v-on:changetime="changetime" v-on:readyfun="readyfun"></datatime>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -271,9 +275,12 @@
 }
 </style>
 <script>
+import datatime from './datetmp.vue';
 export default {
+    components: {datatime},
     data() {
         return {
+            monthDate:[],
             RecentNotice: "最近通知",
             waitSth: "待办事项",
             sysPrompt: "系统提示",
@@ -343,10 +350,25 @@ export default {
                 .catch(function (error) {
 
                 });
-            console.log(pageIndex);
+           
+        },
+        changetime(data){
+            console.log(data)
+        },
+        readyfun(arr,data){
+            var arr = arr;
+            //先根据接口返回数据 修改arr 
+            //然后再把arr赋值给monthdate
+            arr.forEach(function(item) {
+                return item.yd = item.day && item.day%3 == 1?true:false;
+            });
+            this.monthDate = arr;
         }
     }
 }
 
+
+
 </script>
+
 
