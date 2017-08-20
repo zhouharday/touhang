@@ -1,5 +1,6 @@
 <template>
     <div class="login-wrap">
+        <div>
         <div class="login-entangle">
             <p class="login-left">Lead Investor</p>
             <p class="login-center">Financial investment</p>
@@ -19,19 +20,10 @@
             <div class="login-pass">
                 <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata"  v-model="passWord">
             </div>
-            <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="活动名称" prop="name">
-                        <el-input v-model="ruleForm.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="活动名称" prop="name">
-                        <el-input v-model="ruleForm.name"></el-input>
-                    </el-form-item>
-                </el-form>     -->
             <div class="find-pass">
-                <!-- <router-link to=""></router-link:atom> -->
+                <!-- <router-link to=""></router-link> -->
                 <router-link class="pass-zhuce" to="/register">企业注册</router-link>
                  <a href="#" class="pass-find">找回密码</a>
-                 <!-- <a href="#" class="pass-zhuce">企业注册</a>  -->
             </div>
             <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
             <hr class="hr" />
@@ -51,6 +43,7 @@
                 <p>关于我们</p>
                 <p>APP下载</p>
             </div>
+        </div>
         </div>
     </div>
 </template>
@@ -85,7 +78,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 html,
 body {
     width: 100%;
@@ -93,12 +86,18 @@ body {
 }
 .login-wrap {
     position: relative;
-    width: 1440px;
-    height: 900px;
-    background: url(/static/img/bg.png);
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    background: url(/static/img/bg.png) no-repeat center center;
+    >div{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        width: 100%;
+    }
 }
 
 .login-btn {
@@ -111,7 +110,7 @@ body {
 }
 
 .login-left {
-    font-size: 96px;
+    font-size: 50px;
     color: #fff;
     font-family: ITC Avant Garda Gothic Demi Regular;
 }
@@ -130,10 +129,10 @@ span {
 }
 
 .login-entangle {
+    width: 35%;
     position: absolute;
-    top: 180px;
-    left: 110px;
-    width: 620px;
+    top: 30%;
+    left: 20%;
 }
 
 .login-bottom {
@@ -170,17 +169,16 @@ input::-webkit-input-placeholder {
 }
 
 .login-box {
-    width: 466px;
-    height: 488px;
+    // width: 35%;
     text-align: center;
     position: absolute;
-    top: 307px;
-    left: 840px;
+    top: 30%;
+    left: 55%;
     border-left: solid 2px #a6a9ad;
 }
 
 .login-name {
-    width: 382px;
+    // width: 382px;
     font-size: 24px;
     color: #fff;
     font-family: "微软雅黑";
@@ -200,11 +198,11 @@ input::-webkit-input-placeholder {
 
 .login-ac,
 .login-pass {
-    width: 330px;
+    // width: 330px;
     height: 84px;
     padding-left: 48px;
     border-bottom: solid 2px #a6a9ad;
-    margin-left: 82px;
+    margin-left: 10%;
     /*margin-bottom: 16px;*/
 }
 
@@ -218,10 +216,10 @@ input::-webkit-input-placeholder {
 }
 
 .find-pass {
-    width: 382px;
+    // width: 382px;
     font-size: 16px;
     margin-bottom: 64px;
-    margin-left: 82px;
+    margin-left: 48px;
     /*clear: both;*/
 }
 
