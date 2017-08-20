@@ -48,7 +48,7 @@
                 </el-table>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="tabValue();dialogFormVisible = false">确 定</el-button>
+                    <el-button type="primary" @click="tabValue()">确 定</el-button>
                 </div>
             </el-dialog>
             <div>
@@ -243,6 +243,7 @@ export default {
     methods: {
         tabValue(){
             this.tableData.forEach(function(item) {
+                this.dialogFormVisible = false;
                 console.log(item.name);
             });
         }

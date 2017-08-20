@@ -14,6 +14,7 @@
         </div>
         <div class="login-box">
             <div class="login-name">企业登录</div>
+            
             <div class="login-ac">
                 <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
             </div>
@@ -70,6 +71,10 @@ export default {
             if( this.valueData ){
                 sessionStorage.clear();
                 this.$router.push({ name:'homeContent' });
+                this.userName = '';
+                this.passWord = '';
+                this.valueData = false;
+
             }
             //console.log(this.valueData);
         }

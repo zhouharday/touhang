@@ -20,7 +20,7 @@
                     <span class="actives">Sat</span>
                 </div>
                 <div>
-                    <span v-for="(list,index) in monthDate" @click="clickDate(index,list.day)">
+                    <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
                         <span :class="{active:list.yd,click:clickN==index,actives:list.week == 0 || list.week == 6}">
                             {{list.day}}
                         </span>
