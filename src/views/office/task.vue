@@ -17,14 +17,14 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="任务名称" :label-width="formLabelWidth">
-                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                                <el-input v-model="form.taskName" class="el_input" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <!-- <el-col :span="12">
-                                            <el-form-item label="开始时间" :label-width="formLabelWidth">
-                                                <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
-                                            </el-form-item>
-                                        </el-col> -->
+                                                    <el-form-item label="开始时间" :label-width="formLabelWidth">
+                                                        <el-input v-model="form.name" class="el_input" auto-complete="off"></el-input>
+                                                    </el-form-item>
+                                                </el-col> -->
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
@@ -54,26 +54,26 @@
                     <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item label="任务说明" :label-width="formLabelWidth">
-                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="textContent">
+                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="form.textContent">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
                 <!-- <el-table :data="tableData" border style="width: 100%">
-                                        <el-table-column prop="date" label="日期" width="180">
-                                        </el-table-column>
-                                        <el-table-column prop="name" label="姓名" width="180">
-                                            <template scope="scope">
-                                                <input type="text" v-model="scope.row.name">
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column prop="address" label="地址">
-                                            <template scope="scope">
-                                                <input type="text" v-model="scope.row.address">
-                                            </template>
-                                        </el-table-column>
-                                    </el-table> -->
+                                                <el-table-column prop="date" label="日期" width="180">
+                                                </el-table-column>
+                                                <el-table-column prop="name" label="姓名" width="180">
+                                                    <template scope="scope">
+                                                        <input type="text" v-model="scope.row.name">
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column prop="address" label="地址">
+                                                    <template scope="scope">
+                                                        <input type="text" v-model="scope.row.address">
+                                                    </template>
+                                                </el-table-column>
+                                            </el-table> -->
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible = false">取 消</el-button>
                     <el-button type="primary" @click="tabValue()">确 定</el-button>
@@ -85,43 +85,43 @@
         </div>
 
         <!-- <div v-show="dialogVisible" class="shadowBox">
-                        <div>
-                            <div>
-                                <!-- Table -->
+                                <div>
+                                    <div>
+                                        <!-- Table -->
         <!-- <table cellspacing="0" border="1">
-                                    <tr>
-                                        <td colspan="4">添加任务</td>
+                                            <tr>
+                                                <td colspan="4">添加任务</td>
 
-                                    </tr>
-                                    <tr>
-                                        <td>任务名称</td>
-                                        <td colspan="3">
-                                            <input>
-                                        </td>
+                                            </tr>
+                                            <tr>
+                                                <td>任务名称</td>
+                                                <td colspan="3">
+                                                    <input>
+                                                </td>
 
-                                    </tr>
-                                    <tr>
-                                        <td>开始时间</td>
-                                        <td><input></td>
-                                        <td>完成时间</td>
-                                        <td><input></td>
-                                    </tr>
-                                    <tr>
-                                        <td>任务说明</td>
-                                        <td colspan="3"><input></td>
-                                    </tr>
-                                    <tr>
-                                        <td>接收人</td>
-                                        <td><input></td>
-                                        <td>指派人</td>
-                                        <td><input></td>
-                                    </tr>
-                                </table>
-                                <el-button>保存</el-button>
-                                <el-button>取消</el-button>
-                            </div>
-                        </div>
-                    </div> -->
+                                            </tr>
+                                            <tr>
+                                                <td>开始时间</td>
+                                                <td><input></td>
+                                                <td>完成时间</td>
+                                                <td><input></td>
+                                            </tr>
+                                            <tr>
+                                                <td>任务说明</td>
+                                                <td colspan="3"><input></td>
+                                            </tr>
+                                            <tr>
+                                                <td>接收人</td>
+                                                <td><input></td>
+                                                <td>指派人</td>
+                                                <td><input></td>
+                                            </tr>
+                                        </table>
+                                        <el-button>保存</el-button>
+                                        <el-button>取消</el-button>
+                                    </div>
+                                </div>
+                            </div> -->
     </section>
 </template>
 
@@ -199,38 +199,21 @@ export default {
     data() {
         return {
             labelPosition: "left",
-            tableData: [{
-                date: '项目名称',
-                name: '',
-                address: ''
-            }, {
-                date: '项目类型',
-                name: '',
-                address: ''
-            }, {
-                date: '项目来源',
-                name: '',
-                address: ''
-            }, {
-                date: '项目负责人',
-                name: '',
-                address: ''
-            }],
             dialogFormVisible: false,
             dialogVisible: false,
-            form: {
-                name: '',
-                startDate: '',
-                switchDate: '',
-                pople1: '',
-                pople2: '',
-                textContent: ''
-            },
             formLabelWidth: '68px',
+            form: {
+                taskName: '', //任务名称
+                startDate: '', //开始时间
+                switchDate: '', //完成时间
+                pople1: '', //接收人
+                pople2: '', //指派人
+                textContent: '' //任务说明
+            },
             columns1: [
                 {
                     title: '指派时间',//1
-                    key: 'time',
+                    key: 'startDate',
                     align: "center"
                 },
                 {
@@ -240,17 +223,17 @@ export default {
                 },
                 {
                     title: '接收人',//3
-                    key: 'Receiver',
+                    key: 'pople1',
                     align: "center"
                 },
                 {
                     title: '指派人',//4
-                    key: 'assignPeople',
+                    key: 'pople2',
                     align: "center"
                 },
                 {
                     title: '完成时间',//5
-                    key: 'doneTime',
+                    key: 'switchDate',
                     align: "center"
                 },
                 {
@@ -264,6 +247,7 @@ export default {
                     align: "center"
                 }
             ],
+            data1: [],
             pickerOptions1: {
                 shortcuts: [{
                     text: '今天',
@@ -291,10 +275,20 @@ export default {
 
     methods: {
         tabValue() {
-            this.tableData.forEach(function (item) {
-                this.dialogFormVisible = false;
-                console.log(item.name);
-            });
+            // self = this,
+            // this.form.forEach(function (item) {
+            //     // console.log(this)
+            //     // console.log(item.name);
+            // });
+            this.dialogFormVisible = false;
+            // console.log(this.form);
+            this.data1.push(this.form);
+            this.form = new Object;
+            for (var key in this.form) {
+                delete this.form[key];
+            }
+            this.form.taskName = '';
+            console.log(this.form);
         },
         getDate() {//封装获取当前系统时间的方法
             // this.dialogFormVisible = true;
@@ -314,7 +308,7 @@ export default {
                 + seperator2 + date.getSeconds();
             return currentdate;
         },
-        dialogFormVisibles(){
+        dialogFormVisibles() {
             this.dialogFormVisible = true;
             let startDate = this.getDate();//获取当前系统时间
             this.form.startDate = startDate;
