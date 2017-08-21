@@ -8,7 +8,6 @@
     @import '../static/css/iview.css';
     @import "../static/css/index.less";
     @import "../static/css/main.css";
-    
 </style>
 <script>
     
