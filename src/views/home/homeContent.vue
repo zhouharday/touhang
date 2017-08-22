@@ -341,7 +341,7 @@ export default {
     },
     methods: {
         changePages(pageIndex) {
-            this.$http.post('/user', { //此处ajax
+            this.$http.post('/url', { //此处ajax
                 pageIndex: pageIndex
             })
                 .then(function (response) {
