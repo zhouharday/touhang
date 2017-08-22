@@ -13,6 +13,6 @@ export default [
         path: 'assistant', //home/领投助手页
         name: 'assistant',
         component: resolve => require(['../views/assistant.vue'], resolve)
-    },
+    }
     
 ]

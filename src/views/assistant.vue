@@ -1,61 +1,69 @@
 <template>
     <section class="assistantContent">
         <!-- 这是领投助手内容 -->
+        <!--搜索框-->
         <el-row class="search-box">
             <el-col :span="10" class="search">
                 <el-input 
-                   placeholder="请选择日期" 
+                   placeholder="请输入查找内容" 
                    icon="search" 
                    v-model="input" 
                    :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
-        </el-row>
-           
-
+        </el-row> 
+        <!--行业ul-->
         <el-row class="common">
             <el-col :span="24">
-                <div>
+                <div class="industry-ul">
                    <ul v-for="(item,index) in industryList" :key="item.index">
-                      <li>{{item.details}}</li>
+                      <li :class="{bag: index == 1,fow: index==0}">{{item.details}}</li>
                    </ul>
+                   <button class="collapse-btn" @click="changeList(1)">
+                       <span :class="btnObject1"></span>
+                       {{collapseBtn1}}
+                   </button>    
                 </div>    
             </el-col>
         </el-row>
-
+       <!--轮次ul -->
         <el-row class="common">
             <el-col :span="24">
-                <div>
+                <div class="round-ul">
                    <ul v-for="(item,index) in roundList" :key="item.index">
-                      <li>{{item.rounds}}</li>
+                      <li :class="{bag: index == 1,fow: index==0}">{{item.rounds}}</li>
                    </ul>
                 </div>    
             </el-col>
         </el-row>
-
+        <!--所在地ul-->
         <el-row class="common">
             <el-col :span="24">
-                <div>
+                <div class="location-ul">
                    <ul v-for="(item,index) in locationList" :key="item.index">
-                      <li>{{item.locations}}</li>
+                      <li :class="{bag: index == 1,fow: index==0}">{{item.locations}}</li>
                    </ul>
+                   <button class="collapse-btn" @click="changeList(2)">
+                       <span :class="btnObject2"></span>
+                       {{collapseBtn2}}
+                   </button>  
                 </div>    
             </el-col>
         </el-row>
-
+        <!--搜索结果-->
         <el-row class="common">
            <el-col :span="24">
                <div>
                    <p>共搜索到<span>4</span>个结果</p>
-                   <hr/>
                </div>
            </el-col>
         </el-row>
-        
+        <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
-                <el-table :data="tableData" stripe style="width: 100%">
+                <el-table :data="tableData" stripe style="width: 100%" class="table-item">
                     <el-table-column prop="project" label="项目">
+                        
                     </el-table-column>
                     <el-table-column prop="industry" label="行业" >
                     </el-table-column>
@@ -70,7 +78,6 @@
                              <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
                                 +项目池
                              </el-button>
-                             
                             <el-button size="small" @click="handleDelete(scope.$index, scope.row)">
                                 分享
                             </el-button>
@@ -84,31 +91,83 @@
 </template>
 
 
+
+
 <style lang="less" scoped>
 .assistantContent {
     width: 100%;
-    height: 700px;
+    height: 650px;
     font-size: 14px;
     background: #fff;    
 }
 .search-box {
-   padding: 30px 30px 30px 0;
-   .search {
-      float: right;
-   }
+    padding: 30px 30px 30px 0;
+    .search {
+       float: right;
+    }
 }
 .common {
-    margin: 0 30px 20px 30px;
+    padding: 0 30px 20px 30px;
     ul {
          float: left;
          li {
-              margin-right: 40px;
+              display: inline-block;
+              box-sizing: border-box;
+              margin-right: 30px;
+              margin-bottom: 5px;
          }
     } 
 }  
-.common p{
+.fow {
     font-weight: bold;
-
+}
+.location-ul li.fow {
+    margin-right: 15px;
+}
+.bag {
+    width: 45px;
+    height: 20px;
+    color: white;  
+    text-align: center;
+    border-radius: 15px;
+    background: red;   
+}
+.collapse-btn {
+    width: 50px;
+    color: red;
+    border: none;
+    outline: none;
+    background: #fff;
+}
+.uptriangle {
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-bottom: 6px solid red;
+}
+.downtriangle {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-top: 6px solid red;
+}
+.common p{
+    font: 20px;
+    font-weight: bold;
+    padding-bottom: 5px;
+    border-bottom: 1px solid red;
+    span {
+       color: red; 
+    }
+}
+.table-item {
+    border: none;
 }
 </style>
 
@@ -118,6 +177,16 @@ export default {
     data() {
         return {
             input: '',
+            collapseBtn1: '收起',
+            collapseBtn2: '下拉',
+            btnObject1: {
+               uptriangle: true,
+               downtriangle: false
+            },
+            btnObject2: {
+               uptriangle: false,
+               downtriangle: true
+            },
             industryList: [
                 { details: "行业：" },
                 { details: "全部" },
@@ -212,6 +281,30 @@ export default {
     methods: {
         handleIconClick(ev) {
             console.log(ev);
+        },
+        // 点击折叠按钮，控制列表项的下拉与收起
+        changeList(btn) {
+            if(btn===1) {
+                if(this.collapseBtn1 == "收起") {
+                    this.collapseBtn1 ="下拉";
+                    this.btnObject1.uptriangle = !(this.btnObject1.uptriangle);
+                    this.btnObject1.downtriangle = !(this.btnObject1.downtriangle); 
+                } else {
+                    this.collapseBtn1 = "收起";
+                    this.btnObject1.uptriangle = !(this.btnObject1.uptriangle);
+                    this.btnObject1.downtriangle = !(this.btnObject1.downtriangle);
+                }
+            } else {
+                if(this.collapseBtn2 == "下拉") {
+                    this.collapseBtn2 = "收起";
+                    this.btnObject2.uptriangle = !(this.btnObject2.uptriangle);
+                    this.btnObject2.downtriangle = !(this.btnObject2.downtriangle);
+               }  else {
+                    this.collapseBtn2 = "下拉";
+                    this.btnObject2.uptriangle = !(this.btnObject2.uptriangle);
+                    this.btnObject2.downtriangle = !(this.btnObject2.downtriangle);
+               }
+            }      
         }
     }
 }    
