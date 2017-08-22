@@ -1,50 +1,50 @@
 <template>
     <div class="login-wrap">
         <div>
-        <div class="login-entangle">
-            <p class="login-left">Lead Investor</p>
-            <p class="login-center">Financial investment</p>
-            <div class="login-bottom">
-                <span class="left-fir">高效</span>
-                <span class="left-dot"></span>
-                <span class="left-sec">信任</span>
-                <span class="right-dot"></span>
-                <span class="left-thi">依赖</span>
+            <div class="login-entangle">
+                <p class="login-left">Lead Investor</p>
+                <p class="login-center">Financial investment</p>
+                <div class="login-bottom">
+                    <span class="left-fir">高效</span>
+                    <span class="left-dot"></span>
+                    <span class="left-sec">信任</span>
+                    <span class="right-dot"></span>
+                    <span class="left-thi">依赖</span>
+                </div>
             </div>
-        </div>
-        <div class="login-box">
-            <div class="login-name">企业登录</div>
-            
-            <div class="login-ac">
-                <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
+            <div class="login-box">
+                <div class="login-name">企业登录</div>
+
+                <div class="login-ac">
+                    <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
+                </div>
+                <div class="login-pass">
+                    <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
+                </div>
+                <div class="find-pass">
+                    <!-- <router-link to=""></router-link> -->
+                    <router-link class="pass-zhuce" to="/register">企业注册</router-link>
+                    <a href="#" class="pass-find">找回密码</a>
+                </div>
+                <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
+                <hr class="hr" />
+                <div class="login-right-bottom">
+                    <p>
+                        <img src="/static/img/联系我们.png">
+                    </p>
+                    <p>
+                        <img src="/static/img/关于我们.png">
+                    </p>
+                    <p>
+                        <img src="/static/img/App下载.png">
+                    </p>
+                </div>
+                <div class="login-footer">
+                    <p>联系我们</p>
+                    <p>关于我们</p>
+                    <p>APP下载</p>
+                </div>
             </div>
-            <div class="login-pass">
-                <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata"  v-model="passWord">
-            </div>
-            <div class="find-pass">
-                <!-- <router-link to=""></router-link> -->
-                <router-link class="pass-zhuce" to="/register">企业注册</router-link>
-                 <a href="#" class="pass-find">找回密码</a>
-            </div>
-            <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
-            <hr class="hr" />
-            <div class="login-right-bottom">
-                <p>
-                    <img src="/static/img/联系我们.png">
-                </p>
-                <p>
-                    <img src="/static/img/关于我们.png">
-                </p>
-                <p>
-                    <img src="/static/img/App下载.png">
-                </p>
-            </div>
-            <div class="login-footer">
-                <p>联系我们</p>
-                <p>关于我们</p>
-                <p>APP下载</p>
-            </div>
-        </div>
         </div>
     </div>
 </template>
@@ -61,16 +61,16 @@ export default {
     ,
     methods: {
         checkVata() {
-            if( this.userName && this.passWord ){
+            if (this.userName && this.passWord) {
                 this.valueData = true;
-            } else{
+            } else {
                 this.valueData = false;
             }
         },
         submitForm() {
-            if( this.valueData ){
+            if (this.valueData) {
                 sessionStorage.clear();
-                this.$router.push({ name:'homeContent' });
+                this.$router.push({ name: 'homeContent' });
                 this.userName = '';
                 this.passWord = '';
                 this.valueData = false;
@@ -89,12 +89,13 @@ body {
     width: 100%;
     height: 100%;
 }
+
 .login-wrap {
     position: relative;
     width: 100%;
     height: 100%;
     background: url(/static/img/bg.png) no-repeat center center;
-    >div{
+    >div {
         position: absolute;
         top: 0;
         left: 0;
@@ -107,6 +108,7 @@ body {
 
 .login-btn {
     text-align: center;
+    
 }
 
 .login-btn button {
@@ -280,7 +282,8 @@ input::-webkit-input-placeholder {
     margin-left: 82px;
     margin-bottom: 16px;
 }
-.active{
+
+.active {
     background: red;
 }
 </style>

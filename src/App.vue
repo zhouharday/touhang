@@ -7,9 +7,9 @@
     @import '../static/css/element-ui(源文件).css';
     @import '../static/css/iview.css';
     @import "../static/css/index.less";
-    @import "../static/css/main.css";
+    @import "../static/css/main.less";
 </style>
 <script>
     
-    
+
 </script>
