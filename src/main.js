@@ -12,9 +12,6 @@ import store from './store';
 // import '../static/css/theme-green/index.css';       // 浅绿色主题
 // import mainCss from "../static/css/main.css";
 
-
-
-
 Vue.use(iView);
 Vue.use(ElementUI);
 
