@@ -31,7 +31,8 @@
                 </select>
              </div>
           </div>
-          <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link>
+          <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</button>
+          <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
        </div>
    </div>
 </template>
@@ -83,7 +84,8 @@ export default{
         },
         submitForm () {
           if(this.valueData){
-             console.log(this.valueData);
+              this.$router.push({ name: 'registerphone' });
+            //  console.log(this.valueData);
           }  
         }
     }

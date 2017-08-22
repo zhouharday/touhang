@@ -16,7 +16,8 @@
             </div>
          </div>
          <button type="button" class="code-btn" @click="time"  :class="{ 'active-code':valuePhone,'active-time':valueTime}">{{btnText}}</button>
-         <router-link to="/login" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</router-link>
+         <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }" >下一步</button>
+         <!-- <router-link to="/login" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</router-link> -->
       </div>
    </div>
 </template>
@@ -104,7 +105,8 @@ export default {
          /***********************提交表单开始*************************/
         submitForm () {
            if(this.valueData){
-               console.log(this.valueData);
+               this.$router.push({ name: 'login' });
+            //    console.log(this.valueData);
                //发起ajax请求
                
            } 
