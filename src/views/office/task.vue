@@ -7,6 +7,7 @@
                     <Table border :columns="columns1" :data="data1" align="center"></Table>
                 </Tab-pane>
                 <Tab-pane label="代办任务">代办任务</Tab-pane>
+                
                 <Tab-pane label="已办任务">已办任务</Tab-pane>
             </Tabs>
             <el-button type="text" @click="dialogFormVisibles">
