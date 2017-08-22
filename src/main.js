@@ -15,8 +15,6 @@ import store from './store';
 
 
 
-
-
 Vue.use(iView);
 Vue.use(ElementUI);
 
