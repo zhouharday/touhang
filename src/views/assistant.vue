@@ -87,7 +87,7 @@
                             <div class="fow" >{{ scope.row.location }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="成立时间" sortable align="center">
+                    <el-table-column label="成立时间"  align="center">
                         <template scope="scope">
                             <div class="fow" >{{ scope.row.datetime }}</div>
                         </template>
