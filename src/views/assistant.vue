@@ -72,13 +72,25 @@
                             <div>{{ scope.row.project }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="industry" label="行业" align="center">
+                    <el-table-column label="行业"  align="center">
+                        <template scope="scope">
+                            <div class="fow" >{{ scope.row.industry }}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="round"  label="轮次" align="center">
+                    <el-table-column label="轮次" align="center">
+                        <template scope="scope">
+                            <div class="fow" >{{ scope.row.round }}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="location" label="所在地" align="center">
+                    <el-table-column label="所在地" align="center">
+                        <template scope="scope">
+                            <div class="fow" >{{ scope.row.location }}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="datetime" label="成立时间" sortable align="center">
+                    <el-table-column label="成立时间" sortable align="center">
+                        <template scope="scope">
+                            <div class="fow" >{{ scope.row.datetime }}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
