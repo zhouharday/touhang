@@ -13,5 +13,10 @@ export default [
         path: 'messageShow', //home/消息公告页
         name: 'messageShow',
         component: resolve => require(['../views/office/messageShow.vue'], resolve)
-    }
+    } ,
+    {
+        path: '/message/:userId', //home/通讯录页
+        name: 'message',
+        component: resolve => require(['../views/message.vue'], resolve)
+    },
 ]
