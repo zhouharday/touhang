@@ -62,18 +62,18 @@
         <el-row class="common">
             <el-col :span="24">
                 <el-table :data="tableData" stripe style="width: 100%" class="table-item">
-                    <el-table-column prop="project" label="项目">
+                    <el-table-column prop="project" label="项目" align="center">
                         
                     </el-table-column>
-                    <el-table-column prop="industry" label="行业" >
+                    <el-table-column prop="industry" label="行业" align="center">
                     </el-table-column>
-                    <el-table-column prop="round"  label="轮次" >
+                    <el-table-column prop="round"  label="轮次" align="center">
                     </el-table-column>
-                    <el-table-column prop="location" label="所在地">
+                    <el-table-column prop="location" label="所在地" align="center">
                     </el-table-column>
-                    <el-table-column prop="datetime" label="成立时间">
+                    <el-table-column prop="datetime" label="成立时间" align="center">
                     </el-table-column>
-                    <el-table-column label="操作">
+                    <el-table-column label="操作" align="center">
                         <template scope="scope">
                              <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
                                 +项目池

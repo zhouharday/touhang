@@ -23,11 +23,11 @@
                     <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
                     <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
                 </el-submenu>
-                <div class="div_el-menu-itemel-submenu__title">
+                <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
                         领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
-                    <span index="assistant" @click="addTab(title_02,'/home/assistant','assistant');addTab1">{{title_02}}</span>
+                    <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
                 </div>
                 <el-submenu index="3">
