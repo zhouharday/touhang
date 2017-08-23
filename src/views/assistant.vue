@@ -61,11 +61,6 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
-<<<<<<< HEAD
-                <el-table :data="tableData" stripe style="width: 100%" class="table-item">
-                    <el-table-column prop="project" label="项目" align="center">
-                        
-=======
                 <el-table :data="tableData" 
                           style="width:100%" 
                           max-height="700"
@@ -76,7 +71,6 @@
                             <a class="theme">{{ scope.row.theme }}</a>
                             <div>{{ scope.row.project }}</div>
                         </template>
->>>>>>> fcb7f03956a505c7de4dfb24c286088c47c27ffa
                     </el-table-column>
                     <el-table-column prop="industry" label="行业" align="center">
                     </el-table-column>
@@ -84,11 +78,7 @@
                     </el-table-column>
                     <el-table-column prop="location" label="所在地" align="center">
                     </el-table-column>
-<<<<<<< HEAD
-                    <el-table-column prop="datetime" label="成立时间" align="center">
-=======
                     <el-table-column prop="datetime" label="成立时间" sortable align="center">
->>>>>>> fcb7f03956a505c7de4dfb24c286088c47c27ffa
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
