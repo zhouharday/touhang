@@ -183,9 +183,10 @@ export default {
             // console.log(key, keyPath);
         },
         addTab(th,url,name) {
-            this.$router.push({ name: 'assistant' });
-            this.$store.commit({type: 'addTab', title: th,url:url,name:name} );
-        },    
+            // this.$router.push({ name: 'assistant' });
+            this.$router.push({ name:name });
+            this.$store.commit({type:'addTab', title:th,url:url,name:name} );
+        }
     }
 }
 </script>

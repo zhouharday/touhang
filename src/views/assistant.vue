@@ -61,9 +61,22 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
+<<<<<<< HEAD
                 <el-table :data="tableData" stripe style="width: 100%" class="table-item">
                     <el-table-column prop="project" label="项目" align="center">
                         
+=======
+                <el-table :data="tableData" 
+                          style="width:100%" 
+                          max-height="700"
+                          class="table-item"
+                          :row-class-name="tableRowClassName">
+                    <el-table-column label="项目" min-width="100" align="left"> 
+                        <template scope="scope">
+                            <a class="theme">{{ scope.row.theme }}</a>
+                            <div>{{ scope.row.project }}</div>
+                        </template>
+>>>>>>> fcb7f03956a505c7de4dfb24c286088c47c27ffa
                     </el-table-column>
                     <el-table-column prop="industry" label="行业" align="center">
                     </el-table-column>
@@ -71,14 +84,18 @@
                     </el-table-column>
                     <el-table-column prop="location" label="所在地" align="center">
                     </el-table-column>
+<<<<<<< HEAD
                     <el-table-column prop="datetime" label="成立时间" align="center">
+=======
+                    <el-table-column prop="datetime" label="成立时间" sortable align="center">
+>>>>>>> fcb7f03956a505c7de4dfb24c286088c47c27ffa
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
-                             <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+                            <el-button size="small">
                                 +项目池
-                             </el-button>
-                            <el-button size="small" @click="handleDelete(scope.$index, scope.row)">
+                            </el-button>
+                            <el-button size="small">
                                 分享
                             </el-button>
                         </template>    
@@ -130,11 +147,11 @@
     color: white;  
     text-align: center;
     border-radius: 15px;
-    background: red;   
+    background: #F05E5E;   
 }
 .collapse-btn {
     width: 50px;
-    color: red;
+    color: #F05E5E;
     border: none;
     outline: none;
     background: #fff;
@@ -161,14 +178,19 @@
     font: 20px;
     font-weight: bold;
     padding-bottom: 5px;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid #F05E5E;
     span {
-       color: red; 
+       color: #F05E5E; 
     }
 }
-.table-item {
-    border: none;
+.theme {
+    font-size: 16px;
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
 }
+// .table-item {
+//     border: none;
+// }
 </style>
 
 
@@ -247,14 +269,16 @@ export default {
                 { locations: "海南省" },    
             ],
             tableData: [
-                {
+                {   
+                    theme: '鹿战',
                     project: '体育赛事即时竞猜平台',
                     industry:'体育',
                     round:'Pre-A轮',
                     location:'广东省',
                     datetime:'2015/01/16'
                 },
-                 {
+                 {  
+                    theme: 'Digital Asset',
                     project: '美国结算和分类式账本服务商',
                     industry:'金融',
                     round:'B+轮',
@@ -262,6 +286,7 @@ export default {
                     datetime:'2016/04/21'
                 },
                  {
+                    theme: '小六汤包',
                     project: '中式餐应连锁品牌',
                     industry:'生活消费',
                     round:'Pre-A轮',
@@ -269,6 +294,7 @@ export default {
                     datetime:'2017/02/13'
                 },
                  {
+                    theme: '智慧熊',
                     project: '双语学前教育连锁机构',
                     industry:'教育',
                     round:'A轮',
@@ -305,7 +331,17 @@ export default {
                     this.btnObject2.downtriangle = !(this.btnObject2.downtriangle);
                }
             }      
+        },
+        // 设置table间隔行的background-color
+        tableRowClassName(row, index) {
+            if ( (index%2) == 0) {
+               return 'info-row';
+            } else {
+               return 'positive-row';
+            }
+            return '';
         }
+
     }
 }    
 </script>
