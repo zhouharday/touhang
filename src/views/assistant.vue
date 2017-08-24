@@ -360,7 +360,7 @@ export default {
         },
         ShowMessagwe(ind) {
             // alert(1);
-            console.log(ind);
+            // console.log(ind);
             this.index = ind;
             this.addTab('详情页', '/message/'+ind, 'message/'+ind );
             this.$router.push({ name: 'message', params: { userId: ind } });
