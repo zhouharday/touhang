@@ -3,13 +3,18 @@
         <!-- 这是详情页{{this.$route.params.userId}} -->
         <div class="messageContent">
            <el-row class="message_top">
-              <el-col :span="8">
+              <el-col :span="4">
                   <div class="messageBrand">
                   </div>
               </el-col>
               <el-col :span="12">
                   <div class="messageIntro">
+                      <div>
 
+                      </div>
+                      <el-table>
+
+                      </el-table>
                   </div>
               </el-col>
               <el-col :span="4">
@@ -58,7 +63,7 @@
 
 </style>
 
-
+ 
 
 
 
