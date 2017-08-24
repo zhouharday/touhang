@@ -35,13 +35,18 @@ const store = new Vuex.Store({
             window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
         },
         deleTab(state, obj) {
+            // console.log(obj);
             state.TitleList.splice(obj.index, 1);
             window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
             if (obj.index == 0) {
                 obj.self.$router.push({ name: 'homeContent' });
                 return;
             }
-            obj.self.$router.push({ name: state.TitleList[obj.index - 1].name });
+            // obj.self.$router.push({ name: state.TitleList[obj.index - 1].name });
+            // console.log(state.TitleList[obj.index - 1].name);
+            // console.log(state.TitleList);
+
+            obj.self.$router.push({ path: state.TitleList[obj.index - 1].path });
 
         }
     }

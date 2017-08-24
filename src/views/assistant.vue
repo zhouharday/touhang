@@ -2,7 +2,7 @@
     <section class="assistantContent">
         <!-- 这是领投助手内容 -->
         <!--搜索框-->
-        <div v-show="isShow" >
+        <div v-show="isShow">
             <el-row class="search-box">
                 <el-col :span="10" class="search">
                     <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick">
@@ -53,7 +53,9 @@
                 <el-col :span="24">
                     <div>
                         <p>共搜索到
-                            <span>4</span>个结果</p>
+                            <span>4</span>
+                            个结果
+                        </p>
                     </div>
                 </el-col>
             </el-row>
@@ -195,7 +197,8 @@
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
-.back{
+
+.back {
     background: #fff;
 }
 
@@ -355,12 +358,12 @@ export default {
             }
             return '';
         },
-        ShowMessagwe( ind ){
+        ShowMessagwe(ind) {
             // alert(1);
-            console.log(ind);
+            // console.log(ind);
             this.index = ind;
-            this.addTab('详情页','/message/'+ind,'message' + ind+1 );
-            this.$router.push( { name: 'message',params:{userId:ind}});
+            this.addTab('详情页', '/message/'+ind, 'message/'+ind );
+            this.$router.push({ name: 'message', params: { userId: ind } });
             // this.$http.post('${base}./url',{ ind }) //请求详情页list 数据
             // .then( response => {
 
@@ -371,10 +374,10 @@ export default {
             // this.isShow = false;
             // this.isHide = true;
         },
-        addTab(th,url,name) {
+        addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });
-            this.$router.push({ name:name });
-            this.$store.commit({type:'addTab', title:th,url:url,name:name} );
+            // this.$router.push({ name: name });
+            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
 
     }
