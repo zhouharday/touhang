@@ -65,7 +65,7 @@
                     <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                         <el-table-column label="项目" min-width="100">
                             <template scope="scope">
-                                <a @click=" ShowMessagwe(scope.$index)" class="theme">{{ scope.row.theme }}</a>
+                                <a @click=" ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
                                 <div>{{ scope.row.project }}</div>
                             </template>
                         </el-table-column>
@@ -358,11 +358,12 @@ export default {
             }
             return '';
         },
-        ShowMessagwe(ind) {
+        ShowMessagwe(title,ind) {
             // alert(1);
             // console.log(ind);
+            // console.log(title.theme);
             this.index = ind;
-            this.addTab('详情页', '/message/'+ind, 'message/'+ind );
+            this.addTab( title.theme + '详情页', '/message/'+ind, 'message/'+ind );
             this.$router.push({ name: 'message', params: { userId: ind } });
             // this.$http.post('${base}./url',{ ind }) //请求详情页list 数据
             // .then( response => {
