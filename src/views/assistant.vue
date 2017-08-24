@@ -214,7 +214,7 @@ export default {
         return {
             isShow: true,
             isHide: false,
-            input: 0,
+            input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
             index: 0,
