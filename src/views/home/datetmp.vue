@@ -156,7 +156,7 @@ module.exports = {
                 }
 
             }
-            console.log(arr);
+            // console.log(arr);
             this.$emit("readyfun", arr, this.date);
         },
         //点击日期

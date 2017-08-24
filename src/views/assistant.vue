@@ -362,7 +362,7 @@ export default {
             // alert(1);
             console.log(ind);
             this.index = ind;
-            this.addTab('详情页', '/message/' + ind, 'message' + ind + 1);
+            this.addTab('详情页', '/message/'+ind, 'message/'+ind );
             this.$router.push({ name: 'message', params: { userId: ind } });
             // this.$http.post('${base}./url',{ ind }) //请求详情页list 数据
             // .then( response => {
@@ -376,7 +376,7 @@ export default {
         },
         addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });
-            this.$router.push({ name: name });
+            // this.$router.push({ name: name });
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
 
