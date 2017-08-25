@@ -1,7 +1,7 @@
 <template>
     <div class="navmenu">
         <ul>
-            <router-link to="homeContent" tag="li" :class="{active:$route.name == 'homeContent'}">
+            <router-link to="/homeContent" tag="li" :class="{active:$route.name == 'homeContent'}">
                 {{title}}
             </router-link>
               <!-- <a href="#homeContent">{{title}}</a>   -->
