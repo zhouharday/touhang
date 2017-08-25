@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section v-loading.body="loading">
         <!-- 这是首页内容 -->
         <el-row :gutter="20" style="margin:0;">
             <el-col :span="12" style="padding:0;">
@@ -280,6 +280,7 @@ export default {
     components: {datatime},
     data() {
         return {
+            loading: false,
             monthDate:[],
             RecentNotice: "最近通知",
             waitSth: "待办事项",

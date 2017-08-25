@@ -6,7 +6,7 @@
             <div class="contacts_L">
                 <div>
 
-                    <div v-for="( item, index) in contacts_list" :key="item.index" @click="active(index)" :class="{'bag':ind === index}">
+                    <div v-for="( item, index) in contacts_list" :key="item.index" @click="active(index,item)" :class="{'bag':ind === index}">
                         <ul>
                             <li>
                                 <div>
@@ -39,7 +39,6 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <!-- <div>申请开通系统试用</div> -->
                                     <el-button style="color:#fff;" type="text" @click="open">申请开通系统试用</el-button>
                                 </div>
                             </div>
@@ -102,7 +101,7 @@ section {
                                 width: 46px;
                                 height: 46px;
                                 display: inline-block;
-                                float: left;
+                                // float: left;
                             }
                         }
                         >div:nth-child(2) {
@@ -136,7 +135,8 @@ section {
             width: 100%;
             height: 60px;
             padding: 10px;
-            background: #ffffff; // border-bottom: 1px solid #cccccc;
+            background: #ffffff;
+            margin-bottom: 1px;
             .bg-purple {
                 .fl {
                     >div {
@@ -155,6 +155,9 @@ section {
                     }
                 }
                 >div:nth-child(2) {
+                    >button{
+                        
+                    }
                     position: absolute;
                     right: 13.5px;
                     top: 13.5px;
@@ -196,70 +199,38 @@ export default {
                 },
                 {
                     src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
+                    name: "陈奕迅",
                     name_bot: "最新版昂",
                     time: "17:05"
                 },
                 {
                     src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
+                    name: "周杰伦",
                     name_bot: "最新版昂",
                     time: "17:05"
                 },
                 {
                     src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
+                    name: "梁静茹",
                     name_bot: "最新版昂",
                     time: "17:05"
                 },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                }
             ],
             srcContent: {
-                src: "/static/img/my_tuxiang.png",
-                name: "张哲",
+                src: "",
+                name: "",
                 title: "聚乐新能源集团-研发部总监"
             }
         }
     },
     methods: {
-        active(index) {
-            // console.log(index);
+        active(index,item) {
+            // console.log(item);
             this.ind = index;
+            this.srcContent.src = item.src;
+            this.srcContent.name = item.name;
+            // this.srcContent.title = item.src;
+
         },
         open() {
             this.$alert('您好,我们已经收到您的试用申请,会尽快为提供优质的服务', '', {

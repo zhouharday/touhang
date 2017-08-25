@@ -1,6 +1,6 @@
 export default [
     {
-        path: 'homeContent', //home/首页
+        path: '/homeContent', //home/首页
         name: 'homeContent',
         component: resolve => require(['../views/home/homeContent.vue'], resolve)
     },
