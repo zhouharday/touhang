@@ -98,12 +98,12 @@ export default {
     },
     data() {
         return {
-            start: { //消息发布状态
-                a: true, //编辑
-                b: true, //发布
-                c: true, //删除
-                d: false, //查看
-            },
+            // start: { //消息发布状态
+            //     a: true, //编辑
+            //     b: true, //发布
+            //     c: true, //删除
+            //     d: false, //查看
+            // },
             labelPosition: 'left',
             formLabelWidth: '120px',
             dialogFormVisible: false,
