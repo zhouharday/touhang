@@ -101,7 +101,7 @@ section {
                                 width: 46px;
                                 height: 46px;
                                 display: inline-block;
-                                float: left;
+                                // float: left;
                             }
                         }
                         >div:nth-child(2) {
@@ -155,6 +155,9 @@ section {
                     }
                 }
                 >div:nth-child(2) {
+                    >button{
+                        
+                    }
                     position: absolute;
                     right: 13.5px;
                     top: 13.5px;
