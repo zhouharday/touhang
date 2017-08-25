@@ -1,65 +1,159 @@
 <template>
-    <section class="messageContainer"> 
+    <section class="messageContainer">
         <!-- 这是详情页{{this.$route.params.userId}} -->
         <div class="messageContent">
-           <el-row class="message_top">
-              <el-col :span="4" style="margin-right:40px;">
-                  <div class="messageBrand">
-                  </div>
-              </el-col>
-              <el-col :span="18">
-                  <div class="messageIntro">
-                      <div class="introText">
-                          <p>鹿战（体育赛事即时竞猜平台）</p>
-                          <div>
-                               <p>行业：<span>体育</span></p>
-                               <p>所在地：<span>深圳</span></p>
-                               <p>成立时间：<span>2015</span></p>  
-                          </div>
-                          <p>公司全称：<span>深圳市天地同舟科技有限责任公司</span></p>
-                      </div>
-                      <div class="introTable">
-                         <p class="table-top">上轮获投</p>
-                         <div class="table-bottom">
-                              <p class="table-col">Pre-A轮</p>
-                              <p>&yen;：<span>数百万</span></p>
-                         </div>
-                      </div>   
-                  </div>
-              </el-col>
-              <el-col :span="2">
-                 <div class="messageBtn" >
-                     <el-button type="danger">
-                       +项目池
-                     </el-button> 
-                 </div>   
-              </el-col>
-           </el-row>
-
-           <el-row class="message_bottom">
-               <el-col :span="24"> 
-                    <div class="messageTab">
-                        <ul>
-                            <li>项目介绍</li>
-                            <li>融资经历</li>
-                            <li>创始团队</li>
-                            <li>查看工商信息</li>
-                        </ul>
+            <el-row class="message_top">
+                <el-col :span="4" style="margin-right:40px;">
+                    <div class="messageBrand">
                     </div>
-                    <div class="messageText">
-                        <div class="message-text">
-                          <b>概述</b>
-                          <p>DeerWar</p>
-                          <b>详细介绍</b>
-
-
+                </el-col>
+                <el-col :span="18">
+                    <div class="messageIntro">
+                        <div class="introText">
+                            <p>{{dataList.projectName}}</p>
+                            <div>
+                                <p>行业：
+                                    <span>{{dataList.industry}}</span>
+                                </p>
+                                <p>所在地：
+                                    <span>{{dataList.location}}</span>
+                                </p>
+                                <p>成立时间：
+                                    <span>{{dataList.datetime}}</span>
+                                </p>
+                            </div>
+                            <p>公司全称：
+                                <span>{{dataList.companyName}}</span>
+                            </p>
                         </div>
-
+                        <div class="introTable">
+                            <p class="table-top">上轮获投</p>
+                            <div class="table-bottom">
+                                <p class="table-col">{{financeList[0].round}}</p>
+                                <p>&yen;：
+                                    <span>{{financeList[0].money}}</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-               </el-col>
-           </el-row>
+                </el-col>
+                <el-col :span="2">
+                    <div class="messageBtn">
+                        <el-button type="danger">
+                            +项目池
+                        </el-button>
+                    </div>
+                </el-col>
+            </el-row>
+            
+            <el-row class="message_bottom">
+                <el-col :span="24">
+                    <div class="messageText">
+                        <el-tabs v-model="activeName" @tab-click="handleClick">
+                            <el-tab-pane label="项目介绍" name="first">
+                                <div class="project">
+                                    <b>概述</b>
+                                    <p>{{dataList.summary}}</p>
+                                    <b>详细介绍</b>
+                                    <p>产品服务</p>
+                                    <p>{{dataList.service}}</p>
+                                    <p>用户市场</p>
+                                    <p>{{dataList.market}}</p>
+                                    <p>商业模式</p>
+                                    <p>{{dataList.businessModel}}</p>
+                                    <p>运营数据</p>
+                                    <p>{{dataList.operationData}}</p>
+                                    <b>商业计划书</b>
+                                    <div v-for="(item,index) in proposalList" :key="item.index">
+                                         <p>
+                                            <span>{{item.plan}}</span>
+                                            <span class="preview">预览</span>
+                                            <span class="preview">下载</span>
+                                         </p>
+                                    </div>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="融资经历" name="second">
+                                <div class="financing">
+                                    <b>融资经历</b>
+                                    <div v-for="(item,index) in  financeList" :key="item.index">
+                                        <p>
+                                            <span class="mgr">{{item.time}}</span>
+                                            <span class="mgr">{{item.round}}</span>
+                                            <span class="mgr">融资金额：
+                                                <span>{{item.money}}</span>
+                                            </span>
+                                            <span class="mgr">投资方：
+                                                <span>{{item.investor}}</span>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="创始团队" name="third">
+                                <div class="team">
+                                    <b>项目团队</b>
+                                    <p>
+                                        团队优势
+                                        <span class="mgls">{{dataList.teamAdvantage}}</span>
+                                    </p>
+                                    <p>
+                                        团队成员
+                                        <span class="mgls">姓名：
+                                            <span>{{dataList.teamMember}}</span>
+                                        </span>
+                                    </p>
+                                    <p class="mgl">职位：
+                                        <span>{{dataList.teamPosition}}</span>
+                                    </p>
+                                    <p class="mgl">介绍：
+                                        <span>{{dataList.teamIntro}}</span>
+                                    </p>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="查看工商信息" name="fourth">
+                                <div class="registration">
+                                    <b>工商信息</b>
+                                    <p>公司名称：
+                                        <span>{{dataList.companyName}}</span>
+                                    </p>
+                                    <p>公司类型：
+                                        <span>{{dataList.companySort}}</span>
+                                    </p>
+                                    <p>成立日期：
+                                        <span>{{dataList.date}}</span>
+                                    </p>
+                                    <p>注册资本：
+                                        <span>{{dataList.capital}}</span>
+                                    </p>
+                                    <p>法人代表：
+                                        <span>{{dataList.representative}}</span>
+                                    </p>
+                                    <p>经营状态：
+                                        <span>{{dataList.operationState}}</span>
+                                    </p>
+                                    <p>登记机关：
+                                        <span>{{dataList.authority}}</span>
+                                    </p>
+                                    <p>注册地址：
+                                        <span>{{dataList.address}}</span>
+                                    </p>
+                                    <p>统一社会信用代码：
+                                        <span>{{dataList.creditCode}}</span>
+                                    </p>
+                                    <p>工商注册号：
+                                        <span>{{dataList.registeredNum}}</span>
+                                    </p>
+                                    <p>组织机构代码：
+                                        <span>{{dataList.institutionCode}}</span>
+                                    </p>
+                                </div>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </el-col>
+            </el-row>
         </div>
-
     </section>
 </template>
 
@@ -67,27 +161,24 @@
 
 
 
-<style lang="less" scoped> 
+<style lang="less" scoped>
 .messageContainer {
     width: 100%;
-    min-height: 700px;
     font-size: 14px;
     background: gray;
     .messageContent {
         width: 93%;
-        min-height: 600px;
-        margin: 20px auto;
+        margin: 0 auto;
+        padding-top: 10px;
         box-sizing: border-box;
         .message_top {
             position: relative;
-            height: 200px;
             margin-bottom: 15px;
             color: #fff;
             .messageBrand {
-                // width: 75%;
                 width: 120px;
                 height: 120px;
-                border: 1px solid  #F05E5E;
+                border: 1px solid #F05E5E;
                 border-radius: 5px;
             }
             .messageIntro {
@@ -117,14 +208,14 @@
                     }
                     .table-bottom {
                         height: 73px;
-                        p { 
+                        p {
                             float: left;
                             width: 50%;
                             text-align: center;
                             line-height: 73px;
                         }
                         .table-col {
-                             border-right: 1px solid #fff;
+                            border-right: 1px solid #fff;
                         }
                     }
                 }
@@ -134,34 +225,41 @@
                 bottom: 0px;
                 right: 0px;
             }
-            
         }
         .message_bottom {
-            height: 400px;
+            height: 590px;
             background: #fff;
-            .messageTab {
-                overflow: hidden;
-                border-bottom: 1px solid #F05E5E;
-                ul {
-                    float:  left;
-                    margin: 5px 25px;
-                    li {
-                        float: left;
-                        margin-right: 25px;
-                   }
-                }
-            }
             .messageText {
-                 margin: 20px 25px;
-                 border: 1px solid pink;
-
+                margin: 0 25px;
+                b {
+                    display: block;
+                }
+                b,
+                p {
+                    margin-bottom: 15px;
+                }
+                .project {
+                    .preview {
+                        margin-left: 15px;
+                        color: #F05E5E;
+                        border-bottom: 1px solid #F05E5E;
+                    }
+                }
+                .financing .mgr {
+                    margin-right: 25px;
+                }
+                .team {
+                    .mgls {
+                        margin-left: 20px;
+                    }
+                    .mgl {
+                        margin-left: 80px;
+                    }
+                }
             }
         }
     }
-
 }
-
-
 </style>
 
  
@@ -169,5 +267,61 @@
 
 
 <script>
-  
+export default {
+    data() {
+        return {
+            activeName: 'first',
+            dataList: {
+                projectName: "鹿战（体育赛事即时竞猜平台）",
+                industry: "体育",
+                location: "深圳",
+                datetime: "2015",
+                companyName: "深圳市天地同舟科技有限责任公司",
+                summary: "DeerWar是一个基于真实体育赛事的Fantasy sports平台，用户可以在鹿战DeerWar平台上选择各大体育明星创建自己的虚拟俱乐部，对虚拟俱乐部的整体比赛数据进行竞猜比赛，与其他球迷PK，平台包含篮球、足球、电子竞技等体育赛事。",
+                service: "",
+                market: "",
+                businessModel: "前期以开机广告收入作为主要盈利点，产品售卖分成为次盈利点，随着项目不断深入，拓展B端智能服务收费项目和信息导流费用，同时开启会员收费模式。",
+                operationData: "截止2017年7月，已服务10万玩家",
+                teamAdvantage: "团队由资深产品运营和技术大咖组成",
+                teamMember: "蒋径舟",
+                teamPosition: "CEO",
+                teamIntro: "北京大学美国法律博士、中国法律硕士；数次创业经历",
+                companySort: "有限责任公司",
+                date: "2016-03-14",
+                capital: "105.2632万人民币",
+                representative: "蒋径舟",
+                operationState: "存续",
+                authority: "深圳市市场监督管理局",
+                address: "深圳市南山区粤海街道大冲商务中心C座902",
+                creditCode: "91440300MA5D8EKP1U",
+                registeredNum: "440301115313203",
+                institutionCode: "5D8EKP1U"
+            },
+            proposalList: [
+                { plan: "xxxxx计划书" },
+                { plan: "xxxxx市场报告"}
+            ],
+            financeList: [
+                {
+                  time: "2017.04",
+                  round: "pre-A轮",
+                  money: "数百万人民币",
+                  investor: "暂无"
+                },
+                {
+                  time: "2016.04",
+                  round: "天使轮",
+                  money: "数百万人民币",
+                  investor: "吴静钰"
+                }
+            ]
+        }
+    },
+    methods: {
+        handleClick(tab, event) {
+            console.log(tab, event);
+        }
+    }
+};
+
 </script>
