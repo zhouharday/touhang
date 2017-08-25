@@ -251,6 +251,13 @@ input::-webkit-input-placeholder {
     margin-bottom: 64px;
     color: #fff;
     margin-top: 4px;
+    outline: none;
+    &:hover{
+        background: #803f3f;
+    }
+    &:active{
+        background: #f05e5e;
+    }
 }
 
 .login-right-bottom {
