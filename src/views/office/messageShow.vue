@@ -16,10 +16,10 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-show="scope.row.start == '未发布'" @click="dialogFormVisible = true" type="text" size="small">{{scope.row.a}}</el-button>
-                                <el-button v-show="scope.row.start == '未发布'" @click="releaseChange(scope.row)" type="text" size="small">{{scope.row.b}}</el-button>
-                                <el-button v-show="scope.row.start == '未发布'" @click.native.prevent="deleteRow(scope.$index, tableData1)" type="text" size="small">{{scope.row.c}}</el-button>
-                                <el-button v-show="scope.row.start == '已发布'" @click="lookAt(scope.row)" type="text" size="small">{{scope.row.d}}</el-button>
+                                <el-button v-show="scope.row.start == '未发布'" @click="dialogFormVisible = true" type="text" size="small">编辑</el-button>
+                                <el-button v-show="scope.row.start == '未发布'" @click="releaseChange(scope.row)" type="text" size="small">发布</el-button>
+                                <el-button v-show="scope.row.start == '未发布'" @click.native.prevent="deleteRow(scope.$index, tableData1)" type="text" size="small">删除</el-button>
+                                <el-button v-show="scope.row.start == '已发布'" @click="lookAt(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -153,10 +153,10 @@ export default {
         // alert(11);
             this.form.start = "未发布";
             this.dialogFormVisible = false;
-            this.tableData1.a = '编辑';
-            this.tableData1.b = '发布';
-            this.tableData1.c = '删除';
-            this.tableData1.d = '';
+            // this.tableData1.a = '编辑';
+            // this.tableData1.b = '发布';
+            // this.tableData1.c = '删除';
+            // this.tableData1.d = '';
 
 
             this.tableData1.push({
@@ -165,21 +165,21 @@ export default {
                 releaseDate: this.form.date,
                 start: this.form.start,
                 text: this.form.textarea,
-                a: "编辑",
-                b: "发布",
-                c: "删除",
-                d: "",
+                // a: "编辑",
+                // b: "发布",
+                // c: "删除",
+                // d: "",
             });
             // this.clearVal();
         },
         releaseChange(data) {
             console.log(data);
             data.start = "已发布";
-            data.a = '';
-            data.b = '';
-            data.c = '';
-            data.d = '查看';
-            this.start.d = true;
+            // data.a = '';
+            // data.b = '';
+            // data.c = '';
+            // data.d = '查看';
+            // this.start.d = true;
             this.sendData(); //send data for server
         },
         realseBtn() { //发布新公告 btn 方法
@@ -191,17 +191,17 @@ export default {
         releaseData() { //发布
             this.dialogFormVisible = false;
             this.form.start = "已发布";
-            this.start.d = true;
+            // this.start.d = true;
             this.tableData1.push({
                 title: this.form.title,
                 releasePeople: this.form.pople,
                 releaseDate: this.form.date,
                 start: this.form.start,
                 text: this.form.textarea,
-                a: "",
-                b: "",
-                c: "",
-                d: "查看"
+                // a: "",
+                // b: "",
+                // c: "",
+                // d: "查看"
             });
             this.sendData(); //send data for server
             this.clearVal();
@@ -211,7 +211,7 @@ export default {
             this.saves = false;
             this.realses = false;
 
-            console.log(data);
+            // console.log(data);
             this.form.title = data.title;
             this.form.textarea = data.text;
             this.form.pople = data.releasePeople;
