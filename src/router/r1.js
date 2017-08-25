@@ -12,7 +12,13 @@ export default [
     {
         path: 'assistant', //home/领投助手页
         name: 'assistant',
-        component: resolve => require(['../views/assistant.vue'], resolve)
+        component: resolve => require(['../views/assistant/assistant.vue'], resolve)
+    },
+    {
+        path: 'projectPool', //home/项目池页
+        name: 'projectPool',
+        component: resolve => require(['../views/project/projectPool.vue'], resolve)
+
     }
     
 ]

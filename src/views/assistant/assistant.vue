@@ -2,7 +2,6 @@
     <section class="assistantContent">
         <!-- 这是领投助手内容 -->
         <!--搜索框-->
-        <div v-show="isShow">
             <el-row class="search-box">
                 <el-col :span="10" class="search">
                     <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick">
@@ -24,7 +23,6 @@
                 </el-col>
             </el-row>
             <!--轮次ul -->
-
             <el-row class="common">
                 <el-col :span="24">
                     <div class="round-ul">
@@ -102,7 +100,6 @@
                     </el-table>
                 </el-col>
             </el-row>
-        </div>
     </section>
 </template>
 
@@ -116,14 +113,12 @@
     font-size: 14px;
     background: #fff;
 }
-
 .search-box {
     padding: 30px 30px 30px 0;
     .search {
         float: right;
     }
 }
-
 .common {
     padding: 0 30px 20px 30px;
     ul {
@@ -136,15 +131,12 @@
         }
     }
 }
-
 .fow {
     font-weight: bold;
 }
-
 .location-ul li.fow {
     margin-right: 15px;
 }
-
 .bag {
     width: 45px;
     height: 20px;
@@ -153,7 +145,6 @@
     border-radius: 15px;
     background: #F05E5E;
 }
-
 .collapse-btn {
     width: 50px;
     color: #F05E5E;
@@ -161,7 +152,6 @@
     outline: none;
     background: #fff;
 }
-
 .uptriangle {
     display: inline-block;
     position: relative;
@@ -171,7 +161,6 @@
     border: 6px solid transparent;
     border-bottom: 6px solid red;
 }
-
 .downtriangle {
     display: inline-block;
     position: relative;
@@ -181,7 +170,6 @@
     border: 6px solid transparent;
     border-top: 6px solid red;
 }
-
 .common p {
     font: 20px;
     font-weight: bold;
@@ -191,20 +179,14 @@
         color: #F05E5E;
     }
 }
-
 .theme {
     font-size: 16px;
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
-
 .back {
     background: #fff;
 }
-
-// .table-item {
-//     border: none;
-// }
 </style>
 
 
@@ -212,8 +194,6 @@
 export default {
     data() {
         return {
-            isShow: true,
-            isHide: false,
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',

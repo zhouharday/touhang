@@ -37,7 +37,7 @@
                         <span>{{title_03}}</span>
                     </template>
     
-                    <el-menu-item index="">{{title5}}</el-menu-item>
+                    <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="">{{title6}}</el-menu-item>
                     <el-menu-item index="">{{title7}}</el-menu-item>
                     <el-menu-item index="">{{title8}}</el-menu-item>
