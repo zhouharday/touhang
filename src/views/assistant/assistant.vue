@@ -63,7 +63,7 @@
                     <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                         <el-table-column label="项目" min-width="100">
                             <template scope="scope">
-                                <a @click=" ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
+                                <a @click="ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
                                 <div>{{ scope.row.project }}</div>
                             </template>
                         </el-table-column>
@@ -89,10 +89,10 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button size="small">
+                                <el-button type="text" size="small" @click="jumpPool">
                                     +项目池
                                 </el-button>
-                                <el-button size="small">
+                                <el-button type="text" size="small" style="display:none">
                                     分享
                                 </el-button>
                             </template>
@@ -354,6 +354,11 @@ export default {
             // });
             // this.isShow = false;
             // this.isHide = true;
+        },
+        jumpPool() {
+            this.addTab( '项目池','/home/projectPool','projectPool');
+            this.$router.push({ name:'projectPool' });
+
         },
         addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });

@@ -39,7 +39,7 @@
                 </el-col>
                 <el-col :span="2">
                     <div class="messageBtn">
-                        <el-button type="danger">
+                        <el-button type="danger"  @click="jumpPool">
                             +项目池
                         </el-button>
                     </div>
@@ -320,6 +320,14 @@ export default {
     methods: {
         handleClick(tab, event) {
             console.log(tab, event);
+        },
+        jumpPool() {
+            this.addTab( '项目池','/home/projectPool','projectPool');
+            this.$router.push({ name:'projectPool' });
+
+        },
+        addTab(th, url, name) {
+            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
     }
 };

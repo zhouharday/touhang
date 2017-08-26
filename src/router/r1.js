@@ -19,6 +19,10 @@ export default [
         name: 'projectPool',
         component: resolve => require(['../views/project/projectPool.vue'], resolve)
 
-    }
-    
+    },
+    {
+        path: 'preProject', //home/投前项目页
+        name: 'preProject',
+        component: resolve => require(['../views/project/preProject.vue'], resolve)
+    },    
 ]

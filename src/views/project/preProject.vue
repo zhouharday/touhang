@@ -1,26 +1,22 @@
 <template>
-    <div class="poolContent">
-        <!-- 状态ul -->
+    <div class="preContent">
+        <!-- 阶段ul -->
         <el-row class="common">
             <el-col :span="24" style="margin-top:20px">
                 <div class="state-ul">
-                    <ul v-for="(item,index) in stateList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.states}}</li>
+                    <ul v-for="(item,index) in stageList" :key="item.index">
+                        <li :class="{bag: index == 1,fow: index==0}">{{item.stages}}</li>
                     </ul>
                 </div>
             </el-col>
         </el-row>
-        <!-- 行业ul -->
+        <!-- 类型ul -->
         <el-row class="common">
             <el-col :span="24">
                 <div class="industry-ul">
-                    <ul v-for="(item,index) in industryList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.details}}</li>
+                    <ul v-for="(item,index) in sortList" :key="item.index">
+                        <li :class="{bag: index == 1,fow: index==0}">{{item.sorts}}</li>
                     </ul>
-                    <button class="collapse-btn" @click="changeList">
-                        <span :class="btnObject"></span>
-                        {{collapseBtn1}}
-                    </button>
                 </div>
             </el-col>
         </el-row>
@@ -37,7 +33,7 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目名称" align="center">
                             <template scope="scope">
-                                <a @click="ShowMessagwe(scope.row,scope.$index)" class="project">{{ scope.row.project }}</a>
+                                <a class="project" @click="ShowMessagwe(scope.row,scope.$index)">{{ scope.row.project }}</a>
                             </template>
                     </el-table-column>
                     <el-table-column prop="mananger" label="项目负责人" align="center">
@@ -50,9 +46,6 @@
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
                             <template scope="scope">
-                                <el-button type="text" size="small" @click="jumpPre">
-                                    转投项目
-                                </el-button>
                                 <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
                                     删除
                                 </el-button>
@@ -64,11 +57,8 @@
     </div>
 </template>
 
-
-
-
 <style lang="less" scoped>
-.poolContent {
+.preContent {
     width: 100%;
     height: 650px;
     font-size: 14px;
@@ -97,31 +87,6 @@
     border-radius: 15px;
     background: #F05E5E;
 }
-.collapse-btn {
-    width: 50px;
-    color: #F05E5E;
-    border: none;
-    outline: none;
-    background: #fff;
-}
-.uptriangle {
-    display: inline-block;
-    position: relative;
-    bottom: 2px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-bottom: 6px solid red;
-}
-.downtriangle {
-    display: inline-block;
-    position: relative;
-    top: 3px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-top: 6px solid red;
-}
 .search-box {
     margin-left: 30px;
     margin-bottom: 20px;
@@ -133,53 +98,28 @@
 </style>
 
 
-
-
 <script>
 export default {
     data() {
         return {
             input: '',
-            collapseBtn1: '收起',
-            collapseBtn2: '下拉',
             index: 0,
-            btnObject: {
-                uptriangle: true,
-                downtriangle: false
-            },
-            stateList: [
-                { states: "状态：" },
-                { states: "全部" },
-                { states: "正常" },
-                { states: "观察" },
-                { states: "中止" },
-                { states: "淘汰" }
+            stageList: [
+                { stages: "项目阶段：" },
+                { stages: "全部" },
+                { stages: "考察储备" },
+                { stages: "立项会" },
+                { stages: "尽职调查" },
+                { stages: "投决会" },
+                { stages: "管理" },
+                { stages: "项目退出" }
             ],
-            industryList: [
-                { details: "行业：" },
-                { details: "全部" },
-                { details: "电商" },
-                { details: "社交" },
-                { details: "硬件" },
-                { details: "文娱传媒" },
-                { details: "信息传输" },
-                { details: "软件信息" },
-                { details: "金融" },
-                { details: "医疗健康" },
-                { details: "科技推广" },
-                { details: "生活消费" },
-                { details: "企业服务" },
-                { details: "旅游" },
-                { details: "地产" },
-                { details: "教育" },
-                { details: "公共交通" },
-                { details: "物流" },
-                { details: "人工智能" },
-                { details: "VR/AR" },
-                { details: "体育" },
-                { details: "农业" },
-                { details: "共享经济" },
-                { details: "游戏" }
+            sortList: [
+                { sorts: "项目类型：" },
+                { sorts: "全部" },
+                { sorts: "PE" },
+                { sorts: "VE" },
+                { sorts: "定增" }
             ],
             tableData: [
                 {
@@ -225,14 +165,14 @@ export default {
                     stage: '项目退出'
                 },
                 {
-                     project: '欧利',
+                    project: '欧利',
                     mananger: '张经理',
                     industry: '外汇',
                     sort: '定增',
                     stage: '投决会'
                 },
                 {
-                     project: '上上墅',
+                    project: '上上墅',
                     mananger: '张经理',
                     industry: '房地产',
                     sort: '定增',
@@ -244,18 +184,6 @@ export default {
     methods: {
         handleIconClick(ev) {
             console.log(ev);
-        },
-        // 点击折叠按钮，控制列表项的下拉与收起
-        changeList() {
-            if (this.collapseBtn1 == "收起") {
-                this.collapseBtn1 = "下拉";
-                this.btnObject.uptriangle = !(this.btnObject.uptriangle);
-                this.btnObject.downtriangle = !(this.btnObject.downtriangle);
-            } else {
-                this.collapseBtn1 = "收起";
-                this.btnObject.uptriangle = !(this.btnObject.uptriangle);
-                this.btnObject.downtriangle = !(this.btnObject.downtriangle);
-            }
         },
         // 设置table间隔行的background-color
         tableRowClassName(row, index) {
@@ -270,10 +198,6 @@ export default {
             this.index = ind;
             this.addTab( title.project + '详情页', '/message/'+ind, 'message/'+ind );
             this.$router.push({ name: 'message', params: { userId: ind } });
-        },
-        jumpPre() {
-            this.addTab('投前项目','/home/preProject','preProject');
-            this.$router.push({ name:'preProject' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
