@@ -39,13 +39,13 @@
                 </el-col>
                 <el-col :span="2">
                     <div class="messageBtn">
-                        <el-button type="danger"  @click="jumpPool">
+                        <el-button type="danger" @click="jumpPool">
                             +项目池
                         </el-button>
                     </div>
                 </el-col>
             </el-row>
-            
+
             <el-row class="message_bottom">
                 <el-col :span="24">
                     <div class="messageText">
@@ -65,11 +65,11 @@
                                     <p>{{dataList.operationData}}</p>
                                     <b>商业计划书</b>
                                     <div v-for="(item,index) in proposalList" :key="item.index">
-                                         <p>
+                                        <p>
                                             <span>{{item.plan}}</span>
                                             <span class="preview">预览</span>
                                             <span class="preview">下载</span>
-                                         </p>
+                                        </p>
                                     </div>
                                 </div>
                             </el-tab-pane>
@@ -299,36 +299,55 @@ export default {
             },
             proposalList: [
                 { plan: "xxxxx计划书" },
-                { plan: "xxxxx市场报告"}
+                { plan: "xxxxx市场报告" }
             ],
             financeList: [
                 {
-                  time: "2017.04",
-                  round: "pre-A轮",
-                  money: "数百万人民币",
-                  investor: "暂无"
+                    time: "2017.04",
+                    round: "pre-A轮",
+                    money: "数百万人民币",
+                    investor: "暂无"
                 },
                 {
-                  time: "2016.04",
-                  round: "天使轮",
-                  money: "数百万人民币",
-                  investor: "吴静钰"
+                    time: "2016.04",
+                    round: "天使轮",
+                    money: "数百万人民币",
+                    investor: "吴静钰"
                 }
             ]
+        }
+    },
+    watch: {
+        $route: function() {
+            this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
+        
         }
     },
     methods: {
         handleClick(tab, event) {
             console.log(tab, event);
+            window.sessionStorage.setItem("tab" + this.$route.params.userId, this.activeName);
         },
         jumpPool() {
-            this.addTab( '项目池','/home/projectPool','projectPool');
-            this.$router.push({ name:'projectPool' });
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
 
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+        },
+        messageList(){
+            this.$http.post(this.api+'url'+this.$route.params.userId)
+            .then( response => {
+
+            })
+            .catch( error => {
+
+            })
         }
+    },
+    created: function() {
+        this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
     }
 };
 

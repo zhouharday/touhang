@@ -272,7 +272,8 @@ export default {
                     industry: '体育',
                     round: 'Pre-A轮',
                     location: '广东省',
-                    datetime: '2015/01/16'
+                    datetime: '2015/01/16',
+                    id: 0
                 },
                 {
                     theme: 'Digital Asset',
@@ -280,7 +281,8 @@ export default {
                     industry: '金融',
                     round: 'B+轮',
                     location: '海外',
-                    datetime: '2016/04/21'
+                    datetime: '2016/04/21',
+                    id: 1
                 },
                 {
                     theme: '小六汤包',
@@ -288,7 +290,8 @@ export default {
                     industry: '生活消费',
                     round: 'Pre-A轮',
                     location: '陕西省',
-                    datetime: '2017/02/13'
+                    datetime: '2017/02/13',
+                    id: 2
                 },
                 {
                     theme: '智慧熊',
@@ -296,7 +299,8 @@ export default {
                     industry: '教育',
                     round: 'A轮',
                     location: '山东省',
-                    datetime: '2014/06/26'
+                    datetime: '2014/06/26',
+                    id: 3
                 }
             ]
         }
@@ -341,7 +345,7 @@ export default {
         ShowMessagwe(title,ind) {
             // alert(1);
             // console.log(ind);
-            // console.log(title.theme);
+            console.log(title);
             this.index = ind;
             this.addTab( title.theme + '详情页', '/message/'+ind, 'message/'+ind );
             this.$router.push({ name: 'message', params: { userId: ind } });

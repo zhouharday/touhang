@@ -68,13 +68,22 @@ export default {
             }
         },
         submitForm() {
+
+
             if (this.valueData) {
                 sessionStorage.clear();
                 this.$router.push({ name: 'homeContent' });
                 this.userName = '';
                 this.passWord = '';
                 this.valueData = false;
-
+                this.$http.get(this.api + "/user/login")
+                    .then(function(data) {
+                        console.log(1)
+                        console.log(data)
+                    })
+                    .catch(function(err) {
+                        console.log(err)
+                    })
             }
             //console.log(this.valueData);
         }
@@ -108,7 +117,6 @@ body {
 
 .login-btn {
     text-align: center;
-    
 }
 
 .login-btn button {
@@ -252,10 +260,10 @@ input::-webkit-input-placeholder {
     color: #fff;
     margin-top: 4px;
     outline: none;
-    &:hover{
+    &:hover {
         background: #803f3f;
     }
-    &:active{
+    &:active {
         background: #f05e5e;
     }
 }

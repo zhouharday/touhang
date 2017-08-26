@@ -12,6 +12,11 @@ var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
 
+var httpProxy = require('http-proxy');
+
+// 新建一个代理 Proxy Server 对象  
+var proxy = httpProxy.createProxyServer();
+
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
     // automatically open browser, if not set will be false
@@ -31,6 +36,7 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
         log: () => {}
     })
+
     // force page reload when html-webpack-plugin template changes
 compiler.plugin('compilation', function(compilation) {
     compilation.plugin('html-webpack-plugin-after-emit', function(data, cb) {
@@ -38,6 +44,13 @@ compiler.plugin('compilation', function(compilation) {
         cb()
     })
 })
+
+app.all("/api/*", function(req, res) {
+    delete req.headers.host;
+    proxy.web(req, res, { target: 'http://v2.eduwxt.com' });
+})
+
+
 
 // proxy api requests
 Object.keys(proxyTable).forEach(function(context) {

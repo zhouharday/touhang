@@ -23,6 +23,7 @@ Vue.use(ElementUI);
 
 
 Vue.prototype.$http = axios;
+Vue.prototype.api = process.env.NODE_ENV === 'production'?"":"/api";
 var vm = new Vue({
     router,
     store,

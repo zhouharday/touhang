@@ -3,15 +3,31 @@
         <v-head></v-head>
         <v-sidebar></v-sidebar>
         <div class="content">
-             <v-shouye></v-shouye>
-            <transition name="move" mode="out-in">
+            <v-shouye></v-shouye>
+            <transition name="bounce">
                 <router-view></router-view>
             </transition>
         </div>
     </div>
 </template>
 <style lang="less" scoped>
-
+.bounce-enter-active {
+  animation: bounce-in .3s;
+}
+.bounce-leave-active {
+  animation: bounce-in .3s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+//   50% {
+//     transform: scale(.5);
+//   }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>
 
 <script>
@@ -25,7 +41,7 @@ export default {
     },
     data() {
         return {
-        
+
         }
     }
 }
