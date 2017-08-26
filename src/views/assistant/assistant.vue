@@ -121,9 +121,8 @@
 }
 .common {
     padding: 0 30px 20px 30px;
-
+    
     ul {
-        
         float: left;
         li {
             display: inline-block;
