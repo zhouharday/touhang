@@ -61,6 +61,14 @@
                 </el-table>
             </el-col>
         </el-row>
+        <el-row type="flex"  align="bottom" class="page" >
+           <el-col :span="8">
+               <span>总记录：{{this.total}}条</span> 
+           </el-col>
+           <el-col :span="16">
+               <Page :total="128" :current="13" style="float:right"></Page>
+           </el-col>    
+        </el-row>
     </div>
 </template>
 
@@ -130,6 +138,9 @@
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
+.page {
+    margin: 25px 30px 0 30px;
+}
 </style>
 
 
@@ -139,6 +150,7 @@
 export default {
     data() {
         return {
+            total: 128,
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
