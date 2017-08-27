@@ -320,7 +320,7 @@ export default {
     watch: {
         $route: function() {
             this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
-        
+
         }
     },
     methods: {
@@ -336,18 +336,26 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        messageList(){
-            this.$http.post(this.api+'url'+this.$route.params.userId)
-            .then( response => {
+        messageList() {
+            this.$http.post(this.api + 'url' + this.$route.params.userId)
+                .then(response => {
 
-            })
-            .catch( error => {
+                })
+                .catch(error => {
 
-            })
+                })
+        },
+        stateData() { //调用 actions 方法
+            this.$store.dispatch({type: 'increment'});
         }
     },
     created: function() {
         this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
+    },
+    computed:{
+        textData(){
+            return this.$store.state.textData;
+        }
     }
 };
 

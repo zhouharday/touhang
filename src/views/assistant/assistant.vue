@@ -2,104 +2,104 @@
     <section class="assistantContent">
         <!-- 这是领投助手内容 -->
         <!--搜索框-->
-            <el-row class="search-box">
-                <el-col :span="10" class="search">
-                    <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick">
-                    </el-input>
-                </el-col>
-            </el-row>
-            <!--行业ul-->
-            <el-row class="common">
-                <el-col :span="24">
-                    <div class="industry-ul">
-                        <ul v-for="(item,index) in industryList" :key="item.index">
-                            <li :class="{bag: index == 1,fow: index==0}">{{item.details}}</li>
-                        </ul>
-                        <button class="collapse-btn" @click="changeList(1)">
+        <el-row class="search-box">
+            <el-col :span="10" class="search">
+                <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick">
+                </el-input>
+            </el-col>
+        </el-row>
+        <!--行业ul-->
+        <el-row class="common">
+            <el-col :span="24">
+                <div class="industry-ul">
+                    <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
+                        <li v-for="(item,index) in industryList" :key="item.index" :class="{bag: index == 1,fow: index==0}">{{item.details}}</li>
+                        <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
                             <span :class="btnObject1"></span>
                             {{collapseBtn1}}
                         </button>
-                    </div>
-                </el-col>
-            </el-row>
-            <!--轮次ul -->
-            <el-row class="common">
-                <el-col :span="24">
-                    <div class="round-ul">
-                        <ul v-for="(item,index) in roundList" :key="item.index">
-                            <li :class="{bag: index == 1,fow: index==0}">{{item.rounds}}</li>
-                        </ul>
-                    </div>
-                </el-col>
-            </el-row>
-            <!--所在地ul-->
-            <el-row class="common">
-                <el-col :span="24">
-                    <div class="location-ul">
-                        <ul v-for="(item,index) in locationList" :key="item.index">
-                            <li :class="{bag: index == 1,fow: index==0}">{{item.locations}}</li>
-                        </ul>
-                        <button class="collapse-btn" @click="changeList(2)">
-                            <span :class="btnObject2"></span>
-                            {{collapseBtn2}}
-                        </button>
-                    </div>
-                </el-col>
-            </el-row>
-            <!--搜索结果-->
-            <el-row class="common">
-                <el-col :span="24">
-                    <div>
-                        <p>共搜索到
-                            <span>4</span>
-                            个结果
-                        </p>
-                    </div>
-                </el-col>
-            </el-row>
-            <!--项目table -->
-            <el-row class="common">
-                <el-col :span="24">
-                    <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
-                        <el-table-column label="项目" min-width="100">
-                            <template scope="scope">
-                                <a @click="ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
-                                <div>{{ scope.row.project }}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="行业" align="center">
-                            <template scope="scope">
-                                <div class="fow">{{ scope.row.industry }}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="轮次" align="center">
-                            <template scope="scope">
-                                <div class="fow">{{ scope.row.round }}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="所在地" align="center">
-                            <template scope="scope">
-                                <div class="fow">{{ scope.row.location }}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="成立时间" align="center">
-                            <template scope="scope">
-                                <div class="fow">{{ scope.row.datetime }}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" align="center">
-                            <template scope="scope">
-                                <el-button type="text" size="small" @click="jumpPool">
-                                    +项目池
-                                </el-button>
-                                <el-button type="text" size="small" style="display:none">
-                                    分享
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </el-col>
-            </el-row>
+                    </ul>
+                </div>
+            </el-col>
+        </el-row>
+        <!--轮次ul -->
+        <el-row class="common">
+            <el-col :span="24">
+                <div class="round-ul">
+                    <ul v-for="(item,index) in roundList" :key="item.index">
+                        <li :class="{bag: index == 1,fow: index==0}">{{item.rounds}}</li>
+                    </ul>
+                </div>
+            </el-col>
+        </el-row>
+        <!--所在地ul-->
+        <el-row class="common">
+            <el-col :span="24">
+                <div class="location-ul">
+                    <ul v-for="(item,index) in locationList" :key="item.index">
+                        <li :class="{bag: index == 1,fow: index==0}">{{item.locations}}</li>
+                    </ul>
+                    <button class="collapse-btn" @click="changeList(2)">
+                        <span :class="btnObject2"></span>
+                        {{collapseBtn2}}
+                    </button>
+                </div>
+            </el-col>
+        </el-row>
+        <!--搜索结果-->
+        <el-row class="common">
+            <el-col :span="24">
+                <div>
+                    <p>共搜索到
+                        <span>4</span>
+                        个结果
+                    </p>
+                </div>
+            </el-col>
+        </el-row>
+        <!--项目table -->
+        <el-row class="common">
+            <el-col :span="24">
+                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
+                    <el-table-column label="项目" min-width="100">
+                        <template scope="scope">
+                            <a @click="ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
+                            <div>{{ scope.row.project }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="行业" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.industry }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="轮次" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.round }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="所在地" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.location }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="成立时间" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.datetime }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" align="center">
+                        <template scope="scope">
+                            <el-button type="text" size="small" @click="jumpPool">
+                                +项目池
+                            </el-button>
+                            <el-button type="text" size="small" style="display:none">
+                                分享
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
     </section>
 </template>
 
@@ -113,31 +113,51 @@
     font-size: 14px;
     background: #fff;
 }
+
 .search-box {
     padding: 30px 30px 30px 0;
     .search {
         float: right;
     }
 }
+
 .common {
     padding: 0 30px 20px 30px;
 
     ul {
         float: left;
+        //  width: 100%;
+        // height: 50px;
         li {
             display: inline-block;
             box-sizing: border-box;
             margin-right: 30px;
             margin-bottom: 5px;
+            cursor: pointer;
         }
     }
 }
+
+.changeList {
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.collapseBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .fow {
     font-weight: bold;
 }
+
 .location-ul li.fow {
     margin-right: 15px;
 }
+
 .bag {
     width: 45px;
     height: 20px;
@@ -146,6 +166,7 @@
     border-radius: 15px;
     background: #F05E5E;
 }
+
 .collapse-btn {
     width: 50px;
     color: #F05E5E;
@@ -153,6 +174,7 @@
     outline: none;
     background: #fff;
 }
+
 .uptriangle {
     display: inline-block;
     position: relative;
@@ -162,6 +184,7 @@
     border: 6px solid transparent;
     border-bottom: 6px solid red;
 }
+
 .downtriangle {
     display: inline-block;
     position: relative;
@@ -171,6 +194,7 @@
     border: 6px solid transparent;
     border-top: 6px solid red;
 }
+
 .common p {
     font: 20px;
     font-weight: bold;
@@ -180,11 +204,13 @@
         color: #F05E5E;
     }
 }
+
 .theme {
     font-size: 16px;
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
+
 .back {
     background: #fff;
 }
@@ -193,6 +219,12 @@
 
 <script>
 export default {
+    mounted() {
+        this.$nextTick(function() {
+            //dom已更新
+            console.log(this.$refs.industry.style.width);
+        })
+    },
     data() {
         return {
             input: '',
@@ -231,7 +263,7 @@ export default {
                 { details: "体育" },
                 { details: "农业" },
                 { details: "共享经济" },
-                { details: "游戏" }
+                // { details: "游戏" }
             ],
             roundList: [
                 { rounds: "轮次：" },
@@ -247,7 +279,7 @@ export default {
                 { rounds: "Pre-C轮" },
                 { rounds: "C轮" },
                 { rounds: "C+轮" },
-                { rounds: "E轮及以后" },
+                { rounds: "E轮及以后" }
             ],
             locationList: [
                 { locations: "所在地：" },
@@ -343,12 +375,12 @@ export default {
             }
             return '';
         },
-        ShowMessagwe(title,ind) {
+        ShowMessagwe(title, ind) {
             // alert(1);
             // console.log(ind);
             console.log(title);
             this.index = ind;
-            this.addTab( title.theme + '详情页', '/message/'+ind, 'message/'+ind );
+            this.addTab(title.theme + '详情页', '/message/' + ind, 'message/' + ind);
             this.$router.push({ name: 'message', params: { userId: ind } });
             // this.$http.post('${base}./url',{ ind }) //请求详情页list 数据
             // .then( response => {
@@ -361,8 +393,8 @@ export default {
             // this.isHide = true;
         },
         jumpPool() {
-            this.addTab( '项目池','/home/projectPool','projectPool');
-            this.$router.push({ name:'projectPool' });
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
 
         },
         addTab(th, url, name) {

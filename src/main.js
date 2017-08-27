@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import iView from 'iview';
 import axios from 'axios';
-
 import App from './App';
 import router from './router';
 import ElementUI from 'element-ui';
@@ -17,10 +16,6 @@ import store from './store';
 
 Vue.use(iView);
 Vue.use(ElementUI);
-
-
-
-
 
 Vue.prototype.$http = axios;
 Vue.prototype.api = process.env.NODE_ENV === 'production'?"":"/api";

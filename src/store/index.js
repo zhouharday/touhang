@@ -6,6 +6,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         TitleList: [],
+        textData: ''
         // tabIndex: ''
     },
     // 将数据存储到本地
@@ -48,6 +49,19 @@ const store = new Vuex.Store({
 
             obj.self.$router.push({ path: state.TitleList[obj.index - 1].path });
 
+        },
+        changeData( state, data){ //操作异步方法改变state
+            state.textData = data;
+        }
+    },
+    actions:{
+        increment ({commit,state}){ //定义异步方法
+            this.$http.post()
+            .then( data => {
+                // state.textData = data;
+                conmmit( 'changeData', data);
+            })
+            .catch()
         }
     }
 })
