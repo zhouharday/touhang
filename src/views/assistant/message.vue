@@ -262,9 +262,6 @@
 }
 </style>
 
- 
-
-
 
 <script>
 export default {

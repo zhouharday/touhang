@@ -17,8 +17,10 @@ import store from './store';
 Vue.use(iView);
 Vue.use(ElementUI);
 
-Vue.prototype.$http = axios;
-Vue.prototype.api = process.env.NODE_ENV === 'production'?"":"/api";
+// Vue.prototype.$http = axios;
+// Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
+Vue.prototype.$http = axios.create();
+Vue.prototype.$http.defaults.baseURL = 'http://192.168.0.198:9091';
 var vm = new Vue({
     router,
     store,

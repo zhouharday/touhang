@@ -222,7 +222,7 @@ export default {
     mounted() {
         this.$nextTick(function() {
             //dom已更新
-            console.log(this.$refs.industry.style.width);
+            // console.log(this.$refs.industry.style.width);
         })
     },
     data() {

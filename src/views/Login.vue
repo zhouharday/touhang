@@ -68,24 +68,19 @@ export default {
             }
         },
         submitForm() {
-
-
             if (this.valueData) {
                 sessionStorage.clear();
-                this.$router.push({ name: 'homeContent' });
-                this.userName = '';
-                this.passWord = '';
+                // this.$router.push({ name: 'homeContent' });
+                // this.userName = '';
+                // this.passWord = '';
                 this.valueData = false;
-                this.$http.get(this.api + "/user/login")
-                    .then(function(data) {
-                        console.log(1)
-                        console.log(data)
-                    })
-                    .catch(function(err) {
-                        console.log(err)
-                    })
+                this.$store.dispatch({
+                    type: 'loginAPI',
+                    name: this.userName,
+                    pwd: this.passWord,
+                    self: this
+                });
             }
-            //console.log(this.valueData);
         }
     }
 

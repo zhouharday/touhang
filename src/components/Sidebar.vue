@@ -191,7 +191,7 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="less" scoped>
 .div_el-menu-itemel-submenu__title{
     height: 56px;
     line-height: 56px;

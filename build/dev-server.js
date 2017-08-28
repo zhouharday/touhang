@@ -45,10 +45,10 @@ compiler.plugin('compilation', function(compilation) {
     })
 })
 
-app.all("/api/*", function(req, res) {
-    delete req.headers.host;
-    proxy.web(req, res, { target: 'http://v2.eduwxt.com' });
-})
+// app.all("/api/*", function(req, res) {
+//     delete req.headers.host;
+//     proxy.web(req, res, { target: 'http://192.168.0.198:9091' });
+// })
 
 
 
