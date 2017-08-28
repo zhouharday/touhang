@@ -13,7 +13,12 @@
             <el-col :span="24">
                 <div class="industry-ul">
                     <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
-                        <li v-for="(item,index) in industryList" :key="item.index" :class="{bag: index == 1,fow: index==0}">{{item.details}}</li>
+                        <li v-for="(item,index) in industryList" 
+                           :key="item.index" 
+                           :class="{active: index==currentIndex1,fow: index==0}"
+                           @click="changeActive(index,1)">
+                           {{item.details}}
+                        </li>
                         <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
                             <span :class="btnObject1"></span>
                             {{collapseBtn1}}
@@ -26,8 +31,13 @@
         <el-row class="common">
             <el-col :span="24">
                 <div class="round-ul">
-                    <ul v-for="(item,index) in roundList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.rounds}}</li>
+                    <ul ref="round">
+                        <li v-for="(item,index) in roundList"
+                           :key="item.index" 
+                           :class="{active: index==currentIndex2,fow: index==0}"
+                           @click="changeActive(index,2)">
+                           {{item.rounds}}
+                        </li>
                     </ul>
                 </div>
             </el-col>
@@ -36,13 +46,18 @@
         <el-row class="common">
             <el-col :span="24">
                 <div class="location-ul">
-                    <ul v-for="(item,index) in locationList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.locations}}</li>
+                    <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }">
+                        <li  v-for="(item,index) in locationList" 
+                             :key="item.index" 
+                             :class="{active: index==currentIndex3,fow: index==0}"
+                             @click="changeActive(index,3)">
+                             {{item.locations}}
+                        </li>
+                        <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
+                            <span :class="btnObject2"></span>
+                            {{collapseBtn2}}
+                        </button>
                     </ul>
-                    <button class="collapse-btn" @click="changeList(2)">
-                        <span :class="btnObject2"></span>
-                        {{collapseBtn2}}
-                    </button>
                 </div>
             </el-col>
         </el-row>
@@ -144,10 +159,21 @@
     position: relative;
 }
 
+
 .collapseBtn {
     position: absolute;
     right: 0;
     top: 0;
+}
+
+.changeListk {
+    position: relative;
+}
+
+.collapseBtnk {
+    position: absolute;
+    bottom: 5px;
+
 }
 
 .fow {
@@ -158,8 +184,8 @@
     margin-right: 15px;
 }
 
-.bag {
-    width: 45px;
+.active {
+    width: 70px;
     height: 20px;
     color: white;
     text-align: center;
@@ -230,7 +256,10 @@ export default {
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
-            index: 0,
+            currentIndex1: 1,
+            currentIndex2: 1,
+            currentIndex3: 1,
+            i: 0,
             btnObject1: {
                 uptriangle: true,
                 downtriangle: false
@@ -339,8 +368,17 @@ export default {
         }
     },
     methods: {
-        handleIconClick(ev) {
-            console.log(ev);
+        handleIconClick() {
+            // console.log(ev);
+            // var newTable=new Array();
+            // if(this.input) {
+            //     for(i=0;i<this.tableData.length;i++){
+            //         if(this.input===tableData[i].project){
+            //             newTable.push(tableData[i]);
+            //         }
+            //         this.tableData=newTable;
+            //     }
+            // }
         },
         // 点击折叠按钮，控制列表项的下拉与收起
         changeList(btn) {
@@ -401,8 +439,16 @@ export default {
             // this.$router.push({ name: 'assistant' });
             // this.$router.push({ name: name });
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+        },
+        changeActive(index,ind) {
+            if(ind==1) {
+                 this.currentIndex1=index;
+            } else if(ind==2) {
+                this.currentIndex2=index;
+            } else {
+                this.currentIndex3=index;
+            }
         }
-
     }
 }    
 </script>

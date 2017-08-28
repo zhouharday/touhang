@@ -243,6 +243,7 @@
                         margin-left: 15px;
                         color: #F05E5E;
                         border-bottom: 1px solid #F05E5E;
+                        cursor: pointer;
                     }
                 }
                 .financing .mgr {
