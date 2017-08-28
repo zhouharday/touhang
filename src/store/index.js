@@ -66,7 +66,7 @@ const store = new Vuex.Store({
             state
         }, userPwd) { //send login API
             // console.log(userPwd);
-            userPwd.self.$http.post('/user/login', {
+            userPwd.self.$http.post('/user/login',{
                     // number: userPwd.name,
                     // pass: userPwd.pwd
                     number: "xiaowen",
