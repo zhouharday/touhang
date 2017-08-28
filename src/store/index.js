@@ -66,11 +66,12 @@ const store = new Vuex.Store({
             state
         }, userPwd) { //send login API
             // console.log(userPwd);
-            userPwd.self.$http.post('/user/login',{
+            userPwd.self.$http.post('/icon/g279962-3.jpg',{
+            // {
                     // number: userPwd.name,
                     // pass: userPwd.pwd
-                    number: "xiaowen",
-                    pass: "e10adc3949ba59abbe56e057f20f883e"
+                //     number: "xiaowen",
+                //     pass: "e10adc3949ba59abbe56e057f20f883e"
                 })
                 .then( data => {
                     if( data.data.status == '156'){

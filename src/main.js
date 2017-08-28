@@ -22,12 +22,16 @@ Vue.prototype.$http = axios;
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
 // Vue.prototype.$http = axios.create();
 // Vue.prototype.$http.defaults.baseURL = 'http://192.168.0.198:9091';
-Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.$http = axios.create({
 
-    baseURL: 'http://192.168.0.198:9091',
+    baseURL: 'https://img3.doubanio.com',
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Headers": "Authorization,Origin, X-Requested-With, Content-Type, Accept",
+        "Access-Control-Allow-Methods": "GET,POST",
+        'Access-Control-Allow-Origin' :  '*'
     },
     transformRequest: [function (data) {
 

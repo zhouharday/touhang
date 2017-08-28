@@ -13,18 +13,26 @@
                 </div>
             </div>
             <div class="login-box">
-                <div class="login-name">企业登录</div>
-
-                <div class="login-ac">
-                    <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
+                <div>
+                    <div class="login-name">企业登录</div>
+                    <div class="login-ac">
+                        <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
+                    </div>
+                    <div class="login-pass">
+                        <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
+                    </div>
+                    <div class="find-pass">
+                        <!-- <router-link to=""></router-link> -->
+                        <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
+                        <a href="#" class="pass-find">找回密码</a>
+                    </div>
                 </div>
-                <div class="login-pass">
-                    <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
-                </div>
-                <div class="find-pass">
-                    <!-- <router-link to=""></router-link> -->
-                    <router-link class="pass-zhuce" to="/register">企业注册</router-link>
-                    <a href="#" class="pass-find">找回密码</a>
+                <div v-show="false">
+                    <el-carousel :interval="4000" type="card" height="200px">
+                        <el-carousel-item v-for="item in loginImg" :key="item">
+                            <h3><img :src="item.src" alt=""></h3>
+                        </el-carousel-item>
+                    </el-carousel>
                 </div>
                 <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
                 <hr class="hr" />
@@ -55,7 +63,13 @@ export default {
         return {
             userName: '',
             passWord: '',
-            valueData: false
+            valueData: false,
+            loginImg: [
+                { src: "../static/img/2.png" },
+                { src: "../static/img/2.png" },
+                { src: "../static/img/2.png" },
+                { src: "../static/img/2.png" },
+            ]
         }
     }
     ,
@@ -295,5 +309,36 @@ input::-webkit-input-placeholder {
 
 .active {
     background: red;
+}
+
+.el-carousel__item {
+    margin: 0 auto;
+    margin-left: 82px;
+    h3 {
+        // position: relative;
+        // color: #475669;
+        font-size: 14px; // opacity: 0.75;
+        line-height: 200px;
+        background: #ffffff;
+        margin: 0;
+        >img {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 112px;
+            height: 112px;
+        }
+    }
+}
+
+.el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n+1) {
+    // background-color: #d3dce6;
 }
 </style>
