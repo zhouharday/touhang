@@ -4,8 +4,13 @@
         <el-row class="common">
             <el-col :span="24" style="margin-top:20px">
                 <div class="state-ul">
-                    <ul v-for="(item,index) in stageList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.stages}}</li>
+                    <ul ref="state">
+                        <li v-for="(item,index) in stageList" 
+                            :key="item.index" 
+                            :class="{active: index==currentIndex1,fow: index==0}"
+                            @click="changeActive(index,1)">
+                            {{item.stages}}
+                        </li>
                     </ul>
                 </div>
             </el-col>
@@ -14,8 +19,13 @@
         <el-row class="common">
             <el-col :span="24">
                 <div class="industry-ul">
-                    <ul v-for="(item,index) in sortList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.sorts}}</li>
+                    <ul ref="industry">
+                        <li v-for="(item,index) in sortList" 
+                            :key="item.index" 
+                            :class="{active: index==currentIndex2,fow: index==0}"
+                            @click="changeActive(index,2)">
+                            {{item.sorts}}
+                        </li>
                     </ul>
                 </div>
             </el-col>
@@ -54,25 +64,27 @@
                 </el-table>
             </el-col>
         </el-row>
-        <el-row type="flex"  align="bottom" class="page" >
+        <el-row type="flex"  align="bottom" class="foot">
            <el-col :span="8">
                <span>总记录：{{this.total}}条</span> 
            </el-col>
            <el-col :span="16">
                <Page :total="128" :current="13" style="float:right"></Page>
-           </el-col>    
+           </el-col>  
         </el-row>
     </div>
 </template>
 
 <style lang="less" scoped>
 .preContent {
+    position: relative;
     width: 100%;
     height: 650px;
     font-size: 14px;
     background: #fff;
 }
 .common {
+    
     padding: 0 30px 20px 30px;
     ul {
         float: left;
@@ -81,14 +93,15 @@
             box-sizing: border-box;
             margin-right: 30px;
             margin-bottom: 5px;
+            cursor: pointer;
         }
     }
 }
 .fow {
     font-weight: bold;
 }
-.bag {
-    width: 45px;
+.active {
+    width: 70px;
     height: 20px;
     color: white;
     text-align: center;
@@ -103,9 +116,11 @@
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
-.page {
-    position: relative;
-    margin: 50px 30px 0 30px;
+.foot {
+    position: absolute;
+    margin-left: 30px;
+    margin-right: 30px;
+    // bottom: 10px;
 }
 </style>
 
@@ -116,7 +131,8 @@ export default {
         return {
             total: 128,
             input: '',
-            index: 0,
+            currentIndex1: 1,
+            currentIndex2: 1,
             stageList: [
                 { stages: "项目阶段：" },
                 { stages: "全部" },
@@ -217,7 +233,15 @@ export default {
         },
         deleteRow(index,rows) {
            rows.splice(index,1);
+        },
+        changeActive(index,ind) {
+            if(ind==1) {
+                 this.currentIndex1=index;
+            } else {
+                this.currentIndex2=index;
+            }
         }
+
     }
 }
 </script>
