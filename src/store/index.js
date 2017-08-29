@@ -66,20 +66,22 @@ const store = new Vuex.Store({
             state
         }, userPwd) { //send login API
             // console.log(userPwd);
-            userPwd.self.$http.post('/icon/g279962-3.jpg',{
-            // {
+            // userPwd.self.$http.post('http://localhost:8080/api/user/login', {
+            userPwd.self.$http.post('api/user/login', {
                     // number: userPwd.name,
                     // pass: userPwd.pwd
-                //     number: "xiaowen",
-                //     pass: "e10adc3949ba59abbe56e057f20f883e"
+                    number: "xiaowen",
+                    pass: "e10adc3949ba59abbe56e057f20f883e"
                 })
-                .then( data => {
-                    if( data.data.status == '156'){
+                .then(data => {
+                    // alert(data.data);
+                    if (data.data.status == '156') {
                         //用户名或密码不正确
-                        alert('用户名或密码不正确');
+                        // alert('用户名或密码不正确');
                         console.log('用户名或密码不正确');
+                        console.log(data.data);
                         return;
-                    } else if( data.data.status == '200' ){ //登录成功
+                    } else if (data.data.status == '200') { //登录成功
                         // alert('success');
                         state.textData = data.data;
                         commit('changeData', data.data);
