@@ -40,6 +40,12 @@
                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
                </el-input>
            </el-col> 
+           <el-col :span="8" class="addProject">
+                <button @click="addProject">
+                   <img src="/static/img/icon--添加项目.png" >
+                   添加项目
+               </button>
+           </el-col>
         </el-row>
         <!--项目table -->
         <el-row class="common">
@@ -163,6 +169,16 @@
 .search-box {
     margin-left: 30px;
     margin-bottom: 20px;
+    .addProject {
+        margin-left: 15px;
+        button {
+            color: #F05E5E;
+            border: none;
+            outline: none;
+            background: #fff;
+            cursor: pointer;
+        }
+    }
 }
 
 .project {
@@ -319,6 +335,10 @@ export default {
         jumpPre() {
             this.addTab('投前项目','/home/preProject','preProject');
             this.$router.push({ name:'preProject' });
+        },
+        addProject() {
+            this.addTab('添加项目','/home/addProject','addProject');
+            this.$router.push({ name:'addProject' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
