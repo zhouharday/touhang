@@ -8,8 +8,7 @@
                         <div class="homeContent_top_L">
                             <!-- <div>这是日期内容</div> -->
                             <div>
-
-                            <datatime title="" :month-date="monthDate" v-on:changetime="changetime" v-on:readyfun="readyfun"></datatime>
+                                <datatime title="" :month-date="monthDate" v-on:changetime="changetime" v-on:readyfun="readyfun"></datatime>
                             </div>
                         </div>
                     </div>
@@ -35,7 +34,7 @@
                 </div>
             </el-col>
         </el-row>
-    
+
         <el-row :gutter="20" style="margin:0;">
             <el-col :span="16" style="padding:0;">
                 <div class="grid-content bg-purple">
@@ -277,11 +276,11 @@
 <script>
 import datatime from './datetmp.vue';
 export default {
-    components: {datatime},
+    components: { datatime },
     data() {
         return {
             loading: false,
-            monthDate:[],
+            monthDate: [],
             RecentNotice: "最近通知",
             waitSth: "待办事项",
             sysPrompt: "系统提示",
@@ -345,23 +344,23 @@ export default {
             this.$http.post('/url', { //此处ajax
                 pageIndex: pageIndex
             })
-                .then(function (response) {
+                .then(function(response) {
 
                 })
-                .catch(function (error) {
+                .catch(function(error) {
 
                 });
-           
+
         },
-        changetime(data){
+        changetime(data) {
             console.log(data)
         },
-        readyfun(arr,data){
+        readyfun(arr, data) {
             var arr = arr;
             //先根据接口返回数据 修改arr 
             //然后再把arr赋值给monthdate
             arr.forEach(function(item) {
-                return item.yd = item.day && item.day%3 == 1?true:false;
+                return item.yd = item.day && item.day % 3 == 1 ? true : false;
             });
             this.monthDate = arr;
         }

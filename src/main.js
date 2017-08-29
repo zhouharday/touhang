@@ -14,32 +14,37 @@ import store from './store';
 
 
 
-
 Vue.use(iView);
 Vue.use(ElementUI);
 
 Vue.prototype.$http = axios;
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
-// Vue.prototype.$http = axios.create();
+Vue.prototype.$http = axios.create();
 // Vue.prototype.$http.defaults.baseURL = 'http://192.168.0.198:9091';
 // Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-Vue.prototype.$http = axios.create({
+// Vue.prototype.$http.defaults.headers.post['Access-Control-Allow-Origin'] = "*";
+// Vue.prototype.$http = axios.create({
 
-    baseURL: 'https://img3.doubanio.com',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Headers": "Authorization,Origin, X-Requested-With, Content-Type, Accept",
-        "Access-Control-Allow-Methods": "GET,POST",
-        'Access-Control-Allow-Origin' :  '*'
-    },
-    transformRequest: [function (data) {
+//     baseURL: 'http://192.168.0.146:9091',
+//     headers: {
+//         'Content-Type': 'application/json',
+//         "Access-Control-Allow-Headers": "X-Custom-Header",
+//         "Access-Control-Allow-Methods": '"GET","POST"',
+//         'Access-Control-Allow-Origin' :  "192.168.0.134"
+//         // 'Origin' :  "192.168.0.134"
+      
+//     },
+//     transformRequest: [function (data) {
 
-        data = Qs.stringify(data);
-        return data;
-    }],
-    withCredentials: true   //加了这段就可以跨域了 
-});
+//         data = Qs.stringify(data);
+//         return data;
+//     }],
+//     withCredentials: true
+// });
+
+
+
+
 var vm = new Vue({
     router,
     store,
