@@ -7,7 +7,11 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         TitleList: [],
-        userInfor: [] //save user login infor
+        userInfor: {}, //save user login infor
+        merchants: [],
+        logo: [],
+        loginCard: false,
+        loginBox: true,
         // tabIndex: ''
     },
     // 将数据存储到本地
@@ -66,7 +70,6 @@ const store = new Vuex.Store({
             state
         }, userPwd) { //send login API
             // console.log(userPwd);
-            // userPwd.self.$http.post('http://localhost:8080/api/user/login', {
             userPwd.self.$http.post('api/user/login', {
                     // number: userPwd.name,
                     // pass: userPwd.pwd
@@ -74,21 +77,41 @@ const store = new Vuex.Store({
                     pass: "e10adc3949ba59abbe56e057f20f883e"
                 })
                 .then(data => {
-                    // alert(data.data);
                     if (data.data.status == '156') {
                         //用户名或密码不正确
                         // alert('用户名或密码不正确');
+
                         console.log('用户名或密码不正确');
                         console.log(data.data);
                         return;
                     } else if (data.data.status == '200') { //登录成功
                         // alert('success');
-                        state.textData = data.data;
-                        commit('changeData', data.data);
-                        userPwd.self.$router.push({
-                            name: 'homeContent'
+                        state.userInfor = data.data.result.userInfo;
+                        state.merchants = data.data.result.merchants;
+                        data.data.result.merchants.forEach(function(item) {
+                            let obj = {};
+                            obj.logo = item.logo;
+                            obj.merchant_name = item.merchant_name;
+                            state.logo.push(obj);
                         });
-                        console.log(state.textData);
+                        console.log(state.userInfor);
+                        console.log(state.merchants);
+                        if (data.data.result.userInfo.isMerchant == '1') { //有组织
+                            state.loginCard = true;
+                            state.loginBox = false;
+                            console.log(state.loginCard);
+                        } else if (data.data.result.userInfo.isMerchant == '0') { //无组织
+                            state.loginCard = false;
+                            state.loginBox = true;
+                            userPwd.self.$router.push({
+                                name: 'homeContent'
+                            });
+                        }
+                        console.log(data.data.result.userInfo.isMerchant);
+                        // commit('changeData', data.data);
+                        // userPwd.self.$router.push({
+                        //     name: 'homeContent'
+                        // });
                     }
                     // console.log(data.data);
                 })

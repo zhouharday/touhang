@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="login-box">
-                <div>
+                <div v-show="loginBoxMessage">
                     <div class="login-name">企业登录</div>
                     <div class="login-ac">
                         <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
@@ -27,14 +27,19 @@
                         <a href="#" class="pass-find">找回密码</a>
                     </div>
                 </div>
-                <div v-show="false">
-                    <el-carousel :interval="4000" type="card" height="200px">
-                        <el-carousel-item v-for="item in loginImg" :key="item">
-                            <h3><img :src="item.src" alt=""></h3>
+                <div v-show="loginCardMessage" class="loginCard">
+                    <div>请确认登录管理后台的企业</div>
+                    <el-carousel @change="loginCards" :interval="0" type="card" height="200px" :autoplay='false'>
+                        <el-carousel-item :initial-index= "0" :name="item.um_id" v-for="item in merchant" :key="item">
+                            <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
+                            <div class="loginCard_title">{{item.merchant_name}}</div>
                         </el-carousel-item>
                     </el-carousel>
+                    <div @click="goBack($event)">返回</div>
                 </div>
-                <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
+                <div class="login_btn">
+                    <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
+                </div>
                 <hr class="hr" />
                 <div class="login-right-bottom">
                     <p>
@@ -59,20 +64,35 @@
 
 <script>
 export default {
+    computed: {
+        loginCardMessage: function() {
+            return this.$store.state.loginCard;
+        },
+        loginBoxMessage: function() {
+            return this.$store.state.loginBox;
+        },
+        merchant() {
+            // console.log(this.$store.state.textData.result.merchants);
+            return this.$store.state.logo;
+        },
+    },
     data() {
         return {
+            loginBox: true,
+            loginCard: false,
             userName: '',
             passWord: '',
             valueData: false,
             loginImg: [
-                { src: "../static/img/2.png" },
-                { src: "../static/img/2.png" },
-                { src: "../static/img/2.png" },
-                { src: "../static/img/2.png" },
+                { logo: "../static/img/2.png", merchant_name: "阿里巴巴1" },
+                // { logo: "../static/img/2.png", merchant_name: "腾讯企业2" },
+                // { logo: "../static/img/2.png", merchant_name: "百度搜索3" },
+                // { logo: "../static/img/2.png", merchant_name: "深度网络4" },
+                // { logo: "../static/img/2.png", merchant_name: "大唐电信5" },
+                // { logo: "../static/img/2.png", merchant_name: "中国移动6" },
             ]
         }
-    }
-    ,
+    },
     methods: {
         checkVata() {
             if (this.userName && this.passWord) {
@@ -85,17 +105,34 @@ export default {
             if (this.valueData) {
                 sessionStorage.clear();
                 // this.$router.push({ name: 'homeContent' });
-                // this.userName = '';
-                // this.passWord = '';
+                let number = this.userName;
+                let pass = this.passWord;
+                this.userName = '';
+                this.passWord = '';
                 this.valueData = false;
                 this.$store.dispatch({
                     type: 'loginAPI',
-                    name: this.userName,
-                    pwd: this.passWord,
+                    name: number,
+                    pwd: pass,
                     self: this
                 });
             }
-        }
+        },
+        goBack($event){
+            // alert(1);
+            this.$store.state.merchants = new Array;
+            $event.stopPropagation();
+            $event.preventDefault();
+            this.$store.state.loginCard = false;
+            this.$store.state.loginBox = true;
+        },
+        loginCards(name) {
+            // alert(1);
+            // console.log(index1);
+            console.log(name);
+            // this.setActiveItem();
+            // console.log(index2);
+        },
     }
 
 }
@@ -311,12 +348,48 @@ input::-webkit-input-placeholder {
     background: red;
 }
 
+.loginCard {
+    margin-left: 78px;
+    position: relative;
+    .loginCard_title {
+        // position: absolute;
+        color: #ffffff;
+        margin-top: 246px;
+    }
+    >div:nth-child(1) {
+        color: #fff;
+        position: absolute;
+        top: -40px;
+        left: 67px;
+        font-size: 20px;
+        font-weight: bolder;
+    }
+    >div:nth-child(2) {
+        padding-bottom: 40px;
+        overflow: hidden;
+        >div {
+            overflow: auto;
+        }
+    }
+    >div:nth-child(3) {
+        color: #ffffff;
+        position: absolute;
+        right: 0;
+        top: 400px;
+    }
+}
+
+.login_btn {
+    margin-top: 65px;
+}
+
 .el-carousel__item {
-    margin: 0 auto;
-    margin-left: 82px;
+    // margin: 0 auto;
+    // margin-left: 82px;
+    overflow: visible;
     h3 {
         // position: relative;
-        // color: #475669;
+        color: #475669;
         font-size: 14px; // opacity: 0.75;
         line-height: 200px;
         background: #ffffff;
@@ -339,6 +412,6 @@ input::-webkit-input-placeholder {
 }
 
 .el-carousel__item:nth-child(2n+1) {
-    // background-color: #d3dce6;
+    background-color: #d3dce6;
 }
 </style>
