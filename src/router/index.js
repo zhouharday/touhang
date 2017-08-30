@@ -1,21 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-Vue.use(Router);
-
-<<<<<<< HEAD
+Vue.use(Router)
 import r1 from "./r1"
 import r2 from "./r2"
 import r3 from "./r3"
 let arr = [];
-arr = arr.concat(r1, r2, r3);
-=======
-import r1 from "./r1";
-import r2 from "./r2";
-import r3 from "./r3";
-let arr = [];
-arr = arr.concat(r1,r2,r3);
->>>>>>> 66c623061e89e474fc2ecb900f4459b486ba97d1
+arr = arr.concat(r1, r2, r3)
 
 export default new Router({
     routes: [{
