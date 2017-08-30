@@ -1,132 +1,136 @@
 <template>
-    <div class="scllor">
-        <div class="sidebar">
-            <div class="portrait">
-                <div class="portrait-top">
-                    <img src="/static/img/默认头像.png">
-                </div>
-                <div class="user">
-                    <div style="margin-top:55px;">
-                        <div>你好， 大乔 !</div>
-                        <div>Administor</div>
-                    </div>
+<div class="scllor">
+    <div class="sidebar">
+        <div class="portrait">
+            <div class="portrait-top">
+                <img src="/static/img/默认头像.png">
+            </div>
+            <div class="user">
+                <div style="margin-top:55px;">
+                    <div>你好， 大乔 !</div>
+                    <div>Administor</div>
                 </div>
             </div>
-            <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
-                <el-submenu index="1">
-                    <template slot="title" style="height:50px;line-height:50px;" class="title">
+        </div>
+        <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
+            <el-submenu index="1">
+                <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
-                    <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
-                    <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
-                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
-                    <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
-                </el-submenu>
-                <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
-                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+                <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
+                <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
+                <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
+                <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
+            </el-submenu>
+            <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
+                <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
                         领投助手 -->
-                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
-                    <span index="assistant">{{title_02}}</span>
-                    <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
-                </div>
-                <el-submenu index="3">
-                    <template slot="title">
+                <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
+                <span index="assistant">{{title_02}}</span>
+                <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
+            </div>
+            <el-submenu index="3">
+                <template slot="title">
                         <!-- <i class="el-icon-date"></i>项目管理</template> -->
-                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
-                        <span>{{title_03}}</span>
-                    </template>
-    
-                    <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
-                    <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
-                    <el-menu-item index="">{{title7}}</el-menu-item>
-                    <el-menu-item index="">{{title8}}</el-menu-item>
-                    <el-menu-item index="">{{title9}}</el-menu-item>
-                    <el-menu-item index="">{{title10}}</el-menu-item>
-                </el-submenu>
-                <el-submenu index="4">
-                    <template slot="title">
+                <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
+                <span>{{title_03}}</span>
+                </template>
+
+                <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
+                <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
+                <el-menu-item index="">{{title7}}</el-menu-item>
+                <el-menu-item index="">{{title8}}</el-menu-item>
+                <el-menu-item index="">{{title9}}</el-menu-item>
+                <el-menu-item index="">{{title10}}</el-menu-item>
+            </el-submenu>
+            <el-submenu index="4">
+                <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>基金管理 -->
-                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
-                        <span>{{title_04}}</span>
-                    </template>
-                    <el-menu-item index="">{{title11}}</el-menu-item>
-                    <el-menu-item index="">{{title12}}</el-menu-item>
-                </el-submenu>
-                <el-submenu index="5">
-    
-                    <template slot="title">
+                  <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
+                  <span>{{title_04}}</span>
+                </template>
+                <el-menu-item index=""
+                @click="addTab(title11,'/home/myfund','myfund')">{{title11}}</el-menu-item>
+                <el-menu-item index=""
+                @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
+            </el-submenu>
+            <el-submenu index="5">
+
+                <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>投资者管理 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/touzizhe.png" />
                         <span>{{title_05}}</span>
                     </template>
-                    <el-menu-item index="">{{title13}}</el-menu-item>
-                </el-submenu>
-                <el-submenu index="6">
-                    <template slot="title">
+                <el-menu-item index="">{{title13}}</el-menu-item>
+            </el-submenu>
+            <el-submenu index="6">
+                <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>综合查询 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/survey.png" />
                         <span>{{title_06}}</span>
                     </template>
-                    <el-menu-item index="">{{title14}}</el-menu-item>
-                    <el-menu-item index="">{{title15}}</el-menu-item>
-                    <el-menu-item index="">{{title16}}</el-menu-item>
-                    <el-menu-item index="">{{title17}}</el-menu-item>
-                    <el-menu-item index="">{{title18}}</el-menu-item>
-                </el-submenu>
-                <!-- <el-submenu index="7">
+                <el-menu-item index="">{{title14}}</el-menu-item>
+                <el-menu-item index="">{{title15}}</el-menu-item>
+                <el-menu-item index="">{{title16}}</el-menu-item>
+                <el-menu-item index="">{{title17}}</el-menu-item>
+                <el-menu-item index="">{{title18}}</el-menu-item>
+            </el-submenu>
+            <!-- <el-submenu index="7">
                         <template slot="title">
                             <i class="el-icon-star-on"></i>统计分析</template>
                     </el-submenu> -->
-                <div class="div_el-menu-itemel-submenu__title">
-                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+            <div class="div_el-menu-itemel-submenu__title">
+                <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
                         统计分析 -->
-                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
-                    <span>{{title_07}}</span>
-                </div>
-                <el-submenu index="8">
-                    <template slot="title">
+                <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
+                <span>{{title_07}}</span>
+            </div>
+            <el-submenu index="8">
+                <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>系统管理 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
                         <span>{{title_08}}</span>
                     </template>
-                    <el-menu-item index="">{{title19}}</el-menu-item>
-                    <el-menu-item index="">{{title20}}</el-menu-item>
-                    <el-menu-item index="">{{title21}}</el-menu-item>
-                    <el-menu-item index="">{{title22}}</el-menu-item>
-                    <el-menu-item index="">{{title23}}</el-menu-item>
-                    <el-menu-item index="">{{title24}}</el-menu-item>
-                    <el-menu-item index="">{{title25}}</el-menu-item>
-                    <el-menu-item index="">{{title26}}</el-menu-item>
-                </el-submenu>
-                <el-submenu index="9">
-                    <template slot="title">
+                <el-menu-item index="">{{title19}}</el-menu-item>
+                <el-menu-item index="">{{title20}}</el-menu-item>
+                <el-menu-item index="">{{title21}}</el-menu-item>
+                <el-menu-item index="">{{title22}}</el-menu-item>
+                <el-menu-item index="">{{title23}}</el-menu-item>
+                <el-menu-item index="">{{title24}}</el-menu-item>
+                <el-menu-item index="">{{title25}}</el-menu-item>
+                <el-menu-item index="">{{title26}}</el-menu-item>
+            </el-submenu>
+            <el-submenu index="9">
+                <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>平台管理 -->
-                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/wangluo.png" />
-                        <span>{{title_09}}</span>
-                    </template>
-                    <el-menu-item index="">{{title27}}</el-menu-item>
-                    <el-menu-item index="">{{title28}}</el-menu-item>
-                    <el-menu-item index="">{{title29}}</el-menu-item>
-                    <el-menu-item index="">{{title30}}</el-menu-item>
-                    <el-menu-item index="">{{title31}}</el-menu-item>
-                    <el-menu-item index="">{{title32}}</el-menu-item>
-                    <el-menu-item index="">{{title33}}</el-menu-item>
-                    <el-menu-item index="">{{title34}}</el-menu-item>
-                </el-submenu>
-            </el-menu>
-        </div>
+                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/wangluo.png" />
+                    <span>{{title_09}}</span>
+                </template>
+                <el-menu-item index="">{{title27}}</el-menu-item>
+                <el-menu-item index="">{{title28}}</el-menu-item>
+                <el-menu-item index="">{{title29}}</el-menu-item>
+                <el-menu-item index="">{{title30}}</el-menu-item>
+                <el-menu-item index="">{{title31}}</el-menu-item>
+                <el-menu-item index="">{{title32}}</el-menu-item>
+                <el-menu-item index="">{{title33}}</el-menu-item>
+                <el-menu-item index="">{{title34}}</el-menu-item>
+            </el-submenu>
+        </el-menu>
     </div>
+</div>
 </template>
 
 <script>
-import { mapState} from 'vuex'
+import {
+    mapState
+} from 'vuex'
 export default {
     computed: mapState({
         onRoutes() {
             return this.$route.path.replace('/', '');
         }
-    }),    
+    }),
     data() {
         return {
             title_01: '日常办公',
@@ -171,7 +175,7 @@ export default {
             title31: '客户管理',
             title32: '客户权限',
             title33: '领头助手',
-            title34: '会员管理',         
+            title34: '会员管理',
 
         }
     },
@@ -182,16 +186,23 @@ export default {
         handleClose(key, keyPath) {
             // console.log(key, keyPath);
         },
-        addTab(th,url,name) {
+        addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });
-            this.$router.push({ name:name });
-            this.$store.commit({type:'addTab', title:th,url:url,name:name} );
+            this.$router.push({
+                name: name
+            });
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
+            });
         }
     }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="less" scoped>
 .div_el-menu-itemel-submenu__title{
     height: 56px;
     line-height: 56px;
@@ -212,7 +223,7 @@ export default {
     height: 100%;
     overflow: hidden;
     position: fixed;
-    
+
 }
 
 .el-menu-item,

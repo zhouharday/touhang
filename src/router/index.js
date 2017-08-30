@@ -3,10 +3,11 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-import r1 from "./r1";
-import r2 from "./r2";
+import r1 from "./r1"
+import r2 from "./r2"
+import r3 from "./r3"
 let arr = [];
-arr = arr.concat(r1,r2);
+arr = arr.concat(r1, r2, r3);
 
 export default new Router({
     routes: [{
