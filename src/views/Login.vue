@@ -14,30 +14,32 @@
             </div>
             <div class="login-box">
                 <!-- <div v-show="loginBoxMessage">
-                                <div class="login-name">企业登录</div>
-                                <div class="login-ac">
-                                    <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
-                                </div>
-                                <div class="login-pass">
-                                    <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
-                                </div>
-                                <div class="find-pass">
-                                    <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
-                                    <a href="#" class="pass-find">找回密码</a>
-                                </div>
-                            </div> -->
+                                                <div class="login-name">企业登录</div>
+                                                <div class="login-ac">
+                                                    <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
+                                                </div>
+                                                <div class="login-pass">
+                                                    <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
+                                                </div>
+                                                <div class="find-pass">
+                                                    <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
+                                                    <a href="#" class="pass-find">找回密码</a>
+                                                </div>
+                                            </div> -->
                 <!-- <div v-show="loginCardMessage" class="loginCard">
-                                <div>请确认登录管理后台的企业</div>
-                                <el-carousel @change="loginCards" :interval="0" type="card" height="200px" :autoplay='false' initial-index=0>
-                                    <el-carousel-item v-for="item in loginImg" :key="item">
-                                        <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
-                                        <div class="loginCard_title">{{item.merchant_name}}</div>
-                                    </el-carousel-item>
-                                </el-carousel>
-                                <div @click="goBack($event)">返回</div>
+                                                <div>请确认登录管理后台的企业</div>
+                                                <el-carousel @change="loginCards" :interval="0" type="card" height="200px" :autoplay='false' initial-index=0>
+                                                    <el-carousel-item v-for="item in loginImg" :key="item">
+                                                        <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
+                                                        <div class="loginCard_title">{{item.merchant_name}}</div>
+                                                    </el-carousel-item>
+                                                </el-carousel>
+                                                <div @click="goBack($event)">返回</div>
 
-                            </div> -->
-                <component :is="stateData"></component>
+                                            </div> -->
+                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" 
+                @changeName="getName" @sendVal="getval">
+                </component>
                 <div class="login_btn">
                     <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
                 </div>
@@ -79,12 +81,10 @@ export default {
     },
     data() {
         return {
-            // CardBox: loginCard,
-            // loginBox: 'loginBox',
-            // loginCard: false,
+            CardBox: loginCard,
             userName: '',
             passWord: '',
-            valueData: true,
+            valueData: false,
             loginImg: [
                 { logo: "../static/img/2.png", merchant_name: "阿里巴巴1" },
                 // { logo: "../static/img/2.png", merchant_name: "腾讯企业2" },
@@ -92,15 +92,21 @@ export default {
                 // { logo: "../static/img/2.png", merchant_name: "深度网络4" },
                 // { logo: "../static/img/2.png", merchant_name: "大唐电信5" },
                 // { logo: "../static/img/2.png", merchant_name: "中国移动6" },
-            ]
+            ],
         }
     },
     methods: {
-        checkVata() {
-            if (this.userName && this.passWord) {
+        getName(val) {
+            this.userName = val;
+        },
+        getPwd(val) {
+            this.passWord = val;
+        },
+        getval(val) {
+            if (val) {
                 this.valueData = true;
             } else {
-                this.valueData = true;
+                this.valueData = false;
             }
         },
         submitForm() {
@@ -112,34 +118,18 @@ export default {
                 this.userName = '';
                 this.passWord = '';
                 this.valueData = false;
-
                 this.$store.dispatch({
                     type: 'loginAPI',
                     name: number,
                     pwd: pass,
                     self: this
                 });
-
-                this.$store.state.login.CardBox = loginBox;
-                // this.isSend = false;
+                this.CardBox = loginBox;
             }
         },
         goBack($event) {
-            // alert(1);
-            // this.$store.state.merchants = [];
-            // $event.stopPropagation();
-            // $event.preventDefault();
-            this.$store.state.loginCard = false;
-            this.$store.state.loginBox = true;
-        },
-        loginCards(name1, name2) {
-            // alert(1);
-            // console.log(index1);
-            // console.log(name1);
-            // console.log(name2);
-            // this.setActiveItem();
-            // console.log(index2);
-        },
+            this.CardBox = loginCard;
+        }
     }
 
 }
