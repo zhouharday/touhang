@@ -29,7 +29,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api':{
-                target:'http://jsonplaceholder.typicode.com',
+                target:'http://192.168.0.198:9091',
                 changeOrigin:true,
                 pathRewrite:{
                     '/api':''

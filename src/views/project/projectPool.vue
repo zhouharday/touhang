@@ -4,8 +4,13 @@
         <el-row class="common">
             <el-col :span="24" style="margin-top:20px">
                 <div class="state-ul">
-                    <ul v-for="(item,index) in stateList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.states}}</li>
+                    <ul ref="state">
+                        <li v-for="(item,index) in stateList" 
+                            :key="item.index" 
+                            :class="{active: index==currentIndex1,fow: index==0}"
+                            @click="changeActive(index,1)">
+                            {{item.states}}
+                        </li>
                     </ul>
                 </div>
             </el-col>
@@ -13,14 +18,19 @@
         <!-- 行业ul -->
         <el-row class="common">
             <el-col :span="24">
-                <div class="industry-ul">
-                    <ul v-for="(item,index) in industryList" :key="item.index">
-                        <li :class="{bag: index == 1,fow: index==0}">{{item.details}}</li>
-                    </ul>
-                    <button class="collapse-btn" @click="changeList">
-                        <span :class="btnObject"></span>
-                        {{collapseBtn1}}
-                    </button>
+                <div class="industry-ul" :class="{ changeList: !btnObject.uptriangle }">
+                    <ul ref="industry">
+                        <li v-for="(item,index) in industryList" 
+                            :key="item.index" 
+                            :class="{active: index==currentIndex2,fow: index==0}"
+                            @click="changeActive(index,2)">
+                            {{item.details}}
+                        </li>
+                        <button :class="{ collapseBtn: !btnObject.uptriangle }" class="collapse-btn" @click="changeList">
+                            <span :class="btnObject"></span>
+                            {{collapseBtn1}}
+                        </button>
+                     </ul>
                 </div>
             </el-col>
         </el-row>
@@ -30,6 +40,12 @@
                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
                </el-input>
            </el-col> 
+           <el-col :span="8" class="addProject">
+                <button @click="addProject">
+                   <img src="/static/img/icon--添加项目.png" >
+                   添加项目
+               </button>
+           </el-col>
         </el-row>
         <!--项目table -->
         <el-row class="common">
@@ -51,7 +67,7 @@
                     <el-table-column label="操作" min-width="100" align="center">
                             <template scope="scope">
                                 <el-button type="text" size="small" @click="jumpPre">
-                                    转投项目
+                                    转投资
                                 </el-button>
                                 <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
                                     删除
@@ -82,6 +98,7 @@
     font-size: 14px;
     background: #fff;
 }
+
 .common {
     padding: 0 30px 20px 30px;
     ul {
@@ -91,20 +108,36 @@
             box-sizing: border-box;
             margin-right: 30px;
             margin-bottom: 5px;
+            cursor: pointer;
         }
     }
 }
+
+.changeList {
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.collapseBtn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
 .fow {
     font-weight: bold;
 }
-.bag {
-    width: 45px;
+
+.active {
+    width: 70px;
     height: 20px;
     color: white;
     text-align: center;
     border-radius: 15px;
     background: #F05E5E;
 }
+
 .collapse-btn {
     width: 50px;
     color: #F05E5E;
@@ -112,6 +145,7 @@
     outline: none;
     background: #fff;
 }
+
 .uptriangle {
     display: inline-block;
     position: relative;
@@ -121,6 +155,7 @@
     border: 6px solid transparent;
     border-bottom: 6px solid red;
 }
+
 .downtriangle {
     display: inline-block;
     position: relative;
@@ -130,14 +165,27 @@
     border: 6px solid transparent;
     border-top: 6px solid red;
 }
+
 .search-box {
     margin-left: 30px;
     margin-bottom: 20px;
+    .addProject {
+        margin-left: 15px;
+        button {
+            color: #F05E5E;
+            border: none;
+            outline: none;
+            background: #fff;
+            cursor: pointer;
+        }
+    }
 }
+
 .project {
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
+
 .page {
     margin: 25px 30px 0 30px;
 }
@@ -154,7 +202,8 @@ export default {
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
-            index: 0,
+            currentIndex1: 1,
+            currentIndex2: 1,
             btnObject: {
                 uptriangle: true,
                 downtriangle: false
@@ -287,11 +336,22 @@ export default {
             this.addTab('投前项目','/home/preProject','preProject');
             this.$router.push({ name:'preProject' });
         },
+        addProject() {
+            this.addTab('添加项目','/home/addProject','addProject');
+            this.$router.push({ name:'addProject' });
+        },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
         deleteRow(index,rows) {
            rows.splice(index,1);
+        },
+        changeActive(index,ind) {
+            if(ind==1) {
+                 this.currentIndex1=index;
+            } else {
+                this.currentIndex2=index;
+            }
         }
     }
 }

@@ -139,7 +139,7 @@ module.exports = {
                         empt: true
                     });
                 } else {
-                    var obj = {};//存放每天日期及课程
+                    var obj = {};//存放每天日期
                     obj.day = x;
                     month = month < 10 ? ("0" + parseInt(month)) : parseInt(month);
                     x = x < 10 ? ("0" + parseInt(x)) : parseInt(x);
