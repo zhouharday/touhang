@@ -45,14 +45,15 @@
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
                 <from-details :formDetails="formDetails"
-                              :formMIS="formMIS">
+                              :formMIS="formMIS"
+                              :formRegistration="formRegistration"
+                              :formAccountinfo="formAccountinfo">
                 </from-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
+                <team></team>
             </el-tab-pane>
             <el-tab-pane label="审批" name="examine" class="tab_list">
-            </el-tab-pane>
-            <el-tab-pane label="任务" name="task" class="tab_list">
             </el-tab-pane>
             <el-tab-pane label="投资者" name="Investor" class="tab_list">
             </el-tab-pane>
@@ -70,6 +71,7 @@
 <script type="text/ecmascript-6">
 import tableInfo from '../../components/tableInfo'
 import fromDetails from './details'
+import Team from './team'
 import echarts from '../../components/echarts'
 export default {
     data() {
@@ -127,16 +129,29 @@ export default {
             activeName: 'details',
             formDetails: {
                 baseInfo: '基本信息',
+                flag: 'false',
                 name: 'aaa基金',
                 establish: ''
             },
-            formMIS: {}
+            formMIS: {
+                baseInfo: '管理信息',
+                flag: 'false',
+            },
+            formRegistration: {
+                baseInfo: '备案注册',
+                flag: 'false',
+            },
+            formAccountinfo: {
+                baseInfo: '账户信息',
+                flag: 'false',
+            }
         }
     },
     components: {
         tableInfo,
         echarts,
-        fromDetails
+        fromDetails,
+        Team
     }
 }
 </script>
@@ -313,7 +328,7 @@ export default {
                     line-height: 20px;
                     border-radius: 100%;
                     color: #fff;
-                    background: #ff4949;
+                    background: #f05e5e;
                     text-align: center;
                     margin-top: 8px;
                 }
@@ -321,7 +336,7 @@ export default {
                     margin: 0 24px 0 20px;
                 }
                 .state {
-                    color: #ff4949;
+                    color: #f05e5e;
                 }
                 .complete {
                     color: #a0a3aa;
