@@ -8,6 +8,4 @@ export default [
         name: 'cooperative',
         component: resolve => require(['../views/fund/cooperative.vue'], resolve)
     }
-
-    
 ]
