@@ -1,7 +1,7 @@
 <template>
     <div class="loginCard">
         <div>请确认登录管理后台的企业</div>
-        <el-carousel :interval="0" type="card" height="200px" :autoplay='false' :initial-index="0">
+        <el-carousel :interval="3000" type="card" height="200px" :autoplay='true' :initial-index="0">
             <el-carousel-item v-for="item in merchant" :key="item" :initial-index="0">
                 <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
                 <div class="loginCard_title">{{item.merchant_name}}</div>

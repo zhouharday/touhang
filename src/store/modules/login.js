@@ -46,7 +46,7 @@ const mutations = {
     pushMerchants(state, data) {
         state.merchants = data.merchants; //push merchants(组织列表) 数据到state
     },
-    changeLoginCard(state){
+    changeLoginCard(state) {
         state.CardBox = loginCard;
     }
 }
@@ -79,11 +79,11 @@ const actions = {
                     console.log(state.userInfor);
                     if (data.data.result.userInfo.isMerchant >= '1') { //有组织
                         commit('pushMerchants', data.data.result);
-                        if( state.merchants.length == '1'){
+                        if (state.merchants.length == '1') {
                             userPwd.self.$router.push({
                                 name: 'homeContent'
                             });
-                        } else if( state.merchants.length > '1'){
+                        } else if (state.merchants.length > '1') {
                             state.CardBox = loginBox;
 
                         }
@@ -92,7 +92,6 @@ const actions = {
 
                         // console.log(state.loginCard);
                     } else if (data.data.result.userInfo.isMerchant == '0') { //无组织
-
 
                         userPwd.self.$router.push({
                             name: 'homeContent'
