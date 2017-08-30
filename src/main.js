@@ -22,27 +22,22 @@ Vue.prototype.$http = axios;
 Vue.prototype.$http = axios.create();
 // Vue.prototype.$http.defaults.baseURL = 'http://192.168.0.198:9091';
 // Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-// Vue.prototype.$http.defaults.headers.post['Access-Control-Allow-Origin'] = "*";
 // Vue.prototype.$http = axios.create({
 
-//     baseURL: 'http://192.168.0.146:9091',
+//     // baseURL: 'http://192.168.0.146:9091',
 //     headers: {
-//         'Content-Type': 'application/json',
-//         "Access-Control-Allow-Headers": "X-Custom-Header",
-//         "Access-Control-Allow-Methods": '"GET","POST"',
-//         'Access-Control-Allow-Origin' :  "192.168.0.134"
-//         // 'Origin' :  "192.168.0.134"
-      
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//         // "Access-Control-Allow-Headers": "X-Custom-Header",
+//         // "Access-Control-Allow-Methods": '"GET","POST"',
+//         // 'Access-Control-Allow-Origin' :  "*"
 //     },
 //     transformRequest: [function (data) {
-
 //         data = Qs.stringify(data);
 //         return data;
 //     }],
+//     // timeout: 1000,
 //     withCredentials: true
 // });
-
-
 
 
 var vm = new Vue({
