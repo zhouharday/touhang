@@ -1,17 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios';
-
+import loginBox from '../components/loginBox'
+import loginCard from '../components/loginCard'
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
         TitleList: [],
         userInfor: {}, //save user login infor
-        merchants: [],
-        logo: [],
+        merchants: [], //save 组织列表
         loginCard: false,
         loginBox: true,
+        CardBox: loginCard
         // tabIndex: ''
     },
     // 将数据存储到本地
@@ -59,13 +60,23 @@ const store = new Vuex.Store({
             });
 
         },
+        changeLogo(state,obj){
+            state.merchants = obj;
+        },
         changeData(state, data) { //操作异步方法改变state
             state.userInfor = data;
-        }
+        },
+        goBack(state) {
+            // alert(1);
+            // this.$store.state.merchants = [];
+            // $event.stopPropagation();
+            // $event.preventDefault();
+            state.CardBox = loginCard;
+            // state.loginBox = loginBox;;
+        },
     },
     actions: { //定义异步方法
         loginAPI({
-            context,
             commit,
             state
         }, userPwd) { //send login API
@@ -86,16 +97,18 @@ const store = new Vuex.Store({
                         return;
                     } else if (data.data.status == '200') { //登录成功
                         // alert('success');
+                        commit('changeLogo',data.data.result.merchants);
                         state.userInfor = data.data.result.userInfo;
-                        state.merchants = data.data.result.merchants;
-                        data.data.result.merchants.forEach(function(item) {
-                            let obj = {};
-                            obj.logo = item.logo;
-                            obj.merchant_name = item.merchant_name;
-                            state.logo.push(obj);
-                        });
-                        console.log(state.userInfor);
+                        // state.merchants = data.data.result.merchants;
+                        // state.merchants.forEach(function (item) {
+                        //     let obj = {};
+                        //     obj.logo = item.logo;
+                        //     obj.merchant_name = item.merchant_name;
+                        //     state.logo.push(obj);
+                        // });
                         console.log(state.merchants);
+                        // console.log(state.userInfor);
+                        // console.log(state.merchants);
                         if (data.data.result.userInfo.isMerchant == '1') { //有组织
                             state.loginCard = true;
                             state.loginBox = false;
@@ -107,7 +120,7 @@ const store = new Vuex.Store({
                                 name: 'homeContent'
                             });
                         }
-                        console.log(data.data.result.userInfo.isMerchant);
+                        // console.log(data.data.result.userInfo.isMerchant);
                         // commit('changeData', data.data);
                         // userPwd.self.$router.push({
                         //     name: 'homeContent'

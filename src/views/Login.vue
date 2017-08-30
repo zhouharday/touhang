@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="login-box">
-                <div v-show="loginBoxMessage">
+                <!-- <div v-show="loginBoxMessage">
                     <div class="login-name">企业登录</div>
                     <div class="login-ac">
                         <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
@@ -22,21 +22,22 @@
                         <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
                     </div>
                     <div class="find-pass">
-                        <!-- <router-link to=""></router-link> -->
                         <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
                         <a href="#" class="pass-find">找回密码</a>
                     </div>
-                </div>
-                <div v-show="loginCardMessage" class="loginCard">
+                </div> -->
+                <!-- <div v-show="loginCardMessage" class="loginCard">
                     <div>请确认登录管理后台的企业</div>
-                    <el-carousel @change="loginCards" :interval="0" type="card" height="200px" :autoplay='false'>
-                        <el-carousel-item :initial-index= "0" :name="item.um_id" v-for="item in merchant" :key="item">
+                    <el-carousel @change="loginCards" :interval="0" type="card" height="200px" :autoplay='false' initial-index=0>
+                        <el-carousel-item v-for="item in loginImg" :key="item">
                             <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
                             <div class="loginCard_title">{{item.merchant_name}}</div>
                         </el-carousel-item>
                     </el-carousel>
                     <div @click="goBack($event)">返回</div>
-                </div>
+
+                </div> -->
+                <component :is="stateData"></component>
                 <div class="login_btn">
                     <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
                 </div>
@@ -63,7 +64,10 @@
 </template>
 
 <script>
+import loginBox from '../components/loginBox'
+import loginCard from '../components/loginCard'
 export default {
+    components: { loginBox, loginCard },
     computed: {
         loginCardMessage: function() {
             return this.$store.state.loginCard;
@@ -73,16 +77,20 @@ export default {
         },
         merchant() {
             // console.log(this.$store.state.textData.result.merchants);
-            return this.$store.state.logo;
+            return this.$store.state.merchants;
         },
+        stateData(){
+            return this.$store.state.CardBox;
+        }
     },
     data() {
         return {
-            loginBox: true,
-            loginCard: false,
+            // CardBox: loginCard,
+            // loginBox: true,
+            // loginCard: false,
             userName: '',
             passWord: '',
-            valueData: false,
+            valueData: true,
             loginImg: [
                 { logo: "../static/img/2.png", merchant_name: "阿里巴巴1" },
                 // { logo: "../static/img/2.png", merchant_name: "腾讯企业2" },
@@ -98,38 +106,44 @@ export default {
             if (this.userName && this.passWord) {
                 this.valueData = true;
             } else {
-                this.valueData = false;
+                this.valueData = true;
             }
         },
         submitForm() {
             if (this.valueData) {
+
                 sessionStorage.clear();
-                // this.$router.push({ name: 'homeContent' });
+                this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
                 let pass = this.passWord;
                 this.userName = '';
                 this.passWord = '';
                 this.valueData = false;
+
                 this.$store.dispatch({
                     type: 'loginAPI',
                     name: number,
                     pwd: pass,
                     self: this
                 });
+
+                this.$store.state.CardBox = loginBox;
+                // this.isSend = false;
             }
         },
-        goBack($event){
+        goBack($event) {
             // alert(1);
-            this.$store.state.merchants = new Array;
-            $event.stopPropagation();
-            $event.preventDefault();
+            // this.$store.state.merchants = [];
+            // $event.stopPropagation();
+            // $event.preventDefault();
             this.$store.state.loginCard = false;
             this.$store.state.loginBox = true;
         },
-        loginCards(name) {
+        loginCards(name1, name2) {
             // alert(1);
             // console.log(index1);
-            console.log(name);
+            // console.log(name1);
+            // console.log(name2);
             // this.setActiveItem();
             // console.log(index2);
         },
