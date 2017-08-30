@@ -4,7 +4,7 @@
         <!--搜索框-->
         <el-row class="search-box">
             <el-col :span="10" class="search">
-                <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick">
+                <el-input placeholder="请输入查找内容" icon="search" v-model="search" :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
         </el-row>
@@ -13,11 +13,8 @@
             <el-col :span="24">
                 <div class="industry-ul">
                     <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
-                        <li v-for="(item,index) in industryList" 
-                           :key="item.index" 
-                           :class="{active: index==currentIndex1,fow: index==0}"
-                           @click="changeActive(index,1)">
-                           {{item.details}}
+                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex1,fow: index==0}" @click="changeActive(index,1)">
+                            {{item.details}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
                             <span :class="btnObject1"></span>
@@ -32,11 +29,8 @@
             <el-col :span="24">
                 <div class="round-ul">
                     <ul ref="round">
-                        <li v-for="(item,index) in roundList"
-                           :key="item.index" 
-                           :class="{active: index==currentIndex2,fow: index==0}"
-                           @click="changeActive(index,2)">
-                           {{item.rounds}}
+                        <li v-for="(item,index) in roundList" :key="item.index" :class="{active: index==currentIndex2,fow: index==0}" @click="changeActive(index,2)">
+                            {{item.rounds}}
                         </li>
                     </ul>
                 </div>
@@ -47,11 +41,8 @@
             <el-col :span="24">
                 <div class="location-ul">
                     <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }">
-                        <li  v-for="(item,index) in locationList" 
-                             :key="item.index" 
-                             :class="{active: index==currentIndex3,fow: index==0}"
-                             @click="changeActive(index,3)">
-                             {{item.locations}}
+                        <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3,fow: index==0}" @click="changeActive(index,3)">
+                            {{item.locations}}
                         </li>
                         <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
                             <span :class="btnObject2"></span>
@@ -111,14 +102,11 @@
                                 分享
                             </el-button>
                             <!-- 确认转项目池 dialog -->
-                            <el-dialog
-                                title="转项目池"
-                                :visible.sync="dialogVisible"
-                                size="tiny">
+                            <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <!-- <button @click="dialogVisible=false">确认</button>
-                                    <button  @click="dialogVisible=false,confirm=true">取消</button> -->
+                                        <button  @click="dialogVisible=false,confirm=true">取消</button> -->
                                     <el-button @click="dialogVisible=false">取 消</el-button>
                                     <el-button type="primary" @click="dialogVisible=false,confirm=true">确 定</el-button>
                                 </span>
@@ -153,8 +141,7 @@
     padding: 0 30px 20px 30px;
 
     ul {
-        float: left;
-        //  width: 100%;
+        float: left; //  width: 100%;
         // height: 50px;
         li {
             display: inline-block;
@@ -186,7 +173,6 @@
 .collapseBtnk {
     position: absolute;
     bottom: 5px;
-
 }
 
 .fow {
@@ -268,7 +254,7 @@ export default {
         return {
             confirm: false,
             dialogVisible: false,
-            input: '',
+            search: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
             currentIndex1: 1,
@@ -385,15 +371,17 @@ export default {
     methods: {
         handleIconClick() {
             // console.log(ev);
-            // var newTable=new Array();
-            // if(this.input) {
-            //     for(i=0;i<this.tableData.length;i++){
-            //         if(this.input===tableData[i].project){
-            //             newTable.push(tableData[i]);
-            //         }
-            //         this.tableData=newTable;
-            //     }
-            // }
+            // console.log(this.search);
+            var newTable = [];
+            if (this.search) {
+                for (let i = 0; i < this.tableData.length; i++) {
+                    if (this.search == this.tableData[i].theme) {
+                        newTable.push(this.tableData[i]);
+                    }
+                        this.tableData = newTable;
+                    console.log(this.tableData)
+                }
+            }
         },
         // 点击折叠按钮，控制列表项的下拉与收起
         changeList(btn) {
@@ -446,27 +434,27 @@ export default {
             // this.isHide = true;
         },
         jumpPool() {
-            this.dialogVisible=true;
-            if(this.confirm) {
-               this.addTab('项目池', '/home/projectPool', 'projectPool');
-               this.$router.push({ name: 'projectPool' });
+            this.dialogVisible = true;
+            if (this.confirm) {
+                this.addTab('项目池', '/home/projectPool', 'projectPool');
+                this.$router.push({ name: 'projectPool' });
             }
             // this.addTab('项目池', '/home/projectPool', 'projectPool');
             // this.$router.push({ name: 'projectPool' });
         },
-        
+
         addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });
             // this.$router.push({ name: name });
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        changeActive(index,ind) {
-            if(ind==1) {
-                this.currentIndex1=index;
-            } else if(ind==2) {
-                this.currentIndex2=index;
+        changeActive(index, ind) {
+            if (ind == 1) {
+                this.currentIndex1 = index;
+            } else if (ind == 2) {
+                this.currentIndex2 = index;
             } else {
-                this.currentIndex3=index;
+                this.currentIndex3 = index;
             }
         }
     }

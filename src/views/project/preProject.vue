@@ -32,10 +32,22 @@
         </el-row>
         <!--搜索框 -->
         <el-row class="search-box">
-           <el-col :span="4">
+           <el-col :span="5">
                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
                </el-input>
            </el-col> 
+           <el-col :span="4" class="addProject">
+                <div @click="addProject">
+                   <img src="/static/img/icon--添加项目.png">
+                   <span>添加项目</span>
+               </div>
+           </el-col>
+           <el-col :span="3" class="importProject" style="height:21px;">
+               <div>
+                  <span>导入</span>
+                  <span>下载模板</span> 
+               </div>
+           </el-col>
         </el-row>
         <!--项目table -->
         <el-row class="common">
@@ -43,7 +55,7 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目名称" align="center">
                             <template scope="scope">
-                                <a class="project" @click="ShowMessagwe(scope.row,scope.$index)">{{ scope.row.project }}</a>
+                                <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
                             </template>
                     </el-table-column>
                     <el-table-column prop="mananger" label="项目负责人" align="center">
@@ -75,6 +87,7 @@
     </div>
 </template>
 
+
 <style lang="less" scoped>
 .preContent {
     position: relative;
@@ -84,7 +97,6 @@
     background: #fff;
 }
 .common {
-    
     padding: 0 30px 20px 30px;
     ul {
         float: left;
@@ -109,18 +121,47 @@
     background: #F05E5E;
 }
 .search-box {
-    margin-left: 30px;
-    margin-bottom: 20px;
+    margin: 0 30px 20px 30px;
+    .addProject {
+        margin-left: 15px;
+        div {
+            position: relative;
+            color: #F05E5E;
+            cursor: pointer;
+            span {
+              position: absolute;
+              top: 2px;
+              left: 30px;
+              border-bottom: 1px solid #F05E5E;
+            }
+        }
+    }
+    .importProject {
+        position: relative;
+        float: right;
+        div {
+            width: 110px;
+            position: absolute;
+            right: 0;
+        }
+        span {
+            color: #F05E5E;
+            margin-left: 10px;
+            border-bottom: 1px solid #F05E5E;
+            cursor: pointer;
+        }
+    }
 }
+
 .project {
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
 .foot {
-    position: absolute;
-    margin-left: 30px;
-    margin-right: 30px;
-    // bottom: 10px;
+    margin: 25px 30px 0 30px
+    //  position: absolute;
+    // left: 30px;
+    // bottom: 20px;
 }
 </style>
 
@@ -156,56 +197,64 @@ export default {
                     mananger: '刘经理',
                     industry: '房地产',
                     sort: 'PE',
-                    stage: '立项会'
+                    stage: '立项会',
+                    id: 0
                 },
                 {
                     project: '一号店',
                     mananger: '王经理',
                     industry: '旅游',
                     sort: 'VE',
-                    stage: '管理'
+                    stage: '管理',
+                    id: 1
                 },
                 {
                     project: '飞志',
                     mananger: '张经理',
                     industry: '外汇',
                     sort: 'PE',
-                    stage: '投决会'
+                    stage: '投决会',
+                    id: 2
                 },
                 {
                     project: '博奥',
                     mananger: '刘经理',
                     industry: '基金',
                     sort: 'PE',
-                    stage: '尽职调查'
+                    stage: '尽职调查',
+                    id: 3
                 },
                 {
                     project: '起亚',
                     mananger: '刘经理',
                     industry: '房地产',
                     sort: '定增',
-                    stage: '考察储备'
+                    stage: '考察储备',
+                    id: 4
                 },
                 {
                     project: '中国石油',
                     mananger: '王经理',
                     industry: '石油',
                     sort: 'VE',
-                    stage: '项目退出'
+                    stage: '项目退出',
+                    id: 4
                 },
                 {
                     project: '欧利',
                     mananger: '张经理',
                     industry: '外汇',
                     sort: '定增',
-                    stage: '投决会'
+                    stage: '投决会',
+                    id: 6
                 },
                 {
                     project: '上上墅',
                     mananger: '张经理',
                     industry: '房地产',
                     sort: '定增',
-                    stage: '尽职调查'
+                    stage: '尽职调查',
+                    id: 7
                 }
             ]
         }
@@ -223,10 +272,14 @@ export default {
             }
             return '';
         },
-        ShowMessagwe(title,ind) {
+        ShowPreMessage(title,ind) {
             this.index = ind;
-            this.addTab( title.project + '详情页', '/message/'+ind, 'message/'+ind );
-            this.$router.push({ name: 'message', params: { userId: ind } });
+            this.addTab( title.project + '详情页', '/home/preProjectMessage/'+ind, '/home/preProjectMessage/'+ind );
+            this.$router.push({ name: 'preProjectMessage', params: { userId: ind } });
+        },
+        addProject() {
+            this.addTab('添加项目','/home/addProject','addProject');
+            this.$router.push({ name:'addProject' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
@@ -241,7 +294,6 @@ export default {
                 this.currentIndex2=index;
             }
         }
-
     }
 }
 </script>

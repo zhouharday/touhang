@@ -29,5 +29,11 @@ export default [
         path: 'addProject', //home/添加项目页
         name: 'addProject',
         component: resolve => require(['../views/project/addProject.vue'], resolve)
-    },      
+    }, 
+    {
+        path: 'preProjectMessage/:userId', //home/投前项目详情页
+        name: 'preProjectMessage',
+        component: resolve => require(['../views/project/preProjectMessage.vue'], resolve)
+
+    }     
 ]

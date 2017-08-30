@@ -36,15 +36,15 @@
         </el-row>
         <!--搜索框 -->
         <el-row class="search-box">
-           <el-col :span="4">
+           <el-col :span="5">
                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
                </el-input>
            </el-col> 
-           <el-col :span="8" class="addProject">
-                <button @click="addProject">
-                   <img src="/static/img/icon--添加项目.png" >
-                   添加项目
-               </button>
+           <el-col :span="4" class="addProject">
+                <div @click="addProject">
+                   <img src="/static/img/icon--添加项目.png">
+                   <span>添加项目</span>
+               </div>
            </el-col>
         </el-row>
         <!--项目table -->
@@ -171,12 +171,16 @@
     margin-bottom: 20px;
     .addProject {
         margin-left: 15px;
-        button {
+        div {
+            position: relative;
             color: #F05E5E;
-            border: none;
-            outline: none;
-            background: #fff;
             cursor: pointer;
+            span {
+              position: absolute;
+              top: 2px;
+              left: 30px;
+              border-bottom: 1px solid #F05E5E;
+            }
         }
     }
 }
