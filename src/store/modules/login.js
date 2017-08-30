@@ -73,7 +73,7 @@ const actions = {
                     state.userInfor = data.data.result.userInfo;
                     console.log(state.merchants);
                     if (data.data.result.userInfo.isMerchant == '1') { //有组织
-
+                        
 
                         // console.log(state.loginCard);
                     } else if (data.data.result.userInfo.isMerchant == '0') { //无组织
