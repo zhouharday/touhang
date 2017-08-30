@@ -67,21 +67,15 @@
 
 <script>
 import { mapState } from 'vuex'
-import loginBox from '../components/loginBox'
-import loginCard from '../components/loginCard'
 export default {
-    // components: { loginBox, loginCard },
     computed: {
         ...mapState({
-            stateData: state => state.login.CardBox,
-            loginCardMessage: state => state.login.loginCard,
-            loginBoxMessage: state => state.login.loginBox,
+            CardBox: state => state.login.CardBox,
             merchant: state => state.login.merchants,
         }),
     },
     data() {
         return {
-            CardBox: loginCard,
             userName: '',
             passWord: '',
             valueData: false,
@@ -124,14 +118,12 @@ export default {
                     pwd: pass,
                     self: this
                 });
-                this.CardBox = loginBox;
             }
         },
         goBack($event) {
-            this.CardBox = loginCard;
+            this.$store.commit('changeLoginCard');
         }
     }
-
 }
 </script>
 
