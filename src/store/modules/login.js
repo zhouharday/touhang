@@ -1,7 +1,7 @@
-// import axios from 'axios';
-import loginBox from '../../components/loginBox'
-import loginCard from '../../components/loginCard'
+import request from 'superagent'
 
+import loginBox from '../../components/loginBox.vue'
+import loginCard from '../../components/loginCard.vue'
 
 
 
@@ -52,11 +52,11 @@ const mutations = {
         });
 
     },
-    changeLogo(state, obj) {
-        state.merchants = obj;
-    },
     changeData(state, data) { //操作异步方法改变state
         state.userInfor = data;
+    },
+    changeLogo(state,data){
+        state.merchants = data;
     },
     goBack(state) {
         // alert(1);

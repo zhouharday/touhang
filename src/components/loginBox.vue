@@ -11,18 +11,13 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     computed: {
-        // loginCardMessage: function() {
-        //     return this.$store.state.loginCard;
-        // },
-        // loginBoxMessage: function() {
-        //     return this.$store.state.loginBox;
-        // },
-        merchant() {
-            // console.log(this.$store.state.textData.result.merchants);
-            return this.$store.state.merchants;
-        },
+        // Getting Vuex State from store/modules/login
+        ...mapState({
+            merchant: state => state.login.merchants,
+        })
     },
     methods: {
         goBacka() {
