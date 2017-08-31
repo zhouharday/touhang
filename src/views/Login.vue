@@ -37,7 +37,7 @@
                                                 <div @click="goBack($event)">返回</div>
 
                                             </div> -->
-                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" 
+                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd"
                 @changeName="getName" @sendVal="getval">
                 </component>
                 <div class="login_btn">
@@ -106,7 +106,7 @@ export default {
         submitForm() {
             if (this.valueData) {
                 sessionStorage.clear();
-                // this.$router.push({ name: 'homeContent' });
+                this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
                 let pass = this.passWord;
                 this.userName = '';

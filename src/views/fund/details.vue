@@ -1,19 +1,11 @@
 <template>
 <div class="form">
+    <tabel-header :data="headerInfo_details"
+                  @method="disable(formDetails)">
+    </tabel-header>
     <div class="formDetails">
         <el-form ref="formDetails" :model="formDetails" label-width="120px">
             <el-row>
-                <el-col :span="24" class="title">
-                    <div class="desc">{{formDetails.baseInfo}}</div>
-                    <div class="btn">
-                        <el-button class="btnwrapper"
-                                   size="small"
-                                   @click="disable(formDetails)">
-                            <Icon type="edit"></Icon>
-                            <span>编辑</span>
-                        </el-button>
-                    </div>
-                </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金名称">
                         <el-input v-model="formDetails.name" :disabled="formDetails.flag"></el-input>
@@ -94,20 +86,10 @@
             </el-row>
         </el-form>
     </div>
+    <tabel-header :data="headerInfo_MIS" @method="disable(formMIS)"></tabel-header>
     <div class="formMIS">
         <el-form ref="formMIS" :model="formMIS" label-width="120px">
             <el-row>
-                <el-col :span="24" class="title">
-                    <div class="desc">{{formMIS.baseInfo}}</div>
-                    <div class="btn">
-                        <el-button class="btnwrapper"
-                                   size="small"
-                                   @click="disable(formDetails)">
-                            <Icon type="edit"></Icon>
-                            <span>编辑</span>
-                        </el-button>
-                    </div>
-                </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金管理人">
                         <el-input v-model="formMIS.name" :disabled="formMIS.flag"></el-input>
@@ -141,20 +123,10 @@
             </el-row>
         </el-form>
     </div>
+    <tabel-header :data="headerInfo_Registration @method="disable(formRegistration)""></tabel-header>
     <div class="formRegistration">
         <el-form ref="formRegistration" :model="formRegistration" label-width="120px">
             <el-row>
-                <el-col :span="24" class="title">
-                    <div class="desc">{{formRegistration.baseInfo}}</div>
-                    <div class="btn">
-                        <el-button class="btnwrapper"
-                                   size="small"
-                                   @click="disable(formDetails)">
-                            <Icon type="edit"></Icon>
-                            <span>编辑</span>
-                        </el-button>
-                    </div>
-                </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册日期">
                         <el-date-picker v-model="formDetails.date" align="right" type="date" placeholder="注册日期" style="width:100%" :disabled="formRegistration.flag">
@@ -189,20 +161,10 @@
             </el-row>
         </el-form>
     </div>
+    <tabel-header :data="headerInfo_Accountinfo" @method="disable(formAccountinfo)"></tabel-header>
     <div class="formAccountinfo">
         <el-form ref="formAccountinfo" :model="formAccountinfo">
             <el-row>
-                <el-col :span="24" class="title">
-                    <div class="desc">{{formAccountinfo.baseInfo}}</div>
-                    <div class="btn">
-                        <el-button class="btnwrapper"
-                                   size="small"
-                                   @click="disable(formDetails)">
-                            <Icon type="edit"></Icon>
-                            <span>编辑</span>
-                        </el-button>
-                    </div>
-                </el-col>
                 <el-col :span="24" class="navbar">
                     <el-row :gutter="20">
                         <el-col span="6">账户类型</el-col>
@@ -275,6 +237,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import tabelHeader from 'components/tabelHeader'
 export default {
     props: {
         formDetails: {
@@ -302,7 +265,35 @@ export default {
             }, {
                 value: 'no',
                 label: '否'
-            }]
+            }],
+            headerInfo_details: {
+                desc: '基本信息',
+                icon_a: 'upload',
+                explain_a: '提交',
+                icon_b: 'edit',
+                explain_b: '编辑'
+            },
+            headerInfo_MIS: {
+                desc: '管理信息',
+                icon_a: 'upload',
+                explain_a: '提交',
+                icon_b: 'edit',
+                explain_b: '编辑'
+            },
+            headerInfo_Registration: {
+                desc: '备案注册',
+                icon_a: 'upload',
+                explain_a: '提交',
+                icon_b: 'edit',
+                explain_b: '编辑'
+            },
+            headerInfo_Accountinfo: {
+                desc: '账户信息',
+                icon_a: 'upload',
+                explain_a: '提交',
+                icon_b: 'edit',
+                explain_b: '编辑'
+            }
         }
     },
     methods: {
@@ -313,6 +304,9 @@ export default {
                 return name.flag = false
             }
         }
+    },
+    components: {
+        tabelHeader
     }
 }
 </script>

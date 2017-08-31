@@ -12,9 +12,18 @@
         </div>
     </div>
     <el-row class="step">
-        <el-col :span="8" class="step_one step_span"><span>{{step_one}}</span></el-col>
-        <el-col :span="8" class="step_second step_span"><span>{{step_second}}</span></el-col>
-        <el-col :span="8" class="step_third step_span"><span>{{step_third}}</span></el-col>
+        <el-col :span="8"
+                class="step_one step_span">
+            <span>{{step_one}}</span>
+        </el-col>
+        <el-col :span="8"
+                class="step_second step_span">
+            <span>{{step_second}}</span>
+        </el-col>
+        <el-col :span="8"
+                class="step_third step_span">
+                <span>{{step_third}}</span>
+        </el-col>
     </el-row>
     <div class="picture">
         <div class="img_wrapper">
@@ -54,10 +63,13 @@
                 <team></team>
             </el-tab-pane>
             <el-tab-pane label="审批" name="examine" class="tab_list">
+                <examine></examine>
             </el-tab-pane>
             <el-tab-pane label="投资者" name="Investor" class="tab_list">
+                <investor></investor>
             </el-tab-pane>
             <el-tab-pane label="投资项目" name="project" class="tab_list">
+                <projects></projects>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
             </el-tab-pane>
@@ -72,6 +84,9 @@
 import tableInfo from '../../components/tableInfo'
 import fromDetails from './details'
 import Team from './team'
+import Examine from './examine'
+import Investor from './investor'
+import Projects from './projects'
 import echarts from '../../components/echarts'
 export default {
     data() {
@@ -151,7 +166,10 @@ export default {
         tableInfo,
         echarts,
         fromDetails,
-        Team
+        Team,
+        Examine,
+        Investor,
+        Projects
     }
 }
 </script>
@@ -204,13 +222,14 @@ export default {
         .step_span {
             line-height: 52px;
             text-align: center;
-        }
-        .step_one {
             width: 32%;
             height: 52px;
             float: left;
-            border: 1px solid red;
+            border: 1px solid #000;
             position: relative;
+        }
+        .step_one {
+            border: 1px solid red;
             &::after {
                 content: '';
                 width: 36px;
@@ -226,12 +245,7 @@ export default {
             }
         }
         .step_second {
-            width: 32%;
-            height: 52px;
-            float: left;
             margin: 0 2%;
-            border: 1px solid #000;
-            position: relative;
             &::after {
                 content: '';
                 width: 36px;
@@ -259,11 +273,6 @@ export default {
             }
         }
         .step_third {
-            width: 32%;
-            height: 52px;
-            float: left;
-            border: 1px solid #000;
-            position: relative;
             &::before {
                 content: '';
                 width: 36px;
@@ -350,6 +359,7 @@ export default {
     }
     .tabs {
         width: 100%;
+        padding-bottom: 54px;
         .el-tabs__nav {
             width: 100%!important;
             .el-tabs__item {
