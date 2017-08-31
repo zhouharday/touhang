@@ -9,7 +9,8 @@ let arr = [];
 arr = arr.concat(r1, r2, r3)
 
 export default new Router({
-    routes: [{
+    routes: [
+        {
             path: '/',
             redirect: '/login'
         },
