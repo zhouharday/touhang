@@ -7,7 +7,7 @@
                 </div>
                 <div class="user">
                     <div style="margin-top:55px;">
-                        <div>你好， 大乔 !</div>
+                        <div>你好,{{userName}} !</div>
                         <div>Administor</div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                领投助手 -->
+                                    领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
@@ -74,12 +74,12 @@
                     <el-menu-item index="">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
-                                <template slot="title">
-                                    <i class="el-icon-star-on"></i>统计分析</template>
-                            </el-submenu> -->
+                                    <template slot="title">
+                                        <i class="el-icon-star-on"></i>统计分析</template>
+                                </el-submenu> -->
                 <div class="div_el-menu-itemel-submenu__title">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                统计分析 -->
+                                    统计分析 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
                     <span>{{title_07}}</span>
                 </div>
@@ -124,6 +124,11 @@ export default {
     computed: mapState({
         onRoutes() {
             return this.$route.path.replace('/', '');
+        },
+        // userName: state => state.login.userInfor.name,
+        userName(state) {
+            state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return state.login.userInfor.name;
         }
     }),
     data() {

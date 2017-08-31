@@ -47,12 +47,12 @@ compiler.plugin('compilation', function (compilation) {
     })
 })
 
-app.all("/api", function (req, res) {
-    delete req.headers.host;
-    proxy.web(req, res, {
-        target: 'http://192.168.0.198:9091'
-    });
-})
+// app.all("/api", function (req, res) {
+//     delete req.headers.host;
+//     proxy.web(req, res, {
+//         target: 'http://192.168.0.198:9091'
+//     });
+// })
 
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
