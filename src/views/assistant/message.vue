@@ -140,7 +140,7 @@
                                             <span>{{dataList.capital}}</span>
                                         </p>
                                         <p>法人代表：
-                                            <span>{{dataList.representative}}</span>
+                                            <span>{{dataList.delegate}}</span>
                                         </p>
                                         <p>经营状态：
                                             <span>{{dataList.operationState}}</span>
@@ -344,7 +344,7 @@ export default {
                 companySort: "有限责任公司",
                 date: "2016-03-14",
                 capital: "105.2632万人民币",
-                representative: "蒋径舟",
+                delegate: "蒋径舟",
                 operationState: "存续",
                 authority: "深圳市市场监督管理局",
                 address: "深圳市南山区粤海街道大冲商务中心C座902",

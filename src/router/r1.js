@@ -17,23 +17,33 @@ export default [
     {
         path: 'projectPool', //home/项目池页
         name: 'projectPool',
-        component: resolve => require(['../views/project/projectPool.vue'], resolve)
+        component: resolve => require(['../views/project/projectPool/projectPool.vue'], resolve)
 
+    },
+    {
+        path: 'zprojectPoolMessage/:userId', //home/正常状态下的项目池详情页
+        name: 'zprojectPoolMessage',
+        component: resolve => require(['../views/project/projectPool/zprojectPoolMessage.vue'], resolve)
+    },
+    {
+        path: 'wprojectPoolMessage', //home/未入项目池的项目详情页
+        name: 'wprojectPoolMessage',
+        component: resolve => require(['../views/project/wprojectPoolMessage.vue'], resolve)
     },
     {
         path: 'preProject', //home/投前项目页
         name: 'preProject',
-        component: resolve => require(['../views/project/preProject.vue'], resolve)
-    }, 
+        component: resolve => require(['../views/project/preProject/preProject.vue'], resolve)
+    },
+    {
+        path: 'preProjectMessage/:userId', //home/投前项目详情页
+        name: 'preProjectMessage',
+        component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
+
+    } , 
     {
         path: 'addProject', //home/添加项目页
         name: 'addProject',
         component: resolve => require(['../views/project/addProject.vue'], resolve)
-    }, 
-    {
-        path: 'preProjectMessage/:userId', //home/投前项目详情页
-        name: 'preProjectMessage',
-        component: resolve => require(['../views/project/preProjectMessage.vue'], resolve)
-
-    }     
+    }      
 ]

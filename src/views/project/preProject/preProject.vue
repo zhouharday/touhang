@@ -36,18 +36,15 @@
                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
                </el-input>
            </el-col> 
-           <el-col :span="4" class="addProject">
-                <div @click="addProject">
-                   <img src="/static/img/icon--添加项目.png">
-                   <span>添加项目</span>
-               </div>
-           </el-col>
-           <el-col :span="3" class="importProject" style="height:21px;">
-               <div>
-                  <span>导入</span>
-                  <span>下载模板</span> 
-               </div>
-           </el-col>
+           <el-col :span="19" class="imdo">
+               <div class="importProject">
+                   <el-upload class="upload-demo" ref="upload"
+                        action="" :auto-upload="false">
+                        <el-button type="text">导入</el-button>    
+                   </el-upload>   
+                   <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>  
+               </div>   
+           </el-col> 
         </el-row>
         <!--项目table -->
         <el-row class="common">
@@ -122,33 +119,21 @@
 }
 .search-box {
     margin: 0 30px 20px 30px;
-    .addProject {
-        margin-left: 15px;
-        div {
+    .imdo {
+        height:30px;
+        display: flex;
+        justify-content: flex-end;  
+        .importProject {
+            width: 115px;
+            height: 100%;
             position: relative;
-            color: #F05E5E;
-            cursor: pointer;
-            span {
-              position: absolute;
-              top: 2px;
-              left: 30px;
-              border-bottom: 1px solid #F05E5E;
+            a {
+                position: absolute;
+                bottom: 3px;
+                left: 55px;
+                color: #F05E5E;
+                border-bottom: 1px solid #F05E5E;
             }
-        }
-    }
-    .importProject {
-        position: relative;
-        float: right;
-        div {
-            width: 110px;
-            position: absolute;
-            right: 0;
-        }
-        span {
-            color: #F05E5E;
-            margin-left: 10px;
-            border-bottom: 1px solid #F05E5E;
-            cursor: pointer;
         }
     }
 }
@@ -276,10 +261,6 @@ export default {
             this.index = ind;
             this.addTab( title.project + '详情页', '/home/preProjectMessage/'+ind, '/home/preProjectMessage/'+ind );
             this.$router.push({ name: 'preProjectMessage', params: { userId: ind } });
-        },
-        addProject() {
-            this.addTab('添加项目','/home/addProject','addProject');
-            this.$router.push({ name:'addProject' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });

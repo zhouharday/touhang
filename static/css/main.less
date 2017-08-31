@@ -306,7 +306,19 @@ ul li {
         background-color: #F05E5E;
         border-color: #F05E5E;
     }
+    .upload-demo {
+        display: inline-block;
+        .el-upload--text {
+            width: 30px;
+            height: 30px;
+            border: none;
+            span {
+               border-bottom: 1px solid #F05E5E;
+            }
+        }
+    }
 }
+
 
 /*添加项目页addProjectContent*/ 
 .addProject {
@@ -326,7 +338,7 @@ ul li {
         }
         .el-button {
             position: absolute;
-            width: 90%;
+            width: 180px;
             left: 10px;
             bottom: 20px;
             border-radius: 8px;
@@ -334,6 +346,19 @@ ul li {
             border-color: #F05E5E;  
         }
     }
-
+    .addProjectContents {
+        .el-button {
+            width: 130px;
+            border-radius: 10px;
+            background-color: #F05E5E;
+            border: none;
+            &:hover {
+                background: #803f3f;
+            }
+            &:active {
+                background: #f05e5e;
+            }
+        }
+    }
 }
 

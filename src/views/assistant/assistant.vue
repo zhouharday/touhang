@@ -260,7 +260,6 @@ export default {
             currentIndex1: 1,
             currentIndex2: 1,
             currentIndex3: 1,
-            i: 0,
             btnObject1: {
                 uptriangle: true,
                 downtriangle: false
@@ -373,13 +372,14 @@ export default {
             // console.log(ev);
             // console.log(this.search);
             var newTable = [];
+            // var that=this;
             if (this.search) {
                 for (let i = 0; i < this.tableData.length; i++) {
                     if (this.search == this.tableData[i].theme) {
                         newTable.push(this.tableData[i]);
                     }
                         this.tableData = newTable;
-                    console.log(this.tableData)
+                    // console.log(this.tableData)
                 }
             }
         },
