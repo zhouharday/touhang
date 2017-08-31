@@ -27,6 +27,7 @@ module.exports = {
             'vue$': 'vue/dist/vue.min.js',
             'src': resolve('src'),
             'assets': resolve('src/assets'),
+            'common': resolve('src/common'),
             'components': resolve('src/components')
         }
     },

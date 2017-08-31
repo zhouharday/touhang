@@ -1,37 +1,41 @@
 <template>
     <div class="tableHeader">
         <div class="title">
-            <div class="desc">{{headerInfo.desc}}</div>
+            <div class="desc">{{data.desc}}</div>
             <div class="btn">
                 <el-button class="btnwrapper"
                            size="small"
-                           @click="disable(name)">
-                    <Icon :type="headerInfo.icon"></Icon>
-                    <span>{{headerInfo.explain}}</span>
+                           v-show="data.icon_a"
+                           @click="Ensure">
+                    <Icon :type="data.icon_a"></Icon>
+                    <span>{{data.explain_a}}</span>
+                </el-button>
+                <el-button class="btnwrapper"
+                           size="small"
+                           v-show="data.icon_b"
+                           @click="click">
+                    <Icon :type="data.icon_b"></Icon>
+                    <span>{{data.explain_b}}</span>
                 </el-button>
             </div>
         </div>
-        <el-table>
-            <el-table-column></el-table-column>
-        </el-table>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
     props: {
-        headerInfo: {
+        data: {
             type: Object,
             default: {}
         }
     },
     methods: {
-        disable(name) {
-            if (name.flag === false) {
-                return name.flag = true
-            } else {
-                return name.flag = false
-            }
+        click() {
+            this.$emit('method')
+        },
+        Ensure() {
+            this.$emit('ensure')
         }
     }
 }
