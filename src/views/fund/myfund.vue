@@ -72,8 +72,10 @@
                 <projects></projects>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
+                <my-file></my-file>
             </el-tab-pane>
             <el-tab-pane label="运营管理" name="manage" class="tab_list">
+                <manage></manage>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -87,6 +89,8 @@ import Team from './team'
 import Examine from './examine'
 import Investor from './investor'
 import Projects from './projects'
+import File from './file'
+import Manage from './manage'
 import echarts from '../../components/echarts'
 export default {
     data() {
@@ -169,7 +173,9 @@ export default {
         Team,
         Examine,
         Investor,
-        Projects
+        Projects,
+        myFile: File,
+        Manage
     }
 }
 </script>

@@ -1,18 +1,18 @@
 <template>
     <div class="tableHeader">
         <div class="title">
-            <div class="desc">{{data.desc}}</div>
+            <div class="desc" v-show="data.desc">{{data.desc}}</div>
             <div class="btn">
                 <el-button class="btnwrapper"
                            size="small"
-                           v-show="data.icon_a"
+                           v-show="data.explain_a"
                            @click="Ensure">
                     <Icon :type="data.icon_a"></Icon>
                     <span>{{data.explain_a}}</span>
                 </el-button>
                 <el-button class="btnwrapper"
                            size="small"
-                           v-show="data.icon_b"
+                           v-show="data.explain_b"
                            @click="click">
                     <Icon :type="data.icon_b"></Icon>
                     <span>{{data.explain_b}}</span>
@@ -43,8 +43,6 @@ export default {
 
 <style lang="less" scoped>
 .tableHeader{
-    width: 100%;
-    height: 100%;
     .title {
         width: 100%;
         height: 42px;
