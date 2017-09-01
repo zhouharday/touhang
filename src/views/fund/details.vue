@@ -123,7 +123,9 @@
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_Registration @method="disable(formRegistration)""></tabel-header>
+    <tabel-header :data="headerInfo_Registration"
+                  @method="disable(formRegistration)">
+    </tabel-header>
     <div class="formRegistration">
         <el-form ref="formRegistration" :model="formRegistration" label-width="120px">
             <el-row>
@@ -135,7 +137,8 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册地">
-                        <el-input v-model="formRegistration.number" :disabled="formRegistration.flag"></el-input>
+                        <el-input v-model="formRegistration.number" :disabled="formRegistration.flag">
+                        </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
