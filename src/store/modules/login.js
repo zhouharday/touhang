@@ -9,10 +9,7 @@ const state = {
     TitleList: [],
     userInfor: {}, //save user login infor
     merchants: [], //save 组织列表
-    logoSrc: {
-        logo: '',
-        merchantName: ''
-    },
+    logoSrc: {},
     CardBox: loginCard,
 }
 
@@ -103,7 +100,7 @@ const actions = {
                             state.logoSrc.logo = data.data.result.merchants[0].logo;
                             state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
                             window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
-                            console.log(state.logoSrc);
+                            // console.log(state.logoSrc);
                             
                             userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
                                     "um_id": state.merchants[0].um_id //用户、机构中间id
@@ -114,6 +111,7 @@ const actions = {
                                         userPwd.self.$router.push({
                                             name: 'homeContent'
                                         });
+                                        console.log(state.logoSrc);
                                         commit('Notification', {
                                             title: '',
                                             message: '登录成功',
