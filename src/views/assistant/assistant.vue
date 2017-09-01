@@ -95,7 +95,7 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="jumpPool">
+                            <el-button type="text" size="small" @click="dialogVisible= true">
                                 +项目池
                             </el-button>
                             <el-button type="text" size="small" style="display:none">
@@ -106,9 +106,9 @@
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <!-- <button @click="dialogVisible=false">确认</button>
-                                        <button  @click="dialogVisible=false,confirm=true">取消</button> -->
+                                                <button  @click="dialogVisible=false,confirm=true">取消</button> -->
                                     <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="dialogVisible=false,confirm=true">确 定</el-button>
+                                    <el-button type="primary" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -260,7 +260,6 @@ export default {
             currentIndex1: 1,
             currentIndex2: 1,
             currentIndex3: 1,
-            i: 0,
             btnObject1: {
                 uptriangle: true,
                 downtriangle: false
@@ -373,12 +372,13 @@ export default {
             // console.log(ev);
             // console.log(this.search);
             var newTable = [];
+            // var that=this;
             if (this.search) {
                 for (let i = 0; i < this.tableData.length; i++) {
                     if (this.search == this.tableData[i].theme) {
                         newTable.push(this.tableData[i]);
                     }
-                        this.tableData = newTable;
+                    this.tableData = newTable;
                     console.log(this.tableData)
                 }
             }
@@ -434,13 +434,9 @@ export default {
             // this.isHide = true;
         },
         jumpPool() {
-            this.dialogVisible = true;
-            if (this.confirm) {
-                this.addTab('项目池', '/home/projectPool', 'projectPool');
-                this.$router.push({ name: 'projectPool' });
-            }
-            // this.addTab('项目池', '/home/projectPool', 'projectPool');
-            // this.$router.push({ name: 'projectPool' });
+            this.dialogVisible = false;
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
         },
 
         addTab(th, url, name) {

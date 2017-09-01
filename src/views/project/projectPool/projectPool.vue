@@ -53,7 +53,7 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目名称" align="center">
                             <template scope="scope">
-                                <a @click="ShowMessagwe(scope.row,scope.$index)" class="project">{{ scope.row.project }}</a>
+                                <a class="project" @click="ShowPoolMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
                             </template>
                     </el-table-column>
                     <el-table-column prop="mananger" label="项目负责人" align="center">
@@ -252,56 +252,64 @@ export default {
                     mananger: '刘经理',
                     industry: '房地产',
                     sort: 'PE',
-                    stage: '立项会'
+                    stage: '立项会',
+                    id: 0
                 },
                 {
                     project: '一号店',
                     mananger: '王经理',
                     industry: '旅游',
                     sort: 'VE',
-                    stage: '管理'
+                    stage: '管理',
+                    id: 1
                 },
                 {
                     project: '飞志',
                     mananger: '张经理',
                     industry: '外汇',
                     sort: 'PE',
-                    stage: '投决会'
+                    stage: '投决会',
+                    id: 2
                 },
                 {
                     project: '博奥',
                     mananger: '刘经理',
                     industry: '基金',
                     sort: 'PE',
-                    stage: '尽职调查'
+                    stage: '尽职调查',
+                    id: 3
                 },
                 {
                     project: '起亚',
                     mananger: '刘经理',
                     industry: '房地产',
                     sort: '定增',
-                    stage: '考察储备'
+                    stage: '考察储备',
+                    id: 4
                 },
                 {
                     project: '中国石油',
                     mananger: '王经理',
                     industry: '石油',
                     sort: 'VE',
-                    stage: '项目退出'
+                    stage: '项目退出',
+                    id: 5
                 },
                 {
                      project: '欧利',
                     mananger: '张经理',
                     industry: '外汇',
                     sort: '定增',
-                    stage: '投决会'
+                    stage: '投决会',
+                    id: 6
                 },
                 {
                      project: '上上墅',
                     mananger: '张经理',
                     industry: '房地产',
                     sort: '定增',
-                    stage: '尽职调查'
+                    stage: '尽职调查',
+                    id: 7
                 }
             ]
         }
@@ -331,10 +339,10 @@ export default {
             }
             return '';
         },
-        ShowMessagwe(title,ind) {
+        ShowPoolMessage(title,ind) {
             this.index = ind;
-            this.addTab( title.project + '详情页', '/message/'+ind, 'message/'+ind );
-            this.$router.push({ name: 'message', params: { userId: ind } });
+            this.addTab( title.project + '详情页', '/home/zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
+            this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
         },
         jumpPre() {
             this.addTab('投前项目','/home/preProject','preProject');
