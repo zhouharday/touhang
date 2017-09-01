@@ -1,7 +1,8 @@
 <template>
     <div class="header">
         <div class="hd_logo">
-            <img src="../../static/img/logo.png" />
+            <img :src="logoSname.logo" />
+            <span>{{logoSname.merchantName}}</span>
         </div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
@@ -16,18 +17,32 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
+    computed: mapState({
+        // username() {
+        //     let username = localStorage.getItem('ms_username');
+        //     return username ? username : this.name;
+        // },
+        logoSname(state) {
+            state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
+            console.log(state.login.logoSrc);
+            return state.login.logoSrc;
+        },
+    }),
+    // beforeCreate() {
+    //     this.$store.state.login.logoSrc = JSON.parse(sessionStorage.getItem("logoSrc")) || {};
+    // },
+    // mounted() {
+    //     console.log(this.logoS.merchantName);
+    // },
+
     data() {
         return {
-            name: '退出'
+            name: '退出',
         }
     },
-    computed: {
-        username() {
-            let username = localStorage.getItem('ms_username');
-            return username ? username : this.name;
-        }
-    },
+
     methods: {
         handleCommand(command) {
             if (command == 'loginout') {
@@ -56,6 +71,8 @@ export default {
         float: left;
         height: 50px;
         margin-left: 196px;
+        line-height: 50px;
+        display: inline-flex;
         img {
             // width: 35px;
             height: 35px;
