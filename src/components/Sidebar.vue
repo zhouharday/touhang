@@ -7,7 +7,7 @@
                 </div>
                 <div class="user">
                     <div style="margin-top:55px;">
-                        <div>你好,{{userName}} !</div>
+                        <div>你好,{{userName.name}} !</div>
                         <div>Administor</div>
                     </div>
                 </div>
@@ -128,7 +128,8 @@ export default {
         // userName: state => state.login.userInfor.name,
         userName(state) {
             state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            return state.login.userInfor.name;
+            // console.log(state.login.userInfor);
+            return state.login.userInfor;
         }
     }),
     data() {
@@ -244,9 +245,6 @@ export default {
     overflow-x: hidden;
 }
 
-.sidebar>ul {
-    // height: 100%;
-}
 
 .portrait-top {
     width: 82px;
@@ -278,10 +276,6 @@ export default {
     color: #f1f3f7;
     /* line-height: 134px; */
 }
-
-.user-name {}
-
-.user-id {}
 
 .el-menu-vertical-demo {
     background: #2E363F;

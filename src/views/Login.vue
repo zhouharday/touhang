@@ -13,32 +13,7 @@
                 </div>
             </div>
             <div class="login-box">
-                <!-- <div v-show="loginBoxMessage">
-                                                <div class="login-name">企业登录</div>
-                                                <div class="login-ac">
-                                                    <input type="text" class="login-account" placeholder="请输入账号/手机号" @input="checkVata" v-model="userName">
-                                                </div>
-                                                <div class="login-pass">
-                                                    <input type="password" class="login-account" placeholder="请输入密码" @input="checkVata" v-model="passWord">
-                                                </div>
-                                                <div class="find-pass">
-                                                    <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
-                                                    <a href="#" class="pass-find">找回密码</a>
-                                                </div>
-                                            </div> -->
-                <!-- <div v-show="loginCardMessage" class="loginCard">
-                                                <div>请确认登录管理后台的企业</div>
-                                                <el-carousel @change="loginCards" :interval="0" type="card" height="200px" :autoplay='false' initial-index=0>
-                                                    <el-carousel-item v-for="item in loginImg" :key="item">
-                                                        <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
-                                                        <div class="loginCard_title">{{item.merchant_name}}</div>
-                                                    </el-carousel-item>
-                                                </el-carousel>
-                                                <div @click="goBack($event)">返回</div>
-
-                                            </div> -->
-                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd"
-                @changeName="getName" @sendVal="getval">
+                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval">
                 </component>
                 <div class="login_btn">
                     <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
