@@ -40,7 +40,7 @@
               <h3>新增项目</h3>
               <div class="addForm">
                   <div class="basicForm">
-                     <el-form ref="form" :model="basicForm" label-width="120px">
+                     <el-form ref="basicForm" :model="basicForm" label-width="120px">
                         <el-row>
                             <el-col  class="title">
                                 <div>基本信息</div>
