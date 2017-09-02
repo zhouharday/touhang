@@ -7,9 +7,12 @@ const state = {
     TitleList: [],
     userInfor: {}, //save user login infor
     merchants: [], //save 组织列表
+    logoSrc: {
         logo: '',
         merchantName: ''
-    }
+    },
+    CardBox: loginCard
+
 }
 
 const mutations = {
@@ -112,7 +115,6 @@ const actions = {
                                 console.log(state.merchants);
                                 if (state.merchants.length == '1') { //只有一个组织
                                     console.log('um_id:' + state.merchants[0].um_id);
-
                                     state.logoSrc.logo = data.data.result.merchants[0].logo;
                                     state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
                                     window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
