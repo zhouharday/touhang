@@ -93,8 +93,8 @@ const actions = {
                         console.log('um_id:' + state.merchants[0].um_id);
                         // number: userPwd.name,
                         // pass: userPwd.pwd
-                        number : "xiaowen",
-                        pass : "e10adc3949ba59abbe56e057f20f883e"
+                        number: "xiaowen",
+                        pass: "e10adc3949ba59abbe56e057f20f883e"
                     }).then(data => {
                         // alert(1);
                         if (data.data.status == '403') {
