@@ -101,10 +101,9 @@
                 </el-row>
             </el-form>
         </div>
-
-
     </div>
 </template>
+
 
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'

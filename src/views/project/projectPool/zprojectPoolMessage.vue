@@ -20,13 +20,16 @@
                  <table-form></table-form>
             </el-tab-pane>
             <el-tab-pane label="工商信息" name="industry" class="tab_list">
+                 <industry-form :industryForm="industryForm"></industry-form>
             </el-tab-pane>
             <el-tab-pane label="融资信息" name="capital" class="tab_list">
                 <capital-table></capital-table>
             </el-tab-pane>
             <el-tab-pane label="记录" name="record" class="tab_list">
+                <record-form></record-form>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
+                <file-table></file-table>
             </el-tab-pane>
         </el-tabs>
    </div>
@@ -40,7 +43,10 @@
 <script type="text/ecmascript-6">
 import detailForm from './details'
 import tableForm from './tables'
+import industryForm from './industry'
 import capitalTable from './capital'
+import recordForm from './record'
+import fileTable from './file'
 export default {
     data() {
         return {
@@ -54,13 +60,21 @@ export default {
             companyForm: {
                baseInfo: '企业信息',
                flag: true
+            },
+            industryForm: {
+                baseInfo: '工商信息',
+                flag: true 
             }
         }
     },
     components: {
        detailForm,
        tableForm,
-       capitalTable
+       industryForm,
+       capitalTable,
+       recordForm,
+       fileTable
+
     },
     methods: {
     }
@@ -105,6 +119,5 @@ export default {
             margin-right: 24px;
         }
     }
-
 }
 </style>

@@ -171,7 +171,7 @@
         <!--文件预览 section -->
         <section class="viewFiles" v-show="isHide">
             <div class="closeView" @click="closeView">
-                <img src="/static/img/close.png" class="close">
+                <img src="/static/img/close.png">
             </div>
             <div class="fileArea">
                         不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 是简单地切换元素的 CSS 属性 display 。
