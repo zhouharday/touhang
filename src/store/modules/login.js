@@ -7,11 +7,9 @@ const state = {
     TitleList: [],
     userInfor: {}, //save user login infor
     merchants: [], //save 组织列表
-    logoSrc: {
         logo: '',
         merchantName: ''
-    },
-    CardBox: loginCard
+    }
 }
 
 const mutations = {
@@ -90,58 +88,114 @@ const actions = {
                     console.log(state.merchants);
                     if (state.merchants.length == '1') { //只有一个组织
                         console.log('um_id:' + state.merchants[0].um_id);
+                        // number: userPwd.name,
+                        // pass: userPwd.pwd
+                        number : "xiaowen",
+                        pass : "e10adc3949ba59abbe56e057f20f883e"
+                    }).then(data => {
+                        // alert(1);
+                        if (data.data.status == '403') {
+                            alert(data.data.message);
+                        } else if (data.data.status == '156') { //用户名或密码不正确
+                            alert(data.data.message);
+                            console.log(data.data.message);
+                            // console.log(data.data);
+                            return;
+                        } else if (data.data.status == '200') { //登录成功
+                            // alert('success');
+                            commit('pushUserInfor', data.data.result);
+                            window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
+                            console.log(state.userInfor);
+                            if (data.data.result.userInfo.isMerchant >= '1') { //有组织
+                                commit('pushMerchants', data.data.result);
+                                window.sessionStorage.setItem('merchants', JSON.stringify(state.merchants));
+                                console.log(state.merchants);
+                                if (state.merchants.length == '1') { //只有一个组织
+                                    console.log('um_id:' + state.merchants[0].um_id);
 
-                        state.logoSrc.logo = data.data.result.merchants[0].logo;
-                        state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
-                        window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
-                        console.log(state.logoSrc);
+                                    state.logoSrc.logo = data.data.result.merchants[0].logo;
+                                    state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
+                                    window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
+                                    // console.log(state.logoSrc);
 
-                        userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-                            "um_id": state.merchants[0].um_id //用户、机构中间id
-                        }).then(Response => {
-                            console.log(Response.data);
-                            if (Response.data.status == '200') {
+                                    userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+                                        "um_id": state.merchants[0].um_id //用户、机构中间id
+                                    }).then(Response => {
+                                        console.log(Response.data);
+                                        if (Response.data.status == '200') {
+                                            userPwd.self.$router.push({name: 'homeContent'});
+                                            console.log(state.logoSrc);
+                                            commit('Notification', {
+                                                title: '',
+                                                message: '登录成功',
+                                                type: 'success'
+                                            });
+                                        }
+                                    }).catch(error => {
+                                        commit('Notification', {
+                                            title: '',
+                                            message: '服务器异常,请稍后再试',
+                                            type: 'error'
+                                        });
+                                    });
+                                    // userPwd.self.$router.push({
+                                    //     name: 'homeContent'
+                                    // });
+                                    // commit('Notification');
+                                } else if (state.merchants.length > '1') { //有多个组织列表
+                                    state.CardBox = loginBox;
+
+                                    state.logoSrc.logo = data.data.result.merchants[0].logo;
+                                    state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
+                                    window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
+                                    console.log(state.logoSrc);
+
+                                    userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+                                        "um_id": state.merchants[0].um_id //用户、机构中间id
+                                    }).then(Response => {
+                                        console.log(Response.data);
+                                        if (Response.data.status == '200') {
+                                            userPwd.self.$router.push({name: 'homeContent'});
+                                            commit('Notification', {
+                                                title: '',
+                                                message: '登录成功',
+                                                type: 'success'
+                                            });
+                                        }
+                                    }).catch(error => {
+                                        commit('Notification', {
+                                            title: '',
+                                            message: '服务器异常,请稍后再试',
+                                            type: 'error'
+                                        });
+                                    });
+                                    // userPwd.self.$router.push({
+                                    //     name: 'homeContent'
+                                    // });
+                                    // commit('Notification');
+                                } else if (state.merchants.length > '1') { //有多个组织列表
+                                    state.CardBox = loginBox;
+
+                                }
+                                // console.log(state.merchants.length);
+
+                            } else if (data.data.result.userInfo.isMerchant == '0') { //无组织
                                 userPwd.self.$router.push({name: 'homeContent'});
-                                commit('Notification', {
-                                    title: '',
-                                    message: '登录成功',
-                                    type: 'success'
-                                });
                             }
-                        }).catch(error => {
-                            commit('Notification', {
-                                title: '',
-                                message: '服务器异常,请稍后再试',
-                                type: 'error'
-                            });
+                        }
+                    }).catch(error => {
+                        commit('Notification', {
+                            title: '',
+                            message: '服务器异常,请稍后再试',
+                            type: 'error'
                         });
-                        // userPwd.self.$router.push({
-                        //     name: 'homeContent'
-                        // });
-                        // commit('Notification');
-                    } else if (state.merchants.length > '1') { //有多个组织列表
-                        state.CardBox = loginBox;
-
-                    }
-                    // console.log(state.merchants.length);
-
-                } else if (data.data.result.userInfo.isMerchant == '0') { //无组织
-                    userPwd.self.$router.push({name: 'homeContent'});
+                        console.log(error);
+                    })
                 }
             }
-        }).catch(error => {
-            commit('Notification', {
-                title: '',
-                message: '服务器异常,请稍后再试',
-                type: 'error'
-            });
-            console.log(error);
-        })
-    }
-}
 
-export default {
-    state,
-    mutations,
-    actions
-}
+            export default {
+                state,
+                mutations,
+                actions
+            }
