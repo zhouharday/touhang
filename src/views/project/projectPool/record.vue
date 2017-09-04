@@ -5,7 +5,6 @@
                 <Input v-model="value" type="textarea" :rows="3" placeholder="请输入..."></Input>
             </div>
             <div class="bottom">
-                <!-- <span>提交</span> -->
                 <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
             </div>
         </div>

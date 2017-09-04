@@ -39,7 +39,7 @@
 
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
-                    <el-menu-item index="">{{title7}}</el-menu-item>
+                    <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
                     <el-menu-item index="">{{title8}}</el-menu-item>
                     <el-menu-item index="">{{title9}}</el-menu-item>
                     <el-menu-item index="">{{title10}}</el-menu-item>
