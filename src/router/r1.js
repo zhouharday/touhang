@@ -15,10 +15,6 @@ const r1 = [
         path: 'projectPool', //home/项目池页
         name: 'projectPool',
         component: resolve => require(['../views/project/projectPool/projectPool.vue'], resolve)
-
-<<<<<<< HEAD
-    }, {
-=======
     },
     {
         path: 'addProject', //home/添加项目页
@@ -26,7 +22,6 @@ const r1 = [
         component: resolve => require(['../views/project/addProject.vue'], resolve)
     },
     {
->>>>>>> fe27a91af7bcd485c11897e10de1b2888267e154
         path: 'zprojectPoolMessage/:userId', //home/正常状态下的项目池详情页
         name: 'zprojectPoolMessage',
         component: resolve => require(['../views/project/projectPool/zprojectPoolMessage.vue'], resolve)
@@ -42,21 +37,6 @@ const r1 = [
         path: 'preProjectMessage/:userId', //home/投前项目详情页
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
-
-<<<<<<< HEAD
-    }, {
-        path: 'addProject', //home/添加项目页
-        name: 'addProject',
-        component: resolve => require(['../views/project/addProject.vue'], resolve)
     }
 ]
 export default r1
-=======
-    } , 
-    {
-        path: 'aftProject', //home/投后项目页
-        name: 'aftProject',
-        component: resolve => require(['../views/project/aftProject/aftProject.vue'], resolve)
-    }      
-]
->>>>>>> fe27a91af7bcd485c11897e10de1b2888267e154
