@@ -259,7 +259,7 @@ export default {
         },
         ShowPreMessage(title,ind) {
             this.index = ind;
-            this.addTab( title.project + '详情页', '/home/preProjectMessage/'+ind, '/home/preProjectMessage/'+ind );
+            this.addTab( '投前'+ title.project + '详情页', '/home/preProjectMessage/'+ind, '/home/preProjectMessage/'+ind );
             this.$router.push({ name: 'preProjectMessage', params: { userId: ind } });
         },
         addTab(th, url, name) {

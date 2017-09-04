@@ -40,7 +40,7 @@
         <el-row class="common">
             <el-col :span="24">
                 <div class="location-ul">
-                    <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }">
+                    <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }" style="width:100%;">
                         <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3,fow: index==0}" @click="changeActive(index,3)">
                             {{item.locations}}
                         </li>

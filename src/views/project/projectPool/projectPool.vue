@@ -341,7 +341,7 @@ export default {
         },
         ShowPoolMessage(title,ind) {
             this.index = ind;
-            this.addTab( title.project + '详情页', '/home/zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
+            this.addTab( '项目池'+ title.project + '详情页', '/home/zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
         },
         jumpPre() {

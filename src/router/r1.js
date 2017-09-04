@@ -21,6 +21,11 @@ export default [
 
     },
     {
+        path: 'addProject', //home/添加项目页
+        name: 'addProject',
+        component: resolve => require(['../views/project/addProject.vue'], resolve)
+    },
+    {
         path: 'zprojectPoolMessage/:userId', //home/正常状态下的项目池详情页
         name: 'zprojectPoolMessage',
         component: resolve => require(['../views/project/projectPool/zprojectPoolMessage.vue'], resolve)
@@ -42,8 +47,8 @@ export default [
 
     } , 
     {
-        path: 'addProject', //home/添加项目页
-        name: 'addProject',
-        component: resolve => require(['../views/project/addProject.vue'], resolve)
+        path: 'aftProject', //home/投后项目页
+        name: 'aftProject',
+        component: resolve => require(['../views/project/aftProject/aftProject.vue'], resolve)
     }      
 ]

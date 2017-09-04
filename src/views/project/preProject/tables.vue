@@ -9,8 +9,6 @@
                 </el-table-column>
                 <el-table-column label="教育背景" prop="edu" align="center">
                 </el-table-column>
-                <el-table-column label="联系电话" prop="phone" align="center">
-                </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="handleEditm(scope.row)">编辑</el-button>
@@ -30,9 +28,6 @@
                     <el-form-item label="教育背景" :label-width="formLabelWidth">
                         <el-input v-model="memberForm1.edu" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="联系电话" :label-width="formLabelWidth">
-                        <el-input v-model="memberForm1.phone" auto-complete="off"></el-input>
-                    </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd1 = false">取 消</el-button>
@@ -50,9 +45,6 @@
                     </el-form-item>
                     <el-form-item label="教育背景" :label-width="formLabelWidth">
                         <el-input v-model="memberForm2.edu" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系电话" :label-width="formLabelWidth">
-                        <el-input v-model="memberForm2.phone" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -148,38 +140,39 @@ export default {
             formLabelWidth: '80px',
             memberData: [
                 {
-                    name: '',
-                    property: '',
-                    edu: '',
-                    phone: ''
+                    name: '张飞',
+                    property: '合伙人',
+                    edu: '北大金融系研究院博士后'
+                }, {
+                    name: '李四',
+                    property: '创建人',
+                    edu: '中国人民大学金融系博士'
                 }
             ],
             memberForm1: {
                 name: '',
                 property: '',
-                edu: '',
-                phone: ''
+                edu: ''
             },
             memberForm2: {
                 name: '',
                 property: '',
-                edu: '',
-                phone: ''
+                edu: ''
             },
             structureData: [
                 {
-                    name: '',
-                    property: '',
-                    capital: '',
-                    num: '',
-                    percent: ''
+                    name: '张飞',
+                    property: '合伙人',
+                    capital: '10,000,000,000',
+                    num: '20',
+                    percent: '12%'
                 },
                 {
-                    name: '',
-                    property: '',
-                    capital: '',
-                    num: '',
-                    percent: ''
+                    name: '李四',
+                    property: '创建人',
+                    capital: '10,000,000,000',
+                    num: '15',
+                    percent: '10%'
                 }
             ],
             structureForm1: {
@@ -197,7 +190,7 @@ export default {
                 percent: ''
             },
             headerInfo_member: {
-                desc: '董事会成员',
+                desc: '董事会成员结构',
                 icon_b: 'plus-round',
                 explain_b: '添加'
             },
@@ -215,6 +208,11 @@ export default {
         },
         confirmAdd1() {
             this.modalAdd1 = false;
+            // this.memberData.push({
+            //     name: this.memberForm1.name,
+            //     property: this.memberForm1.property,
+            //     edu: this.memberForm1.edu
+            // });
             this.memberData.push(this.memberForm1);
             this.clearMVal1();
         },
@@ -247,11 +245,13 @@ export default {
         },
         //清除 添加董事会成员对话框
         clearMVal1() {
+            // this.memberForm1.name = '';
+            // this.memberForm1.property = '';
+            // this.memberForm1.edu = ''
             this.memberForm1 = {
                 name: '',
                 property: '',
-                edu: '',
-                phone: ''
+                edu: ''
             }
         },
         //清除 编辑董事会成员对话框
@@ -259,13 +259,12 @@ export default {
             this.memberForm2 = {
                 name: '',
                 property: '',
-                edu: '',
-                phone: ''
+                edu: ''
             }
         },
         //清除 添加股权结构对话框
         clearSVal1() {
-            this.structureForm1 = {
+            this.structureFrom1 = {
                 name: '',
                 property: '',
                 capital: '',
@@ -275,7 +274,7 @@ export default {
         },
         //清除 编辑股权结构对话框
         clearSVal2() {
-            this.structureForm2 = {
+            this.structureFrom2 = {
                 name: '',
                 property: '',
                 capital: '',
