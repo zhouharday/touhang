@@ -50,7 +50,7 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
                         <span>{{title_04}}</span>
                     </template>
-                    <el-menu-item index="myfund" @click="addTab(title11,'/home/myfund','myfund')">{{title11}}</el-menu-item>
+                    <el-menu-item index="myfund" @click="addTab(title11,'/home/fund','fund')">{{title11}}</el-menu-item>
                     <el-menu-item index="cooperative" @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="5">

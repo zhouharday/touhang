@@ -1,25 +1,22 @@
 <template>
-    <div class="tableHeader">
-        <div class="title">
-            <div class="desc" v-show="data.desc">{{data.desc}}</div>
-            <div class="btn">
-                <el-button class="btnwrapper"
-                           size="small"
-                           v-show="data.explain_a"
-                           @click="Ensure">
-                    <Icon :type="data.icon_a"></Icon>
-                    <span>{{data.explain_a}}</span>
-                </el-button>
-                <el-button class="btnwrapper"
-                           size="small"
-                           v-show="data.explain_b"
-                           @click="click">
-                    <Icon :type="data.icon_b"></Icon>
-                    <span>{{data.explain_b}}</span>
-                </el-button>
-            </div>
+<div class="tableHeader">
+    <div class="title" ref="title">
+        <div class="desc">
+            <slot></slot>
+            <span v-show="data.desc">{{data.desc}}</span>
+        </div>
+        <div class="btn">
+            <el-button v-for="(btn, index) in data.btnGroup"
+                       @click="handler(index, $event)"
+                       class="btnwrapper"
+                       ref="btnwrapper"
+                       v-show="data.btnGroup">
+                <Icon :type="btn.icon" v-show="btn.icon"></Icon>
+                <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
+            </el-button>
         </div>
     </div>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -28,21 +25,36 @@ export default {
         data: {
             type: Object,
             default: {}
+        },
+        theme: {
+            type: String,
+            default: '#2a3142'
         }
     },
     methods: {
-        click() {
-            this.$emit('method')
+        handler(index, event) {
+            if (index == 0) {
+                this.$emit('add', event.target)
+            } else if (index == 1) {
+                this.$emit('show', event.target)
+            } else if (index == 2) {
+                this.$emit('down', event.target)
+            } else {
+                return
+            }
         },
-        Ensure() {
-            this.$emit('ensure')
+        _theme() {
+            this.$refs.title.style.background = this.theme
         }
+    },
+    mounted() {
+        this._theme()
     }
 }
 </script>
 
 <style lang="less" scoped>
-.tableHeader{
+.tableHeader {
     .title {
         width: 100%;
         height: 42px;
@@ -63,16 +75,19 @@ export default {
             line-height: 42px;
             .btnwrapper {
                 float: right;
-                transition: 1s all;
-                background: #2a3142;
-                border: 1px solid #2a3142;
+                transition: 0.3s all;
+                background: transparent;
+                margin-right: 12px;
+                border: none;
                 font-size: 14px;
-                color: #fff;
+                color: #1f2d3d;
                 outlione: none;
                 &:hover {
                     background: #ff4949;
-                    border: 1px solid #ff4949;
                     transform: scale(1.1);
+                }
+                .explain {
+                    margin-right: 6px;
                 }
             }
         }
