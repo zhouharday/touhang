@@ -20,33 +20,35 @@
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
-            <el-table-column fixed prop="fundName" label="基金名称" width="180">
+            <el-table-column fixed prop="fundName" label="基金名称">
             </el-table-column>
-            <el-table-column prop="number" label="基金编号" width="180">
+            <el-table-column prop="number" label="基金编号">
             </el-table-column>
-            <el-table-column prop="province" label="组织类型" width="180">
+            <el-table-column prop="province" label="组织类型">
             </el-table-column>
-            <el-table-column prop="city" label="管理类型" width="180">
+            <el-table-column prop="city" label="管理类型">
             </el-table-column>
-            <el-table-column prop="address" label="基金规模（元）" width="180">
+            <el-table-column prop="address" label="基金规模（元）">
             </el-table-column>
-            <el-table-column prop="zip" label="募集总额（元）" width="180">
+            <el-table-column prop="zip" label="募集总额（元）">
             </el-table-column>
-            <el-table-column prop="province" label="投资总额（元）" width="180">
+            <el-table-column prop="province" label="投资总额（元）">
             </el-table-column>
-            <el-table-column prop="city" label="剩余额度（元）" width="180">
+            <el-table-column prop="city" label="剩余额度（元）">
             </el-table-column>
-            <el-table-column prop="address" label="成立日期" width="180">
+            <el-table-column prop="address" label="成立日期">
             </el-table-column>
-            <el-table-column prop="zip" label="募集总额（元）" width="180">
+            <el-table-column prop="zip" label="状态">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="100">
+            <el-table-column fixed="right" label="操作">
                 <template scope="scope">
                    <el-button @click="handleClick" type="text" size="small">查看</el-button>
                    <el-button type="text" size="small">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        </el-pagination>
     </div>
 </div>
 </template>
@@ -85,7 +87,8 @@ export default {
             }, {
                 title: '基金状态：',
                 details: ['全部', '中止']
-            }]
+            }],
+            currentPage: 10
         }
     },
     methods: {
@@ -101,6 +104,12 @@ export default {
         },
         downloadTem(el) {
             alert(2)
+        },
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+            console.log(`当前页: ${val}`);
         }
     },
     components: {

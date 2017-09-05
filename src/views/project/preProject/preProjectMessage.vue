@@ -60,7 +60,7 @@
           </industry-form>
         </el-tab-pane>
         <el-tab-pane label="审批" name="approve" class="tab_list">
-          <approve-table></approve-table>
+          <approve-table ></approve-table>
         </el-tab-pane>
         <el-tab-pane label="文档" name="file" class="tab_list">
           <file-table></file-table>
