@@ -1,12 +1,21 @@
 const r3 = [
     {
         path: 'fund',
-        name: 'fund',
         component: resolve => require(['../views/fund/fund.vue'], resolve),
         children: [
             {
-                path: ':id',
+                path: '',
+                name: 'myfund',
+                redirect: 'myfund'
+            }, {
+                path: 'myfund',
                 component: resolve => require(['../views/fund/myfund.vue'], resolve)
+            }, {
+                path: 'add',
+                component: resolve => require(['../views/fund/add.vue'], resolve)
+            }, {
+                path: ':id',
+                component: resolve => require(['../views/fund/fundDetails.vue'], resolve)
             }
         ]
     }, {

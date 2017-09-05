@@ -74,7 +74,6 @@ export default {
             text-align: right;
             line-height: 42px;
             .btnwrapper {
-                float: right;
                 transition: 0.3s all;
                 background: transparent;
                 margin-right: 12px;

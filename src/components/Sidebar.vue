@@ -39,7 +39,7 @@
 
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
-                    <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
+                    <el-menu-item index="">{{title7}}</el-menu-item>
                     <el-menu-item index="">{{title8}}</el-menu-item>
                     <el-menu-item index="">{{title9}}</el-menu-item>
                     <el-menu-item index="">{{title10}}</el-menu-item>
@@ -50,7 +50,7 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
                         <span>{{title_04}}</span>
                     </template>
-                    <el-menu-item index="myfund" @click="addTab(title11,'/home/fund','fund')">{{title11}}</el-menu-item>
+                    <el-menu-item index="myfund" @click="addTab(title11,'/home/fund','myfund')">{{title11}}</el-menu-item>
                     <el-menu-item index="cooperative" @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="5">
@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
     computed: mapState({
         onRoutes() {
@@ -130,7 +130,7 @@ export default {
             state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
             // console.log(state.login.userInfor);
             return state.login.userInfor;
-        }
+        },
     }),
     data() {
         return {
@@ -191,14 +191,24 @@ export default {
             // this.$router.push({ name: 'assistant' });
             this.$router.push({
                 name: name
-            });
+            })
             this.$store.commit({
                 type: 'addTab',
                 title: th,
                 url: url,
                 name: name
-            });
-        }
+            })
+            console.log(url)
+            this.SET_NAME(name)
+            this.SET_URL(url)
+            this.SET_TITLE(th)
+            console.log(this.$store.state.crumbs)
+        },
+        ...mapMutations([
+            'SET_NAME',
+            'SET_URL',
+            'SET_TITLE'
+        ])
     }
 }
 </script>
@@ -236,7 +246,7 @@ export default {
 .sidebar {
     display: block;
     position: absolute;
-    width: 217px;
+    width: 196px;
     left: 0;
     top: 0;
     bottom: 0;

@@ -1,4 +1,5 @@
-import request from 'superagent'
+// import request from 'superagent'
+import * as types from '../mutations-type'
 import {Notification} from 'element-ui'
 import loginBox from '../../components/loginBox.vue'
 import loginCard from '../../components/loginCard.vue'
@@ -12,9 +13,12 @@ const state = {
         merchantName: ''
     },
     CardBox: loginCard
-
 }
-
+// const mutations = {
+//     [types.SET_TITLELIST](state, targetName) {
+//         state.TitleList = targetName
+//     }
+// }
 const mutations = {
     addTab(state, targetName) {
         let obj = {};
