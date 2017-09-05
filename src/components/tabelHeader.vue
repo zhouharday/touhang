@@ -46,7 +46,7 @@ export default {
                 if (this.theme = '#fff' || 'white') {
                     btnwrapper[i].$el.style.color = '#1f2d3d'
                 } else {
-                    btnwrapper[i].$el.style.color = this.theme
+                    btnwrapper[i].$el.style.color = '#fff'
                 }
             }
         }
