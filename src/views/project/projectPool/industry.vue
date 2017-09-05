@@ -1,6 +1,6 @@
 <template>
     <div class="industryForm">
-        <tabel-header :data="headerInfo_industry" @method="disable(industryForm)"></tabel-header>
+        <tabel-header :data="headerInfo_industry" @add="disable(industryForm)"></tabel-header>
         <div class="form">
             <el-form ref="form" :model="industryForm" label-width="100px">
                 <el-row>
@@ -64,8 +64,10 @@ export default {
         return {
             headerInfo_industry: {
                 desc: '工商信息',
-                icon_b: 'refresh',
-                explain_b: '数据更新',
+                btnGroup: [{
+                    icon: 'refresh',
+                    explain: '数据更新'
+                }]
             },
             // industryForm: {
             //     companyName: '',

@@ -45,6 +45,7 @@ export default {
         },
         _theme() {
             this.$refs.title.style.background = this.theme
+            // console.log(this.$refs.btnwrapper[0].style.background)
         }
     },
     mounted() {

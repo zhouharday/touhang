@@ -1,6 +1,6 @@
 <template>
     <div class="form">
-        <tabel-header :data="headerInfo_basic" @method="disable(basicForm)"></tabel-header>
+        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -47,7 +47,7 @@
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_company" @method="disable(companyForm)"></tabel-header>
+        <tabel-header :data="headerInfo_company" @add="disable(companyForm)"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
@@ -106,7 +106,7 @@
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_capital" @method="disable(capitalForm)"></tabel-header>
+        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)"></tabel-header>
         <div class="capitalForm">
             <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
                 <el-row>
@@ -195,24 +195,36 @@ export default {
             }],
             headerInfo_basic: {
                 desc: '基本信息',
-                icon_a: 'upload',
-                explain_a: '提交',
-                icon_b: 'edit',
-                explain_b: '编辑'
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                },
+                {
+                    icon: 'upload',
+                    explain: '提交'
+                }]
             },
             headerInfo_company: {
                 desc: '企业信息',
-                icon_a: 'upload',
-                explain_a: '提交',
-                icon_b: 'edit',
-                explain_b: '编辑'
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                },
+                {
+                    icon: 'upload',
+                    explain: '提交'
+                }]
             },
             headerInfo_capital: {
                 desc: '投资信息',
-                icon_a: 'upload',
-                explain_a: '提交',
-                icon_b: 'edit',
-                explain_b: '编辑'
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                },
+                {
+                    icon: 'upload',
+                    explain: '提交'
+                }]
             }
 
         }

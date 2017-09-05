@@ -1,7 +1,7 @@
 <template>
     <div class="tables">
         <div class="memberTable">
-            <tabel-header :data="headerInfo_member" @method="method1"></tabel-header>
+            <tabel-header :data="headerInfo_member" @add="method1"></tabel-header>
             <el-table :data="memberData" border style="width: 100%">
                 <el-table-column label="姓名" prop="name" align="center">
                 </el-table-column>
@@ -191,13 +191,17 @@ export default {
             },
             headerInfo_member: {
                 desc: '董事会成员结构',
-                icon_b: 'plus-round',
-                explain_b: '添加'
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '添加'
+                }]
             },
             headerInfo_structure: {
                 desc: '股权结构',
-                icon_b: 'plus-round',
-                explain_b: '添加'
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '添加'
+                }]
             }
         }
     },

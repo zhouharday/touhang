@@ -32,7 +32,7 @@
     </el-row>
     <div class="picture">
       <div class="img_wrapper">
-        <img src="static/img/double.png" alt="">
+        <img src="static/img/double.png">
       </div>
       <div class="prompt_message">
         <span class="prompt">{{prompt}}</span>

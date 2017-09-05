@@ -1,7 +1,7 @@
 <template>
     <div class="table">
         <div class="teamTable">
-            <tabel-header :data="headerInfo_team" @method="method"></tabel-header>
+            <tabel-header :data="headerInfo_team" @add="method"></tabel-header>
             <el-table :data="teamData" border style="width: 100%">
                 <el-table-column label="姓名" prop="name" align="center">
                 </el-table-column>
@@ -52,8 +52,10 @@ export default {
             formLabelWidth: '80px',
             headerInfo_team: {
                 desc: '当前项目成员',
-                icon_b: 'plus-round',
-                explain_b: '添加'
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '添加'
+                }]
             },
             teamData: [
                 {
