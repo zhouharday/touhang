@@ -67,11 +67,16 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/survey.png" />
                         <span>{{title_06}}</span>
                     </template>
-                    <el-menu-item index="">{{title14}}</el-menu-item>
-                    <el-menu-item index="">{{title15}}</el-menu-item>
-                    <el-menu-item index="">{{title16}}</el-menu-item>
-                    <el-menu-item index="">{{title17}}</el-menu-item>
-                    <el-menu-item index="">{{title18}}</el-menu-item>
+                    <el-menu-item index="proLibrary"
+                    @click="addTab(title14, '/home/proLibrary', 'proLibrary')">{{title14}}</el-menu-item>
+                    <el-menu-item index="fundLibrary"
+                    @click="addTab(title15, '/home/fundLibrary', 'fundLibrary')">{{title15}}</el-menu-item>
+                    <el-menu-item index="investorLibrary"
+                    @click="addTab(title16, '/home/investorLibrary', 'investorLibrary')">{{title16}}</el-menu-item>
+                    <el-menu-item index="projectsDoc"
+                    @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
+                    <el-menu-item index="fundDoc"
+                    @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
                                     <template slot="title">

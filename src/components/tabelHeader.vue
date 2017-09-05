@@ -5,12 +5,8 @@
             <slot></slot>
             <span v-show="data.desc">{{data.desc}}</span>
         </div>
-        <div class="btn">
-            <el-button v-for="(btn, index) in data.btnGroup"
-                       @click="handler(index, $event)"
-                       class="btnwrapper"
-                       ref="btnwrapper"
-                       v-show="data.btnGroup">
+        <div class="btn" ref="btn">
+            <el-button v-for="(btn, index) in data.btnGroup" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
                 <Icon :type="btn.icon" v-show="btn.icon"></Icon>
                 <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
             </el-button>
@@ -45,6 +41,14 @@ export default {
         },
         _theme() {
             this.$refs.title.style.background = this.theme
+            for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
+                let btnwrapper = this.$refs.btnwrapper
+                if (this.theme = '#fff' || 'white') {
+                    btnwrapper[i].$el.style.color = '#1f2d3d'
+                } else {
+                    btnwrapper[i].$el.style.color = this.theme
+                }
+            }
         }
     },
     mounted() {
@@ -54,15 +58,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "../common/styles/variable.less";
 .tableHeader {
     .title {
         width: 100%;
         height: 42px;
         line-height: 42px;
-        background: #2a3142;
-        color: #fff;
+        background: @color-theme;
+        color: @color-base;
         padding: 0 26px;
-        margin-bottom: 12px;
+        margin-bottom: @font-size-small;
         display: flex;
         align-items: center;
         .desc {
@@ -76,13 +81,14 @@ export default {
             .btnwrapper {
                 transition: 0.3s all;
                 background: transparent;
-                margin-right: 12px;
+                margin-right: @font-size-small;
                 border: none;
                 font-size: 14px;
                 color: #1f2d3d;
                 outlione: none;
                 &:hover {
-                    background: #ff4949;
+                    color: @color-base;
+                    background: @color-theme-red;
                     transform: scale(1.1);
                 }
                 .explain {
