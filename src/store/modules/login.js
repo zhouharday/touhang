@@ -69,7 +69,7 @@ const actions = {
         userPwd.self.$http.post('api/user/login', {
             // number: userPwd.name,
             // pass: userPwd.pwd
-            number: "xiaowen",
+            number: "010",
             pass: "e10adc3949ba59abbe56e057f20f883e"
         }).then(data => {
             // alert(1);
@@ -123,23 +123,10 @@ const actions = {
                     } else if (state.merchants.length > '1') { //有多个组织列表
                         state.CardBox = loginBox;
 
-                        state.logoSrc.logo = data.data.result.merchants[0].logo;
-                        state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
-                        window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
-                        console.log(state.logoSrc);
-
                         userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-                            "um_id": state.merchants[0].um_id //用户、机构中间id
                         }).then(Response => {
                             console.log(Response.data);
-                            if (Response.data.status == '200') {
-                                userPwd.self.$router.push({name: 'homeContent'});
-                                commit('Notification', {
-                                    title: '',
-                                    message: '登录成功',
-                                    type: 'success'
-                                });
-                            }
+                            
                         }).catch(error => {
                             commit('Notification', {
                                 title: '',
