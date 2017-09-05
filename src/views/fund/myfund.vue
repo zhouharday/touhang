@@ -47,8 +47,15 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-        </el-pagination>
+        <el-pagination @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="currentPage"
+                           :page-sizes="[100, 200, 300, 400]"
+                           :page-size="100"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="400"
+                           class="page">
+         </el-pagination>
     </div>
 </div>
 </template>
@@ -158,6 +165,11 @@ export default {
     .tables {
         width: 100%;
         padding-top: @font-size-small;
+        .page{
+            width: 100%;
+            text-align: right;
+            padding: @font-size-large-x 0;
+        }
     }
 }
 </style>

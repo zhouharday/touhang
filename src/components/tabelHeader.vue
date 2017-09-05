@@ -41,12 +41,13 @@ export default {
         },
         _theme() {
             this.$refs.title.style.background = this.theme
+            console.log(this.theme)
             for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
-                let btnwrapper = this.$refs.btnwrapper
-                if (this.theme = '#fff' || 'white') {
-                    btnwrapper[i].$el.style.color = '#1f2d3d'
-                } else {
+                var btnwrapper = this.$refs.btnwrapper
+                if (this.theme == '#2a3142') {
                     btnwrapper[i].$el.style.color = '#fff'
+                } else {
+                    btnwrapper[i].$el.style.color = '#1f2d3d'
                 }
             }
         }
@@ -84,7 +85,7 @@ export default {
                 margin-right: @font-size-small;
                 border: none;
                 font-size: 14px;
-                color: #1f2d3d;
+                color: #fff;
                 outlione: none;
                 &:hover {
                     color: @color-base;
