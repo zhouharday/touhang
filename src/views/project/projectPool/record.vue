@@ -1,12 +1,9 @@
 <template>
     <div class="recordBox">
+        <tabel-header :data="headerInfo_record"></tabel-header>
         <div class="recordForm">
-            <div class="top">
-                <Input v-model="value" type="textarea" :rows="3" placeholder="请输入..."></Input>
-            </div>
-            <div class="bottom">
-                <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
-            </div>
+            <Input v-model="value" type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
+            <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
         </div>
         <div class="recordArea">
             <Timeline>
@@ -16,7 +13,6 @@
                         <p>
                             <span>{{item.userName}}</span>
                             <span>{{item.date}}</span>
-                            <span>{{item.fileName}}</span>
                         </p>
                         <p>{{item.recordText}}</p>
                         <p>
@@ -33,29 +29,32 @@
 
 
 <script type="text/ecmascript-6">
+import tabelHeader from 'components/tabelHeader'
 export default {
     data() {
         return {
-            value: '',
+            headerInfo_record: {
+                desc: '记录'
+            },
+            value: {
+                text: ''
+            },
             recordList: [
                 {
                     userName: '张三',
                     date: '2018-5-9 12:25',
-                    fileName: 'AAAAAAAA.doc',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
                     userName: '张三',
                     date: '2018-5-9 12:25',
-                    fileName: '',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
                     userName: '张三',
                     date: '2018-5-9 12:25',
-                    fileName: '',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2016'
                 }
@@ -69,9 +68,12 @@ export default {
 
         },
         delRecord(index) {
-            this.recordList.splice(index,1);
+            this.recordList.splice(index, 1);
         }
 
+    },
+    components: {
+        tabelHeader
     }
 }
 
@@ -84,23 +86,17 @@ export default {
     width: 100%;
     height: 100%;
     .recordForm {
-        margin: 30px 0;
-        .top {
-            height: 95px;
-            padding: 10px 20px;
-            background: #2a3142;
-        }
-        .bottom {
-            .submit-btn {
-                width: 100%;
-                height: 40px;
-                color: #fff;
-                font-size: 20px;
-            }
+        margin: 25px 0;
+        overflow: hidden;
+        .submit-btn {
+            width: 10%;
+            float: right;
+            color: #fff;
+            margin-top: 15px;
         }
     }
     .recordArea {
-        padding: 40px 100px;
+        padding: 30px 120px;
         .recordContent {
             position: relative;
             b {
@@ -117,7 +113,7 @@ export default {
                 vertical-align: middle;
                 background: #eef0f4;
                 margin-left: 30px;
-                padding: 18px 80px;
+                padding: 18px 50px;
                 text-align: left;
                 border-radius: 10px;
                 &::before {

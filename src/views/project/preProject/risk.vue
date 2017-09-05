@@ -18,7 +18,6 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" @cilck="modalTracking = true">跟踪</el-button>
-                        <el-button type="text" size="small" class="btn_border">编辑</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,riskData)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -154,13 +153,5 @@ export default {
 .riskTable {
     width: 100%;
     height: 100%;
-    .el-table {
-        .btn_border {
-            border-right: 1px solid #ddd;
-            border-left: 1px solid #ddd;
-            border-radius: 0;
-            padding: 0 12px;
-        }
-    }
 }
 </style>

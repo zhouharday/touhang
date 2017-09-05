@@ -85,6 +85,7 @@ import tableForm from './tables'
 import teamTable from './team'
 import industryForm from './industry'
 import approveTable from './approve'
+import fileTable from './file'
 import riskTable from './risk'
 export default {
   data() {
@@ -147,6 +148,7 @@ export default {
     teamTable,
     industryForm,
     approveTable,
+    fileTable,
     riskTable
 
   }

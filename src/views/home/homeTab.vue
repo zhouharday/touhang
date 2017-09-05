@@ -36,7 +36,7 @@
                 margin-left: 6px;
                 font-size: @font-size-medium;
                 color: @color-font;
-                &:hover{
+                &:hover {
                     color: @color-theme-red;
                 }
             }
@@ -71,7 +71,8 @@ export default {
     },
     methods: {
         linkFun($event, path, index) {
-            if ($event.target.tagName == 'IMG') {
+            // console.log($event.target.tagName);
+            if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', { index: index, self: this });
                 return;
             }

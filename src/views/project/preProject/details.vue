@@ -225,8 +225,7 @@ export default {
                     icon: 'upload',
                     explain: '提交'
                 }]
-            }
-
+            },
         }
     },
     methods: {

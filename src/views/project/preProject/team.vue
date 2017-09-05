@@ -6,6 +6,14 @@
                 <el-table-column label="姓名" prop="name" align="center">
                 </el-table-column>
                 <el-table-column label="角色" prop="role" align="center">
+                    <template scope="scope">
+                        <el-select v-model="value" placeholder="请选择角色" style="width:100%">
+                            <el-option v-for="item in options" 
+                                       :key="item.value" :label="item.label" 
+                                       :value="item.value" style="width:100%">
+                            </el-option>
+                        </el-select>
+                    </template>
                 </el-table-column>
                 <el-table-column label="添加日期" prop="date" align="center">
                 </el-table-column>
