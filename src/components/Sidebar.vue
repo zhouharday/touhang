@@ -194,6 +194,10 @@ export default {
         },
         addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });
+                console.log(th)
+                console.log(url)
+                console.log(name)
+
             this.$router.push({
                 name: name
             })
@@ -203,7 +207,6 @@ export default {
                 url: url,
                 name: name
             })
-            console.log(url)
             this.SET_NAME(name)
             this.SET_URL(url)
             this.SET_TITLE(th)

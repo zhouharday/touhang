@@ -1,7 +1,7 @@
 <template>
     <div class="table">
         <div class="capitalTable">
-            <tabel-header :data="headerInfo_capital" @method="method"></tabel-header>
+            <tabel-header :data="headerInfo_capital" @add="method"></tabel-header>
             <el-table :data="capitalData" border style="width: 100%">
                 <el-table-column label="融资轮次" prop="round" align="center">
                 </el-table-column>
@@ -109,8 +109,10 @@ export default {
             },
             headerInfo_capital: {
                 desc: '融资信息',
-                icon_b: 'plus-round',
-                explain_b: '添加'
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '添加'
+                }]
             }
         }
     },

@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="fileTable" v-show="isShow">
-            <tabel-header :data="headerInfo_file" @ensure="fileDialog"></tabel-header>
+            <tabel-header :data="headerInfo_file" @add="fileDialog"></tabel-header>
             <el-table :data="fileData" border style="width: 100%" align="center">
                 <el-table-column label="文档名称" prop="fileName" align="center">
                 </el-table-column>
@@ -48,15 +48,7 @@
                 <img src="/static/img/close.png">
             </div>
             <div class="fileArea">
-                不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。 v-show 是简单地切换元素的 CSS 属性 display 。 
-                注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在
-                切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。 惰性的：如果在初始渲染时条件为假，则什么也不做
-                ——直到条件第一次变为真时，才会开始渲染条件块。 相比之下， v-show 就简单得多——不管初始条件是什么，元素总是
-                会被渲染，并且只是简单地基于 CSS 进行切换。 一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。
-                因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。
-                 v-if 与 v-for 一起使用 当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。 
-                 请查阅 列表渲染指南 以获取详细信息。 ← Class 与 Style 绑定 列表渲染 → 发现错误？想参与编辑？ 
-                 在 Github 上编辑此页！
+                不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。 v-show 是简单地切换元素的 CSS 属性 display 。 注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在 切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。 惰性的：如果在初始渲染时条件为假，则什么也不做 ——直到条件第一次变为真时，才会开始渲染条件块。 相比之下， v-show 就简单得多——不管初始条件是什么，元素总是 会被渲染，并且只是简单地基于 CSS 进行切换。 一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。 因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。 v-if 与 v-for 一起使用 当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。 请查阅 列表渲染指南 以获取详细信息。 ← Class 与 Style 绑定 列表渲染 → 发现错误？想参与编辑？ 在 Github 上编辑此页！
             </div>
         </section>
     </div>
@@ -102,8 +94,10 @@ export default {
             ],
             headerInfo_file: {
                 desc: '前期文档',
-                icon_a: 'upload',
-                explain_a: '上传'
+                btnGroup: [{
+                    icon: 'upload',
+                    explain: '上传'
+                }]
             },
         }
     },
@@ -125,12 +119,12 @@ export default {
         },
         preview(row) {
             this.isShow = false,
-            this.isHide = true,
-            console.log(row.fileName)
+                this.isHide = true,
+                console.log(row.fileName)
         },
         closeView() {
             this.isShow = true,
-            this.isHide = false              
+                this.isHide = false
         },
         handleDelete(index, rows) {
             rows.splice(index, 1);
