@@ -1,78 +1,78 @@
 <template>
-    <div class="preProjectMessage">
-        <div class="title">
-            <div class="left">
-                <span class="desc">{{title}}</span>
-                <img src="static/img/icon-中止-.png" alt="" class="termination">
-            </div>
-            <div class="right">
-                <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-                <el-button type="danger">下一步</el-button>
-                <img src="static/img/icon-重启.png" alt="" class="restart">
-            </div>
-        </div>
-        <el-row class="step">
-            <el-col :span="4" class="step_first step_span">
-                <span>{{step_first}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span">
-                <span>{{step_second}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span">
-                <span>{{step_third}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span">
-                <span>{{step_fourth}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span">
-                <span>{{step_fiveth}}</span>
-            </el-col>
-            </el-col>
-            <el-col :span="4" class="step_third step_span">
-                <span>{{step_sixth}}</span>
-            </el-col>
-        </el-row>
-        <div class="picture">
-            <div class="img_wrapper">
-                <img src="static/img/double.png" alt="">
-            </div>
-            <div class="prompt_message">
-                <span class="prompt">{{prompt}}</span>
-                <div class="item_wrapper">
-                    <div class="item" v-for="(item, index) in module" :key="item.index">
-                        <span class="count">{{item.count}}</span>
-                        <p class="desc">{{item.desc}}</p>
-                        <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tabs">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                    </detail-form>
-                    <table-form></table-form>
-                </el-tab-pane>
-                <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table></team-table>
-                </el-tab-pane>
-                <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                    <industry-form :industryForm="industryForm">
-                    </industry-form>
-                </el-tab-pane>
-                <el-tab-pane label="审批" name="approve" class="tab_list">
-                </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
-                </el-tab-pane>
-                <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                </el-tab-pane>
-                <el-tab-pane label="管理" name="manage" class="tab_list">
-                </el-tab-pane>
-            </el-tabs>
-        </div>
+  <div class="preProjectMessage">
+    <div class="title">
+      <div class="left">
+        <span class="desc">{{title}}</span>
+      </div>
+      <div class="right">
+        <el-button type="danger">下一阶段</el-button>
+        <el-button type="danger">中止</el-button>
+      </div>
     </div>
+    <el-row class="step">
+      <el-col :span="4" class="step_first step_span">
+        <span>{{step_first}}</span>
+      </el-col>
+      <el-col :span="4" class="step_second step_span">
+        <span>{{step_second}}</span>
+      </el-col>
+      <el-col :span="4" class="step_second step_span">
+        <span>{{step_third}}</span>
+      </el-col>
+      <el-col :span="4" class="step_second step_span">
+        <span>{{step_fourth}}</span>
+      </el-col>
+      <el-col :span="4" class="step_second step_span">
+        <span>{{step_fiveth}}</span>
+      </el-col>
+      </el-col>
+      <el-col :span="4" class="step_third step_span">
+        <span>{{step_sixth}}</span>
+      </el-col>
+    </el-row>
+    <div class="picture">
+      <div class="img_wrapper">
+        <img src="static/img/double.png" alt="">
+      </div>
+      <div class="prompt_message">
+        <span class="prompt">{{prompt}}</span>
+        <div class="item_wrapper">
+          <div class="item" v-for="(item, index) in module" :key="item.index">
+            <span class="count">{{item.count}}</span>
+            <p class="desc">{{item.desc}}</p>
+            <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane label="详情" name="details" class="tab_list">
+          <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+          </detail-form>
+          <table-form></table-form>
+        </el-tab-pane>
+        <el-tab-pane label="团队" name="team" class="tab_list">
+          <team-table></team-table>
+        </el-tab-pane>
+        <el-tab-pane label="工商信息" name="industry" class="tab_list">
+          <industry-form :industryForm="industryForm">
+          </industry-form>
+        </el-tab-pane>
+        <el-tab-pane label="审批" name="approve" class="tab_list">
+          <approve-table></approve-table>
+        </el-tab-pane>
+        <el-tab-pane label="文档" name="file" class="tab_list">
+          <file-table></file-table>
+        </el-tab-pane>
+        <el-tab-pane label="风险登记" name="risk" class="tab_list">
+          <risk-table></risk-table>
+        </el-tab-pane>
+        <el-tab-pane label="管理" name="manage" class="tab_list">
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </div>
 </template>
 
 
@@ -84,6 +84,8 @@ import detailForm from './details'
 import tableForm from './tables'
 import teamTable from './team'
 import industryForm from './industry'
+import approveTable from './approve'
+import riskTable from './risk'
 export default {
   data() {
     return {
@@ -142,8 +144,10 @@ export default {
   components: {
     detailForm,
     tableForm,
-    teamTable,    
-    industryForm
+    teamTable,
+    industryForm,
+    approveTable,
+    riskTable
 
   }
 }
@@ -176,22 +180,13 @@ export default {
         color: #fff;
         vertical-align: top;
       }
-      .termination {
-        margin-left: 24px;
-        vertical-align: middle;
-      }
     }
     .right {
       height: 100%;
       float: right;
       margin-right: 24px;
       .el-button {
-        border-radius: 24px;
         padding: 5px 15px;
-      }
-      .restart {
-        margin-left: 24px;
-        vertical-align: middle;
       }
     }
   }
