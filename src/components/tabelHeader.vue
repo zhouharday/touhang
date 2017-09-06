@@ -46,7 +46,6 @@ export default {
             this.$refs.title.style.background = this.theme;
             console.log(this.$refs.btnwrapper);
             this.$refs.title.style.background = this.theme
-<<<<<<< HEAD
             console.log(this.theme)
             if (this.$refs.btnwrapper) {
                 for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
@@ -56,15 +55,6 @@ export default {
                     } else {
                         btnwrapper[i].$el.style.color = '#1f2d3d'
                     }
-=======
-            // console.log(this.theme)
-            for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
-                var btnwrapper = this.$refs.btnwrapper
-                if (this.theme == '#2a3142') {
-                    btnwrapper[i].$el.style.color = '#fff'
-                } else {
-                    btnwrapper[i].$el.style.color = '#1f2d3d'
->>>>>>> 80710da5d3c4d56eb0e43a9b82d45757645b16d8
                 }
             } else {
                 return
