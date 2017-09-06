@@ -38,11 +38,11 @@ const r1 = [
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
     }, 
-    {
-        path: '/addProject', //home/添加项目页
-        name: 'addProject',
-        component: resolve => require(['../views/project/addProject.vue'], resolve)
-    },
+    // {
+    //     path: '/addProject', //home/添加项目页
+    //     name: 'addProject',
+    //     component: resolve => require(['../views/project/addProject.vue'], resolve)
+    // },
     {
         path: '/message/:userId', //home/添加项目页
         name: 'message',

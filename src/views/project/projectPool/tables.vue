@@ -7,7 +7,7 @@
                 </el-table-column>
                 <el-table-column label="性质" prop="property" align="center">
                 </el-table-column>
-                <el-table-column label="教育背景" prop="edu" align="center">
+                <el-table-column label="教育背景" prop="edu" align="center">    
                 </el-table-column>
                 <el-table-column label="联系电话" prop="phone" align="center">
                 </el-table-column>

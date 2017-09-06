@@ -59,8 +59,11 @@
           <industry-form :industryForm="industryForm">
           </industry-form>
         </el-tab-pane>
+        <el-tab-pane label="记录" name="record" class="tab_list">
+          <record-form></record-form>
+        </el-tab-pane>
         <el-tab-pane label="审批" name="approve" class="tab_list">
-          <approve-table ></approve-table>
+          <approve-table></approve-table>
         </el-tab-pane>
         <el-tab-pane label="文档" name="file" class="tab_list">
           <file-table></file-table>
@@ -69,6 +72,7 @@
           <risk-table></risk-table>
         </el-tab-pane>
         <el-tab-pane label="管理" name="manage" class="tab_list">
+          <manage-table></manage-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -84,9 +88,11 @@ import detailForm from './details'
 import tableForm from './tables'
 import teamTable from './team'
 import industryForm from './industry'
+import recordForm from './record'
 import approveTable from './approve'
 import fileTable from './file'
 import riskTable from './risk'
+import manageTable from './manage'
 export default {
   data() {
     return {
@@ -147,9 +153,11 @@ export default {
     tableForm,
     teamTable,
     industryForm,
+    recordForm,
     approveTable,
     fileTable,
-    riskTable
+    riskTable,
+    manageTable
 
   }
 }
