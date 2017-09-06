@@ -42,6 +42,11 @@ const r1 = [
         path: '/addProject', //home/添加项目页
         name: 'addProject',
         component: resolve => require(['../views/project/addProject.vue'], resolve)
+    },
+    {
+        path: '/message/:userId', //home/添加项目页
+        name: 'message',
+        component: resolve => require(['../views/assistant/message.vue'], resolve)
     }      
 ]
 export default r1
