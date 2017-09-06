@@ -7,13 +7,14 @@
             <!-- <a href="#homeContent">{{title}}</a>   -->
             <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,item.name,index)" :class="{active:$route.name == item.name || $route.path == item.path }">
                 <span>{{item.title}}</span>
-                <img src="/static/img/close.png">
+                <Icon type="close" class="close"></Icon>
             </li>
         </ul>
     </div>
 </template>
 
 <style lang="less" scoped>
+@import '../../common/styles/variable.less';
 .navmenu {
     width: 100%;
     height: 35px;
@@ -21,7 +22,6 @@
     ul {
         overflow: hidden;
         li {
-            position: relative;
             padding-left: 20px;
             padding-right: 20px; // width: 80px;
             height: 35px;
@@ -32,10 +32,13 @@
             &.active {
                 background-color: #fff;
             }
-            >img {
-                position: absolute;
-                top: 9px;
-                right: 0;
+            .close {
+                margin-left: 6px;
+                font-size: @font-size-medium;
+                color: @color-font;
+                &:hover {
+                    color: @color-theme-red;
+                }
             }
         }
     }
@@ -51,6 +54,14 @@ export default {
         }
     },
     computed: mapState({
+<<<<<<< HEAD
+=======
+        // ttaa: state => {
+        //         state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [],
+        //         state.login.TitleList
+        // }
+        // ttaa: state => this.$store.state.login.TitleList,
+>>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
         ttaa(state) {
             state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [];
             return state.login.TitleList;
@@ -62,9 +73,15 @@ export default {
         }
     },
     methods: {
+<<<<<<< HEAD
         linkFun($event, path, name, index) {
             // alert(2);
             if ($event.target.tagName == 'IMG') {
+=======
+        linkFun($event, path, index) {
+            // console.log($event.target.tagName);
+            if ($event.target.tagName == 'I') {
+>>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
                 this.$store.commit('deleTab', { index: index, self: this });
                 return;
             };

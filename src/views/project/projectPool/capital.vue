@@ -1,7 +1,7 @@
 <template>
     <div class="table">
         <div class="capitalTable">
-            <tabel-header :data="headerInfo_capital" @method="method"></tabel-header>
+            <tabel-header :data="headerInfo_capital" @add="method"></tabel-header>
             <el-table :data="capitalData" border style="width: 100%">
                 <el-table-column label="融资轮次" prop="round" align="center">
                 </el-table-column>
@@ -31,7 +31,9 @@
                         <el-input v-model="capitalForm1.capital" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="融资日期" :label-width="formLabelWidth">
-                        <el-input v-model="capitalForm1.date" auto-complete="off"></el-input>
+                        <!-- <el-input v-model="capitalForm1.date" auto-complete="off"></el-input> -->
+                        <el-date-picker type="date" placeholder="融资日期" v-model="capitalForm1.date" style="width: 100%;">
+                        </el-date-picker>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -66,6 +68,7 @@
 
  <script style="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
+import { changeDate } from 'common/js/config'
 export default {
     data() {
         return {
@@ -106,8 +109,10 @@ export default {
             },
             headerInfo_capital: {
                 desc: '融资信息',
-                icon_b: 'plus-round',
-                explain_b: '添加'
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '添加'
+                }]
             }
         }
     },
@@ -118,12 +123,8 @@ export default {
         },
         confirmAdd1() {
             this.modalAdd1 = false;
-            this.capitalData.push({
-                round: this.capitalForm1.round,
-                way: this.capitalForm1.way,
-                capital: this.capitalForm1.capital,
-                date: this.capitalForm1.date
-            });
+            this.capitalForm1.date = changeDate(this.capitalForm1.date);
+            this.capitalData.push(this.capitalForm1);
             this.clearVal1();
         },
         //编辑 融资信息的方法
@@ -139,21 +140,25 @@ export default {
         },
         //清除 添加融资信息对话框
         clearVal1() {
-            this.capitalForm1.round = '';
-            this.capitalForm1.way = '';
-            this.capitalForm1.capital = '',
-            this.capitalForm1.date = ''
+            this.capitalForm1 = {
+                round: '',
+                way: '',
+                capital: '',
+                date: ''
+            }
         },
         //清除 编辑融资信息对话框
         clearVal2() {
-            this.capitalForm2.round = '';
-            this.capitalForm2.way = '';
-            this.capitalForm2.capital = '',
-            this.capitalForm2.date = ''
+            this.capitalForm2 = {
+                round: '',
+                way: '',
+                capital: '',
+                date: ''
+            }
         }
     },
     components: {
-            tabelHeader
+        tabelHeader
     }
 }      
 </script>

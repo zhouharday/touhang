@@ -53,7 +53,7 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
                         <span>{{title_04}}</span>
                     </template>
-                    <el-menu-item index="myfund" @click="addTab(title11,'/home/myfund','myfund')">{{title11}}</el-menu-item>
+                    <el-menu-item index="myfund" @click="addTab(title11,'/home/fund','myfund')">{{title11}}</el-menu-item>
                     <el-menu-item index="cooperative" @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="5">
@@ -70,11 +70,16 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/survey.png" />
                         <span>{{title_06}}</span>
                     </template>
-                    <el-menu-item index="">{{title14}}</el-menu-item>
-                    <el-menu-item index="">{{title15}}</el-menu-item>
-                    <el-menu-item index="">{{title16}}</el-menu-item>
-                    <el-menu-item index="">{{title17}}</el-menu-item>
-                    <el-menu-item index="">{{title18}}</el-menu-item>
+                    <el-menu-item index="proLibrary"
+                    @click="addTab(title14, '/home/proLibrary', 'proLibrary')">{{title14}}</el-menu-item>
+                    <el-menu-item index="fundLibrary"
+                    @click="addTab(title15, '/home/fundLibrary', 'fundLibrary')">{{title15}}</el-menu-item>
+                    <el-menu-item index="investorLibrary"
+                    @click="addTab(title16, '/home/investorLibrary', 'investorLibrary')">{{title16}}</el-menu-item>
+                    <el-menu-item index="projectsDoc"
+                    @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
+                    <el-menu-item index="fundDoc"
+                    @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
                                     <template slot="title">
@@ -133,9 +138,13 @@
 </template>
 
 <script>
+<<<<<<< HEAD
 import { mapState } from 'vuex'
 import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
 import zTree from "../../static/js/zTree/jquery.ztree.core";
+=======
+import { mapState, mapMutations } from 'vuex'
+>>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
 export default {
     comments: { jq, zTree },
     beforeCreate() { },
@@ -188,11 +197,14 @@ export default {
             // console.log(state.login.userInfor);
             return state.login.userInfor;
         },
+<<<<<<< HEAD
         um_id() {
             state.login.logoSrc = JSON.parse(sessionStorage.getItem('merchants')) || {};
             return state.login.merchants;
         }
         // menus: state => state.login.menus
+=======
+>>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
     }),
     data() {
         return {
@@ -372,16 +384,33 @@ export default {
             return (treeNode.id !== 1);
         },
         addTab(th, url, name) {
+<<<<<<< HEAD
+=======
+            // this.$router.push({ name: 'assistant' });
+                console.log(th)
+                console.log(url)
+                console.log(name)
+
+>>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
             this.$router.push({
                 name: name
-            });
+            })
             this.$store.commit({
                 type: 'addTab',
                 title: th,
                 url: url,
                 name: name
-            });
-        }
+            })
+            this.SET_NAME(name)
+            this.SET_URL(url)
+            this.SET_TITLE(th)
+            console.log(this.$store.state.crumbs)
+        },
+        ...mapMutations([
+            'SET_NAME',
+            'SET_URL',
+            'SET_TITLE'
+        ])
     }
 }
 </script>
@@ -507,7 +536,7 @@ export default {
 .sidebar {
     display: block;
     position: absolute;
-    width: 217px;
+    width: 196px;
     left: 0;
     top: 0;
     bottom: 0;

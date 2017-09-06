@@ -9,6 +9,7 @@ let arr = [];
 arr = arr.concat(r1, r2, r3)
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '/',

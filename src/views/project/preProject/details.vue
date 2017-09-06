@@ -34,7 +34,12 @@
                             <el-input v-model="basicForm.location" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目负责人">
+                            <el-input v-model="basicForm.manager" :disabled="basicForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
                         <el-form-item label="业务部门">
                             <el-input v-model="basicForm.department" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
@@ -101,6 +106,63 @@
                 </el-row>
             </el-form>
         </div>
+        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)"></tabel-header>
+        <div class="capitalForm">
+            <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="投资轮次">
+                            <el-input v-model="capitalForm.round" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目初始估值（元）">
+                            <el-input v-model="capitalForm.valuation" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="投资金额（元）">
+                            <el-input v-model="capitalForm.money" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="股权占比（%）">
+                            <el-input v-model="capitalForm.percent" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="原币种金额">
+                            <el-input v-model="capitalForm.omoney" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="币种">
+                            <el-input v-model="capitalForm.currency" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="投资取得股份数（股）">
+                            <el-input v-model="capitalForm.share" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="投资取得注册资本（元）">
+                            <el-input v-model="capitalForm.regCapital" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="初始投资时间">
+                            <el-input v-model="capitalForm.inTime" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目预计退出时间">
+                            <el-input v-model="capitalForm.outTime" :disabled="capitalForm.flag"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
     </div>
 </template>
 
@@ -114,6 +176,10 @@ export default {
             default: {}
         },
         companyForm: {
+            type: Object,
+            default: {}
+        },
+        capitalForm: {
             type: Object,
             default: {}
         }
@@ -148,7 +214,18 @@ export default {
                     icon: 'upload',
                     explain: '提交'
                 }]
-            }
+            },
+            headerInfo_capital: {
+                desc: '投资信息',
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                },
+                {
+                    icon: 'upload',
+                    explain: '提交'
+                }]
+            },
         }
     },
     methods: {
@@ -165,6 +242,7 @@ export default {
     }
 }
 </script>
+
 
 <style lang="less" scoped>
 .form {

@@ -27,6 +27,7 @@ export default {
         logoSname(state) {
             state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
             return state.login.logoSrc;
+            // console.log(sessionStorage.getItem('logoSrc'));
         },
     }),
     data() {
