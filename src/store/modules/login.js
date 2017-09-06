@@ -1,13 +1,7 @@
-<<<<<<< HEAD
 import request from 'superagent'
 import {
     Notification
 } from 'element-ui'
-=======
-// import request from 'superagent'
-import * as types from '../mutations-type'
-import {Notification} from 'element-ui'
->>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
 import loginBox from '../../components/loginBox.vue'
 import loginCard from '../../components/loginCard.vue'
 
@@ -114,49 +108,8 @@ const actions = {
                         state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
                         window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
                         // console.log(state.logoSrc);
-<<<<<<< HEAD
                         userPwd.self.$router.push({
                             name: 'homeContent'
-=======
-
-                        userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-                            "um_id": state.merchants[0].um_id //用户、机构中间id
-                        }).then(Response => {
-                            console.log(Response.data);
-                            if (Response.data.status == '200') {
-                                userPwd.self.$router.push({name: 'homeContent'});
-                                console.log(state.logoSrc);
-                                commit('Notification', {
-                                    title: '',
-                                    message: '登录成功',
-                                    type: 'success'
-                                });
-                            }
-                        }).catch(error => {
-                            commit('Notification', {
-                                title: '',
-                                message: '服务器异常,请稍后再试',
-                                type: 'error'
-                            });
-                        });
-                        // userPwd.self.$router.push({
-                        //     name: 'homeContent'
-                        // });
-                        // commit('Notification');
-                    } else if (state.merchants.length > '1') { //有多个组织列表
-                        state.CardBox = loginBox;
-
-                        userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-                        }).then(Response => {
-                            console.log(Response.data);
-                            
-                        }).catch(error => {
-                            commit('Notification', {
-                                title: '',
-                                message: '服务器异常,请稍后再试',
-                                type: 'error'
-                            });
->>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
                         });
                         // userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
                         //     "um_id": state.merchants[0].um_id //用户、机构中间id
