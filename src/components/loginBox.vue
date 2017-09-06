@@ -3,7 +3,7 @@
         <div>请确认登录管理后台的企业</div>
         <el-carousel :interval="3000" type="card" height="200px" :autoplay='true' :initial-index="0">
             <el-carousel-item v-for="item in merchant" :key="item" :initial-index="0">
-                <h3 @click="loginCards(item.um_id)"><img :src="item.logo" alt=""></h3>
+                <h3 @click="loginCards(item.um_id,item.merchant_name)"><img :src="item.logo" alt=""></h3>
                 <div class="loginCard_title">{{item.merchant_name}}</div>
             </el-carousel-item>
         </el-carousel>
@@ -32,7 +32,7 @@ export default {
         },
         loginCards(um_id1, um_id2) {
             console.log(um_id1); //当前幻灯片索引
-            // console.log(name2); //上一张幻灯片索引
+            console.log(um_id2); //上一张幻灯片索引
 
 
             this.$router.push({

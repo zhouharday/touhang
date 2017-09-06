@@ -14,9 +14,9 @@ export default [
         name: 'messageShow',
         component: resolve => require(['../views/office/messageShow.vue'], resolve)
     } ,
-    {
-        path: '/message/:userId', //home/详情页
-        name: 'message',
-        component: resolve => require(['../views/assistant/message.vue'], resolve)
-    },
+    // {
+    //     path: '/message/:userId', //home/详情页
+    //     name: 'message',
+    //     component: resolve => require(['../views/assistant/message.vue'], resolve)
+    // },
 ]

@@ -341,8 +341,10 @@ export default {
         },
         ShowPoolMessage(title,ind) {
             this.index = ind;
-            this.addTab( title.project + '详情页', '/home/zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
+            this.addTab( title.project + '详情页', '/home/zprojectPoolMessage/'+ind, "zprojectPoolMessage"+ind );
+            // this.addTab( title.project + '详情页', 'zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
+            // this.$router.push({ path: 'zprojectPoolMessage/'+ind, params: { userId: ind } });
         },
         jumpPre() {
             this.addTab('投前项目','/home/preProject','preProject');

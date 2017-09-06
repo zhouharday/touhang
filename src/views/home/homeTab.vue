@@ -5,7 +5,7 @@
                 {{title}}
             </router-link>
             <!-- <a href="#homeContent">{{title}}</a>   -->
-            <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,index)" :class="{active:$route.name == item.name || $route.path == item.path }">
+            <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,item.name,index)" :class="{active:$route.name == item.name || $route.path == item.path }">
                 <span>{{item.title}}</span>
                 <img src="/static/img/close.png">
             </li>
@@ -51,11 +51,6 @@ export default {
         }
     },
     computed: mapState({
-        // ttaa: state => {
-        //         state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [],
-        //         state.login.TitleList
-        // } 
-        // ttaa: state => this.$store.state.login.TitleList,
         ttaa(state) {
             state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [];
             return state.login.TitleList;
@@ -67,12 +62,14 @@ export default {
         }
     },
     methods: {
-        linkFun($event, path, index) {
+        linkFun($event, path, name, index) {
+            // alert(2);
             if ($event.target.tagName == 'IMG') {
                 this.$store.commit('deleTab', { index: index, self: this });
                 return;
-            }
+            };
             this.$router.push({ path: path });
+            // this.$router.push({ name: name });
         }
     }
 }

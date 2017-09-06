@@ -2,7 +2,7 @@
     <div class="header">
         <div class="hd_logo">
             <img :src="logoSname.logo" />
-            <span>{{logoSname}}</span>
+            <span>{{logoSname.merchantName}}</span>
         </div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
@@ -20,33 +20,18 @@
 import { mapState } from 'vuex'
 export default {
     computed: mapState({
-        // username() {
-        //     let username = localStorage.getItem('ms_username');
-        //     return username ? username : this.name;
-        // },
+        username() {
+            let username = localStorage.getItem('ms_username');
+            return username ? username : this.name;
+        },
         logoSname(state) {
-            // state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
-            // state.login.logoSrc = '深度'
-            // console.log(sessionStorage.getItem('logoSrc'));
-            console.log(state.login.logoSrc);
+            state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
             return state.login.logoSrc;
         },
     }),
-    // beforeCreate() {
-    //     this.$store.state.login.logoSrc = JSON.parse(sessionStorage.getItem("logoSrc")) || {};
-    // },
-    mounted() {
-        // this.logoSname = this.$store.state.login.logoSrc;
-        console.log(this.$store.state.login.logoSrc);
-    },
-    // created(){
-    //     console.log(typeof(this.$store.state.login.logoSrc));
-    // },
-
     data() {
         return {
             name: '退出',
-            logoSname: ''
         }
     },
 
