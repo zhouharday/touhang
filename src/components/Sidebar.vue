@@ -53,7 +53,7 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
                         <span>{{title_04}}</span>
                     </template>
-                    <el-menu-item index="myfund" @click="addTab(title11,'/home/fund','myfund')">{{title11}}</el-menu-item>
+                    <el-menu-item index="myfund" @click="addTab(title11,'/home/myfund','myfund')">{{title11}}</el-menu-item>
                     <el-menu-item index="cooperative" @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="5">
@@ -137,6 +137,7 @@ export default {
     beforeCreate() { },
     created() {
         this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+        // console.log(this.$store.state.login.merchants[0].um_id);
         this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
             "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
         }).then(Response => {
@@ -144,7 +145,7 @@ export default {
             if (Response.data.status == '200') {
                 this.menus = Response.data.result;
                 console.log(this.menus);
-                // alert(1);
+                alert(1);
             }
         }).catch(error => {
             console.log(error);

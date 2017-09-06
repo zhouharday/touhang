@@ -41,7 +41,7 @@ export default {
         },
         _theme() {
             this.$refs.title.style.background = this.theme
-            console.log(this.theme)
+            // console.log(this.theme)
             for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
                 var btnwrapper = this.$refs.btnwrapper
                 if (this.theme == '#2a3142') {
