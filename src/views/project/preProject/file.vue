@@ -185,10 +185,6 @@ export default {
                 inspectionName: 'AAAAAAAAA',
                 user: '张三',
                 date: '2017-09-09'
-            }, {
-                inspectionName: 'AAAAAAAAA',
-                user: '张三',
-                date: '2017-09-09'
             }],
             headerInfo_inspection: {
                 desc: '考察报告',
@@ -203,6 +199,11 @@ export default {
             },
             projectData: [{
                 projectName: 'AAAAAAAAA',
+                user: '张三',
+                date: '2017-09-09'
+            },
+            {
+                inspectionName: 'AAAAAAAAA',
                 user: '张三',
                 date: '2017-09-09'
             }],
