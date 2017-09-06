@@ -35,11 +35,6 @@
    </div>
 </div>
 </template>
-
-
-
-
-
 <script type="text/ecmascript-6">
 import detailForm from './details'
 import tableForm from './tables'

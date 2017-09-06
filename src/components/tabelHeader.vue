@@ -6,7 +6,7 @@
             <span v-show="data.desc">{{data.desc}}</span>
         </div>
         <div class="btn" ref="btn">
-            <el-button v-for="(btn, index) in data.btnGroup" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
+            <el-button v-for="(btn, index) in data.btnGroup" :key="btn.index" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
                 <Icon :type="btn.icon" v-show="btn.icon"></Icon>
                 <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
             </el-button>
@@ -17,6 +17,9 @@
 
 <script type="text/ecmascript-6">
 export default {
+     mounted() {
+        this._theme()
+    },
     props: {
         data: {
             type: Object,
@@ -40,6 +43,8 @@ export default {
             }
         },
         _theme() {
+            this.$refs.title.style.background = this.theme;
+            console.log(this.$refs.btnwrapper);
             this.$refs.title.style.background = this.theme
             // console.log(this.theme)
             for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
@@ -52,9 +57,9 @@ export default {
             }
         }
     },
-    mounted() {
-        this._theme()
-    }
+    // mounted() {
+    //     this._theme()
+    // }
 }
 </script>
 
