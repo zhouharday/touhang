@@ -6,14 +6,6 @@
                 <el-table-column label="姓名" prop="name" align="center">
                 </el-table-column>
                 <el-table-column label="角色" prop="role" align="center">
-                    <template scope="scope">
-                        <el-select v-model="value" placeholder="请选择角色" style="width:100%">
-                            <el-option v-for="item in options" 
-                                       :key="item.value" :label="item.label" 
-                                       :value="item.value" style="width:100%">
-                            </el-option>
-                        </el-select>
-                    </template>
                 </el-table-column>
                 <el-table-column label="添加日期" prop="date" align="center">
                 </el-table-column>
@@ -30,7 +22,10 @@
                         <el-input v-model="teamForm.name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="角色" :label-width="formLabelWidth">
-                        <el-input v-model="teamForm.role" auto-complete="off"></el-input>
+                        <el-select v-model="teamForm.role" placeholder="请选择角色" style="width:100%">
+                            <el-option label="角色一" value="角色一"></el-option>
+                            <el-option label="角色二" value="角色二"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="添加日期" :label-width="formLabelWidth">
                         <el-date-picker type="date" placeholder="添加日期" v-model="teamForm.date" style="width: 100%;">
@@ -75,7 +70,7 @@ export default {
                     name: '',
                     role: '',
                     date: ''
-                }
+                },
             ],
             teamForm: {
                 name: '',
