@@ -1,5 +1,4 @@
-const r2 = [
-    {
+const r2 = [{
         path: 'schedule', //home/日程页
         name: 'schedule',
         component: resolve => require(['../views/office/schedule.vue'], resolve)
@@ -13,3 +12,4 @@ const r2 = [
         component: resolve => require(['../views/office/messageShow.vue'], resolve)
     }
 ]
+export default r2

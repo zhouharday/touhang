@@ -67,7 +67,7 @@ export default {
     methods: {
         linkFun($event, path, name, index) {
             // alert(2);
-            if ($event.target.tagName == 'IMG') {
+            if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', { index: index, self: this });
                 return;
             };

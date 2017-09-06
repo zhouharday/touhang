@@ -123,22 +123,13 @@
                 </el-submenu>
              </el-menu>
 
-
-
-
-
-
-
-
-
-
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState,mapMutations } from 'vuex'
 import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
 import zTree from "../../static/js/zTree/jquery.ztree.core";
 export default {
@@ -177,7 +168,7 @@ export default {
         //         treeObj.removeClass("showIcon");
         //     })
         })
-            $.fn.zTree.init($("#zTree"), this.setting, this.zNodes);
+            // $.fn.zTree.init($("#zTree"), this.setting, this.zNodes);
         //     // // alert(1);
         //     // console.log(this.zNodes);
         //     // console.log(this.setting);
@@ -363,17 +354,17 @@ export default {
             //     return false;
             // }
             // return true;
-            if (treeNode.hasOwnProperty('path')) {
-                // alert(222);
-                let title = treeNode.name;
-                let url = treeNode.path;
-                let name = url.substring(6);
-                // console.log(title);
-                // console.log(url);
-                // console.log(name);
-                this.addTab(title, url, name);
-            }
-            return (treeNode.id !== 1);
+            // if (treeNode.hasOwnProperty('path')) {
+            //     // alert(222);
+            //     let title = treeNode.name;
+            //     let url = treeNode.path;
+            //     let name = url.substring(6);
+            //     // console.log(title);
+            //     // console.log(url);
+            //     // console.log(name);
+            //     this.addTab(title, url, name);
+            // }
+            // return (treeNode.id !== 1);
         },
         addTab(th, url, name) {
             this.$router.push({
@@ -520,7 +511,7 @@ export default {
 .sidebar {
     display: block;
     position: absolute;
-    width: 196px;
+    width: 213px;
     left: 0;
     top: 0;
     bottom: 0;

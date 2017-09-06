@@ -17,6 +17,11 @@ const r1 = [
         component: resolve => require(['../views/project/projectPool/projectPool.vue'], resolve)
     },
     {
+        path: 'addProject', //home/添加项目页
+        name: 'addProject',
+        component: resolve => require(['../views/project/addProject.vue'], resolve)
+    },
+    {
         path: 'zprojectPoolMessage/:userId', //home/正常状态下的项目池详情页
         name: 'zprojectPoolMessage',
         component: resolve => require(['../views/project/projectPool/zprojectPoolMessage.vue'], resolve)
@@ -32,7 +37,6 @@ const r1 = [
         path: 'preProjectMessage/:userId', //home/投前项目详情页
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
-
     }, 
     {
         path: '/addProject', //home/添加项目页
@@ -40,3 +44,4 @@ const r1 = [
         component: resolve => require(['../views/project/addProject.vue'], resolve)
     }      
 ]
+export default r1
