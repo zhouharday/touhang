@@ -54,14 +54,11 @@ export default {
         }
     },
     computed: mapState({
-<<<<<<< HEAD
-=======
         // ttaa: state => {
         //         state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [],
         //         state.login.TitleList
         // }
         // ttaa: state => this.$store.state.login.TitleList,
->>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
         ttaa(state) {
             state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [];
             return state.login.TitleList;
@@ -73,15 +70,9 @@ export default {
         }
     },
     methods: {
-<<<<<<< HEAD
-        linkFun($event, path, name, index) {
-            // alert(2);
-            if ($event.target.tagName == 'IMG') {
-=======
         linkFun($event, path, index) {
             // console.log($event.target.tagName);
             if ($event.target.tagName == 'I') {
->>>>>>> 82aeffa4d467b9edf8a1df86789da7c0a01e6a76
                 this.$store.commit('deleTab', { index: index, self: this });
                 return;
             };
