@@ -1,21 +1,8 @@
 <template>
 <div class="fund">
-    <div class="choose">
-        <ul v-for="(item, index) of chooseInfo" class="lists" key="index">
-            <li class="title">{{item.title}}</li>
-            <li class="ul_list">
-                <ul>
-                    <li class="list" v-for="(list, nowIndex) of item.details">
-                        <el-button @click="changeList(index, nowIndex)" class="btn" :class="{active: currentIndex == index && clickIndex == nowIndex}">
-                            {{list}}
-                        </el-button>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+    <myFilter :chooseInfo="chooseInfo"></myFilter>
     <div class="tables">
-        <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem">
+        <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="input2" :on-icon-click="handleIconClick" style="width: 320px;">
             </el-input>
         </table-header>
@@ -62,6 +49,7 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import myFilter from 'components/myFilter'
 const INDEX = 0;
 const NOW = 0;
 export default {
@@ -120,7 +108,8 @@ export default {
         }
     },
     components: {
-        tableHeader
+        tableHeader,
+        myFilter
     }
 }
 </script>
@@ -169,6 +158,9 @@ export default {
             width: 100%;
             text-align: right;
             padding: @font-size-large-x 0;
+        }
+        .addPadding {
+            padding-bottom: 12px;
         }
     }
 }

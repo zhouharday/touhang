@@ -3,7 +3,7 @@
     <div class="title" ref="title">
         <div class="desc">
             <slot></slot>
-            <span v-show="data.desc">{{data.desc}}</span>
+            <span v-show="data.desc" class="defaultcolor" ref="desc">{{data.desc}}</span>
         </div>
         <div class="btn" ref="btn">
             <el-button v-for="(btn, index) in data.btnGroup" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
@@ -20,7 +20,7 @@ export default {
     props: {
         data: {
             type: Object,
-            default: {}
+            default: {} /*data默认格式 data: { desc: 'xxx',btnGroup: ['xxx','xxx']} */
         },
         theme: {
             type: String,
@@ -42,13 +42,20 @@ export default {
         _theme() {
             this.$refs.title.style.background = this.theme
             console.log(this.theme)
-            for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
-                var btnwrapper = this.$refs.btnwrapper
-                if (this.theme == '#2a3142') {
-                    btnwrapper[i].$el.style.color = '#fff'
-                } else {
-                    btnwrapper[i].$el.style.color = '#1f2d3d'
+            if (this.$refs.btnwrapper) {
+                for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
+                    var btnwrapper = this.$refs.btnwrapper
+                    if (this.theme == '#2a3142') {
+                        btnwrapper[i].$el.style.color = '#fff'
+                    } else {
+                        btnwrapper[i].$el.style.color = '#1f2d3d'
+                    }
                 }
+            } else {
+                return
+            }
+            if (this.theme && this.theme=='#2a3142') {
+                this.$refs.desc.style.color = '#fff'
             }
         }
     },
@@ -65,15 +72,17 @@ export default {
         width: 100%;
         height: 42px;
         line-height: 42px;
-        background: @color-theme;
+        background: @color-base;
         color: @color-base;
-        padding: 0 26px;
-        margin-bottom: @font-size-small;
         display: flex;
         align-items: center;
         .desc {
             flex: 1;
             text-align: left;
+            .defaultcolor {
+                color: #20a0ff;
+                margin-left: 24px;
+            }
         }
         .btn {
             flex: 1;
