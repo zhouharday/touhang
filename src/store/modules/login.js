@@ -1,7 +1,6 @@
-import request from 'superagent'
-import {
-    Notification
-} from 'element-ui'
+import { Notification } from 'element-ui'
+// import request from 'superagent'
+import * as types from '../mutations-type'
 import loginBox from '../../components/loginBox.vue'
 import loginCard from '../../components/loginCard.vue'
 
@@ -41,7 +40,7 @@ const mutations = {
         state.TitleList.splice(obj.index, 1);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
         if (obj.index == 0) {
-            obj.self.$router.push({
+            obj.self.$router.push({ 
                 name: 'homeContent'
             });
             return;
