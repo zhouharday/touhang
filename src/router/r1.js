@@ -37,6 +37,11 @@ const r1 = [
         path: 'preProjectMessage/:userId', //home/投前项目详情页
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
-    }
+    }, 
+    {
+        path: '/message/:userId', //home/添加项目页
+        name: 'message',
+        component: resolve => require(['../views/assistant/message.vue'], resolve)
+    }      
 ]
 export default r1

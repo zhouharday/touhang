@@ -13,9 +13,9 @@
                 </el-table-column>
                 <el-table-column label="审批状态" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small">未通过</el-button>
-                        <el-button type="text" size="small" class="btn_border">审批中</el-button>
-                        <el-button type="text" size="small">通过</el-button>
+                        <span>未通过</span>
+                        <span>审批中</span>
+                        <span>通过</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -66,11 +66,8 @@ export default {
     width: 100%;
     height: 100%;
     .el-table {
-        .btn_border {
-            border-right: 1px solid #ddd;
-            border-left: 1px solid #ddd;
-            border-radius: 0;
-            padding: 0 12px;
+        span {
+            margin-right: 15px;
         }
     }
 }

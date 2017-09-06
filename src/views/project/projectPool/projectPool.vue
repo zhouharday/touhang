@@ -56,7 +56,7 @@
                                 <a class="project" @click="ShowPoolMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
                             </template>
                     </el-table-column>
-                    <el-table-column prop="mananger" label="项目负责人" align="center">
+                    <el-table-column prop="mananger" label="项目创建人" align="center">
                     </el-table-column>
                     <el-table-column prop="industry" label="所属行业" align="center">
                     </el-table-column>
@@ -341,8 +341,10 @@ export default {
         },
         ShowPoolMessage(title,ind) {
             this.index = ind;
-            this.addTab( '项目池'+ title.project + '详情页', '/home/zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
+            this.addTab( title.project + '详情页', '/home/zprojectPoolMessage/'+ind, "zprojectPoolMessage"+ind );
+            // this.addTab( title.project + '详情页', 'zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
+            // this.$router.push({ path: 'zprojectPoolMessage/'+ind, params: { userId: ind } });
         },
         jumpPre() {
             this.addTab('投前项目','/home/preProject','preProject');

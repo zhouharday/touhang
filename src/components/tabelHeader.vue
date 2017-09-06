@@ -6,7 +6,7 @@
             <span v-show="data.desc" class="defaultcolor" ref="desc">{{data.desc}}</span>
         </div>
         <div class="btn" ref="btn">
-            <el-button v-for="(btn, index) in data.btnGroup" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
+            <el-button v-for="(btn, index) in data.btnGroup" :key="btn.index" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
                 <Icon :type="btn.icon" v-show="btn.icon"></Icon>
                 <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
             </el-button>
@@ -17,6 +17,9 @@
 
 <script type="text/ecmascript-6">
 export default {
+     mounted() {
+        this._theme()
+    },
     props: {
         data: {
             type: Object,
@@ -40,7 +43,10 @@ export default {
             }
         },
         _theme() {
+            this.$refs.title.style.background = this.theme;
+            console.log(this.$refs.btnwrapper);
             this.$refs.title.style.background = this.theme
+<<<<<<< HEAD
             console.log(this.theme)
             if (this.$refs.btnwrapper) {
                 for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
@@ -50,6 +56,15 @@ export default {
                     } else {
                         btnwrapper[i].$el.style.color = '#1f2d3d'
                     }
+=======
+            // console.log(this.theme)
+            for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
+                var btnwrapper = this.$refs.btnwrapper
+                if (this.theme == '#2a3142') {
+                    btnwrapper[i].$el.style.color = '#fff'
+                } else {
+                    btnwrapper[i].$el.style.color = '#1f2d3d'
+>>>>>>> 80710da5d3c4d56eb0e43a9b82d45757645b16d8
                 }
             } else {
                 return
@@ -59,9 +74,9 @@ export default {
             }
         }
     },
-    mounted() {
-        this._theme()
-    }
+    // mounted() {
+    //     this._theme()
+    // }
 }
 </script>
 

@@ -1,77 +1,78 @@
 // 基金页面路由
 const fund = (resolve) => {
-  import('views/fund/fund').then((module) => {
-    resolve(module)
-  })
+    import ('views/fund/fund').then((module) => {
+        resolve(module)
+    })
 }
 const myfund = (resolve) => {
-  import('views/fund/myfund').then((module) => {
-    resolve(module)
-  })
+    import ('views/fund/myfund').then((module) => {
+        resolve(module)
+    })
 }
 const add = (resolve) => {
-  import('views/fund/add').then((module) => {
-    resolve(module)
-  })
+    import ('views/fund/add').then((module) => {
+        resolve(module)
+    })
 }
 const fundDetails = (resolve) => {
-  import('views/fund/fundDetails').then((module) => {
-    resolve(module)
-  })
+    import ('views/fund/fundDetails').then((module) => {
+        resolve(module)
+    })
 }
 const cooperative = (resolve) => {
-  import('views/fund/cooperative').then((module) => {
-    resolve(module)
-  })
+    import ('views/fund/cooperative').then((module) => {
+        resolve(module)
+    })
 }
 // 综合查询路由信息
 
 const proLibrary = (resolve) => {
-  import('views/query/proLibrary').then((module) => {
-    resolve(module)
-  })
+    import ('views/query/proLibrary').then((module) => {
+        resolve(module)
+    })
 }
 const fundLibrary = (resolve) => {
-  import('views/query/fundLibrary').then((module) => {
-    resolve(module)
-  })
+    import ('views/query/fundLibrary').then((module) => {
+        resolve(module)
+    })
 }
 const investorLibrary = (resolve) => {
-  import('views/query/investorLibrary').then((module) => {
-    resolve(module)
-  })
+    import ('views/query/investorLibrary').then((module) => {
+        resolve(module)
+    })
 }
 const projectsDoc = (resolve) => {
-  import('views/query/projectsDoc').then((module) => {
-    resolve(module)
-  })
+    import ('views/query/projectsDoc').then((module) => {
+        resolve(module)
+    })
 }
 const fundDoc = (resolve) => {
-  import('views/query/fundDoc').then((module) => {
-    resolve(module)
-  })
+    import ('views/query/fundDoc').then((module) => {
+        resolve(module)
+    })
 }
 const r3 = [
+    // {
+    //     path: 'fund',
+    //     component: fund,
+    //     children: [
+    //         {
+    //             path: '',
+    //             name: 'myfund',
+    //             redirect: 'myfund'
+    //         }, {
+    //             path: 'myfund',
+    //             component: myfund
+    //         }, {
+    //             path: 'add',
+    //             component: add
+    //         }, {
+    //             path: ':id',
+    //             component: fundDetails
+    //         }
+    //     ]
+    // }, 
     {
-        path: 'fund',
-        component: fund,
-        children: [
-            {
-                path: '',
-                name: 'myfund',
-                redirect: 'myfund'
-            }, {
-                path: 'myfund',
-                component: myfund
-            }, {
-                path: 'add',
-                component: add
-            }, {
-                path: ':id',
-                component: fundDetails
-            }
-        ]
-    }, {
         path: 'cooperative', //home/合作机构
         name: 'cooperative',
         component: cooperative
@@ -95,6 +96,14 @@ const r3 = [
         path: 'fundDoc', // home/基金文档
         name: 'fundDoc',
         component: fundDoc
+    }, {
+        path: 'myfund', // home/基金文档
+        name: 'myfund',
+        component: myfund
+    }, {
+        path: 'fund', // home/基金文档
+        name: 'fund',
+        component: fund
     }
 ]
 export default r3

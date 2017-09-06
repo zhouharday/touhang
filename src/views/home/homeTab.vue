@@ -5,7 +5,11 @@
                 {{title}}
             </router-link>
             <!-- <a href="#homeContent">{{title}}</a>   -->
+<<<<<<< HEAD
             <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,index)" :class="{active:$route.name == item.name || $route.path == item.path}">
+=======
+            <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,item.path,item.name,index)" :class="{active:$route.name == item.name || $route.path == item.path }">
+>>>>>>> 80710da5d3c4d56eb0e43a9b82d45757645b16d8
                 <span>{{item.title}}</span>
                 <Icon type="close" class="close"></Icon>
             </li>
@@ -36,7 +40,7 @@
                 margin-left: 6px;
                 font-size: @font-size-medium;
                 color: @color-font;
-                &:hover{
+                &:hover {
                     color: @color-theme-red;
                 }
             }
@@ -54,11 +58,6 @@ export default {
         }
     },
     computed: mapState({
-        // ttaa: state => {
-        //         state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [],
-        //         state.login.TitleList
-        // }
-        // ttaa: state => this.$store.state.login.TitleList,
         ttaa(state) {
             state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [];
             return state.login.TitleList;
@@ -70,12 +69,14 @@ export default {
         }
     },
     methods: {
-        linkFun($event, path, index) {
-            if ($event.target.tagName == 'IMG') {
+        linkFun($event, path, name, index) {
+            // alert(2);
+            if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', { index: index, self: this });
                 return;
-            }
+            };
             this.$router.push({ path: path });
+            // this.$router.push({ name: name });
         }
     }
 }

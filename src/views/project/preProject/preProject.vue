@@ -55,7 +55,7 @@
                                 <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
                             </template>
                     </el-table-column>
-                    <el-table-column prop="mananger" label="项目负责人" align="center">
+                    <el-table-column prop="mananger" label="项目创建人" align="center">
                     </el-table-column>
                     <el-table-column prop="industry" label="所属行业" align="center">
                     </el-table-column>
@@ -259,7 +259,7 @@ export default {
         },
         ShowPreMessage(title,ind) {
             this.index = ind;
-            this.addTab( '投前'+ title.project + '详情页', '/home/preProjectMessage/'+ind, '/home/preProjectMessage/'+ind );
+            this.addTab( '投前'+ title.project + '详情页', '/home/preProjectMessage/'+ind, 'preProjectMessage/'+ind );
             this.$router.push({ name: 'preProjectMessage', params: { userId: ind } });
         },
         addTab(th, url, name) {

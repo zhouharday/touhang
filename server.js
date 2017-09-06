@@ -11,5 +11,5 @@ app.get("/",function(req,res){
 
 app.listen(8080, function() {
     var c = require('child_process');
-    c.exec('start http://127.0.0.1:8080');
+    c.exec('start http://192.168.0.134:8080');
 })
