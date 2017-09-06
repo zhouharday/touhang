@@ -114,7 +114,7 @@
                     <el-menu-item index="leadAssistant" @click="addTab(title33, '/home/leadAssistant', 'leadAssistant')">{{title33}}</el-menu-item>
                     <el-menu-item index="memberManagement" @click="addTab(title34, '/home/memberManagement', 'memberManagement')">{{title34}}</el-menu-item>
                 </el-submenu>
-            </el-menu>
+            </el-menu> 
 
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
