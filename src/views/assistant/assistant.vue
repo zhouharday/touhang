@@ -421,7 +421,7 @@ export default {
             // console.log(ind);
             console.log(title);
             this.index = ind;
-            this.addTab(title.theme + '详情页', '/message/' + ind, 'message/' + ind);
+            this.addTab(title.theme + '详情页', '/home/message/' + ind, 'message/' + ind);
             this.$router.push({ name: 'message', params: { userId: ind } });
             // this.$http.post('${base}./url',{ ind }) //请求详情页list 数据
             // .then( response => {
