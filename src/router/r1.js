@@ -44,7 +44,7 @@ const r1 = [{
 
     },
     {
-        path: '/message/:userId', //home/添加项目页
+        path: 'message/:userId', //home/添加项目页
         name: 'message',
         component: resolve => require(['../views/assistant/message.vue'], resolve)
     }

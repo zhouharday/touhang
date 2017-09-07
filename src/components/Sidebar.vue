@@ -12,13 +12,11 @@
                     </div>
                 </div>
             </div>
-            <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" 
-            unique-opened router @open="handleOpen" @close="handleClose">
+            <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
                 <el-submenu index="1">
-                    <template slot="title" style="height:50px;line-height:50px;" 
-                    class="title">
+                    <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-                        margin-right: 7px;" src="/static/img/office.png" />
+                                        margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -28,7 +26,7 @@
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                    领投助手 -->
+                                                    领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
@@ -70,24 +68,19 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/survey.png" />
                         <span>{{title_06}}</span>
                     </template>
-                    <el-menu-item index="proLibrary"
-                    @click="addTab(title14, '/home/proLibrary', 'proLibrary')">{{title14}}</el-menu-item>
-                    <el-menu-item index="fundLibrary"
-                    @click="addTab(title15, '/home/fundLibrary', 'fundLibrary')">{{title15}}</el-menu-item>
-                    <el-menu-item index="investorLibrary"
-                    @click="addTab(title16, '/home/investorLibrary', 'investorLibrary')">{{title16}}</el-menu-item>
-                    <el-menu-item index="projectsDoc"
-                    @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
-                    <el-menu-item index="fundDoc"
-                    @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
+                    <el-menu-item index="proLibrary" @click="addTab(title14, '/home/proLibrary', 'proLibrary')">{{title14}}</el-menu-item>
+                    <el-menu-item index="fundLibrary" @click="addTab(title15, '/home/fundLibrary', 'fundLibrary')">{{title15}}</el-menu-item>
+                    <el-menu-item index="investorLibrary" @click="addTab(title16, '/home/investorLibrary', 'investorLibrary')">{{title16}}</el-menu-item>
+                    <el-menu-item index="projectsDoc" @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
+                    <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
-                                    <template slot="title">
-                                        <i class="el-icon-star-on"></i>统计分析</template>
-                                </el-submenu> -->
+                                                    <template slot="title">
+                                                        <i class="el-icon-star-on"></i>统计分析</template>
+                                                </el-submenu> -->
                 <div class="div_el-menu-itemel-submenu__title">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                    统计分析 -->
+                                                    统计分析 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
                     <span>{{title_07}}</span>
                 </div>
@@ -112,16 +105,16 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/wangluo.png" />
                         <span>{{title_09}}</span>
                     </template>
-                    <el-menu-item index="">{{title27}}</el-menu-item>
-                    <el-menu-item index="">{{title28}}</el-menu-item>
-                    <el-menu-item index="">{{title29}}</el-menu-item>
-                    <el-menu-item index="">{{title30}}</el-menu-item>
-                    <el-menu-item index="">{{title31}}</el-menu-item>
-                    <el-menu-item index="">{{title32}}</el-menu-item>
-                    <el-menu-item index="">{{title33}}</el-menu-item>
-                    <el-menu-item index="">{{title34}}</el-menu-item>
+                    <el-menu-item index="featuresMenu" @click="addTab(title27, '/home/featuresMenu', 'featuresMenu')">{{title27}}</el-menu-item>
+                    <el-menu-item index="roleManger" @click="addTab(title28, '/home/roleManger', 'roleManger')">{{title28}}</el-menu-item>
+                    <el-menu-item index="userList" @click="addTab(title29, '/home/userList', 'userList')">{{title29}}</el-menu-item>
+                    <el-menu-item index="newsBulletin" @click="addTab(title30, '/home/newsBulletin', 'newsBulletin')">{{title30}}</el-menu-item>
+                    <el-menu-item index="customerManagement" @click="addTab(title31, '/home/customerManagement', 'customerManagement')">{{title31}}</el-menu-item>
+                    <el-menu-item index="customerPrivilege" @click="addTab(title32, '/home/customerPrivilege', 'customerPrivilege')">{{title32}}</el-menu-item>
+                    <el-menu-item index="leadAssistant" @click="addTab(title33, '/home/leadAssistant', 'leadAssistant')">{{title33}}</el-menu-item>
+                    <el-menu-item index="memberManagement" @click="addTab(title34, '/home/memberManagement', 'memberManagement')">{{title34}}</el-menu-item>
                 </el-submenu>
-             </el-menu>
+            </el-menu>
 
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
@@ -129,47 +122,66 @@
 </template>
 
 <script>
-import { mapState,mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
 import zTree from "../../static/js/zTree/jquery.ztree.core";
 export default {
     comments: { jq, zTree },
-    beforeCreate() { },
-    created() {
+    beforeCreate() {
         this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // console.log(this.$store.state.login.merchants[0].um_id);
         this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
             "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
-        }).then(Response => {
-            console.log(this.$store.state.login.merchants[0].um_id);
-            if (Response.data.status == '200') {
-                this.menus = Response.data.result;
-                console.log(this.menus);
-                alert(1);
-            }
-        }).catch(error => {
-            console.log(error);
-        });
+        })
+            .then(Response => {
+                console.log(this.$store.state.login.merchants[0].um_id);
+                if (Response.data.status == '200') {
+                    this.menus = Response.data.result;
+                    console.log(this.menus);
+                    // alert(1);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    created() {
+        // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+        // // console.log(this.$store.state.login.merchants[0].um_id);
+        // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+        //     "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
+        // })
+        // .then(Response => {
+        //     console.log(this.$store.state.login.merchants[0].um_id);
+        //     if (Response.data.status == '200') {
+        //         this.menus = Response.data.result;
+        //         console.log(this.menus);
+        //         // alert(1);
+        //     }
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // });
     },
     ready() { },
     mounted() {
         // $(document).ready(function() {
         this.$nextTick(function() {
-        //     var curMenu = null, zTree_Menu = null;
-        //     var treeObj = $("#treeDemo");
-        //     $.fn.zTree.init(treeObj, this.setting, this.zNodes);
-        //     zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
-        //     // curMenu = zTree_Menu.getNodes()[0].children[0].children[0];
-        //     zTree_Menu.selectNode(curMenu);
-        //     treeObj.hover(function() {
-        //         if (!treeObj.hasClass("showIcon")) {
-        //             treeObj.addClass("showIcon");
-        //         }
-        //     }, function() {
-        //         treeObj.removeClass("showIcon");
-        //     })
+            //     var curMenu = null, zTree_Menu = null;
+            //     var treeObj = $("#treeDemo");
+            //     $.fn.zTree.init(treeObj, this.setting, this.zNodes);
+            //     zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
+            //     // curMenu = zTree_Menu.getNodes()[0].children[0].children[0];
+            //     zTree_Menu.selectNode(curMenu);
+            //     treeObj.hover(function() {
+            //         if (!treeObj.hasClass("showIcon")) {
+            //             treeObj.addClass("showIcon");
+            //         }
+            //     }, function() {
+            //         treeObj.removeClass("showIcon");
+            //     })
         })
-            // $.fn.zTree.init($("#zTree"), this.setting, this.zNodes);
+        // $.fn.zTree.init($("#zTree"), this.setting, this.zNodes);
         //     // // alert(1);
         //     // console.log(this.zNodes);
         //     // console.log(this.setting);
@@ -179,10 +191,8 @@ export default {
         onRoutes() {
             return this.$route.path.replace('/', '');
         },
-        // userName: state => state.login.userInfor.name,
         userName(state) {
             state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            // console.log(state.login.userInfor);
             return state.login.userInfor;
         },
         um_id() {
@@ -330,8 +340,8 @@ export default {
             title26: '流程设置',
             title_09: '平台管理',
             title27: '功能菜单',
-            title28: '用户管理',
-            title29: '角色权限',
+            title28: '角色管理',
+            title29: '用户列表',
             title30: '消息公告',
             title31: '客户管理',
             title32: '客户权限',
