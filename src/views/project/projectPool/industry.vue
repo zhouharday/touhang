@@ -1,6 +1,6 @@
 <template>
     <div class="industryForm">
-        <tabel-header :data="headerInfo_industry" @add="disable(industryForm)"></tabel-header>
+        <tabel-header :data="headerInfo_industry" @add="disable(industryForm)" class="title"></tabel-header>
         <div class="form">
             <el-form ref="form" :model="industryForm" label-width="100px">
                 <el-row>
@@ -100,5 +100,8 @@ export default {
 
 
 <style lang="less" scoped>
+.title {
+   margin-bottom: 12px;
+}
 
 </style>

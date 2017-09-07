@@ -1,7 +1,7 @@
 <template>
 <div class="mytabel">
     <ul class="lists">
-        <li v-for="(item, index) in data" class="list">
+        <li v-for="(item, index) in data" class="list" :key="item.index">
             <div class="keys">
                 {{item.name}}
             </div>

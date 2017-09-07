@@ -1,5 +1,4 @@
-const r1 = [
-    {
+const r1 = [{
         path: '/homeContent', //home/首页
         name: 'homeContent',
         component: resolve => require(['../views/home/homeContent.vue'], resolve)
@@ -37,11 +36,17 @@ const r1 = [
         path: 'preProjectMessage/:userId', //home/投前项目详情页
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
-    }, 
+    },
+    {
+        path: 'aftProject', //home/投后项目页
+        name: 'aftProject',
+        component: resolve => require(['../views/project/aftProject/aftProject.vue'], resolve)
+
+    },
     {
         path: 'message/:userId', //home/添加项目页
         name: 'message',
         component: resolve => require(['../views/assistant/message.vue'], resolve)
-    }      
+    }
 ]
 export default r1
