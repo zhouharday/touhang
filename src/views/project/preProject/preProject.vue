@@ -5,8 +5,8 @@
             <el-col :span="24" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stageList" 
-                            :key="item.index" 
+                        <li v-for="(item,index) in stageList"
+                            :key="item.index"
                             :class="{active: index==currentIndex1,fow: index==0}"
                             @click="changeActive(index,1)">
                             {{item.stages}}
@@ -20,8 +20,8 @@
             <el-col :span="24">
                 <div class="industry-ul">
                     <ul ref="industry">
-                        <li v-for="(item,index) in sortList" 
-                            :key="item.index" 
+                        <li v-for="(item,index) in sortList"
+                            :key="item.index"
                             :class="{active: index==currentIndex2,fow: index==0}"
                             @click="changeActive(index,2)">
                             {{item.sorts}}
@@ -35,16 +35,16 @@
            <el-col :span="5">
                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
                </el-input>
-           </el-col> 
+           </el-col>
            <el-col :span="19" class="imdo">
                <div class="importProject">
                    <el-upload class="upload-demo" ref="upload"
                         action="" :auto-upload="false">
-                        <el-button type="text">导入</el-button>    
-                   </el-upload>   
-                   <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>  
-               </div>   
-           </el-col> 
+                        <el-button type="text">导入</el-button>
+                   </el-upload>
+                   <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
+               </div>
+           </el-col>
         </el-row>
         <!--项目table -->
         <el-row class="common">
@@ -75,11 +75,11 @@
         </el-row>
         <el-row type="flex"  align="bottom" class="foot">
            <el-col :span="8">
-               <span>总记录：{{this.total}}条</span> 
+               <span>总记录：{{this.total}}条</span>
            </el-col>
            <el-col :span="16">
                <Page :total="128" :current="13" style="float:right"></Page>
-           </el-col>  
+           </el-col>
         </el-row>
     </div>
 </template>
@@ -122,7 +122,7 @@
     .imdo {
         height:30px;
         display: flex;
-        justify-content: flex-end;  
+        justify-content: flex-end;
         .importProject {
             width: 115px;
             height: 100%;

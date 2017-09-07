@@ -1,9 +1,5 @@
 // 基金页面路由
-const fund = (resolve) => {
-    import ('views/fund/fund').then((module) => {
-        resolve(module)
-    })
-}
+
 const myfund = (resolve) => {
     import ('views/fund/myfund').then((module) => {
         resolve(module)
@@ -51,6 +47,17 @@ const fundDoc = (resolve) => {
         resolve(module)
     })
 }
+// 投资者管理
+const investor = (resolve) => {
+    import ('views/investor/investor').then((module) => {
+        resolve(module)
+    })
+}
+const investorDetails = (resolve) => {
+    import ('views/investor/investorDetails').then((module) => {
+        resolve(module)
+    })
+}
 const r3 = [
     // {
     //     path: 'fund',
@@ -71,8 +78,16 @@ const r3 = [
     //             component: fundDetails
     //         }
     //     ]
-    // }, 
+    // },
     {
+        path: 'myfund', // home/基金文档
+        name: 'myfund',
+        component: myfund
+    }, {
+        path: 'fundDetails/:id', // home/基金详情
+        name: 'fundDetails',
+        component: fundDetails
+    }, {
         path: 'cooperative', //home/合作机构
         name: 'cooperative',
         component: cooperative
@@ -97,13 +112,13 @@ const r3 = [
         name: 'fundDoc',
         component: fundDoc
     }, {
-        path: 'myfund', // home/基金文档
-        name: 'myfund',
-        component: myfund
+        path: 'investor',
+        name: 'investor',
+        component: investor, // 投资者管理 我的投资者
     }, {
-        path: 'fund', // home/基金文档
-        name: 'fund',
-        component: fund
+        path: 'investorDetails/:id',
+        name: 'investorDetails',
+        component: investorDetails
     }
 ]
 export default r3

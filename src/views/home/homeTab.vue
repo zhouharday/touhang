@@ -67,7 +67,7 @@ export default {
         }
     },
     methods: {
-        linkFun($event, path, name, index) {
+        linkFun($event, index, path, name) {
             // alert(2);
             if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', {
@@ -79,6 +79,7 @@ export default {
             this.$router.push({
                 path: path
             });
+            console.log(path)
             // this.$router.push({ name: name });
         }
     }
