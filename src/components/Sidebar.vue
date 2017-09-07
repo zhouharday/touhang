@@ -459,11 +459,6 @@ export default {
     font-weight: bold;
 }
 
-.ztree li span.button {
-    // background-image: url("./left_menuForOutLook.png");
-    // background-image: url("./left_menuForOutLook.gif");
-}
-
 .ztree li span.button.switch.level0 {
     width: 20px;
     height: 20px

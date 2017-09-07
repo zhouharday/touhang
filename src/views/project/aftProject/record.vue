@@ -1,8 +1,8 @@
 <template>
     <div class="recordBox">
-        <tabel-header :data="headerInfo_record" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_record"></tabel-header>
         <div class="recordForm">
-            <Input v-model="value" type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
+            <Input type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
             <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
         </div>
         <div class="recordArea">
@@ -11,8 +11,8 @@
                     <b>{{item.year}}</b>
                     <div class="recordText">
                         <p>
-                            <span>{{item.userName}}</span>
-                            <span>{{item.date}}</span>
+                            <span>{{userName.name}}</span>
+                            <span>{{sysDate}}</span>
                         </p>
                         <p>{{item.recordText}}</p>
                         <p>
@@ -29,32 +29,35 @@
 
 
 <script type="text/ecmascript-6">
+import { mapState } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 export default {
+    computed: mapState({
+        // userName(state) {
+        //     state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+        //     // console.log(state.login.userInfor.name);
+        //     return state.login.userInfor;
+        // },
+    }),
     data() {
         return {
+            sysDate: this.getSysDate(), //获取当前系统时间的方法
             headerInfo_record: {
                 desc: '记录'
             },
-            value: {
-                text: ''
+            recordTexts: {
+                recordText: ''
             },
             recordList: [
                 {
-                    userName: '张三',
-                    date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
-                    userName: '张三',
-                    date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
-                    userName: '张三',
-                    date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2016'
                 }
@@ -64,13 +67,29 @@ export default {
     methods: {
         submitRecord() {
             console.log(this.value);
-            this.recordList.push(this.value);
+            this.recordList.push(this.recordTexts);
 
         },
         delRecord(index) {
             this.recordList.splice(index, 1);
+        },
+        getSysDate() {
+            // var date = new Date();
+            // var seperator1 = "-";
+            // var seperator2 = ":";
+            // var month = date.getMonth() + 1;
+            // var strDate = date.getDate();
+            // if (month >= 1 && month <= 9) {
+            //     month = "0" + month;
+            // }
+            // if (strDate >= 0 && strDate <= 9) {
+            //     strDate = "0" + strDate;
+            // }
+            // var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            //     + " " + date.getHours() + seperator2 + date.getMinutes()
+            //     + seperator2 + date.getSeconds();
+            // return currentdate;
         }
-
     },
     components: {
         tabelHeader
@@ -82,9 +101,6 @@ export default {
 
 
 <style  lang="less" scoped>
-.title {
-    color: #fff;
-}
 .recordBox {
     width: 100%;
     height: 100%;

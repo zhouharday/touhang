@@ -140,13 +140,13 @@ export default {
             formLabelWidth: '80px',
             memberData: [
                 {
-                    name: '张飞',
-                    property: '合伙人',
-                    edu: '北大金融系研究院博士后'
+                    name: '',
+                    property: '',
+                    edu: ''
                 }, {
-                    name: '李四',
-                    property: '创建人',
-                    edu: '中国人民大学金融系博士'
+                    name: '',
+                    property: '',
+                    edu: ''
                 }
             ],
             memberForm1: {
@@ -161,18 +161,18 @@ export default {
             },
             structureData: [
                 {
-                    name: '张飞',
-                    property: '合伙人',
-                    capital: '10,000,000,000',
-                    num: '20',
-                    percent: '12%'
+                    name: '',
+                    property: '',
+                    capital: '',
+                    num: '',
+                    percent: ''
                 },
                 {
-                    name: '李四',
-                    property: '创建人',
-                    capital: '10,000,000,000',
-                    num: '15',
-                    percent: '10%'
+                    name: '',
+                    property: '',
+                    capital: '',
+                    num: '',
+                    percent: ''
                 }
             ],
             structureForm1: {
@@ -227,7 +227,6 @@ export default {
         confirmAdd2() {
             this.modalAdd2 = false;
         },
-
         //添加 股权结构的方法
         method3() {
             this.modalAdd3 = true;

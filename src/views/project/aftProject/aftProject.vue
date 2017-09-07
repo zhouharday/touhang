@@ -9,10 +9,10 @@
             </div>
         </div>
         <div class="firstLayer">
-            <el-row :gutter="10">
+            <el-row :gutter="40">
                 <el-col :span="12">
-                    <div>出资主体</div>
-                    <el-table :data="fundTable" style="width: 100%">
+                    <div class="tableTitle">出资主体</div>
+                    <el-table :data="fundTable" style="width: 100%" :row-class-name="tableRowClassName">
                         <el-table-column label="基金名称" align="center">
                             <template scope="scope">
                                 <a class="fundName">{{ scope.row.fundName }}</a>
@@ -27,19 +27,55 @@
                     </el-table>
                 </el-col>
                 <el-col :span="12">
-                    <echarts></echarts>
+                    <echarts class="chart"></echarts>
                 </el-col>
             </el-row>
         </div>
         <div class="secondLayer">
-            <el-row :gutter="10">
+            <el-row :gutter="40">
                 <el-col :span="12">
                     <table-info :data="tableData"></table-info>
                 </el-col>
                 <el-col :span="12">
-                  
+                    <div class="prompt_message">
+                        <span class="prompt">{{prompt}}</span>
+                        <div class="item_wrapper">
+                            <div class="item" v-for="(item, index) in message" :key="item.index">
+                                <span class="count">{{item.count}}</span>
+                                <p class="desc">{{item.desc}}</p>
+                                <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+                            </div>
+                        </div>
+                        <div class="img_wrapper">
+                            <img src="/static/img/double.png">
+                        </div>
+                    </div>
                 </el-col>
             </el-row>
+        </div>
+        <div class="tabs">
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="详情" name="details" class="tab_list">
+                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                    </detail-form>
+                    <table-form></table-form>
+                </el-tab-pane>
+                <el-tab-pane label="审批" name="approve" class="tab_list">
+                    <approve-table></approve-table>
+                </el-tab-pane>
+                <el-tab-pane label="文档" name="file" class="tab_list">
+                    <file-table></file-table>
+                </el-tab-pane>
+                 <el-tab-pane label="管理" name="manage" class="tab_list">
+                    <manage-table></manage-table>
+                </el-tab-pane>
+                <el-tab-pane label="记录" name="record" class="tab_list">
+                    <record-form></record-form>
+                </el-tab-pane>
+                <el-tab-pane label="风险管理" name="risk" class="tab_list">
+                    <risk-table></risk-table>
+                </el-tab-pane>
+            </el-tabs>
         </div>
     </div>
 </template>
@@ -48,10 +84,30 @@
 <script type="text/ecmascript-6">
 import tableInfo from '../../../components/tableInfo'
 import echarts from '../../../components/echarts'
+import detailForm from './details'
+import tableForm from './tables'
+import approveTable from './approve'
+import recordForm from './record'
+import fileTable from './file'
 export default {
     data() {
         return {
             title: '双子金服投资项目',
+            prompt: '任务助手小双温馨提示:',
+            activeName: 'details',
+            message: [
+                {
+                    count: 1,
+                    desc: '2017【经营数据】指标出现警告',
+                    state: true,
+                    info: '已处理'
+                }, {
+                    count: 2,
+                    desc: '2017【年报】指标出现警告',
+                    state: false,
+                    info: '立即处理'
+                }
+            ],
             fundTable: [
                 {
                     fundName: '京东',
@@ -77,41 +133,80 @@ export default {
                     paidMoney: '29,000,000,000'
                 }
             ],
-            tableData: [{
-                name: '最新估值（元）',
-                rmb: '83,000,000',
-                updown: '3%'
-            }, {
-                name: '最新浮盈（元）',
-                rmb: '32,000,000,000'
-            }, {
-                name: '估值日期'
-            }, {
-                name: '基金规模（元）'
-            }, {
-                name: '募集总额（元）'
-            }, {
-                name: '投资总额（元）'
-            }, {
-                name: '剩余额度（元）'
-            }, {
-                name: '待分配总额（元）',
-            }, {
-                name: '基金负责人'
-            }, {
-                name: '成立日期'
-            }],
-
-
+            tableData: [
+                {
+                    rmb: '83,000,000',
+                    name: '最新估值（元）',
+                    updown: '3'
+                }, {
+                    rmb: '32,000,000,000',
+                    name: '最新浮盈（元）'
+                }, {
+                    date: '',
+                    name: '估值日期'
+                }, {
+                    rmb: '',
+                    name: '基金规模（元）'
+                }, {
+                    rmb: '',
+                    name: '募集总额（元）'
+                }, {
+                    rmb: '',
+                    name: '投资总额（元）'
+                }, {
+                    rmb: '',
+                    name: '剩余额度（元）'
+                }, {
+                    rmb: '',
+                    name: '待分配总额（元）',
+                }, {
+                    manager: '',
+                    name: '基金负责人'
+                }, {
+                    date: '',
+                    name: '成立日期'
+                }
+            ],
+            basicForm: {
+                baseInfo: '基本信息',
+                flag: true
+            },
+            companyForm: {
+                baseInfo: '企业信息',
+                flag: true
+            },
+            capitalForm: {
+                baseInfo: '投资信息',
+                flag: true
+            }
         }
     },
     methods: {
-
+        disable(name) {
+            if (name.flag === false) {
+                return name.flag = true
+            } else {
+                return name.flag = false
+            }
+        },
+        // 设置 出资主体table  间隔行的background-color
+        tableRowClassName(row, index) {
+            if ((index % 2) == 0) {
+                return 'info-row';
+            } else {
+                return 'positive-row';
+            }
+            return '';
+        }
     },
     components: {
         echarts,
-        tableInfo
-
+        tableInfo,
+        detailForm,
+        tableForm,
+        approveTable,
+        recordForm,
+        fileTable
     }
 }   
 </script>    
@@ -154,7 +249,75 @@ export default {
     .firstLayer {
         width: 100%;
         margin-bottom: 40px;
+        .tableTitle {
+            font-weight: bold;
+            color: #333;
+            font-size: px;
+        }
     }
-    .secondLayer {}
+    .secondLayer {
+        .prompt_message {
+            position: relative;
+            width: 100%;
+            height: 262px;
+            vertical-align: middle;
+            background: #eef0f4;
+            padding: 18px 24px;
+            text-align: left;
+            border-radius: 10px;
+            .prompt {
+                line-height: 36px;
+            }
+            .item {
+                width: 100%;
+                height: 36px;
+                margin-left: 24px;
+                line-height: 36px;
+                .count,
+                .desc,
+                .state {
+                    float: left;
+                    line-height: 36px;
+                }
+                .count {
+                    width: 20px;
+                    height: 20px;
+                    line-height: 20px;
+                    border-radius: 100%;
+                    color: #fff;
+                    background: #f05e5e;
+                    text-align: center;
+                    margin-top: 8px;
+                }
+                .desc {
+                    margin: 0 24px 0 20px;
+                }
+                .state {
+                    color: #f05e5e;
+                }
+                .complete {
+                    color: #a0a3aa;
+                }
+            }
+            .img_wrapper img {
+                position: absolute;
+                width: 100px;
+                height: 120px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    }
+    .tabs {
+        width: 100%;
+        margin-top: 50px;
+        padding-bottom: 54px;
+        .el-tabs__nav {
+            width: 100%!important;
+            .el-tabs__item {
+                width: 12.5%!important;
+            }
+        }
+    }
 }
 </style>
