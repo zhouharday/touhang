@@ -14,7 +14,7 @@
         <el-row>
           <el-col :span="6" class="roleMang_tab_boder">
             <div class="grid-content bg-purple-dark">
-              <el-button type="primary" size="small" class="addBtn">添加</el-button>
+              <el-button @click="addTab" type="primary" size="small" class="addBtn">添加</el-button>
             </div>
           </el-col>
           <el-col :span="6" class="roleMang_tab_boder">
@@ -36,7 +36,7 @@
           </el-col>
         </el-row>
       </div>
-      <el-table :data="userListTabData" style="width: 100%">
+      <el-table id="userListTabData" :data="userListTabData" style="width: 100%" ref="userListTabData">
         <el-table-column prop="userName" label="姓名" align="center">
         </el-table-column>
         <el-table-column prop="account" label="账号" align="center">
@@ -79,7 +79,23 @@ export default {
         }
       ]
     }
-  }
+  },
+  methods: {
+    addTab(){
+      let tr = 
+      `<tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>`;
+      // this.$refs.userListTabData.append(tr);
+      console.log(this.$refs.userListTabData.toggleRowSelection());
+      let tab = document.getElementById('userListTabData');
+      // console.log(tab);
+      // tab.append(tr);
+    }
+  },
 }
 </script>
 

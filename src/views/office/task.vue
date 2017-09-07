@@ -270,9 +270,10 @@ section {
     >div {
         background: #fff;
         position: relative;
+        padding: 24px;
         >button {
             position: absolute;
-            top: 0;
+            top: 10px;
             right: 50px;
         }
     }

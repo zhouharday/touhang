@@ -29,3 +29,23 @@
         </el-row>
   </section>
 </template>
+
+<script>
+    export default {
+        data(){
+            return {
+
+            }
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+section {
+  >div {
+    background: #ffffff;
+    padding: 24px;
+    overflow: hidden;
+  }
+}
+</style>
