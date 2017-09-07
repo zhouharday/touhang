@@ -11,7 +11,7 @@
                     <b>{{item.year}}</b>
                     <div class="recordText">
                         <p>
-                            <span>{{item.userName}}</span>
+                            <span>{{userName.name}}</span>
                             <span>{{item.date}}</span>
                         </p>
                         <p>{{item.recordText}}</p>
@@ -29,8 +29,16 @@
 
 
 <script type="text/ecmascript-6">
+import { mapState } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 export default {
+    computed:
+    mapState({
+        userName(state) {
+            state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return state.login.userInfor;
+        }
+    }),
     data() {
         return {
             headerInfo_record: {
@@ -41,19 +49,16 @@ export default {
             },
             recordList: [
                 {
-                    userName: '张三',
                     date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
-                    userName: '张三',
                     date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
-                    userName: '张三',
                     date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2016'

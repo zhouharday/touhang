@@ -20,8 +20,8 @@
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
-                    <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item>
-                    <!--<el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item> -->
+                    <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
+                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
                     <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
@@ -78,12 +78,26 @@
                                                     <template slot="title">
                                                         <i class="el-icon-star-on"></i>统计分析</template>
                                                 </el-submenu> -->
-                <div class="div_el-menu-itemel-submenu__title">
+                <!-- <div class="div_el-menu-itemel-submenu__title">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
                                                     统计分析 -->
-                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
+                    <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
                     <span>{{title_07}}</span>
-                </div>
+                </div> -->
+                <el-submenu index="7">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>系统管理 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
+                        <span>{{title_07}}</span>
+                    </template>
+                    <el-menu-item index="">{{title_07_1}}</el-menu-item>
+                    <el-menu-item index="">{{title_07_2}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
+                    <el-menu-item index="">{{title_07_3}}</el-menu-item>
+                    <el-menu-item index="">{{title_07_4}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
+                    <el-menu-item index="">{{title_07_5}}</el-menu-item>
+                </el-submenu>
                 <el-submenu index="8">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>系统管理 -->
@@ -92,10 +106,10 @@
                     </template>
                     <el-menu-item index="">{{title19}}</el-menu-item>
                     <el-menu-item index="">{{title20}}</el-menu-item>
-                    <el-menu-item index="">{{title21}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
                     <el-menu-item index="">{{title22}}</el-menu-item>
                     <el-menu-item index="">{{title23}}</el-menu-item>
-                    <el-menu-item index="">{{title24}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
                     <el-menu-item index="">{{title25}}</el-menu-item>
                     <el-menu-item index="">{{title26}}</el-menu-item>
                 </el-submenu>
@@ -329,13 +343,18 @@ export default {
             title17: '项目文档',
             title18: '基金文档',
             title_07: '统计分析',
+            title_07_1: '出资统计表',
+            title_07_2: '项目信息统计表',
+            title_07_3: '基金信息统计表',
+            title_07_4: '项目投资统计表',
+            title_07_5: '统计分析图',
             title_08: '系统管理',
             title19: '公司信息',
-            title20: '部门管理',
-            title21: '用户管理',
+            title20: '组织架构',
+            // title21: '用户管理',
             title22: '角色权限',
             title23: '数据字典',
-            title24: '业务权限',
+            // title24: '业务权限',
             title25: '流程管理',
             title26: '流程设置',
             title_09: '平台管理',
@@ -387,10 +406,10 @@ export default {
                 url: url,
                 name: name
             })
-            this.SET_NAME(name)
-            this.SET_URL(url)
-            this.SET_TITLE(th)
-            console.log(this.$store.state.crumbs)
+            // this.SET_NAME(name)
+            // this.SET_URL(url)
+            // this.SET_TITLE(th)
+            // console.log(this.$store.state.crumbs)
         },
         ...mapMutations([
             'SET_NAME',

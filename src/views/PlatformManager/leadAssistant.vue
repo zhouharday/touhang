@@ -23,7 +23,7 @@
         </el-table-column>
         <el-table-column prop="industry" label="行业" width="180">
           <template scope="scope">
-            
+
           </template>
         </el-table-column>
         <el-table-column prop="rounds" label="轮次">
@@ -41,6 +41,10 @@
         <el-table-column prop="sharesNumber" label="分享次数">
         </el-table-column>
         <el-table-column prop="" label="操作">
+          <template scope="scope">
+            <el-button @click="remove" type="text" size="small">隐藏/显示</el-button>
+            <el-button @click="remove" type="text" size="small">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -53,28 +57,26 @@ export default {
     return {
       leadTabData: [
         {
-          projectName: '2016-05-02',
-          industry: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          rounds: '上海市普陀区金沙江路 1518 弄',
-          lastCast: '上海市普陀区金沙江路 1518 弄',
-          location: '上海市普陀区金沙江路 1518 弄',
-          established: '上海市普陀区金沙江路 1518 弄',
-          numberAdditions: '上海市普陀区金沙江路 1518 弄',
-          status: '上海市普陀区金沙江路 1518 弄',
-          sharesNumber: '上海市普陀区金沙江路 1518 弄',
+          projectName: '鹿战',
+          industry: '',
+          rounds: '',
+          lastCast: '',
+          location: '',
+          established: '',
+          numberAdditions: '',
+          status: '隐藏',
+          sharesNumber: ''
         },
         {
-          projectName: '2016-05-02',
-          industry: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          rounds: '上海市普陀区金沙江路 1518 弄',
-          lastCast: '上海市普陀区金沙江路 1518 弄',
-          location: '上海市普陀区金沙江路 1518 弄',
-          established: '上海市普陀区金沙江路 1518 弄',
-          numberAdditions: '上海市普陀区金沙江路 1518 弄',
-          status: '上海市普陀区金沙江路 1518 弄',
-          sharesNumber: '上海市普陀区金沙江路 1518 弄',
+          projectName: '3188',
+          industry: '',
+          rounds: '',
+          lastCast: '',
+          location: '',
+          established: '',
+          numberAdditions: '',
+          status: '发布',
+          sharesNumber: ''
         },
       ]
     }
