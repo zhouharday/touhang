@@ -23,7 +23,7 @@
         </el-table-column>
         <el-table-column prop="industry" label="行业" width="180">
           <template scope="scope">
-
+            
           </template>
         </el-table-column>
         <el-table-column prop="rounds" label="轮次">

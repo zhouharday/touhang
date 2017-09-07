@@ -39,7 +39,7 @@ const r1 = [
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
     }, 
     {
-        path: '/message/:userId', //home/添加项目页
+        path: 'message/:userId', //home/添加项目页
         name: 'message',
         component: resolve => require(['../views/assistant/message.vue'], resolve)
     }      

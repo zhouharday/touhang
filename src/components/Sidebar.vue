@@ -16,7 +16,7 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-                                    margin-right: 7px;" src="/static/img/office.png" />
+                                        margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -26,7 +26,7 @@
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                领投助手 -->
+                                                    领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
@@ -75,12 +75,12 @@
                     <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
-                                                <template slot="title">
-                                                    <i class="el-icon-star-on"></i>统计分析</template>
-                                            </el-submenu> -->
+                                                    <template slot="title">
+                                                        <i class="el-icon-star-on"></i>统计分析</template>
+                                                </el-submenu> -->
                 <div class="div_el-menu-itemel-submenu__title">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                统计分析 -->
+                                                    统计分析 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
                     <span>{{title_07}}</span>
                 </div>
@@ -114,7 +114,7 @@
                     <el-menu-item index="leadAssistant" @click="addTab(title33, '/home/leadAssistant', 'leadAssistant')">{{title33}}</el-menu-item>
                     <el-menu-item index="memberManagement" @click="addTab(title34, '/home/memberManagement', 'memberManagement')">{{title34}}</el-menu-item>
                 </el-submenu>
-            </el-menu> 
+            </el-menu>
 
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
@@ -191,10 +191,8 @@ export default {
         onRoutes() {
             return this.$route.path.replace('/', '');
         },
-        // userName: state => state.login.userInfor.name,
         userName(state) {
             state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            // console.log(state.login.userInfor);
             return state.login.userInfor;
         },
         um_id() {
