@@ -72,7 +72,7 @@
                             </el-form-item>
                         </el-col>
                         <!-- <el-col>
-                                            </el-col> -->
+                                                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -245,6 +245,7 @@
 
 
 <script type="text/ecmascript-6">
+import { changeDate } from 'common/js/config'
 export default {
     data() {
         return {
@@ -330,8 +331,9 @@ export default {
         // 添加 经营数据 的方法
         operatingAdd() {
             this.operatingModal1 = false;
+            this.operatingForm1.date = changeDate(this.operatingForm1.date);
+            this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
             this.operatingData.push(this.operatingForm1);
-            console.log( this.operatingData);
         },
         // 编辑 经营数据 的方法
         operatingEdit() {
@@ -342,6 +344,8 @@ export default {
         // 添加 财务数据 的方法
         financialAdd() {
             this.financialModal1 = false;
+            this.financialForm1.date = changeDate(this.financialForm1.date);
+            this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
             this.financialData.push(this.financialForm1);
         },
         // 编辑 经营数据 的方法
