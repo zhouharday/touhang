@@ -66,7 +66,7 @@
                 <el-tab-pane label="文档" name="file" class="tab_list">
                     <file-table></file-table>
                 </el-tab-pane>
-                 <el-tab-pane label="管理" name="manage" class="tab_list">
+                <el-tab-pane label="管理" name="manage" class="tab_list">
                     <manage-table></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
@@ -74,6 +74,14 @@
                 </el-tab-pane>
                 <el-tab-pane label="风险管理" name="risk" class="tab_list">
                     <risk-table></risk-table>
+                </el-tab-pane>
+                <el-tab-pane label="重大事项" name="event" class="tab_list">
+                    <event-table></event-table>
+                </el-tab-pane>
+                <el-tab-pane label="数据填报" name="data" class="tab_list">
+                    <data-table></data-table>
+                </el-tab-pane>
+                <el-tab-pane label="监控设置" name="monitor" class="tab_list">
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -89,6 +97,12 @@ import tableForm from './tables'
 import approveTable from './approve'
 import recordForm from './record'
 import fileTable from './file'
+import manageTable from './manage'
+import riskTable from './risk'
+import eventTable from './event'
+import dataTable from './data'
+
+
 export default {
     data() {
         return {
@@ -206,7 +220,11 @@ export default {
         tableForm,
         approveTable,
         recordForm,
-        fileTable
+        fileTable,
+        manageTable,
+        riskTable,
+        eventTable,
+        dataTable
     }
 }   
 </script>    

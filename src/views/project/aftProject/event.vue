@@ -1,10 +1,36 @@
 <template>
-    <div class="recordBox">
-        <tabel-header :data="headerInfo_record" class="title"></tabel-header>
-        <div class="recordForm">
-            <Input v-model="value" type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
+    <div class="eventBox">
+        <el-form :model="eventForm" label-width="80px" class="eventForm">
+            <el-form-item label="汇报事项">
+                <el-select v-model="eventForm.event" placeholder="请选择汇报事项" style="width: 100%;">
+                    <el-option label="上市进展情况" value="上市进展情况"></el-option>
+                    <el-option label="重大股东会决议" value="重大股东会决议"></el-option>
+                    <el-option label="重大董事会决议" value="重大董事会决议"></el-option>
+                    <el-option label="重大监事会决议" value="重大监事会决议"></el-option>
+                    <el-option label="重大投资事项" value="重大投资事项"></el-option>
+                    <el-option label="重大筹融资事项" value="重大筹融资事项"></el-option>
+                    <el-option label="对赌执行情况" value="对赌执行情况"></el-option>
+                    <el-option label="股权变更" value="股权变更"></el-option>
+                    <el-option label="其他" value="其他"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="事项日期">
+                <el-date-picker type="date" placeholder="选择日期" v-model="eventForm.date" style="width:100%;"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="事项内容">
+                <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="eventForm.content">
+                </el-input>
+            </el-form-item>
+            <el-form-item label="相关文档">
+                <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
+                    <div style="padding: 20px 0">
+                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                        <p>点击或将文件拖拽到这里上传</p>
+                    </div>
+                </Upload>
+            </el-form-item>
             <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
-        </div>
+        </el-form>
         <div class="recordArea">
             <Timeline>
                 <TimelineItem v-for="(item,index) in recordList" :key="item.index" class="recordContent">
@@ -33,11 +59,13 @@ import tabelHeader from 'components/tabelHeader'
 export default {
     data() {
         return {
-            headerInfo_record: {
-                desc: '记录'
-            },
             value: {
                 text: ''
+            },
+            eventForm: {
+                event: '',
+                date: '',
+                content: ''
             },
             recordList: [
                 {
@@ -85,17 +113,18 @@ export default {
 .title {
     color: #fff;
 }
-.recordBox {
+
+.eventBox {
     width: 100%;
     height: 100%;
-    .recordForm {
+    .eventForm {
+        padding: 0 50px;
         margin: 25px 0;
-        overflow: hidden;
         .submit-btn {
-            width: 10%;
-            float: right;
+            margin-left: 40%;
+            width: 20%;
             color: #fff;
-            margin-top: 15px;
+            margin-top: 5px;
         }
     }
     .recordArea {
@@ -109,8 +138,8 @@ export default {
             }
             .recordText {
                 position: relative;
-                width: 90%;
-                height: 110px;
+                width: 95%;
+                height: 120px;
                 display: inline-block;
                 font-size: 14px;
                 vertical-align: middle;
