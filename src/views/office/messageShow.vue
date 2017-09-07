@@ -74,6 +74,11 @@
 <style lang="less" scoped>
 .messageShow {
     position: relative;
+    background: #ffffff;
+    padding: 24px;
+    >div:nth-child(1){
+        margin-top: 20px;
+    }
     .messageBtn {
         position: absolute;
         top: 6px;

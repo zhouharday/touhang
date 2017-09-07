@@ -16,17 +16,17 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-                                    margin-right: 7px;" src="/static/img/office.png" />
+                                        margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
-                    <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item>
-                    <!--<el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item> -->
+                    <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
+                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
                     <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                领投助手 -->
+                                                    领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
@@ -40,7 +40,7 @@
 
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
-                    <el-menu-item index="">{{title7}}</el-menu-item>
+                    <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
                     <el-menu-item index="">{{title8}}</el-menu-item>
                     <el-menu-item index="">{{title9}}</el-menu-item>
                     <el-menu-item index="">{{title10}}</el-menu-item>
@@ -76,15 +76,29 @@
                     <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
-                                                <template slot="title">
-                                                    <i class="el-icon-star-on"></i>统计分析</template>
-                                            </el-submenu> -->
-                <div class="div_el-menu-itemel-submenu__title">
+                                                    <template slot="title">
+                                                        <i class="el-icon-star-on"></i>统计分析</template>
+                                                </el-submenu> -->
+                <!-- <div class="div_el-menu-itemel-submenu__title">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                统计分析 -->
-                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
+                                                    统计分析 -->
+                    <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
                     <span>{{title_07}}</span>
-                </div>
+                </div> -->
+                <el-submenu index="7">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>统计分析 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
+                        <span>{{title_07}}</span>
+                    </template>
+                    <el-menu-item index="fundedForm" @click="addTab(title_07_1, '/home/fundedForm', 'fundedForm')">{{title_07_1}}</el-menu-item>
+                    <el-menu-item index="projectInfor" @click="addTab(title_07_2, '/home/projectInfor', 'projectInfor')">{{title_07_2}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
+                    <el-menu-item index="fundInFormation" @click="addTab(title_07_3, '/home/fundInFormation', 'fundInFormation')">{{title_07_3}}</el-menu-item>
+                    <el-menu-item index="invesTment" @click="addTab(title_07_4, '/home/invesTment', 'invesTment')">{{title_07_4}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
+                    <el-menu-item index="statisticalAnalysis" @click="addTab(title_07_5, '/home/statisticalAnalysis', 'statisticalAnalysis')">{{title_07_5}}</el-menu-item>
+                </el-submenu>
                 <el-submenu index="8">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>系统管理 -->
@@ -93,10 +107,10 @@
                     </template>
                     <el-menu-item index="">{{title19}}</el-menu-item>
                     <el-menu-item index="">{{title20}}</el-menu-item>
-                    <el-menu-item index="">{{title21}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
                     <el-menu-item index="">{{title22}}</el-menu-item>
                     <el-menu-item index="">{{title23}}</el-menu-item>
-                    <el-menu-item index="">{{title24}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
                     <el-menu-item index="">{{title25}}</el-menu-item>
                     <el-menu-item index="">{{title26}}</el-menu-item>
                 </el-submenu>
@@ -192,10 +206,8 @@ export default {
         onRoutes() {
             return this.$route.path.replace('/', '');
         },
-        // userName: state => state.login.userInfor.name,
         userName(state) {
             state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            // console.log(state.login.userInfor);
             return state.login.userInfor;
         },
         um_id() {
@@ -332,13 +344,18 @@ export default {
             title17: '项目文档',
             title18: '基金文档',
             title_07: '统计分析',
+            title_07_1: '出资统计表',
+            title_07_2: '项目信息统计表',
+            title_07_3: '基金信息统计表',
+            title_07_4: '项目投资统计表',
+            title_07_5: '统计分析图',
             title_08: '系统管理',
             title19: '公司信息',
-            title20: '部门管理',
-            title21: '用户管理',
+            title20: '组织架构',
+            // title21: '用户管理',
             title22: '角色权限',
             title23: '数据字典',
-            title24: '业务权限',
+            // title24: '业务权限',
             title25: '流程管理',
             title26: '流程设置',
             title_09: '平台管理',
@@ -390,10 +407,10 @@ export default {
                 url: url,
                 name: name
             })
-            this.SET_NAME(name)
-            this.SET_URL(url)
-            this.SET_TITLE(th)
-            console.log(this.$store.state.crumbs)
+            // this.SET_NAME(name)
+            // this.SET_URL(url)
+            // this.SET_TITLE(th)
+            // console.log(this.$store.state.crumbs)
         },
         ...mapMutations([
             'SET_NAME',
@@ -460,11 +477,6 @@ export default {
 .ztree li a.level0 span {
     font-size: 150%;
     font-weight: bold;
-}
-
-.ztree li span.button {
-    // background-image: url("./left_menuForOutLook.png");
-    // background-image: url("./left_menuForOutLook.gif");
 }
 
 .ztree li span.button.switch.level0 {

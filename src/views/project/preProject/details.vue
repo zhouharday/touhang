@@ -1,6 +1,6 @@
 <template>
     <div class="form">
-        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)"></tabel-header>
+        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -47,7 +47,7 @@
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_company" @add="disable(companyForm)"></tabel-header>
+        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
@@ -106,7 +106,7 @@
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)"></tabel-header>
+        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)" class="title"></tabel-header>
         <div class="capitalForm">
             <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
                 <el-row>
@@ -245,6 +245,9 @@ export default {
 
 
 <style lang="less" scoped>
+.title {
+    margin-bottom: 12px;
+}
 .form {
     width: 100%;
     height: 100%;

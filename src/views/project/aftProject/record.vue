@@ -1,8 +1,8 @@
 <template>
     <div class="recordBox">
-        <tabel-header :data="headerInfo_record"></tabel-header>
+        <tabel-header :data="headerInfo_record" class="title"></tabel-header>
         <div class="recordForm">
-            <Input type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
+            <Input v-model="value" type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
             <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
         </div>
         <div class="recordArea">
@@ -41,19 +41,19 @@ export default {
             },
             recordList: [
                 {
-                    userName: this.$store.state.login.userInfor.name,
-                    date: '2018-5-9 12:25',
-                    recordText: '',
-                    year: '2017'
-                },
-                {
-                    userName: this.$store.state.login.userInfor.name,
+                    userName: '张三',
                     date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2017'
                 },
                 {
-                    userName: this.$store.state.login.userInfor.name,
+                    userName: '张三',
+                    date: '2018-5-9 12:25',
+                    recordText: '拜访客户，进行相关数据收集',
+                    year: '2017'
+                },
+                {
+                    userName: '张三',
                     date: '2018-5-9 12:25',
                     recordText: '拜访客户，进行相关数据收集',
                     year: '2016'
@@ -82,6 +82,9 @@ export default {
 
 
 <style  lang="less" scoped>
+.title {
+    color: #fff;
+}
 .recordBox {
     width: 100%;
     height: 100%;

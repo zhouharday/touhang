@@ -40,7 +40,7 @@ const mutations = {
         state.TitleList.splice(obj.index, 1);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
         if (obj.index == 0) {
-            obj.self.$router.push({ 
+            obj.self.$router.push({
                 name: 'homeContent'
             });
             return;
@@ -49,7 +49,6 @@ const mutations = {
             path: state.TitleList[obj.index - 1].path
             // path: state.TitleList[obj.index - 1].name
         });
-
     },
     pushUserInfor(state, data) {
         state.userInfor = data.userInfo; //push merchants(组织列表) 数据到state
