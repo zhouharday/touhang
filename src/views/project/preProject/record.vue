@@ -40,24 +40,24 @@ export default {
                 text: ''
             },
             recordList: [
-                // {
-                //     userName: '',
-                //     date: '2018-5-9 12:25',
-                //     recordText: '',
-                //     year: '2017'
-                // },
-                // {
-                //     userName: '',
-                //     date: '2018-5-9 12:25',
-                //     recordText: '拜访客户，进行相关数据收集',
-                //     year: '2017'
-                // },
-                // {
-                //     userName: '',
-                //     date: '2018-5-9 12:25',
-                //     recordText: '拜访客户，进行相关数据收集',
-                //     year: '2016'
-                // }
+                {
+                    userName: this.$store.state.login.userInfor.name,
+                    date: '2018-5-9 12:25',
+                    recordText: '',
+                    year: '2017'
+                },
+                {
+                    userName: this.$store.state.login.userInfor.name,
+                    date: '2018-5-9 12:25',
+                    recordText: '拜访客户，进行相关数据收集',
+                    year: '2017'
+                },
+                {
+                    userName: this.$store.state.login.userInfor.name,
+                    date: '2018-5-9 12:25',
+                    recordText: '拜访客户，进行相关数据收集',
+                    year: '2016'
+                }
             ]
         }
     },

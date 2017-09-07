@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import iView from 'iview';
+import echarts from 'echarts';
+// 引入 ECharts 主模块
+// var echarts = require('echarts/lib/echarts');
+
 import axios from 'axios';
 import Qs from 'qs'
 import App from './App';
@@ -16,6 +20,7 @@ import store from './store';
 
 
 Vue.use(iView);
+Vue.use(echarts);
 Vue.use(ElementUI);
 
 Vue.prototype.$http = axios;
