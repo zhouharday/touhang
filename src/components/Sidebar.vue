@@ -86,17 +86,17 @@
                 </div> -->
                 <el-submenu index="7">
                     <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>系统管理 -->
+                        <!-- <i class="el-icon-star-on"></i>统计分析 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
                         <span>{{title_07}}</span>
                     </template>
-                    <el-menu-item index="">{{title_07_1}}</el-menu-item>
-                    <el-menu-item index="">{{title_07_2}}</el-menu-item>
+                    <el-menu-item index="fundedForm" @click="addTab(title_07_1, '/home/fundedForm', 'fundedForm')">{{title_07_1}}</el-menu-item>
+                    <el-menu-item index="projectInfor" @click="addTab(title_07_2, '/home/projectInfor', 'projectInfor')">{{title_07_2}}</el-menu-item>
                     <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
-                    <el-menu-item index="">{{title_07_3}}</el-menu-item>
-                    <el-menu-item index="">{{title_07_4}}</el-menu-item>
+                    <el-menu-item index="fundInFormation" @click="addTab(title_07_3, '/home/fundInFormation', 'fundInFormation')">{{title_07_3}}</el-menu-item>
+                    <el-menu-item index="invesTment" @click="addTab(title_07_4, '/home/invesTment', 'invesTment')">{{title_07_4}}</el-menu-item>
                     <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
-                    <el-menu-item index="">{{title_07_5}}</el-menu-item>
+                    <el-menu-item index="statisticalAnalysis" @click="addTab(title_07_5, '/home/statisticalAnalysis', 'statisticalAnalysis')">{{title_07_5}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="8">
                     <template slot="title">

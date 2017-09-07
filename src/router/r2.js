@@ -50,6 +50,32 @@ const r2 = [{
         path: 'memberManagement', //home/平台管理/客户权限
         name: 'memberManagement',
         component: resolve => require(['../views/PlatformManager/memberManagement.vue'], resolve)
+    },
+    /***************统计分析模块 Router*******************************************************************/
+    {
+        path: 'fundedForm', //home/统计分析/出资统计表
+        name: 'fundedForm',
+        component: resolve => require(['../views/StatisticalAnalysis/fundedForm.vue'], resolve)
+    },
+    {
+        path: 'projectInfor', //home/统计分析/项目信息统计表
+        name: 'projectInfor',
+        component: resolve => require(['../views/StatisticalAnalysis/projectInfor.vue'], resolve)
+    },
+    {
+        path: 'fundInFormation', //home/统计分析/基金信息统计表
+        name: 'fundInFormation',
+        component: resolve => require(['../views/StatisticalAnalysis/fundInFormation.vue'], resolve)
+    },
+    {
+        path: 'invesTment', //home/统计分析/项目投资统计表
+        name: 'invesTment',
+        component: resolve => require(['../views/StatisticalAnalysis/invesTment.vue'], resolve)
+    },
+    {
+        path: 'statisticalAnalysis', //home/统计分析/统计分析图
+        name: 'statisticalAnalysis',
+        component: resolve => require(['../views/StatisticalAnalysis/statisticalAnalysis.vue'], resolve)
     }
 ]
 export default r2
