@@ -18,8 +18,8 @@
         <!-- 类型ul -->
         <el-row class="common">
             <el-col :span="24">
-                <div class="industry-ul">
-                    <ul ref="industry">
+                <div class="sort-ul">
+                    <ul ref="sort">
                         <li v-for="(item,index) in sortList" 
                             :key="item.index" 
                             :class="{active: index==currentIndex2,fow: index==0}"
@@ -143,7 +143,7 @@
     border-bottom: 1px solid #F05E5E;
 }
 .foot {
-    margin: 25px 30px 0 30px
+    margin: 25px 30px 0 30px;
     //  position: absolute;
     // left: 30px;
     // bottom: 20px;

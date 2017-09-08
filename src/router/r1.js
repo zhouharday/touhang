@@ -44,6 +44,25 @@ const r1 = [{
 
     },
     {
+        path: 'projectOut', //home/退出项目页
+        name: 'projectOut',
+        component: resolve => require(['../views/project/projectOut/projectOut.vue'], resolve)
+
+    },
+    {
+        path: 'projectValuation', //home/项目估值页
+        name: 'projectValuation',
+        component: resolve => require(['../views/project/projectValuation/projectValuation.vue'], resolve)
+
+    },
+    {
+        path: 'valuationView', //home/估值查看页
+        name: 'valuationView',
+        component: resolve => require(['../views/project/valuationView/valuationView.vue'], resolve)
+
+    },
+
+    {
         path: 'message/:userId', //home/添加项目页
         name: 'message',
         component: resolve => require(['../views/assistant/message.vue'], resolve)

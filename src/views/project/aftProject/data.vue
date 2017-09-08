@@ -25,7 +25,8 @@
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,operatingData)">删除</el-button>
                     </template>
                 </el-table-column>
-            </el-table>
+            </el-table>.
+            
             <!-- 添加经营数据 对话框-->
             <el-dialog title="添加经营数据" :visible.sync="operatingModal1" :close-on-click-modal="false">
                 <el-form :model="operatingForm1" :label-width="formLabelWidth">
