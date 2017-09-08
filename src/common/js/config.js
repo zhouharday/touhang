@@ -10,3 +10,9 @@ export function changeDate(value) {
     }
     return [year, month, day].join('-')
 }
+// 待测试
+export function clearValue(obj) {
+    Object.keys(obj).forEach((val, array) => {
+        obj[val] = ''
+    })
+}

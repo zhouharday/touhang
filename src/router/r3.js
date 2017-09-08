@@ -58,6 +58,53 @@ const investorDetails = (resolve) => {
         resolve(module)
     })
 }
+// 系统管理
+const business = (resolve) => {
+    import('views/system/business').then((module) => {
+        resolve(module)
+    })
+}
+const companyInfo = (resolve) => {
+    import('views/system/companyInfo').then((module) => {
+        resolve(module)
+    })
+}
+const department = (resolve) => {
+    import('views/system/department').then((module) => {
+        resolve(module)
+    })
+}
+const dictionary = (resolve) => {
+    import('views/system/dictionary').then((module) => {
+        resolve(module)
+    })
+}
+const fundAuthority = (resolve) => {
+    import('views/system/fundAuthority').then((module) => {
+        resolve(module)
+    })
+}
+const process = (resolve) => {
+    import('views/system/process').then((module) => {
+        resolve(module)
+    })
+}
+const processSetting = (resolve) => {
+    import('views/system/processSetting').then((module) => {
+        resolve(module)
+    })
+}
+const role = (resolve) => {
+    import('views/system/role').then((module) => {
+        resolve(module)
+    })
+}
+const subscriber = (resolve) => {
+    import('views/system/subscriber').then((module) => {
+        resolve(module)
+    })
+}
+
 const r3 = [
     // {
     //     path: 'fund',
@@ -119,6 +166,42 @@ const r3 = [
         path: 'investorDetails/:id',
         name: 'investorDetails',
         component: investorDetails
+    }, {
+        path: 'business',  // 系统管理 业务权限
+        name: 'business',
+        component: business
+    }, {
+        path: 'companyInfo',
+        name: 'companyInfo',
+        component: companyInfo
+    }, {
+        path: 'department',
+        name: 'department',
+        component: department
+    }, {
+        path: 'dictionary',
+        name: 'dictionary',
+        component: dictionary
+    }, {
+        path: 'fundAuthority',
+        name: 'fundAuthority',
+        component: fundAuthority
+    }, {
+        path: 'process',
+        name: 'process',
+        component: process
+    }, {
+        path: 'processSetting',
+        name: 'processSetting',
+        component: processSetting
+    }, {
+        path: 'role',
+        name: 'role',
+        component: role
+    }, {
+        path: 'subscriber',
+        name: 'subscriber',
+        component: subscriber
     }
 ]
 export default r3

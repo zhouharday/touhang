@@ -57,15 +57,6 @@ export default {
                 details: ['全部', '机构', '个人', '政府']
             }],
             theme: '#fff',
-            titleHeader: {
-                desc: '更多',
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '投资者'
-                }, {
-                    explain: '导入'
-                }]
-            },
             investorData: [{
                 name: '张三',
                 type: '个人',

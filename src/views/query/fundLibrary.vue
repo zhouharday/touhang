@@ -45,16 +45,6 @@ export default {
     data() {
         return {
             theme: '#fff',
-            titleInfo: {
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '基金'
-                }, {
-                    explain: '导入'
-                }, {
-                    explain: '模板下载'
-                }]
-            },
             myFund: [{
                 fundName: '中国联通',
                 number: 20160906,
