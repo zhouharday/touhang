@@ -292,8 +292,8 @@ export default {
         tabelHeader
     }
 }
-
 </script>
+
 
 
 <style lang="less" scoped>
