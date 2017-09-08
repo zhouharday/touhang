@@ -37,15 +37,12 @@ const r1 = [{
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
     },
-<<<<<<< HEAD
-=======
     {
         path: 'aftProject', //home/投后项目页
         name: 'aftProject',
         component: resolve => require(['../views/project/aftProject/aftProject.vue'], resolve)
 
     },
->>>>>>> 50e008da3750689dc2254d1a73f3f1142017aea3
     {
         path: 'message/:userId', //home/添加项目页
         name: 'message',

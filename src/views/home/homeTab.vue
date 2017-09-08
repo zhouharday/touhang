@@ -5,7 +5,7 @@
             {{title}}
         </router-link>
         <!-- <a href="#homeContent">{{title}}</a>   -->
-        <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,index,item.path)" :class="{active:$route.name == item.name || $route.path == item.path}">
+        <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,index,item.path,item.name)" :class="{active:$route.name == item.name || $route.path == item.path}">
             <span>{{item.title}}</span>
             <Icon type="close" class="close"></Icon>
         </li>
@@ -65,11 +65,7 @@ export default {
         }
     },
     methods: {
-<<<<<<< HEAD
-        linkFun($event, index, path, name) {
-=======
         linkFun($event,index,path) {
->>>>>>> 50e008da3750689dc2254d1a73f3f1142017aea3
             // alert(2);
             if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', {
@@ -81,7 +77,6 @@ export default {
             this.$router.push({
                 path: path
             });
-            console.log(path)
             // this.$router.push({ name: name });
         }
     }

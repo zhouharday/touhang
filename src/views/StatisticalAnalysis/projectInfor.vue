@@ -14,11 +14,15 @@
                 </el-col>
                 <el-col :span="8" class="searchIpt">
                     <div class="grid-content bg-purple-dark">
-                        <el-button class="searchIpt" type="primary">导出统计表</el-button>
+                        <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
+                            <el-button class="searchIpt" type="primary">
+                                导出统计表
+                            </el-button>
+                        </a>
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="tableData" border style="width: 100%">
+            <el-table :data="projectInforTabData" border style="width: 100%">
                 <el-table-column fixed="left" prop="projectName" label="项目名称" width="150" align="center">
                 </el-table-column>
                 <el-table-column prop="projectType" label="项目类型" width="150" align="center">
@@ -46,10 +50,10 @@
                 <el-col :span="24">
                     <div class="grid-content bg-purple-dark">
                         显示
-                        <span> 1 </span>到
-                        <span> 7 </span>条 共
-                        <span> 7 </span>条记录 每页显示
-                        <span> 10 </span>条
+                        <span> {{from}} </span>到
+                        <span> {{to}} </span>条, 共
+                        <span> {{altogether}} </span>条记录, 每页显示
+                        <span> {{every}} </span>条
                     </div>
                 </el-col>
             </el-row>
@@ -59,6 +63,27 @@
 
 <script>
 export default {
+    created() {
+        // this.$http.post('api/url', {
+
+        // })
+        //     .then(res => {
+
+        //     })
+        //     .catch(error => {
+
+        //     });
+        if (this.projectInforTabData.length == '0') {
+            this.from = '0';
+            this.to = '0';
+            this.altogether = '0';
+        } else if (this.projectInforTabData.length > '0') {
+            this.from = 1;
+            this.to = this.projectInforTabData.length;
+            this.altogether = this.projectInforTabData.length;
+        }
+        // console.log(this.projectInforTabData.length);
+    },
     methods: {
         handleClick() {
             console.log(1);
@@ -67,7 +92,11 @@ export default {
 
     data() {
         return {
-            tableData: [
+            from: 0,
+            to: 0,
+            altogether: 0,
+            every: 10,
+            projectInforTabData: [
                 {
                     projectName: '2016-05-03',
                     projectType: '王小虎',

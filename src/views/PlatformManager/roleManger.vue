@@ -20,11 +20,24 @@
         </el-col>
         <el-col :span="16">
           <div class="grid-content bg-purple">
-            <el-table :data="rolTabData_R" border style="width: 100%" align="center">
-              <el-table-column prop="roleName" label="权限名称名称" width="" align="center">
+            <el-row :gutter="0" class="roleName">
+              <el-col :span="15" class="roleName_spanBoder">
+                <div class="grid-content bg-purple-dark">
+                  权限名称
+                </div>
+              </el-col>
+              <el-col :span="9" class="roleName_spanBoder">
+                <div class="grid-content bg-purple-dark">
+                  操作
+                </div>
+              </el-col>
+            </el-row>
+            <el-table :show-header="false" :data="rolTabData_R" border style="width: 100%" align="center">
+              <el-table-column prop="roleName" label="权限名称" width="" align="center">
               </el-table-column>
-              <el-table-column prop="operating" label="操作" width="" align="center">
-                
+              <!-- <el-table-column prop="operating" label="操作" width="" align="center">
+                      </el-table-column> -->
+              <el-table-column type="selection" width="" align="center">
               </el-table-column>
             </el-table>
           </div>
@@ -63,8 +76,20 @@ section {
     background: #ffffff;
     padding: 24px;
     overflow: hidden;
-    .addBtn{
+    .addBtn {
       margin-bottom: 10px;
+    }
+    .roleName {
+      height: 40px;
+      background: #eef1f6;
+      line-height: 40px;
+      border: 1px solid #dfe6ec;
+      box-sizing: border-box;
+      border-bottom: none;
+      color: #1f2d3d;
+    }
+    .roleName_spanBoder {
+      text-align: center;
     }
   }
 }
