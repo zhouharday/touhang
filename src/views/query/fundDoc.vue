@@ -1,20 +1,11 @@
 <template>
 <div class="fundDoc">
     <el-row :gutter="24">
-        <el-col :span="24">
-            <el-row :gutter="24">
-                <el-col :span="4">
-                    <div class="search">
-                        <el-input placeholder="请输入搜索内容" icon="search" v-model="inputSearch" :on-icon-click="handleIconClick">
-                        </el-input>
-                    </div>
-                </el-col>
-                <el-col :span="20">
-                    <myFilter :chooseInfo="chooseInfo"></myFilter>
-                </el-col>
-            </el-row>
-        </el-col>
         <el-col :span="4">
+            <div class="search">
+                <el-input placeholder="请输入搜索内容" icon="search" v-model="inputSearch" :on-icon-click="handleIconClick">
+                </el-input>
+            </div>
             <div class="list">
                 <ul class="listsWrapper">
                     <li class="menu" v-for="(menu, index) of projectMenu">{{menu.name}}</li>
@@ -22,6 +13,7 @@
             </div>
         </el-col>
         <el-col :span="20" class="addPadding">
+            <myFilter :chooseInfo="chooseInfo"></myFilter>
             <!-- 基金设立报告 -->
             <tableHeader :data="investigateTitle"></tableHeader>
             <el-table :data="reportData" border style="width: 100%" :show-header="false">
@@ -220,7 +212,6 @@ export default {
 @import '../../common/styles/variable.less';
 .fundDoc {
     width: 100%;
-    height: 100%;
     padding: 24px;
     background: @color-base;
     .search {
@@ -229,7 +220,6 @@ export default {
     }
     .list {
         width: 100%;
-        height: 100%;
         .listsWrapper {
             border: 1px solid #eef1f6;
         }

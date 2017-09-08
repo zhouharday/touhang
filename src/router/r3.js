@@ -1,5 +1,9 @@
 // 基金页面路由
-
+const fund = (resolve) => {
+    import ('views/fund/fund').then((module) => {
+        resolve(module)
+    })
+}
 const myfund = (resolve) => {
     import ('views/fund/myfund').then((module) => {
         resolve(module)
@@ -47,6 +51,7 @@ const fundDoc = (resolve) => {
         resolve(module)
     })
 }
+<<<<<<< HEAD
 // 投资者管理
 const investor = (resolve) => {
     import ('views/investor/investor').then((module) => {
@@ -105,6 +110,8 @@ const subscriber = (resolve) => {
     })
 }
 
+=======
+>>>>>>> c3095b99b23ac4eba6cdfc0a42250a74dfbb3fe1
 const r3 = [
     // {
     //     path: 'fund',
@@ -125,16 +132,8 @@ const r3 = [
     //             component: fundDetails
     //         }
     //     ]
-    // },
+    // }, 
     {
-        path: 'myfund', // home/基金文档
-        name: 'myfund',
-        component: myfund
-    }, {
-        path: 'fundDetails/:id', // home/基金详情
-        name: 'fundDetails',
-        component: fundDetails
-    }, {
         path: 'cooperative', //home/合作机构
         name: 'cooperative',
         component: cooperative
@@ -159,10 +158,11 @@ const r3 = [
         name: 'fundDoc',
         component: fundDoc
     }, {
-        path: 'investor',
-        name: 'investor',
-        component: investor, // 投资者管理 我的投资者
+        path: 'myfund', // home/基金文档
+        name: 'myfund',
+        component: myfund
     }, {
+<<<<<<< HEAD
         path: 'investorDetails/:id',
         name: 'investorDetails',
         component: investorDetails
@@ -202,6 +202,11 @@ const r3 = [
         path: 'subscriber',
         name: 'subscriber',
         component: subscriber
+=======
+        path: 'fund', // home/基金文档
+        name: 'fund',
+        component: fund
+>>>>>>> c3095b99b23ac4eba6cdfc0a42250a74dfbb3fe1
     }
 ]
 export default r3

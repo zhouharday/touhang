@@ -82,6 +82,7 @@
                     <data-table></data-table>
                 </el-tab-pane>
                 <el-tab-pane label="监控设置" name="monitor" class="tab_list">
+                    <monitor-table></monitor-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -101,6 +102,7 @@ import manageTable from './manage'
 import riskTable from './risk'
 import eventTable from './event'
 import dataTable from './data'
+import monitorTable from './monitor'
 
 
 export default {
@@ -224,7 +226,8 @@ export default {
         manageTable,
         riskTable,
         eventTable,
-        dataTable
+        dataTable,
+        monitorTable
     }
 }   
 </script>    

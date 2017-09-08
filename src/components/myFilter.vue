@@ -8,9 +8,7 @@
             <div class="ul_list">
                 <ul class="listWrapper">
                     <li class="list" v-for="(list, nowIndex) of item.details">
-                        <el-button @click="changeList(index, nowIndex)"
-                                   :class="{active: nowIndex == 0}"
-                                   class="btn">
+                        <el-button @click="changeList(index, nowIndex)" class="btn" :class="{active: parentIndex == index && currentIndex == nowIndex}">
                             {{list}}
                         </el-button>
                     </li>
@@ -22,6 +20,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+const INDEX = 0
 export default {
     /* 默认数据结构
       chooseInfo: [{
@@ -37,23 +36,15 @@ export default {
     },
     data() {
         return {
-            currentIndex: '',
-            parentIndex: '',
-            changed: false
+            currentIndex: INDEX, // 按钮本身index
+            parentIndex: INDEX, // 上一级循环的index
         }
     },
     methods: {
-        changeList(index, val) {
-            console.log(index)
-            console.log(val)
-            // this.parentIndex = index
-            // this.currentIndex = val
+        changeList(value, n) {
+            this.currentIndex = n
+            this.parentIndex = value
         },
-    },
-    watch: {
-        parentIndex(val, oldval) {
-
-        }
     }
 }
 </script>
@@ -63,6 +54,37 @@ export default {
 .myFilter {
     width: 100%;
     background: @color-base;
+    /*.choose {
+        width: 100%;
+        .lists {
+            width: 100%;
+            height: 42px;
+            line-height: 42px;
+            .title {
+                width: 120px;
+                height: 100%;
+                float: left;
+                text-align: center;
+            }
+            .ul_list {
+                width: 100%;
+                height: 100%;
+                padding-left: 120px;
+                li {
+                    float: left;
+                    padding: 0 12px;
+                    .btn {
+                        border: none;
+                        &.active,
+                        &.default {
+                            color: @color-base;
+                            background: @color-theme-red;
+                        }
+                    }
+                }
+            }
+        }
+    }*/
     .lists{
         width: 100%;
         height: 42px;
@@ -83,8 +105,7 @@ export default {
                 }
                 .btn{
                     border: none;
-                    &.active,
-                    &.default{
+                    &.active{
                         background: @color-theme-red;
                     }
                 }

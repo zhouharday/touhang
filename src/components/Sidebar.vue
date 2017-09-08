@@ -41,9 +41,9 @@
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
                     <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
-                    <el-menu-item index="">{{title8}}</el-menu-item>
-                    <el-menu-item index="">{{title9}}</el-menu-item>
-                    <el-menu-item index="">{{title10}}</el-menu-item>
+                    <el-menu-item index="projectOut" @click="addTab(title8,'/home/projectOut','projectOut')">{{title8}}</el-menu-item>
+                    <el-menu-item index="projectValuation" @click="addTab(title9,'/home/projectValuation','projectValuation')">{{title9}}</el-menu-item>
+                    <el-menu-item index="valuationView" @click="addTab(title10,'/home/valuationView','valuationView')">{{title10}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="4">
                     <template slot="title">
@@ -60,8 +60,7 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/touzizhe.png" />
                         <span>{{title_05}}</span>
                     </template>
-                    <el-menu-item index="investor"
-                    @click="addTab(title13,'/home/investor','investor')">{{title13}}</el-menu-item>
+                    <el-menu-item index="">{{title13}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="6">
                     <template slot="title">

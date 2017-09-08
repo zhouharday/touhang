@@ -7,39 +7,42 @@
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
-            <el-table-column fixed label="基金名称" width="150">
+            <el-table-column fixed prop="fundName" label="基金名称">
+            </el-table-column>
+            <el-table-column prop="number" label="基金编号">
+            </el-table-column>
+            <el-table-column prop="province" label="组织类型">
+            </el-table-column>
+            <el-table-column prop="city" label="管理类型">
+            </el-table-column>
+            <el-table-column prop="address" label="基金规模（元）">
+            </el-table-column>
+            <el-table-column prop="zip" label="募集总额（元）">
+            </el-table-column>
+            <el-table-column prop="province" label="投资总额（元）">
+            </el-table-column>
+            <el-table-column prop="city" label="剩余额度（元）">
+            </el-table-column>
+            <el-table-column prop="address" label="成立日期">
+            </el-table-column>
+            <el-table-column prop="zip" label="状态">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作">
                 <template scope="scope">
-                  <div class="name" @click="handleRouter(scope.$index, scope.row)">
-                      <span class="investorName">{{ scope.row.fundName }}</span>
-                  </div>
-                </template>
-            </el-table-column>
-            <el-table-column prop="fundNo" label="基金编号" width="200">
-            </el-table-column>
-            <el-table-column prop="orgTypeId" label="组织类型" width="200">
-            </el-table-column>
-            <el-table-column prop="manageTypeId" label="管理类型" width="200">
-            </el-table-column>
-            <el-table-column prop="fundScale" label="基金规模（元）" width="200">
-            </el-table-column>
-            <el-table-column prop="placementSum" label="募集总额（元）" width="200">
-            </el-table-column>
-            <el-table-column prop="investSum" label="投资总额（元）" width="200">
-            </el-table-column>
-            <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200">
-            </el-table-column>
-            <el-table-column prop="createDate" label="成立日期" width="200">
-            </el-table-column>
-            <el-table-column prop="fundStageId" label="状态" width="200">
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="150">
-                <template scope="scope">
-                   <el-button type="text" size="small">删除</el-button>
+                   <el-button @click="handleClick" type="text" size="small">查看</el-button>
+                   <el-button type="text" size="small">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
-        </el-pagination>
+        <el-pagination @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="currentPage"
+                           :page-sizes="[100, 200, 300, 400]"
+                           :page-size="100"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="400"
+                           class="page">
+         </el-pagination>
     </div>
 </div>
 </template>
@@ -47,7 +50,6 @@
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
-import {mapMutations} from 'vuex'
 const INDEX = 0;
 const NOW = 0;
 export default {
@@ -66,6 +68,8 @@ export default {
                     explain: '模板下载'
                 }]
             },
+            addFund: false,
+            formLabelWidth: '120px',
             chooseInfo: [{
                 title: '组织类型：',
                 details: ['全部', '契约型', '公司型', '合伙型']
@@ -79,31 +83,6 @@ export default {
                 title: '基金状态：',
                 details: ['全部', '中止']
             }],
-            myFund: [{
-                manageTypeId: '', //管理类型id
-                investSum: '', //投资总额
-                orgTypeId: '', //组织类型id
-                fundNo: '20160901', //基金编号
-                fundScale: "1000", //基金规模
-                id: "773a889fb82b4c5bad7086184673bbce", //基金id
-                fundName: "深度并购", //基金名称
-                placementSum: '', //募集总额
-                surplusLimit: '', //剩余额度
-                createDate: '', //成立日期
-                fundStageId: "1" //状态
-            }, {
-                manageTypeId: '', //管理类型id
-                investSum: '', //投资总额
-                orgTypeId: '', //组织类型id
-                fundNo: '20160901', //基金编号
-                fundScale: "1000", //基金规模
-                id: "773a", //基金id
-                fundName: "aaaa", //基金名称
-                placementSum: '', //募集总额
-                surplusLimit: '', //剩余额度
-                createDate: '', //成立日期
-                fundStageId: "1" //状态
-            }],
             currentPage: 10
         }
     },
@@ -114,20 +93,6 @@ export default {
         },
         watchTarget(el) {
             this.$router.push('/home/fund/add')
-        },
-        handleRouter(index, row) {
-            this.addTab({
-                type: 'addTab',
-                title: row.fundName + '详情',
-                url: '/home/fundDetails/' + row.id,
-                name: 'fundDetails/' + row.id
-            });
-            this.$router.push({
-                name: 'fundDetails',
-                params: {
-                    id: row.id
-                }
-            })
         },
         leadingIn(el) {
             console.log(this.$store)
@@ -140,10 +105,7 @@ export default {
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
-        },
-        ...mapMutations([
-            'addTab' // 映射 this.addTab() 为 this.$store.commit
-        ])
+        }
     },
     components: {
         tableHeader,
@@ -154,7 +116,6 @@ export default {
 
 <style lang="less" scoped>
 @import "../../common/styles/variable.less";
-@import '../../common/styles/mixin.less';
 .fund {
     width: 100%;
     height: 100%;
@@ -193,8 +154,7 @@ export default {
     .tables {
         width: 100%;
         padding-top: @font-size-small;
-        .table-router();
-        .page {
+        .page{
             width: 100%;
             text-align: right;
             padding: @font-size-large-x 0;

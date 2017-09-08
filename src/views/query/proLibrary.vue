@@ -1,8 +1,7 @@
 <template>
 <div class="proLibrary">
-    <myFilter :chooseInfo="chooseInfo"></myFilter>
     <div class="title">
-        <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
+        <tableHeader :theme="theme" :data="titleInfo">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
             </el-input>
         </tableHeader>
@@ -30,21 +29,21 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
-import myFilter from 'components/myFilter'
 export default {
     data() {
         return {
             theme: '#fff',
             titleInfo: {
-                // btnGroup: [{
-                //     icon: 'plus-round',
-                //     explain: '基金'
-                // }, {
-                //     explain: '导入'
-                // }, {
-                //     explain: '模板下载'
-                // }]
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '基金'
+                }, {
+                    explain: '导入'
+                }, {
+                    explain: '模板下载'
+                }]
             },
+<<<<<<< HEAD
             chooseInfo: [{
                 title: '项目类型:',
                 details: ['全部', 'PE', 'VC', '定增']
@@ -55,6 +54,17 @@ export default {
                 industry: '军工',
                 type: '',
                 step: '进行中...',
+=======
+            myFund: [{
+                fundName: '中国联通',
+                number: 20160906,
+                orgType: '众投',
+                admType: '代理',
+                fundScale: 100000000,
+                raiseTotal: 5000000,
+                invTotal: 80000000,
+                remainingQuota: 300000,
+>>>>>>> c3095b99b23ac4eba6cdfc0a42250a74dfbb3fe1
                 date: '2016-09-01',
                 investment: 200000
             }, {
@@ -77,8 +87,7 @@ export default {
         }
     },
     components: {
-        tableHeader,
-        myFilter
+        tableHeader
     }
 }
 </script>
@@ -90,9 +99,6 @@ export default {
     height: 100%;
     padding: 24px;
     background: @color-base;
-    .addPadding{
-        padding-bottom: 12px;
-    }
     .page{
         padding: 24px 0;
         text-align: right;

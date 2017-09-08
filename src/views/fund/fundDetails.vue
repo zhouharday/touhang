@@ -3,16 +3,12 @@
     <div class="title">
         <div class="left">
             <span class="desc">{{title}}</span>
-            <span class="icon">
-                <Icon type="pause"></Icon>
-            </span>
+            <img src="static/img/icon-中止-.png" alt="" class="termination">
         </div>
         <div class="right">
             <el-button type="danger">&nbsp;返回&nbsp;</el-button>
             <el-button type="danger">下一步</el-button>
-            <span class="restart">
-                <Icon type="ios-play"></Icon>
-            </span>
+            <img src="static/img/icon-重启.png" alt="" class="restart">
         </div>
     </div>
     <el-row class="step">
@@ -31,7 +27,7 @@
     </el-row>
     <div class="picture">
         <div class="img_wrapper">
-            <img src="../../../static/img/double.png" alt="">
+            <img src="static/img/double.png" alt="">
         </div>
         <div class="prompt_message">
             <span class="prompt">{{prompt}}</span>
@@ -185,7 +181,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../common/styles/variable.less";
 .fund {
     width: 100%;
     /*height: 100%;*/
@@ -201,17 +196,11 @@ export default {
             float: left;
             margin-left: 24px;
             font-size: 0;
-            .desc{
+            .desc {
                 font-size: 20px;
                 font-weight: 600;
                 color: #fff;
                 vertical-align: top;
-            }
-            .icon{
-                font-size: 20px;
-                font-weight: 600;
-                color: @color-theme-red;
-                margin-left: 24px;
             }
             .termination {
                 margin-left: 24px;
@@ -227,12 +216,6 @@ export default {
                 padding: 5px 15px;
             }
             .restart {
-                width: 24px;
-                height: 24px;
-                padding: 6px;
-                color: @color-theme-red;
-                font-size: 20px;
-                font-weight: 600;
                 margin-left: 24px;
                 vertical-align: middle;
             }

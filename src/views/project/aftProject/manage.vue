@@ -356,10 +356,11 @@
 
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
+import { changeDate } from 'common/js/config'
 export default {
     data() {
         return {
-            formLabelWidth: '80px',
+            formLabelWidth: '110px',
             costAdd1: false,
             costAdd2: false,
             contractAdd1: false,
@@ -381,11 +382,11 @@ export default {
             },
             costData: [{
                 costSort: '',
-                money: ''
+                money: '2000'
             },
             {
                 costSort: '',
-                money: ''
+                money: '1000'
             }],
             headerInfo_cost: {
                 desc: '项目费用',
@@ -409,7 +410,7 @@ export default {
             },
             contractData: [{
                 contractName: '',
-                date: '',
+                date: '2017-08-09',
                 money: '',
                 percent: '',
                 appendix: ''
@@ -542,8 +543,9 @@ export default {
             this.costAdd1 = true
         },
         confirmCostAdd1() {
-            this.costAdd1 = false;
             this.costData.push(this.costForm1);
+            this.costForm1 = {};
+            this.costAdd1 = false;
         },
         // 编辑 项目费用 的方法
         EditCost(row) {
@@ -553,13 +555,17 @@ export default {
             this.costAdd2 = false;
         },
 
+
+
         // 添加 项目合同 的方法
         contractDialog() {
             this.contractAdd1 = true
         },
         confirmContractAdd1() {
-            this.contractAdd1 = false;
+            this.contractForm1.date = changeDate(this.contractForm1.date);
             this.contractData.push(this.contractForm1);
+            this.contractForm1 = {};
+            this.contractAdd1 = false;
         },
         // 编辑 项目合同 的方法
         EditContract(row) {
@@ -575,8 +581,10 @@ export default {
             this.paidAdd1 = true
         },
         confirmPaidAdd1() {
-            this.paidAdd1 = false;
+            this.paidForm1.paidDate = changeDate(this.paidForm1.paidDate);
             this.paidData.push(this.paidForm1);
+            this.paidForm1 = {};
+            this.paidAdd1 = false;
         },
         // 编辑 投资支付 的方法
         EditPaid(row) {
@@ -592,8 +600,10 @@ export default {
             this.sharingAdd1 = true
         },
         confirmSharingAdd1() {
-            this.sharingAdd1 = false;
+            this.sharingForm1.sharingDate = changeDate(this.sharingForm1.sharingDate);
             this.sharingData.push(this.sharingForm1);
+            this.sharingForm1 = {};
+            this.sharingAdd1 = false;
         },
         // 编辑 项目分红 的方法
         EditSharing(row) {
@@ -604,13 +614,15 @@ export default {
         },
 
 
-         // 添加 项目退出 的方法
+        // 添加 项目退出 的方法
         outingDialog() {
             this.outingAdd1 = true
         },
         confirmOutingAdd1() {
-            this.outingAdd1 = false;
+            this.outingForm1.cashDate = changeDate(this.outingForm1.cashDate);
             this.outingData.push(this.outingForm1);
+            this.outingForm1 = {};
+            this.outingAdd1 = false;
         },
         // 编辑 项目退出 的方法
         EditOuting(row) {
@@ -620,12 +632,10 @@ export default {
             this.outingAdd2 = false;
         },
 
-
         //删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
-        },
-
+        }
     },
     components: {
         tabelHeader

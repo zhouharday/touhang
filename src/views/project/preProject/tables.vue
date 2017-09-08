@@ -228,6 +228,7 @@ export default {
             this.modalAdd2 = false;
         },
 
+
         //添加 股权结构的方法
         method3() {
             this.modalAdd3 = true;
@@ -244,10 +245,8 @@ export default {
         confirmAdd4() {
             this.modalAdd4 = false;
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
-        },
+      
+
         //清除 添加董事会成员对话框
         clearMVal1() {
             // this.memberForm1.name = '';
@@ -286,14 +285,20 @@ export default {
                 num: '',
                 percent: ''
             }
+        },
+
+
+        //删除当前行
+        handleDelete(index, rows) {
+            rows.splice(index, 1);
         }
     },
     components: {
         tabelHeader
     }
 }
-
 </script>
+
 
 
 <style lang="less" scoped>

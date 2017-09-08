@@ -57,6 +57,9 @@ export default {
             } else {
                 return
             }
+            if (this.theme && this.theme=='#2a3142') {
+                this.$refs.desc.style.color = '#fff'
+            }
         }
     },
     // mounted() {
@@ -80,7 +83,7 @@ export default {
             flex: 1;
             text-align: left;
             .defaultcolor {
-                color: #495060;
+                color: #20a0ff;
                 margin-left: 24px;
             }
         }

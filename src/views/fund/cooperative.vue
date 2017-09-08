@@ -1,6 +1,6 @@
 <template>
 <div class="cooperative">
-    <table-header :data="headerInfo" @add="alertModle" :theme="theme" class="addPadding">
+    <table-header :data="headerInfo" @add="alertModle" :theme="theme">
         <el-input placeholder="请输入搜索内容" icon="search" v-model="input2" :on-icon-click="handleIconClick" style="width: 320px;">
         </el-input>
     </table-header>
@@ -89,8 +89,5 @@ export default {
     height: 100%;
     padding: 24px;
     background: #fff;
-    .addPadding{
-        padding-bottom: 12px;
-    }
 }
 </style>
