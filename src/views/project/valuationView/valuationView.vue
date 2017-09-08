@@ -2,7 +2,10 @@
     <div class="valueView">
         <!-- 状态ul -->
         <el-row class="common">
-            <el-col :span="24" style="margin-top:20px">
+            <el-col :span="2">
+                <div class="tag">状态：</div>
+            </el-col>
+            <el-col :span="22" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
                         <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index)">
@@ -35,20 +38,15 @@
                     </el-table-column>
                     <el-table-column prop="state" label="状态" align="center">
                     </el-table-column>
-                    <el-table-column label="操作" align="center">
-                    <template scope="scope">
-                        <el-button type="text" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-                    </template>
-                </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
         <el-row type="flex" align="bottom" class="foot">
             <el-col :span="8">
-                <span>总记录：{{this.total}}条</span>
+                <span>总记录：{{total}} 条</span>
             </el-col>
             <el-col :span="16">
-                <Page  :current="13" style="float:right"></Page>
+                <Page :current="13" style="float:right"></Page>
             </el-col>
         </el-row>
     </div>
@@ -78,7 +76,10 @@
     }
 }
 
-.fow {
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -108,16 +109,32 @@
 
 <script>
 export default {
+    created() {
+        // this.$http.post('api/url',{
+
+        // })
+        // .then( res => {
+        //     let data = res.data;
+        //     if(data.length == 0 ){
+        //         this.tatal = 0;
+        //     } else if ( data.length != 0 ){
+        //         this.total = data.length;
+        //     }
+        // })
+        // .catch( error => {
+
+        // });
+        this.total = this.tableData.length
+    },
     data() {
         return {
-            total: 2,
+            total: '',
             input: '',
-            currentIndex: 1,
+            currentIndex: 0,
             stateList: [
-                { state: "状态：" },
                 { state: "全部" },
-                { state: "未提交" },
-                { state: "已提交" }
+                { state: "未估值" },
+                { state: "已估值" }
             ],
             tableData: [
                 {
