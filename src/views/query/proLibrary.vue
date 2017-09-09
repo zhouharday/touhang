@@ -1,7 +1,8 @@
 <template>
 <div class="proLibrary">
+    <myFilter :chooseInfo="chooseInfo"></myFilter>
     <div class="title">
-        <tableHeader :theme="theme" :data="titleInfo">
+        <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
             </el-input>
         </tableHeader>
@@ -41,20 +42,25 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import myFilter from 'components/myFilter'
 export default {
     data() {
         return {
             theme: '#fff',
             titleInfo: {
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '基金'
-                }, {
-                    explain: '导入'
-                }, {
-                    explain: '模板下载'
-                }]
+                // btnGroup: [{
+                //     icon: 'plus-round',
+                //     explain: '基金'
+                // }, {
+                //     explain: '导入'
+                // }, {
+                //     explain: '模板下载'
+                // }]
             },
+            chooseInfo: [{
+                title: '项目类型:',
+                details: ['全部', 'PE', 'VC', '定增']
+            }],
             myFund: [{
                 fundName: '中国联通',
                 number: 20160906,
@@ -92,7 +98,8 @@ export default {
         }
     },
     components: {
-        tableHeader
+        tableHeader,
+        myFilter
     }
 }
 </script>
@@ -104,6 +111,9 @@ export default {
     height: 100%;
     padding: 24px;
     background: @color-base;
+    .addPadding{
+        padding-bottom: 12px;
+    }
     .page{
         padding: 24px 0;
         text-align: right;

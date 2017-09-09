@@ -60,7 +60,8 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/touzizhe.png" />
                         <span>{{title_05}}</span>
                     </template>
-                    <el-menu-item index="">{{title13}}</el-menu-item>
+                    <el-menu-item index="investor"
+                    @click="addTab(title13,'/home/investor','investor')">{{title13}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="6">
                     <template slot="title">

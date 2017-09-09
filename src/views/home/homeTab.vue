@@ -5,7 +5,7 @@
             {{title}}
         </router-link>
         <!-- <a href="#homeContent">{{title}}</a>   -->
-        <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,index,item.path)" :class="{active:$route.name == item.name || $route.path == item.path}">
+        <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,index,item.path,item.name)" :class="{active:$route.name == item.name || $route.path == item.path}">
             <span>{{item.title}}</span>
             <Icon type="close" class="close"></Icon>
         </li>
