@@ -105,14 +105,42 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
                         <span>{{title_08}}</span>
                     </template>
-                    <el-menu-item index="">{{title19}}</el-menu-item>
-                    <el-menu-item index="">{{title20}}</el-menu-item>
-                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
-                    <el-menu-item index="">{{title22}}</el-menu-item>
-                    <el-menu-item index="">{{title23}}</el-menu-item>
-                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
-                    <el-menu-item index="">{{title25}}</el-menu-item>
-                    <el-menu-item index="">{{title26}}</el-menu-item>
+                    <el-menu-item index="companyInfo"
+                                  @click="addTab(title19, '/home/companyInfo', 'companyInfo')">
+                        {{title19}}
+                    </el-menu-item>
+                    <el-menu-item index="department"
+                                  @click="addTab(title20, '/home/department', 'department')">
+                        {{title20}}
+                    </el-menu-item>
+                    <el-menu-item index="subscriber"
+                                  @click="addTab(title21, '/home/subscriber', 'subscriber')">
+                        {{title21}}
+                    </el-menu-item>
+                    <el-menu-item index="role"
+                                  @click="addTab(title22, '/home/role', 'role')">
+                        {{title22}}
+                    </el-menu-item>
+                    <el-menu-item index="dictionary"
+                                  @click="addTab(title23, '/home/dictionary', 'dictionary')">
+                        {{title23}}
+                    </el-menu-item>
+                    <el-menu-item index="business"
+                                  @click="addTab(title24, '/home/business', 'business')">
+                        {{title24}}
+                    </el-menu-item>
+                    <el-menu-item index="fundAuthority"
+                                  @click="addTab(title35, '/home/fundAuthority', 'fundAuthority')">
+                        {{title35}}
+                    </el-menu-item>
+                    <el-menu-item index="process"
+                                  @click="addTab(title25, '/home/process', 'process')">
+                        {{title25}}
+                    </el-menu-item>
+                    <el-menu-item index="processSetting"
+                                  @click="addTab(title26, '/home/processSetting', 'processSetting')">
+                        {{title26}}
+                    </el-menu-item>
                 </el-submenu>
                 <el-submenu index="9">
                     <template slot="title">
@@ -351,11 +379,12 @@ export default {
             title_07_5: '统计分析图',
             title_08: '系统管理',
             title19: '公司信息',
-            title20: '组织架构',
-            // title21: '用户管理',
+            title20: '部门管理',
+            title21: '用户管理',
             title22: '角色权限',
             title23: '数据字典',
-            // title24: '业务权限',
+            title24: '业务权限',
+            title35: '基金权限',
             title25: '流程管理',
             title26: '流程设置',
             title_09: '平台管理',
