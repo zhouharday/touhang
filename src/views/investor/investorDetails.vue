@@ -26,7 +26,6 @@
         <el-tab-pane label="资金明细" name="fourth">
             <fundDetails></fundDetails>
         </el-tab-pane>
-        <el-tab-pane label="资金明细" name="five">定时任务补偿</el-tab-pane>
         <el-tab-pane label="资金明细" name="five">
             <visitingRecord></visitingRecord>
         </el-tab-pane>

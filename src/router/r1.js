@@ -15,24 +15,29 @@ const r1 = [
         component: resolve => require(['../views/assistant/assistant.vue'], resolve)
     }, 
     {
+        path: 'message/:userId', //home/领投助手的项目详情页
+        name: 'message',
+        component: resolve => require(['../views/assistant/message.vue'], resolve)
+    },
+    {
         path: 'projectPool', //home/项目池页
         name: 'projectPool',
         component: resolve => require(['../views/project/projectPool/projectPool.vue'], resolve)
-    }, 
+    },  
     {
-        path: 'addProject', //home/添加项目页
-        name: 'addProject',
-        component: resolve => require(['../views/project/addProject.vue'], resolve)
-    }, 
-    {
-        path: 'zprojectPoolMessage/:userId', //home/正常状态下的项目池详情页
+        path: 'zprojectPoolMessage/:userId', //home/入项目池的项目详情页
         name: 'zprojectPoolMessage',
         component: resolve => require(['../views/project/projectPool/zprojectPoolMessage.vue'], resolve)
     },
     {
-        path: 'wprojectPoolMessage', //home/未入项目池的项目详情页
+        path: 'addProject', //home/手动添加项目页1
+        name: 'addProject',
+        component: resolve => require(['../views/project/projectPool/addProject.vue'], resolve)
+    },
+    {
+        path: 'wprojectPoolMessage', //home/搜索添加项目页2
         name: 'wprojectPoolMessage',
-        component: resolve => require(['../views/project/wprojectPoolMessage.vue'], resolve)
+        component: resolve => require(['../views/project/projectPool/wprojectPoolMessage.vue'], resolve)
     }, 
     {
         path: 'preProject', //home/投前项目页
@@ -43,32 +48,24 @@ const r1 = [
         path: 'preProjectMessage/:userId', //home/投前项目详情页
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
-    }, 
-    {
+    }, {
         path: 'aftProject', //home/投后项目页
         name: 'aftProject',
         component: resolve => require(['../views/project/aftProject/aftProject.vue'], resolve)
-    }, 
-    {
+    }, {
         path: 'projectOut', //home/退出项目页
         name: 'projectOut',
         component: resolve => require(['../views/project/projectOut/projectOut.vue'], resolve)
-    },
-    {
+
+    }, {
         path: 'projectValuation', //home/项目估值页
         name: 'projectValuation',
         component: resolve => require(['../views/project/projectValuation/projectValuation.vue'], resolve)
 
-    },
-    {
+    }, {
         path: 'valuationView', //home/估值查看页
         name: 'valuationView',
         component: resolve => require(['../views/project/valuationView/valuationView.vue'], resolve)
-    },
-    {
-        path: 'message/:userId', //home/添加项目页
-        name: 'message',
-        component: resolve => require(['../views/assistant/message.vue'], resolve)
     }
 ]
 export default r1

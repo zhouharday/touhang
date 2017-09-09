@@ -148,7 +148,8 @@
     padding: 0 30px 20px 30px;
 
     ul {
-        float: left; //  width: 100%;
+        float: left;
+         //  width: 100%;
         // height: 50px;
         li {
             display: inline-block;
@@ -440,7 +441,6 @@ export default {
             this.addTab('项目池', '/home/projectPool', 'projectPool');
             this.$router.push({ name: 'projectPool' });
         },
-
         addTab(th, url, name) {
             // this.$router.push({ name: 'assistant' });
             // this.$router.push({ name: name });

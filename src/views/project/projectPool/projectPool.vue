@@ -66,12 +66,20 @@
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="jumpPre">
+                            <el-button type="text" size="small" @click="dialogVisible=true">
                                 转投资
                             </el-button>
-                            <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
+                            <el-button type="text" size="small" @click="deleteRow(scope.$index,tableData)">
                                 删除
                             </el-button>
+                            <!-- 确认转项目池 dialog -->
+                            <el-dialog title="转投资" :visible.sync="dialogVisible" size="tiny">
+                                <span>确认将该项目转投资？</span>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="primary" @click="jumpPre">确 定</el-button>
+                                </span>
+                            </el-dialog>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -217,6 +225,7 @@ export default {
             collapseBtn2: '下拉',
             currentIndex1: 0,
             currentIndex2: 0,
+            dialogVisible: false,
             btnObject: {
                 uptriangle: true,
                 downtriangle: false
@@ -358,7 +367,7 @@ export default {
             this.$router.push({ name: 'preProject' });
         },
         addProject() {
-            this.addTab('添加项目', '/home/addProject', 'addProject');
+            this.addTab('添加项目1', '/home/addProject', 'addProject');
             this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {
