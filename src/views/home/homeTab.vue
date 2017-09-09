@@ -65,11 +65,8 @@ export default {
         }
     },
     methods: {
-<<<<<<< HEAD
-        linkFun($event, index, path, name) {
-=======
+        // linkFun($event, index, path, name) {
         linkFun($event,index,path) {
->>>>>>> c3095b99b23ac4eba6cdfc0a42250a74dfbb3fe1
             // alert(2);
             if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', {

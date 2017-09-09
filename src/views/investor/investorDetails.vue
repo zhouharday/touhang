@@ -26,13 +26,9 @@
         <el-tab-pane label="资金明细" name="fourth">
             <fundDetails></fundDetails>
         </el-tab-pane>
-<<<<<<< HEAD
-        <el-tab-pane label="资金明细" name="five">定时任务补偿</el-tab-pane>
-=======
         <el-tab-pane label="资金明细" name="five">
             <visitingRecord></visitingRecord>
         </el-tab-pane>
->>>>>>> dbb5bed1613301ec0f51cfc73f87df73e2726d00
     </el-tabs>
 </div>
 </template>
@@ -42,10 +38,7 @@ import baseInfo from "./baseInfo"
 import investorDoc from './investorDoc'
 import agreement from "./agreement"
 import fundDetails from "./fundDetails"
-<<<<<<< HEAD
-=======
 import visitingRecord from "./visitingRecord"
->>>>>>> dbb5bed1613301ec0f51cfc73f87df73e2726d00
 export default {
     data() {
         return {
@@ -66,12 +59,8 @@ export default {
         baseInfo,
         investorDoc,
         agreement,
-<<<<<<< HEAD
-        fundDetails
-=======
         fundDetails,
         visitingRecord
->>>>>>> dbb5bed1613301ec0f51cfc73f87df73e2726d00
     }
 }
 </script>
