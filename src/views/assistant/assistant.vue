@@ -10,10 +10,13 @@
         </el-row>
         <!--行业ul-->
         <el-row class="common">
-            <el-col :span="24">
+              <el-col :span="1">
+                <div class="tag_s">行业：</div>
+            </el-col>
+            <el-col :span="23">
                 <div class="industry-ul">
                     <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
-                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex1,fow: index==0}" @click="changeActive(index,1)">
+                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
                             {{item.details}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
@@ -26,10 +29,13 @@
         </el-row>
         <!--轮次ul -->
         <el-row class="common">
-            <el-col :span="24">
+              <el-col :span="1">
+                <div class="tag_s">轮次：</div>
+            </el-col>
+            <el-col :span="23">
                 <div class="round-ul">
                     <ul ref="round">
-                        <li v-for="(item,index) in roundList" :key="item.index" :class="{active: index==currentIndex2,fow: index==0}" @click="changeActive(index,2)">
+                        <li v-for="(item,index) in roundList" :key="item.index" :class="{active: index==currentIndex2}" @click="changeActive(index,2)">
                             {{item.rounds}}
                         </li>
                     </ul>
@@ -38,10 +44,13 @@
         </el-row>
         <!--所在地ul-->
         <el-row class="common">
-            <el-col :span="24">
+              <el-col :span="1">
+                <div class="tag_s">所在地：</div>
+            </el-col>
+            <el-col :span="23">
                 <div class="location-ul">
                     <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }" style="width:100%;">
-                        <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3,fow: index==0}" @click="changeActive(index,3)">
+                        <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3}" @click="changeActive(index,3)">
                             {{item.locations}}
                         </li>
                         <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
@@ -105,8 +114,6 @@
                             <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <!-- <button @click="dialogVisible=false">确认</button>
-                                                <button  @click="dialogVisible=false,confirm=true">取消</button> -->
                                     <el-button @click="dialogVisible=false">取 消</el-button>
                                     <el-button type="primary" @click="jumpPool">确 定</el-button>
                                 </span>
@@ -175,12 +182,10 @@
     bottom: 5px;
 }
 
-.fow {
+.tag_s {
+    margin-bottom: 5px;
+    font-size: 14px;
     font-weight: bold;
-}
-
-.location-ul li.fow {
-    margin-right: 15px;
 }
 
 .active {
@@ -257,9 +262,9 @@ export default {
             search: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
-            currentIndex1: 1,
-            currentIndex2: 1,
-            currentIndex3: 1,
+            currentIndex1: 0,
+            currentIndex2: 0,
+            currentIndex3: 0,
             btnObject1: {
                 uptriangle: true,
                 downtriangle: false
@@ -269,7 +274,6 @@ export default {
                 downtriangle: true
             },
             industryList: [
-                { details: "行业：" },
                 { details: "全部" },
                 { details: "电商" },
                 { details: "社交" },
@@ -295,7 +299,6 @@ export default {
                 // { details: "游戏" }
             ],
             roundList: [
-                { rounds: "轮次：" },
                 { rounds: "全部" },
                 { rounds: "种子轮" },
                 { rounds: "天使轮" },
@@ -311,7 +314,6 @@ export default {
                 { rounds: "E轮及以后" }
             ],
             locationList: [
-                { locations: "所在地：" },
                 { locations: "全部" },
                 { locations: "北京市" },
                 { locations: "上海市" },

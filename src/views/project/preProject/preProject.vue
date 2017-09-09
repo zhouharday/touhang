@@ -2,12 +2,15 @@
     <div class="preContent">
         <!-- 阶段ul -->
         <el-row class="common">
-            <el-col :span="24" style="margin-top:20px">
+            <el-col :span="2">
+                <div class="tag">项目阶段：</div>
+            </el-col>
+            <el-col :span="22" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
                         <li v-for="(item,index) in stageList"
                             :key="item.index"
-                            :class="{active: index==currentIndex1,fow: index==0}"
+                            :class="{active: index==currentIndex1}"
                             @click="changeActive(index,1)">
                             {{item.stages}}
                         </li>
@@ -17,12 +20,15 @@
         </el-row>
         <!-- 类型ul -->
         <el-row class="common">
-            <el-col :span="24">
+            <el-col :span="2">
+                <div class="tag_s">项目类型：</div>
+            </el-col>
+            <el-col :span="22">
                 <div class="sort-ul">
                     <ul ref="sort">
                         <li v-for="(item,index) in sortList" 
                             :key="item.index" 
-                            :class="{active: index==currentIndex2,fow: index==0}"
+                            :class="{active: index==currentIndex2}"
                             @click="changeActive(index,2)">
                             {{item.sorts}}
                         </li>
@@ -106,9 +112,19 @@
         }
     }
 }
-.fow {
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
     font-weight: bold;
 }
+
+.tag_s {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
 .active {
     width: 70px;
     height: 20px;
@@ -157,10 +173,9 @@ export default {
         return {
             total: 128,
             input: '',
-            currentIndex1: 1,
-            currentIndex2: 1,
+            currentIndex1: 0,
+            currentIndex2: 0,
             stageList: [
-                { stages: "项目阶段：" },
                 { stages: "全部" },
                 { stages: "考察储备" },
                 { stages: "立项会" },
@@ -170,7 +185,6 @@ export default {
                 { stages: "项目退出" }
             ],
             sortList: [
-                { sorts: "项目类型：" },
                 { sorts: "全部" },
                 { sorts: "PE" },
                 { sorts: "VE" },

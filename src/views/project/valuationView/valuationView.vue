@@ -2,13 +2,13 @@
     <div class="valueView">
         <!-- 状态ul -->
         <el-row class="common">
-            <el-col :span="2">
+            <el-col :span="1">
                 <div class="tag">状态：</div>
             </el-col>
-            <el-col :span="22" style="margin-top:20px">
+            <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index)">
+                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index)">
                             {{item.state}}
                         </li>
                     </ul>
