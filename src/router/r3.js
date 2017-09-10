@@ -109,26 +109,6 @@ const subscriber = (resolve) => {
 
 
 const r3 = [
-    // {
-    //     path: 'fund',
-    //     component: fund,
-    //     children: [
-    //         {
-    //             path: '',
-    //             name: 'myfund',
-    //             redirect: 'myfund'
-    //         }, {
-    //             path: 'myfund',
-    //             component: myfund
-    //         }, {
-    //             path: 'add',
-    //             component: add
-    //         }, {
-    //             path: ':id',
-    //             component: fundDetails
-    //         }
-    //     ]
-    // },
     {
         path: 'myfund', // home/基金文档
         name: 'myfund',
@@ -166,10 +146,6 @@ const r3 = [
         name: 'investor',
         component: investor, // 投资者管理 我的投资者
     }, {
-        path: 'investorDetails/:id',
-        name: 'investorDetails',
-        component: investorDetails
-    },{
         path: 'investorDetails/:id',
         name: 'investorDetails',
         component: investorDetails
