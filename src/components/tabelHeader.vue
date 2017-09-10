@@ -80,7 +80,7 @@ export default {
             flex: 1;
             text-align: left;
             .defaultcolor {
-                color: #495060;
+                color: #fff;
                 margin-left: 24px;
             }
         }

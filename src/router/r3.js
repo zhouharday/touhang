@@ -169,10 +169,6 @@ const r3 = [
         path: 'investorDetails/:id',
         name: 'investorDetails',
         component: investorDetails
-    },{
-        path: 'investorDetails/:id',
-        name: 'investorDetails',
-        component: investorDetails
     }, {
         path: 'business',  // 系统管理 业务权限
         name: 'business',
