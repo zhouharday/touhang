@@ -6,7 +6,7 @@
                 <el-button @click="changeRisk2">风险预警</el-button>
             </div>
             <div class="rightBtn">
-                <el-button @click="addRisk">添加</el-button>
+                <el-button @click="modalAdd=true" v-if="addBtn">添加</el-button>
             </div>
         </div>
         <div class="f_risk" v-show="f_show">
@@ -156,7 +156,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small">立即处理</el-button>
+                        <el-button type="text" size="small" @click="modalAlarm=true">立即处理</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -211,6 +211,7 @@
 export default {
     data() {
         return {
+            addBtn: true,
             f_show: true,
             s_show: false,
             modalAdd: false,
@@ -291,14 +292,6 @@ export default {
         }
     },
     methods: {
-        // 切换 风险添加
-        addRisk() {
-            if (this.f_show) {
-                this.modalAdd = true;
-            } else {
-                this.modalAlarm = true;
-            }
-        },
         // 添加预警 的保存按钮
         confirmAlarm() {
 
@@ -307,10 +300,12 @@ export default {
         changeRisk1() {
             this.f_show = true;
             this.s_show = false;
+            this.addBtn = true;
         },
         changeRisk2() {
             this.f_show = false;
             this.s_show = true;
+            this.addBtn = false;
         },
         // 删除当前行
         handleDelete(index, rows) {

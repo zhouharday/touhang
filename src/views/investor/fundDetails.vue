@@ -39,7 +39,48 @@
 </template>
 
 <script type="text/ecmascript-6">
-export default {}
+export default {
+    data() {
+        return {
+            detailsData: [{
+                protocolName: 'xxxxx',
+                fundName: '深度并购基金',
+                amount: '100,000',
+                ratio: '5%',
+                actual: 565.56,
+                date: '2016-09-08'
+            }, {
+                protocolName: 'xxx',
+                fundName: '深度并购基金',
+                amount: '100,000',
+                ratio: '5.6%',
+                actual: 565.56,
+                date: '2016-09-08'
+            }],
+            formLabelWidth: '120px',
+            addDetailed: false,
+            Detailed: {
+
+            },
+            options: [{
+                value: '名称a',
+                label: '名称a'
+            }, {
+                value: '名称b',
+                label: '名称b'
+            }]
+        }
+    },
+    methods: {
+        getSummaries(param) {
+            console.log(param)
+        },
+        showDetailed() {
+            this.addDetailed = true
+        },
+        Detailed: {}
+    }
+}
 </script>
 
 <style lang="less" scoped>

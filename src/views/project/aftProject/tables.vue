@@ -18,14 +18,14 @@
             </el-table>
             <!-- 添加董事会成员 对话框-->
             <el-dialog title="添加董事会成员" :visible.sync="modalAdd1" :close-on-click-modal="false">
-                <el-form :model="memberForm1">
-                    <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-form :model="memberForm1" :label-width="formLabelWidth">
+                    <el-form-item label="姓名">
                         <el-input v-model="memberForm1.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="性质" :label-width="formLabelWidth">
+                    <el-form-item label="性质">
                         <el-input v-model="memberForm1.property" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="教育背景" :label-width="formLabelWidth">
+                    <el-form-item label="教育背景">
                         <el-input v-model="memberForm1.edu" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
@@ -36,14 +36,14 @@
             </el-dialog>
             <!-- 编辑董事会成员 对话框-->
             <el-dialog title="编辑董事会成员" :visible.sync="modalAdd2" :close-on-click-modal="false">
-                <el-form :model="memberForm2">
-                    <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-form :model="memberForm2" :label-width="formLabelWidth">
+                    <el-form-item label="姓名">
                         <el-input v-model="memberForm2.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="性质" :label-width="formLabelWidth">
+                    <el-form-item label="性质">
                         <el-input v-model="memberForm2.property" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="教育背景" :label-width="formLabelWidth">
+                    <el-form-item label="教育背景">
                         <el-input v-model="memberForm2.edu" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
@@ -76,20 +76,20 @@
             </el-table>
             <!-- 添加股权结构 对话框-->
             <el-dialog title="添加股权结构" :visible.sync="modalAdd3" :close-on-click-modal="false">
-                <el-form :model="structureForm1">
-                    <el-form-item label="股东姓名" :label-width="formLabelWidth">
+                <el-form :model="structureForm1" :label-width="formLabelWidth">
+                    <el-form-item label="股东姓名">
                         <el-input v-model="structureForm1.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="股东性质" :label-width="formLabelWidth">
+                    <el-form-item label="股东性质">
                         <el-input v-model="structureForm1.property" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="投资金额（元）" :label-width="formLabelWidth">
+                    <el-form-item label="投资金额（元）">
                         <el-input v-model="structureForm1.capital" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="持股数量（股）" :label-width="formLabelWidth">
+                    <el-form-item label="持股数量（股）">
                         <el-input v-model="structureForm1.num" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="股权占比（%）" :label-width="formLabelWidth">
+                    <el-form-item label="股权占比（%）">
                         <el-input v-model="structureForm1.percent" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
@@ -100,20 +100,20 @@
             </el-dialog>
             <!-- 编辑股权结构 对话框-->
             <el-dialog title="编辑股权结构" :visible.sync="modalAdd4" :close-on-click-modal="false">
-                <el-form :model="structureForm2">
-                    <el-form-item label="股东姓名" :label-width="formLabelWidth">
+                <el-form :model="structureForm2"  :label-width="formLabelWidth">
+                    <el-form-item label="股东姓名">
                         <el-input v-model="structureForm2.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="股东性质" :label-width="formLabelWidth">
+                    <el-form-item label="股东性质">
                         <el-input v-model="structureForm2.property" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="投资金额（元）" :label-width="formLabelWidth">
+                    <el-form-item label="投资金额（元）">
                         <el-input v-model="structureForm2.capital" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="持股数量（股）" :label-width="formLabelWidth">
+                    <el-form-item label="持股数量（股）">
                         <el-input v-model="structureForm2.num" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="股权占比（%）" :label-width="formLabelWidth">
+                    <el-form-item label="股权占比（%）">
                         <el-input v-model="structureForm2.percent" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
@@ -206,19 +206,15 @@ export default {
         }
     },
     methods: {
+        
         //添加 董事会成员的方法
         method1() {
             this.modalAdd1 = true;
         },
         confirmAdd1() {
-            this.modalAdd1 = false;
-            // this.memberData.push({
-            //     name: this.memberForm1.name,
-            //     property: this.memberForm1.property,
-            //     edu: this.memberForm1.edu
-            // });
             this.memberData.push(this.memberForm1);
-            this.clearMVal1();
+            this.memberForm1 = {};
+            this.modalAdd1 = false;
         },
         //编辑 董事会成员的方法
         handleEditm(row) {
@@ -227,14 +223,17 @@ export default {
         confirmAdd2() {
             this.modalAdd2 = false;
         },
+
+
+
         //添加 股权结构的方法
         method3() {
             this.modalAdd3 = true;
         },
         confirmAdd3() {
-            this.modalAdd3 = false;
             this.structureData.push(this.structureForm1);
-            this.clearSVal1();
+            this.structureForm1 = {};
+            this.modalAdd3 = false;
         },
         //编辑 股权结构的方法
         handleEdits(row) {
@@ -243,48 +242,12 @@ export default {
         confirmAdd4() {
             this.modalAdd4 = false;
         },
+
+
+
         //删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
-        },
-        //清除 添加董事会成员对话框
-        clearMVal1() {
-            // this.memberForm1.name = '';
-            // this.memberForm1.property = '';
-            // this.memberForm1.edu = ''
-            this.memberForm1 = {
-                name: '',
-                property: '',
-                edu: ''
-            }
-        },
-        //清除 编辑董事会成员对话框
-        clearMVal2() {
-            this.memberForm2 = {
-                name: '',
-                property: '',
-                edu: ''
-            }
-        },
-        //清除 添加股权结构对话框
-        clearSVal1() {
-            this.structureFrom1 = {
-                name: '',
-                property: '',
-                capital: '',
-                num: '',
-                percent: ''
-            }
-        },
-        //清除 编辑股权结构对话框
-        clearSVal2() {
-            this.structureFrom2 = {
-                name: '',
-                property: '',
-                capital: '',
-                num: '',
-                percent: ''
-            }
         }
     },
     components: {

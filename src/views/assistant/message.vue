@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+    <div class="container">
         <section class="messageContainer">
             <!-- 这是详情页{{this.$route.params.userId}} -->
             <div class="messageContent" v-show="isShow">
@@ -41,18 +41,15 @@
                     </el-col>
                     <el-col :span="2">
                         <div class="messageBtn">
-                            <el-button type="danger" @click="jumpPool">
+                            <el-button type="danger" @click="dialogVisible=true">
                                 +项目池
                             </el-button>
                             <!-- 转项目池 dialog -->
-                            <el-dialog
-                                title="转项目池"
-                                :visible.sync="dialogVisible"
-                                size="tiny">
+                            <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="dialogVisible=false,confirm=true">确 定</el-button>
+                                    <el-button type="primary" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </div>
@@ -174,17 +171,7 @@
                 <img src="/static/img/close.png">
             </div>
             <div class="fileArea">
-                        不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 是简单地切换元素的 CSS 属性 display 。
-                        注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。
-                        惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。
-                        相比之下， v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。
-                        一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。
-                        v-if 与 v-for 一起使用
-
-                        当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。
-                        请查阅 列表渲染指南 以获取详细信息。
-                        ← Class 与 Style 绑定 列表渲染 →
-                        发现错误？想参与编辑？ 在 Github 上编辑此页！
+                不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。v-show 是简单地切换元素的 CSS 属性 display 。 注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。 惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。 相比之下， v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。 一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。 v-if 与 v-for 一起使用 当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。 请查阅 列表渲染指南 以获取详细信息。 ← Class 与 Style 绑定 列表渲染 → 发现错误？想参与编辑？ 在 Github 上编辑此页！
             </div>
         </section>
     </div>
@@ -200,7 +187,7 @@
         width: 100%;
         font-size: 14px;
         background: url(/static/img/mbg.png) no-repeat;
-        background-size:100% 100%;
+        background-size: 100% 100%;
         .messageContent {
             width: 93%;
             margin: 0 auto;
@@ -210,7 +197,7 @@
                 position: relative;
                 margin-bottom: 15px;
                 color: #fff;
-                .messageBrand img{
+                .messageBrand img {
                     width: 100px;
                     height: 100px;
                 }
@@ -294,24 +281,24 @@
         }
     }
     .viewFiles {
-         position: relative;
-         width: 100%;
-         padding: 20px 30px;
-         box-sizing: border-box;
-         background: #fff;
-         .closeView {
-             position: absolute;
-             right: -16px;
-             top: -16px;
-             cursor: pointer;
-             img {
-                 width: 35px;
-                 height: 35px;
-                 border: 1px solid  #fff;
-                 border-radius: 50%;
-                 background: #F05E5E;
-              }
-         }
+        position: relative;
+        width: 100%;
+        padding: 20px 30px;
+        box-sizing: border-box;
+        background: #fff;
+        .closeView {
+            position: absolute;
+            right: -16px;
+            top: -16px;
+            cursor: pointer;
+            img {
+                width: 35px;
+                height: 35px;
+                border: 1px solid #fff;
+                border-radius: 50%;
+                background: #F05E5E;
+            }
+        }
     }
 }
 </style>
@@ -384,13 +371,9 @@ export default {
             window.sessionStorage.setItem("tab" + this.$route.params.userId, this.activeName);
         },
         jumpPool() {
-            this.dialogVisible=true;
-            if(this.confirm) {
-               this.addTab('项目池', '/home/projectPool', 'projectPool');
-               this.$router.push({ name: 'projectPool' });
-            }
-            // this.addTab('项目池', '/home/projectPool', 'projectPool');
-            // this.$router.push({ name: 'projectPool' });
+            this.dialogVisible = true;
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
@@ -413,14 +396,14 @@ export default {
                 })
         },
         stateData() { //调用 actions 方法
-            this.$store.dispatch({type: 'increment'});
+            this.$store.dispatch({ type: 'increment' });
         }
     },
     created: function() {
         this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
     },
-    computed:{
-        textData(){
+    computed: {
+        textData() {
             return this.$store.state.textData;
         }
     }

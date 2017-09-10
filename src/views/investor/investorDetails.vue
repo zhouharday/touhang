@@ -5,7 +5,7 @@
             <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
             <el-col class="total" :span="21">
                 <el-row :gutter="20">
-                    <el-col :span="5" v-for="(item, index) of titleInfo.total">
+                    <el-col :span="5" v-for="(item, index) of titleInfo.total" :key="item.index">
                         <p class="desc">{{item.desc}}</p>
                         <p class="amount">{{item.amount}}<span class="unit">元</span></p>
                     </el-col>
@@ -26,7 +26,9 @@
         <el-tab-pane label="资金明细" name="fourth">
             <fundDetails></fundDetails>
         </el-tab-pane>
-        <el-tab-pane label="资金明细" name="five">定时任务补偿</el-tab-pane>
+        <el-tab-pane label="资金明细" name="five">
+            <visitingRecord></visitingRecord>
+        </el-tab-pane>
     </el-tabs>
 </div>
 </template>
@@ -36,6 +38,7 @@ import baseInfo from "./baseInfo"
 import investorDoc from './investorDoc'
 import agreement from "./agreement"
 import fundDetails from "./fundDetails"
+import visitingRecord from "./visitingRecord"
 export default {
     data() {
         return {
@@ -56,7 +59,8 @@ export default {
         baseInfo,
         investorDoc,
         agreement,
-        fundDetails
+        fundDetails,
+        visitingRecord
     }
 }
 </script>

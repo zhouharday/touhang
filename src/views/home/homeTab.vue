@@ -65,6 +65,7 @@ export default {
         }
     },
     methods: {
+        // linkFun($event, index, path, name) {
         linkFun($event,index,path) {
             // alert(2);
             if ($event.target.tagName == 'I') {
