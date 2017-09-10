@@ -23,12 +23,12 @@
           </el-col>
           <el-col :span="6" class="roleMang_tab_boder">
             <div class="grid-content bg-purple-dark">
-              <span>状态</span>
+              <span>状态: {{status}}</span>
             </div>
           </el-col>
           <el-col :span="6" class="roleMang_tab_boder">
             <div class="grid-content bg-purple-dark">
-              <el-select v-model="value4" clearable placeholder="请选择">
+              <el-select v-model="status" clearable placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
@@ -36,18 +36,129 @@
           </el-col>
         </el-row>
       </div>
+      <!-- Add userListFormData Diglog  -->
+      <el-dialog title="添加用户" :visible.sync="userListDialogFormVisible">
+        <el-form :model="userListFormData" ref="userListFormData" class="userListFormData">
+          <el-row :gutter="20">
+            <el-col :span="24">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="addPeople" label="添加人员" :label-width="formLabelWidth">
+                  <el-input v-model="userListFormData.addPeople" auto-complete="off"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
+          <div class="inforBackg">基本信息</div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="account" label="账号" :label-width="formLabelWidth">
+                  <el-input v-model="userListFormData.account" auto-complete="off"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="userName" label="姓名" :label-width="formLabelWidth">
+                  <el-input v-model="userListFormData.userName" auto-complete="off"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="rolePeople" label="角色" :label-width="formLabelWidth">
+                  <el-select v-model="userListFormData.rolePeople" placeholder="请选择" size="120%">
+                    <el-option v-for="item in roleSelect" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
+          <div class="inforBackg">个人信息</div>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="gender" label="性别" :label-width="formLabelWidth">
+                  <el-select v-model="userListFormData.gender" placeholder="请选择" size="100%">
+                    <el-option v-for="item in gender" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="birthday" label="生日" :label-width="formLabelWidth">
+                  <el-input v-model="userListFormData.birthday" auto-complete="off"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="phoneNumber" label="手机" :label-width="formLabelWidth">
+                  <el-input v-model="userListFormData.phoneNumber" auto-complete="off"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="grid-content bg-purple-dark">
+                <el-form-item prop="email" label="邮箱" :label-width="formLabelWidth">
+                  <el-input v-model="userListFormData.email" auto-complete="off"></el-input>
+                </el-form-item>
+              </div>
+            </el-col>
+          </el-row>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="userListDialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="pushRolTabData_L">确 定</el-button>
+        </div>
+      </el-dialog>
+
+      <el-row :gutter="20">
+        <el-col :span="24">
+          <div class="grid-content bg-purple-dark"></div>
+        </el-col>
+        <el-col :span="24">
+          <div class="grid-content bg-purple-dark"></div>
+        </el-col>
+      </el-row>
       <el-table id="userListTabData" :data="userListTabData" style="width: 100%" ref="userListTabData">
         <el-table-column prop="userName" label="姓名" align="center">
+          <template scope="scope">
+            <span class="cursor" v-if="!scope.row.editFlag">{{ scope.row.userName }}</span>
+            <span v-if="scope.row.editFlag" class="cell-edit-input">
+              <el-input v-model="scope.row.userName" placeholder=""></el-input>
+            </span>
+          </template>
         </el-table-column>
         <el-table-column prop="account" label="账号" align="center">
+          <template scope="scope">
+            <span class="cursor" v-if="!scope.row.editFlag">{{ scope.row.account }}</span>
+            <span v-if="scope.row.editFlag" class="cell-edit-input">
+              <el-input v-model="scope.row.account" placeholder=""></el-input>
+            </span>
+          </template>
         </el-table-column>
         <el-table-column prop="email" label="邮箱" align="center">
+          <template scope="scope">
+            <span class="cursor" v-if="!scope.row.editFlag">{{ scope.row.email }}</span>
+            <span v-if="scope.row.editFlag" class="cell-edit-input">
+              <el-input v-model="scope.row.email" placeholder=""></el-input>
+            </span>
+          </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button @click="edit" type="text" size="small">编辑</el-button>
-            <el-button @click="remove" type="text" size="small">锁定/启用</el-button>
-            <el-button @click="remove" type="text" size="small">密码初始化</el-button>
+            <el-button v-if="!scope.row.editFlag" :disabled="isDisabled" @click="editUserListTabData(scope.$index,scope.row)" type="text" size="small">编 辑</el-button>
+            <el-button v-if="scope.row.editFlag" @click="saveUserListTabData(scope.$index,scope.row)" type="text" size="small">保 存</el-button>
+            <el-button @click="locking" type="text" size="small">锁 定 &nbsp;&nbsp;/</el-button>
+            <el-button @click="Enabled" type="text" size="small">启 用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -60,42 +171,101 @@
 export default {
   data() {
     return {
+      locked: false, //是否锁定
+      isDisabled: false, //是否禁用按钮
+      status: '所有',
       options: [{
-        value: '选项1',
+        value: '所有',
         label: '所有'
       }, {
-        value: '选项2',
+        value: '启用',
         label: '启用'
       }, {
-        value: '选项3',
+        value: '锁定',
         label: '锁定'
       }],
-      value4: '所有',
       userListTabData: [
         {
           userName: "习近平",
           account: "12564998525215",
-          email: "12345678@qq.com"
+          email: "12345678@qq.com",
+          editFlag: false
         }
-      ]
+      ],
+      userListFormData: { //添加用户信息 form list
+        userName: "", //姓名
+        account: "", //账号
+        email: "", //邮箱
+        addPeople: "", //添加人员
+        rolePeople: "", //角色
+        gender: "", //性别
+        birthday: "", //生日
+        phoneNumber: "", //手机
+        editFlag: false
+      },
+      userListDialogFormVisible: false, //Diglog
+      roleSelect: [{ //角色 selectList
+        value: '黄金糕',
+        label: '黄金糕'
+      }, {
+        value: '双皮奶',
+        label: '双皮奶'
+      }, {
+        value: '蚵仔煎',
+        label: '蚵仔煎'
+      }, {
+        value: '龙须面',
+        label: '龙须面'
+      }, {
+        value: '北京烤鸭',
+        label: '北京烤鸭'
+      }],
+      role: '',
+      gender: '',
+      gender: [
+        {
+          value: '0',
+          label: '男'
+        },
+        {
+          value: '1',
+          label: '女'
+        },
+      ],
+      formLabelWidth: '',
+      formSelectLabelWidth: 200,
     }
   },
   methods: {
-    addTab(){
-      let tr = 
-      `<tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>`;
-      // this.$refs.userListTabData.append(tr);
-      console.log(this.$refs.userListTabData.toggleRowSelection());
-      let tab = document.getElementById('userListTabData');
-      // console.log(tab);
-      // tab.append(tr);
+    addTab() { //添加
+      // alert(1);
+      this.userListDialogFormVisible = true;
+      console.log('下面这个error(resetFields) 可以忽略!!!');
+      this.$refs.userListFormData.resetFields();
+    },
+    pushRolTabData_L() { //确定
+      this.userListTabData.push(this.userListFormData);
+      // console.log(this.userListFormData.rolePeople);
+      this.userListFormData = {};
+      this.userListDialogFormVisible = false;
+    },
+    editUserListTabData(index, row) { //编辑
+      if (this.locked == false) {
+        row.editFlag = true;
+      }
+    },
+    saveUserListTabData(index, row) { //保存
+      row.editFlag = false;
+    },
+    locking() { //锁定
+      this.isDisabled = true;
+      this.locked = true;
+    },
+    Enabled() { //启用
+    this.isDisabled = false;
+      this.locked = false;
     }
-  },
+  }
 }
 </script>
 
@@ -113,11 +283,18 @@ section {
     }
     .roleMang_tab {
       .roleMang_tab_boder {
-        border: 1px solid #cccccc;
+        // border: 1px solid #cccccc;
+        margin-bottom: 10px;
         height: 40px;
         line-height: 40px;
       }
-      .grid-content {}
+    }
+    .userListFormData {
+      .inforBackg {
+        height: 40px;
+        line-height: 40px;
+        background: #eff2f7;
+      }
     }
   }
 }

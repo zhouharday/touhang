@@ -20,18 +20,17 @@
             </el-table>
             <!-- 添加融资信息 对话框-->
             <el-dialog title="添加融资信息" :visible.sync="modalAdd1" :close-on-click-modal="false">
-                <el-form :model="capitalForm1">
-                    <el-form-item label="融资轮次" :label-width="formLabelWidth">
+                <el-form :model="capitalForm1" label-width="140px">
+                    <el-form-item label="融资轮次">
                         <el-input v-model="capitalForm1.round" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="融资方式" :label-width="formLabelWidth">
+                    <el-form-item label="融资方式">
                         <el-input v-model="capitalForm1.way" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="本轮融资金额（元）" :label-width="formLabelWidth">
+                    <el-form-item label="本轮融资金额（元）">
                         <el-input v-model="capitalForm1.capital" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="融资日期" :label-width="formLabelWidth">
-                        <!-- <el-input v-model="capitalForm1.date" auto-complete="off"></el-input> -->
+                    <el-form-item label="融资日期">
                         <el-date-picker type="date" placeholder="融资日期" v-model="capitalForm1.date" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
@@ -43,17 +42,17 @@
             </el-dialog>
             <!-- 编辑融资信息 对话框-->
             <el-dialog title="编辑融资信息" :visible.sync="modalAdd2" :close-on-click-modal="false">
-                <el-form :model="capitalForm2">
-                    <el-form-item label="融资轮次" :label-width="formLabelWidth">
+                <el-form :model="capitalForm2" label-width="140px">
+                    <el-form-item label="融资轮次">
                         <el-input v-model="capitalForm2.round" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="融资方式" :label-width="formLabelWidth">
+                    <el-form-item label="融资方式">
                         <el-input v-model="capitalForm2.way" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="本轮融资金额（元）" :label-width="formLabelWidth">
+                    <el-form-item label="本轮融资金额（元）">
                         <el-input v-model="capitalForm2.capital" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="融资日期" :label-width="formLabelWidth">
+                    <el-form-item label="融资日期">
                         <el-input v-model="capitalForm2.date" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
@@ -74,7 +73,6 @@ export default {
         return {
             modalAdd1: false,
             modalAdd2: false,
-            formLabelWidth: '80px',
             capitalData: [
                 {
                     round: '',

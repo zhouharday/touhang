@@ -5,19 +5,32 @@
             <tabel-header :data="headerInfo_cost" @add="costDialog"></tabel-header>
             <el-table :data="costData" border style="width: 100%" align="center">
                 <el-table-column label="费用类型" prop="costSort" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.costSort }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.costSort" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="金额（元）" prop="money" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.money }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.money" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="EditCost(scope.row)">编辑</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="edit(scope.$index,scope.row)">编辑</el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="save(scope.$index,scope.row)">保存</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,costData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!-- 添加项目费用 对话框-->
             <el-dialog title="添加项目费用" :visible.sync="costAdd1" :close-on-click-modal="false">
-                <el-form :model="costForm1" :label-width="formLabelWidth">
+                <el-form :model="costForm1" label-width="100px">
                     <el-form-item label="费用类型">
                         <el-input v-model="costForm1.costSort" auto-complete="off"></el-input>
                     </el-form-item>
@@ -30,104 +43,113 @@
                     <el-button type="primary" @click="confirmCostAdd1">确 定</el-button>
                 </div>
             </el-dialog>
-            <!-- 编辑项目费用 对话框-->
-            <el-dialog title="编辑项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
-                <el-form :model="costForm2" :label-width="formLabelWidth">
-                    <el-form-item label="费用类型">
-                        <el-input v-model="costForm2.costSort" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="金额（元）">
-                        <el-input v-model="costForm2.money" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="costAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmCostAdd2">确 定</el-button>
-                </div>
-            </el-dialog>
         </div>
 
         <!-- 项目合同 部分 -->
         <div class="fileTable">
             <tabel-header :data="headerInfo_contract" @add="contractDialog" class="title"></tabel-header>
-            <el-table :data="contractData" border style="width: 100%" align="center">
+            <el-table :data="contractData" border style="width: 100%" align="center" show-summary>
                 <el-table-column label="合同名称" prop="contractName" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.contractName }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.contractName" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="签约日期" prop="date" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.date }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.date" style="width: 100%;">
+                            </el-date-picker>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="合同金额（元）" prop="money" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.money }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.money" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="percent" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.percent }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.percent" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="合同附件" prop="appendix" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.appendix }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <!-- action 上传的地址，必填 -->
+                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="scope.row.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                <div style="padding: 20px 0">
+                                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                    <p>点击或将文件拖拽到这里上传</p>
+                                </div>
+                            </Upload>
+                            <!-- <el-input v-model="scope.row.appendix" placeholder=""></el-input> -->
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="EditContract(scope.row)">编辑</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="edit(scope.$index,scope.row)">编辑</el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="save(scope.$index,scope.row)">保存</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,contractData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 添加项合同 对话框-->
+            <!-- 添加项目合同 对话框-->
             <el-dialog title="添加项目合同" :visible.sync="contractAdd1" :close-on-click-modal="false">
-                <el-form :model="contractForm1" :label-width="formLabelWidth">
-                    <el-form-item label="合同名称">
-                        <el-input v-model="contractForm1.contractName" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="签约日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.date" style="width: 100%;">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="合同金额（元）">
-                        <el-input v-model="contractForm1.money" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="股权占比（%）">
-                        <el-input v-model="contractForm1.percent" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="合同附件">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
-                    </el-form-item>
+                <el-form :model="contractForm1" label-width="110px">
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="合同名称">
+                                <el-input v-model="contractForm1.contractName" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span="12">
+                            <el-form-item label="签约日期">
+                                <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.date" style="width: 100%;">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span="12">
+                            <el-form-item label="合同金额（元）">
+                                <el-input v-model="contractForm1.money" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span="12">
+                            <el-form-item label="股权占比（%）">
+                                <el-input v-model="contractForm1.percent" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col>
+                            <el-form-item label="合同附件">
+                                <!-- action 上传的地址，必填 -->
+                                <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
+                                    <div style="padding: 20px 0">
+                                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                        <p>点击或将文件拖拽到这里上传</p>
+                                    </div>
+                                </Upload>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="contractAdd1 = false">取 消</el-button>
                     <el-button type="primary" @click="confirmContractAdd1">确 定</el-button>
-                </div>
-            </el-dialog>
-            <!-- 编辑项目合同 对话框-->
-            <el-dialog title="编辑项目合同" :visible.sync="contractAdd2" :close-on-click-modal="false">
-                <el-form :model="contractForm2" :label-width="formLabelWidth">
-                    <el-form-item label="合同名称">
-                        <el-input v-model="contractForm2.contractName" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="签约日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm2.date" style="width: 100%;">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="合同金额（元）">
-                        <el-input v-model="contractForm2.money" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="股权占比（%）">
-                        <el-input v-model="contractForm2.percent" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="合同附件">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="contractAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmContractAdd2">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -135,27 +157,59 @@
         <!-- 投资支付 部分 -->
         <div class="fileTable">
             <tabel-header :data="headerInfo_paid" @add="paidDialog" class="title"></tabel-header>
-            <el-table :data="paidData" border style="width: 100%" align="center">
+            <el-table :data="paidData" border style="width: 100%" align="center" show-summary>
                 <el-table-column label="基金名称" prop="foundName" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.foundName }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.foundName" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="投资金额（元）" prop="capitalMoney" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.capitalMoney }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.capitalMoney" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="percent" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.percent }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.percent" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="实缴金额（元）" prop="paidMoney" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.paidMoney }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.paidMoney" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="支付日期" prop="paidDate" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.paidDate }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.paidDate" style="width: 100%;">
+                            </el-date-picker>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="EditPaid(scope.row)">编辑</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="edit(scope.$index,scope.row)">编辑</el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="save(scope.$index,scope.row)">保存</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,paidData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!-- 添加投资支付 对话框-->
             <el-dialog title="添加投资支付" :visible.sync="paidAdd1" :close-on-click-modal="false">
-                <el-form :model="paidForm1" :label-width="formLabelWidth">
+                <el-form :model="paidForm1" label-width="110px">
                     <el-form-item label="基金名称">
                         <el-input v-model="paidForm1.foundName" auto-complete="off"></el-input>
                     </el-form-item>
@@ -178,37 +232,12 @@
                     <el-button type="primary" @click="confirmPaidAdd1">确 定</el-button>
                 </div>
             </el-dialog>
-            <!-- 编辑投资支付 对话框-->
-            <el-dialog title="编辑投资支付" :visible.sync="paidAdd2" :close-on-click-modal="false">
-                <el-form :model="paidForm2" :label-width="formLabelWidth">
-                    <el-form-item label="基金名称">
-                        <el-input v-model="paidForm2.foundName" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="投资金额（元）">
-                        <el-input v-model="paidForm2.capitalMoney" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="股权占比（%）">
-                        <el-input v-model="paidForm2.percent" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="实缴金额（元）">
-                        <el-input v-model="paidForm2.paidMoney" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="支付日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm2.paidDate" style="width: 100%;">
-                        </el-date-picker>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="paidAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmPaidAdd2">确 定</el-button>
-                </div>
-            </el-dialog>
         </div>
 
         <!--  项目分红 部分-->
         <div class="fileTable">
             <tabel-header :data="headerInfo_sharing" @add="sharingDialog" class="title"></tabel-header>
-            <el-table :data="sharingData" border style="width: 100%" align="center">
+            <el-table :data="sharingData" border style="width: 100%" align="center" show-summary>
                 <el-table-column label="基金名称" prop="foundName" align="center">
                 </el-table-column>
                 <el-table-column label="投资金额（元）" prop="capitalMoney" align="center">
@@ -228,7 +257,7 @@
             </el-table>
             <!-- 添加项目分红 对话框-->
             <el-dialog title="添加项目分红" :visible.sync="sharingAdd1" :close-on-click-modal="false">
-                <el-form :model="sharingForm1" :label-width="formLabelWidth">
+                <el-form :model="sharingForm1" label-width="110px">
                     <el-form-item label="基金名称">
                         <el-input v-model="sharingForm1.foundName" auto-complete="off"></el-input>
                     </el-form-item>
@@ -253,7 +282,7 @@
             </el-dialog>
             <!-- 编辑项目分红 对话框-->
             <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
-                <el-form :model="sharingForm2" :label-width="formLabelWidth">
+                <el-form :model="sharingForm2" label-width="110px">
                     <el-form-item label="基金名称">
                         <el-input v-model="sharingForm2.foundName" auto-complete="off"></el-input>
                     </el-form-item>
@@ -281,7 +310,7 @@
         <!-- 项目退出 部分 -->
         <div class="fileTable">
             <tabel-header :data="headerInfo_outing" @add="outingDialog" class="title"></tabel-header>
-            <el-table :data="outingData" border style="width: 100%" align="center">
+            <el-table :data="outingData" border style="width: 100%" align="center"  show-summary>
                 <el-table-column label="合同名称" prop="contractName" align="center">
                 </el-table-column>
                 <el-table-column label="合同金额（元）" prop="contractMoney" align="center">
@@ -301,7 +330,7 @@
             </el-table>
             <!-- 添加项目退出 对话框-->
             <el-dialog title="添加项目退出" :visible.sync="outingAdd1" :close-on-click-modal="false">
-                <el-form :model="outingForm1" :label-width="formLabelWidth">
+                <el-form :model="outingForm1" label-width="110px">
                     <el-form-item label="合同名称">
                         <el-input v-model="outingForm1.contractName" auto-complete="off"></el-input>
                     </el-form-item>
@@ -326,7 +355,7 @@
             </el-dialog>
             <!-- 编辑项目退出 对话框-->
             <el-dialog title="编辑项目退出" :visible.sync="outingAdd2" :close-on-click-modal="false">
-                <el-form :model="outingForm2" :label-width="formLabelWidth">
+                <el-form :model="outingForm2" label-width="110px">
                     <el-form-item label="合同名称">
                         <el-input v-model="outingForm2.contractName" auto-complete="off"></el-input>
                     </el-form-item>
@@ -361,11 +390,8 @@ export default {
         return {
             formLabelWidth: '80px',
             costAdd1: false,
-            costAdd2: false,
             contractAdd1: false,
-            contractAdd2: false,
             paidAdd1: false,
-            paidAdd2: false,
             sharingAdd1: false,
             sharingAdd2: false,
             outingAdd1: false,
@@ -373,15 +399,13 @@ export default {
             //项目费用
             costForm1: {
                 costSort: '',
-                money: ''
-            },
-            costForm2: {
-                costSort: '',
-                money: ''
+                money: '',
+                editFlag: false
             },
             costData: [{
                 costSort: '',
-                money: ''
+                money: '',
+                editFlag: false
             },
             {
                 costSort: '',
@@ -399,20 +423,16 @@ export default {
                 contractName: '',
                 date: '',
                 money: '',
-                percent: ''
-            },
-            contractForm2: {
-                contractName: '',
-                date: '',
-                money: '',
-                percent: ''
+                percent: '',
+                editFlag: false
             },
             contractData: [{
                 contractName: '',
                 date: '',
                 money: '',
                 percent: '',
-                appendix: ''
+                appendix: '',
+                editFlag: false
             }],
             headerInfo_contract: {
                 desc: '项目合同',
@@ -427,14 +447,8 @@ export default {
                 capitalMoney: '',
                 percent: '',
                 paidMoney: '',
-                paidDate: ''
-            },
-            paidForm2: {
-                foundName: '',
-                capitalMoney: '',
-                percent: '',
-                paidMoney: '',
-                paidDate: ''
+                paidDate: '',
+                editFlag: false
             },
             paidData: [
                 {
@@ -442,13 +456,15 @@ export default {
                     capitalMoney: '',
                     percent: '',
                     paidMoney: '10,000',
-                    paidDate: '2017-9-9'
+                    paidDate: '2017-9-9',
+                    editFlag: false
                 }, {
                     foundName: 'AA基金',
                     capitalMoney: '',
                     percent: '',
                     paidMoney: '10,000',
-                    paidDate: '2017-9-9'
+                    paidDate: '2017-9-9',
+                    editFlag: false
                 }
             ],
             headerInfo_paid: {
@@ -542,32 +558,31 @@ export default {
             this.costAdd1 = true
         },
         confirmCostAdd1() {
-            this.costAdd1 = false;
             this.costData.push(this.costForm1);
+            this.costForm1 = {};
+            this.costAdd1 = false;
         },
         // 编辑 项目费用 的方法
-        EditCost(row) {
-            this.costAdd2 = true;
+        edit(index, row) { //编辑
+            row.editFlag = true;
         },
-        confirmCostAdd2() {
-            this.costAdd2 = false;
+        save(index, row) { //编辑后保存
+            // console.log(row);
+            row.editFlag = false;
         },
+
 
         // 添加 项目合同 的方法
         contractDialog() {
             this.contractAdd1 = true
         },
         confirmContractAdd1() {
-            this.contractAdd1 = false;
             this.contractData.push(this.contractForm1);
+            this.contractForm1 = {};
+            this.contractAdd1 = false;
+
         },
-        // 编辑 项目合同 的方法
-        EditContract(row) {
-            this.contractAdd2 = true;
-        },
-        confirmContractAdd2() {
-            this.contractAdd2 = false;
-        },
+
 
 
         // 添加 投资支付 的方法
@@ -575,15 +590,9 @@ export default {
             this.paidAdd1 = true
         },
         confirmPaidAdd1() {
-            this.paidAdd1 = false;
             this.paidData.push(this.paidForm1);
-        },
-        // 编辑 投资支付 的方法
-        EditPaid(row) {
-            this.paidAdd2 = true;
-        },
-        confirmPaidAdd2() {
-            this.paidAdd2 = false;
+            this.paidForm1 = {};
+            this.paidAdd1 = false;
         },
 
 
@@ -604,7 +613,7 @@ export default {
         },
 
 
-         // 添加 项目退出 的方法
+        // 添加 项目退出 的方法
         outingDialog() {
             this.outingAdd1 = true
         },
@@ -624,8 +633,7 @@ export default {
         //删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
-        },
-
+        }
     },
     components: {
         tabelHeader

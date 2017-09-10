@@ -1,21 +1,19 @@
 <template>
-    <div class="zpoolMessage">
+    <div class="wpoolMessage">
         <div class="title">
             <div class="left">
                 <span class="desc">{{title}}</span>
-                <el-button class="state">{{state}}</el-button>
             </div>
             <div class="right">
-                <el-button type="danger" @click="dialogVisible=true">投资</el-button>
-                <el-button type="danger">观察</el-button>
-                <el-button type="danger">淘汰</el-button>
+                <el-button type="danger" @click="dialogVisible=true">入项目池</el-button>
+                <el-button type="danger" @click="jumpAdd">返回</el-button>
             </div>
             <!-- 确认转项目池 dialog -->
-            <el-dialog title="转投资" :visible.sync="dialogVisible" size="tiny">
-                <span>确认将该项目转投资？</span>
+            <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
+                <span>确认将该项目转入项目池？</span>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible=false">取 消</el-button>
-                    <el-button type="primary" @click="jumpPre">确 定</el-button>
+                    <el-button type="primary" @click="jumpPool">确 定</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -32,12 +30,6 @@
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
                     <capital-table></capital-table>
                 </el-tab-pane>
-                <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form></record-form>
-                </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
-                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
@@ -47,13 +39,10 @@ import detailForm from './details'
 import tableForm from './tables'
 import industryForm from './industry'
 import capitalTable from './capital'
-import recordForm from './record'
-import fileTable from './file'
 export default {
     data() {
         return {
             title: '双子金服投资项目',
-            state: '正常',
             dialogVisible: false,
             activeName: 'details',
             basicForm: {
@@ -75,14 +64,16 @@ export default {
         tableForm,
         industryForm,
         capitalTable,
-        recordForm,
-        fileTable
-
     },
     methods: {
-        jumpPre() {
-            this.addTab('投前项目', '/home/preProject', 'preProject');
-            this.$router.push({ name: 'preProject' });
+        jumpPool() {
+            this.dialogVisible = false;
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
+        },
+        jumpAdd() {
+            this.addTab('添加项目', '/home/addProject', 'addProject');
+            this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
@@ -96,7 +87,7 @@ export default {
 
 
 <style lang="less" scoped>
-.zpoolMessage {
+.wpoolMessage {
     width: 100%;
     /*height: 100%;*/
     background-color: #fff;
@@ -117,10 +108,6 @@ export default {
                 font-weight: 600;
                 color: #fff;
                 vertical-align: top;
-            }
-            .state {
-                margin-left: 24px;
-                vertical-align: middle;
             }
         }
         .right {

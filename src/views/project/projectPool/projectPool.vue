@@ -2,13 +2,13 @@
     <div class="poolContent">
         <!-- 状态ul -->
         <el-row class="common">
-            <el-col :span="24" style="margin-top:20px">
+            <el-col :span="1">
+                <div class="tag">状态：</div>
+            </el-col>
+            <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" 
-                            :key="item.index" 
-                            :class="{active: index==currentIndex1,fow: index==0}"
-                            @click="changeActive(index,1)">
+                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
                             {{item.states}}
                         </li>
                     </ul>
@@ -17,44 +17,44 @@
         </el-row>
         <!-- 行业ul -->
         <el-row class="common">
-            <el-col :span="24">
+            <el-col :span="1">
+                <div class="tag_s">行业：</div>
+            </el-col>
+            <el-col :span="23">
                 <div class="industry-ul" :class="{ changeList: !btnObject.uptriangle }">
                     <ul ref="industry">
-                        <li v-for="(item,index) in industryList" 
-                            :key="item.index" 
-                            :class="{active: index==currentIndex2,fow: index==0}"
-                            @click="changeActive(index,2)">
+                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex2}" @click="changeActive(index,2)">
                             {{item.details}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject.uptriangle }" class="collapse-btn" @click="changeList">
                             <span :class="btnObject"></span>
                             {{collapseBtn1}}
                         </button>
-                     </ul>
+                    </ul>
                 </div>
             </el-col>
         </el-row>
         <!--搜索框 -->
         <el-row class="search-box">
-           <el-col :span="5">
-               <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
-               </el-input>
-           </el-col> 
-           <el-col :span="4" class="addProject">
+            <el-col :span="5">
+                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
+                </el-input>
+            </el-col>
+            <el-col :span="4" class="addProject">
                 <div @click="addProject">
-                   <img src="/static/img/icon--添加项目.png">
-                   <span>添加项目</span>
-               </div>
-           </el-col>
+                    <img src="/static/img/icon--添加项目.png">
+                    <span>添加项目</span>
+                </div>
+            </el-col>
         </el-row>
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目名称" align="center">
-                            <template scope="scope">
-                                <a class="project" @click="ShowPoolMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
-                            </template>
+                        <template scope="scope">
+                            <a class="project" @click="ShowPoolMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="mananger" label="项目创建人" align="center">
                     </el-table-column>
@@ -65,25 +65,33 @@
                     <el-table-column prop="stage" label="项目阶段" align="center">
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
-                            <template scope="scope">
-                                <el-button type="text" size="small" @click="jumpPre">
-                                    转投资
-                                </el-button>
-                                <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
-                                    删除
-                                </el-button>
-                            </template>
+                        <template scope="scope">
+                            <el-button type="text" size="small" @click="dialogVisible=true">
+                                转投资
+                            </el-button>
+                            <el-button type="text" size="small" @click="deleteRow(scope.$index,tableData)">
+                                删除
+                            </el-button>
+                            <!-- 确认转项目池 dialog -->
+                            <el-dialog title="转投资" :visible.sync="dialogVisible" size="tiny">
+                                <span>确认将该项目转投资？</span>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="primary" @click="jumpPre">确 定</el-button>
+                                </span>
+                            </el-dialog>
+                        </template>
                     </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
-        <el-row type="flex"  align="bottom" class="page" >
-           <el-col :span="8">
-               <span>总记录：{{this.total}}条</span> 
-           </el-col>
-           <el-col :span="16">
-               <Page :total="128" :current="13" style="float:right"></Page>
-           </el-col>    
+        <el-row type="flex" align="bottom" class="page">
+            <el-col :span="8">
+                <span>总记录：{{this.total}}条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page :total="128" :current="13" style="float:right"></Page>
+            </el-col>
         </el-row>
     </div>
 </template>
@@ -125,7 +133,16 @@
     top: 0;
 }
 
-.fow {
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tag_s {
+    margin-bottom: 5px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -176,10 +193,10 @@
             color: #F05E5E;
             cursor: pointer;
             span {
-              position: absolute;
-              top: 2px;
-              left: 30px;
-              border-bottom: 1px solid #F05E5E;
+                position: absolute;
+                top: 2px;
+                left: 30px;
+                border-bottom: 1px solid #F05E5E;
             }
         }
     }
@@ -206,14 +223,14 @@ export default {
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
-            currentIndex1: 1,
-            currentIndex2: 1,
+            currentIndex1: 0,
+            currentIndex2: 0,
+            dialogVisible: false,
             btnObject: {
                 uptriangle: true,
                 downtriangle: false
             },
             stateList: [
-                { states: "状态：" },
                 { states: "全部" },
                 { states: "正常" },
                 { states: "观察" },
@@ -221,7 +238,6 @@ export default {
                 { states: "淘汰" }
             ],
             industryList: [
-                { details: "行业：" },
                 { details: "全部" },
                 { details: "电商" },
                 { details: "社交" },
@@ -296,7 +312,7 @@ export default {
                     id: 5
                 },
                 {
-                     project: '欧利',
+                    project: '欧利',
                     mananger: '张经理',
                     industry: '外汇',
                     sort: '定增',
@@ -304,7 +320,7 @@ export default {
                     id: 6
                 },
                 {
-                     project: '上上墅',
+                    project: '上上墅',
                     mananger: '张经理',
                     industry: '房地产',
                     sort: '定增',
@@ -339,32 +355,32 @@ export default {
             }
             return '';
         },
-        ShowPoolMessage(title,ind) {
+        ShowPoolMessage(title, ind) {
             this.index = ind;
-            this.addTab( title.project + '详情页', '/home/zprojectPoolMessage/'+ind, "zprojectPoolMessage"+ind );
+            this.addTab(title.project + '详情页', '/home/zprojectPoolMessage/' + ind, "zprojectPoolMessage" + ind);
             // this.addTab( title.project + '详情页', 'zprojectPoolMessage/'+ind, 'zprojectPoolMessage/'+ind );
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
             // this.$router.push({ path: 'zprojectPoolMessage/'+ind, params: { userId: ind } });
         },
         jumpPre() {
-            this.addTab('投前项目','/home/preProject','preProject');
-            this.$router.push({ name:'preProject' });
+            this.addTab('投前项目', '/home/preProject', 'preProject');
+            this.$router.push({ name: 'preProject' });
         },
         addProject() {
-            this.addTab('添加项目','/home/addProject','addProject');
-            this.$router.push({ name:'addProject' });
+            this.addTab('添加项目1', '/home/addProject', 'addProject');
+            this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        deleteRow(index,rows) {
-           rows.splice(index,1);
+        deleteRow(index, rows) {
+            rows.splice(index, 1);
         },
-        changeActive(index,ind) {
-            if(ind==1) {
-                 this.currentIndex1=index;
+        changeActive(index, ind) {
+            if (ind == 1) {
+                this.currentIndex1 = index;
             } else {
-                this.currentIndex2=index;
+                this.currentIndex2 = index;
             }
         }
     }
