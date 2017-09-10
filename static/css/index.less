@@ -1,18 +1,24 @@
 /************************************/
 
 .Task {
-    .el-dialog--small{
+    .el-dialog--small {
         width: 880px;
     }
-    .el-date-editor.el-input{
+    .el-date-editor.el-input {
         width: 100%;
     }
 }
 
-@color:#f05e5e;
-@c1:#515511;
-@c2:#888888;
-@c3:#acacac;
+#roleManger {
+    .cursor {
+        cursor: pointer;
+    }
+}
+
+@color: #f05e5e;
+@c1: #515511;
+@c2: #888888;
+@c3: #acacac;
 //日期选择
 #month {
     width: 100%;
@@ -46,7 +52,6 @@
                     font-size: 16px;
                     color: @c2;
                     line-height: 30px;
-                    
                 }
                 >i {
                     display: block;
@@ -68,15 +73,14 @@
                     &.i3 {
                         margin-left: 20px;
                         margin-right: 10px;
-                    }
-                    // &.i4 {}
+                    } // &.i4 {}
                 }
             }
             &.week_title {
                 color: @c3;
                 >span {
                     border-top: none;
-                    &.actives{
+                    &.actives {
                         color: @color;
                     }
                 }
@@ -104,7 +108,7 @@
                     margin: 0 auto;
                     border-radius: 50%;
                     cursor: pointer;
-                    &.actives{
+                    &.actives {
                         color: @color;
                     }
                     &.active {
@@ -140,7 +144,6 @@
 .el-input__inner {
     -webkit-appearance: none;
     -moz-appearance: none;
-   
     background-color: #fff;
     background-image: none;
     border-radius: 4px;
@@ -156,7 +159,8 @@
     transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     width: 100%;
 }
-button{
+
+button {
     // &:hover{
     //     background: #803f3f;
     // }
@@ -164,10 +168,11 @@ button{
     //     background: #f05e5e;
     // }
 }
-#zTree{
-    li{
-        >a{
-            >span{
+
+#zTree {
+    li {
+        >a {
+            >span {
                 color: #ffffff;
                 font-size: 15px;
             }

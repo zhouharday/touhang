@@ -144,23 +144,26 @@ export default {
     methods: {
         addMenu(index, row) { //添加
             this.dialogFormVisible1 = true;
+            console.log('下面这个error(resetFields) 可以忽略!!!');
+            this.$refs.addFormData.resetFields();
         },
         edit(index, row) { //编辑
             // console.log(row)
             row.editFlag = true;
+        },
+        save(index, row) { //编辑后保存
+            // console.log(row);
+            row.editFlag = false;
         },
         remove(index, rows) { //删除
             rows.splice(index, 1);
         },
         determin() { //确定
             this.featuresTabData.push(this.addFormData);
-            // this.$refs['addFormData'].resetFields();
             this.addFormData = {};
             this.dialogFormVisible1 = false;
-        },
-        save(index, row) { //编辑后保存
-            // console.log(row);
-            row.editFlag = false;
+            // this.$refs.addFormData.resetFields();
+            // this.$refs['addFormData'].resetFields();
         },
     },
 }
