@@ -20,7 +20,7 @@
       </el-row>
       <!-- 新增客户信息 Dialog -->
       <el-dialog title="新增客户" :visible.sync="addCustomerDialogFormVisible">
-        <el-form class="addCustomerFormData" :model="addCustomerFormData" ref="addCustomerFormDatas">
+        <el-form class="addCustomerFormData" :model="addCustomerFormData" ref="addCustomerFormData">
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
@@ -221,7 +221,7 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button v-if="!scope.row.editFlag" @click="Edit(scope.$index,scope.row)" type="text" size="small">编 辑</el-button>
+            <el-button v-if="!scope.row.editFlag" :disabled="scope.row.status == '锁定'" @click="Edit(scope.$index,scope.row)" type="text" size="small">编 辑</el-button>
             <el-button v-if="scope.row.editFlag" @click="Edit(scope.$index,scope.row)" type="text" size="small">保 存</el-button>
             <el-button @click="locking(scope.$index,scope.row)" type="text" size="small">锁 定 &nbsp;&nbsp;/</el-button>
             <el-button @click="Enabled(scope.$index,scope.row)" type="text" size="small">启 用</el-button>
@@ -243,7 +243,7 @@ export default {
         openDate: '', //开通日期
         expiryDate: '', //到期日期
         type: '', //类型
-        status: '', //状态
+        status: '启用', //状态
         officeAddress: "", //办公地址
         companyEmail: "", //公司邮箱
         contactPerson: "", //联系人
@@ -254,7 +254,7 @@ export default {
         legalRepresen: "", //法人代表
         lrIDNumber: "", //法人代表身份证号
         address: "", //*详细地址
-        editFlag: false
+        editFlag: false, //是否可编辑
       },
       isDisabled: false,
       locked: false,
@@ -263,63 +263,53 @@ export default {
   },
   methods: {
     addCustomer() { //Add 新客户
+      // let new_addCustomerFormData = {
+      //     clientName: '', //客户名称
+      //     account: '', //账号
+      //     openDate: '', //开通日期
+      //     expiryDate: '', //到期日期
+      //     type: '', //类型
+      //     status: '启用', //状态
+      //     officeAddress: "", //办公地址
+      //     companyEmail: "", //公司邮箱
+      //     contactPerson: "", //联系人
+      //     contactPhone: "", //联系电话
+      //     relatedDoc: "", //相关文档
+      //     remarks: "", //备注
+      //     uscc: "", //*统一社会信用代码
+      //     legalRepresen: "", //法人代表
+      //     lrIDNumber: "", //法人代表身份证号
+      //     address: "", //*详细地址
+      //     editFlag: false
+      //   };
+      // for( let i in this.addCustomerFormData ){
+      //   this.addCustomerFormData[i] = '';
+      // }
+      // for( let i in new_addCustomerFormData ){
+      //   new_addCustomerFormData[i] = '';
+      // }
+      let new_addCustomerFormData = new Object;
+      new_addCustomerFormData = this.addCustomerFormData;
+      // console.log(this.addCustomerFormData);
+      // console.log(this.addCustomerFormData);
+      this.addCustomerFormData = new_addCustomerFormData;
       this.addCustomerDialogFormVisible = true;
-      // console.log('下面这个error(resetFields) 可以忽略!!!');
-      this.$refs.addCustomerFormDatas.resetFields();
-      this.addCustomerFormData.editFlag = false;
-      // this.addCustomerFormData = {};
+      // this.$refs.addCustomerFormData.resetFields();
     },
     saveCustomerDialogForm() { //保存新增客户列表
-      // this.newsFormData.status = '未发布';
-
-      this.addCustomerFormData.editFlag = false;
-      this.addCustomerFormData.status = '启用';
-      // this.addCustomerFormData.isDisabled = false;
       this.addCustomerTabData.push(this.addCustomerFormData);
-      console.log(this.addCustomerFormData);
-      for (let key in this.addCustomerFormData) {
-        console.log(this.addCustomerFormData['editFlag']);
-        // key[editFlag] = false;
-      }
       this.addCustomerFormData = {};
-      // this.$refs.addCustomerFormDatas.resetFields();
+      // this.$refs.addCustomerFormData.resetFields();
       this.addCustomerDialogFormVisible = false;
     },
     Edit(index, row) { //编辑
-      // row.editFlag = false;
-      // this.addCustomerFormData.editFlag = false;
-      console.log(row.editFlag);
-      // if (this.locked == false) {
-      // return row.editFlag = !row.editFlag;
-      // if (row.editFlag == true) {
-      //   row.editFlag = false;
-      // } else {
-      //   // alert(1);
-        // row.isDisabled = true;
-        row.editFlag = !row.editFlag;
-        console.log(row.editFlag);
-      // }
-      // // }
+      row.editFlag = !row.editFlag;
     },
-    // save(index, row) { //保存
-    //   console.log(row);
-    //   if( row.editFlag == true ){
-    //       row.editFlag = false;
-    //     } else {
-    //       row.editFlag = true;
-
-    //     }
-    // },
     locking(index, row) { //锁定
       row.status = "锁定";
-      console.log(row);
-      this.isDisabled = true;
-      // this.locked = true;
     },
     Enabled(index, row) { //启用
       row.status = '启用';
-      this.isDisabled = false;
-      // this.locked = false;
     }
   }
 }
