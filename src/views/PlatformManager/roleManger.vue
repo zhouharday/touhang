@@ -29,10 +29,10 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <el-table @cell-click="roleEdit(row, column, cell, event)" :data="rolTabData_L" border style="width: 100%" align="center">
+            <el-table :data="rolTabData_L" border style="width: 100%" align="center">
               <el-table-column prop="roleName" label="角色名称" width="" align="center">
                 <template scope="scope">
-                  <span class="cursor" v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
+                  <span class="cursor" @click="roleEdit(row, column, cell, event)" v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
                   <span v-if="scope.row.editFlag" class="cell-edit-input">
                     <el-input v-model="scope.row.roleName" placeholder=""></el-input>
                   </span>
@@ -40,8 +40,8 @@
               </el-table-column>
               <el-table-column label="操作" width="" align="center">
                 <template scope="scope" v-show=" scope.$index != '0' ">
-                  <el-button v-if="!scope.row.editFlag" v-show="scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">编辑</el-button>
-                  <el-button v-if="scope.row.editFlag" v-show="scope.$index != '0'" @click="saveSelecttionTab(scope.$index,scope.row)" type="text" size="small">保存</el-button>
+                  <el-button v-if="!scope.row.editFlag && scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">编辑</el-button>
+                  <el-button v-if="scope.row.editFlag && scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">保存</el-button>
                   <el-button v-show="scope.$index != '0'" @click="remove(scope.$index,rolTabData_L)" type="text" size="small">删除</el-button>
                 </template>
               </el-table-column>
@@ -103,13 +103,15 @@ export default {
         { roleName: "账号管理", check: false },
       ],
       multipleSelection: [],
-      // isCheck: true
-
     }
   },
   methods: {
-    roleEdit(row, column, cell, event) {
+    roleEdit(row, column, cell, $event) {
       // alert(1001);
+      // console.log(row);
+      // console.log(column);
+      // console.log(cell);
+      // console.log($event);
       this.rolTabData_R.forEach(item => {
         item.check = true;
       });
@@ -121,18 +123,16 @@ export default {
     },
     addBtn() { //添加
       // alert(111);
+      let new_rolFormData_L = { roleName: "", editFlag: false };
+      this.rolFormData_L = new_rolFormData_L;
       this.rolFormDialog = true;
-      console.log('下面这个error(resetFields) 可以忽略!!!');
-      this.$refs.rolFormData_L.resetFields();
     },
     remove(index, rows) { //删除
       rows.splice(index, 1);
     },
     editSelecttionTab(index, row) { //编辑
-      row.editFlag = true;
-    },
-    saveSelecttionTab(index, row) { //保存
-      row.editFlag = false;
+    // alert(1002);
+      row.editFlag = !row.editFlag;
     },
     handleSelectionChange(val) { //选中的数据
       this.multipleSelection = val;
