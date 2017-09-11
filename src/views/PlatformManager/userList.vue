@@ -155,10 +155,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button v-if="!scope.row.editFlag" :disabled="isDisabled" @click="editUserListTabData(scope.$index,scope.row)" type="text" size="small">编 辑</el-button>
-            <el-button v-if="scope.row.editFlag" @click="saveUserListTabData(scope.$index,scope.row)" type="text" size="small">保 存</el-button>
-            <el-button @click="locking" type="text" size="small">锁 定 &nbsp;&nbsp;/</el-button>
-            <el-button @click="Enabled" type="text" size="small">启 用</el-button>
+            <el-button :disabled="scope.row.locked == true" v-if="!scope.row.editFlag" @click="editUserListTabData(scope.$index,scope.row)" type="primary" size="small">编 辑</el-button>
+            <el-button v-if="scope.row.editFlag" @click="editUserListTabData(scope.$index,scope.row)" type="primary" size="small">保 存</el-button>
+            <el-button @click="checkLocking(scope.$index,scope.row)" type="primary" size="small">锁 定</el-button>
+            <el-button @click="checkLocking(scope.$index,scope.row)" type="primary" size="small">启 用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -189,7 +189,8 @@ export default {
           userName: "习近平",
           account: "12564998525215",
           email: "12345678@qq.com",
-          editFlag: false
+          editFlag: false,
+          locked: false,
         }
       ],
       userListFormData: { //添加用户信息 form list
@@ -201,7 +202,8 @@ export default {
         gender: "", //性别
         birthday: "", //生日
         phoneNumber: "", //手机
-        editFlag: false
+        editFlag: false,
+        locked: false,
       },
       userListDialogFormVisible: false, //Diglog
       roleSelect: [{ //角色 selectList
@@ -239,9 +241,22 @@ export default {
   methods: {
     addTab() { //添加
       // alert(1);
+      let new_userListFormData = {
+        userName: "", //姓名
+        account: "", //账号
+        email: "", //邮箱
+        addPeople: "", //添加人员
+        rolePeople: "", //角色
+        gender: "", //性别
+        birthday: "", //生日
+        phoneNumber: "", //手机
+        editFlag: false,
+        locked: false,
+      };
+      this.userListFormData = new_userListFormData;
       this.userListDialogFormVisible = true;
-      console.log('下面这个error(resetFields) 可以忽略!!!');
-      this.$refs.userListFormData.resetFields();
+      // console.log('下面这个error(resetFields) 可以忽略!!!');
+      // this.$refs.userListFormData.resetFields();
     },
     pushRolTabData_L() { //确定
       this.userListTabData.push(this.userListFormData);
@@ -250,21 +265,16 @@ export default {
       this.userListDialogFormVisible = false;
     },
     editUserListTabData(index, row) { //编辑
-      if (this.locked == false) {
-        row.editFlag = true;
+      if (row.locked == false) {
+        row.editFlag = !row.editFlag;
       }
     },
-    saveUserListTabData(index, row) { //保存
-      row.editFlag = false;
+    // saveUserListTabData(index, row) { //保存
+    //   row.editFlag = false;
+    // },
+    checkLocking(index,row) { //锁定
+      row.locked = !row.locked;
     },
-    locking() { //锁定
-      this.isDisabled = true;
-      this.locked = true;
-    },
-    Enabled() { //启用
-    this.isDisabled = false;
-      this.locked = false;
-    }
   }
 }
 </script>

@@ -22,30 +22,22 @@
             </div>
         </el-col>
         <el-col :span="16">
-            <div class="roleBtn">
-                <el-button>角色权限</el-button>
-                <el-button>角色用户</el-button>
-            </div>
-            <div class="roleContent right">
-                <el-button>修改权限</el-button>
-            </div>
-            <div class="textWrapper">
-                <el-row>
-                    <el-col :span="24" v-for="menuItem in theModel">
-                        <my-tree :model="menuItem"></my-tree>
-                    </el-col>
-                </el-row>
-            </div>
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="角色权限" name="first">
+                    <role-limits></role-limits>
+                </el-tab-pane>
+                <el-tab-pane label="角色用户" name="second">
+                    <role-user></role-user>
+                </el-tab-pane>
+            </el-tabs>
         </el-col>
     </el-row>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
-import myTree from "components/treeMenu"
-import {
-    myData
-} from "common/js/myData"
+import roleLimits from "./roleLimits"
+import roleUser from "./roleUser"
 export default {
     data() {
         return {
@@ -58,11 +50,12 @@ export default {
             }, {
                 role: '项目人员'
             }],
-            theModel: myData
+            activeName: 'first'
         }
     },
     components: {
-        myTree
+        roleLimits,
+        roleUser
     }
 }
 </script>
@@ -74,16 +67,13 @@ export default {
     width: 100%;
     padding: 24px;
     background: #fff;
+    min-height: 820px;
     .roleContent {
         padding-top: 12px;
         padding-bottom: 12px;
     }
     .right {
         text-align: right;
-    }
-    .textWrapper {
-        width: 100%;
-        border: 1px solid #dfe6ec;
     }
 }
 </style>

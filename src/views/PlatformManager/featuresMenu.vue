@@ -49,9 +49,9 @@
                             <template scope="scope">
                                 <el-button class="el-icon-plus" type="text" size="small" @click="addMenu(scope.$index,scope.row)">
                                 </el-button>
-                                <el-button v-if="!scope.row.editFlag" class="el-icon-edit" type="text" size="small" @click="edit(scope.$index,scope.row)">
+                                <el-button v-if="!scope.row.editFlag" class="el-icon-edit" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">
                                 </el-button>
-                                <el-button v-if="scope.row.editFlag" class="el-icon-check" type="text" size="small" @click="save(scope.$index,scope.row)">
+                                <el-button v-if="scope.row.editFlag" class="el-icon-check" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">
                                 </el-button>
                                 <el-button class="el-icon-delete2" type="text" size="small" @click.native.prevent="remove(scope.$index, featuresTabData)">
                                 </el-button>
@@ -143,17 +143,20 @@ export default {
     },
     methods: {
         addMenu(index, row) { //添加
+            let new_addFormData = {
+                name: "",
+                link: "",
+                creatDate: "",
+                modifyDate: "",
+                remarks: "",
+                editFlag: false
+            };
+            this.addFormData = new_addFormData;
             this.dialogFormVisible1 = true;
-            console.log('下面这个error(resetFields) 可以忽略!!!');
-            this.$refs.addFormData.resetFields();
         },
-        edit(index, row) { //编辑
+        checkEdit(index, row) { //编辑
             // console.log(row)
-            row.editFlag = true;
-        },
-        save(index, row) { //编辑后保存
-            // console.log(row);
-            row.editFlag = false;
+            row.editFlag = !row.editFlag;
         },
         remove(index, rows) { //删除
             rows.splice(index, 1);

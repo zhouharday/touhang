@@ -221,10 +221,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button v-if="!scope.row.editFlag" :disabled="scope.row.status == '锁定'" @click="Edit(scope.$index,scope.row)" type="text" size="small">编 辑</el-button>
-            <el-button v-if="scope.row.editFlag" @click="Edit(scope.$index,scope.row)" type="text" size="small">保 存</el-button>
-            <el-button @click="locking(scope.$index,scope.row)" type="text" size="small">锁 定 &nbsp;&nbsp;/</el-button>
-            <el-button @click="Enabled(scope.$index,scope.row)" type="text" size="small">启 用</el-button>
+            <el-button v-if="!scope.row.editFlag" :disabled="scope.row.status == '锁定'" @click="Edit(scope.$index,scope.row)" type="primary" size="small">编 辑</el-button>
+            <el-button v-if="scope.row.editFlag" @click="Edit(scope.$index,scope.row)" type="primary" size="small">保 存</el-button>
+            <el-button @click="locking(scope.$index,scope.row)" type="primary" size="small">锁 定</el-button>
+            <el-button @click="Enabled(scope.$index,scope.row)" type="primary" size="small">启 用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -263,38 +263,27 @@ export default {
   },
   methods: {
     addCustomer() { //Add 新客户
-      // let new_addCustomerFormData = {
-      //     clientName: '', //客户名称
-      //     account: '', //账号
-      //     openDate: '', //开通日期
-      //     expiryDate: '', //到期日期
-      //     type: '', //类型
-      //     status: '启用', //状态
-      //     officeAddress: "", //办公地址
-      //     companyEmail: "", //公司邮箱
-      //     contactPerson: "", //联系人
-      //     contactPhone: "", //联系电话
-      //     relatedDoc: "", //相关文档
-      //     remarks: "", //备注
-      //     uscc: "", //*统一社会信用代码
-      //     legalRepresen: "", //法人代表
-      //     lrIDNumber: "", //法人代表身份证号
-      //     address: "", //*详细地址
-      //     editFlag: false
-      //   };
-      // for( let i in this.addCustomerFormData ){
-      //   this.addCustomerFormData[i] = '';
-      // }
-      // for( let i in new_addCustomerFormData ){
-      //   new_addCustomerFormData[i] = '';
-      // }
-      let new_addCustomerFormData = new Object;
-      new_addCustomerFormData = this.addCustomerFormData;
-      // console.log(this.addCustomerFormData);
-      // console.log(this.addCustomerFormData);
+      let new_addCustomerFormData = {
+          clientName: '', //客户名称
+          account: '', //账号
+          openDate: '', //开通日期
+          expiryDate: '', //到期日期
+          type: '', //类型
+          status: '启用', //状态
+          officeAddress: "", //办公地址
+          companyEmail: "", //公司邮箱
+          contactPerson: "", //联系人
+          contactPhone: "", //联系电话
+          relatedDoc: "", //相关文档
+          remarks: "", //备注
+          uscc: "", //*统一社会信用代码
+          legalRepresen: "", //法人代表
+          lrIDNumber: "", //法人代表身份证号
+          address: "", //*详细地址
+          editFlag: false
+        };
       this.addCustomerFormData = new_addCustomerFormData;
       this.addCustomerDialogFormVisible = true;
-      // this.$refs.addCustomerFormData.resetFields();
     },
     saveCustomerDialogForm() { //保存新增客户列表
       this.addCustomerTabData.push(this.addCustomerFormData);

@@ -21,7 +21,7 @@
             <el-table-column prop="address" label="用时">
             </el-table-column>
         </el-table>
-        <el-row>
+        <!-- <el-row>
             <el-col :span="24">
                 <el-row>
                     <el-col v-for="(item, index) of title">
@@ -29,7 +29,7 @@
                     </el-col>
                 </el-row>
             </el-col>
-        </el-row>
+        </el-row> -->
     </div>
 </div>
 </template>

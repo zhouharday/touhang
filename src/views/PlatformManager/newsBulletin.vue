@@ -83,8 +83,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button @click="checkEdit(scope.$index,scope.row)" v-if="scope.row.status == '已发布'? isRelease = false : isRelease = true " type="primary" size="small">{{edit}}</el-button>
-            <!-- <el-button v-if="scope.row.editFlag" @click="scope.row.editFlag = false" type="primary" size="small">保 存</el-button> -->
+            <el-button v-if="!scope.row.editFlag" :disabled="scope.row.status == '已发布'" @click="checkEdit(scope.$index,scope.row)" type="primary" size="small">{{edit}}</el-button>
+            <el-button v-if="scope.row.editFlag" @click="scope.row.editFlag = false" type="primary" size="small">保 存</el-button>
             <el-button type="primary" size="small" @click.native.prevent="newsTabData.splice(scope.$index,1)">删除</el-button>
             <el-button type="primary" size="small" :disabled="scope.row.status == '已发布'? isRelease = true : isRelease = false " @click="scope.row.status = '已发布'">发布</el-button>
           </template>
@@ -99,15 +99,7 @@
 export default {
   data() {
     return {
-      newsTabData: [
-        {
-          title: '系统维护通知', //标题
-          publisher: '李克强', //发布人
-          publisherDate: '2017-09-10', //发布日期
-          status: "未发布", //状态
-          editFlag: false
-        }
-      ],
+      newsTabData: [],
       newsFormData: {
         title: '', //标题
         content: "", //内容
@@ -123,9 +115,16 @@ export default {
   },
   methods: {
     newAdd() { //Add New Row
+      let new_newsFormData = {
+        title: '', //标题
+        content: "", //内容
+        publisher: '', //发布人
+        publisherDate: '', //发布日期
+        status: "", //状态
+        editFlag: false
+      };
+      this.newsFormData = new_newsFormData;
       this.newsFormVisible = true;
-      console.log('下面这个error(resetFields) 可以忽略!!!');
-      this.$refs.newsFormData.resetFields();
     },
     newsFormSave() { //Save
       this.newsFormData.status = '未发布';
@@ -142,14 +141,7 @@ export default {
       this.newsFormVisible = false;
     },
     checkEdit(index,row){
-      if( this.edit == '编辑' ){
-        this.edit = '保存';
-        row.editFlag = true;
-      } else {
-        this.edit = '编辑';
-        row.editFlag = false;
-
-      }
+      row.editFlag = !row.editFlag;
     }
   }
 }
