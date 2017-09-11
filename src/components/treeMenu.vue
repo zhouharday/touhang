@@ -97,7 +97,7 @@ export default {
     }
     .stair {
         background: #eef1f6;
-        border-top: 1px solid #dfe6ec;
+        /*border-top: 1px solid #dfe6ec;*/
         border-bottom: 1px solid #dfe6ec;
         .add_border_right{
             border: none;
