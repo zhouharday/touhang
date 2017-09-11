@@ -29,10 +29,10 @@
       <el-row :gutter="20">
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <el-table @cell-click="roleEdit(row, column, cell, event)" :data="rolTabData_L" border style="width: 100%" align="center">
+            <el-table :data="rolTabData_L" border style="width: 100%" align="center">
               <el-table-column prop="roleName" label="角色名称" width="" align="center">
                 <template scope="scope">
-                  <span class="cursor" v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
+                  <span class="cursor" @click="roleEdit(row, column, cell, event)" v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
                   <span v-if="scope.row.editFlag" class="cell-edit-input">
                     <el-input v-model="scope.row.roleName" placeholder=""></el-input>
                   </span>
@@ -41,7 +41,7 @@
               <el-table-column label="操作" width="" align="center">
                 <template scope="scope" v-show=" scope.$index != '0' ">
                   <el-button v-if="!scope.row.editFlag && scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">编辑</el-button>
-                  <el-button v-if="scope.row.editFlag && scope.$index != '0'" v-show="scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">保存</el-button>
+                  <el-button v-if="scope.row.editFlag && scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">保存</el-button>
                   <el-button v-show="scope.$index != '0'" @click="remove(scope.$index,rolTabData_L)" type="text" size="small">删除</el-button>
                 </template>
               </el-table-column>
@@ -106,8 +106,12 @@ export default {
     }
   },
   methods: {
-    roleEdit(row, column, cell, event) {
+    roleEdit(row, column, cell, $event) {
       // alert(1001);
+      // console.log(row);
+      // console.log(column);
+      // console.log(cell);
+      // console.log($event);
       this.rolTabData_R.forEach(item => {
         item.check = true;
       });

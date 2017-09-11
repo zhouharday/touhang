@@ -221,10 +221,10 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button v-if="!scope.row.editFlag" :disabled="scope.row.status == '锁定'" @click="Edit(scope.$index,scope.row)" type="text" size="small">编 辑</el-button>
-            <el-button v-if="scope.row.editFlag" @click="Edit(scope.$index,scope.row)" type="text" size="small">保 存</el-button>
-            <el-button @click="locking(scope.$index,scope.row)" type="text" size="small">锁 定 &nbsp;&nbsp;/</el-button>
-            <el-button @click="Enabled(scope.$index,scope.row)" type="text" size="small">启 用</el-button>
+            <el-button v-if="!scope.row.editFlag" :disabled="scope.row.status == '锁定'" @click="Edit(scope.$index,scope.row)" type="primary" size="small">编 辑</el-button>
+            <el-button v-if="scope.row.editFlag" @click="Edit(scope.$index,scope.row)" type="primary" size="small">保 存</el-button>
+            <el-button @click="locking(scope.$index,scope.row)" type="primary" size="small">锁 定</el-button>
+            <el-button @click="Enabled(scope.$index,scope.row)" type="primary" size="small">启 用</el-button>
           </template>
         </el-table-column>
       </el-table>
