@@ -263,70 +263,32 @@ export default {
   },
   methods: {
     addCustomer() { //Add 新客户
-      // let new_addCustomerFormData = {
-      //     clientName: '', //客户名称
-      //     account: '', //账号
-      //     openDate: '', //开通日期
-      //     expiryDate: '', //到期日期
-      //     type: '', //类型
-      //     status: '启用', //状态
-      //     officeAddress: "", //办公地址
-      //     companyEmail: "", //公司邮箱
-      //     contactPerson: "", //联系人
-      //     contactPhone: "", //联系电话
-      //     relatedDoc: "", //相关文档
-      //     remarks: "", //备注
-      //     uscc: "", //*统一社会信用代码
-      //     legalRepresen: "", //法人代表
-      //     lrIDNumber: "", //法人代表身份证号
-      //     address: "", //*详细地址
-      //     editFlag: false
-      //   };
-      // for( let i in this.addCustomerFormData ){
-      //   this.addCustomerFormData[i] = '';
-      // }
-      // for( let i in new_addCustomerFormData ){
-      //   new_addCustomerFormData[i] = '';
-      // }
-      let new_addCustomerFormData = new Object;
-      new_addCustomerFormData = this.addCustomerFormData;
-      // console.log(this.addCustomerFormData);
-      // console.log(this.addCustomerFormData);
+      let new_addCustomerFormData = {
+          clientName: '', //客户名称
+          account: '', //账号
+          openDate: '', //开通日期
+          expiryDate: '', //到期日期
+          type: '', //类型
+          status: '启用', //状态
+          officeAddress: "", //办公地址
+          companyEmail: "", //公司邮箱
+          contactPerson: "", //联系人
+          contactPhone: "", //联系电话
+          relatedDoc: "", //相关文档
+          remarks: "", //备注
+          uscc: "", //*统一社会信用代码
+          legalRepresen: "", //法人代表
+          lrIDNumber: "", //法人代表身份证号
+          address: "", //*详细地址
+          editFlag: false
+        };
       this.addCustomerFormData = new_addCustomerFormData;
       this.addCustomerDialogFormVisible = true;
-<<<<<<< HEAD
-      // console.log('下面这个error(resetFields) 可以忽略!!!');
-      // this.$refs.addCustomerFormDatas.resetFields();
-      this.addCustomerFormData.editFlag = false;
-      // this.addCustomerFormData = {};
-      obj = {};
-    },
-    saveCustomerDialogForm() { //保存新增客户列表
-      // this.newsFormData.status = '未发布';
-
-      this.addCustomerFormData.editFlag = false;
-      this.addCustomerFormData.status = '启用';
-      // this.addCustomerFormData.isDisabled = false;
-      let obj = {};
-      obj = this.addCustomerFormData;
-      // this.addCustomerTabData.push(this.addCustomerFormData);
-      this.addCustomerTabData.push(obj);
-      console.log(this.addCustomerFormData);
-      for (let key in this.addCustomerFormData) {
-        console.log(this.addCustomerFormData['editFlag']);
-        // key[editFlag] = false;
-      }
-      this.addCustomerFormData = {};
-      obj = {};
-      // this.$refs.addCustomerFormDatas.resetFields();
-=======
-      // this.$refs.addCustomerFormData.resetFields();
     },
     saveCustomerDialogForm() { //保存新增客户列表
       this.addCustomerTabData.push(this.addCustomerFormData);
       this.addCustomerFormData = {};
       // this.$refs.addCustomerFormData.resetFields();
->>>>>>> ea461a1279909b3600e806f2e39e4de0bba9b88b
       this.addCustomerDialogFormVisible = false;
     },
     Edit(index, row) { //编辑

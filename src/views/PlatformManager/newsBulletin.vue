@@ -148,7 +148,6 @@ export default {
       } else {
         this.edit = '编辑';
         row.editFlag = false;
-
       }
     }
   }
