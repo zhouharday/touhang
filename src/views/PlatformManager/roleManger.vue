@@ -40,8 +40,8 @@
               </el-table-column>
               <el-table-column label="操作" width="" align="center">
                 <template scope="scope" v-show=" scope.$index != '0' ">
-                  <el-button v-if="!scope.row.editFlag" v-show="scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">编辑</el-button>
-                  <el-button v-if="scope.row.editFlag" v-show="scope.$index != '0'" @click="saveSelecttionTab(scope.$index,scope.row)" type="text" size="small">保存</el-button>
+                  <el-button v-if="!scope.row.editFlag && scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">编辑</el-button>
+                  <el-button v-if="scope.row.editFlag && scope.$index != '0'" v-show="scope.$index != '0'" @click="editSelecttionTab(scope.$index,scope.row)" type="text" size="small">保存</el-button>
                   <el-button v-show="scope.$index != '0'" @click="remove(scope.$index,rolTabData_L)" type="text" size="small">删除</el-button>
                 </template>
               </el-table-column>
@@ -103,8 +103,6 @@ export default {
         { roleName: "账号管理", check: false },
       ],
       multipleSelection: [],
-      // isCheck: true
-
     }
   },
   methods: {
@@ -121,18 +119,16 @@ export default {
     },
     addBtn() { //添加
       // alert(111);
+      let new_rolFormData_L = { roleName: "", editFlag: false };
+      this.rolFormData_L = new_rolFormData_L;
       this.rolFormDialog = true;
-      console.log('下面这个error(resetFields) 可以忽略!!!');
-      this.$refs.rolFormData_L.resetFields();
     },
     remove(index, rows) { //删除
       rows.splice(index, 1);
     },
     editSelecttionTab(index, row) { //编辑
-      row.editFlag = true;
-    },
-    saveSelecttionTab(index, row) { //保存
-      row.editFlag = false;
+    // alert(1002);
+      row.editFlag = !row.editFlag;
     },
     handleSelectionChange(val) { //选中的数据
       this.multipleSelection = val;

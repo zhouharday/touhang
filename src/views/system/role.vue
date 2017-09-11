@@ -31,7 +31,7 @@
             </div>
             <div class="textWrapper">
                 <el-row>
-                    <el-col :span="24" v-for="menuItem in theModel">
+                    <el-col :span="24" v-for="(menuItem,index) in theModel" :key="menuItem.index">
                         <my-tree :model="menuItem"></my-tree>
                     </el-col>
                 </el-row>
@@ -43,9 +43,7 @@
 
 <script type="text/ecmascript-6">
 import myTree from "components/treeMenu"
-import {
-    myData
-} from "common/js/myData"
+import { myData } from "common/js/myData"
 export default {
     data() {
         return {
