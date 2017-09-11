@@ -42,7 +42,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="costAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmCostAdd2(s)">确 定</el-button>
+                    <el-button type="primary" @click="confirmCostAdd2(isSave)">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
