@@ -110,8 +110,10 @@
                 </div>
                 <el-form :model="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" :label-width="formLabelWidth">
-                        <el-button type="text">处理中</el-button>
-                        <el-button type="text">已解决</el-button>
+                        <el-select v-model="trackingForm.result" placeholder="请选择处理状态">
+                            <el-option label="处理中" value="处理中"></el-option>
+                            <el-option label="已解决" value="已解决"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="汇报内容" :label-width="formLabelWidth">
                         <el-input type="textarea" :rows="2" v-model="trackingForm.content" auto-complete="off">
@@ -167,7 +169,7 @@ export default {
             },
             tableData: [
                 {
-                    theme: '',
+                    theme: 'AAAAAA',
                     description: '',
                     proposer: '',
                     startingDate: '',
@@ -191,28 +193,16 @@ export default {
                 content: '',
                 appendix: ''
             },
-            riskData: [{
-                riskTheme: 'AAAAAAAAAA',
-                handlePerson: '',
-                assignor: '',
-                startingDate: '',
-                endingDate: '',
-                state: ''
-            }, {
-                riskTheme: '',
-                handlePerson: '',
-                assignor: '',
-                startingDate: '',
-                endingDate: '',
-                state: ''
-            }, {
-                riskTheme: '',
-                handlePerson: '',
-                assignor: '',
-                startingDate: '',
-                endingDate: '',
-                state: ''
-            }],
+            riskData: [
+                {
+                    riskTheme: 'AAAAAAAAAA',
+                    handlePerson: '',
+                    assignor: '',
+                    startingDate: '',
+                    endingDate: '',
+                    state: ''
+                }
+            ],
         }
     },
     methods: {
