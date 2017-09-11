@@ -265,9 +265,10 @@ export default {
     addCustomer() { //Add 新客户
       this.addCustomerDialogFormVisible = true;
       // console.log('下面这个error(resetFields) 可以忽略!!!');
-      this.$refs.addCustomerFormDatas.resetFields();
+      // this.$refs.addCustomerFormDatas.resetFields();
       this.addCustomerFormData.editFlag = false;
       // this.addCustomerFormData = {};
+      obj = {};
     },
     saveCustomerDialogForm() { //保存新增客户列表
       // this.newsFormData.status = '未发布';
@@ -275,13 +276,17 @@ export default {
       this.addCustomerFormData.editFlag = false;
       this.addCustomerFormData.status = '启用';
       // this.addCustomerFormData.isDisabled = false;
-      this.addCustomerTabData.push(this.addCustomerFormData);
+      let obj = {};
+      obj = this.addCustomerFormData;
+      // this.addCustomerTabData.push(this.addCustomerFormData);
+      this.addCustomerTabData.push(obj);
       console.log(this.addCustomerFormData);
       for (let key in this.addCustomerFormData) {
         console.log(this.addCustomerFormData['editFlag']);
         // key[editFlag] = false;
       }
       this.addCustomerFormData = {};
+      obj = {};
       // this.$refs.addCustomerFormDatas.resetFields();
       this.addCustomerDialogFormVisible = false;
     },
