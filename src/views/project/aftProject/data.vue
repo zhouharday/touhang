@@ -2,8 +2,8 @@
     <div class="table">
         <div class="topBtn">
             <div class="leftBtn">
-                <el-button @click="changeData1">经营数据</el-button>
-                <el-button @click="changeData2">财务数据</el-button>
+                <el-button @click="changeData1" :class="{active:f_show}">经营数据</el-button>
+                <el-button @click="changeData2" :class="{active:s_show}">财务数据</el-button>
             </div>
             <div class="rightBtn">
                 <el-button @click="addData">添加</el-button>
@@ -40,8 +40,10 @@
                         <el-col :span="12">
                             <el-form-item label="类型">
                                 <el-select v-model="operatingForm1.sort" placeholder="请选择类型" style="width:100%;">
-                                    <el-option label="类型一" value="类型一"></el-option>
-                                    <el-option label="类型二" value="类型二"></el-option>
+                                    <el-option label="年报" value="年报"></el-option>
+                                    <el-option label="半年报" value="半年报"></el-option>
+                                    <el-option label="季报" value="季报"></el-option>
+                                    <el-option label="月报" value="月报"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -94,8 +96,8 @@
                         <el-col :span="12">
                             <el-form-item label="类型">
                                 <el-select v-model="operatingForm2.sort" placeholder="请选择类型" style="width:100%;">
-                                    <el-option label="类型一" value="类型一"></el-option>
-                                    <el-option label="类型二" value="类型二"></el-option>
+                                    <el-option label="半年报" value="半年报"></el-option>
+                                    <el-option label="季报" value="季报"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -263,7 +265,7 @@ export default {
             operatingData: [
                 {
                     baseDate: '2017-9-9',
-                    sort: '',
+                    sort: '年报',
                     informant: '',
                     date: ''
                 }
@@ -388,5 +390,8 @@ export default {
         }
         .rightBtn {}
     }
+}
+.active {
+   background: #dfe6ec; 
 }
 </style>

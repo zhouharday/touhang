@@ -16,3 +16,18 @@ export function clearValue(obj) {
         obj[val] = ''
     })
 }
+// 递归函数
+
+// export function mune(arr) {
+//     let newArr = []
+//     arr.map((x) => {
+//         if (x.pId == 0) {
+//             newArr.push(x)
+//         }
+//         newArr.map((list) => {
+//             if(list.id == x.pId) {
+//
+//             }
+//         })
+//     })
+// }
