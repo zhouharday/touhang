@@ -1,5 +1,5 @@
 <template>
-    <div class="aftProject">
+    <div class="aftProjectMessage">
         <div class="title">
             <div class="left">
                 <span class="desc">{{title}}</span>

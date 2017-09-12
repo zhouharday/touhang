@@ -362,19 +362,36 @@ ul li {
     }
 }
 
-/*投前详情页的风险登记模块*/ 
-.riskTable {
-    .el-dialog--small {
-        width: 1143px;
+/*投前详情页*/ 
+.preProjectMessage {
+    // 投前详情页的风险登记模块
+    .riskTable {
+        .el-dialog--small {
+            width: 1143px;
+        }
+        .el-date-editor.el-input {
+            width: 100%;
+        }
     }
-    .el-date-editor.el-input {
-        width: 100%;
+    // 投前详情页 管理模块下 的投资支付dialog
+    .capitalDialog {
+        .el-dialog--small {
+            width: 1143px;
+        }
     }
+    // 投前详情页 管理模块下 的项目分红dialog
+    .sharingDialog {
+        .el-dialog--small {
+            width: 1143px;
+        }
+    }
+
 }
 
 
+
 /*投后详情页*/
-.aftProject {
+.aftProjectMessage {
     .firstLayer {
         // 出资主体table 表头的样式
         .el-table th, .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
@@ -386,6 +403,18 @@ ul li {
         }
         .el-table .positive-row {
             background: #EEF0F4;
+        }
+    }
+    // 投后详情页 管理模块下 的投资支付dialog
+    .capitalDialog {
+        .el-dialog--small {
+            width: 1160px;
+        }
+    }
+    // 投后详情页 管理模块下 的项目分红dialog
+    .sharingDialog {
+        .el-dialog--small {
+            width: 1143px;
         }
     }
     // 投后详情页的风险管理模块

@@ -193,7 +193,7 @@
             </el-collapse-item>
             <el-collapse-item title="投资支付" name="3">
                 <!-- 投资支付 部分 -->
-                <div class="fileTable">
+                <div class="fileTable capitalDialog">
                     <tabel-header :data="headerInfo_paid" @add="paidAdd1=true"></tabel-header>
                     <el-table :data="paidData" border style="width: 100%" align="center" show-summary>
                         <el-table-column label="合同名称" prop="contractName" align="center">
@@ -306,7 +306,7 @@
             </el-collapse-item>
             <el-collapse-item title="项目分红" name="4">
                 <!--  项目分红 部分-->
-                <div class="fileTable">
+                <div class="fileTable sharingDialog">
                     <tabel-header :data="headerInfo_sharing" @add="sharingAdd1=true"></tabel-header>
                     <el-table :data="sharingData" border style="width: 100%" align="center" show-summary>
                         <el-table-column label="合同名称" prop="contractName" align="center">
