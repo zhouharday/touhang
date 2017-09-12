@@ -16,7 +16,7 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-                                        margin-right: 7px;" src="/static/img/office.png" />
+                                                margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -26,7 +26,7 @@
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                    领投助手 -->
+                                                            领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
@@ -60,8 +60,7 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/touzizhe.png" />
                         <span>{{title_05}}</span>
                     </template>
-                    <el-menu-item index="investor"
-                    @click="addTab(title13,'/home/investor','investor')">{{title13}}</el-menu-item>
+                    <el-menu-item index="investor" @click="addTab(title13,'/home/investor','investor')">{{title13}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="6">
                     <template slot="title">
@@ -76,15 +75,15 @@
                     <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
-                                                    <template slot="title">
-                                                        <i class="el-icon-star-on"></i>统计分析</template>
-                                                </el-submenu> -->
+                                                            <template slot="title">
+                                                                <i class="el-icon-star-on"></i>统计分析</template>
+                                                        </el-submenu> -->
                 <!-- <div class="div_el-menu-itemel-submenu__title">
-                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                    统计分析 -->
-                    <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
-                    <span>{{title_07}}</span>
-                </div> -->
+                            <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+                                                            统计分析 -->
+                <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
+                            <span>{{title_07}}</span>
+                        </div> -->
                 <el-submenu index="7">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>统计分析 -->
@@ -105,40 +104,31 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
                         <span>{{title_08}}</span>
                     </template>
-                    <el-menu-item index="companyInfo"
-                                  @click="addTab(title19, '/home/companyInfo', 'companyInfo')">
+                    <el-menu-item index="companyInfo" @click="addTab(title19, '/home/companyInfo', 'companyInfo')">
                         {{title19}}
                     </el-menu-item>
-                    <el-menu-item index="department"
-                                  @click="addTab(title20, '/home/department', 'department')">
+                    <el-menu-item index="department" @click="addTab(title20, '/home/department', 'department')">
                         {{title20}}
                     </el-menu-item>
-                    <el-menu-item index="subscriber"
-                                  @click="addTab(title21, '/home/subscriber', 'subscriber')">
+                    <el-menu-item index="subscriber" @click="addTab(title21, '/home/subscriber', 'subscriber')">
                         {{title21}}
                     </el-menu-item>
-                    <el-menu-item index="role"
-                                  @click="addTab(title22, '/home/role', 'role')">
-                        {{title22}}
-                    </el-menu-item>
-                    <el-menu-item index="dictionary"
-                                  @click="addTab(title23, '/home/dictionary', 'dictionary')">
+                    <el-menu-item index="dictionary" @click="addTab(title23, '/home/dictionary', 'dictionary')">
                         {{title23}}
                     </el-menu-item>
-                    <el-menu-item index="business"
-                                  @click="addTab(title24, '/home/business', 'business')">
+                    <el-menu-item index="role" @click="addTab(title22, '/home/role', 'role')">
+                        {{title22}}
+                    </el-menu-item>
+                    <el-menu-item index="business" @click="addTab(title24, '/home/business', 'business')">
                         {{title24}}
                     </el-menu-item>
-                    <el-menu-item index="fundAuthority"
-                                  @click="addTab(title35, '/home/fundAuthority', 'fundAuthority')">
+                    <el-menu-item index="fundAuthority" @click="addTab(title35, '/home/fundAuthority', 'fundAuthority')">
                         {{title35}}
                     </el-menu-item>
-                    <el-menu-item index="process"
-                                  @click="addTab(title25, '/home/process', 'process')">
+                    <el-menu-item index="process" @click="addTab(title25, '/home/process', 'process')">
                         {{title25}}
                     </el-menu-item>
-                    <el-menu-item index="processSetting"
-                                  @click="addTab(title26, '/home/processSetting', 'processSetting')">
+                    <el-menu-item index="processSetting" @click="addTab(title26, '/home/processSetting', 'processSetting')">
                         {{title26}}
                     </el-menu-item>
                 </el-submenu>
@@ -381,8 +371,8 @@ export default {
             title19: '公司信息',
             title20: '部门管理',
             title21: '用户管理',
-            title22: '角色权限',
             title23: '数据字典',
+            title22: '企业权限',
             title24: '业务权限',
             title35: '基金权限',
             title25: '流程管理',
