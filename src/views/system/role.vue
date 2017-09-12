@@ -40,8 +40,8 @@ import roleLimits from "./roleLimits"
 import roleUser from "./roleUser"
 export default {
     created(){
-        this.$http.post('api/role/findResourceByRid',{
-
+        this.$http.post('api/formset/queryInfo',{
+            
         })
         .then( res => {
             let data = res.data;
