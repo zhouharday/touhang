@@ -125,8 +125,8 @@
                                 </el-col>
                             </el-row>
                         </el-form>
-                        <div class="table_title">
-                            <div class="left">
+                        <div class="table_title" style="justify-content:space-between;">
+                            <div class="left" style="width:25.2%">
                                 <span class="desc">{{ table_title }}</span>
                             </div>
                             <div class="right">
@@ -268,7 +268,7 @@
                             </el-row>
                         </el-form>
                         <div class="table_title">
-                            <div class="left">
+                            <div class="left" style="width:16.8%">
                                 <span class="desc">{{ table_title }}</span>
                             </div>
                         </div>
@@ -365,7 +365,7 @@
                             </el-row>
                         </el-form>
                         <div class="table_title">
-                            <div class="left">
+                            <div class="left" style="width:20.3%">
                                 <span class="desc">{{ table_title }}</span>
                             </div>
                         </div>
@@ -399,19 +399,27 @@
                     </el-dialog>
                 </div>
             </el-collapse-item>
-            <el-collapse-item title="项目退出" name="5"> 
-                <div class="table_title">
-                    <div class="left" style="margin-left:156px">
-                        <span class="desc">标题</span>
-                    </div>
-                    
-                </div>   
-                <div class="table_title">
-                    <div class="left" style="margin-left:156px">
+            <el-collapse-item title="项目退出" name="5">
+                <el-table :data="outingData1" border style="width: 100%" align="center">
+                    <el-table-column label="标题" prop="title" align="center">
+                    </el-table-column>
+                    <el-table-column label="退出类型" prop="outingSort" align="center">
+                    </el-table-column>
+                    <el-table-column label="退出金额" prop="outingMoney" align="center">
+                    </el-table-column>
+                    <el-table-column label="相关附件" prop="relativedAppendix" align="center">
+                    </el-table-column>
+                     <el-table-column label="经办人" prop="operator" align="center">
+                    </el-table-column>
+                    <el-table-column label="回款日期" prop="handlingDate" align="center">
+                    </el-table-column>
+                </el-table>
+                <div class="table_title" style="margin-top:10px">
+                    <div class="left" style="width:25%;"> 
                         <span class="desc">{{ table_title }}</span>
                     </div>
                 </div>
-                <el-table :data="outingData" border style="width: 100%" align="center">
+                <el-table :data="outingData2" border style="width: 100%" align="center">
                     <el-table-column label="基金名称" prop="foundName" align="center">
                     </el-table-column>
                     <el-table-column label="投资金额（元）" prop="investment" align="center">
@@ -423,7 +431,6 @@
                 </el-table>
             </el-collapse-item>
         </el-collapse>
-
     </section>
 </template>
 
@@ -617,7 +624,17 @@ export default {
                 }
             ],
             // 项目退出
-            outingData: [
+            outingData1: [
+                {
+                     title: 'AAA项目',
+                     outingSort: '',
+                     outingMoney: '',
+                     relativedAppendix: '',
+                     operator: '',
+                     handlingDate: ''
+                }
+            ],
+            outingData2: [
                 {
                     foundName: 'AA基金',
                     investment: '500,000',
@@ -724,28 +741,26 @@ export default {
     height: 100%;
 }
 
-
 .table_title {
     width: 100%;
     height: 41px;
+    display: flex;
     line-height: 41px;
     border: 1px solid #dfe6ec;
     border-bottom: none;
     background: #eef1f6;
     .left {
-        height: 100%;
-        float: left;
-        margin-left: 75px;
-        font-size: 0;
+        text-align: center;
+        // border-right: 1px solid #dfe6ec;
+        // box-sizing: border-box;
         .desc {
-            font-size: 14px;
+            font-size: 18px;
             font-weight: 600;
-            color: #1f2d3d; // vertical-align: top;
+            color: #1f2d3d; 
         }
     }
     .right {
         height: 100%;
-        float: right; //margin-right: 24px;
         .el-button {
             padding: 5px 15px;
         }

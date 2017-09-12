@@ -53,6 +53,10 @@ const r1 = [
         name: 'aftProject',
         component: resolve => require(['../views/project/aftProject/aftProject.vue'], resolve)
     }, {
+        path: 'aftProjectMessage/:userId', //home/投后项目详情页
+        name: 'aftProjectMessage',
+        component: resolve => require(['../views/project/aftProject/aftProjectMessage.vue'], resolve)
+    }, {
         path: 'projectOut', //home/退出项目页
         name: 'projectOut',
         component: resolve => require(['../views/project/projectOut/projectOut.vue'], resolve)
