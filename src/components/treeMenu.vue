@@ -3,15 +3,15 @@
     <el-row>
         <el-col :span="24" class="parent" :class="{stair: model.children && !model.menuContent}">
             <el-row>
-                <el-col :span="6">
-                    <div class="title" @click="toggle">
+                <el-col :span="spanCount">
+                    <div class="title" @click="toggle($event, model, currentIndex)">
                         <Icon v-if="!isFolder && model.children" :type="[open ? 'chevron-right': 'chevron-down']">
                         </Icon>
                         <span class="info">{{ model.menuName }}</span>
                         <span v-if="model.menuContent"><el-checkbox v-model="checked"></el-checkbox></span>
                     </div>
                 </el-col>
-                <el-col :span="18" class="add_border_left">
+                <el-col :span="18" class="add_border_left" v-if="model.menuContent">
                     <div class="dataDetails" v-for="(text, index) of model.menuContent">
                         <div class="btn_group" v-if="text.label === 'button'">
                             <div class="btn" v-for="(btn, btnIndex) of text.details">
@@ -29,7 +29,7 @@
             </el-row>
         </el-col>
         <el-col :span="24">
-            <el-row v-show="open" v-if="!isFolder" style="background: #fff;">
+            <el-row v-show="open" v-if="!isFolder">
                 <tree-menu v-for="item in model.children" :model="item"></tree-menu>
             </el-row>
         </el-col>
@@ -38,13 +38,32 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {mapMutations} from 'vuex'
 export default {
     name: 'treeMenu',
-    props: ['model'],
+    props: {
+        model: {
+            type: Object,
+            default: {}
+        },
+        currentIndex: {
+            type: Number,
+            default: 0
+        }
+    },
     data() {
         return {
             open: true,
-            isFolder: false
+            isFolder: false,
+            spanCount: 24,
+            modelID: 0
+        }
+    },
+    created() {
+        if(this.model.menuContent) {
+            this.spanCount = 6
+        } else {
+            this.spanCount = 24
         }
     },
     computed: {
@@ -53,12 +72,30 @@ export default {
         }
     },
     methods: {
-        toggle() {
+        toggle(event, model, index) {
+            // console.log(index)
+            // console.log(model.pId)
+            console.log(this.$refs.title)
+            this.modelID = model.id
             if (!this.isFolder) {
                 this.open = !this.open
             }
-        }
+            this.SET_MUNE(model)
+        },
+        ...mapMutations([
+            'SET_MUNE'
+        ])
     }
+    // watch: {
+    //     modelID(oldval, newval) {
+    //
+    //         if(newval == oldval) {
+    //             return
+    //         } else {
+    //             this.$refs.title.style.background = 'red'
+    //         }
+    //     }
+    // }
 }
 </script>
 
@@ -79,6 +116,9 @@ export default {
             .info {
                 padding-left: 12px;
                 padding-right: 8px;
+            }
+            &:hover{
+                background: #dfe6ec;
             }
         }
         .dataDetails {

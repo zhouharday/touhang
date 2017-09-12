@@ -30,7 +30,6 @@ export default new Router({
             path: '/register',
             name: 'register',
             component: resolve => require(['../views/Register.vue'], resolve)
-
         },
         {
             path: '/registerphone',
