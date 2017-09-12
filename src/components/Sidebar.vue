@@ -436,16 +436,7 @@ export default {
                 url: url,
                 name: name
             })
-            // this.SET_NAME(name)
-            // this.SET_URL(url)
-            // this.SET_TITLE(th)
-            // console.log(this.$store.state.crumbs)
-        },
-        ...mapMutations([
-            'SET_NAME',
-            'SET_URL',
-            'SET_TITLE'
-        ])
+        }
     }
 }
 </script>

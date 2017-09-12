@@ -16,18 +16,31 @@ export function clearValue(obj) {
         obj[val] = ''
     })
 }
-// 递归函数
 
-// export function mune(arr) {
-//     let newArr = []
-//     arr.map((x) => {
-//         if (x.pId == 0) {
-//             newArr.push(x)
-//         }
-//         newArr.map((list) => {
-//             if(list.id == x.pId) {
-//
-//             }
-//         })
-//     })
-// }
+export function getNodes(arr) {
+    var nodes = [];
+    arr.map(function (node) {
+        if (node.pId === 0) {
+            nodes.push(node)
+        } else {
+            pushNode(node,nodes)
+        }
+    })
+    return nodes
+}
+
+function pushNode(node, pNodes) {
+    pNodes.map(function (pNode) {
+        if (pNode.id === node.pId) {
+            if (!pNode.children) {
+                pNode.children = [node]
+            } else {
+                pNode.children.push(node)
+            }
+        } else {
+            if (pNode.children) {
+                pushNode(node, pNode.children)
+            }
+        }
+    })
+}
