@@ -236,7 +236,7 @@ export default {
 
 
 <style lang="less" scoped>
-.aftProject {
+.aftProjectMessage {
     width: 100%;
     background-color: #fff;
     padding: 24px;
