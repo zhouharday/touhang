@@ -110,7 +110,7 @@
           </el-row>
         </el-form>
         <!-- 项目介绍 Form End -->
-        <!-- 融资经历 Form start -->
+        <!-- 融资经历 Tab start -->
         <el-row :gutter="20">
           <!-- <el-col :span="24" class="formTitle">基本信息</el-col> -->
           <el-col :span="24" class="subscriber">
@@ -130,10 +130,30 @@
             </el-table>
           </el-col>
         </el-row>
-        <!-- 融资经历 Form End -->
+        <!-- 融资经历 Tab End -->
+        <!-- 创始团队 Tab Start -->
+        <el-row :gutter="20">
+          <!-- <el-col :span="24" class="formTitle">基本信息</el-col> -->
+          <el-col :span="24" class="subscriber">
+            创始团队
+            <el-button @click="addLeaderAssistantForm(3)" size="small" type="primary">添加</el-button>
+          </el-col>
+          <el-col :span="24">
+            <el-table align="center" :data="financingExperienceTab" ref="financingExperienceTab" border style="width: 100%">
+              <el-table-column prop="date" label="姓名" align="center">
+              </el-table-column>
+              <el-table-column prop="rounds" label="职位" align="center">
+              </el-table-column>
+              <el-table-column prop="AmountFinan" label="介绍" align="center">
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
+        <!-- 创始团队 Tab End -->
+
         <div slot="footer" class="dialog-footer">
           <el-button @click="leaderAssistantFormDialog = false">取 消</el-button>
-          <el-button type="primary" @click="leaderAssistantFormDialog = false">确 定</el-button>
+          <el-button type="primary" @click="leaderAssistantFormSaveBtn(1)">确 定</el-button>
         </div>
       </el-dialog>
       <!-- 添加领头助手 Dialog End-->
@@ -141,22 +161,22 @@
       <el-dialog title="添加" :visible.sync="financingDialogFormVisible">
         <el-form :model="financingExperienceForm" ref="financingExperienceForm" :label-position="leaderAssistantFormDialog_align">
           <el-row :gutter="20">
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="时间" porp="date" :label-width="formLabelWidth">
                 <el-input v-model="financingExperienceForm.date" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="轮次" porp="rounds" :label-width="formLabelWidth">
                 <el-input v-model="financingExperienceForm.rounds" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="融资金额" porp="AmountFinan" :label-width="formLabelWidth">
                 <el-input v-model="financingExperienceForm.AmountFinan" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="投资方" porp="investor" :label-width="formLabelWidth">
                 <el-input v-model="financingExperienceForm.investor" auto-complete="off"></el-input>
               </el-form-item>
@@ -165,7 +185,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="financingDialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="financingDialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="leaderAssistantFormSaveBtn(2)">确 定</el-button>
         </div>
       </el-dialog>
       <!-- 添加融资经历 Dialog End -->
@@ -238,15 +258,8 @@ export default {
         operationalData: "", //运营数据
         businessProposal: "", //商业计划书
       },
-      financingExperienceTab: [ //融资经历
-        {
-          date: "", //时间
-          rounds: "", //轮次
-          AmountFinan: "", //融资金额
-          investor: "", //投资方
-        }
-      ],
-      financingExperienceForm: {
+      financingExperienceTab: [], //融资经历 Tab
+      financingExperienceForm: { //融资经历 Form
         date: "", //时间
         rounds: "", //轮次
         AmountFinan: "", //融资金额
@@ -259,13 +272,31 @@ export default {
     }
   },
   methods: {
-    addLeaderAssistantForm(n) {
+    addLeaderAssistantForm(n) { //添加
       if (n == 1) {
-        // this.leaderAssistantFormDialog = true;
+        // alert(1);
         this.leaderAssistantFormDialog = !this.leaderAssistantFormDialog;
       } else if (n == 2) {
-        // this.financingDialogFormVisible = true;
-      this.financingDialogFormVisible = !this.financingDialogFormVisible;
+        // alert(2);
+        let new_financingExperienceForm = {
+          date: "", //时间
+          rounds: "", //轮次
+          AmountFinan: "", //融资金额
+          investor: "", //投资方
+        };
+        this.financingExperienceForm = new_financingExperienceForm;
+        this.financingDialogFormVisible = !this.financingDialogFormVisible;
+      }
+    },
+    leaderAssistantFormSaveBtn(n) { //确定
+      if (n == 1) {
+        // alert(1);
+        this.leaderAssistantFormDialog = !this.leaderAssistantFormDialog;
+      } else if (n == 2) {
+        // alert(2);
+        this.financingExperienceTab.push(this.financingExperienceForm);
+        this.financingDialogFormVisible = !this.financingDialogFormVisible;
+        this.financingExperienceForm = {};
       }
     },
   }
