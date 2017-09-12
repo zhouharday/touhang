@@ -32,17 +32,17 @@
             </el-dialog>
             <!-- 编辑项目费用 对话框-->
             <el-dialog title="编辑项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
-                <el-form :model="costForm2" :label-width="formLabelWidth">
-                    <el-form-item label="费用类型">
+                <el-form :model="costForm2" :data="costForm2" :label-width="formLabelWidth">
+                    <el-form-item porp="costSort" label="费用类型">
                         <el-input v-model="costForm2.costSort" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="金额（元）">
+                    <el-form-item porp="money" label="金额（元）">
                         <el-input v-model="costForm2.money" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="costAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmCostAdd2">确 定</el-button>
+                    <el-button type="primary" @click="confirmCostAdd2(isSave)">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -549,10 +549,21 @@ export default {
         },
         // 编辑 项目费用 的方法
         EditCost(row) {
+            console.log(row);
+            this.costForm2 = row;
             this.costAdd2 = true;
+            this.confirmCostAdd2(row);
         },
-        confirmCostAdd2() {
-            this.costAdd2 = false;
+        confirmCostAdd2(row) { //确定
+            console.log(row);
+            if (row) {
+                const rows = row;
+                return;
+            } else if ('undefined') {
+                // rows = this.costForm2;
+                this.costAdd2 = false;
+            }
+
         },
 
 

@@ -39,6 +39,18 @@
 import roleLimits from "./roleLimits"
 import roleUser from "./roleUser"
 export default {
+    created(){
+        this.$http.post('api/formset/queryInfo',{
+            
+        })
+        .then( res => {
+            let data = res.data;
+            console.log(data);
+        })
+        .catch( error => {
+
+        })
+    },
     data() {
         return {
             roleInfo: [{
