@@ -160,23 +160,26 @@ import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
 import zTree from "../../static/js/zTree/jquery.ztree.core";
 export default {
     comments: { jq, zTree },
-    beforeCreate() {
-        this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
-        // console.log(this.$store.state.login.merchants[0].um_id);
-        this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-            "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
-        })
-            .then(Response => {
-                console.log(this.$store.state.login.merchants[0].um_id);
-                if (Response.data.status == '200') {
-                    this.menus = Response.data.result;
-                    console.log(this.menus);
-                    // alert(1);
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+    beforeCreate() { 
+
+        // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+        // // console.log(this.$store.state.login.merchants[0].um_id);
+        // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+        // // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
+        //     // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
+        //     "merchantId": this.$store.state.login.merchants[0].um_id //用户、机构中间id
+        // })
+        //     .then(Response => {
+        //         // console.log(this.$store.state.login.merchants[0].um_id);
+        //         if (Response.data.status == '200') {
+        //             this.menus = Response.data.result;
+        //             console.log(this.menus);
+        //             // alert(1);
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
     },
     created() {
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
