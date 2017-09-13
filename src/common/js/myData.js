@@ -8,7 +8,12 @@ export const myData = [{
             menuName: '审批',
             menuContent: [{
                 label: 'button',
-                details: ['浏览', '发起', '添加', '删除']
+                details: ['浏览', '发起', '添加', '删除'], 
+            }],
+            children: [{
+                id: 888,
+                pId: 666,
+                menuName: 'ssss'
             }]
         }, {
             id: 12,

@@ -74,6 +74,9 @@
         <el-tab-pane label="管理" name="manage" class="tab_list">
           <manage-table></manage-table>
         </el-tab-pane>
+        <el-tab-pane label="退出" name="outing" class="tab_list">
+          <outing-form></outing-form>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -93,6 +96,7 @@ import approveTable from './approve'
 import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
+import outingForm from './outing'
 export default {
   data() {
     return {
@@ -157,7 +161,8 @@ export default {
     approveTable,
     fileTable,
     riskTable,
-    manageTable
+    manageTable,
+    outingForm
 
   }
 }

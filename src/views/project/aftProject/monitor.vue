@@ -23,14 +23,20 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="数据来源" :label-width="formLabelWidth">
-                            <el-input v-model="monitorForm.dataSources" auto-complete="off"></el-input>
+                            <el-select v-model="monitorForm.dataSources" placeholder="请选择数据来源" style="width:100%;">
+                                <el-option label="资产负债表" value="资产负债表"></el-option>
+                                <el-option label="利润表" value="利润表"></el-option>
+                                <el-option label="现金流量表" value="现金流量表"></el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="类型">
                             <el-select v-model="monitorForm.sort" placeholder="请选择类型" style="width:100%;">
-                                <el-option label="类型一" value="类型一"></el-option>
-                                <el-option label="类型二" value="类型二"></el-option>
+                                <el-option label="年报" value="年报"></el-option>
+                                <el-option label="半年报" value="半年报"></el-option>
+                                <el-option label="季报" value="季报"></el-option>
+                                <el-option label="月报" value="月报"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -64,7 +70,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="monitorSetting = false">取 消</el-button>
-                <el-button type="primary" @click="monitorSetting = false">确 定</el-button>
+                <el-button type="primary" @click="monitorSettingAdd">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -108,6 +114,16 @@ export default {
         }
     },
     methods: {
+        // 删除当前行
+        handleDelete(index, rows) {
+            rows.splice(index, 1);
+        },
+        // 添加 监控设置 的方法
+        monitorSettingAdd() {
+           this.monitorData.push(this.monitorForm);
+           this.monitorForm ={};
+           this.monitorSetting=false;
+        }
 
     },
     components: {

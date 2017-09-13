@@ -3,7 +3,7 @@
         <section class="riskTable">
             <tabel-header :data="headerInfo_risk" @add="modalAdd = true"></tabel-header>
             <el-table :data="riskData" border style="width: 100%" align="center">
-                <el-table-column label="主题" prop="riskTheme" align="center">
+                <el-table-column label="主题" prop="riskTheme" align="center"> 
                 </el-table-column>
                 <el-table-column label="处理人" prop="handlePerson" align="center">
                 </el-table-column>
@@ -78,7 +78,6 @@
                     <el-button type="primary" @click="confirmAdd">保存</el-button>
                 </div>
             </el-dialog>
-
             <!-- 风险跟踪  对话框 -->
             <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
                 <el-table :data="tableData" border style="width: 100%">

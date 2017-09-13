@@ -1,211 +1,172 @@
 <template>
-    <div class="aftProject">
-        <div class="title">
-            <div class="left">
-                <span class="desc">{{title}}</span>
-            </div>
-            <div class="right">
-                <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-            </div>
-        </div>
-        <div class="firstLayer">
-            <el-row :gutter="40">
-                <el-col :span="12">
-                    <div class="tableTitle">出资主体</div>
-                    <el-table :data="fundTable" style="width: 100%" :row-class-name="tableRowClassName">
-                        <el-table-column label="基金名称" align="center">
-                            <template scope="scope">
-                                <a class="fundName">{{ scope.row.fundName }}</a>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="investorMoney" label="投资金额（元）" align="center">
-                        </el-table-column>
-                        <el-table-column prop="percent" label="股权占比（%）" align="center">
-                        </el-table-column>
-                        <el-table-column prop="paidMoney" label="支付金额（元）" align="center">
-                        </el-table-column>
-                    </el-table>
-                </el-col>
-                <el-col :span="12">
-                    <echarts class="chart"></echarts>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="secondLayer">
-            <el-row :gutter="40">
-                <el-col :span="12">
-                    <table-info :data="tableData"></table-info>
-                </el-col>
-                <el-col :span="12">
-                    <div class="prompt_message">
-                        <span class="prompt">{{prompt}}</span>
-                        <div class="item_wrapper">
-                            <div class="item" v-for="(item, index) in message" :key="item.index">
-                                <span class="count">{{item.count}}</span>
-                                <p class="desc">{{item.desc}}</p>
-                                <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
-                            </div>
-                        </div>
-                        <div class="img_wrapper">
-                            <img src="/static/img/double.png">
-                        </div>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="tabs">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                    </detail-form>
-                    <table-form></table-form>
-                </el-tab-pane>
-                <el-tab-pane label="审批" name="approve" class="tab_list">
-                    <approve-table></approve-table>
-                </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
-                </el-tab-pane>
-                <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table></manage-table>
-                </el-tab-pane>
-                <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form></record-form>
-                </el-tab-pane>
-                <el-tab-pane label="风险管理" name="risk" class="tab_list">
-                    <risk-table></risk-table>
-                </el-tab-pane>
-                <el-tab-pane label="重大事项" name="event" class="tab_list">
-                    <event-table></event-table>
-                </el-tab-pane>
-                <el-tab-pane label="数据填报" name="data" class="tab_list">
-                    <data-table></data-table>
-                </el-tab-pane>
-                <el-tab-pane label="监控设置" name="monitor" class="tab_list">
-                    <monitor-table></monitor-table>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
+    <div class="preContent">
+        <!-- 类型ul -->
+        <el-row class="common">
+            <el-col :span="2">
+                <div class="tag">项目类型：</div>
+            </el-col>
+            <el-col :span="22" style="margin-top:20px">
+                <div class="sort-ul">
+                    <ul ref="sort">
+                        <li v-for="(item,index) in sortList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index)">
+                            {{item.sorts}}
+                        </li>
+                    </ul>
+                </div>
+            </el-col>
+        </el-row>
+        <!--搜索框 -->
+        <el-row class="search-box">
+            <el-col :span="5">
+                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
+                </el-input>
+            </el-col>
+        </el-row>
+        <!--项目table -->
+        <el-row class="common">
+            <el-col :span="24">
+                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
+                    <el-table-column label="项目名称" align="center">
+                        <template scope="scope">
+                            <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="mananger" label="项目创建人" align="center">
+                    </el-table-column>
+                    <el-table-column prop="industry" label="所属行业" align="center">
+                    </el-table-column>
+                    <el-table-column prop="sort" label="项目类型" align="center">
+                    </el-table-column>
+                    <el-table-column prop="investingDate" label="投资日期" align="center">
+                    </el-table-column>
+                    <el-table-column prop="investment" label="投资金额（元）" align="center">
+                    </el-table-column>
+                    <el-table-column prop="state" label="状态" align="center">
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+        <el-row type="flex" align="bottom" class="foot">
+            <el-col :span="8">
+                <span>总记录：{{this.total}}条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page :total="128" :current="13" style="float:right"></Page>
+            </el-col>
+        </el-row>
     </div>
 </template>
-    
-
-<script type="text/ecmascript-6">
-import tableInfo from '../../../components/tableInfo'
-import echarts from '../../../components/echarts'
-import detailForm from './details'
-import tableForm from './tables'
-import approveTable from './approve'
-import recordForm from './record'
-import fileTable from './file'
-import manageTable from './manage'
-import riskTable from './risk'
-import eventTable from './event'
-import dataTable from './data'
-import monitorTable from './monitor'
 
 
+<style lang="less" scoped>
+.preContent {
+    position: relative;
+    width: 100%;
+    height: 650px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.common {
+    padding: 0 30px 20px 30px;
+    ul {
+        float: left;
+        li {
+            display: inline-block;
+            box-sizing: border-box;
+            margin-right: 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    }
+}
+
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.active {
+    width: 70px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 15px;
+    background: #F05E5E;
+}
+
+.search-box {
+    margin: 0 30px 20px 30px;
+}
+
+.project {
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
+}
+
+.foot {
+    margin: 25px 30px 0 30px; //  position: absolute;
+    // left: 30px;
+    // bottom: 20px;
+}
+</style>
+
+
+<script>
 export default {
     data() {
         return {
-            title: '双子金服投资项目',
-            prompt: '任务助手小双温馨提示:',
-            activeName: 'details',
-            message: [
-                {
-                    count: 1,
-                    desc: '2017【经营数据】指标出现警告',
-                    state: true,
-                    info: '已处理'
-                }, {
-                    count: 2,
-                    desc: '2017【年报】指标出现警告',
-                    state: false,
-                    info: '立即处理'
-                }
-            ],
-            fundTable: [
-                {
-                    fundName: '京东',
-                    investorMoney: '56,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '24,000,000,000'
-                },
-                {
-                    fundName: '一号店',
-                    investorMoney: '24,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '24,000,000,000'
-                }, {
-                    fundName: '飞志',
-                    investorMoney: '36,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '12,000,000,000'
-                },
-                {
-                    fundName: '博奥',
-                    investorMoney: '29,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '29,000,000,000'
-                }
+            total: 128,
+            input: '',
+            currentIndex: 0,
+            sortList: [
+                { sorts: "全部" },
+                { sorts: "天使" },
+                { sorts: "并购重组" },
+                { sorts: "PE" },
+                { sorts: "VC" }
             ],
             tableData: [
                 {
-                    rmb: '83,000,000',
-                    name: '最新估值（元）',
-                    updown: '3'
-                }, {
-                    rmb: '32,000,000,000',
-                    name: '最新浮盈（元）'
-                }, {
-                    date: '',
-                    name: '估值日期'
-                }, {
-                    rmb: '',
-                    name: '基金规模（元）'
-                }, {
-                    rmb: '',
-                    name: '募集总额（元）'
-                }, {
-                    rmb: '',
-                    name: '投资总额（元）'
-                }, {
-                    rmb: '',
-                    name: '剩余额度（元）'
-                }, {
-                    rmb: '',
-                    name: '待分配总额（元）',
-                }, {
-                    manager: '',
-                    name: '基金负责人'
-                }, {
-                    date: '',
-                    name: '成立日期'
+                    project: '京东',
+                    mananger: '刘经理',
+                    industry: '房地产',
+                    sort: 'PE',
+                    investingDate: '2017-09-08',
+                    investment: '',
+                    state: '',
+                    id: 0
+                },
+                {
+                    project: '一号店',
+                    mananger: '王经理',
+                    industry: '旅游',
+                    sort: 'VC',
+                    investingDate: '2017-09-08',
+                    investment: '',
+                    state: '',
+                    id: 1
+                },
+                {
+                    project: '飞志',
+                    mananger: '张经理',
+                    industry: '外汇',
+                    sort: '天使',
+                    investingDate: '2017-09-08',
+                    investment: '',
+                    state: '',
+                    id: 2
                 }
-            ],
-            basicForm: {
-                baseInfo: '基本信息',
-                flag: true
-            },
-            companyForm: {
-                baseInfo: '企业信息',
-                flag: true
-            },
-            capitalForm: {
-                baseInfo: '投资信息',
-                flag: true
-            }
+            ]
         }
     },
     methods: {
-        disable(name) {
-            if (name.flag === false) {
-                return name.flag = true
-            } else {
-                return name.flag = false
-            }
+        handleIconClick(ev) {
+            console.log(ev);
         },
-        // 设置 出资主体table  间隔行的background-color
+        // 设置table间隔行的background-color
         tableRowClassName(row, index) {
             if ((index % 2) == 0) {
                 return 'info-row';
@@ -213,132 +174,19 @@ export default {
                 return 'positive-row';
             }
             return '';
-        }
-    },
-    components: {
-        echarts,
-        tableInfo,
-        detailForm,
-        tableForm,
-        approveTable,
-        recordForm,
-        fileTable,
-        manageTable,
-        riskTable,
-        eventTable,
-        dataTable,
-        monitorTable
-    }
-}   
-</script>    
+        },
+        ShowPreMessage(title, ind) {
+            this.index = ind;
+            this.addTab('投后' + title.project + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
+            this.$router.push({ name: 'aftProjectMessage', params: { userId: ind } });
+        },
+        addTab(th, url, name) {
+            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+        },
+        changeActive(index) {
+            this.currentIndex = index;
 
-
-
-
-<style lang="less" scoped>
-.aftProject {
-    width: 100%;
-    background-color: #fff;
-    padding: 24px;
-    .title {
-        width: 100%;
-        height: 64px;
-        line-height: 64px;
-        margin-bottom: 24px;
-        background-color: #2a3142;
-        .left {
-            height: 100%;
-            float: left;
-            margin-left: 24px;
-            .desc {
-                font-size: 20px;
-                font-weight: 600;
-                color: #fff;
-                vertical-align: top;
-            }
-        }
-        .right {
-            height: 100%;
-            float: right;
-            margin-right: 24px;
-            .el-button {
-                border-radius: 24px;
-                padding: 5px 15px;
-            }
-        }
-    }
-    .firstLayer {
-        width: 100%;
-        margin-bottom: 40px;
-        .tableTitle {
-            font-weight: bold;
-            color: #333;
-            font-size: px;
-        }
-    }
-    .secondLayer {
-        .prompt_message {
-            position: relative;
-            width: 100%;
-            height: 262px;
-            vertical-align: middle;
-            background: #eef0f4;
-            padding: 18px 24px;
-            text-align: left;
-            border-radius: 10px;
-            .prompt {
-                line-height: 36px;
-            }
-            .item {
-                width: 100%;
-                height: 36px;
-                margin-left: 24px;
-                line-height: 36px;
-                .count,
-                .desc,
-                .state {
-                    float: left;
-                    line-height: 36px;
-                }
-                .count {
-                    width: 20px;
-                    height: 20px;
-                    line-height: 20px;
-                    border-radius: 100%;
-                    color: #fff;
-                    background: #f05e5e;
-                    text-align: center;
-                    margin-top: 8px;
-                }
-                .desc {
-                    margin: 0 24px 0 20px;
-                }
-                .state {
-                    color: #f05e5e;
-                }
-                .complete {
-                    color: #a0a3aa;
-                }
-            }
-            .img_wrapper img {
-                position: absolute;
-                width: 100px;
-                height: 120px;
-                bottom: 10px;
-                right: 10px;
-            }
-        }
-    }
-    .tabs {
-        width: 100%;
-        margin-top: 50px;
-        padding-bottom: 54px;
-        .el-tabs__nav {
-            width: 100%!important;
-            .el-tabs__item {
-                width: 12.5%!important;
-            }
         }
     }
 }
-</style>
+</script>

@@ -186,9 +186,10 @@ export default {
             ],
             sortList: [
                 { sorts: "全部" },
+                { sorts: "天使" },
+                { sorts: "并购重组" },
                 { sorts: "PE" },
-                { sorts: "VE" },
-                { sorts: "定增" }
+                { sorts: "VC" }
             ],
             tableData: [
                 {
