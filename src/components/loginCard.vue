@@ -28,6 +28,7 @@ export default {
         return {
             name: '',
             password: '',
+            pass: true,
         }
     },
     methods: {

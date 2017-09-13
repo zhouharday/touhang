@@ -47,10 +47,13 @@
                 </el-row>
                 <el-row>
                     <div class="contacts_R_content">
-                        <el-col :span="24">
-                            <div class="grid-content bg-purple">
-
-                            </div>
+                        <el-col :span="24">       
+                        </el-col>
+                    </div>
+                </el-row>
+                <el-row>
+                    <div class="contacts_R_content">
+                        <el-col :span="24">       
                         </el-col>
                     </div>
                 </el-row>
@@ -194,24 +197,6 @@ export default {
                 {
                     src: "/static/img/my_tuxiang.png",
                     name: "张哲",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "陈奕迅",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "周杰伦",
-                    name_bot: "最新版昂",
-                    time: "17:05"
-                },
-                {
-                    src: "/static/img/my_tuxiang.png",
-                    name: "梁静茹",
                     name_bot: "最新版昂",
                     time: "17:05"
                 },
