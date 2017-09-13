@@ -18,24 +18,33 @@ export function clearValue(obj) {
 }
 
 export function getNodes(arr) {
+    // console.log(arr);
     var nodes = [];
     arr.map(function (node) {
-        if (node.pId === 0) {
+        if (node.parentId === '0') {
             nodes.push(node)
         } else {
             pushNode(node,nodes)
         }
     })
+    // console.log(nodes);
     return nodes
 }
 
-function pushNode(node, pNodes) {
+ function pushNode(node, pNodes) {
+    //  alert(111);
+     let charlds = [];
     pNodes.map(function (pNode) {
-        if (pNode.id === node.pId) {
+        // console.log(pNode.children);
+        if (pNode.id == node.parentId) {
+            // console.log('*****:'+ pNode.children);
             if (!pNode.children) {
-                pNode.children = [node]
+                // console.log('//////'+pNode);
+                // alert(111)
+                pNode.children = [node];
             } else {
-                pNode.children.push(node)
+                // alert(222)
+                pNode.children.push(node);
             }
         } else {
             if (pNode.children) {

@@ -1,4 +1,6 @@
-import { Notification } from 'element-ui'
+import {
+    Notification
+} from 'element-ui'
 // import request from 'superagent'
 import * as types from '../mutations-type'
 import loginBox from '../../components/loginBox.vue'
@@ -94,11 +96,11 @@ const actions = {
                 commit('pushUserInfor', data.data.result);
                 window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
                 console.log(state.userInfor);
-                console.log(data.data);
+                // console.log(data.data);
                 if (data.data.result.userInfo.isMerchant >= '1') { //有组织
                     commit('pushMerchants', data.data.result);
                     window.sessionStorage.setItem('merchants', JSON.stringify(state.merchants));
-                    // console.log(state.merchants);
+                    console.log(state.merchants);
                     if (state.merchants.length == '1') { //只有一个组织
                         console.log('um_id:' + state.merchants[0].um_id);
                         console.log('//////////////////////////////////////////////////////////////////////////');
@@ -108,6 +110,11 @@ const actions = {
                         // console.log(state.logoSrc);
                         userPwd.self.$router.push({
                             name: 'homeContent'
+                        });
+                        commit('Notification', {
+                            title: '',
+                            message: '登录成功',
+                            type: 'success'
                         });
                         // userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
                         //     "um_id": state.merchants[0].um_id //用户、机构中间id

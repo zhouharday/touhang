@@ -84,8 +84,9 @@ export default {
         /************************验证码倒计时开始************************************/
         time () {
           if (this.valuePhone) {
+            //   alert(111);
               var that=this;
-              var sec=30;
+              var sec=60;
               var timer1=setInterval(
                  function () {
                     that.valueTime = true;
@@ -100,12 +101,17 @@ export default {
               ,1000);
           }
         },
-        /**************************验证码倒计时结束********************************************/
+        sendVerificationCode(){ //发送验证码 Ajax
+            this.$http.post('api/merchant/validationCode',{
+
+            })
+        },
+         /************************验证码倒计时结束*********************/
 
          /***********************提交表单开始*************************/
         submitForm () {
            if(this.valueData){
-               this.$router.push({ name: 'login' });
+            //    this.$router.push({ name: 'register' });
             //    console.log(this.valueData);
                //发起ajax请求
                
