@@ -4,60 +4,56 @@
             <tabel-header :data="headerInfo_member" @add="method1"></tabel-header>
             <el-table :data="memberData" border style="width: 100%">
                 <el-table-column label="姓名" prop="name" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.name" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="性质" prop="property" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.property }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.property" placeholder=""></el-input>
+                        </span>
+                    </template>
+
                 </el-table-column>
-                <el-table-column label="教育背景" prop="edu" align="center">    
-                </el-table-column>
-                <el-table-column label="联系电话" prop="phone" align="center">
+                <el-table-column label="教育背景" prop="edu" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.edu }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.edu" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="handleEditm(scope.row)">编辑</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,memberData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!-- 添加董事会成员 对话框-->
             <el-dialog title="添加董事会成员" :visible.sync="modalAdd1" :close-on-click-modal="false">
-                <el-form :model="memberForm1" label-width="80px">
-                    <el-form-item label="姓名">
+                <el-form :model="memberForm1" :rules="rules1" ref="memberForm1" label-width="80px">
+                    <el-form-item label="姓名" prop="name">
                         <el-input v-model="memberForm1.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="性质">
+                    <el-form-item label="性质" prop="property">
                         <el-input v-model="memberForm1.property" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="教育背景">
+                    <el-form-item label="教育背景" prop="edu">
                         <el-input v-model="memberForm1.edu" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系电话">
-                        <el-input v-model="memberForm1.phone" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd1 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd1">确 定</el-button>
-                </div>
-            </el-dialog>
-            <!-- 编辑董事会成员 对话框-->
-            <el-dialog title="编辑董事会成员" :visible.sync="modalAdd2" :close-on-click-modal="false">
-                <el-form :model="memberForm2" label-width="80px">
-                    <el-form-item label="姓名">
-                        <el-input v-model="memberForm2.name" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="性质">
-                        <el-input v-model="memberForm2.property" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="教育背景">
-                        <el-input v-model="memberForm2.edu" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="联系电话">
-                        <el-input v-model="memberForm2.phone" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd2">确 定</el-button>
+                    <el-button type="primary" @click="confirmAdd1('memberForm1')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -66,68 +62,77 @@
             <tabel-header :data="headerInfo_structure" @add="method3" class="structureHeader"></tabel-header>
             <el-table :data="structureData" border style="width: 100%">
                 <el-table-column label="股东姓名" prop="name" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.name" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="股东性质" prop="property" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.property }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.property" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="投资金额（元）" prop="capital" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.capital }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.capital" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="持股数量（股）" prop="num" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.num }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.num" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="percent" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.percent }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.percent" placeholder=""></el-input>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="handleEdits(scope.row)">编辑</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,structureData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!-- 添加股权结构 对话框-->
             <el-dialog title="添加股权结构" :visible.sync="modalAdd3" :close-on-click-modal="false">
-                <el-form :model="structureForm1" label-width="110px">
-                    <el-form-item label="股东姓名">
+                <el-form :model="structureForm1" :rules="rules2" ref="structureForm1" label-width="120px">
+                    <el-form-item label="股东姓名" prop="name">
                         <el-input v-model="structureForm1.name" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="股东性质">
+                    <el-form-item label="股东性质" prop="property">
                         <el-input v-model="structureForm1.property" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="投资金额（元）">
+                    <el-form-item label="投资金额（元）" prop="capital">
                         <el-input v-model="structureForm1.capital" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="持股数量（股）">
+                    <el-form-item label="持股数量（股）" prop="num">
                         <el-input v-model="structureForm1.num" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="股权占比（%）">
+                    <el-form-item label="股权占比（%）" prop="percent">
                         <el-input v-model="structureForm1.percent" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd3 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd3">确 定</el-button>
-                </div>
-            </el-dialog>
-            <!-- 编辑股权结构 对话框-->
-            <el-dialog title="编辑股权结构" :visible.sync="modalAdd4" :close-on-click-modal="false">
-                <el-form :model="structureForm2" label-width="110px">
-                    <el-form-item label="股东姓名">
-                        <el-input v-model="structureForm2.name" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="股东性质">
-                        <el-input v-model="structureForm2.property" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="投资金额（元）">
-                        <el-input v-model="structureForm2.capital" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="持股数量（股）" >
-                        <el-input v-model="structureForm2.num" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="股权占比（%）">
-                        <el-input v-model="structureForm2.percent" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd4 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd4">确 定</el-button>
+                    <el-button type="primary" @click="confirmAdd3('structureForm1')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -142,43 +147,56 @@ export default {
     data() {
         return {
             modalAdd1: false,
-            modalAdd2: false,
             modalAdd3: false,
-            modalAdd4: false,
+            //董事会成员
             memberData: [
                 {
-                    name: '',
-                    property: '',
-                    edu: '',
-                    phone: ''
+                    name: '张飞',
+                    property: '合伙人',
+                    edu: '北大金融系研究院博士后',
+                    editFlag: false
+                }, {
+                    name: '李四',
+                    property: '创建人',
+                    edu: '中国人民大学金融系博士',
+                    editFlag: false
                 }
             ],
             memberForm1: {
                 name: '',
                 property: '',
                 edu: '',
-                phone: ''
+                editFlag: false
             },
-            memberForm2: {
-                name: '',
-                property: '',
-                edu: '',
-                phone: ''
+            //添加董事会成员 表单验证规则
+            rules1: {
+                name: [
+                    { required: true, message: '请输入成员姓名', trigger: 'blur' }
+                ],
+                property: [
+                    { required: true, message: '请输入成员性质', trigger: 'blur' }
+                ],
+                edu: [
+                    { required: true, message: '请输入教育背景', trigger: 'blur' }
+                ]
             },
+            //股权结构
             structureData: [
                 {
-                    name: '',
-                    property: '',
-                    capital: '',
-                    num: '',
-                    percent: ''
+                    name: '张飞',
+                    property: '合伙人',
+                    capital: '10,000,000,000',
+                    num: '20',
+                    percent: '12%',
+                    editFlag: false
                 },
                 {
-                    name: '',
-                    property: '',
-                    capital: '',
-                    num: '',
-                    percent: ''
+                    name: '李四',
+                    property: '创建人',
+                    capital: '10,000,000,000',
+                    num: '15',
+                    percent: '10%',
+                    editFlag: false
                 }
             ],
             structureForm1: {
@@ -186,17 +204,29 @@ export default {
                 property: '',
                 capital: '',
                 num: '',
-                percent: ''
+                percent: '',
+                editFlag: false
             },
-            structureForm2: {
-                name: '',
-                property: '',
-                capital: '',
-                num: '',
-                percent: ''
+            //添加股权结构 表单验证规则
+            rules2: {
+                name: [
+                    { required: true, message: '请输入股东姓名', trigger: 'blur' }
+                ],
+                property: [
+                    { required: true, message: '请输入股东性质', trigger: 'blur' }
+                ],
+                capital: [
+                    { required: true, message: '请输入投资金额', trigger: 'blur' }
+                ],
+                num: [
+                    { required: true, message: '请输入持股数量', trigger: 'blur' }
+                ],
+                percent: [
+                    { required: true, message: '请输入股权占比', trigger: 'blur' }
+                ]
             },
             headerInfo_member: {
-                desc: '董事会成员',
+                desc: '董事会成员结构',
                 btnGroup: [{
                     icon: 'plus-round',
                     explain: '添加'
@@ -216,59 +246,59 @@ export default {
         method1() {
             this.modalAdd1 = true;
         },
-        confirmAdd1() {
-            this.modalAdd1 = false;
-            this.memberData.push(this.memberForm1);
-            this.clearMVal1();
+        confirmAdd1(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.memberData.push(this.memberForm1);
+                    this.clearMVal1();
+                    this.modalAdd1 = false;
+                } else {
+                    return false;
+                }
+
+            });
         },
-        //编辑 董事会成员的方法
-        handleEditm(row) {
-            this.modalAdd2 = true;
-        },
-        confirmAdd2() {
-            this.modalAdd2 = false;
-        },
+
+
+
         //添加 股权结构的方法
         method3() {
             this.modalAdd3 = true;
         },
-        confirmAdd3() {
-            this.modalAdd3 = false;
-            this.structureData.push(this.structureForm1);
-            this.clearSVal1();
+        confirmAdd3(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.structureData.push(this.structureForm1);
+                    this.clearSVal1();
+                    this.modalAdd3 = false;
+                } else {
+                    return false;
+                }
+            });
         },
-        //编辑 股权结构的方法
-        handleEdits(row) {
-            this.modalAdd4 = true;
+
+
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
         },
-        confirmAdd4() {
-            this.modalAdd4 = false;
-        },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
-        },
+
+
         //清除 添加董事会成员对话框
         clearMVal1() {
+            // this.memberForm1.name = '';
+            // this.memberForm1.property = '';
+            // this.memberForm1.edu = ''
             this.memberForm1 = {
                 name: '',
                 property: '',
-                edu: '',
-                phone: ''
+                edu: ''
             }
         },
-        //清除 编辑董事会成员对话框
-        clearMVal2() {
-            this.memberForm2 = {
-                name: '',
-                property: '',
-                edu: '',
-                phone: ''
-            }
-        },
+
         //清除 添加股权结构对话框
         clearSVal1() {
-            this.structureForm1 = {
+            this.structureFrom1 = {
                 name: '',
                 property: '',
                 capital: '',
@@ -276,23 +306,19 @@ export default {
                 percent: ''
             }
         },
-        //清除 编辑股权结构对话框
-        clearSVal2() {
-            this.structureForm2 = {
-                name: '',
-                property: '',
-                capital: '',
-                num: '',
-                percent: ''
-            }
+
+
+        //删除当前行
+        handleDelete(index, rows) {
+            rows.splice(index, 1);
         }
     },
     components: {
         tabelHeader
     }
 }
-
 </script>
+
 
 
 <style lang="less" scoped>
