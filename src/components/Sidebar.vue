@@ -16,7 +16,7 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-                                                margin-right: 7px;" src="/static/img/office.png" />
+                                                        margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -26,7 +26,7 @@
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                            领投助手 -->
+                                                                    领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
@@ -75,15 +75,15 @@
                     <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
                 <!-- <el-submenu index="7">
-                                                            <template slot="title">
-                                                                <i class="el-icon-star-on"></i>统计分析</template>
-                                                        </el-submenu> -->
+                                                                    <template slot="title">
+                                                                        <i class="el-icon-star-on"></i>统计分析</template>
+                                                                </el-submenu> -->
                 <!-- <div class="div_el-menu-itemel-submenu__title">
-                            <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                            统计分析 -->
+                                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+                                                                    统计分析 -->
                 <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
-                            <span>{{title_07}}</span>
-                        </div> -->
+                                    <span>{{title_07}}</span>
+                                </div> -->
                 <el-submenu index="7">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>统计分析 -->
@@ -149,6 +149,11 @@
                 </el-submenu>
             </el-menu>
 
+            <!-- <el-row>
+                        <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
+                            <my-tree :model="menuItem"></my-tree>
+                        </el-col>
+                    </el-row> -->
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
@@ -158,30 +163,56 @@
 import { mapState, mapMutations } from 'vuex'
 import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
 import zTree from "../../static/js/zTree/jquery.ztree.core";
+import { getNodes } from 'common/js/config';
+import myTree from 'components/treeMenu';
 export default {
-    comments: { jq, zTree },
-    beforeCreate() { 
-
+    components: { jq, zTree, getNodes, myTree },
+    beforeCreate() {
+        this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+        // console.log(this.$store.state.login.merchants[0].um_id);
+        this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+            // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
+            // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
+            "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
+        })
+            .then(Response => {
+                // console.log(this.$store.state.login.merchants[0].um_id);
+                if (Response.data.status == '200') {
+                    console.log(Response.data.result);
+                    // this.theModel = Response.data.result;
+                    // console.log(Response.data.result);
+                    this.theModel = getNodes(Response.data.result);
+                    //  console.log(nodes);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    created() {
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // // console.log(this.$store.state.login.merchants[0].um_id);
         // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
         // // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
         //     // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
-        //     "merchantId": this.$store.state.login.merchants[0].um_id //用户、机构中间id
+        //     "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
         // })
         //     .then(Response => {
         //         // console.log(this.$store.state.login.merchants[0].um_id);
         //         if (Response.data.status == '200') {
         //             this.menus = Response.data.result;
-        //             console.log(this.menus);
+        //             // let nodes = getNodes(this.menus);
+        //             // console.log(nodes);
         //             // alert(1);
         //         }
         //     })
         //     .catch(error => {
         //         console.log(error);
         //     });
-    },
-    created() {
+
+
+
+
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // // console.log(this.$store.state.login.merchants[0].um_id);
         // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
@@ -199,7 +230,6 @@ export default {
         //     console.log(error);
         // });
     },
-    ready() { },
     mounted() {
         // $(document).ready(function() {
         this.$nextTick(function() {
@@ -238,6 +268,7 @@ export default {
     }),
     data() {
         return {
+            theModel: [],
             setting: {
                 view: {
                     showLine: false,

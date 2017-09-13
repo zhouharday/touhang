@@ -3,6 +3,8 @@
     <el-row>
         <el-col :span="24" class="parent" :class="{stair: model.children && !model.menuContent}">
             <el-row>
+                <!-- {{!isFolder}} -->
+                <!-- {{model}} -->
                 <el-col :span="spanCount">
                     <div class="title" @click="toggle($event, model, currentIndex)">
                         <Icon v-if="!isFolder && model.children" :type="[open ? 'chevron-right': 'chevron-down']">
