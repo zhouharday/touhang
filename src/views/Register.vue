@@ -12,7 +12,7 @@
                 </div>
                 <div class="register-in">
                     <label>所属行业：</label>
-                    <el-select required @change="checkVata" v-model="register.industry" placeholder="请选择">
+                    <el-select class="register_select" required @change="checkVata" v-model="register.industry" placeholder="请选择">
                         <el-option v-for="item in industry" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
                     </el-select>
@@ -23,19 +23,17 @@
                 </div>
                 <div class="register-ad">
                     <label>所在地：</label>
-                    <el-select required @change="checkVata" v-model="register.province" placeholder="请选择">
+                    <el-select class="register_select" required @change="checkVata" v-model="register.province" placeholder="请选择">
                         <el-option v-for="item in provinces" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
                     </el-select>
                 </div>
             </div>
-            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</button>
+            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
             <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
         </div>
     </div>
 </template>
-
-
 
 <script>
 import city from '../../static/js/city.json.js'
@@ -63,15 +61,7 @@ export default {
         }
     },
 
-    mounted() {
-        // this.$http.post('api/dictionaryController/select2Menu',{
-        //     "dicParent": '1'
-        // })
-        // .then( res => {
-        //     console.log(res.data);
-        // })
-        // .catch()
-    },
+    mounted() {},
     created() {
         this.$http.post('api/dictionaryController/select2Menu', {
             "dicParent": '1'
@@ -99,29 +89,13 @@ export default {
             });
         function getIndustry(self) { //获取行业数据
             return self.$http.post('api/dictionaryController/select2Menu', {
-                "dicParent": '3'
+                "dicParent": '1'
             })
-                .then(res => {
-                    if (res.data.status == '200') {
-                        this.provinces = res.data.result;
-                        console.log(res.data.result);
-                    }
-                })
-                .catch(error => {
-
-                });
         };
         function getRegister(self) { //获取省份数据
             return self.$http.post('api/dictionaryController/select2Menu', {
                 "dicParent": '3'
             })
-                .then(res => {
-                    if (res.data.status == '200') {
-                        this.provinces = res.data.result;
-                        console.log(res.data.result);
-                    }
-                })
-                .catch()
         };
         // let self = this;
         // axios.all([getIndustry(this), getRegister(this)])
@@ -155,11 +129,9 @@ export default {
         submitForm() {
             if (this.valueData) {
                 this.$store.state.register.register = this.register;
+                console.log(this.$store.state.register.register);
                 // window.sessionStorage('register',JSON.stringify(this.register));
-                // console.log(this.$store.state.register.register);
-                // this.register
-                // console.log(this.register);
-                // this.$router.push({ name: 'registerphone' });
+                this.$router.push({ name: 'contacts' });
                 //  console.log(this.valueData);
             }
         }
@@ -241,16 +213,17 @@ input::-webkit-input-placeholder {
 .register-user,
 .register-province,
 .register-city {
-    width: 320px;
-    height: 55px;
-    padding: 10px 15px;
+    width: 300px;
+    height: 36px;
+    padding: 10px;
     margin-left: 20px;
     font-size: 16px;
-    color: #fff;
+    /* color: #fff; */
     border: none;
-    border-bottom: 2px solid #a6a9ad;
+    border-radius: 4px;
+    /* border-bottom: 2px solid #a6a9ad; */
     outline: none;
-    background: transparent;
+    /* background: transparent; */
 }
 
 .register-province,
@@ -277,5 +250,10 @@ input::-webkit-input-placeholder {
 
 .active {
     background: red;
+}
+.register_select{
+    margin-left: 20px;
+    /* background:  */
+    width: 300px;
 }
 </style>

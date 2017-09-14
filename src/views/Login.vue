@@ -42,6 +42,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import md5 from 'js-md5'
 export default {
     computed: {
         ...mapState({
@@ -83,7 +84,9 @@ export default {
                 sessionStorage.clear();
                 // this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
-                let pass = this.passWord;
+                // let pass = this.passWord;
+                let pass = md5(this.passWord,32);
+                // console.log(pass);
                 this.userName = '';
                 this.passWord = '';
                 this.valueData = false;
@@ -93,6 +96,7 @@ export default {
                     pwd: pass,
                     self: this
                 });
+                // console.log(pass);
             }
         },
         goBack($event) {
