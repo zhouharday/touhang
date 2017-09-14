@@ -3,7 +3,7 @@
         <v-head></v-head>
         <v-sidebar></v-sidebar>
         <div class="content">
-            <v-shouye></v-shouye>
+            <v-shouye v-if="isVshowYe"></v-shouye>
             <transition name="bounce">
                 <router-view></router-view>
             </transition>
@@ -34,8 +34,11 @@
 import vHead from './Header.vue';
 import vSidebar from './Sidebar.vue';
 import vShouye from '../views/home/homeTab.vue';
-
+import { mapState } from 'vuex'
 export default {
+    computed: mapState({
+        isVshowYe: state => state.register.isVshowYe,
+    }),
     components: {
         vHead, vSidebar, vShouye
     },

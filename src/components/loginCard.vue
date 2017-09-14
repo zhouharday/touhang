@@ -9,7 +9,7 @@
         </div>
         <div class="find-pass">
             <!-- <router-link to=""></router-link> -->
-            <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
+            <router-link v-if="pass" class="pass-zhuce" to="/registerphone">企业注册</router-link>
             <a href="#" class="pass-find">找回密码</a>
         </div>
     </div>
@@ -130,7 +130,7 @@ span {
 }
 
 input::-webkit-input-placeholder {
-    color: #a6a9ad;
+    // color: #a6a9ad;
 }
 
 .login-box {
@@ -153,7 +153,8 @@ input::-webkit-input-placeholder {
 
 .login-account {
     width: 382px;
-    height: 84px;
+    // height: 84px;
+    margin-top: 30px;
     background: transparent;
     border: none;
     font-size: 20px;

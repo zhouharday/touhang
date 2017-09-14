@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import iView from 'iview';
 import echarts from 'echarts';
+import md5 from 'js-md5';
 // 引入 ECharts 主模块
 // var echarts = require('echarts/lib/echarts');
 
@@ -20,7 +21,7 @@ import store from './store';
 
 
 Vue.use(iView);
-Vue.use(echarts);
+// Vue.use(echarts);
 Vue.use(ElementUI);
 
 Vue.prototype.$http = axios;
