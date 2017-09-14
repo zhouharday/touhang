@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <el-button style="color:#fff;" type="text" @click="open">申请开通系统试用</el-button>
+                                    <el-button style="color:#fff;" type="text" @click="openDialog('form')">申请开通系统试用</el-button>
                                 </div>
                             </div>
                         </el-col>
@@ -47,16 +47,78 @@
                 </el-row>
                 <el-row>
                     <div class="contacts_R_content">
-                        <el-col :span="24">       
+                        <el-col :span="24">
                         </el-col>
                     </div>
                 </el-row>
                 <el-row>
                     <div class="contacts_R_content">
-                        <el-col :span="24">       
+                        <el-col :span="24">
                         </el-col>
                     </div>
                 </el-row>
+                <!-- 申请开通系统 对话框 -->
+                <el-dialog title="申请开通系统" :visible.sync="systemDialog">
+                    <!-- <i></i> -->
+                    <el-form :model="form" :rules="rules" ref="form" label-width="200px">
+                        <el-row>
+                            <el-col>
+                                <i></i>
+                            </el-col>
+                            <el-col :span="18">
+                                <el-form-item label="统一社会信用代码" prop="creditCode">
+                                    <el-input v-model="form.creditCode" auto-complete="off" class="mgl"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="18">
+                                <el-form-item label="企业名称" prop="companyName">
+                                    <el-input v-model="form.companyName" auto-complete="off" class="mgl"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="18">
+                                <el-form-item label="法人代表" prop="delegate">
+                                    <el-input v-model="form.delegate" auto-complete="off" class="mgl"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="18">
+                                <el-form-item label="详细地址" prop="address">
+                                    <el-input v-model="form.address" auto-complete="off" class="mgl"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col>
+                                <i></i>
+                            </el-col>
+                            <el-col>
+                                <el-form-item prop="edition">
+                                    <el-radio v-model="form.edition" label="1">
+                                        <b>申请免费版</b>
+                                    </el-radio>
+                                    <p>5个账号以下可免费试用该系统；在此基础上可购买使用账号数量</p>
+                                </el-form-item>
+                            </el-col>
+                            <el-col>
+                                <el-form-item prop="edition">
+                                    <el-radio v-model="form.edition" label="2">
+                                        <b>申请年费版</b>
+                                    </el-radio>
+                                    <p>不限账号数量，试用一年</p>
+                                </el-form-item>
+                            </el-col>
+                            <el-col>
+                                <el-form-item prop="edition">
+                                    <el-radio v-model="form.edition" label="3">
+                                        <b>申请永久版</b>
+                                    </el-radio>
+                                    <p>不限账号数量，永久使用</p>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="systemDialog = false">取 消</el-button>
+                        <el-button type="primary" @click="submitForm('form')">提 交</el-button>
+                    </div>
+                </el-dialog>
             </div>
         </div>
     </section>
@@ -103,8 +165,7 @@ section {
                             >img {
                                 width: 46px;
                                 height: 46px;
-                                display: inline-block;
-                                // float: left;
+                                display: inline-block; // float: left;
                             }
                         }
                         >div:nth-child(2) {
@@ -158,9 +219,7 @@ section {
                     }
                 }
                 >div:nth-child(2) {
-                    >button{
-                        
-                    }
+                    >button {}
                     position: absolute;
                     right: 13.5px;
                     top: 13.5px;
@@ -186,12 +245,31 @@ section {
 .bag {
     background: #dee0e5;
 }
+
+.mgl {
+    margin-left: 40px;
+}
+
+i {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #c4c4c4;
+}
+
+b {
+    font-size: 16px;
+}
 </style>
+
+
+
 
 <script>
 export default {
     data() {
         return {
+            systemDialog: false,
             ind: '',
             contacts_list: [
                 {
@@ -205,11 +283,35 @@ export default {
                 src: "",
                 name: "",
                 title: "聚乐新能源集团-研发部总监"
-            }
+            },
+            form: {
+                creditCode: '',
+                companyName: '',
+                delegate: '',
+                address: '',
+                edition: ''
+            },
+            rules: {
+                creditCode: [
+                    { required: true, message: '请输入信用代码', trigger: 'blur' }
+                ],
+                companyName: [
+                    { required: true, message: '请输入企业名称', trigger: 'blur' }
+                ],
+                delegate: [
+                    { required: true, message: '请输入法人代表', trigger: 'blur' }
+                ],
+                address: [
+                    { required: true, message: '请输入详细地址', trigger: 'blur' }
+                ],
+                edition: [
+                    { required: true, message: '请选择系统版本', trigger: 'change' }
+                ]
+            },
         }
     },
     methods: {
-        active(index,item) {
+        active(index, item) {
             // console.log(item);
             this.ind = index;
             this.srcContent.src = item.src;
@@ -217,14 +319,17 @@ export default {
             // this.srcContent.title = item.src;
 
         },
-        open() {
-            this.$alert('您好,我们已经收到您的试用申请,会尽快为提供优质的服务', '', {
-                confirmButtonText: '确定',
-                callback: action => {
-                    this.$message({
-                        type: 'info',
-                        message: `action: ${action}`
-                    });
+        openDialog(formName) {
+           this.systemDialog = !this.systemDialog;
+           this.$refs[formName].resetFields();
+        },
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.systemDialog = !this.systemDialog;
+                } else {
+                    return false;
+                    this.$refs[formName].resetFields();
                 }
             });
         }

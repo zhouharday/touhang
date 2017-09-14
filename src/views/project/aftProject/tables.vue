@@ -1,13 +1,13 @@
 <template>
     <div class="tables">
         <div class="memberTable">
-            <tabel-header :data="headerInfo_member" @add="method1"></tabel-header>
+            <tabel-header :data="headerInfo_member" @add="addMember"></tabel-header>
             <el-table :data="memberData" border style="width: 100%">
                 <el-table-column label="姓名" prop="name" align="center">
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.name" placeholder=""></el-input>
+                            <el-input v-model="scope.row.name"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -15,7 +15,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.property }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.property" placeholder=""></el-input>
+                            <el-input v-model="scope.row.property"></el-input>
                         </span>
                     </template>
 
@@ -24,7 +24,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.edu }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.edu" placeholder=""></el-input>
+                            <el-input v-model="scope.row.edu"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -40,32 +40,32 @@
             </el-table>
             <!-- 添加董事会成员 对话框-->
             <el-dialog title="添加董事会成员" :visible.sync="modalAdd1" :close-on-click-modal="false">
-                <el-form :model="memberForm1" :rules="rules1" ref="memberForm1" label-width="80px">
+                <el-form :model="memberForm" :rules="rules1" ref="memberForm" label-width="80px">
                     <el-form-item label="姓名" prop="name">
-                        <el-input v-model="memberForm1.name" auto-complete="off"></el-input>
+                        <el-input v-model="memberForm.name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="性质" prop="property">
-                        <el-input v-model="memberForm1.property" auto-complete="off"></el-input>
+                        <el-input v-model="memberForm.property" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="教育背景" prop="edu">
-                        <el-input v-model="memberForm1.edu" auto-complete="off"></el-input>
+                        <el-input v-model="memberForm.edu" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd1 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd1('memberForm1')">确 定</el-button>
+                    <el-button type="primary" @click="confirmAdd1('memberForm')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
 
         <div class="structureTable">
-            <tabel-header :data="headerInfo_structure" @add="method3" class="structureHeader"></tabel-header>
+            <tabel-header :data="headerInfo_structure" @add="addStructure" class="structureHeader"></tabel-header>
             <el-table :data="structureData" border style="width: 100%">
                 <el-table-column label="股东姓名" prop="name" align="center">
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.name" placeholder=""></el-input>
+                            <el-input v-model="scope.row.name"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -73,7 +73,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.property }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.property" placeholder=""></el-input>
+                            <el-input v-model="scope.row.property"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -81,7 +81,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.capital }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.capital" placeholder=""></el-input>
+                            <el-input v-model="scope.row.capital"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -89,7 +89,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.num }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.num" placeholder=""></el-input>
+                            <el-input v-model="scope.row.num"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -97,7 +97,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.percent }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.percent" placeholder=""></el-input>
+                            <el-input v-model="scope.row.percent"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -112,27 +112,27 @@
                 </el-table-column>
             </el-table>
             <!-- 添加股权结构 对话框-->
-            <el-dialog title="添加股权结构" :visible.sync="modalAdd3" :close-on-click-modal="false">
-                <el-form :model="structureForm1" :rules="rules2" ref="structureForm1" label-width="120px">
+            <el-dialog title="添加股权结构" :visible.sync="modalAdd2" :close-on-click-modal="false">
+                <el-form :model="structureForm" :rules="rules2" ref="structureForm" label-width="120px">
                     <el-form-item label="股东姓名" prop="name">
-                        <el-input v-model="structureForm1.name" auto-complete="off"></el-input>
+                        <el-input v-model="structureForm.name" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="股东性质" prop="property">
-                        <el-input v-model="structureForm1.property" auto-complete="off"></el-input>
+                        <el-input v-model="structureForm.property" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="投资金额（元）" prop="capital">
-                        <el-input v-model="structureForm1.capital" auto-complete="off"></el-input>
+                        <el-input v-model="structureForm.capital" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="持股数量（股）" prop="num">
-                        <el-input v-model="structureForm1.num" auto-complete="off"></el-input>
+                        <el-input v-model="structureForm.num" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="股权占比（%）" prop="percent">
-                        <el-input v-model="structureForm1.percent" auto-complete="off"></el-input>
+                        <el-input v-model="structureForm.percent" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd3 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd3('structureForm1')">确 定</el-button>
+                    <el-button @click="modalAdd2 = false">取 消</el-button>
+                    <el-button type="primary" @click="confirmAdd2('structureForm')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -147,7 +147,7 @@ export default {
     data() {
         return {
             modalAdd1: false,
-            modalAdd3: false,
+            modalAdd2: false,
             //董事会成员
             memberData: [
                 {
@@ -162,7 +162,7 @@ export default {
                     editFlag: false
                 }
             ],
-            memberForm1: {
+            memberForm: {
                 name: '',
                 property: '',
                 edu: '',
@@ -199,7 +199,7 @@ export default {
                     editFlag: false
                 }
             ],
-            structureForm1: {
+            structureForm: {
                 name: '',
                 property: '',
                 capital: '',
@@ -243,71 +243,54 @@ export default {
     },
     methods: {
         //添加 董事会成员的方法
-        method1() {
-            this.modalAdd1 = true;
+        addMember() {
+            let new_memberForm = {
+                name: '',
+                property: '',
+                edu: '',
+                editFlag: false
+            };
+            this.memberForm = new_memberForm;
+            this.modalAdd1 = !this.modalAdd1;
         },
         confirmAdd1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.memberData.push(this.memberForm1);
-                    this.clearMVal1();
-                    this.modalAdd1 = false;
+                    this.memberData.push(this.memberForm);
+                    this.modalAdd1 = !this.modalAdd1;
                 } else {
                     return false;
                 }
 
             });
         },
-
-
-
         //添加 股权结构的方法
-        method3() {
-            this.modalAdd3 = true;
-        },
-        confirmAdd3(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.structureData.push(this.structureForm1);
-                    this.clearSVal1();
-                    this.modalAdd3 = false;
-                } else {
-                    return false;
-                }
-            });
-        },
-
-
-        checkEdit(index, row) { //编辑
-            // console.log(row)
-            row.editFlag = !row.editFlag;
-        },
-
-
-        //清除 添加董事会成员对话框
-        clearMVal1() {
-            // this.memberForm1.name = '';
-            // this.memberForm1.property = '';
-            // this.memberForm1.edu = ''
-            this.memberForm1 = {
-                name: '',
-                property: '',
-                edu: ''
-            }
-        },
-
-        //清除 添加股权结构对话框
-        clearSVal1() {
-            this.structureFrom1 = {
+        addStructure() {
+            let new_structureForm = {
                 name: '',
                 property: '',
                 capital: '',
                 num: '',
-                percent: ''
-            }
+                percent: '',
+                editFlag: false
+            };
+            this.structureForm = new_structureForm;
+            this.modalAdd2 = !this.modalAdd2;
         },
-
-
+        confirmAdd2(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.structureData.push(this.structureForm);
+                    this.modalAdd2 = !this.modalAdd2;
+                } else {
+                    return false;
+                }
+            });
+        },
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
+        },
         //删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
