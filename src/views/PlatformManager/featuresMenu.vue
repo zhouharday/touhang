@@ -141,7 +141,7 @@ export default {
             }
         }
     },
-    methods: {
+    methods: { 
         addMenu(index, row) { //添加
             let new_addFormData = {
                 name: "",

@@ -21,15 +21,14 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="operatingModal2 =true">编辑</el-button>
+                        <el-button type="text" size="small" @click="operatingModal2 =true">添加数据</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,operatingData)">删除</el-button>
-                        <el-button type="text" size="small">添加数据</el-button>
                     </template>
                 </el-table-column>
-            </el-table>.
+            </el-table>
 
-            <!-- 添加经营数据 对话框-->
-            <el-dialog title="添加经营数据" :visible.sync="operatingModal1" :close-on-click-modal="false">
+            <!-- 添加经营数据表头 对话框-->
+            <el-dialog title="添加经营数据表头" :visible.sync="operatingModal1" :close-on-click-modal="false">
                 <el-form :model="operatingForm1" :label-width="formLabelWidth">
                     <el-row>
                         <el-col :span="12">
@@ -82,8 +81,8 @@
                     <el-button type="primary" @click="operatingAdd">保存</el-button>
                 </div>
             </el-dialog>
-            <!-- 编辑经营数据  对话框 -->
-            <el-dialog title="编辑经营数据" :visible.sync="operatingModal2" :close-on-click-modal="false" class="editData">
+            <!-- 添加经营数据明细 对话框 -->
+            <el-dialog title="添加经营数据明细" :visible.sync="operatingModal2" :close-on-click-modal="false" class="editData">
                 <el-table :data="operatingData1" border style="width:100%">
                     <el-table-column label="项目" prop="project" align="center">
                         <template scope="scope">
@@ -142,8 +141,8 @@
                     <el-button type="primary" @click="operatingEdit">保存</el-button>
                 </div>
             </el-dialog>
-            <!--  添加经营数据 对话框-->
-            <el-dialog title="添加经营数据明细" :visible.sync="operatingModal3" :close-on-click-modal="false">
+            <!--  添加经营数据项目 对话框-->
+            <el-dialog title="添加经营数据项目" :visible.sync="operatingModal3" :close-on-click-modal="false">
                 <el-form :model="operatingForm2" label-width="140px">
                     <el-row>
                         <el-col :span="12">
@@ -192,12 +191,12 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="financialModal2 =true">编辑</el-button>
+                        <el-button type="text" size="small" @click="financialModal2 =true">添加数据</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,financialData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <!--  添加财务数据 对话框-->
+            <!--  添加财务数据表头  对话框-->
             <el-dialog title="添加财务数据" :visible.sync="financialModal1" :close-on-click-modal="false">
                 <el-form :model="financialForm1" :label-width="formLabelWidth">
                     <el-row>
@@ -249,7 +248,7 @@
                     <el-button type="primary" @click="financialAdd">保存</el-button>
                 </div>
             </el-dialog>
-            <!--  编辑财务数据 对话框-->
+            <!--  添加财务数据明细 对话框-->
             <el-dialog title="编辑财务数据" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal">
                     <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">

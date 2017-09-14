@@ -3,7 +3,7 @@
         <section class="riskTable">
             <tabel-header :data="headerInfo_risk" @add="modalAdd = true"></tabel-header>
             <el-table :data="riskData" border style="width: 100%" align="center">
-                <el-table-column label="主题" prop="riskTheme" align="center"> 
+                <el-table-column label="主题" prop="riskTheme" align="center">
                 </el-table-column>
                 <el-table-column label="处理人" prop="handlePerson" align="center">
                 </el-table-column>
@@ -17,6 +17,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
+                        <el-button type="text" size="small" @click="modalRiskView=true">查看详情</el-button>
                         <el-button type="text" size="small" @click="modalTracking=true">跟踪</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,riskData)">删除</el-button>
                     </template>
@@ -78,6 +79,36 @@
                     <el-button type="primary" @click="confirmAdd">保存</el-button>
                 </div>
             </el-dialog>
+            <!-- 查看风险详情 对话框 -->
+            <el-dialog title="查看风险上报详情" :visible.sync="modalRiskView" :close-on-click-modal="false">
+                <el-table :data="tableData" border style="width: 100%">
+                    <el-table-column prop="theme" label="风险主题" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="description" label="风险描述" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="proposer" label="提出人" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="startingDate" label="提出时间" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="recipient" label="接收人" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column label="完成时间" width="200px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="appendix" label="附件" width="150px" align="center">
+                    </el-table-column>
+                </el-table>
+                <div class="operationBox">
+                    <div class="left">
+                        <div>处理记录</div>
+                    </div>
+                    <div class="right">
+                        <p v-for="(item,index) in riskRecords" :key="item.index">
+                            <span>{{item.record}}</span>
+                            <span>{{item.file}}</span>
+                        </p>
+                    </div>
+                </div>
+            </el-dialog>
             <!-- 风险跟踪  对话框 -->
             <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
                 <el-table :data="tableData" border style="width: 100%">
@@ -101,7 +132,7 @@
                         <div>处理记录</div>
                     </div>
                     <div class="right">
-                        <p v-for="(item,index) in Records" :key="item.index">
+                        <p v-for="(item,index) in riskRecords" :key="item.index">
                             <span>{{item.record}}</span>
                             <span>{{item.file}}</span>
                         </p>
@@ -145,6 +176,7 @@ export default {
     data() {
         return {
             modalAdd: false,
+            modalRiskView: false,
             modalTracking: false,
             formLabelWidth: '80px',
             file: null,
@@ -177,7 +209,7 @@ export default {
                     appendix: '',
                 }
             ],
-            Records: [
+            riskRecords: [
                 {
                     record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
                     file: 'AAA.doc'

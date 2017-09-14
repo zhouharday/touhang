@@ -5,8 +5,9 @@ Vue.use(Router)
 import r1 from "./r1"
 import r2 from "./r2"
 import r3 from "./r3"
+import r4 from "./r4"
 let arr = [];
-arr = arr.concat(r1, r2, r3)
+arr = arr.concat(r1, r2, r3, r4)
 
 export default new Router({
     mode: 'history',

@@ -35,7 +35,7 @@
                         </div>
                     </el-dialog>
                     <!-- 编辑项目费用 对话框-->
-                    <el-dialog title="添加项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
+                    <el-dialog title="编辑项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
                         <el-form :model="costForm2" label-width="100px">
                             <el-form-item label="费用类型">
                                 <el-select v-model="costForm2.costSort" placeholder="请选择费用类型" style="width: 100%;">
@@ -138,7 +138,10 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.fundName" placeholder=""></el-input>
+                                        <el-select v-model="scope.row.fundName" placeholder="请选择基金">
+                                            <el-option label="基金一" value="基金一"></el-option>
+                                            <el-option label="基金二" value="基金二"></el-option>
+                                        </el-select>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -175,7 +178,10 @@
                     <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
                         <el-form :model="fundForm1" label-width="110px">
                             <el-form-item label="基金名称">
-                                <el-input v-model="fundForm1.fundName" auto-complete="off"></el-input>
+                                <el-select v-model="fundForm1.fundName" placeholder="请选择基金" style="width: 100%">
+                                    <el-option label="基金一" value="基金一"></el-option>
+                                    <el-option label="基金二" value="基金二"></el-option>
+                                </el-select>
                             </el-form-item>
                             <el-form-item label="投资金额（元）">
                                 <el-input v-model="fundForm1.investment" auto-complete="off"></el-input>
@@ -409,13 +415,13 @@
                     </el-table-column>
                     <el-table-column label="相关附件" prop="relativedAppendix" align="center">
                     </el-table-column>
-                     <el-table-column label="经办人" prop="operator" align="center">
+                    <el-table-column label="经办人" prop="operator" align="center">
                     </el-table-column>
                     <el-table-column label="回款日期" prop="handlingDate" align="center">
                     </el-table-column>
                 </el-table>
                 <div class="table_title" style="margin-top:10px">
-                    <div class="left" style="width:25%;"> 
+                    <div class="left" style="width:25%;">
                         <span class="desc">{{ table_title }}</span>
                     </div>
                 </div>
@@ -507,13 +513,13 @@ export default {
             },
             fundData1: [
                 {
-                    fundName: 'AAAAAA合同',
+                    fundName: 'AAAAAA基金',
                     investment: '',
                     percent: '',
                     editFlag: false
                 },
                 {
-                    fundName: 'BBBBBB合同',
+                    fundName: 'BBBBBB基金',
                     investment: '',
                     percent: '',
                     editFlag: false
@@ -626,12 +632,12 @@ export default {
             // 项目退出
             outingData1: [
                 {
-                     title: 'AAA项目',
-                     outingSort: '',
-                     outingMoney: '',
-                     relativedAppendix: '',
-                     operator: '',
-                     handlingDate: ''
+                    title: 'AAA项目',
+                    outingSort: '',
+                    outingMoney: '',
+                    relativedAppendix: '',
+                    operator: '',
+                    handlingDate: ''
                 }
             ],
             outingData2: [
@@ -748,13 +754,12 @@ export default {
     border-bottom: none;
     background: #eef1f6;
     .left {
-        text-align: center;
-        // border-right: 1px solid #dfe6ec;
+        text-align: center; // border-right: 1px solid #dfe6ec;
         // box-sizing: border-box;
         .desc {
             font-size: 18px;
             font-weight: 600;
-            color: #1f2d3d; 
+            color: #1f2d3d;
         }
     }
     .right {

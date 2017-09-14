@@ -25,6 +25,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
+                        <el-button type="text" size="small" @click="modalRiskView=true">查看详情</el-button>
                         <el-button type="text" size="small" @click="modalTracking=true">跟踪</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,riskData)">删除</el-button>
                     </template>
@@ -85,6 +86,36 @@
                     <el-button type="primary" @click="confirmAdd">保存</el-button>
                 </div>
             </el-dialog>
+            <!-- 查看风险详情 对话框 -->
+            <el-dialog title="查看风险上报详情" :visible.sync="modalRiskView" :close-on-click-modal="false">
+                <el-table :data="riskData1" border style="width: 100%">
+                    <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="description" label="风险描述" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="proposer" label="提出人" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="startingDate" label="提出时间" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="recipient" label="接收人" width="150px" align="center">
+                    </el-table-column>
+                    <el-table-column label="完成时间" width="200px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="appendix" label="附件" width="150px" align="center">
+                    </el-table-column>
+                </el-table>
+                <div class="operationBox">
+                    <div class="left">
+                        <div>处理记录</div>
+                    </div>
+                    <div class="right">
+                        <p v-for="(item,index) in riskRecords" :key="item.index">
+                            <span>{{item.record}}</span>
+                            <span>{{item.file}}</span>
+                        </p>
+                    </div>
+                </div>
+            </el-dialog>
             <!-- 风险跟踪  对话框 -->
             <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
                 <el-table :data="riskData1" border style="width: 100%">
@@ -108,7 +139,7 @@
                         <div>处理记录</div>
                     </div>
                     <div class="right">
-                        <p v-for="(item,index) in Records" :key="item.index">
+                        <p v-for="(item,index) in riskRecords" :key="item.index">
                             <span>{{item.record}}</span>
                             <span>{{item.file}}</span>
                         </p>
@@ -156,29 +187,71 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
+                         <el-button type="text" size="small" @click="modalAlarmView=true">查看详情</el-button>
                         <el-button type="text" size="small" @click="modalAlarm=true">立即处理</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
+            <!-- 查看风险预警详情 对话框-->
+            <el-dialog title="查看风险预警详情" :visible.sync="modalAlarmView" :close-on-click-modal="false">
+                <el-table :data="alarmData1" border style="width: 100%">
+                    <el-table-column prop="dataSources" label="数据来源" width="147px" align="center">
+                    </el-table-column>
+                    <el-table-column prop="dataSort" label="类型" align="center">
+                    </el-table-column>
+                    <el-table-column prop="date" label="基准日" align="center">
+                    </el-table-column>
+                    <el-table-column prop="targetName" label="指标名称" align="center">
+                    </el-table-column>
+                    <el-table-column prop="alarmRule" label="预警规则" align="center">
+                    </el-table-column>
+                    <el-table-column prop="threshold" label="阈值" align="center">
+                    </el-table-column>
+                    <el-table-column prop="realValue" label="实际值" align="center">
+                    </el-table-column>
+                </el-table>
+                <div class="operationBox">
+                    <div class="left">
+                        <div>处理记录</div>
+                    </div>
+                    <div class="right">
+                        <p v-for="(item,index) in  alarmRecords" :key="item.index">
+                            <span>{{item.record}}</span>
+                            <span>{{item.file}}</span>
+                        </p>
+                    </div>
+                </div>
+            </el-dialog>
             <!-- 风险处理 对话框-->
             <el-dialog title="风险处理" :visible.sync="modalAlarm" :close-on-click-modal="false">
                 <el-table :data="alarmData1" border style="width: 100%">
-                    <el-table-column prop="dataSources" label="数据来源"  width="150px" align="center">
+                    <el-table-column prop="dataSources" label="数据来源" width="147px" align="center">
                     </el-table-column>
-                    <el-table-column prop="dataSort" label="类型"  width="150px" align="center">
+                    <el-table-column prop="dataSort" label="类型" align="center">
                     </el-table-column>
-                    <el-table-column prop="date" label="基准日"  width="150px" align="center">
+                    <el-table-column prop="date" label="基准日" align="center">
                     </el-table-column>
-                    <el-table-column prop="targetName" label="指标名称" width="150px" align="center">
+                    <el-table-column prop="targetName" label="指标名称" align="center">
                     </el-table-column>
-                    <el-table-column prop="alarmRule" label="预警规则" width="150px" align="center">
+                    <el-table-column prop="alarmRule" label="预警规则" align="center">
                     </el-table-column>
-                    <el-table-column prop="threshold" label="阈值"  width="150px"  align="center">
+                    <el-table-column prop="threshold" label="阈值" align="center">
                     </el-table-column>
-                    <el-table-column prop="realValue" label="实际值"  width="150px" align="center">
+                    <el-table-column prop="realValue" label="实际值" align="center">
                     </el-table-column>
                 </el-table>
+                <div class="operationBox">
+                    <div class="left">
+                        <div>处理记录</div>
+                    </div>
+                    <div class="right">
+                        <p v-for="(item,index) in  alarmRecords" :key="item.index">
+                            <span>{{item.record}}</span>
+                            <span>{{item.file}}</span>
+                        </p>
+                    </div>
+                </div>
                 <el-form :model="alarmForm" style="margin-top:20px;background:#eef1f6;padding:10px;" :label-width="formLabelWidth">
                     <el-form-item label="处理结果">
                         <el-select v-model="alarmForm.result" placeholder="请选择处理状态">
@@ -221,7 +294,9 @@ export default {
             f_show: true,
             s_show: false,
             modalAdd: false,
+            modalRiskView: false,
             modalTracking: false,
+            modalAlarmView: false,
             modalAlarm: false,
             formLabelWidth: '80px',
             file: null,
@@ -250,7 +325,7 @@ export default {
                 }
             ],
             // 风险跟踪 处理记录
-            Records: [
+            riskRecords: [
                 {
                     record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
                     file: 'AAA.doc'
@@ -283,7 +358,35 @@ export default {
                     state: '管理'
                 }
             ],
-
+            // 风险预警 立即处理table
+            alarmData1: [
+                {
+                    dataSources: '',
+                    dataSort: '',
+                    date: '',
+                    targetName: '',
+                    alarmRule: '',
+                    threshold: '',
+                    realValue: ''
+                }
+            ],
+            // 风险预警 处理记录
+            alarmRecords: [
+                {
+                    record: '2017-06-28 18:42:55   张三  【处理中】已经提交相应处理方案',
+                    file: 'BBB.doc'
+                },
+                {
+                    record: '2017-06-28 18:42:55   张三  【已解决】 已经解决该预警',
+                    file: 'BBB.PDF'
+                }
+            ],
+            // 风险预警 立即处理表单
+            alarmForm: {
+                result: '',
+                content: '',
+                appendix: ''
+            },
             alarmData: [
                 {
                     dataName: '资产负债表',
@@ -293,30 +396,12 @@ export default {
                     alarm: '正常'
                 }
             ],
-            // 风险预警 立即处理table
-            alarmData1: [
-                {
-                  dataSources: '',
-                  dataSort: '',
-                  date: '',
-                  targetName: '',
-                  alarmRule: '',
-                  threshold: '',
-                  realValue: ''
-                }
-            ],
-            // 风险预警 立即处理表单
-            alarmForm: {
-                result: '',
-                content: '',
-                appendix: ''
-            }
         }
     },
     methods: {
         // 添加预警 的保存按钮
         confirmAlarm() {
-            this.modalAlarm=false;
+            this.modalAlarm = false;
 
 
         },
