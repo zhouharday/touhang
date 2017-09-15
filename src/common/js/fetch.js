@@ -4,6 +4,7 @@ import {Message} from 'iview'
 
 const service = axios.create({
     timeout: 5000,
+    baseURL: 'http://192.168.0.198:9091',
     headers: {
         'Content-Type': 'application/json'
     }

@@ -114,6 +114,10 @@ const r3 = [
         name: 'myfund',
         component: myfund
     }, {
+        path: 'add', // home/基金文档
+        name: 'add',
+        component: add
+    }, {
         path: 'fundDetails/:id', // home/基金详情
         name: 'fundDetails',
         component: fundDetails

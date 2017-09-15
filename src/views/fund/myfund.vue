@@ -48,6 +48,7 @@
 import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
 import {mapMutations} from 'vuex'
+import {getManagementType} from 'api/fund'
 const INDEX = 0;
 const NOW = 0;
 export default {
@@ -113,7 +114,18 @@ export default {
             this.clickIndex = n
         },
         watchTarget(el) {
-            this.$router.push('/home/fund/add')
+            this.addTab({
+                type: 'add',
+                title: '添加基金',
+                url: '/home/add',
+                name: 'add'
+            });
+            this.$store.dispatch('getManageType').then(() => {
+                this.$router.push('/home/add')
+            }).catch(() =>{
+                this.$router.push('/home/myfund')
+            })
+
         },
         handleRouter(index, row) {
             this.addTab({
