@@ -10,44 +10,44 @@
         <div class="find-pass">
             <!-- <router-link to=""></router-link> -->
             <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
-            <span class="pass-find" @click="findPwd=true">找回密码</span>
+            <span class="pass-find" @click="openDialog('form')">找回密码</span>
             <router-link v-if="pass" class="pass-zhuce" to="/registerphone">企业注册</router-link>
-            <a href="#" class="pass-find">找回密码</a>
+            <!-- <a href="#" class="pass-find">找回密码</a> -->
         </div>
         <!-- 忘记密码 对话框 -->
-        <el-dialog title="忘记密码" :visible.sync="findPwd" top="20%" close-on-click-modal="false">
+        <!-- <el-dialog title="忘记密码" :visible.sync="findDialog" top="20%" close-on-click-modal="false">
             <el-form :model="form" :rules="rules" ref="form" label-position="left" label-width="120px">
                 <el-row>
                     <el-col :span="16" offset="2">
                         <el-form-item label="登录手机号码" prop="phone">
-                            <el-input v-model="form.phone" auto-complete="off"></el-input>
+                            <el-input v-model="form.phone" @input="checkVata" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-button>{{ btnText}}</el-button>
+                        <el-button :class="{'active-code':!isSendCode}" class="code-btn" :disabled="isSendCode" type="primary">{{ btnText}}</el-button>
                     </el-col>
                     <el-col :span="16" offset="2">
                         <el-form-item label="验证码" prop="code">
-                            <el-input v-model="form.code" auto-complete="off"></el-input>
+                            <el-input v-model="form.code" @input="checkVata" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="16" offset="2">
                         <el-form-item label="新密码" prop="newPwd">
-                            <el-input v-model="form.newPwd" auto-complete="off"></el-input>
+                            <el-input v-model="form.newPwd" @input="checkVata" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="16" offset="2">
                         <el-form-item label="请确认新密码" prop="checkPwd">
-                            <el-input v-model="form.checkPwd" auto-complete="off"></el-input>
+                            <el-input v-model="form.checkPwd" @input="checkVata" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="findPwd = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm('form')">保 存</el-button>
+                <el-button @click="findDialog = false">取 消</el-button>
+                <el-button type="primary" class="register-btn" @click="submitForm" :class="{ active:valueData }">保 存</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -61,29 +61,11 @@ export default {
         },
     },
     data() {
-        // 新密码 验证规则
-        var validatePwd = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入新密码'));
-            } else {
-                if (this.form.newPwd !== '') {
-                    this.$refs.form.validateField('newPwd');
-                }
-                callback();
-            }
-        };
-        var validatePwd2 = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请再次输入确认密码'));
-            } else if (value !== this.form.newPwd) {
-                callback(new Error('两次输入密码不一致!'));
-            } else {
-                callback();
-            }
-        };
         return {
+            isSendCode: true, //是否可以发送验证码
+            valueData: false, //所有输入的值是否通过验证
             btnText: '获取验证码',
-            findPwd: false,
+            findDialog: false,
             name: '',
             password: '',
             pass: true,
@@ -92,20 +74,6 @@ export default {
                 code: '',
                 newPwd: '',
                 checkPwd: ''
-            },
-            rules: {
-                phone: [
-
-                ],
-                code: [
-                    { required: true, message: '请填写验证码', trigger: 'blur' }
-                ],
-                newPwd: [
-                    { validator: validatePwd, trigger: 'blur' }
-                ],
-                checkPwd: [
-                    { validator: validatePwd2, trigger: 'blur' }
-                ]
             }
         }
     },
@@ -117,8 +85,36 @@ export default {
                 this.$emit("sendVal", 0)
             }
         },
+        // /*******************验证 找回密码表单 开始*************************/
+        // /***********************手机号码验证开始************************************************/
+        // checkPhone(phone) {
+        //     var pattern = /^1[34578][0-9]{9}$/;
+        //     if (phone != '') {
+        //         if (pattern.test(phone)) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         }
+        //     }
+        // },
+        // openDialog(formName) {
+        //     this.findDialog = !this.findDialog;
+        // },
 
-    },
+
+
+
+        // submitForm(formName) {
+        //     this.$refs[formName].validate((valid) => {
+        //         if (valid) {
+        //             this.findDialog = !this.findDialog;
+        //         } else {
+        //             return false;
+        //             this.$refs[formName].resetFields();
+        //         }
+        //     });
+
+    }
 }
 </script>
 
@@ -211,10 +207,9 @@ span {
     margin-top: 48px;
 }
 
-input::-webkit-input-placeholder {
-    // color: #a6a9ad;
-}
-
+// input::-webkit-input-placeholder {
+//     // color: #a6a9ad;
+// }
 .login-box {
     // width: 35%;
     text-align: center;
@@ -234,8 +229,7 @@ input::-webkit-input-placeholder {
 }
 
 .login-account {
-    width: 382px;
-    // height: 84px;
+    width: 382px; // height: 84px;
     margin-top: 30px;
     background: transparent;
     border: none;
@@ -401,6 +395,26 @@ input::-webkit-input-placeholder {
 
 .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
+}
+
+// 找回 密码对话框的样式
+.code-btn {
+    font-size: 16px;
+    color: #fff;
+    outline: none;
+    background: gray;
+}
+
+.active-code {
+    background: orange;
+}
+
+.active-time {
+    background: red;
+}
+
+.active {
+    background: red;
 }
 </style>
 

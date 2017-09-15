@@ -35,11 +35,6 @@ const r1 = [
         component: resolve => require(['../views/project/projectPool/addProject.vue'], resolve)
     },
     {
-        path: 'wprojectPoolMessage', //home/搜索添加项目页2
-        name: 'wprojectPoolMessage',
-        component: resolve => require(['../views/project/projectPool/wprojectPoolMessage.vue'], resolve)
-    }, 
-    {
         path: 'preProject', //home/投前项目页
         name: 'preProject',
         component: resolve => require(['../views/project/preProject/preProject.vue'], resolve)

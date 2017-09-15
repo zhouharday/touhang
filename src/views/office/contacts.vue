@@ -219,7 +219,7 @@ section {
                     }
                 }
                 >div:nth-child(2) {
-                    >button {}
+                    // >button {}
                     position: absolute;
                     right: 13.5px;
                     top: 13.5px;
