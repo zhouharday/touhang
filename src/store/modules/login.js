@@ -15,7 +15,15 @@ const state = {
         logo: '',
         merchantName: ''
     },
-    CardBox: loginCard
+    CardBox: loginCard,
+    showOrHide: {
+        isVshowYe: true, //是否显示首页
+        isShowSidebar: false, //是否只显示通讯录菜单列表
+    },
+    approvelType: { //审核状态
+        type: '',
+        text: ''
+    }, //企业审核状态
 }
 // const mutations = {
 //     [types.SET_TITLELIST](state, targetName) {
@@ -61,6 +69,14 @@ const mutations = {
     changeLoginCard(state) {
         state.CardBox = loginCard;
     },
+    saveApprovalStatus(state,approvelType) { //保存审核状态
+        state.approvelType.type = approvelType.type;
+        state.approvelType.text = approvelType.text;
+    },
+    showOrHide(state, isShouye){ //是否显示首页和通讯录菜单
+        state.showOrHide.isVshowYe = isShouye.isVshowYe;
+        state.showOrHide.isShowSidebar = isShouye.isShowSidebar;
+    },
     Notification(state, msg) { //登录成功提示信息 Box
         Notification({
             title: msg.title,
@@ -76,7 +92,6 @@ const actions = {
         state
     }, userPwd) { //send login API
         // console.log(userPwd);
-        // userPwd.self.$http.post('http://localhost:8080/api/user/login', {
         userPwd.self.$http.post('api/user/login', {
             number: userPwd.name,
             pass: userPwd.pwd
@@ -103,46 +118,62 @@ const actions = {
                     window.sessionStorage.setItem('merchants', JSON.stringify(state.merchants));
                     console.log(state.merchants);
                     if (state.merchants.length == '1') { //只有一个组织
-                        console.log('um_id:' + state.merchants[0].um_id);
+                        console.log(state.merchants[0].type);
+                        
+                        if (state.merchants[0].type == '0') { //审核中
+                            commit('saveApprovalStatus', {type: state.merchants[0].type, text: '您的申请正在审核中,请您耐心等待~'});
+                            window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
+                            
+                            commit('showOrHide', {isVshowYe: 0, isShowSidebar: 1 });
+                            window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
+                        
+                        } else if (state.merchants[0].type == '1') { //审核通过
+
+                            commit('saveApprovalStatus', {type: state.merchants[0].type, text: '审核通过'});
+                            window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
+                        
+                        } else if (state.merchants[0].type == '2') { //审核失败
+                            // alert(state.merchants[0].type);
+                            commit('saveApprovalStatus', {type: state.merchants[0].type, text: '太遗憾了,您的审核未通过,再接再厉哦~'});
+                            window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
+                        
+                            commit('showOrHide', {isVshowYe: 0, isShowSidebar: 1 });
+                            window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
+                        } else if (state.merchants[0].type == '3') { //已注册但未开通试用权限
+                            // alert(state.merchants[0].type);
+                            commit('saveApprovalStatus', {type: state.merchants[0].type, text: '恭喜您注册成功,请您点击右上角申请开通使用权限~'});
+                            window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
+
+                            commit('showOrHide', {isVshowYe: 0, isShowSidebar: 1 });
+                            window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
+                        };
+                        if(state.merchants[0].type != '1'){ //还未审核通过
+                            userPwd.self.$router.push({ //只显示通讯录菜单列表
+                                name: 'contacts'
+                            });
+                            commit('Notification', {
+                                title: '',
+                                message: '登录成功',
+                                type: 'success'
+                            });
+                        } else {
+                            userPwd.self.$router.push({ //审核已通过
+                                name: 'homeContent'
+                            });
+                            commit('Notification', {
+                                title: '',
+                                message: '登录成功',
+                                type: 'success'
+                            });
+                        }
+                        // console.log('um_id:' + state.merchants[0].um_id);
                         console.log('//////////////////////////////////////////////////////////////////////////');
-                        state.logoSrc.logo = data.data.result.merchants[0].logo;
-                        state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name;
+                        state.logoSrc.logo = data.data.result.merchants[0].logo; //企业logo
+                        state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name; //企业名字
                         window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));
                         // console.log(state.logoSrc);
-                        userPwd.self.$router.push({
-                            name: 'homeContent'
-                        });
-                        commit('Notification', {
-                            title: '',
-                            message: '登录成功',
-                            type: 'success'
-                        });
-                        // userPwd.self.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-                        //     "um_id": state.merchants[0].um_id //用户、机构中间id
-                        // }).then(Response => {
-                        //     state.menus = Response.data.result;
-                        //     console.log(state.menus);
-                        //     if (Response.data.status == '200') {
-                        //         // alert(1);
-                        //         userPwd.self.$router.push({
-                        //             name: 'homeContent'
-                        //         });
-                        //         commit('Notification', {
-                        //             title: '',
-                        //             message: '登录成功',
-                        //             type: 'success'
-                        //         });
-                        //     }
-                        // }).catch(error => {
-                        //     commit('Notification', {
-                        //         title: '',
-                        //         message: '服务器异常,请稍后再试',
-                        //         type: 'error'
-                        //     });
-                        // });
                     } else if (state.merchants.length > '1') { //有多个组织列表
                         state.CardBox = loginBox;
-
                     }
                     // console.log(state.merchants.length);
 

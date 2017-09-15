@@ -12,27 +12,158 @@
                     </div>
                 </div>
             </div>
-            <div v-if="isVshowYe">
+            <div v-if="showOrHide.isShowSidebar">
                 <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
                     <el-submenu index="1">
-                    <template slot="title" style="height:50px;line-height:50px;" class="title">
-                        <img style="margin-top: 18px;display: block;float: left;
-                                                margin-right: 7px;" src="/static/img/office.png" />
-                        <span>{{title_01}}</span>
-                    </template>
-                    <!-- <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item> -->
-                    <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
-                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
-                    <!-- <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item> -->
-                </el-submenu>
+                        <template slot="title" style="height:50px;line-height:50px;" class="title">
+                            <img style="margin-top: 18px;display: block;float: left; margin-right: 7px;" src="/static/img/office.png" />
+                            <span>{{title_01}}</span>
+                        </template>
+                        <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
+                    </el-submenu>
                 </el-menu>
             </div>
+            <el-menu v-if="!showOrHide.isShowSidebar" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
+                <el-submenu index="1">
+                    <template slot="title" style="height:50px;line-height:50px;" class="title">
+                        <img style="margin-top: 18px;display: block;float: left;
+                                                                                    margin-right: 7px;" src="/static/img/office.png" />
+                        <span>{{title_01}}</span>
+                    </template>
+                    <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
+                    <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
+                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
+                    <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
+                </el-submenu>
+                <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
+                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+                                                                                                领投助手 -->
+                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
+                    <span index="assistant">{{title_02}}</span>
+                    <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
+                </div>
+                <el-submenu index="3">
+                    <template slot="title">
+                        <!-- <i class="el-icon-date"></i>项目管理</template> -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
+                        <span>{{title_03}}</span>
+                    </template>
 
+                    <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
+                    <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
+                    <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
+                    <el-menu-item index="projectOut" @click="addTab(title8,'/home/projectOut','projectOut')">{{title8}}</el-menu-item>
+                    <el-menu-item index="projectValuation" @click="addTab(title9,'/home/projectValuation','projectValuation')">{{title9}}</el-menu-item>
+                    <el-menu-item index="valuationView" @click="addTab(title10,'/home/valuationView','valuationView')">{{title10}}</el-menu-item>
+                </el-submenu>
+                <el-submenu index="4">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>基金管理 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
+                        <span>{{title_04}}</span>
+                    </template>
+                    <el-menu-item index="myfund" @click="addTab(title11,'/home/myfund','myfund')">{{title11}}</el-menu-item>
+                    <el-menu-item index="cooperative" @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
+                </el-submenu>
+                <el-submenu index="5">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>投资者管理 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/touzizhe.png" />
+                        <span>{{title_05}}</span>
+                    </template>
+                    <el-menu-item index="investor" @click="addTab(title13,'/home/investor','investor')">{{title13}}</el-menu-item>
+                </el-submenu>
+                <el-submenu index="6">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>综合查询 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/survey.png" />
+                        <span>{{title_06}}</span>
+                    </template>
+                    <el-menu-item index="proLibrary" @click="addTab(title14, '/home/proLibrary', 'proLibrary')">{{title14}}</el-menu-item>
+                    <el-menu-item index="fundLibrary" @click="addTab(title15, '/home/fundLibrary', 'fundLibrary')">{{title15}}</el-menu-item>
+                    <el-menu-item index="investorLibrary" @click="addTab(title16, '/home/investorLibrary', 'investorLibrary')">{{title16}}</el-menu-item>
+                    <el-menu-item index="projectsDoc" @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
+                    <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
+                </el-submenu>
+                <!-- <el-submenu index="7">
+                                                                                                <template slot="title">
+                                                                                                    <i class="el-icon-star-on"></i>统计分析</template>
+                                                                                            </el-submenu> -->
+                <!-- <div class="div_el-menu-itemel-submenu__title">
+                                                                <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+                                                                                                统计分析 -->
+                <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
+                                                                <span>{{title_07}}</span>
+                                                            </div> -->
+                <el-submenu index="7">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>统计分析 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
+                        <span>{{title_07}}</span>
+                    </template>
+                    <el-menu-item index="fundedForm" @click="addTab(title_07_1, '/home/fundedForm', 'fundedForm')">{{title_07_1}}</el-menu-item>
+                    <el-menu-item index="projectInfor" @click="addTab(title_07_2, '/home/projectInfor', 'projectInfor')">{{title_07_2}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
+                    <el-menu-item index="fundInFormation" @click="addTab(title_07_3, '/home/fundInFormation', 'fundInFormation')">{{title_07_3}}</el-menu-item>
+                    <el-menu-item index="invesTment" @click="addTab(title_07_4, '/home/invesTment', 'invesTment')">{{title_07_4}}</el-menu-item>
+                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
+                    <el-menu-item index="statisticalAnalysis" @click="addTab(title_07_5, '/home/statisticalAnalysis', 'statisticalAnalysis')">{{title_07_5}}</el-menu-item>
+                </el-submenu>
+                <el-submenu index="8">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>系统管理 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
+                        <span>{{title_08}}</span>
+                    </template>
+                    <el-menu-item index="companyInfo" @click="addTab(title19, '/home/companyInfo', 'companyInfo')">
+                        {{title19}}
+                    </el-menu-item>
+                    <el-menu-item index="department" @click="addTab(title20, '/home/department', 'department')">
+                        {{title20}}
+                    </el-menu-item>
+                    <el-menu-item index="subscriber" @click="addTab(title21, '/home/subscriber', 'subscriber')">
+                        {{title21}}
+                    </el-menu-item>
+                    <el-menu-item index="dictionary" @click="addTab(title23, '/home/dictionary', 'dictionary')">
+                        {{title23}}
+                    </el-menu-item>
+                    <el-menu-item index="role" @click="addTab(title22, '/home/role', 'role')">
+                        {{title22}}
+                    </el-menu-item>
+                    <el-menu-item index="business" @click="addTab(title24, '/home/business', 'business')">
+                        {{title24}}
+                    </el-menu-item>
+                    <el-menu-item index="fundAuthority" @click="addTab(title35, '/home/fundAuthority', 'fundAuthority')">
+                        {{title35}}
+                    </el-menu-item>
+                    <el-menu-item index="process" @click="addTab(title25, '/home/process', 'process')">
+                        {{title25}}
+                    </el-menu-item>
+                    <el-menu-item index="processSetting" @click="addTab(title26, '/home/processSetting', 'processSetting')">
+                        {{title26}}
+                    </el-menu-item>
+                </el-submenu>
+                <el-submenu index="9">
+                    <template slot="title">
+                        <!-- <i class="el-icon-star-on"></i>平台管理 -->
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/wangluo.png" />
+                        <span>{{title_09}}</span>
+                    </template>
+                    <el-menu-item index="featuresMenu" @click="addTab(title27, '/home/featuresMenu', 'featuresMenu')">{{title27}}</el-menu-item>
+                    <el-menu-item index="roleManger" @click="addTab(title28, '/home/roleManger', 'roleManger')">{{title28}}</el-menu-item>
+                    <el-menu-item index="userList" @click="addTab(title29, '/home/userList', 'userList')">{{title29}}</el-menu-item>
+                    <el-menu-item index="newsBulletin" @click="addTab(title30, '/home/newsBulletin', 'newsBulletin')">{{title30}}</el-menu-item>
+                    <el-menu-item index="customerManagement" @click="addTab(title31, '/home/customerManagement', 'customerManagement')">{{title31}}</el-menu-item>
+                    <el-menu-item index="customerPrivilege" @click="addTab(title32, '/home/customerPrivilege', 'customerPrivilege')">{{title32}}</el-menu-item>
+                    <el-menu-item index="leadAssistant" @click="addTab(title33, '/home/leadAssistant', 'leadAssistant')">{{title33}}</el-menu-item>
+                    <el-menu-item index="memberManagement" @click="addTab(title34, '/home/memberManagement', 'memberManagement')">{{title34}}</el-menu-item>
+                </el-submenu>
+            </el-menu>
             <!-- <el-row>
-                            <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
-                                <my-tree :model="menuItem"></my-tree>
-                            </el-col>
-                        </el-row> -->
+                                                                            <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
+                                                                                <my-tree :model="menuItem"></my-tree>
+                                                                            </el-col>
+                                                                        </el-row> -->
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
@@ -47,28 +178,30 @@ import myTree from 'components/treeMenu';
 export default {
     components: { jq, zTree, getNodes, myTree },
     beforeCreate() {
-        this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+        // alert(111);
+        // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // console.log(this.$store.state.login.merchants[0].um_id);
-        this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-            // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
-            // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
-            "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
-        })
-            .then(Response => {
-                // console.log(this.$store.state.login.merchants[0].um_id);
-                if (Response.data.status == '200') {
-                    console.log(Response.data.result);
-                    // this.theModel = Response.data.result;
-                    // console.log(Response.data.result);
-                    this.theModel = getNodes(Response.data.result);
-                    //  console.log(nodes);
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+        //     // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
+        //     // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
+        //     "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
+        // })
+        //     .then(Response => {
+        //         // console.log(this.$store.state.login.merchants[0].um_id);
+        //         if (Response.data.status == '200') {
+        //             console.log(Response.data.result);
+        //             // this.theModel = Response.data.result;
+        //             // console.log(Response.data.result);
+        //             // this.theModel = getNodes(Response.data.result);
+        //             //  console.log(nodes);
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
     },
     created() {
+        // alert(222)
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // // console.log(this.$store.state.login.merchants[0].um_id);
         // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
@@ -89,9 +222,6 @@ export default {
         //         console.log(error);
         //     });
 
-
-
-
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // // console.log(this.$store.state.login.merchants[0].um_id);
         // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
@@ -110,44 +240,36 @@ export default {
         // });
     },
     mounted() {
-        // $(document).ready(function() {
-        this.$nextTick(function() {
-            //     var curMenu = null, zTree_Menu = null;
-            //     var treeObj = $("#treeDemo");
-            //     $.fn.zTree.init(treeObj, this.setting, this.zNodes);
-            //     zTree_Menu = $.fn.zTree.getZTreeObj("treeDemo");
-            //     // curMenu = zTree_Menu.getNodes()[0].children[0].children[0];
-            //     zTree_Menu.selectNode(curMenu);
-            //     treeObj.hover(function() {
-            //         if (!treeObj.hasClass("showIcon")) {
-            //             treeObj.addClass("showIcon");
-            //         }
-            //     }, function() {
-            //         treeObj.removeClass("showIcon");
-            //     })
-        })
-        // $.fn.zTree.init($("#zTree"), this.setting, this.zNodes);
-        //     // // alert(1);
-        //     // console.log(this.zNodes);
-        //     // console.log(this.setting);
-        // })
     },
-    computed: mapState({
-        onRoutes() {
+    computed: {
+        onRoutes(state) {
+            // alert(111);
             return this.$route.path.replace('/', '');
         },
         userName(state) {
-            state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            return state.login.userInfor;
+            // alert(222);
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return this.$store.state.login.userInfor;
         },
-        um_id() {
-            state.login.logoSrc = JSON.parse(sessionStorage.getItem('merchants')) || {};
-            return state.login.merchants;
+        um_id(state) {
+            // alert(333);
+            this.$store.state.login.logoSrc = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            return this.$store.state.login.merchants;
         },
-        isVshowYe: state => state.register.isVshowYe
-    }),
+        showOrHide() {
+            if (JSON.parse(sessionStorage.getItem('showOrHide')) == '' || JSON.parse(sessionStorage.getItem('showOrHide')) == 'undefined') {
+                this.$store.state.login.showOrHide.isVshowYe = 0;
+                this.$store.state.login.showOrHide.isShowSidebar = 1;
+                return this.$store.state.login.showOrHide;
+            } else {
+                this.$store.state.login.showOrHide = JSON.parse(sessionStorage.getItem('showOrHide')) || {};
+                return this.$store.state.login.showOrHide;
+            }
+        }
+    },
     data() {
         return {
+
             theModel: [],
             setting: {
                 view: {
@@ -340,6 +462,7 @@ export default {
                 url: url,
                 name: name
             })
+            // alert(222)
         }
     }
 }

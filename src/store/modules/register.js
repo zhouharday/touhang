@@ -13,7 +13,7 @@ const state = {
         "contactUser": "", //联系人姓名
         "contactPhone": "" //联系电话 必须
     },
-    isVshowYe: true, //首次登陆用户是否显示首页
+    // isVshowYe: true, //是否显示首页
 }
 
 const mutations = {

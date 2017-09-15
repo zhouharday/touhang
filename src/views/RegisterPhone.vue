@@ -17,7 +17,8 @@
             </div>
             <!-- <button type="button" class="code-btn" @click="time" :class="{ 'active-code':valuePhone,'active-time':valueTime}">{{btnText}}</button> -->
             <el-button :class="{'active-code':!isSendCode,}" @click="sendVerificationCode" class="code-btn" :disabled="isSendCode" type="primary">{{btnText}}</el-button>
-            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确 定</button></button>
+            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
+            </button>
             <!-- <router-link to="/login" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</router-link> -->
         </div>
     </div>
@@ -26,6 +27,7 @@
 
 <script>
 import ElementUI from 'element-ui'
+import service from 'common/js/fetch'
 export default {
     data() {
         return {
@@ -71,7 +73,7 @@ export default {
 
         /************************验证码倒计时开始************************************/
         time() {
-            if ( this.isSendCode == 0 ) {
+            if (this.isSendCode == 0) {
                 // alert(111);
                 // this.sendVerificationCode();
                 this.valueData = false;
@@ -92,9 +94,15 @@ export default {
             }
         },
         sendVerificationCode() { //发送验证码 Ajax
-            this.$http.post('api/merchant/validationCode', {
-                contactPhone: this.phonecontactPhone
+            return service({
+            url:'api/merchant/validationCode',
+            method: 'post',
+            data: {contactPhone: this.phonecontactPhone}
             })
+            
+            // this.$http.post('api/merchant/validationCode', {
+            //     contactPhone: this.phonecontactPhone
+            // })
                 .then(res => {
                     if (res.data.status == '200') {
                         // this.provinces = res.data.result;
@@ -104,7 +112,7 @@ export default {
                     } else if (res.data.status == '1006') { //手机号已注册
                         // console.log(res.data);
                         this.isSendCode = 1;
-                        alert(res.data.message);
+                        // alert(res.data.message);
                     } else if (res.data.status == '1008') { //手机号不合法
                         // console.log(res.data);
                         this.isSendCode = 1;
@@ -123,7 +131,11 @@ export default {
 
         /***********************提交表单开始*************************/
         submitForm() {
-            if (this.valueData && this.isValidationCode) {
+            if (this.valueData) {
+                if (this.isValidationCode == 0) {
+                    alert('验证码不正确!');
+                    return;
+                }
                 this.$store.state.register.register.contactPhone = this.phonecontactPhone;
                 this.$store.state.register.register.validationCode = this.validationCode;
                 // this.$http.post('api/merchant/register', this.$store.state.register.register)
@@ -131,7 +143,7 @@ export default {
                 //         if (res.data.status == '200') { //注册数据验证通过
                 //             // alert(111);
                 //             // this.provinces = res.data.result;
-                            this.$router.push({ name: 'register' }); //进入下一步页面
+                this.$router.push({ name: 'register' }); //进入下一步页面
                 //             this.$store.state.register.isVshowYe = false; //首次登陆用户不显示首页
                 //             // console.log(res.data);
                 //         } else if (res.data.status == '403') { //网络异常
@@ -144,7 +156,7 @@ export default {
                 //         console.log(error);
                 //     })
                 //    this.$router.push({ name: 'register' });
-                // console.log(this.$store.state.register.register);
+                console.log(this.$store.state.register.register);
             }
         }
         /************************提交表单结束********************************/
