@@ -88,7 +88,7 @@ const actions = {
         commit,
         state
     }, user) { //send login API
-        // console.log(userPwd);
+        // console.log(user);
         user.self.$http.post('api/user/login', {
             number: user.name,
             pass: user.pwd
@@ -104,7 +104,7 @@ const actions = {
                 return;
             } else if (data.data.status == '200') { //登录成功
                 // alert('success');
-                console.log(userPwd);
+                console.log(user);
                 commit('pushUserInfor', data.data.result);
                 window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
                 console.log(state.userInfor);
@@ -138,7 +138,7 @@ const actions = {
                         if (state.merchants[0].type != '1') { //还未审核通过
                             commit('showOrHide', { isVshowYe: 0, isShowSidebar: 1 });
                             window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
-                            userPwd.self.$router.push({ //只显示通讯录菜单列表
+                            user.self.$router.push({ //只显示通讯录菜单列表
                                 name: 'contacts'
                             });
                             commit('Notification', {
@@ -147,7 +147,7 @@ const actions = {
                                 type: 'success'
                             });
                         } else {
-                            userPwd.self.$router.push({ //审核已通过
+                            user.self.$router.push({ //审核已通过
                                 name: 'homeContent'
                             });
                             commit('Notification', {
@@ -168,7 +168,7 @@ const actions = {
                     // console.log(state.merchants.length);
 
                 } else if (data.data.result.userInfo.isMerchant == '0') { //无组织(不存在这种情况)
-                    userPwd.self.$router.push({
+                    user.self.$router.push({
                         name: 'homeContent'
                     });
                 }
