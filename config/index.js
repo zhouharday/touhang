@@ -23,7 +23,7 @@ module.exports = {
     },
     dev: {
         env: require('./dev.env'),
-        port: 8080,
+        port: 8081,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
@@ -31,7 +31,8 @@ module.exports = {
             '/api':{
                 // target:'http://192.168.0.198:9091',
                 // target:'http://192.168.0.117:9091',
-                target:'http://100.64.33.181:9091',
+                // target:'http://100.64.33.181:9091',
+                target:'http://zhqwjmw.eicp.net',
                 changeOrigin:true,
                 pathRewrite:{
                     '/api':''
