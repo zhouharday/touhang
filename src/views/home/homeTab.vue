@@ -1,16 +1,16 @@
 <template>
-<div class="navmenu">
-    <ul>
-        <router-link to="/homeContent" tag="li" :class="{active:$route.name == 'homeContent'}">
-            {{title}}
-        </router-link>
-        <!-- <a href="#homeContent">{{title}}</a>   -->
-        <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,index,item.path,item.name)" :class="{active:$route.name == item.name || $route.path == item.path}">
-            <span>{{item.title}}</span>
-            <Icon type="close" class="close"></Icon>
-        </li>
-    </ul>
-</div>
+    <div class="navmenu">
+        <ul>
+            <router-link v-if="isShow.isVshowYe" to="/homeContent" tag="li" :class="{active:$route.name == 'homeContent'}">
+                {{title}}
+            </router-link>
+            <!-- <a href="#homeContent">{{title}}</a>   -->
+            <li v-for="(item,index) in ttaa" :key="item.index" @click="linkFun($event,index,item.path,item.name)" :class="{active:$route.name == item.name || $route.path == item.path}">
+                <span>{{item.title}}</span>
+                <Icon type="close" class="close"></Icon>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <style lang="less" scoped>
@@ -48,17 +48,20 @@
 import { mapState } from 'vuex'
 export default {
     watch: {
-        '$route' (to, from) {
+        '$route'(to, from) {
             // 对路由变化作出响应...
             //   console.log(from,to);
         }
     },
-    computed: mapState({
-        ttaa(state) {
-            state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [];
-            return state.login.TitleList;
-        }
-    }),
+    computed: {
+        ...mapState({
+            isShow: state => state.login.showOrHide,
+            ttaa(state) {
+                state.login.TitleList = JSON.parse(sessionStorage.getItem('key')) || [];
+                return state.login.TitleList;
+            },
+        }),
+    },
     data() {
         return {
             title: '首页',
@@ -66,7 +69,7 @@ export default {
     },
     methods: {
         // linkFun($event, index, path, name) {
-        linkFun($event,index,path) {
+        linkFun($event, index, path) {
             // alert(2);
             if ($event.target.tagName == 'I') {
                 this.$store.commit('deleTab', {

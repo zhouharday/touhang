@@ -29,7 +29,7 @@
                     </el-select>
                 </div>
             </div>
-            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
+            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确 定</button>
             <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
         </div>
     </div>
@@ -39,6 +39,7 @@
 import city from '../../static/js/city.json.js'
 import { mapState } from 'vuex'
 import axios from 'axios'
+import md5 from 'js-md5'
 export default {
     data() {
         return {
@@ -63,7 +64,7 @@ export default {
 
     mounted() {},
     created() {
-        this.$http.post('api/dictionaryController/select2Menu', {
+        this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>行业
             "dicParent": '1'
         })
             .then(res => {
@@ -75,7 +76,7 @@ export default {
             .catch(error => {
 
             });
-        this.$http.post('api/dictionaryController/select2Menu', {
+        this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>省份
             "dicParent": '3'
         })
             .then(res => {
@@ -85,7 +86,7 @@ export default {
                 }
             })
             .catch(error => {
-
+                console.log(error);
             });
         function getIndustry(self) { //获取行业数据
             return self.$http.post('api/dictionaryController/select2Menu', {
@@ -126,13 +127,38 @@ export default {
             }
             this.valueData = 0;
         },
-        submitForm() {
+        submitForm() { //最后一步提交所有注册数据
             if (this.valueData) {
-                this.$store.state.register.register = this.register;
-                console.log(this.$store.state.register.register);
-                // window.sessionStorage('register',JSON.stringify(this.register));
-                this.$router.push({ name: 'contacts' });
-                //  console.log(this.valueData);
+                this.$store.state.register.register.merchantName = this.register.merchantName;
+                this.$store.state.register.register.industry = this.register.industry;
+                this.$store.state.register.register.province = this.register.province;
+                this.$store.state.register.register.contactUser = this.register.contactUser;
+                this.$http.post('api/merchant/register', this.$store.state.register.register)
+                    .then(res => {
+                        if (res.data.status == '200') { //注册数据验证通过
+                            // this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页
+                            // this.$store.state.login.show_OR_hide.isShowSidebar = true; //只显示通讯录菜单列表
+                            let number = this.$store.state.register.register.contactPhone;
+                            let pass = md5('123456', 32);
+                            this.$store.dispatch({ //登录
+                                type: 'loginAPI',
+                                name: number,
+                                pwd: pass,
+                                self: this
+                            });
+                            // this.$router.push({ name: 'contacts' }); //进入通讯录页面
+                            // console.log(res.data);
+                        } else if (res.data.status == '403') { //网络异常
+                            // console.log(res.data);
+                            alert(res.data.message);
+                        } else {
+                            alert('验证码不正确!');
+                        }
+                    })
+                    .catch(error => {
+                        // alert(222);
+                        console.log(error);
+                    })
             }
         }
     }
@@ -251,7 +277,8 @@ input::-webkit-input-placeholder {
 .active {
     background: red;
 }
-.register_select{
+
+.register_select {
     margin-left: 20px;
     /* background:  */
     width: 300px;

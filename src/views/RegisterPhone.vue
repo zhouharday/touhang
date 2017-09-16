@@ -16,8 +16,9 @@
                 </div>
             </div>
             <!-- <button type="button" class="code-btn" @click="time" :class="{ 'active-code':valuePhone,'active-time':valueTime}">{{btnText}}</button> -->
-            <el-button :class="{'active-code':!isSendCode,}" @click="sendVerificationCode" class="code-btn" :disabled="isSendCode" type="primary">{{btnText}}</el-button>
-            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确 定</button></button>
+            <el-button :class="{'active-code':isSendCode,}" @click="sendVerificationCode" class="code-btn" :disabled="!isSendCode" type="primary">{{btnText}}</el-button>
+            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
+            </button>
             <!-- <router-link to="/login" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</router-link> -->
         </div>
     </div>
@@ -26,12 +27,13 @@
 
 <script>
 import ElementUI from 'element-ui'
+import service from 'common/js/fetch'
 export default {
     data() {
         return {
             phonecontactPhone: '', //手机号码
             validationCode: '', //验证码
-            isSendCode: true, //是否可以发送验证码
+            isSendCode: false, //是否可以发送验证码
             valueData: false, //所有输入的值是否通过验证
             // valuePhone: false, //手机号是否验证通过
             // valueTime: false,
@@ -44,13 +46,13 @@ export default {
         checkVata() {
             if (this.checkPhone(this.phonecontactPhone) && this.validationCode) {
                 this.valueData = true;
-                this.isSendCode = false;
+                this.isSendCode = true;
             }
             else if (this.checkPhone(this.phonecontactPhone)) {
-                this.isSendCode = false;
+                this.isSendCode = true;
                 this.valueData = false;
             } else {
-                this.isSendCode = true;
+                this.isSendCode = false;
                 this.valueData = false;
             }
         },
@@ -71,19 +73,21 @@ export default {
 
         /************************验证码倒计时开始************************************/
         time() {
-            if ( this.isSendCode == 0 ) {
+            if (this.isSendCode) {
                 // alert(111);
                 // this.sendVerificationCode();
+                this.isSendCode = !this.isSendCode;
                 this.valueData = false;
                 var that = this;
-                var sec = 60;
+                var sec = 10;
                 var timer1 = setInterval(
                     function() {
-                        that.isSendCode = true;
+                        // that.isSendCode = true;
                         that.btnText = sec + 's';
                         if (sec < 0) {
-                            that.isSendCode = false;
+                            // that.isSendCode = false;
                             clearInterval(timer1);
+                            that.isSendCode = !that.isSendCode;
                             that.btnText = '获取验证码';
                         }
                         sec--;
@@ -92,26 +96,33 @@ export default {
             }
         },
         sendVerificationCode() { //发送验证码 Ajax
-            this.$http.post('api/merchant/validationCode', {
-                contactPhone: this.phonecontactPhone
+            this.time();
+            return service({
+                url: 'api/merchant/validationCode',
+                method: 'post',
+                data: { contactPhone: this.phonecontactPhone }
             })
+
+                // this.$http.post('api/merchant/validationCode', {
+                //     contactPhone: this.phonecontactPhone
+                // })
                 .then(res => {
                     if (res.data.status == '200') {
                         // this.provinces = res.data.result;
-                        this.time();
-                        this.isValidationCode = 1;
+                        // this.time();
+                        // this.isValidationCode = 1;
                         console.log(res.data);
                     } else if (res.data.status == '1006') { //手机号已注册
                         // console.log(res.data);
-                        this.isSendCode = 1;
+                        // this.isSendCode = 1;
                         alert(res.data.message);
                     } else if (res.data.status == '1008') { //手机号不合法
                         // console.log(res.data);
-                        this.isSendCode = 1;
+                        // this.isSendCode = 1;
                         alert(res.data.message);
                     } else if (res.data.status == '403') { //服务器异常
                         // console.log(res.data);
-                        this.isSendCode = 1;
+                        // this.isSendCode = 1;
                         alert(res.data.message);
                     }
                 })
@@ -123,28 +134,12 @@ export default {
 
         /***********************提交表单开始*************************/
         submitForm() {
-            if (this.valueData && this.isValidationCode) {
+            if (this.isSendCode && this.validationCode) {
+                
                 this.$store.state.register.register.contactPhone = this.phonecontactPhone;
                 this.$store.state.register.register.validationCode = this.validationCode;
-                // this.$http.post('api/merchant/register', this.$store.state.register.register)
-                //     .then(res => {
-                //         if (res.data.status == '200') { //注册数据验证通过
-                //             // alert(111);
-                //             // this.provinces = res.data.result;
-                            this.$router.push({ name: 'register' }); //进入下一步页面
-                //             this.$store.state.register.isVshowYe = false; //首次登陆用户不显示首页
-                //             // console.log(res.data);
-                //         } else if (res.data.status == '403') { //网络异常
-                //             // console.log(res.data);
-                //             alert(res.data.message);
-                //         }
-                //     })
-                //     .catch(error => {
-                //         // alert(222);
-                //         console.log(error);
-                //     })
-                //    this.$router.push({ name: 'register' });
-                // console.log(this.$store.state.register.register);
+                this.$router.push({ name: 'register' }); //进入下一步页面
+                console.log(this.$store.state.register.register);
             }
         }
         /************************提交表单结束********************************/
