@@ -340,9 +340,9 @@ export default {
     },
     created() {
         this._getType(),
-            this.$store.dispatch('getFundInvestment'),
-            this.$store.dispatch('getManagementCompany'),
-            this.$store.dispatch('getOrganizationType')
+        this.$store.dispatch('getFundInvestment'),
+        this.$store.dispatch('getManagementCompany'),
+        this.$store.dispatch('getOrganizationType')
     },
     components: {
         tabelHeader
