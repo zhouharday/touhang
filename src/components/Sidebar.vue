@@ -74,6 +74,16 @@
                 <el-menu-item index="projectsDoc" @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
                 <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
             </el-submenu>
+            <!-- <el-submenu index="7">
+                                                            <template slot="title">
+                                                                <i class="el-icon-star-on"></i>统计分析</template>
+                                                        </el-submenu> -->
+            <!-- <div class="div_el-menu-itemel-submenu__title">
+                            <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
+                                                            统计分析 -->
+            <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
+                            <span>{{title_07}}</span>
+                        </div> -->
             <el-submenu index="7">
                 <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>统计分析 -->
