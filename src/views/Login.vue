@@ -82,7 +82,7 @@ export default {
         submitForm() {
             if (this.valueData) {
                 sessionStorage.clear();
-                // this.$router.push({ name: 'homeContent' });
+                this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
                 // let pass = this.passWord;
                 let pass = md5(this.passWord,32);

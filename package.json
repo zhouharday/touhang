@@ -16,7 +16,7 @@
     "extract-text-webpack-plugin": "^2.1.2",
     "http-proxy": "^1.16.2",
     "iview": "^2.1.0",
-    "js-md5": "^0.6.0",
+    "js-nmd5": "^0.6.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "node-sass": "^4.5.3",

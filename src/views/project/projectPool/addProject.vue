@@ -1,45 +1,11 @@
 <template>
     <div class="addProject">
-        <div class="addProjectContentf" v-show="isShow">
-            <section class="searchAddProject">
-                <el-row class="inputSearch" type="flex" justify="center" align="middle">
-                    <el-col :span="12">
-                        <el-input v-model="input" placeholder="百度"></el-input>
-                    </el-col>
-                    <el-col :span="4">
-                        <div>
-                            <img src="/static/img/icon-search.png" style="width:40px;height:40px">
-                        </div>
-                    </el-col>
-                </el-row>
-
-                <el-row class="text">
-                    <el-col :span="4">
-                        <p>根据词条搜索到以下
-                            <span>{{this.dataNum}}</span>条内容</p>
-                    </el-col>
-                    <el-col :span="3">
-                        <span @click="changeAdd">新增项目</span>
-                    </el-col>
-                </el-row>
-
-                <el-row class="dataList" type="flex" justify="space-around">
-                    <el-col :span="6" class="dataBox" align="center" v-for="(item,index) in dataList" :key="item.index">
-                        <el-card :body-style="{ padding: '10px'}">
-                            <h3>{{item.company}}</h3>
-                            <p>{{item.intro}}</p>
-                            <el-button type="danger" @click="addProject">+项目池</el-button>
-                        </el-card>
-                    </el-col>
-                </el-row>
-            </section>
-        </div>
-        <div class="addProjectContents" v-show="isHide">
+        <div class="addProjectContents">
             <section class="editAddProject">
                 <h3>新增项目</h3>
                 <div class="addForm">
                     <div class="basicForm">
-                        <el-form ref="basicForm" :model="basicForm" label-width="120px">
+                        <el-form ref="basicForm" :rules="rules" :model="basicForm" label-width="120px">
                             <el-row>
                                 <el-col class="title">
                                     <div>基本信息</div>
@@ -297,8 +263,6 @@
 export default {
     data() {
         return {
-            isShow: true,
-            isHide: false,
             dataNum: 3,
             basicForm: {
                 projectName: '',
@@ -322,20 +286,6 @@ export default {
                 service: '',
                 remark: ''
             },
-            dataList: [
-                {
-                    company: '百度科技有限公司',
-                    intro: '全球最大的中文搜索引擎、致力于让网民更便捷地获取信息， 找到所求。百度超过千亿的中文网页数据库，可以瞬间找到相关的搜索结果。'
-                },
-                {
-                    company: '百度（中国有限公司）',
-                    intro: '全球最大的中文搜索引擎、致力于让网民更便捷地获取信息， 找到所求。百度超过千亿的中文网页数据库，可以瞬间找到相关的搜索结果。'
-                },
-                {
-                    company: '无锡亿佰度餐饮管理服务有限公司',
-                    intro: '全球最大的中文搜索引擎、致力于让网民更便捷地获取信息， 找到所求。百度超过千亿的中文网页数据库，可以瞬间找到相关的搜索结果。'
-                }
-            ],
             // 上传 企业LOGO
             defaultList: [
                 {
@@ -357,14 +307,6 @@ export default {
         this.uploadList = this.$refs.upload.fileList;
     },
     methods: {
-        addProject() {
-            this.addTab('添加项目2', '/home/wprojectPoolMessage', 'wprojectPoolMessage');
-            this.$router.push({ name: 'wprojectPoolMessage' });
-        },
-        changeAdd() {
-            this.isShow = false;
-            this.isHide = true;
-        },
         submitForm() {
             this.addTab('项目池', '/home/projectPool', 'projectPool');
             this.$router.push({ name: 'projectPool' });

@@ -78,10 +78,10 @@ const actions = {
         // console.log(userPwd);
         // userPwd.self.$http.post('http://localhost:8080/api/user/login', {
         userPwd.self.$http.post('api/user/login', {
-            number: userPwd.name,
-            pass: userPwd.pwd
-            // number: "010",
-            // pass: "e10adc3949ba59abbe56e057f20f883e"
+            // number: userPwd.name,
+            // pass: userPwd.pwd
+            number: "010",
+            pass: "e10adc3949ba59abbe56e057f20f883e"
         }).then(data => {
             // alert(1);
             if (data.data.status == '403') {
