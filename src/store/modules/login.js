@@ -91,12 +91,10 @@ const actions = {
     }, user) { //send login API
         // console.log(user);
         user.self.$http.post('api/user/login', {
-            // user.self.$http.post('api/merchant/validationCode', {
-            // number: user.name,
-            // pass: user.pwd
+            number: user.name,
+            pass: user.pwd
             // number: "010",
             // pass: "e10adc3949ba59abbe56e057f20f883e"
-            "contactPhone":"18700958609"
         }).then(data => {
             // alert(1);
             if (data.data.status == '403') {
