@@ -47,8 +47,15 @@
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
-import {mapMutations} from 'vuex'
-import {getManagementType} from 'api/fund'
+import Service from 'common/js/fetch'
+import {
+    mapMutations,
+    mapGetters
+} from 'vuex'
+import {
+    getManagementType,
+    getMyFundDetails
+} from 'api/fund'
 const INDEX = 0;
 const NOW = 0;
 export default {
@@ -80,32 +87,7 @@ export default {
                 title: '基金状态：',
                 details: ['全部', '中止']
             }],
-            myFund: [{
-                manageTypeId: '', //管理类型id
-                investSum: '', //投资总额
-                orgTypeId: '', //组织类型id
-                fundNo: '20160901', //基金编号
-                fundScale: "1000", //基金规模
-                id: "773a889fb82b4c5bad7086184673bbce", //基金id
-                fundName: "深度并购", //基金名称
-                placementSum: '', //募集总额
-                surplusLimit: '', //剩余额度
-                createDate: '', //成立日期
-                fundStageId: "1" //状态
-            }, {
-                manageTypeId: '', //管理类型id
-                investSum: '', //投资总额
-                orgTypeId: '', //组织类型id
-                fundNo: '20160901', //基金编号
-                fundScale: "1000", //基金规模
-                id: "773a", //基金id
-                fundName: "aaaa", //基金名称
-                placementSum: '', //募集总额
-                surplusLimit: '', //剩余额度
-                createDate: '', //成立日期
-                fundStageId: "1" //状态
-            }],
-            currentPage: 10
+            myFund: []
         }
     },
     methods: {
@@ -122,23 +104,31 @@ export default {
             });
             this.$store.dispatch('getManageType').then(() => {
                 this.$router.push('/home/add')
-            }).catch(() =>{
+            }).catch(() => {
                 this.$router.push('/home/myfund')
             })
 
         },
         handleRouter(index, row) {
-            this.addTab({
-                type: 'addTab',
-                title: row.fundName + '详情',
-                url: '/home/fundDetails/' + row.id,
-                name: 'fundDetails/' + row.id
-            });
-            this.$router.push({
-                name: 'fundDetails',
-                params: {
-                    id: row.id
+            getMyFundDetails(row.id).then((res) => {
+                if (res.data.status == '200') {
+                    this.GET_MYFUNDDETAILS(res.data.result)
+                    this.addTab({
+                        type: 'addTab',
+                        title: row.fundName + '详情',
+                        url: '/home/fundDetails/' + row.id,
+                        name: 'fundDetails/' + row.id
+                    });
+                    this.$router.push({
+                        name: 'fundDetails',
+                        params: {
+                            id: row.id
+                        }
+                    })
                 }
+            }).catch(err => {
+                this.$Message.error(err)
+                this.$router.push('/home/myfund')
             })
         },
         leadingIn(el) {
@@ -154,7 +144,18 @@ export default {
             console.log(`当前页: ${val}`);
         },
         ...mapMutations([
-            'addTab' // 映射 this.addTab() 为 this.$store.commit
+            'addTab', // 映射 this.addTab() 为 this.$store.commit
+            'GET_MYFUNDDETAILS'
+        ])
+    },
+    created() {
+        this.$store.dispatch('getFundLists').then(() => {
+            this.myFund = this.myFundList.list
+        })
+    },
+    computed: {
+        ...mapGetters([
+            'myFundList'
         ])
     },
     components: {
@@ -169,7 +170,7 @@ export default {
 @import '../../common/styles/mixin.less';
 .fund {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background: @color-base;
     padding: @height-small;
     .choose {

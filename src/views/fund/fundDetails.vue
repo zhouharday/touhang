@@ -96,6 +96,7 @@ import Projects from './projects'
 import File from './file'
 import Manage from './manage'
 import echarts from '../../components/echarts'
+import {mapGetters} from 'vuex'
 export default {
     data() {
         return {
@@ -150,16 +151,8 @@ export default {
                 name: '姓名'
             }],
             activeName: 'details',
-            formDetails: {
-                baseInfo: '基本信息',
-                flag: 'false',
-                name: 'aaa基金',
-                establish: ''
-            },
-            formMIS: {
-                baseInfo: '管理信息',
-                flag: 'false',
-            },
+            formDetails: {},
+            formMIS: {},
             formRegistration: {
                 baseInfo: '备案注册',
                 flag: 'false',
@@ -169,6 +162,21 @@ export default {
                 flag: 'false',
             }
         }
+    },
+    computed: {
+        ...mapGetters([
+            'fundDetails'
+        ])
+    },
+    created() {
+        this.fundDetails = Object.assign({}, this.fundDetails.fundBaseInfo, {
+            baseInfo: '基本信息',
+            flag: 'false'
+        }),
+        this.formMIS = Object.assign({}, this.fundDetails.fundManageInfo, {
+            baseInfo: '管理信息',
+            flag: 'false'
+        })
     },
     components: {
         tableInfo,
