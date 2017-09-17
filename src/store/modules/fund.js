@@ -1,18 +1,22 @@
 import * as types from '../mutations-type'
 import Service from '../../common/js/fetch'
-import {getManagementType, FundInvestment, managementCompany, OrganizationType} from '../../api/fund'
+import {getManagementType, FundInvestment, managementCompany, OrganizationType, getMyFund} from '../../api/fund'
 const state = {
     getManType: JSON.stringify(sessionStorage.getItem('getManType')) || [],
     fundInvestment: [],
     managementCompany: [],
-    OrgType: []
+    OrgType: [],
+    myFundList: {},
+    fundDetails: {}
 }
 
 const getters = {
     getManType: state => state.getManType,
     fundInvestment: state => state.fundInvestment,
     managementCompany: state => state.managementCompany,
-    OrgType: state => state.OrgType
+    OrgType: state => state.OrgType,
+    myFundList: state => state.myFundList,
+    fundDetails: state => state.fundDetails
 }
 
 const mutations = {
@@ -27,6 +31,12 @@ const mutations = {
     },
     [types.GET_ORGTYPE](state, OrgType) {
         state.OrgType = OrgType
+    },
+    [types.GET_MYFUNDLIDT](state, myFundList) {
+        state.myFundList = myFundList
+    },
+    [types.GET_MYFUNDDETAILS](state, fundDetails) {
+        state.fundDetails = fundDetails
     }
 }
 
@@ -34,7 +44,6 @@ const actions = {
     getManageType({commit, dispatch}) {
         return getManagementType().then((res) => {
             if (res.status == '200') {
-                console.log(res.data.result)
                 commit(types.GET_MANTYPE, res.data.result)
                 sessionStorage.setItem('getManType', JSON.stringify(res.data.result))
             }
@@ -45,7 +54,6 @@ const actions = {
     getFundInvestment({commit, dispatch}) {
         return FundInvestment().then((res) => {
             if (res.status == '200') {
-                console.log(res.data.result)
                 commit(types.GET_FUNDINVESTMENT, res.data.result)
             }
         }).catch(err => {
@@ -55,7 +63,6 @@ const actions = {
     getManagementCompany({commit, dispatch}) {
         return managementCompany().then((res) => {
             if (res.status == '200') {
-                console.log(res.data.result)
                 commit(types.GET_MANAGEMENTCOMPANY, res.data.result)
             }
         }).catch(err => {
@@ -65,8 +72,16 @@ const actions = {
     getOrganizationType({commit, dispatch}) {
         return OrganizationType().then((res) => {
             if (res.status == '200') {
-                console.log(res.data.result)
                 commit(types.GET_ORGTYPE, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getFundLists({commit, dispatch}) {
+        return getMyFund().then((res) => {
+            if(res.status == '200') {
+                commit(types.GET_MYFUNDLIDT, res.data.result)
             }
         }).catch(err => {
             console.log(err)
