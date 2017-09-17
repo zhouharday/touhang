@@ -1,24 +1,22 @@
 <template>
-<div class="myFilter">
-    <ul class="choose">
-        <li v-for="(item, index) of chooseInfo" class="lists" key="index">
-            <div class="title" v-show="item.title">
-              {{item.title}}
-            </div>
-            <div class="ul_list">
-                <ul class="listWrapper">
-                    <li class="list" v-for="(list, nowIndex) of item.details">
-                        <el-button @click="changeList(index, nowIndex)"
-                                   :class="{active: nowIndex == 0}"
-                                   class="btn">
-                            {{list}}
-                        </el-button>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-</div>
+    <div class="myFilter">
+        <ul class="choose">
+            <li v-for="(item, index) of chooseInfo" class="lists" :key="item">
+                <div class="title" v-show="item.title">
+                    {{item.title}}
+                </div>
+                <div class="ul_list">
+                    <ul class="listWrapper">
+                        <li class="list" v-for="(list, nowIndex) of item.details" :key="list">
+                            <el-button @click="changeList(index, nowIndex)" :class="{active: nowIndex==currentIndex && index==parentIndex}" class="btn">
+                                {{list}}
+                            </el-button>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -37,8 +35,8 @@ export default {
     },
     data() {
         return {
-            currentIndex: '',
-            parentIndex: '',
+            currentIndex: 0,
+            parentIndex: 0,
             changed: false
         }
     },
@@ -46,8 +44,10 @@ export default {
         changeList(index, val) {
             console.log(index)
             console.log(val)
-            // this.parentIndex = index
-            // this.currentIndex = val
+
+            this.parentIndex = index
+            this.currentIndex = val
+
         },
     },
     watch: {
@@ -63,28 +63,27 @@ export default {
 .myFilter {
     width: 100%;
     background: @color-base;
-    .lists{
+    .lists {
         width: 100%;
         height: 42px;
         margin: 6px 0;
         display: flex;
-        .title{
+        .title {
             flex: 0 0 120px;
             height: 100%;
             line-height: 42px;
         }
-        .ul_list{
+        .ul_list {
             flex: 1;
             line-height: 42px;
-            .listWrapper{
+            .listWrapper {
                 display: flex;
-                .list{
+                .list {
                     margin-right: 24px;
                 }
-                .btn{
+                .btn {
                     border: none;
-                    &.active,
-                    &.default{
+                    &.active {
                         background: @color-theme-red;
                     }
                 }

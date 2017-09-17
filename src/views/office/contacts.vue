@@ -5,7 +5,6 @@
             <!-- 联系人list -->
             <div class="contacts_L">
                 <div>
-
                     <div v-for="( item, index) in contacts_list" :key="item.index" @click="active(index,item)" :class="{'bag':ind === index}">
                         <ul>
                             <li>
@@ -45,9 +44,11 @@
                         </el-col>
                     </div>
                 </el-row>
-                <el-row>
+                <el-row style="height:100%;">
                     <div class="contacts_R_content">
                         <el-col :span="24">
+                            <img v-show="typeText.type == '1'" :src="errorIMG.error_01" alt="">
+                            <div v-show="typeText.type != '1'">{{typeText.text}}</div>
                         </el-col>
                     </div>
                 </el-row>
@@ -130,7 +131,6 @@ section {
 }
 
 .contacts_list {
-    // background: #ffffff;
     height: 103%;
     overflow: hidden;
     .contacts_L {
@@ -191,13 +191,13 @@ section {
     .contacts_R {
         float: left;
         width: 80%;
-        height: 60px; // border-bottom: 1px solid #ccc;
+        height: 100%; // border-bottom: 1px solid #ccc;
         // padding: 10px;
         box-sizing: border-box;
         position: relative;
         .contacts_R_header {
             width: 100%;
-            height: 60px;
+            height: 60px; // height: 100%;
             padding: 10px;
             background: #ffffff;
             margin-bottom: 1px;
@@ -219,7 +219,6 @@ section {
                     }
                 }
                 >div:nth-child(2) {
-                    // >button {}
                     position: absolute;
                     right: 13.5px;
                     top: 13.5px;
@@ -236,8 +235,32 @@ section {
             }
         }
         .contacts_R_content {
+            position: relative;
             background: #ffffff;
-            height: 600px;
+            height: 100%;
+            >img {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 340px;
+                height: 273px;
+            }
+            >div>div {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 500px;
+                height: 100px;
+                font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
+                color: darkgreen;
+                font-size: 20px;
+            }
         }
     }
 }
@@ -262,19 +285,46 @@ b {
 }
 </style>
 
-
-
-
 <script>
+import { mapState } from 'vuex'
 export default {
+    beforeCreate() {
+        // alert(114);
+    },
+    computed: {
+
+        typeText() {
+            if ( JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null ) {
+                // alert(1111);
+                this.$store.state.login.approvelType.type = '';
+                this.$store.state.login.approvelType.text = '您好，请先注册~';
+                // console.log(state.login.approvelType);
+                return this.$store.state.login.approvelType;
+            } else {
+                this.$store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
+                // console.log(state.login.approvelType);
+                return this.$store.state.login.approvelType;
+            }
+        },
+        ...mapState({
+            // userName: state => state.login.userInfor
+        })
+    },
     data() {
         return {
+            // typeText:{
+            //     type: 1
+            // },
             systemDialog: false,
             ind: '',
+            // error_01: "/static/img/error/error_01.png/",
+            errorIMG: {
+                error_01: "/static/img/error/error_01.png",
+            },
             contacts_list: [
                 {
                     src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
+                    name: this.$store.state.login.userInfor.name,
                     name_bot: "最新版昂",
                     time: "17:05"
                 },
@@ -285,11 +335,11 @@ export default {
                 title: "聚乐新能源集团-研发部总监"
             },
             form: {
-                creditCode: '',
-                companyName: '',
-                delegate: '',
-                address: '',
-                edition: ''
+                creditCode: '', //社会编码
+                companyName: '', //客户名称
+                delegate: '', //法人代表
+                address: '', //详细地址
+                // edition: '' 
             },
             rules: {
                 creditCode: [
@@ -305,7 +355,7 @@ export default {
                     { required: true, message: '请输入详细地址', trigger: 'blur' }
                 ],
                 edition: [
-                    { required: true, message: '请选择系统版本', trigger: 'change' }
+                    { required: true, message: '请选择申请类型', trigger: 'change' }
                 ]
             },
         }
@@ -320,16 +370,39 @@ export default {
 
         },
         openDialog(formName) {
-           this.systemDialog = !this.systemDialog;
-           this.$refs[formName].resetFields();
+            let new_form = {
+                creditCode: '',
+                companyName: '',
+                delegate: '',
+                address: '',
+                edition: ''
+            };
+            this.form = new_form;
+            this.systemDialog = !this.systemDialog;
+            //this.$refs[formName].resetFields();
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    console.log(this.form);
+                    this.$http.post('api/merchant/apply', {
+                        "id": "50a21234735f4e34a5da5dadf47ff9b5",
+                        "socialCode": this.form.creditCode,
+                        "merchantName": this.form.companyName,
+                        "address": this.form.address,
+                        "merchantTypeId": "1", 
+                        "representative": this.form.delegate, //法人代表
+                    })
+                        .then(res => {
+                            console.log(res);
+                        })
+                        .catch(ero => {
+
+                        })
                     this.systemDialog = !this.systemDialog;
                 } else {
-                    return false;
                     this.$refs[formName].resetFields();
+                    return false;
                 }
             });
         }

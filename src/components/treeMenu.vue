@@ -14,13 +14,13 @@
                     </div>
                 </el-col>
                 <el-col :span="18" class="add_border_left" v-if="model.menuContent">
-                    <div class="dataDetails" v-for="(text, index) of model.menuContent">
+                    <div class="dataDetails" v-for="(text, index) of model.menuContent" :key="text">
                         <div class="btn_group" v-if="text.label === 'button'">
-                            <div class="btn" v-for="(btn, btnIndex) of text.details">
+                            <div class="btn" v-for="(btn, btnIndex) of text.details" :key="btn">
                                 <el-button size="small" class="btnStyle">{{btn}}</el-button>
                             </div>
                         </div>
-                        <div class="checkbox" v-else="text.label === 'checkbox'">
+                        <div class="checkbox" v-else = "text.label === 'checkbox'">
                             <el-checkbox-group v-model="text.checkedList">
                                 <span class="detailsTitle">{{text.detailsTitle}}</span>
                                  <el-checkbox v-for="(checkbox, checkedIndex) in text.details"  :label="checkbox" :key="checkedIndex">{{checkbox}}</el-checkbox>
@@ -32,7 +32,7 @@
         </el-col>
         <el-col :span="24">
             <el-row v-show="open" v-if="!isFolder">
-                <tree-menu v-for="item in model.children" :model="item"></tree-menu>
+                <tree-menu v-for="item in model.children" :model="item" :key="item"></tree-menu>
             </el-row>
         </el-col>
     </el-row>

@@ -21,9 +21,9 @@ import store from './store';
 
 
 Vue.use(iView);
-// Vue.use(echarts);
+Vue.use(echarts);
 Vue.use(ElementUI);
-
+Vue.prototype.md5 = md5;
 Vue.prototype.$http = axios;
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
 Vue.prototype.$http = axios.create();
@@ -45,6 +45,7 @@ Vue.prototype.$http = axios.create();
 //     // timeout: 1000,
 //     withCredentials: true
 // });
+
 
 
 var vm = new Vue({

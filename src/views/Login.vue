@@ -42,8 +42,17 @@
 
 <script>
 import { mapState } from 'vuex'
-import md5 from 'js-md5'
 export default {
+    // watch:{
+    //     router(to,form){
+    //         // console.log(to);
+    //     }
+    // },
+    created(){
+        this.userName = '';
+        this.passWord = '';
+        console.log(this.isLogged);
+    },
     computed: {
         ...mapState({
             CardBox: state => state.login.CardBox,
@@ -85,7 +94,9 @@ export default {
                 // this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
                 // let pass = this.passWord;
-                let pass = md5(this.passWord,32);
+                let pass = this.md5(this.passWord,32);
+                // window.setCookie("name",number); 
+                // window.setCookie("pwd",pass);
                 // console.log(pass);
                 this.userName = '';
                 this.passWord = '';

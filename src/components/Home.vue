@@ -3,7 +3,7 @@
         <v-head></v-head>
         <v-sidebar></v-sidebar>
         <div class="content">
-            <v-shouye v-if="isVshowYe"></v-shouye>
+            <v-Tab></v-Tab>
             <transition name="bounce">
                 <router-view></router-view>
             </transition>
@@ -12,39 +12,36 @@
 </template>
 <style lang="less" scoped>
 .bounce-enter-active {
-  animation: bounce-in .3s;
+    animation: bounce-in .3s;
 }
+
 .bounce-leave-active {
-  animation: bounce-in .3s reverse;
+    animation: bounce-in .3s reverse;
 }
+
 @keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-//   50% {
-//     transform: scale(.5);
-//   }
-  100% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(0);
+    } //   50% {
+    //     transform: scale(.5);
+    //   }
+    100% {
+        transform: scale(1);
+    }
 }
 </style>
 
 <script>
 import vHead from './Header.vue';
 import vSidebar from './Sidebar.vue';
-import vShouye from '../views/home/homeTab.vue';
-import { mapState } from 'vuex'
+import VTab from '../views/home/homeTab.vue';
 export default {
-    computed: mapState({
-        isVshowYe: state => state.register.isVshowYe,
-    }),
     components: {
-        vHead, vSidebar, vShouye
+        vHead, vSidebar, VTab
     },
     data() {
         return {
-
+           
         }
     }
 }
