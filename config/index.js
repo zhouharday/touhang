@@ -30,7 +30,7 @@ module.exports = {
         proxyTable: {
             '/api':{
                 // target:'http://192.168.0.198:9091',
-                // target:'http://100.64.33.181:8090', //ÍâÍøIP
+                // target:'http://100.64.33.181:8090', //å¤–ç½‘IP
                 // target:'http://192.168.0.122:9091',
                 // target:'http://192.168.0.117:9091',
                 // target:'http://100.64.33.181:9091',

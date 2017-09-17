@@ -7,8 +7,7 @@
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">
-                    <img class="user-logo" src="../../static/img/icon_close.png"> 
-                    {{username}}
+                    <img class="user-logo" src="../../static/img/icon_close.png"> {{username}}
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="loginout">退出</el-dropdown-item>
@@ -40,10 +39,20 @@ export default {
     methods: {
         handleCommand(command) {
             if (command == 'loginout') {
-                localStorage.removeItem('ms_username')
-                this.$router.push('/login');
+                localStorage.removeItem('ms_username');
+                sessionStorage.clear();
+                this.delCook();
+                window.location.href = 'http://localhost:8081/login';
+                // this.$router.push('/login');
             }
-        }
+        },
+        delCook() {
+            var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+            if (keys) {
+                for (var i = keys.length; i--;)
+                    document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+            }
+        },
     }
 }
 </script>

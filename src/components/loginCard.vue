@@ -2,17 +2,14 @@
     <div>
         <div class="login-name">企业登录</div>
         <div class="login-ac">
-            <input type="text" class="login-account" @input="checkVataa" v-model="name" placeholder="请输入账号/手机号" required>
+            <input autocomplete="off" type="text" class="login-account" @input="checkVataa" v-model="name" placeholder="请输入账号/手机号" required>
         </div>
         <div class="login-pass">
-            <input type="password" class="login-account" @input="checkVataa" v-model="password" placeholder="请输入密码" required>
+            <input autocomplete="off" type="password" class="login-account" @input="checkVataa" v-model="password" placeholder="请输入密码" required>
         </div>
         <div class="find-pass">
-            <!-- <router-link to=""></router-link> -->
-            <router-link v-if="pass" class="pass-zhuce" to="/register">企业注册</router-link>
             <span class="pass-find" @click="openDialog('form')">找回密码</span>
-            <!-- <router-link v-if="pass" class="pass-zhuce" to="/registerphone">企业注册</router-link> -->
-            <!-- <a href="#" class="pass-find">找回密码</a> -->
+            <router-link v-if="pass" class="pass-zhuce" to="/registerphone">企业注册</router-link>
         </div>
         <!-- 忘记密码 对话框 -->
         <el-dialog title="忘记密码" :visible.sync="findDialog">

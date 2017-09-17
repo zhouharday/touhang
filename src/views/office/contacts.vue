@@ -286,12 +286,13 @@ b {
 </style>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapState } from 'vuex'
 export default {
     beforeCreate() {
         // alert(114);
     },
     computed: {
+
         typeText() {
             if ( JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null ) {
                 // alert(1111);
@@ -304,7 +305,10 @@ export default {
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             }
-        }
+        },
+        ...mapState({
+            // userName: state => state.login.userInfor
+        })
     },
     data() {
         return {
@@ -320,7 +324,7 @@ export default {
             contacts_list: [
                 {
                     src: "/static/img/my_tuxiang.png",
-                    name: "张哲",
+                    name: this.$store.state.login.userInfor.name,
                     name_bot: "最新版昂",
                     time: "17:05"
                 },

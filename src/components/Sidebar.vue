@@ -131,21 +131,6 @@
                         {{title26}}
                     </el-menu-item>
                 </el-submenu>
-                <el-submenu index="9">
-                    <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>平台管理 -->
-                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/wangluo.png" />
-                        <span>{{title_09}}</span>
-                    </template>
-                    <el-menu-item index="featuresMenu" @click="addTab(title27, '/home/featuresMenu', 'featuresMenu')">{{title27}}</el-menu-item>
-                    <el-menu-item index="roleManger" @click="addTab(title28, '/home/roleManger', 'roleManger')">{{title28}}</el-menu-item>
-                    <el-menu-item index="userList" @click="addTab(title29, '/home/userList', 'userList')">{{title29}}</el-menu-item>
-                    <el-menu-item index="newsBulletin" @click="addTab(title30, '/home/newsBulletin', 'newsBulletin')">{{title30}}</el-menu-item>
-                    <el-menu-item index="customerManagement" @click="addTab(title31, '/home/customerManagement', 'customerManagement')">{{title31}}</el-menu-item>
-                    <el-menu-item index="customerPrivilege" @click="addTab(title32, '/home/customerPrivilege', 'customerPrivilege')">{{title32}}</el-menu-item>
-                    <el-menu-item index="leadAssistant" @click="addTab(title33, '/home/leadAssistant', 'leadAssistant')">{{title33}}</el-menu-item>
-                    <el-menu-item index="memberManagement" @click="addTab(title34, '/home/memberManagement', 'memberManagement')">{{title34}}</el-menu-item>
-                </el-submenu>
             </el-menu>
             <!-- <el-row>
                                                                                             <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
