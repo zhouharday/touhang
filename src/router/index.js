@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => { //在所有导航完成之前先判断�
         return;
     }
     var isLogin = Boolean(store.state.login.isLogged);
-    if (isLogin ) { 
+    if (isLogin ) {
         next()   // 进行下一个钩子函数  
     }else {
        next({path: '/login'})   //  跳转到login页面  

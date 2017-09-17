@@ -42,7 +42,6 @@
 
 <script>
 import { mapState } from 'vuex'
-// import md5 from 'js-md5'
 export default {
     // watch:{
     //     router(to,form){
@@ -50,6 +49,8 @@ export default {
     //     }
     // },
     created(){
+        this.userName = '';
+        this.passWord = '';
         console.log(this.isLogged);
     },
     computed: {
