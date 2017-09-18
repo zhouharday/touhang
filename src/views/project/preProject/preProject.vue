@@ -43,13 +43,14 @@
                </el-input>
            </el-col>
            <el-col :span="19" class="imdo">
-               <div class="importProject">
+                <!-- 后期所做导入和下载模板功能 -->
+               <!-- <div class="importProject">
                    <el-upload class="upload-demo" ref="upload"
                         action="" :auto-upload="false">
                         <el-button type="text">导入</el-button>
                    </el-upload>
                    <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-               </div>
+               </div> -->
            </el-col>
         </el-row>
         <!--项目table -->
