@@ -63,7 +63,7 @@ export default {
                 callback(new Error('请输入手机号码'));
             } else {
                 if ((value !== '') && (/^1[34578][0-9]{9}$/.test(this.form1.phone))) {
-                    callback();
+                    return true;
                 }
                 callback(new Error('请输入正确的手机号码'));
             }
@@ -129,11 +129,13 @@ export default {
         },
          /*******************验证 找回密码表单 开始*************************/
         // checkVata() {
-        //      if ( this.validatePhone && thisvalidatePwd && this.validatePwd ) {
+        //     // console.log(this.rules.phone);
+        //      if ( this.validatePhone && this.validatePwd && this.validatePwd2 ) {
         //         this.valueData = true;
         //         this.isSendCode = false;
         //     }
         //     else if (this.validatePhone) {
+        //         alert(1);
         //         this.isSendCode = false;
         //         this.valueData = false;
         //     } else {

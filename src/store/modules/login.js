@@ -18,7 +18,7 @@ const state = {
     CardBox: loginCard,
     showOrHide: {
         isVshowYe: true, //是否显示首页
-        isShowSidebar: false, //是否只显示通讯录菜单列表
+        isShowSidebar: false, //是只否显示通讯录菜单列表
         // isShowSidebar: true,
     },
     approvelType: { //企业审核状态

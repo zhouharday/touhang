@@ -236,8 +236,7 @@ export default {
                 this.$store.state.login.showOrHide.isShowSidebar = 0;
                 return this.$store.state.login.showOrHide;
             } else {
-                // this.$store.state.login.showOrHide = JSON.parse(sessionStorage.getItem('showOrHide')) || {};
-                console.log(this.$store.state.login.showOrHide);
+                //this.$store.state.login.showOrHide = //JSON.parse(sessionStorage.getItem('showOrHide')) || {};
                 return this.$store.state.login.showOrHide;
             }
         }
