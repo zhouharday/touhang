@@ -27,11 +27,7 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-<<<<<<< HEAD
-                                                                                    margin-right: 7px;" src="/static/img/office.png" />
-=======
                                                                                                     margin-right: 7px;" src="/static/img/office.png" />
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -40,18 +36,10 @@
                     <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
-<<<<<<< HEAD
-                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                                                                领投助手 -->
-                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
-                    <span index="assistant">{{title_02}}</span>
-                    <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
-=======
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i> -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')">{{title_02}}</router-link> -->
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 </div>
                 <el-submenu index="3">
                     <template slot="title">
@@ -59,10 +47,6 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
                         <span>{{title_03}}</span>
                     </template>
-<<<<<<< HEAD
-
-=======
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
                     <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
@@ -99,19 +83,6 @@
                     <el-menu-item index="projectsDoc" @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
                     <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
-<<<<<<< HEAD
-                <!-- <el-submenu index="7">
-                                                                                                <template slot="title">
-                                                                                                    <i class="el-icon-star-on"></i>统计分析</template>
-                                                                                            </el-submenu> -->
-                <!-- <div class="div_el-menu-itemel-submenu__title">
-                                                                <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
-                                                                                                统计分析 -->
-                <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
-                                                                <span>{{title_07}}</span>
-                                                            </div> -->
-=======
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 <el-submenu index="7">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>统计分析 -->
@@ -160,36 +131,12 @@
                         {{title26}}
                     </el-menu-item>
                 </el-submenu>
-<<<<<<< HEAD
-                <el-submenu index="9">
-                    <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>平台管理 -->
-                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/wangluo.png" />
-                        <span>{{title_09}}</span>
-                    </template>
-                    <el-menu-item index="featuresMenu" @click="addTab(title27, '/home/featuresMenu', 'featuresMenu')">{{title27}}</el-menu-item>
-                    <el-menu-item index="roleManger" @click="addTab(title28, '/home/roleManger', 'roleManger')">{{title28}}</el-menu-item>
-                    <el-menu-item index="userList" @click="addTab(title29, '/home/userList', 'userList')">{{title29}}</el-menu-item>
-                    <el-menu-item index="newsBulletin" @click="addTab(title30, '/home/newsBulletin', 'newsBulletin')">{{title30}}</el-menu-item>
-                    <el-menu-item index="customerManagement" @click="addTab(title31, '/home/customerManagement', 'customerManagement')">{{title31}}</el-menu-item>
-                    <el-menu-item index="customerPrivilege" @click="addTab(title32, '/home/customerPrivilege', 'customerPrivilege')">{{title32}}</el-menu-item>
-                    <el-menu-item index="leadAssistant" @click="addTab(title33, '/home/leadAssistant', 'leadAssistant')">{{title33}}</el-menu-item>
-                    <el-menu-item index="memberManagement" @click="addTab(title34, '/home/memberManagement', 'memberManagement')">{{title34}}</el-menu-item>
-                </el-submenu>
-            </el-menu>
-            <!-- <el-row>
-                                                                            <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
-                                                                                <my-tree :model="menuItem"></my-tree>
-                                                                            </el-col>
-                                                                        </el-row> -->
-=======
             </el-menu>
             <!-- <el-row>
                                                                                             <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
                                                                                                 <my-tree :model="menuItem"></my-tree>
                                                                                             </el-col>
                                                                                         </el-row> -->
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
