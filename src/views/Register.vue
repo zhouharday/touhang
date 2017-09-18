@@ -39,6 +39,7 @@
 import city from '../../static/js/city.json.js'
 import { mapState } from 'vuex'
 import axios from 'axios'
+import md5 from 'js-md5'
 export default {
     data() {
         return {
@@ -135,9 +136,23 @@ export default {
                 this.$http.post('api/merchant/register', this.$store.state.register.register)
                     .then(res => {
                         if (res.data.status == '200') { //注册数据验证通过
+<<<<<<< HEAD
                             this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页
                             this.$store.state.login.show_OR_hide.isShowSidebar = true; //只显示通讯录菜单列表
                             this.$router.push({ name: 'contacts' }); //进入通讯录页面
+=======
+                            // this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页
+                            // this.$store.state.login.show_OR_hide.isShowSidebar = true; //只显示通讯录菜单列表
+                            let number = this.$store.state.register.register.contactPhone;
+                            let pass = md5('123456', 32);
+                            this.$store.dispatch({ //登录
+                                type: 'loginAPI',
+                                name: number,
+                                pwd: pass,
+                                self: this
+                            });
+                            // this.$router.push({ name: 'contacts' }); //进入通讯录页面
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                             // console.log(res.data);
                         } else if (res.data.status == '403') { //网络异常
                             // console.log(res.data);
@@ -150,7 +165,10 @@ export default {
                         // alert(222);
                         console.log(error);
                     })
+<<<<<<< HEAD
                 console.log(this.$store.state.register.register);
+=======
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
             }
         }
     }

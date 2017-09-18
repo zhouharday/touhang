@@ -27,7 +27,11 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
+<<<<<<< HEAD
                                                                                     margin-right: 7px;" src="/static/img/office.png" />
+=======
+                                                                                                    margin-right: 7px;" src="/static/img/office.png" />
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -36,11 +40,18 @@
                     <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
+<<<<<<< HEAD
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i>
                                                                                                 领投助手 -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
                     <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')" >{{title_02}}</router-link> -->
+=======
+                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i> -->
+                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
+                    <span index="assistant">{{title_02}}</span>
+                    <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')">{{title_02}}</router-link> -->
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 </div>
                 <el-submenu index="3">
                     <template slot="title">
@@ -48,7 +59,10 @@
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
                         <span>{{title_03}}</span>
                     </template>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
                     <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
@@ -85,6 +99,7 @@
                     <el-menu-item index="projectsDoc" @click="addTab(title17, '/home/projectsDoc', 'projectsDoc')">{{title17}}</el-menu-item>
                     <el-menu-item index="fundDoc" @click="addTab(title18, '/home/fundDoc', 'fundDoc')">{{title18}}</el-menu-item>
                 </el-submenu>
+<<<<<<< HEAD
                 <!-- <el-submenu index="7">
                                                                                                 <template slot="title">
                                                                                                     <i class="el-icon-star-on"></i>统计分析</template>
@@ -95,6 +110,8 @@
                 <!-- <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_analysis.png" />
                                                                 <span>{{title_07}}</span>
                                                             </div> -->
+=======
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 <el-submenu index="7">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>统计分析 -->
@@ -143,6 +160,7 @@
                         {{title26}}
                     </el-menu-item>
                 </el-submenu>
+<<<<<<< HEAD
                 <el-submenu index="9">
                     <template slot="title">
                         <!-- <i class="el-icon-star-on"></i>平台管理 -->
@@ -164,6 +182,14 @@
                                                                                 <my-tree :model="menuItem"></my-tree>
                                                                             </el-col>
                                                                         </el-row> -->
+=======
+            </el-menu>
+            <!-- <el-row>
+                                                                                            <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
+                                                                                                <my-tree :model="menuItem"></my-tree>
+                                                                                            </el-col>
+                                                                                        </el-row> -->
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
@@ -257,9 +283,15 @@ export default {
             return this.$store.state.login.merchants;
         },
         showOrHide() {
+<<<<<<< HEAD
             if (JSON.parse(sessionStorage.getItem('showOrHide')) == '' || JSON.parse(sessionStorage.getItem('showOrHide')) == 'undefined') {
                 this.$store.state.login.showOrHide.isVshowYe = 0;
                 this.$store.state.login.showOrHide.isShowSidebar = 1;
+=======
+            if (JSON.parse(sessionStorage.getItem('showOrHide')) == null) {
+                this.$store.state.login.showOrHide.isVshowYe = 1;
+                this.$store.state.login.showOrHide.isShowSidebar = 0;
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 return this.$store.state.login.showOrHide;
             } else {
                 this.$store.state.login.showOrHide = JSON.parse(sessionStorage.getItem('showOrHide')) || {};
@@ -324,52 +356,52 @@ export default {
                     "icon": null,  //对应图标
                     "sort": 6,     //排序
                     "parentId": "0", //父id
-                    "type": "0",    //按钮类型
+                    "type": "0", //按钮类型
                     "code": "userinfo,userupdate",//标识
                     "target": "_self",
                     "onClick": "addTab()",
                     "description": null,   //描述
                     "status": "0",   //状态
                     "createDate": null,
-                    "merchantId": "11",   //商户id
+                    "merchantId": "11", //商户id
                     "versionRecord": 1502260340000
                 },
                 {
                     // "open": true,
-                    "id": 2,  // 菜单id
+                    "id": 2, // 菜单id
                     "pId": 0,
                     "name": "一级菜单", //菜单标题
                     "common": "0",        //是否为公共
                     "icon": null,  //对应图标
                     "sort": 6,     //排序
                     "parentId": "0", //父id
-                    "type": "0",    //按钮类型
-                    "code": "userinfo,userupdate",//标识
-                    "url": null,     //类型
-                    "description": null,   //描述
-                    "status": "0",   //状态
+                    "type": "0", //按钮类型
+                    "code": "userinfo,userupdate", //标识
+                    "url": null, //类型
+                    "description": null, //描述
+                    "status": "0", //状态
                     "createDate": null,
-                    "merchantId": "11",   //商户id
+                    "merchantId": "11", //商户id
                     "versionRecord": 1502260340000
                 },
                 {
                     // "open": true,
-                    "id": 21,  // 菜单id
+                    "id": 21, // 菜单id
                     "pId": 2,
                     "name": "子菜单", //菜单标题
                     // "url": "/home/projectPool",     //类型
-                    "path": "/home/projectPool",     //类型
+                    "path": "/home/projectPool", //类型
                     "target": "_self",
-                    "common": "0",        //是否为公共
-                    "icon": null,  //对应图标
-                    "sort": 6,     //排序
+                    "common": "0", //是否为公共
+                    "icon": null, //对应图标
+                    "sort": 6, //排序
                     "parentId": "0", //父id
-                    "type": "0",    //按钮类型
-                    "code": "userinfo,userupdate",//标识
-                    "description": null,   //描述
-                    "status": "0",   //状态
+                    "type": "0", //按钮类型
+                    "code": "userinfo,userupdate", //标识
+                    "description": null, //描述
+                    "status": "0", //状态
                     "createDate": null,
-                    "merchantId": "11",   //商户id
+                    "merchantId": "11", //商户id
                     "versionRecord": 1502260340000
                 }
             ],
@@ -471,12 +503,12 @@ export default {
 <style lang="less" scoped>
 .ztree * {
     font-size: 10pt;
-    font-family: "Microsoft Yahei", Verdana, Simsun, "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Segoe UI Symbol", "Helvetica Neue", Arial
+    font-family: "Microsoft Yahei", Verdana, Simsun, "Segoe UI Web Light", "Segoe UI Light", "Segoe UI Web Regular", "Segoe UI", "Segoe UI Symbol", "Helvetica Neue", Arial;
 }
 
 .ztree li ul {
     margin: 0;
-    padding: 0
+    padding: 0;
 }
 
 .ztree li {
@@ -486,20 +518,19 @@ export default {
 .ztree li a {
     width: 200px;
     height: 30px;
-    padding-top: 0px;
+    padding-top: 0;
 }
-
 .ztree li a:hover {
     text-decoration: none;
     background-color: #E7E7E7;
 }
 
 .ztree li a span.button.switch {
-    visibility: hidden
+    visibility: hidden;
 }
 
 .ztree.showIcon li a span.button.switch {
-    visibility: visible
+    visibility: visible;
 }
 
 .ztree li a.curSelectedNode {
@@ -528,12 +559,12 @@ export default {
 
 .ztree li span.button.switch.level0 {
     width: 20px;
-    height: 20px
+    height: 20px;
 }
 
 .ztree li span.button.switch.level1 {
     width: 20px;
-    height: 20px
+    height: 20px;
 }
 
 .ztree li span.button.noline_open {
@@ -560,7 +591,7 @@ export default {
     padding: 0 20px;
     cursor: pointer;
     position: relative;
-    transition: border-color .3s, background-color .3s, color .3s;
+    transition: border-color 0.3s, background-color 0.3s, color 0.3s;
     box-sizing: border-box;
     white-space: nowrap;
     &:hover {
@@ -592,7 +623,6 @@ export default {
     overflow: scroll;
     overflow-x: hidden;
 }
-
 
 .portrait-top {
     width: 82px;
