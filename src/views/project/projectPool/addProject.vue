@@ -152,8 +152,110 @@
     </div>
 </template>
 
+<script>
+import { addPre } from 'api/project';
 
-
+export default {
+    name: 'addProject',
+    data() {
+        return {
+            dataNum: 3,
+            basicForm: {
+                projectName: '',
+                shortName: '',
+                projectSort: '',
+                industry: '',
+                origin: '',
+                location: '',
+                manager: '',
+                department: ''
+            },
+            companyForm: {
+                companyName: '',
+                delegate: '',
+                regCapital: '',
+                paidCapital: '',
+                regDatetime: '',
+                creditCode: '',
+                regAddress: '',
+                workingSite: '',
+                service: '',
+                remark: ''
+            },
+            // 上传 企业LOGO
+            defaultList: [
+                {
+                    'name': 'a42bdcc1178e62b4694c830f028db5c0',
+                    'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
+                },
+                {
+                    'name': 'bc7521e033abdd1e92222d733590f104',
+                    'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                }
+            ],
+            imgName: '',
+            visible: false,
+            uploadList: []
+        }
+    },
+    mounted() {
+        // 上传 企业LOGO
+        this.uploadList = this.$refs.upload.fileList;
+    },
+    methods: {
+        submitForm() {
+            let basicForm = this.basicForm;
+            let companyForm = this.companyForm;
+            console.log('basicForm: ', basicForm, companyForm);
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
+        },
+        cancleForm() {
+            this.isShow = true;
+            this.isHide = false;
+        },
+        addTab(th, url, name) {
+            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+        },
+        // 上传 企业LOGO 的方法
+        handleView(name) {
+            this.imgName = name;
+            this.visible = true;
+        },
+        handleRemove(file) {
+            // 从 upload 实例删除数据
+            const fileList = this.$refs.upload.fileList;
+            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
+        },
+        handleSuccess(res, file) {
+            // 因为上传过程为实例，这里模拟添加 url
+            file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
+            file.name = '7eb99afb9d5f317c912f08b5212fd69a';
+        },
+        handleFormatError(file) {
+            this.$Notice.warning({
+                title: '文件格式不正确',
+                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
+            });
+        },
+        handleMaxSize(file) {
+            this.$Notice.warning({
+                title: '超出文件大小限制',
+                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
+            });
+        },
+        handleBeforeUpload() {
+            const check = this.uploadList.length < 5;
+            if (!check) {
+                this.$Notice.warning({
+                    title: '最多只能上传 5 张图片。'
+                });
+            }
+            return check;
+        }
+    },
+}
+</script>
 
 <style lang="less" scoped>
 .addProject {
@@ -256,104 +358,3 @@
     }
 }
 </style>
-
-
-
-<script>
-export default {
-    data() {
-        return {
-            dataNum: 3,
-            basicForm: {
-                projectName: '',
-                shortName: '',
-                projectSort: '',
-                industry: '',
-                origin: '',
-                location: '',
-                manager: '',
-                department: ''
-            },
-            companyForm: {
-                companyName: '',
-                delegate: '',
-                regCapital: '',
-                paidCapital: '',
-                regDatetime: '',
-                creditCode: '',
-                regAddress: '',
-                workingSite: '',
-                service: '',
-                remark: ''
-            },
-            // 上传 企业LOGO
-            defaultList: [
-                {
-                    'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                    'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                },
-                {
-                    'name': 'bc7521e033abdd1e92222d733590f104',
-                    'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                }
-            ],
-            imgName: '',
-            visible: false,
-            uploadList: []
-        }
-    },
-    mounted() {
-        // 上传 企业LOGO
-        this.uploadList = this.$refs.upload.fileList;
-    },
-    methods: {
-        submitForm() {
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
-        },
-        cancleForm() {
-            this.isShow = true;
-            this.isHide = false;
-        },
-        addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
-        },
-        // 上传 企业LOGO 的方法
-        handleView(name) {
-            this.imgName = name;
-            this.visible = true;
-        },
-        handleRemove(file) {
-            // 从 upload 实例删除数据
-            const fileList = this.$refs.upload.fileList;
-            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-        },
-        handleSuccess(res, file) {
-            // 因为上传过程为实例，这里模拟添加 url
-            file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-            file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-        },
-        handleFormatError(file) {
-            this.$Notice.warning({
-                title: '文件格式不正确',
-                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-            });
-        },
-        handleMaxSize(file) {
-            this.$Notice.warning({
-                title: '超出文件大小限制',
-                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
-            });
-        },
-        handleBeforeUpload() {
-            const check = this.uploadList.length < 5;
-            if (!check) {
-                this.$Notice.warning({
-                    title: '最多只能上传 5 张图片。'
-                });
-            }
-            return check;
-        }
-    },
-}
-</script>

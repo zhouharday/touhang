@@ -231,7 +231,7 @@ export default {
         },
         showOrHide() {
             if (JSON.parse(sessionStorage.getItem('showOrHide')) == null) {
-                alert(111);
+                // alert(111);
                 this.$store.state.login.showOrHide.isVshowYe = 1;
                 this.$store.state.login.showOrHide.isShowSidebar = 0;
                 return this.$store.state.login.showOrHide;

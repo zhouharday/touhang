@@ -91,85 +91,10 @@
     </div>
 </template>
 
-
-<style lang="less" scoped>
-.preContent {
-    position: relative;
-    width: 100%;
-    height: 650px;
-    font-size: 14px;
-    background: #fff;
-}
-.common {
-    padding: 0 30px 20px 30px;
-    ul {
-        float: left;
-        li {
-            display: inline-block;
-            box-sizing: border-box;
-            margin-right: 30px;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-    }
-}
-.tag {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.tag_s {
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.active {
-    width: 70px;
-    height: 20px;
-    color: white;
-    text-align: center;
-    border-radius: 15px;
-    background: #F05E5E;
-}
-.search-box {
-    margin: 0 30px 20px 30px;
-    .imdo {
-        height:30px;
-        display: flex;
-        justify-content: flex-end;
-        .importProject {
-            width: 115px;
-            height: 100%;
-            position: relative;
-            a {
-                position: absolute;
-                bottom: 3px;
-                left: 55px;
-                color: #F05E5E;
-                border-bottom: 1px solid #F05E5E;
-            }
-        }
-    }
-}
-
-.project {
-    color: #F05E5E;
-    border-bottom: 1px solid #F05E5E;
-}
-.foot {
-    margin: 25px 30px 0 30px;
-    //  position: absolute;
-    // left: 30px;
-    // bottom: 20px;
-}
-</style>
-
-
 <script>
+import { getPres } from 'api/project';
 export default {
+    name: 'preProject',
     data() {
         return {
             total: 128,
@@ -260,7 +185,17 @@ export default {
             ]
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            let self = this;
+            getPres().then(resp => {
+                let data = resp.data;
+                self.tableData = data;
+            });
+        },
         handleIconClick(ev) {
             console.log(ev);
         },
@@ -294,3 +229,78 @@ export default {
     }
 }
 </script>
+
+<style lang="less" scoped>
+.preContent {
+    position: relative;
+    width: 100%;
+    height: 650px;
+    font-size: 14px;
+    background: #fff;
+}
+.common {
+    padding: 0 30px 20px 30px;
+    ul {
+        float: left;
+        li {
+            display: inline-block;
+            box-sizing: border-box;
+            margin-right: 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    }
+}
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tag_s {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.active {
+    width: 70px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 15px;
+    background: #F05E5E;
+}
+.search-box {
+    margin: 0 30px 20px 30px;
+    .imdo {
+        height:30px;
+        display: flex;
+        justify-content: flex-end;
+        .importProject {
+            width: 115px;
+            height: 100%;
+            position: relative;
+            a {
+                position: absolute;
+                bottom: 3px;
+                left: 55px;
+                color: #F05E5E;
+                border-bottom: 1px solid #F05E5E;
+            }
+        }
+    }
+}
+
+.project {
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
+}
+.foot {
+    margin: 25px 30px 0 30px;
+    //  position: absolute;
+    // left: 30px;
+    // bottom: 20px;
+}
+</style>
