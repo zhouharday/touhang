@@ -16,17 +16,14 @@
         </div>
     </div>
     <el-row class="step">
-        <el-col :span="8"
-                class="step_one step_span">
+        <el-col :span="8" class="step_one step_span">
             <span>{{step_one}}</span>
         </el-col>
-        <el-col :span="8"
-                class="step_second step_span">
+        <el-col :span="8" class="step_second step_span">
             <span>{{step_second}}</span>
         </el-col>
-        <el-col :span="8"
-                class="step_third step_span">
-                <span>{{step_third}}</span>
+        <el-col :span="8" class="step_third step_span">
+            <span>{{step_third}}</span>
         </el-col>
     </el-row>
     <div class="picture">
@@ -57,10 +54,7 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <from-details :formDetails="formDetails"
-                              :formMIS="formMIS"
-                              :formRegistration="formRegistration"
-                              :formAccountinfo="formAccountinfo">
+                <from-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="formAccountinfo">
                 </from-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
@@ -96,7 +90,9 @@ import Projects from './projects'
 import File from './file'
 import Manage from './manage'
 import echarts from '../../components/echarts'
-import {mapGetters} from 'vuex'
+import {
+    mapGetters
+} from 'vuex'
 export default {
     data() {
         return {
@@ -153,14 +149,8 @@ export default {
             activeName: 'details',
             formDetails: {},
             formMIS: {},
-            formRegistration: {
-                baseInfo: '备案注册',
-                flag: 'false',
-            },
-            formAccountinfo: {
-                baseInfo: '账户信息',
-                flag: 'false',
-            }
+            formRegistration: {},
+            formAccountinfo: {}
         }
     },
     computed: {
@@ -176,6 +166,14 @@ export default {
         this.formMIS = Object.assign({}, this.fundDetails.fundManageInfo, {
             baseInfo: '管理信息',
             flag: 'false'
+        }),
+        this.formAccountinfo = Object.assign({}, this.fundDetails.fundAccinfo, {
+            baseInfo: '账户信息',
+            flag: 'false',
+        }),
+        this.formRegistration = Object.assign({}, this.fundDetails.fundRegistration, {
+            baseInfo: '备案注册',
+            flag: 'false',
         })
     },
     components: {
@@ -209,13 +207,13 @@ export default {
             float: left;
             margin-left: 24px;
             font-size: 0;
-            .desc{
+            .desc {
                 font-size: 20px;
                 font-weight: 600;
                 color: #fff;
                 vertical-align: top;
             }
-            .icon{
+            .icon {
                 font-size: 20px;
                 font-weight: 600;
                 color: @color-theme-red;

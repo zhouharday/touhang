@@ -95,7 +95,7 @@ export default {
                 let number = this.userName;
                 // let pass = this.passWord;
                 let pass = this.md5(this.passWord,32);
-                // window.setCookie("name",number); 
+                // window.setCookie("name",number);
                 // window.setCookie("pwd",pass);
                 // console.log(pass);
                 this.userName = '';

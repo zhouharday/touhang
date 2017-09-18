@@ -3,9 +3,9 @@ import axios from 'axios'
 import {Message} from 'iview'
 
 const service = axios.create({
-    // timeout: 5000,
-    // baseURL: 'http://192.168.0.198:9091',
-    baseURL: 'http://zhqwjmw.eicp.net',
+    timeout: 5000,
+    baseURL: 'http://192.168.0.198:9091',
+    // baseURL: 'http://zhqwjmw.eicp.net',
     headers: {
         'Content-Type': 'application/json'
     }
