@@ -41,7 +41,7 @@ export default {
             if (command == 'loginout') {
                 localStorage.removeItem('ms_username');
                 sessionStorage.clear();
-                this.delCook();
+                // this.delCook();
                 window.location.href = 'http://localhost:8081/login';
                 // this.$router.push('/login');
             }
