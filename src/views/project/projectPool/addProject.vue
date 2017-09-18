@@ -222,7 +222,7 @@ export default {
         submitForm(formName) {
             let basicForm = this.basicForm;
             let companyForm = this.companyForm;
-            console.log('basicForm: ', basicForm, companyForm);
+            // console.log('basicForm: ', basicForm, companyForm);
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     addPre({
