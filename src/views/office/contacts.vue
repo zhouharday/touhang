@@ -289,19 +289,39 @@ b {
 import { mapState } from 'vuex'
 export default {
     beforeCreate() {
+        this.$http.post('api/merchantType/queryList',{})
+            .then( res => {
+                // console.log(res);
+                // if( res.data.status == '200'){
+
+                // }
+            })
+            .catch( error => {
+                console.log(error);
+            });
         // alert(114);
     },
-    computed: {
+    created(){
+        // this.$http.post('api/merchantType/queryList',{})
+        //     .then( res => {
+        //         // console.log(res);
+        //         // if( res.data.status == '200'){
 
+        //         // }
+        //     })
+        //     .catch( error => {
+        //         console.log(error);
+        //     });
+    },
+    computed: {
         typeText() {
             if ( JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null ) {
-                // alert(1111);
                 this.$store.state.login.approvelType.type = '';
                 this.$store.state.login.approvelType.text = '您好，请先注册~';
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             } else {
-                this.$store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
+                // this.$store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             }
@@ -369,17 +389,30 @@ export default {
             // this.srcContent.title = item.src;
 
         },
-        openDialog(formName) {
-            let new_form = {
-                creditCode: '',
-                companyName: '',
-                delegate: '',
-                address: '',
-                edition: ''
-            };
-            this.form = new_form;
-            this.systemDialog = !this.systemDialog;
+        openDialog(formName) { //查询企业类型
+        alert(111);
+            // let new_form = {
+            //     creditCode: '',
+            //     companyName: '',
+            //     delegate: '',
+            //     address: '',
+            //     edition: ''
+            // };
+            // this.form = new_form;
+            // this.systemDialog = !this.systemDialog;
             //this.$refs[formName].resetFields();
+            this.$http.post('api/merchant/validationCode',{
+                "contactPhone":"18700958609"
+            })
+            .then( res => {
+                // console.log(res);
+                // if( res.data.status == '200'){
+
+                // }
+            })
+            .catch( error => {
+                console.log(error);
+            });
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
