@@ -49,7 +49,7 @@ router.beforeEach((to, from, next) => { //在所有导航完成之前先判断�
     };
     store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
     var isLogin = store.state.login.approvelType.isLogged;
-    console.log(isLogin);
+    // console.log(isLogin);
     if (isLogin ) {
         // alert(111);
         next()   // 进行下一个钩子函数  
