@@ -199,6 +199,14 @@ export default {
 
                 })
         },
+        handleCurrentChange1(pages) { //获取tabList1 分页数据
+            console.log(pages);
+            // this.getTaskList1(pages);
+        },
+        handleCurrentChange2(pages) { //获取tabList2 分页数据
+            console.log(pages);
+            // this.getTaskList2(pages);
+        },
         tableDatasss(tab) {
             if (tab.index == '0') {
                 this.getNoticeUserList1();
