@@ -50,7 +50,7 @@
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
                     <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
-                    <el-menu-item index="projectOut" @click="addTab(title8,'/home/projectOut','projectOut')">{{title8}}</el-menu-item>
+                    <!-- <el-menu-item index="projectOut" @click="addTab(title8,'/home/projectOut','projectOut')">{{title8}}</el-menu-item> -->
                     <el-menu-item index="projectValuation" @click="addTab(title9,'/home/projectValuation','projectValuation')">{{title9}}</el-menu-item>
                     <el-menu-item index="valuationView" @click="addTab(title10,'/home/valuationView','valuationView')">{{title10}}</el-menu-item>
                 </el-submenu>
@@ -231,6 +231,7 @@ export default {
         },
         showOrHide() {
             if (JSON.parse(sessionStorage.getItem('showOrHide')) == null) {
+                alert(111);
                 this.$store.state.login.showOrHide.isVshowYe = 1;
                 this.$store.state.login.showOrHide.isShowSidebar = 0;
                 return this.$store.state.login.showOrHide;

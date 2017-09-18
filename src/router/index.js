@@ -42,17 +42,20 @@ const router = new Router({
         }
     ],
 })
-// router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录
-//     if(to.path == '/login'){
-//         next();
-//         return;
-//     }
-//     var isLogin = Boolean(store.state.login.isLogged);
-//     if (isLogin ) {
-//         next()   // 进行下一个钩子函数  
-//     }else {
-//        next({path: '/login'})   //  跳转到login页面  
-//     }
-// })
+router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录
+    if(to.path == '/login'){
+        next();
+        return;
+    };
+    store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
+    var isLogin = store.state.login.approvelType.isLogged;
+    console.log(isLogin);
+    if (isLogin ) {
+        // alert(111);
+        next()   // 进行下一个钩子函数  
+    }else {
+       next({path: '/login'})   //  跳转到login页面  
+    }
+})
 
 export default router
