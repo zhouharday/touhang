@@ -98,13 +98,13 @@ const actions = {
             // number: "010",
             // pass: "e10adc3949ba59abbe56e057f20f883e"
         }).then(data => {
-            if (data.data.status == '403') {
-                alert(data.data.message);
+            if (data.status == '403') {
+                alert(data.message);
             } else if (data.data.status == '156') { //用户名或密码不正确
                 alert(data.data.message);
                 console.log(data.data.message);
                 return;
-            } else if (data.data.status == '200') { //登录成功
+            } else if (data.status == '200') { //登录成功
                 // alert('success');
                 state.approvelType.isLogged = true;
                 console.log(user);
