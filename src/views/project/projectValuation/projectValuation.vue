@@ -26,6 +26,32 @@
                     <el-table-column prop="project" label="项目名称" align="center">
                     </el-table-column>
                     <el-table-column prop="valuationParameter" label="估值参数" align="center" width="250px">
+                        <template scope="scope">
+                            <span v-if="!scope.row.editFlag">{{ scope.row.valuationParameter }}</span>
+                            <span v-if="scope.row.editFlag" class="cell-edit-input">
+                                <el-row width="100%">
+                                    <el-col style="50px">
+                                        <el-input v-model="scope.row.parameter1" auto-complete="off"></el-input>
+                                        *PB
+                                        <el-input v-model="scope.row.parameter2" auto-complete="off"></el-input>
+                                        *股权占比
+                                        <el-input v-model="scope.row.parameter3" disabled auto-complete="off"></el-input>
+                                    </el-col>
+
+                                    <!-- <el-col :span="1">
+                                                <el-input v-model="scope.row.parameter1" auto-complete="off"></el-input>
+                                            </el-col>
+                                            <el-col :span="1"> 
+                                                *PB
+                                                <el-input v-model="scope.row.parameter2" auto-complete="off"></el-input>
+                                            </el-col>
+                                            <el-col :span="1">
+                                                *股权占比
+                                                <el-input v-model="scope.row.parameter3" disabled auto-complete="off"></el-input>
+                                            </el-col> -->
+                                </el-row>
+                            </span>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="valuation" label="估值（元）" align="center">
                     </el-table-column>
@@ -51,7 +77,10 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="handleEdit(scope.row)">保存</el-button>
+                            <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                            </el-button>
+                            <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                            </el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -136,19 +165,27 @@ export default {
             tableData: [
                 {
                     project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
+                    valuationParameter: '500*450*3.5',
+                    parameter1: '',
+                    parameter2: '',
+                    parameter3: '',
                     valuation: '',
                     valuationDate: '',
                     valuationOfficer: '',
-                    state: ''
+                    state: '',
+                    editFlag: false
                 },
                 {
                     project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
+                    valuationParameter: '500*450*3.5',
+                    parameter1: '',
+                    parameter2: '',
+                    parameter3: '',
                     valuation: '',
                     valuationDate: '',
                     valuationOfficer: '',
-                    state: ''
+                    state: '',
+                    editFlag: false
                 }
             ],
             form: {
@@ -158,6 +195,10 @@ export default {
         }
     },
     methods: {
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
+        },
         handleIconClick(ev) {
             console.log(ev);
         },

@@ -17,7 +17,6 @@
             </div>
             <el-button :class="{'active-code':isSendCode,}" @click="sendVerificationCode" class="code-btn" :disabled="!isSendCode" type="primary">{{btnText}}</el-button>
             <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
-            </button>
         </div>
     </div>
 </template>

@@ -3,7 +3,7 @@
         <div class="sidebar">
             <div class="portrait">
                 <div class="portrait-top">
-                    <img src="/static/img/默认头像.png">
+                    <img src="/static/img/默认头像.png" @click="jumpPersonal()">
                 </div>
                 <div class="user">
                     <div style="margin-top:55px;">
@@ -32,8 +32,9 @@
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
                     <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
-                    <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
-                    <el-menu-item index="messageShow" @click="addTab(title4,'/home/messageShow','messageShow')">{{title4}}</el-menu-item>
+                    <el-menu-item index="contacts" @click="addTab(title2,'/home/contacts','contacts')">{{title2}}</el-menu-item>
+                    <el-menu-item index="messageShow" @click="addTab(title3,'/home/messageShow','messageShow')">{{title3}}</el-menu-item>
+                    <!-- <el-menu-item index="personal" @click="addTab(title4,'/home/personal','personal')">{{title4}}</el-menu-item> -->
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
                     <!-- <i style="margin-right:7px;" class="el-icon-menu"></i> -->
@@ -349,9 +350,9 @@ export default {
             ],
             title_01: '日常办公',
             title1: '任务',
-            title2: '日程',
-            title3: '通讯录',
-            title4: '消息公告',
+            title2: '通讯录',
+            title3: '消息公告',
+            title4: '个人中心',
             title_02: '领投助手',
             title_03: '项目管理',
             title5: '项目池',
@@ -383,7 +384,7 @@ export default {
             title21: '用户管理',
             title23: '数据字典',
             title22: '企业权限',
-            title24: '业务权限',
+            title24: '项目权限',
             title35: '基金权限',
             title25: '流程管理',
             title26: '流程设置',
@@ -425,6 +426,11 @@ export default {
             //     this.addTab(title, url, name);
             // }
             // return (treeNode.id !== 1);
+        },
+         // 跳转至个人中心
+        jumpPersonal() {
+            this.addTab('个人中心', '/home/personal', 'personal');
+            this.$router.push({ name: 'personal' });
         },
         addTab(th, url, name) {
             this.$router.push({
