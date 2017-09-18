@@ -39,11 +39,7 @@
 import { mapState } from 'vuex'
 import vHead from './Header.vue';
 import vSidebar from './Sidebar.vue';
-<<<<<<< HEAD
-import vShouye from '../views/home/homeTab.vue';
-=======
 import VTab from '../views/home/homeTab.vue';
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
 export default {
     components: {
         vHead, vSidebar, VTab
@@ -55,13 +51,7 @@ export default {
     },
     data() {
         return {
-<<<<<<< HEAD
-            showOrHide: {
-                isVshowYe: 0
-            }
-=======
            
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
         }
     }
 }

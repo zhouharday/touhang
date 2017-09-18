@@ -94,15 +94,10 @@ export default {
                 // this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
                 // let pass = this.passWord;
-<<<<<<< HEAD
-                let pass = md5(this.passWord,32);
-                console.log(pass);
-=======
                 let pass = this.md5(this.passWord,32);
                 // window.setCookie("name",number); 
                 // window.setCookie("pwd",pass);
                 // console.log(pass);
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 this.userName = '';
                 this.passWord = '';
                 this.valueData = false;

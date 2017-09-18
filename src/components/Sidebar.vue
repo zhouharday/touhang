@@ -283,15 +283,9 @@ export default {
             return this.$store.state.login.merchants;
         },
         showOrHide() {
-<<<<<<< HEAD
-            if (JSON.parse(sessionStorage.getItem('showOrHide')) == '' || JSON.parse(sessionStorage.getItem('showOrHide')) == 'undefined') {
-                this.$store.state.login.showOrHide.isVshowYe = 0;
-                this.$store.state.login.showOrHide.isShowSidebar = 1;
-=======
             if (JSON.parse(sessionStorage.getItem('showOrHide')) == null) {
                 this.$store.state.login.showOrHide.isVshowYe = 1;
                 this.$store.state.login.showOrHide.isShowSidebar = 0;
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 return this.$store.state.login.showOrHide;
             } else {
                 this.$store.state.login.showOrHide = JSON.parse(sessionStorage.getItem('showOrHide')) || {};

@@ -245,11 +245,8 @@ section {
                 left: 0;
                 right: 0;
                 margin: auto;
-<<<<<<< HEAD
-=======
                 width: 340px;
                 height: 273px;
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
             }
             >div>div {
                 position: absolute;
@@ -258,14 +255,11 @@ section {
                 left: 0;
                 right: 0;
                 margin: auto;
-<<<<<<< HEAD
-=======
                 width: 500px;
                 height: 100px;
                 font-family: Helvetica, 'Hiragino Sans GB', 'Microsoft Yahei', '微软雅黑', Arial, sans-serif;
                 color: darkgreen;
                 font-size: 20px;
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
             }
         }
     }
@@ -292,20 +286,6 @@ b {
 </style>
 
 <script>
-<<<<<<< HEAD
-// import { mapState } from 'vuex'
-export default {
-    beforeCreate(){
-        // alert(114);
-    },
-    computed: {
-        typeText() {
-            // alert('contacts');
-            if (JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == '' || JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == 'undefined') {
-                // alert(1111);
-                this.$store.state.login.approvelType.type = '3';
-                this.$store.state.login.approvelType.text = '恭喜您注册成功,请您点击右上角申请开通使用权限~';
-=======
 import { mapState } from 'vuex'
 export default {
     beforeCreate() {
@@ -318,7 +298,6 @@ export default {
                 // alert(1111);
                 this.$store.state.login.approvelType.type = '';
                 this.$store.state.login.approvelType.text = '您好，请先注册~';
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             } else {
@@ -326,15 +305,6 @@ export default {
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             }
-<<<<<<< HEAD
-        }
-    },
-    data() {
-        return {
-            typeText:{
-                type: 1
-            },
-=======
         },
         ...mapState({
             // userName: state => state.login.userInfor
@@ -345,7 +315,6 @@ export default {
             // typeText:{
             //     type: 1
             // },
->>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
             systemDialog: false,
             ind: '',
             // error_01: "/static/img/error/error_01.png/",
