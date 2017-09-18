@@ -5,48 +5,48 @@
                 <h3>新增项目</h3>
                 <div class="addForm">
                     <div class="basicForm">
-                        <el-form ref="basicForm" :rules="rules" :model="basicForm" label-width="120px">
+                        <el-form ref="basicForm" :rules="rules1" :model="basicForm" label-width="120px">
                             <el-row>
                                 <el-col class="title">
                                     <div>基本信息</div>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="*项目名称">
-                                        <el-input v-model="basicForm.projectName" required></el-input>
+                                    <el-form-item label="项目名称" prop="projectName">
+                                        <el-input v-model="basicForm.projectName"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="*项目简称">
-                                        <el-input v-model="basicForm.shortName" required></el-input>
+                                    <el-form-item label="项目简称" prop="shortName">
+                                        <el-input v-model="basicForm.shortName"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="*项目类型">
-                                        <el-input v-model="basicForm.projectSort" required></el-input>
+                                    <el-form-item label="项目类型" prop="projectSort">
+                                        <el-input v-model="basicForm.projectSort"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="*所属行业">
-                                        <el-input v-model="basicForm.industry" required></el-input>
+                                    <el-form-item label="所属行业" prop="industry">
+                                        <el-input v-model="basicForm.industry"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目来源">
+                                    <el-form-item label="项目来源" prop="origin">
                                         <el-input v-model="basicForm.origin"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="所在地">
+                                    <el-form-item label="所在地" prop="location">
                                         <el-input v-model="basicForm.location"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目负责人">
+                                    <el-form-item label="项目负责人" prop="manager">
                                         <el-input v-model="basicForm.manager"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="业务部门">
+                                    <el-form-item label="业务部门" prop="department">
                                         <el-input v-model="basicForm.department"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -60,59 +60,59 @@
                                     <div>企业信息</div>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="企业名称">
+                                    <el-form-item label="企业名称" prop="companyName">
                                         <el-input v-model="companyForm.companyName"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="法人代表">
+                                    <el-form-item label="法人代表" prop="delegate">
                                         <el-input v-model="companyForm.delegate"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="注册资本（元）">
+                                    <el-form-item label="注册资本（元）" prop="regCapital">
                                         <el-input v-model="companyForm.regCapital"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="实收资本（元）">
+                                    <el-form-item label="实收资本（元）" prop="paidCapital">
                                         <el-input v-model="companyForm.paidCapital"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="注册登记日期">
+                                    <el-form-item label="注册登记日期" prop="regDatetime">
                                         <el-date-picker type="date" v-model="companyForm.regDatetime" style="width:100%">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="统一信用代码">
+                                    <el-form-item label="统一信用代码" prop="creditCode">
                                         <el-input v-model="companyForm.creditCode"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="注册地址">
+                                    <el-form-item label="注册地址" prop="regAddress">
                                         <el-input v-model="companyForm.regAddress"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="办公地址">
+                                    <el-form-item label="办公地址" prop="workingSite">
                                         <el-input v-model="companyForm.workingSite"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col>
-                                    <el-form-item label="主营业务">
+                                    <el-form-item label="主营业务" prop="service">
                                         <el-input v-model="companyForm.service"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col>
-                                    <el-form-item label="备注">
+                                    <el-form-item label="备注" prop="remark">
                                         <el-input v-model="companyForm.remark"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <!-- 上传 企业LOGO -->
                                 <el-col>
-                                    <el-form-item label="企业LOGO">
+                                    <el-form-item label="企业LOGO" prop="logo">
                                         <div class="demo-upload-list" v-for="item in uploadList" :key="item.index">
                                             <template v-if="item.status === 'finished'">
                                                 <img :src="item.url">
@@ -125,7 +125,7 @@
                                                 <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
                                             </template>
                                         </div>
-                                        <Upload ref="upload" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" style="display: inline-block;width:58px;">
+                                        <Upload ref="upload" v-modeel="companyForm.logo" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" style="display: inline-block;width:58px;">
                                             <div style="width: 58px;height:58px;line-height: 58px;">
                                                 <Icon type="camera" size="20"></Icon>
                                             </div>
@@ -141,7 +141,7 @@
                     <div class="formBtn">
                         <el-row>
                             <el-col style="display:flex;justify-content:flex-end;">
-                                <el-button type="danger" @click="submitForm">保存</el-button>
+                                <el-button type="danger" @click="submitForm('basicForm')">保存</el-button>
                                 <el-button type="danger" @click="cancleForm">取消</el-button>
                             </el-col>
                         </el-row>
@@ -197,8 +197,7 @@
         }
     }
     .addProjectContents {
-        width: 100%;
-        // height: 800px;
+        width: 100%; // height: 800px;
         padding: 20px;
         font-size: 14px;
         background: #fff;
@@ -215,8 +214,7 @@
                 padding: 0 26px;
                 margin-bottom: 12px;
             }
-        }
-        //  上传 企业LOGO 的样式设置
+        } //  上传 企业LOGO 的样式设置
         .demo-upload-list {
             display: inline-block;
             width: 60px;
@@ -284,7 +282,23 @@ export default {
                 regAddress: '',
                 workingSite: '',
                 service: '',
-                remark: ''
+                remark: '',
+                logo: ''
+            },
+            // 基本信息 form验证
+            rules1: {
+                projectName: [
+                    { required: true, message: '请输入项目名称', trigger: 'blur' }
+                ],
+                shortName: [
+                    { required: true,  message: '请输入项目简称', trigger: 'blur' }
+                ],
+                projectSort: [
+                    { required: true,  message: '请输入项目类型', trigger: 'blur' }
+                ],
+                industry: [
+                    { required: true,  message: '请输入所属行业', trigger: 'blur' }
+                ]
             },
             // 上传 企业LOGO
             defaultList: [
@@ -307,9 +321,18 @@ export default {
         this.uploadList = this.$refs.upload.fileList;
     },
     methods: {
-        submitForm() {
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
+        submitForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.addTab('项目池', '/home/projectPool', 'projectPool');
+                    this.$router.push({ name: 'projectPool' });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+            // this.addTab('项目池', '/home/projectPool', 'projectPool');
+            // this.$router.push({ name: 'projectPool' });
         },
         cancleForm() {
             this.isShow = true;
