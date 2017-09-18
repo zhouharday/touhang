@@ -10,7 +10,6 @@ const state = {
     TitleList: [],
     userInfor: {}, //save user login infor
     merchants: [], //save 组织列表
-    isLogged: false, //登录状态
     menus: [],
     logoSrc: {
         logo: '',
@@ -24,7 +23,8 @@ const state = {
     },
     approvelType: { //企业审核状态
         type: '',
-        text: ''
+        text: '',
+        isLogged: false, //登录状态
     },
 }
 
@@ -70,6 +70,8 @@ const mutations = {
     saveApprovalStatus(state, approvelType) { //保存审核状态
         state.approvelType.type = approvelType.type;
         state.approvelType.text = approvelType.text;
+        state.approvelType.isLogged = true;
+
     },
     showOrHide(state, isShouye) { //是否显示首页和通讯录菜单
         state.showOrHide.isVshowYe = isShouye.isVshowYe;
@@ -104,7 +106,7 @@ const actions = {
                 return;
             } else if (data.data.status == '200') { //登录成功
                 // alert('success');
-                state.isLogged = true;
+                state.approvelType.isLogged = true;
                 console.log(user);
                 commit('pushUserInfor', data.data.result);
                 window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
