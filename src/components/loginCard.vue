@@ -63,7 +63,7 @@ export default {
                 callback(new Error('请输入手机号码'));
             } else {
                 if ((value !== '') && (/^1[34578][0-9]{9}$/.test(this.form1.phone))) {
-                    return true;
+                    callback();
                 }
                 callback(new Error('请输入正确的手机号码'));
             }

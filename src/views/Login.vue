@@ -49,9 +49,9 @@ export default {
     //     }
     // },
     created(){
-        this.userName = '';
-        this.passWord = '';
-        console.log(this.isLogged);
+        // console.log(this.isLogged);
+    },
+    mounted(){
     },
     computed: {
         ...mapState({

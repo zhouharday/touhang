@@ -264,7 +264,6 @@
     </section>
 </template>
 
-
 <style lang="less" scoped>
 section {
     >div {

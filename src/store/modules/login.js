@@ -84,7 +84,7 @@ const mutations = {
             type: msg.type
         })
     }
-}
+};
 
 const actions = {
     loginAPI({
@@ -143,6 +143,7 @@ const actions = {
                             window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
                             user.self.$router.push({ //只显示通讯录菜单列表
                                 name: 'contacts'
+                                // name: 'homeContent'
                             });
                             commit('Notification', {
                                 title: '',

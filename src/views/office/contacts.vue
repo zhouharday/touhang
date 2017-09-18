@@ -89,28 +89,15 @@
                             <el-col>
                                 <i></i>
                             </el-col>
-                            <el-col>
+                            <!-- 企业类型 -->
+                            <el-col v-for="(item, index) in typePostage" :key="item.index">
                                 <el-form-item prop="edition">
-                                    <el-radio v-model="form.edition" label="1">
-                                        <b>申请免费版</b>
+                                    <el-radio v-model="form.edition" :label="item.id">
+                                        <b>{{item.typeName}}</b>
                                     </el-radio>
-                                    <p>5个账号以下可免费试用该系统；在此基础上可购买使用账号数量</p>
-                                </el-form-item>
-                            </el-col>
-                            <el-col>
-                                <el-form-item prop="edition">
-                                    <el-radio v-model="form.edition" label="2">
-                                        <b>申请年费版</b>
-                                    </el-radio>
-                                    <p>不限账号数量，试用一年</p>
-                                </el-form-item>
-                            </el-col>
-                            <el-col>
-                                <el-form-item prop="edition">
-                                    <el-radio v-model="form.edition" label="3">
-                                        <b>申请永久版</b>
-                                    </el-radio>
-                                    <p>不限账号数量，永久使用</p>
+                                    <p>
+                                        <span>{{item.typeDescribe}}</span>
+                                    </p>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -287,57 +274,47 @@ b {
 
 <script>
 import { mapState } from 'vuex'
+import service from 'common/js/fetch'
+import axios from 'axios'
+
 export default {
     beforeCreate() {
-        this.$http.post('api/merchantType/queryList',{})
-            .then( res => {
-                // console.log(res);
-                // if( res.data.status == '200'){
 
-                // }
+    },
+    created() {
+        this.$http.post('/api/merchantType/queryList', {})
+            .then(res => {
+                if (res.data.status == '200') {
+                    this.typePostage = res.data.result;
+                    console.log(res.data.result);
+                }
             })
-            .catch( error => {
+            .catch(error => {
                 console.log(error);
             });
-        // alert(114);
-    },
-    created(){
-        // this.$http.post('api/merchantType/queryList',{})
-        //     .then( res => {
-        //         // console.log(res);
-        //         // if( res.data.status == '200'){
-
-        //         // }
-        //     })
-        //     .catch( error => {
-        //         console.log(error);
-        //     });
     },
     computed: {
         typeText() {
-            if ( JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null ) {
+            if (JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null) {
                 this.$store.state.login.approvelType.type = '';
                 this.$store.state.login.approvelType.text = '您好，请先注册~';
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             } else {
-                // this.$store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
+                this.$store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
                 // console.log(state.login.approvelType);
                 return this.$store.state.login.approvelType;
             }
         },
-        ...mapState({
-            // userName: state => state.login.userInfor
-        })
+        id() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants'));
+            return this.$store.state.login.merchants[0].id;
+        }
     },
     data() {
         return {
-            // typeText:{
-            //     type: 1
-            // },
             systemDialog: false,
             ind: '',
-            // error_01: "/static/img/error/error_01.png/",
             errorIMG: {
                 error_01: "/static/img/error/error_01.png",
             },
@@ -355,12 +332,14 @@ export default {
                 title: "聚乐新能源集团-研发部总监"
             },
             form: {
-                creditCode: '', //社会编码
-                companyName: '', //客户名称
+                creditCode: '', //统一社会信用代码
+                companyName: '', //企业名称
                 delegate: '', //法人代表
                 address: '', //详细地址
-                // edition: '' 
+                edition: '', //企业类型
+                id: this.id
             },
+            typePostage: [], //申请类型
             rules: {
                 creditCode: [
                     { required: true, message: '请输入信用代码', trigger: 'blur' }
@@ -386,51 +365,42 @@ export default {
             this.ind = index;
             this.srcContent.src = item.src;
             this.srcContent.name = item.name;
-            // this.srcContent.title = item.src;
-
+            this.srcContent.title = item.src;
         },
         openDialog(formName) { //查询企业类型
-        alert(111);
-            // let new_form = {
-            //     creditCode: '',
-            //     companyName: '',
-            //     delegate: '',
-            //     address: '',
-            //     edition: ''
-            // };
-            // this.form = new_form;
-            // this.systemDialog = !this.systemDialog;
-            //this.$refs[formName].resetFields();
-            this.$http.post('api/merchant/validationCode',{
-                "contactPhone":"18700958609"
-            })
-            .then( res => {
-                // console.log(res);
-                // if( res.data.status == '200'){
-
-                // }
-            })
-            .catch( error => {
-                console.log(error);
-            });
+            let new_form = {
+                creditCode: '', //统一社会信用代码
+                companyName: '', //企业名称
+                delegate: '', //法人代表
+                address: '', //详细地址
+                edition: '', //企业类型
+                id: this.id //企业id
+            };
+            this.form = new_form;
+            this.systemDialog = !this.systemDialog;
+            // this.$refs[formName].resetFields();
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.form);
-                    this.$http.post('api/merchant/apply', {
-                        "id": "50a21234735f4e34a5da5dadf47ff9b5",
+                    // console.log(this.form);
+                    this.$http.post('/api/merchant/apply', {
+                        "id": this.id,
                         "socialCode": this.form.creditCode,
                         "merchantName": this.form.companyName,
                         "address": this.form.address,
-                        "merchantTypeId": "1", 
-                        "representative": this.form.delegate, //法人代表
+                        "merchantTypeId": this.form.edition,
+                        "representative": this.form.delegate,
                     })
                         .then(res => {
-                            console.log(res);
+                            if (res.data.status == '200') {
+                                console.log('申请开通企业权限: ' + res.data.message);
+                            } else if(res.data.status == '403'){
+                                alert(res.data.message);
+                            }
                         })
                         .catch(ero => {
-
+                            console.log(ero);
                         })
                     this.systemDialog = !this.systemDialog;
                 } else {
