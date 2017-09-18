@@ -62,7 +62,7 @@ export default {
         }
     },
 
-    mounted() {},
+    mounted() { },
     created() {
         this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>行业
             "dicParent": '1'

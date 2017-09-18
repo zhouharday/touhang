@@ -33,7 +33,11 @@ module.exports = {
             '/api': {
                 // target: 'http://zhqwjmw.eicp.net',
                 target:'http://192.168.0.198:9091',
+<<<<<<< HEAD
+                // target:'http://100.64.33.181:9091', //外网IP
+=======
                 // target:'http://100.64.33.181:8090', //外网IP
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
                 // target:'http://192.168.0.122:9091',
                 // target:'http://192.168.0.117:9091',
                 // target:'http://100.64.33.181:9091',

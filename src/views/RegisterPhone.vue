@@ -15,9 +15,17 @@
                     <input type="text" class="register-code" placeholder="请输入验证码" @input="checkVata" v-model="validationCode">
                 </div>
             </div>
+<<<<<<< HEAD
+            <!-- <button type="button" class="code-btn" @click="time" :class="{ 'active-code':valuePhone,'active-time':valueTime}">{{btnText}}</button> -->
+            <el-button :class="{'active-code':!isSendCode,}" @click="sendVerificationCode" class="code-btn" :disabled="isSendCode" type="primary">{{btnText}}</el-button>
+            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
+            </button>
+            <!-- <router-link to="/login" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</router-link> -->
+=======
             <el-button :class="{'active-code':isSendCode,}" @click="sendVerificationCode" class="code-btn" :disabled="!isSendCode" type="primary">{{btnText}}</el-button>
             <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">下一步</button>
             </button>
+>>>>>>> 7b8bba345062f540d397d6c6995427c9a674c54b
         </div>
     </div>
 </template>
