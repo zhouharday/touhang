@@ -87,7 +87,7 @@ export function delPre(preId) {
 	const data = {
 
 	} 
-	return service({url: '', method: 'post', data});
+	return service({url: 'http://192.168.0.88:9091/projectPool/deleteProject', method: 'post', data});
 }
 
 // 转投资

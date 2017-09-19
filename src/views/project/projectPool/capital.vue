@@ -71,23 +71,23 @@
         </div>
     </div>
 </template>
+<script style="text/ecmascript-6">
+import { Message } from 'iview'
 
- <script style="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
+import { getFinances, addFinance, editFinance, delFinance } from 'api/finance';
 export default {
     data() {
         return {
             modalAdd: false,
-            capitalData: [
-                {
-                    round: '天使轮',
-                    way: '',
-                    capital: '',
-                    date: '',
-                    editFlag: false
-                }
-            ],
+            capitalData: [{
+                round: '天使轮',
+                way: '',
+                capital: '',
+                date: '',
+                editFlag: false
+            }],
             capitalForm: {
                 round: '',
                 way: '',
@@ -118,7 +118,26 @@ export default {
             }
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            getFinances()
+            .then(resp => {
+                console.log('resp: ', resp);
+                let data = resp.data;
+                let message = data.message;
+                if (!message) {
+                    
+                } else {
+                    this.capitalData = [];
+                    Message.info(message);
+                }
+            }).catch(e => {
+                console.log('getFinances exists error: ', e);
+            })
+        },
         //添加 融资信息的方法
         addCapital() {
             let new_capitalForm = {
@@ -134,9 +153,19 @@ export default {
         confirmAdd(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.capitalForm.date = changeDate(this.capitalForm.date);
-                    this.capitalData.push(this.capitalForm);
-                    this.modalAdd = !this.modalAdd;
+                    let capitalForm = this.capitalForm;
+                    capitalForm.date = changeDate(capitalForm.date);
+                    addFinance({
+                        projectTurnId: capitalForm.round,
+                        financingWayId: capitalForm.way,
+                        financingMoney: capitalForm.capital,
+                        financingDate: capitalForm.date
+                    }).then(resp => {
+                        this.capitalData.push(capitalForm);
+                        this.modalAdd = !this.modalAdd;
+                    }).catch(e => {
+                        console.log('addFinance exists error: ', e);
+                    })
                 } else {
                     return false;
                 }
@@ -153,10 +182,9 @@ export default {
     components: {
         tabelHeader
     }
-}      
+}
+
 </script>
-
-
 <style lang="less" scoped>
 .table {
     width: 100%;
@@ -166,4 +194,5 @@ export default {
         height: 100%;
     }
 }
+
 </style>
