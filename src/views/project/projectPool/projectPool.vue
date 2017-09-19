@@ -77,7 +77,7 @@
                                 <span>确认将该项目转投资？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="jumpPre">确 定</el-button>
+                                    <el-button type="primary" @click="jumpPre(scope.$index,tableData)">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getPres } from 'api/project';
+import { getPres, transPre } from 'api/project';
 export default {
     name: 'projectPool',
     data() {
@@ -218,12 +218,46 @@ export default {
     },
     methods: {
         init() {
+            this.initInfo();
+            this.getDatas();
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            
+            this.merchantId = merchants[0].id;
+        },
+        getDatas(projectName, projectType, industryId) {
+            if (projectType == '全部') projectName = '';
+            if (industryId == '全部') industryId = '';
             let self = this;
-            getPres().then(resp => {
-                console.log('resp: ', resp);
+            // console.log(merchants);
+            let params = {
+                merchantId: this.merchantId
+            };
+
+            if (projectName) params.projectName = projectName;
+            if (projectType) params.projectType = projectType;
+            if (industryId) params.industryId = industryId;
+            getPres(params).then(resp => {
                 let data = resp.data;
+                data = self.handleDatas(data);
                 self.tableData = data;
             })
+        },
+        /**
+         * [handleDatas 处理项目列表数据]
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        handleDatas(data = []) {
+            data.forEach(item => {
+                item.project = item.project_name;
+                item.mananger = item.project_leader_id;
+                item.industry = item.industry_id;
+                item.sort = item.project_type;
+                item.stage = item.project_status;
+            });
+            return data;
         },
         handleIconClick(ev) {
             console.log(ev);
@@ -256,9 +290,11 @@ export default {
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
             // this.$router.push({ path: 'zprojectPoolMessage/'+ind, params: { userId: ind } });
         },
-        jumpPre() {
+        jumpPre(index, data) {
+            let _data = data[index];
+            console.log(_data);
             this.addTab('投前项目', '/home/preProject', 'preProject');
-            this.$router.push({ name: 'preProject' });
+            // this.$router.push({ name: 'preProject' });
         },
         addProject() {
             this.addTab('添加项目1', '/home/addProject', 'addProject');
@@ -268,13 +304,22 @@ export default {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
         deleteRow(index, rows) {
+
             rows.splice(index, 1);
         },
         changeActive(index, ind) {
-            if (ind == 1) {
+            if (ind == 1) { // 状态
+                let stateList = this.stateList;
+                let state = stateList[index].states;
+                this.state = state;
                 this.currentIndex1 = index;
-            } else {
+                this.getDatas(null, this.state, this.industry);
+            } else {        // 行业
+                let industryList = this.industryList;
+                let industry = this.industryList[index].details;
+                this.industry = industry;
                 this.currentIndex2 = index;
+                this.getDatas(null, this.state, this.industry);
             }
         }
     }
