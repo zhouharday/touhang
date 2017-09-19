@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import { addPre } from 'api/project';
+import { addPro } from 'api/project';
 
 const store = {
     isSubmit: false
@@ -231,7 +231,7 @@ export default {
                 if (valid) {
                     if (store.isSubmit) return;
                     store.isSubmit = true;
-                    addPre({
+                    addPro({
                         projectInfo: basicForm,
                         enterpriseInfo: companyForm  
                     }).then(resp => {

@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getPres, transPre } from 'api/project';
+import { getPros, transPro } from 'api/project';
 export default {
     name: 'projectPool',
     data() {
@@ -230,8 +230,7 @@ export default {
         getDatas(projectName, projectType, industryId) {
             if (projectType == '全部') projectName = '';
             if (industryId == '全部') industryId = '';
-            let self = this;
-            // console.log(merchants);
+            
             let params = {
                 merchantId: this.merchantId
             };
@@ -239,10 +238,10 @@ export default {
             if (projectName) params.projectName = projectName;
             if (projectType) params.projectType = projectType;
             if (industryId) params.industryId = industryId;
-            getPres(params).then(resp => {
+            getPros(params).then(resp => {
                 let data = resp.data;
-                data = self.handleDatas(data);
-                self.tableData = data;
+                data = this.handleDatas(data);
+                this.tableData = data;
             })
         },
         /**
@@ -303,7 +302,7 @@ export default {
             let merchantId = this.merchantId;
             let projectId = _data.id;
             let addProjectUserId = this.addProjectUserId;
-            transPre({
+            transPro({
                 merchantId,
                 projectId,
                 addProjectUserId

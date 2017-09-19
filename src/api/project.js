@@ -30,8 +30,8 @@ export function updateValuation(params = {}) {
 	return service({url: '/appraisement/updaAppraisement', method: 'post', data})
 }
 
-// 投前项目列表
-export function getPres(params = {}) {
+// 项目池列表
+export function getPros(params = {}) {
 	let { projectName, projectType, industryId, merchantId } = params;
 	const data = {
 		projectName, // 项目名关键字:"讲",
@@ -42,16 +42,16 @@ export function getPres(params = {}) {
 	return service({url: '/projectPool/searchProject', method: 'post', data})
 }
 
-// 投前项目详情
-export function getPreDetail(id) {
+// 项目池详情
+export function getProDetail(id) {
 	const data = {
 		id
 	}
 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
 }
 
-// 添加项目
-export function addPre(params = {}) {
+// 添加项目池
+export function addPro(params = {}) {
 	let { projectInfo, enterpriseInfo } = params;
 	/*
 	let { 
@@ -83,7 +83,7 @@ export function addPre(params = {}) {
 }
 
 // 删除项目
-export function delPre(preId) {
+export function delPro(preId) {
 	const data = {
 
 	} 
@@ -91,7 +91,7 @@ export function delPre(preId) {
 }
 
 // 转投资
-export function transPre(params = {}) {
+export function transPro(params = {}) {
 	let { projectId, merchantId, addProjectUserId } = params;
 	const data = {
 		projectId,

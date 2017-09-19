@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { getPres } from 'api/project';
+import { getPres } from 'api/projectPre';
 export default {
     name: 'preProject',
     data() {
@@ -190,11 +190,48 @@ export default {
     },
     methods: {
         init() {
-            let self = this;
-            getPres().then(resp => {
+            this.initInfo();
+            this.getDatas();  
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+        },
+        getDatas(projectName, projectType, industryId) {
+            if (projectType == '全部') projectName = '';
+            if (industryId == '全部') industryId = '';
+
+            let params = {
+                merchantId: this.merchantId,
+                userId: this.addProjectUserId
+            };
+
+            getPres(params).then(resp => {
                 let data = resp.data;
-                self.tableData = data;
+                let list = data.result.list;
+                list = this.handleDatas(list);
+                this.tableData = list;
+            }).catch(e => {
+                console.log('getPres exists error: ', e);
             });
+
+        },
+        /**
+         * [handleDatas 处理项目列表数据]
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        handleDatas(data = []) {
+            data.forEach(item => {
+                item.project = item.projectName;
+                item.mananger = item.createUserId;
+                item.industry = item.industryId;
+                item.sort = item.projectTypeId;
+                item.stage = item.projectStageId;
+            });
+            return data;
         },
         handleIconClick(ev) {
             console.log(ev);
