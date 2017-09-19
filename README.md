@@ -15,34 +15,30 @@ npm run dev //运行项目
 
 4.项目目录
 
-
-    |-- build                            // Webpack configuration file
-	|-- config                           // Project package path
-	|-- src                              // Source directory
-	|   |-- components                   // Components
-	|       |-- common                   // Common component
-	|           |-- Header.vue           // Header component
-	|           |-- Home.vue           	 // Home component
-	|           |-- Sidebar.vue          // Sidebar component
-	|		|-- page                   	 // Router page
-	|           |-- BaseCharts.vue       // BaseCharts
-	|           |-- BaseForm.vue         // BaseForm
-	|           |-- BaseTable.vue        // BaseTable
-	|           |-- Login.vue          	 // Login
-	|           |-- Markdown.vue         // Markdown
-	|           |-- MixCharts.vue        // MixCharts
-	|           |-- Readme.vue           // Readme
-	|           |-- Upload.vue           // Upload
-	|           |-- VueEditor.vue        // VueEditor
-	|           |-- VueTable.vue         // VueTable
-	|   |-- App.vue                      // Main component
-	|   |-- main.js                      // Entry file
-	|-- .babelrc                         // ES6 syntax compiler configuration
-	|-- .editorconfig                    // Code specification
-	|-- .gitignore                       // Ignored file
-	|-- index.html                       // Entry HTML file
-	|-- package.json                     // Dependent configuration file
-	|-- README.md                        // Readme
+├── build                       // 最终发布的代码存放位置
+├── config                      // 配置目录
+├── node_modules                // 加载的项目依赖模块
+├── src
+│   ├── api 
+│   ├── common
+│   ├── commponents             // 公用的组件文件
+│   ├── router                  // 路由配置
+│   ├── store
+│   ├── views                   // 八大项目模块的组件文件
+│   ├── App.vue                 // 项目入口文件
+│   └── main.js                 // 项目的核心文件
+├── static                      // web静态资源加载  
+│   ├── css
+│   ├── image              
+│   ├── img       
+│   ├── js 
+│   ├── source              
+│   ├── .gitkeep                    
+│   └── data.json 
+├── index.html                  // 首页入口文件           
+├── package.json                // 项目配置文件
+├── README.md                   // 项目的说明文档
+└── server.js                   // 启动应用配置
 
 5.项目功能模块
 
