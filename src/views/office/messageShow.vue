@@ -12,14 +12,14 @@
                         </el-table-column>
                         <el-table-column prop="createDate" label="发布日期" align="center">
                         </el-table-column>
-                        <el-table-column prop="noticeStatus" label="状态" align="center">
+                        <el-table-column prop="noticeType" label="状态" align="center">
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-show="scope.row.noticeStatus == '未发布'" @click="dialogFormVisible = true" type="text" size="small">编辑</el-button>
-                                <el-button v-show="scope.row.noticeStatus == '未发布'" @click="releaseChange(scope.row)" type="text" size="small">发布</el-button>
-                                <el-button v-show="scope.row.noticeStatus == '未发布'" @click.native.prevent="deleteRow(scope.$index, tableData1)" type="text" size="small">删除</el-button>
-                                <el-button v-show="scope.row.noticeStatus == '已发布'" @click="lookAt(scope.row)" type="text" size="small">查看</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNotice(scope.row)" type="text" size="small">编辑</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="deleteNotice(scope.row,scope.$index, tableData1)" type="text" size="small">删除</el-button>
+                                <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -57,26 +57,27 @@
             <!-- 发布新公告 btn -->
             <el-button v-show="isAddMsg" type="primary" @click="realseBtn" class="messageBtn">发布新公告</el-button>
             <!-- 发布新公告 dialog -->
-            <el-dialog title="发布新公告" :visible.sync="dialogFormVisible">
-                <el-form :model="form" :label-position="labelPosition">
-                    <el-form-item label="主题" :label-width="formLabelWidth">
-                        <el-input v-model="form.title" auto-complete="off"></el-input>
+            <el-dialog style="width:1100px" title="发布新公告" :visible.sync="dialogFormVisible">
+                <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
+                    <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
+                        <el-input v-model="sendNoticeform.noticeTitle" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="内容" :label-width="formLabelWidth">
-                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="form.textarea">
+                    <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
+                        <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="发布人" :label-width="formLabelWidth">
-                        <el-input v-model="form.pople" auto-complete="off"></el-input>
+                    <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
+                        <el-input :disabled="1" v-model="sendNoticeform.seedUserId" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="发布日期" :label-width="formLabelWidth">
-                        <el-input v-model="form.date" auto-complete="off"></el-input>
+                    <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
+                        <el-date-picker @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button v-show="cancles" @click="cancle">取 消</el-button>
-                    <el-button v-show="saves" type="info" @click="save">保 存</el-button>
-                    <el-button v-show="realses" type="success" @click="releaseData">发 布</el-button>
+                    <el-button v-show="saves" type="info" @click="saveORrealse(1)">保 存</el-button>
+                    <el-button v-show="realses" type="success" @click="saveORrealse(2)">发 布</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -114,7 +115,7 @@ export default {
     },
     created() {
         // console.log(this.$store.state.login.userInfor.id);
-        this.getNoticeUserList1();
+        this.getNoticeUserList1(1);
     },
     mounted() {
 
@@ -148,19 +149,21 @@ export default {
             cancles: true,
             saves: true,
             realses: true,
-            form: {
-                title: "", //主题
-                textarea: '', //内容
-                pople: '', //发布人
-                date: '', //发布日期
-                start: ""
+            sendNoticeform: { //添加公告form
+                noticeTitle: "", //主题
+                noticeContent: '', //内容
+                seedUserId: '', //发布人
+                seedNoticeDate: '', //发布日期
+                noticeType: "" //发布状态
             },
             tableData1: [],
             tableData2: []
         }
     },
     methods: {
+        /************公告 Start***************/
         getNoticeUserList1(pages) { //获取公司公告列表数据
+            // alert(1);
             this.$http.post('/api/work/getNoticeList', {
                 "seedUserId": this.userId,
                 "page": pages,
@@ -170,12 +173,19 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data);
-                        // this.tableData1 = res.data.result.list
-                        // this.tableData1 = res.data.result.list; //任务数据列表
-                        // this.page1.pageNum = res.data.result.pageNum; //当前页码 
-                        // this.page1.total = res.data.result.total; //数据总数 
-                        // this.page1.pageSize = res.data.result.pageSize; //每页条数 
-                        // this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        res.data.result.list.forEach(function(item,index) {
+                            if (item.noticeType == '1'){
+                                item.noticeType = '未发布';
+                            }else{
+                                item.noticeType = '已发布';
+                            }
+                        }, this);
+                        this.tableData1 = res.data.result.list;
+                        this.tableData1 = res.data.result.list; //任务数据列表
+                        this.page1.pageNum = res.data.result.pageNum; //当前页码 
+                        this.page1.total = res.data.result.total; //数据总数 
+                        this.page1.pageSize = res.data.result.pageSize; //每页条数 
+                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
                         if (res.data.status == '49999') { //数据为空
                             console.log('没有新数据');
                         }
@@ -187,7 +197,103 @@ export default {
                     console.log(error);
                 })
         },
-        getNoticeUserList2(pages) { //获取系统消息列表数据
+        getNoticeUserList2(num) { //保存/发布公司公告列表数据
+            // alert(2);
+            this.$http.post('/api/work/addNotice', {
+                "seedUserId": this.userId,
+                "noticeTitle": this.sendNoticeform.noticeTitle,
+                "seedNoticeDate": this.sendNoticeform.seedNoticeDate,
+                "noticeType": num,
+                "noticeContent": this.sendNoticeform.noticeContent,
+                "merchantId": this.$store.state.login.merchants[0].id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data.message);
+                        this.getNoticeUserList1(1);
+                        if (res.data.status == '49996') { //数据为空
+                            console.log('传入参数非法');
+                        }
+                    } else if (res.data.status == '403') {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        releaseNotice(row) { //发布公司公告列表数据
+            // console.log(id);
+            // alert(2);
+            this.$http.post('/api/work/seedNotice', {
+                id: row.id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data.message);
+                        this.getNoticeUserList1(1);
+                        if (res.data.status == '49996') { //数据为空
+                            console.log('传入参数非法');
+                        }
+                    } else if (res.data.status == '403') {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        editNotice(row) { //编辑公告列表
+            console.log(row);
+            this.dialogFormVisible = true;
+            this.$http.post('/api/work/modifyNoticeInfo', {
+                "id": row.id,
+                "noticeTitle": row.noticeTitle,
+                "seedNoticeDate": row.seedNoticeDate,
+                "noticeContent": row.seedNoticeDate
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        alert(565);
+                        row.noticeTitle = this.sendNoticeform.noticeTitle;
+                        row.noticeContent = this.sendNoticeform.noticeContent;
+                        row.seedUserName = this.sendNoticeform.seedUserId;
+                        row.seedNoticeDate = this.sendNoticeform.seedNoticeDate;
+                        console.log(res.data.message);
+                        if (res.data.status == '49996') { //数据为空
+                            console.log('传入参数非法');
+                        }
+                    } else if (res.data.status == '403') {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        deleteNotice(row) { //删除公告列表
+            // console.log(row);
+            this.$http.post('/api/work/deleteNotice', {
+                id: row.id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data.message);
+                        this.getNoticeUserList1(1);
+                        if (res.data.status == '49996') { //数据为空
+                            console.log('传入参数非法');
+                        }
+                    } else if (res.data.status == '403') {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        /***************公告 End******************* */
+        /***************系统消息 Start********************/
+        getSysNoticeList2(pages) { //获取系统消息列表数据
             this.$http.post('/api/sysManage/selectSysMessageList', {
                 "seedUserId": this.userId,
                 "page": pages,
@@ -208,6 +314,7 @@ export default {
                     console.log(error);
                 })
         },
+        /***************系统消息 End******************* */
         handleCurrentChange1(pages) { //获取tabList1 分页数据
             console.log(pages);
             this.getNoticeUserList1(pages);
@@ -227,46 +334,37 @@ export default {
         },
         cancle() { //取消 Btn
             this.dialogFormVisible = false;
-            this.clearVal();
         },
-        save() { //保存 Btn
+        saveORrealse(num) { //保存 Btn
             // alert(11);
-            this.form.start = "未发布";
+            if (num == '1') { //保存
+                this.sendNoticeform.noticeType = "1";
+                this.getNoticeUserList2(num);
+            } else { //发布
+                this.sendNoticeform.noticeType = "2";
+                this.getNoticeUserList2(num);
+            }
             this.dialogFormVisible = false;
-            // this.tableData1.a = '编辑';
-            // this.tableData1.b = '发布';
-            // this.tableData1.c = '删除';
-            // this.tableData1.d = '';
-
-
-            this.tableData1.push({
-                title: this.form.title,
-                releasePeople: this.form.pople,
-                releaseDate: this.form.date,
-                start: this.form.start,
-                text: this.form.textarea,
-                // a: "编辑",
-                // b: "发布",
-                // c: "删除",
-                // d: "",
-            });
-            // this.clearVal();
+            console.log(this.sendNoticeform);
         },
         releaseChange(data) {
             console.log(data);
             data.start = "已发布";
-            // data.a = '';
-            // data.b = '';
-            // data.c = '';
-            // data.d = '查看';
-            // this.start.d = true;
             this.sendData(); //send data for server
         },
-        realseBtn() { //发布新公告 btn 方法
+        realseBtn() { //发布新公告Dialog btn 方法
+            // alert(111);
+            let new_sendNoticeform = {
+                noticeTitle: "", //主题
+                noticeContent: '', //内容
+                seedUserId: this.$store.state.login.userInfor.name, //发布人
+                seedNoticeDate: '', //发布日期
+                noticeType: "" //发布状态
+            };
+            this.sendNoticeform = new_sendNoticeform;
             this.dialogFormVisible = true;
             this.saves = true;
             this.realses = true;
-            this.clearVal();
         },
         releaseData() { //发布
             this.dialogFormVisible = false;
@@ -278,43 +376,20 @@ export default {
                 releaseDate: this.form.date,
                 start: this.form.start,
                 text: this.form.textarea,
-                // a: "",
-                // b: "",
-                // c: "",
-                // d: "查看"
             });
             this.sendData(); //send data for server
             this.clearVal();
         },
-        lookAt(data) { //查看方法
-            this.dialogFormVisible = true;
-            this.saves = false;
-            this.realses = false;
-
-            // console.log(data);
-            this.form.title = data.title;
-            this.form.textarea = data.text;
-            this.form.pople = data.releasePeople;
-            this.form.date = data.releaseDate;
-
+        getDateValue(val) { //获取完成时间的值
+            // console.log(val);
+            this.sendNoticeform.seedNoticeDate = val;
+            return val;
         },
-        clearVal() { //清空form val
-            this.form.title = '';
-            this.form.pople = '';
-            this.form.date = '';
-            this.form.textarea = '';
+        lookNotice(row) { //查看方法
+            alert(row.noticeContent);
         },
         deleteRow(index, rows) { //删除当前行
             rows.splice(index, 1);
-        },
-        sendData() { //send data for server
-            // this.$http.post('url', { data: this.form })
-            //     .then(response => {
-
-            //     })
-            //     .catch(error => {
-
-            //     })
         }
     },
 }
