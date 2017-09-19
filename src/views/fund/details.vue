@@ -38,7 +38,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金投向">
-                        <el-select v-model="formDetails.turn" :disabled="formDetails.flag" style="width:100%">
+                        <el-select v-model="formDetails.fundInvestId" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of fundInvestment" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -46,7 +46,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金结构">
-                        <el-input v-model="formDetails.structure" :disabled="formDetails.flag"></el-input>
+                        <el-input v-model="formDetails.fundOrg" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -68,7 +68,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="业务部门">
-                        <el-input v-model="formDetails.department" :disabled="formDetails.flag"></el-input>
+                        <el-input v-model="formDetails.businessDeptId" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -100,7 +100,7 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="基金管理人">
-                        <el-select v-model="formDetails.fundStratorId" :disabled="formDetails.flag" style="width:100%">
+                        <el-select v-model="formMIS.fundStratorId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of managementCompany" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -108,27 +108,42 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金托管人">
-                        <el-input v-model="formMIS.fundCustodianId" :disabled="formMIS.flag"></el-input>
+                        <el-select v-model="formMIS.fundCustodianId" :disabled="formMIS.flag" style="width:100%">
+                            <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金监理人">
-                        <el-input v-model="formMIS.fundSupervisorId" :disabled="formMIS.flag"></el-input>
+                        <el-select v-model="formMIS.fundSupervisorId" :disabled="formMIS.flag" style="width:100%">
+                            <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金监管人">
-                        <el-input v-model="formMIS.fundSuperintId" :disabled="formMIS.flag"></el-input>
+                        <el-select v-model="formMIS.fundSuperintId" :disabled="formMIS.flag" style="width:100%">
+                            <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金投资顾问">
-                        <el-input v-model="formMIS.fundAdvisorId" :disabled="formMIS.flag"></el-input>
+                        <el-select v-model="formMIS.fundAdvisorId" :disabled="formMIS.flag" style="width:100%">
+                            <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="第三方合作机构">
-                        <el-input v-model="formMIS.fundOrganizationId" :disabled="formMIS.flag"></el-input>
+                        <el-select v-model="formMIS.fundOrganizationId" :disabled="formMIS.flag" style="width:100%">
+                            <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -276,7 +291,6 @@ export default {
     },
     data() {
         return {
-            getManType: [],
             headerInfo_details: {
                 desc: '基本信息',
                 btnGroup: [{
@@ -316,6 +330,32 @@ export default {
                     icon: 'upload',
                     explain: '提交'
                 }]
+            },
+            options: [{
+                value: 1,
+                label: '未备案'
+            }, {
+                value: 2,
+                label: '已备案'
+            }], //1：未备案 2：已经备案
+            Accountinfo: {
+                title: ['账户类型', '户名', '开户行', '账号'],
+                formlist: [{
+                    username: '基本户户名',
+                    openingBank: '',
+                    accountNumber: '',
+                    accountType: ''
+                }, {
+                    username: '托管户户名',
+                    openingBank: '',
+                    accountNumber: '',
+                    accountType: ''
+                }, {
+                    username: '募集结算账户户名',
+                    openingBank: '',
+                    accountNumber: '',
+                    accountType: ''
+                }]
             }
         }
     },
@@ -326,23 +366,22 @@ export default {
             } else {
                 return name.flag = false
             }
-        },
-        _getType() {
-            this.getManType = JSON.parse(sessionStorage.getItem('getManType'))
         }
     },
     computed: {
         ...mapGetters([
+            'getManType',
             'OrgType',
             'managementCompany',
-            'fundInvestment'
+            'fundInvestment',
+            'getOrgList'
         ])
     },
     created() {
-        this._getType(),
         this.$store.dispatch('getFundInvestment'),
         this.$store.dispatch('getManagementCompany'),
-        this.$store.dispatch('getOrganizationType')
+        this.$store.dispatch('getAllOrg')
+        this.$store.dispatch('getAllOrg')
     },
     components: {
         tabelHeader

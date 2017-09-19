@@ -161,6 +161,7 @@ export default {
             })
                 .then(res => {
                     if (res.status == '200') {
+                        this.tableData1 = [];
                         console.log(res.data);
                         // this.tableData1 = res.data.result.list
                         this.page1.pageNum = res.data.result.pageNum; //当前页码 
@@ -169,7 +170,10 @@ export default {
                         this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
                         res.data.result.list.forEach(function(item, index) {
                             let list = res.data.result.list[index].assistNotice;
+                            let listArr = [];
+                            // listArr.push(list);
                             this.tableData1.push(list);
+                            // this.tableData1 = listArr;
                         }, this);
                     } else if (res.data.status == '403') {
                         alert(res.data.message);
@@ -186,6 +190,7 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data);
+                        this.tableData2 = [];
                         // this.tableData1 = res.data.result.list
                         res.data.result.list.forEach(function(item, index) {
                             let list = res.data.result.list[index].assistNotice;
@@ -196,12 +201,25 @@ export default {
                     }
                 })
                 .catch(error => {
-
+                    console.log(error);
                 })
         },
         handleCurrentChange1(pages) { //获取tabList1 分页数据
             console.log(pages);
             // this.getTaskList1(pages);
+            this.$http.post('/api/work/getTaskList', {
+                
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data);
+                    } else if (res.data.status == '403') {
+                        alert(res.data.message);
+                    }
+                })
+                .catch(error => {
+
+                })
         },
         handleCurrentChange2(pages) { //获取tabList2 分页数据
             console.log(pages);

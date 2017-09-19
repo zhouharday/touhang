@@ -3,7 +3,12 @@
     <myFilter :chooseInfo="chooseInfo"></myFilter>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
-            <el-input placeholder="请输入搜索内容" icon="search" v-model="input2" :on-icon-click="handleIconClick" style="width: 320px;">
+            <el-input placeholder="请输入搜索内容"
+                      icon="search"
+                      v-model="input2"
+                      :on-icon-click="handleIconClick"
+                      autofocus='true'
+                      style="width: 320px;">
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
@@ -76,13 +81,13 @@ export default {
             },
             chooseInfo: [{
                 title: '组织类型：',
-                details: ['全部', '契约型', '公司型', '合伙型']
+                details: []
             }, {
                 title: '管理类型：',
-                details: ['全部', '自我管理', '委托管理', '顾问管理']
+                details: []
             }, {
                 title: '基金阶段：',
-                details: ['全部', '基金设立', '运营管理', '基金退出']
+                details: []
             }, {
                 title: '基金状态：',
                 details: ['全部', '中止']
@@ -101,13 +106,8 @@ export default {
                 title: '添加基金',
                 url: '/home/add',
                 name: 'add'
-            });
-            this.$store.dispatch('getManageType').then(() => {
-                this.$router.push('/home/add')
-            }).catch(() => {
-                this.$router.push('/home/myfund')
             })
-
+            this.$router.push('/home/add')
         },
         handleRouter(index, row) {
             getMyFundDetails(row.id).then((res) => {
@@ -151,11 +151,27 @@ export default {
     created() {
         this.$store.dispatch('getFundLists').then(() => {
             this.myFund = this.myFundList.list
+        }),
+        this.$store.dispatch('getManageType').then(() => {
+            this.chooseInfo[0].details = this.getManType
+        }),
+        this.$store.dispatch('getOrganizationType').then(() =>{
+            this.chooseInfo[1].details = this.OrgType
+        }),
+        this.$store.dispatch('getFundStage').then(() => {
+            this.chooseInfo[2].details = this.fundStage
+        }),
+        this.$store.dispatch('getFundStatus').then(() => {
+            this.chooseInfo[3].details = this.fundStatus
         })
     },
     computed: {
         ...mapGetters([
-            'myFundList'
+            'myFundList',
+            'getManType',
+            'OrgType',
+            'fundStage',
+            'fundStatus'
         ])
     },
     components: {
