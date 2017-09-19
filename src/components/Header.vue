@@ -35,7 +35,6 @@ export default {
             name: '退出',
         }
     },
-
     methods: {
         handleCommand(command) {
             if (command == 'loginout') {

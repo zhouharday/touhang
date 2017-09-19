@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="img_wrapper">
-                            <img src="/static/img/double.png">
+                            <img src="/static/img/double-02.png">
                         </div>
                     </div>
                 </el-col>
@@ -322,7 +322,7 @@ export default {
             }
             .img_wrapper img {
                 position: absolute;
-                width: 100px;
+                width: 120px;
                 height: 120px;
                 bottom: 10px;
                 right: 10px;
