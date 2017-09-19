@@ -2,31 +2,37 @@
     <section>
         <!-- 这是消息公告页内容 -->
         <div class="messageShow">
-            <el-tabs type="border-card">
+            <el-tabs type="border-card" @tab-click="tableDatasss">
                 <!-- 公司公告 Tab -->
-                <el-tab-pane label="公司公告">
-                    <el-table :data="tableData1" border style="width: 100%">
-                        <el-table-column prop="title" label="主题" align="center">
+                <el-tab-pane value="1" label="公司公告">
+                    <el-table stripe :data="tableData1" border style="width: 100%">
+                        <el-table-column prop="noticeTitle" label="主题" align="center">
                         </el-table-column>
-                        <el-table-column prop="releasePeople" label="发布人" align="center">
+                        <el-table-column prop="seedUserName" label="发布人" align="center">
                         </el-table-column>
-                        <el-table-column prop="releaseDate" label="发布日期" align="center">
+                        <el-table-column prop="createDate" label="发布日期" align="center">
                         </el-table-column>
-                        <el-table-column prop="start" label="状态" align="center">
+                        <el-table-column prop="noticeStatus" label="状态" align="center">
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-show="scope.row.start == '未发布'" @click="dialogFormVisible = true" type="text" size="small">编辑</el-button>
-                                <el-button v-show="scope.row.start == '未发布'" @click="releaseChange(scope.row)" type="text" size="small">发布</el-button>
-                                <el-button v-show="scope.row.start == '未发布'" @click.native.prevent="deleteRow(scope.$index, tableData1)" type="text" size="small">删除</el-button>
-                                <el-button v-show="scope.row.start == '已发布'" @click="lookAt(scope.row)" type="text" size="small">查看</el-button>
+                                <el-button v-show="scope.row.noticeStatus == '未发布'" @click="dialogFormVisible = true" type="text" size="small">编辑</el-button>
+                                <el-button v-show="scope.row.noticeStatus == '未发布'" @click="releaseChange(scope.row)" type="text" size="small">发布</el-button>
+                                <el-button v-show="scope.row.noticeStatus == '未发布'" @click.native.prevent="deleteRow(scope.$index, tableData1)" type="text" size="small">删除</el-button>
+                                <el-button v-show="scope.row.noticeStatus == '已发布'" @click="lookAt(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
+                    <div style="margin: 10px;overflow: hidden">
+                        <div style="float: right;">
+                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page1.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
+                            </el-pagination>
+                        </div>
+                    </div>
                 </el-tab-pane>
                 <!-- 系统消息 Tab -->
-                <el-tab-pane label="系统消息">
-                    <el-table :data="tableData2" border style="">
+                <el-tab-pane value="2" label="系统消息">
+                    <el-table stripe :data="tableData2" border style="">
                         <el-table-column prop="title" label="主题" width="550" align="center">
                         </el-table-column>
                         <el-table-column prop="releasePeople" label="发布人" width="" align="center">
@@ -40,6 +46,12 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                    <div style="margin: 10px;overflow: hidden">
+                        <div style="float: right;">
+                            <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
+                            </el-pagination>
+                        </div>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
             <!-- 发布新公告 btn -->
@@ -76,7 +88,7 @@
     position: relative;
     background: #ffffff;
     padding: 24px;
-    >div:nth-child(1){
+    >div:nth-child(1) {
         margin-top: 20px;
     }
     .messageBtn {
@@ -88,18 +100,20 @@
 </style>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+    computed: {
+
+    },
     beforeCreate() { //请求系统消息 list
-        // this.$http.post('url', {})
-        // .then(function( response ){
 
-        // })
-        // .catch( error => {
-
-        // })
+    },
+    created() {
+        // console.log(this.$store.state.login.userInfor.id);
+        this.getNoticeUserList1();
     },
     mounted() {
-        
+
     },
     data() {
         return {
@@ -109,6 +123,20 @@ export default {
             //     c: true, //删除
             //     d: false, //查看
             // },
+            page1: {
+                pageNum: '', //当前页码
+                total: '', //数据总数
+                pageSize: '', //每页条数
+                navigatepageNums: '', //页数
+                current: '', //当前页码
+            },
+            page2: {
+                pageNum: '', //当前页码
+                total: '', //数据总数
+                pageSize: '', //每页条数
+                navigatepageNums: '', //页数
+                current: '', //当前页码
+            },
             labelPosition: 'left',
             formLabelWidth: '120px',
             dialogFormVisible: false,
@@ -122,40 +150,76 @@ export default {
                 date: '', //发布日期
                 start: ""
             },
-            tableData1: [
-                {
-                    title: "a1",
-                    releasePeople: "a1",
-                    releaseDate: "a1",
-                    start: "已发布",
-                    text: "",
-                    a: "编辑",
-                    b: "发布",
-                    c: "删除",
-                    d: "查看",
-                },
-                {
-                    title: "a1",
-                    releasePeople: "a1",
-                    releaseDate: "a1",
-                    start: "未发布",
-                    text: "",
-                    a: "编辑",
-                    b: "发布",
-                    c: "删除",
-                    d: "查看",
-                }
-            ],
+            tableData1: [],
             tableData2: []
         }
     },
     methods: {
+        getNoticeUserList1() { //获取公司公告列表数据
+            this.$http.post('/api/work/getNoticeUserList', {
+                userId: this.$store.state.login.userInfor.id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data);
+                        // this.tableData1 = res.data.result.list
+                        this.page1.pageNum = res.data.result.pageNum; //当前页码 
+                        this.page1.total = res.data.result.total; //数据总数 
+                        this.page1.pageSize = res.data.result.pageSize; //每页条数 
+                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        res.data.result.list.forEach(function(item, index) {
+                            let list = res.data.result.list[index].assistNotice;
+                            this.tableData1.push(list);
+                        }, this);
+                    } else if (res.data.status == '403') {
+                        alert(res.data.message);
+                    }
+                })
+                .catch(error => {
+
+                })
+        },
+        getNoticeUserList2() { //获取系统消息列表数据
+            this.$http.post('/api/work/getNoticeUserList', {
+                userId: this.$store.state.login.userInfor.id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data);
+                        // this.tableData1 = res.data.result.list
+                        res.data.result.list.forEach(function(item, index) {
+                            let list = res.data.result.list[index].assistNotice;
+                            this.tableData2.push(list);
+                        }, this);
+                    } else if (res.data.status == '403') {
+                        alert(res.data.message);
+                    }
+                })
+                .catch(error => {
+
+                })
+        },
+        handleCurrentChange1(pages) { //获取tabList1 分页数据
+            console.log(pages);
+            // this.getTaskList1(pages);
+        },
+        handleCurrentChange2(pages) { //获取tabList2 分页数据
+            console.log(pages);
+            // this.getTaskList2(pages);
+        },
+        tableDatasss(tab) {
+            if (tab.index == '0') {
+                this.getNoticeUserList1();
+            } else if (tab.index == '1') {
+                this.getNoticeUserList2();
+            }
+        },
         cancle() { //取消 Btn
             this.dialogFormVisible = false;
             this.clearVal();
         },
         save() { //保存 Btn
-        // alert(11);
+            // alert(11);
             this.form.start = "未发布";
             this.dialogFormVisible = false;
             // this.tableData1.a = '编辑';

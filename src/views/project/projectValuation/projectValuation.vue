@@ -68,6 +68,65 @@
     </div>
 </template>
 
+<script>
+import { getProjectValuation } from 'api/project';
+export default {
+    data() {
+        return {
+            total: 2,
+            input: '',
+            currentIndex: 1,
+            stateList: [
+                { state: "状态：" },
+                { state: "全部" },
+                { state: "未提交" },
+                { state: "已提交" }
+            ],
+            tableData: [
+                {
+                    project: 'AAAAAAAA',
+                    valuationParameter: '市净率1000*20*5%',
+                    valuation: '',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: ''
+                },
+                {
+                    project: 'AAAAAAAA',
+                    valuationParameter: '市净率1000*20*5%',
+                    valuation: '',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: ''
+                }
+            ],
+            form: {
+                algorithmType: ''
+            }
+            // total: this.tableData.length
+        }
+    },
+    created() {
+        this.init();
+    },
+    methods: {
+        init() {
+            let self = this;
+            getProjectValuation().then(resp => {
+                let data = resp.data.result;
+                self.tableData = data;
+            });
+        },
+        handleIconClick(ev) {
+            console.log(ev);
+        },
+        changeActive(index) {
+            this.currentIndex = index;
+        }
+    }
+}
+</script>
+
 
 <style lang="less" scoped>
 .projectValue {
@@ -118,52 +177,3 @@
     margin: 25px 30px 0 30px;
 }
 </style>
-
-
-<script>
-export default {
-    data() {
-        return {
-            total: 2,
-            input: '',
-            currentIndex: 1,
-            stateList: [
-                { state: "状态：" },
-                { state: "全部" },
-                { state: "未提交" },
-                { state: "已提交" }
-            ],
-            tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
-                },
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
-                }
-            ],
-            form: {
-                algorithmType: ''
-            }
-            // total: this.tableData.length
-        }
-    },
-    methods: {
-        handleIconClick(ev) {
-            console.log(ev);
-        },
-        changeActive(index) {
-            this.currentIndex = index;
-        }
-    }
-}
-</script>

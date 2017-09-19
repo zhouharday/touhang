@@ -129,11 +129,13 @@ export default {
         },
          /*******************验证 找回密码表单 开始*************************/
         // checkVata() {
-        //      if ( this.validatePhone && thisvalidatePwd && this.validatePwd ) {
+        //     // console.log(this.rules.phone);
+        //      if ( this.validatePhone && this.validatePwd && this.validatePwd2 ) {
         //         this.valueData = true;
         //         this.isSendCode = false;
         //     }
         //     else if (this.validatePhone) {
+        //         alert(1);
         //         this.isSendCode = false;
         //         this.valueData = false;
         //     } else {
