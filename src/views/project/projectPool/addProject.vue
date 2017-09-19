@@ -155,6 +155,10 @@
 <script>
 import { addPre } from 'api/project';
 
+const store = {
+    isSubmit: false
+}
+
 export default {
     name: 'addProject',
     data() {
@@ -225,14 +229,19 @@ export default {
             // console.log('basicForm: ', basicForm, companyForm);
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    if (store.isSubmit) return;
+                    store.isSubmit = true;
                     addPre({
                         projectInfo: basicForm,
                         enterpriseInfo: companyForm  
                     }).then(resp => {
+                        store.isSubmit = false;
                         console.log('resp: ', resp);
                         // this.addTab('项目池', '/home/projectPool', 'projectPool');
                         // this.$router.push({ name: 'projectPool' });
-                    })  
+                    }).catch(e => {
+                        console.log(e);
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;

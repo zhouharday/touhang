@@ -79,5 +79,24 @@ export function addPre(params = {}) {
 		projectInfo,
 		enterpriseInfo
 	}
-	return service({url: 'projectPool/addProjectPool', method: 'post', data})
+	return service({url: '/projectPool/addProjectPool', method: 'post', data})
+}
+
+// 删除项目
+export function delPre(preId) {
+	const data = {
+
+	} 
+	return service({url: '', method: 'post', data});
+}
+
+// 转投资
+export function transPre(params = {}) {
+	let { projectId, merchantId, addProjectUserId } = params;
+	const data = {
+		projectId,
+		merchantId,
+		addProjectUserId
+	}
+	return service({url: '/investProject/addInvestProject', method: 'post', data});
 }
