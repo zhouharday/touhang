@@ -29,9 +29,6 @@ export default {
             type: Array,
             default: []
         }
-    },
-    created() {
-        console.log(this.data)
     }
 }
 </script>

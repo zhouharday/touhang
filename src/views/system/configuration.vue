@@ -1,20 +1,52 @@
 <template>
     <section class="configuratin">
         <el-row :gutter="30">
-            <el-col :span="6" style="height: 450px;border-right: 1px solid #ddd;padding: 0">
+            <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
+                <!-- 项目阶段 配置-->
                 <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px">添加</el-button>
+                    <el-button type="danger" style="width:80px" @click="openProject">添加</el-button>
                 </div>
                 <b style="padding-left:15px;">项目阶段配置</b>
                 <div class="project_config">
-                    <div class="project_menu">项目配置</div>
+                    <div class="menu_title">
+                        <div>项目配置</div>
+                    </div>
                     <div class="menu_box">
-                        <p class="menu_list1">
-                            <span>考察储备</span>
+                        <p class="menu_list" v-for="item in projectMenu" :key="item.index">
+                            <span v-if="!item.editFlag">{{item.stageName}}</span>
+                            <span v-if="item.editFlag" class="cell-edit-input">
+                                <el-input v-model="item.stageName"></el-input>
+                            </span>
                             <Icon type="arrow-up-c" class="mgr"></Icon>
                             <Icon type="arrow-down-c"></Icon>
-                            <el-button type="text" class="leftBtn">编辑</el-button>
-                            <el-button type="text">删除</el-button>
+                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
+                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存
+                            </el-button>
+                            <el-button type="text" @click="handleDelete(index,projectMenu)">删除</el-button>
+                        </p>
+                    </div>
+                </div>
+                <!-- 基金阶段 配置 -->
+                <div class="rightAdd_btn">
+                    <el-button type="danger" style="width:80px" @click="openFund">添加</el-button>
+                </div>
+                <b style="padding-left:15px;">基金阶段配置</b>
+                <div class="project_config">
+                    <div class="menu_title">
+                        <div>基金配置</div>
+                    </div>
+                    <div class="menu_box">
+                        <p class="menu_list" v-for="item in fundMenu" :key="item.index">
+                            <span v-if="!item.editFlag">{{item.fundName}}</span>
+                            <span v-if="item.editFlag" class="cell-edit-input">
+                                <el-input v-model="item.fundName"></el-input>
+                            </span>
+                            <Icon type="arrow-up-c" class="mgr"></Icon>
+                            <Icon type="arrow-down-c"></Icon>
+                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
+                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存
+                            </el-button>
+                            <el-button type="text" @click="handleDelete(index,fundMenu)">删除</el-button>
                         </p>
                     </div>
                 </div>
@@ -23,7 +55,7 @@
                 <el-row>
                     <el-col>
                         <div class="leftAdd_btn">
-                            <el-button type="danger" style="width:80px" @click="fileDialog=true">添加</el-button>
+                            <el-button type="danger" style="width:80px" @click="openFile">添加</el-button>
                         </div>
                     </el-col>
                     <el-col>
@@ -58,6 +90,44 @@
                 </el-row>
             </el-col>
         </el-row>
+        <!-- 添加 项目阶段 对话框-->
+        <el-dialog title="阶段名称" :visible.sync="projectDialog" class="fileDialog">
+            <el-form :model="projectForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="阶段名称：" prop="stageName" label-width="100px">
+                            <el-input v-model="projectForm.stageName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addProject">保存</el-button>
+                <el-button class="dialogBtn" @click="projectDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加 基金阶段 对话框-->
+        <el-dialog title="基金名称" :visible.sync="fundDialog" class="fileDialog">
+            <el-form :model="fundForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="基金名称：" prop="fundName" label-width="100px">
+                            <el-input v-model="fundForm.fundName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addFund">保存</el-button>
+                <el-button class="dialogBtn" @click="fundDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
         <!-- 添加  文档 对话框-->
         <el-dialog title="文档名称" :visible.sync="fileDialog" class="fileDialog">
             <el-form :model="fileForm">
@@ -73,7 +143,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn_active" @click="fileDialog = false">保存</el-button>
+                <el-button class="dialogBtn_active" @click="addFile">保存</el-button>
                 <el-button class="dialogBtn" @click="fileDialog = false">取消</el-button>
             </div>
         </el-dialog>
@@ -84,6 +154,8 @@
 export default {
     data() {
         return {
+            projectDialog: false,
+            fundDialog: false,
             fileDialog: false,
             fileData: [
                 {
@@ -101,18 +173,82 @@ export default {
                 fileName: '',
                 editFlag: false
             },
-            menuList: [
-                { menu: '考察储备'},
-                 { menu: '立项会'}
+            projectForm: {
+                stageName: '',
+                editFlag: false
+            },
+            projectMenu: [
+                {
+                    stageName: '考察储备',
+                    editFlag: false
+                },
+                {
+                    stageName: '立项会',
+                    editFlag: false
+                }
+            ],
+            fundForm: {
+                fundName: '',
+                editFlag: false
+            },
+            fundMenu: [
+                {
+                    fundName: '基金投资',
+                    editFlag: false
+                },
+                {
+                    fundName: '基金撤资',
+                    editFlag: false
+                }
             ]
         }
     },
     methods: {
-        // 添加角色 的方法
-        addRole() {
-            this.roleData.push(this.roleForm);
-            this.roleForm = {};
-            this.roleDialog = false;
+        // 添加 项目配置 的方法
+        openProject() {
+            let new_projectForm = {
+                stageName: '',
+                editFlag: false
+            };
+            this.projectForm = new_projectForm;
+            this.projectDialog = !this.projectDialog;
+        },
+        addProject() {
+            this.projectMenu.push(this.projectForm);
+            this.projectForm = {};
+            this.projectDialog = !this.projectDialog;
+        },
+        // 添加 基金配置 的方法
+        openFund() {
+            let new_fundForm = {
+                fundName: '',
+                editFlag: false
+            };
+            this.fundForm = new_fundForm;
+            this.fundDialog = !this.fundDialog;
+        },
+        addFund() {
+            this.fundMenu.push(this.fundForm);
+            this.fundForm = {};
+            this.fundDialog = !this.fundDialog;
+        },
+        // 添加 文档 的方法
+        openFile() {
+            let new_fileForm = {
+                fileName: '',
+                editFlag: false
+            };
+            this.fileForm = new_fileForm;
+            this.fileDialog = !this.fileDialog;
+        },
+        addFile() {
+            this.fileData.push(this.fileForm);
+            this.fileForm = {};
+            this.fileDialog = !this.fileDialog;
+        },
+        //
+        edit(index, item) {
+            item.editFlag = !item.editFlag;
         },
         checkEdit(index, row) { //编辑
             // console.log(row)
@@ -148,26 +284,34 @@ export default {
         display: flex;
         justify-content: flex-end;
     } //  右边菜单 project_menu
-    .project_menu {
+    .menu_title {
         height: 40px;
         line-height: 40px;
-        padding-left: 0;
-        background: #dfe6ec;
+        padding-left: 5px;
+        ;
+        background: #2A3142;
+        >div {
+            padding-left: 10px;
+            background: #dfe6ec;
+        }
     }
     .menu_box {
         padding: 10px 30px 10px 15px;
-        .menu_list1 {
+        font-size: 14px;
+        .menu_list {
             display: flex;
             align-items: center;
             justify-content: flex-end;
+            margin-bottom: 5px;
             &:hover {
                 background: #dfe6ec;
             }
             span {
-                margin-right: 55px;;
+                margin-right: 45px;
+                ;
             }
             .mgr {
-                   margin-right: 15px; 
+                margin-right: 15px;
             }
             .leftBtn {
                 margin-left: 45px;
@@ -182,9 +326,7 @@ export default {
     }
     .dialog-footer {
         text-align: center;
-        margin-top: 75px; // position: absolute;
-        // bottom: 60px;
-        // // left: 0;
+        margin-top: 75px;
     }
     .dialogBtn_active {
         width: 150px;

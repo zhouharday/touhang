@@ -225,7 +225,7 @@ section {
             position: relative;
             background: #ffffff;
             height: 100%;
-            >img {
+            >div>img {
                 position: absolute;
                 top: 0;
                 bottom: 0;
@@ -284,9 +284,9 @@ export default {
     created() {
         this.$http.post('/api/merchantType/queryList', {})
             .then(res => {
-                if (res.data.status == '200') {
+                if (res.status == '200') {
                     this.typePostage = res.data.result;
-                    console.log(res.data.result);
+                    // console.log(res.data.result);
                 }
             })
             .catch(error => {
@@ -393,7 +393,7 @@ export default {
                         "representative": this.form.delegate,
                     })
                         .then(res => {
-                            if (res.data.status == '200') {
+                            if (res.status == '200') {
                                 console.log('申请开通企业权限: ' + res.data.message);
                             } else if(res.data.status == '403'){
                                 alert(res.data.message);

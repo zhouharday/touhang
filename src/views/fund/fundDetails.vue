@@ -54,8 +54,8 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <from-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="formAccountinfo">
-                </from-details>
+                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="formAccountinfo">
+                </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
                 <team></team>
@@ -82,7 +82,7 @@
 
 <script type="text/ecmascript-6">
 import tableInfo from '../../components/tableInfo'
-import fromDetails from './details'
+import Details from './details'
 import Team from './team'
 import Examine from './examine'
 import Investor from './investor'
@@ -148,38 +148,34 @@ export default {
             }],
             activeName: 'details',
             formDetails: {},
-            formMIS: {},
-            formRegistration: {},
-            formAccountinfo: {}
+            // formMIS: {},
+            // formRegistration: {},
+            // formAccountinfo: {}
         }
     },
     computed: {
         ...mapGetters([
-            'fundDetails'
+            'myFundDetails'
         ])
     },
     created() {
-        this.fundDetails = Object.assign({}, this.fundDetails.fundBaseInfo, {
-            baseInfo: '基本信息',
+        this.fundDetails = Object.assign({}, this.myFundDetails.fundBaseInfo, {
             flag: 'false'
-        }),
-        this.formMIS = Object.assign({}, this.fundDetails.fundManageInfo, {
-            baseInfo: '管理信息',
+        })
+        this.formMIS = Object.assign({}, this.myFundDetails.fundManageInfo, {
             flag: 'false'
-        }),
-        this.formAccountinfo = Object.assign({}, this.fundDetails.fundAccinfo, {
-            baseInfo: '账户信息',
-            flag: 'false',
-        }),
-        this.formRegistration = Object.assign({}, this.fundDetails.fundRegistration, {
-            baseInfo: '备案注册',
+        })
+        this.formAccountinfo = Object.assign({}, this.myFundDetails.fundAccinfo, {
+            flag: 'false'
+        })
+        this.formRegistration = Object.assign({}, this.myFundDetails.fundRegistration, {
             flag: 'false',
         })
     },
     components: {
         tableInfo,
         echarts,
-        fromDetails,
+        myDetails: Details,
         Team,
         Examine,
         Investor,
