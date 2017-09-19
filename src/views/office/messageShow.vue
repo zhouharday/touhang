@@ -55,7 +55,7 @@
                 </el-tab-pane>
             </el-tabs>
             <!-- 发布新公告 btn -->
-            <el-button type="text" @click="realseBtn" class="messageBtn">发布新公告</el-button>
+            <el-button v-show="isAddMsg" type="primary" @click="realseBtn" class="messageBtn">发布新公告</el-button>
             <!-- 发布新公告 dialog -->
             <el-dialog title="发布新公告" :visible.sync="dialogFormVisible">
                 <el-form :model="form" :label-position="labelPosition">
@@ -103,7 +103,11 @@
 import { mapState } from 'vuex'
 export default {
     computed: {
-
+        userId(state) {
+            // alert(111);
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            return this.$store.state.login.userInfor.id;
+        },
     },
     beforeCreate() { //请求系统消息 list
 
@@ -123,6 +127,7 @@ export default {
             //     c: true, //删除
             //     d: false, //查看
             // },
+            isAddMsg: true,
             page1: {
                 pageNum: '', //当前页码
                 total: '', //数据总数
@@ -155,49 +160,48 @@ export default {
         }
     },
     methods: {
-        getNoticeUserList1() { //获取公司公告列表数据
-            this.$http.post('/api/work/getNoticeUserList', {
-                userId: this.$store.state.login.userInfor.id
+        getNoticeUserList1(pages) { //获取公司公告列表数据
+            this.$http.post('/api/work/getNoticeList', {
+                "seedUserId": this.userId,
+                "page": pages,
+                "pageSize": 10,
+                "merchantId": this.$store.state.login.merchants[0].id
             })
                 .then(res => {
                     if (res.status == '200') {
-                        this.tableData1 = [];
                         console.log(res.data);
                         // this.tableData1 = res.data.result.list
-                        this.page1.pageNum = res.data.result.pageNum; //当前页码 
-                        this.page1.total = res.data.result.total; //数据总数 
-                        this.page1.pageSize = res.data.result.pageSize; //每页条数 
-                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
-                        res.data.result.list.forEach(function(item, index) {
-                            let list = res.data.result.list[index].assistNotice;
-                            let listArr = [];
-                            // listArr.push(list);
-                            this.tableData1.push(list);
-                            // this.tableData1 = listArr;
-                        }, this);
+                        // this.tableData1 = res.data.result.list; //任务数据列表
+                        // this.page1.pageNum = res.data.result.pageNum; //当前页码 
+                        // this.page1.total = res.data.result.total; //数据总数 
+                        // this.page1.pageSize = res.data.result.pageSize; //每页条数 
+                        // this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        if (res.data.status == '49999') { //数据为空
+                            console.log('没有新数据');
+                        }
                     } else if (res.data.status == '403') {
-                        alert(res.data.message);
+                        console.log(res.data.message);
                     }
                 })
                 .catch(error => {
-
+                    console.log(error);
                 })
         },
-        getNoticeUserList2() { //获取系统消息列表数据
-            this.$http.post('/api/work/getNoticeUserList', {
-                userId: this.$store.state.login.userInfor.id
+        getNoticeUserList2(pages) { //获取系统消息列表数据
+            this.$http.post('/api/sysManage/selectSysMessageList', {
+                "seedUserId": this.userId,
+                "page": pages,
+                "pageSize": 10,
+                "merchantId": this.$store.state.login.merchants[0].id
             })
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data);
-                        this.tableData2 = [];
-                        // this.tableData1 = res.data.result.list
-                        res.data.result.list.forEach(function(item, index) {
-                            let list = res.data.result.list[index].assistNotice;
-                            this.tableData2.push(list);
-                        }, this);
+                        if (res.data.status == '49999') { //数据为空
+                            console.log('没有新数据');
+                        }
                     } else if (res.data.status == '403') {
-                        alert(res.data.message);
+                        console.log(res.data.message);
                     }
                 })
                 .catch(error => {
@@ -206,29 +210,18 @@ export default {
         },
         handleCurrentChange1(pages) { //获取tabList1 分页数据
             console.log(pages);
-            // this.getTaskList1(pages);
-            this.$http.post('/api/work/getTaskList', {
-                
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data);
-                    } else if (res.data.status == '403') {
-                        alert(res.data.message);
-                    }
-                })
-                .catch(error => {
-
-                })
+            this.getNoticeUserList1(pages);
         },
         handleCurrentChange2(pages) { //获取tabList2 分页数据
             console.log(pages);
-            // this.getTaskList2(pages);
+            this.getNoticeUserList2(pages);
         },
         tableDatasss(tab) {
             if (tab.index == '0') {
+                this.isAddMsg = true;
                 this.getNoticeUserList1();
             } else if (tab.index == '1') {
+                this.isAddMsg = false;
                 this.getNoticeUserList2();
             }
         },
