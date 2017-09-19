@@ -159,8 +159,8 @@ export default {
                 if (valid) {
                     this.findDialog = !this.findDialog;
                 } else {
-                    return false;
                     this.$refs[formName].resetFields();
+                    return false;
                 }
             });
         }
