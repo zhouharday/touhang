@@ -66,10 +66,10 @@
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="dialogVisible=true">
+                            <el-button type="text" size="small" @click="goJumpPref(scope.$index, tableData)">
                                 转投资
                             </el-button>
-                            <el-button type="text" size="small" @click="deleteRow(scope.$index,tableData)">
+                            <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)">
                                 删除
                             </el-button>
                             <!-- 确认转项目池 dialog -->
@@ -77,7 +77,7 @@
                                 <span>确认将该项目转投资？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="jumpPre(scope.$index,tableData)">确 定</el-button>
+                                    <el-button type="primary" @click.native.prevent="jumpPre()">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -223,8 +223,9 @@ export default {
         },
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
-            
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
         },
         getDatas(projectName, projectType, industryId) {
             if (projectType == '全部') projectName = '';
@@ -260,7 +261,9 @@ export default {
             return data;
         },
         handleIconClick(ev) {
-            console.log(ev);
+            let input = this.input;
+            console.log('input: ', input);
+            this.getDatas(input, this.state, this.industry);
         },
         // 点击折叠按钮，控制列表项的下拉与收起
         changeList() {
@@ -290,11 +293,32 @@ export default {
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
             // this.$router.push({ path: 'zprojectPoolMessage/'+ind, params: { userId: ind } });
         },
-        jumpPre(index, data) {
-            let _data = data[index];
-            console.log(_data);
-            this.addTab('投前项目', '/home/preProject', 'preProject');
-            // this.$router.push({ name: 'preProject' });
+        goJumpPref(index, data) {
+            console.log('index: ', index);
+            this.dialogVisible = true;
+            this.jumpData = data[index] || {};
+        },
+        jumpPre() {
+            let _data = this.jumpData;
+            let merchantId = this.merchantId;
+            let projectId = _data.id;
+            let addProjectUserId = this.addProjectUserId;
+            transPre({
+                merchantId,
+                projectId,
+                addProjectUserId
+            }).then(resp => {
+                let data = resp.data;
+                if (!data.message) {
+                    console.log(resp);
+                    this.addTab('投前项目', '/home/preProject', 'preProject');
+                    this.$router.push({ name: 'preProject' });
+                } else {
+                    this.dialogVisible = false; // 隐藏弹框
+                }
+            }).catch(e => {
+                console.log('jumpPre exists error: ', e);
+            });
         },
         addProject() {
             this.addTab('添加项目1', '/home/addProject', 'addProject');
@@ -304,8 +328,8 @@ export default {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
         deleteRow(index, rows) {
-
-            rows.splice(index, 1);
+            console.log(index);
+            // rows.splice(index, 1);
         },
         changeActive(index, ind) {
             if (ind == 1) { // 状态
