@@ -226,7 +226,7 @@ export default {
                 ]
             },
             headerInfo_member: {
-                desc: '董事会成员结构',
+                desc: '董事会成员',
                 btnGroup: [{
                     icon: 'plus-round',
                     explain: '添加'
