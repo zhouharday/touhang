@@ -1,7 +1,8 @@
 <template>
     <div class="header">
         <div class="hd_logo">
-            <img src="../../static/img/logo.png" />
+            <img :src="logoSname.logo" />
+            <span>{{logoSname.merchantName}}</span>
         </div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
@@ -16,25 +17,41 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
-    data() {
-        return {
-            name: '退出'
-        }
-    },
-    computed: {
+    computed: mapState({
         username() {
             let username = localStorage.getItem('ms_username');
             return username ? username : this.name;
+        },
+        logoSname(state) {
+            state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
+            return state.login.logoSrc;
+            // console.log(sessionStorage.getItem('logoSrc'));
+        },
+    }),
+    data() {
+        return {
+            name: '退出',
         }
     },
     methods: {
         handleCommand(command) {
             if (command == 'loginout') {
-                localStorage.removeItem('ms_username')
-                this.$router.push('/login');
+                localStorage.removeItem('ms_username');
+                sessionStorage.clear();
+                // this.delCook();
+                window.location.href = 'http://localhost:8081/login';
+                // this.$router.push('/login');
             }
-        }
+        },
+        delCook() {
+            var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+            if (keys) {
+                for (var i = keys.length; i--;)
+                    document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+            }
+        },
     }
 }
 </script>
@@ -56,6 +73,8 @@ export default {
         float: left;
         height: 50px;
         margin-left: 196px;
+        line-height: 50px;
+        display: inline-flex;
         img {
             // width: 35px;
             height: 35px;

@@ -1,0 +1,26 @@
+@import "./variable.less";
+
+.base-style {
+    width: 100%;
+    min-height: 100%;
+    background: @color-base;
+    padding: @height-small;
+}
+
+.table-router {
+    width: 100%;
+    height: 100%;
+    transition: 0.3s all;
+
+    .investorName {
+        margin-left: 10px;
+        color: @color-theme-red;
+    }
+
+    &:hover {
+        .investorName {
+            transform: scale(1.1);
+            color: @color-before-hover;
+        }
+    }
+}

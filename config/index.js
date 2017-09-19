@@ -14,7 +14,9 @@ module.exports = {
         // Before setting to `true`, make sure to:
         // npm install --save-dev compression-webpack-plugin
         productionGzip: false,
-        productionGzipExtensions: ['js', 'css'],
+        productionGzipExtensions: [
+            'js', 'css'
+        ],
         // Run the build command with an extra argument to
         // View the bundle analyzer report after build finishes:
         // `npm run build --report`
@@ -23,16 +25,20 @@ module.exports = {
     },
     dev: {
         env: require('./dev.env'),
-        port: 8080,
+        port: 8081,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/api':{
-                target:'http://jsonplaceholder.typicode.com',
-                changeOrigin:true,
-                pathRewrite:{
-                    '/api':''
+            '/api': {
+                // target: 'http://zhqwjmw.eicp.net',
+                target:'http://192.168.0.198:9091', // 198
+                // target:'http://192.168.0.122:9091',
+                // target:'http://192.168.0.117:9091',
+                // target:'http://100.64.33.181:9091',
+                changeOrigin: true,
+                pathRewrite: {
+                    '/api': ''
                 }
             }
         },
