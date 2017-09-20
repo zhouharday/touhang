@@ -13,10 +13,7 @@
                 <el-col :span="12">
                     <div class="tableTitle">出资主体</div>
                     <el-table :data="fundTable" style="width: 100%" :row-class-name="tableRowClassName">
-                        <el-table-column label="基金名称" align="center">
-                            <template scope="scope">
-                                <a class="fundName">{{ scope.row.fundName }}</a>
-                            </template>
+                        <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investorMoney" label="投资金额（元）" align="center">
                         </el-table-column>
