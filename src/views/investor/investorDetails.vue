@@ -70,7 +70,7 @@ export default {
 @import '../../common/styles/variable.less';
 .investorDetails {
     .base-style();
-    .header{
+    .header {
         width: 100%;
         padding-bottom: @height-small;
         .info {

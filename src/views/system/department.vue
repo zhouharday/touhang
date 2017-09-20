@@ -82,6 +82,7 @@ export default {
     data() {
         return {
             currentData: [{
+                id: 'a1',
                 name: '投资一部',
                 childrenData: [{
                     title: '一部第一小组',
@@ -91,6 +92,7 @@ export default {
                     desc: '描述信息b'
                 }]
             }, {
+                id: 'a2',
                 name: '投资二部',
                 childrenData: [{
                     title: '二部第一小组',
@@ -100,6 +102,7 @@ export default {
                     desc: '描述信息aaaa'
                 }]
             }, {
+                id: 'a3',
                 name: '投资三部',
                 childrenData: [{
                     title: '三部第一小组',
@@ -131,8 +134,8 @@ export default {
             let result = []
             arr.map((x) => {
                 result.push({
-                    lebal: x.name,
-                    value: x.name
+                    label: x.name,
+                    value: x.id
                 })
             })
             return this.options = result

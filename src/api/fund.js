@@ -3,10 +3,10 @@ import service from 'common/js/fetch'
 // 获取我的基金列表
 export function getMyFund() {
     const data = {
-        //createUserId: JSON.parse(sessionStorage.getItem('userInfor')).id, //当前登录用户id
-        //merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id必传"
-        createUserId: "asdffsdfdsf", //当前登录用户id
-        merchantId: "123456", //商户id必传"
+        createUserId: JSON.parse(sessionStorage.getItem('userInfor')).id, //当前登录用户id
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id必传"
+        //createUserId: "asdffsdfdsf", //当前登录用户id
+        //merchantId: "123456", //商户id必传"
         /*
          //以下字段传空值或者不传则是全部"
          orgTypeId: null,//组织类型ID

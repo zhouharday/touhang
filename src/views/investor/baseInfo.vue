@@ -11,7 +11,10 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="投资者类型" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="baseInfo.investorTypeId" auto-complete="off"></el-input>
+                        <el-select v-model="addInvestor.investorTypeId" style="width:100%">
+                            <el-option v-for="(item, index) of typeInvestor" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -44,7 +47,10 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="投资经理" :label-width="formLabelWidth">
-                        <el-input v-model="baseInfo.investmentManagerId" auto-complete="off"></el-input>
+                        <el-select v-model="baseInfo.investmentManagerId" style="width:100%">
+                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -83,6 +89,7 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import {mapGetters} from 'vuex'
 export default {
     data() {
         return {
@@ -94,6 +101,11 @@ export default {
                 }]
             },
             formLabelWidth: '120px',
+            investorTypeId: [],
+            investmentManager: [{
+                dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+                id: JSON.parse(sessionStorage.getItem('userInfor')).id
+            }],
             baseInfo: {}
         }
     },
@@ -104,6 +116,16 @@ export default {
         onSubmit() {
             alert('确定')
         }
+    },
+    computed: {
+        ...mapGetters([
+            'investorDetails',
+            'investorType'
+        ])
+    },
+    created() {
+        this.baseInfo = this.investorDetails
+        this.investorTypeId = this.investorType
     },
     components: {
         tableHeader
