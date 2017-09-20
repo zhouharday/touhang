@@ -26,9 +26,9 @@
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
-                <el-tab-pane label="工商信息" name="industry" class="tab_list">
+                <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                     <industry-form :industryForm="industryForm"></industry-form>
-                </el-tab-pane>
+                </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
                     <capital-table></capital-table>
                 </el-tab-pane>
@@ -45,7 +45,7 @@
 <script>
 import detailForm from './details'
 import tableForm from './tables'
-import industryForm from './industry'
+// import industryForm from './industry'
 import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
@@ -76,7 +76,7 @@ export default {
     components: {
         detailForm,
         tableForm,
-        industryForm,
+        // industryForm,
         capitalTable,
         recordForm,
         fileTable

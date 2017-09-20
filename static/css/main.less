@@ -189,6 +189,7 @@ ul li {
     th.el-table_1_column_1 .cell {
         margin-left: 50px;
     }
+    // 隔行变色样式
     .el-table .info-row {
         background: #fff;
     }
@@ -211,15 +212,15 @@ ul li {
 
 
 /*项目详情页messageContent*/ 
-.messageContent {
-    .el-tabs__active-bar {
-       background-color: red;
-    }
-    .el-tabs__item.is-active {
-        color: #F05E5E;
-    }
+// .messageContent {
+//     .el-tabs__active-bar {
+//        background-color: red;
+//     }
+//     .el-tabs__item.is-active {
+//         color: #F05E5E;
+//     }
 
-}
+// }
 
 
 /*项目池页poolContent*/ 
@@ -451,9 +452,33 @@ ul li {
 
 /*项目估值页*/
 .projectValue {
+     // row-table的css style
+     .el-table th {
+        background-color: #2A3142;  
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
     .el-form-item {
         margin-bottom: 0;
    }
+}
+
+/*估值查看页*/
+.valueView {
+     // row-table的css style
+    .el-table th {
+        background-color: #2A3142;  
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
 }
 
 
