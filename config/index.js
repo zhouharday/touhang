@@ -32,11 +32,7 @@ module.exports = {
         proxyTable: {
             '/api': {
                 // target: 'http://zhqwjmw.eicp.net',
-<<<<<<< HEAD
                 target:'http://192.168.0.198:9091',
-=======
-                target:'http://192.168.0.198:9091', // 198
->>>>>>> 57b030f451a6c94ee6659587586994463fa844b2
                 // target:'http://192.168.0.122:9091',
                 // target:'http://192.168.0.117:9091',
                 // target:'http://100.64.33.181:9091',
