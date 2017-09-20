@@ -59,10 +59,10 @@
         <el-tab-pane label="团队" name="team" class="tab_list">
           <team-table></team-table>
         </el-tab-pane>
-        <el-tab-pane label="工商信息" name="industry" class="tab_list">
+        <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
           <industry-form :industryForm="industryForm">
           </industry-form>
-        </el-tab-pane>
+        </el-tab-pane> -->
         <el-tab-pane label="记录" name="record" class="tab_list">
           <record-Form></record-Form>
         </el-tab-pane>
@@ -144,7 +144,7 @@
 import detailForm from './details'
 import tableForm from './tables'
 import teamTable from './team'
-import industryForm from './industry'
+// import industryForm from './industry'
 import recordForm from './record'
 import approveTable from './approve'
 import fileTable from './file'
@@ -229,7 +229,7 @@ export default {
     detailForm,
     tableForm,
     teamTable,
-    industryForm,
+    // industryForm,
     recordForm,
     approveTable,
     fileTable,

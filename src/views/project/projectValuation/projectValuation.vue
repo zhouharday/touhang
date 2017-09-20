@@ -65,9 +65,9 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
-                            <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                            <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
                             </el-button>
-                            <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                            <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">保存
                             </el-button>
                         </template>
                     </el-table-column>
