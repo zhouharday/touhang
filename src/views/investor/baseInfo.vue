@@ -83,6 +83,7 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import {mapGetters} from 'vuex'
 export default {
     data() {
         return {
@@ -104,6 +105,14 @@ export default {
         onSubmit() {
             alert('确定')
         }
+    },
+    computed: {
+        ...mapGetters([
+            'investorDetails'
+        ])
+    },
+    created() {
+        this.baseInfo = this.investorDetails
     },
     components: {
         tableHeader

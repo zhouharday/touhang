@@ -45,13 +45,18 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="投资者类型" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.investorTypeId" auto-complete="off"></el-input>
+                        <el-select v-model="addInvestor.investorTypeId" style="width:100%">
+                            <el-option v-for="(item, index) of typeInvestor" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="证件类型" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.certificateTypeId">
-                        </el-input>
+                        <el-select v-model="addInvestor.certificateTypeId" style="width:100%">
+                            <el-option v-for="(item, index) of typeId" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -72,13 +77,18 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="所属区域" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.regionName">
-                        </el-input>
+                        <el-select v-model="addInvestor.regionName" style="width:100%">
+                            <el-option v-for="(item, index) of area" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="投资经理" :label-width="formLabelWidth">
-                        <el-input v-model="addInvestor.investmentManagerId" auto-complete="off"></el-input>
+                        <el-select v-model="addInvestor.investmentManagerId" style="width:100%">
+                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -99,7 +109,7 @@
                 </el-col>
                 <el-col :span="24">
                     <el-form-item label="备注" :label-width="formLabelWidth">
-                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="remark">
+                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="addInvestor.remark">
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -114,17 +124,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {
-    mapMutations
-} from 'vuex'
+import {mapMutations,mapGetters} from 'vuex'
 import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
+import {addInvestor} from 'api/investor'
 export default {
     data() {
         return {
             chooseInfo: [{
                 title: '项目类型',
-                details: ['全部', '机构', '个人', '政府']
+                details: []
             }],
             theme: '#fff',
             dataTitle: {
@@ -133,47 +142,93 @@ export default {
                     explain: '投资者'
                 }]
             },
-            investorData: [{
-                id: 12,
-                investorName: '投资者名称',
-                investorTypeId: '类型',
-                InvestmentManager: '安红',
-                amount: '累计投资额'
-            }, {
-                id: 13,
-                investorName: '李四',
-                investorTypeId: '类型',
-                InvestmentManager: '安红',
-                amount: 1000
-            }],
+            investorData: [],
             modelInvestor: false,
             formLabelWidth: '120px',
-            addInvestor: {}
+            addInvestor: {},
+            typeInvestor: [],
+            typeId: [],
+            addInvestor: {
+                investorName: '',
+                investorTypeId: '',
+                certificateTypeId: '',
+                certificateNum: '',
+                organizationProperty: '',
+                personalAssets: '',
+                regionId: '',
+                regionName: '',
+                investmentManagerId: '',
+                contacts: '',
+                contactNumber: '',
+                addUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                address: '',
+                remark: ''
+            },
+            investmentManager: [{
+                dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+                id: JSON.parse(sessionStorage.getItem('userInfor')).id
+            }],
+            area: []
         }
     },
     methods: {
-        handleRouter(index, row) {
-            this.addTab({
-                type: 'addTab',
-                title: row.investorName + '详情页',
-                url: '/home/investorDetails/' + row.id,
-                name: 'investorDetails/' + row.id
-            });
-            this.$router.push({
-                name: 'investorDetails',
-                params: {
-                    id: row.id
-                }
+        handleRouter(index, rowList) {
+            this.$store.dispatch('getInvDetails', rowList).then(() => {
+                this.$router.push({
+                    name: 'investorDetails',
+                    params: {
+                        id: rowList.id
+                    }
+                })
+                this.addTab({
+                    type: 'addTab',
+                    title: rowList.investorName + '详情页',
+                    url: '/home/investorDetails/' + rowList.id,
+                    name: 'investorDetails/' + rowList.id
+                })
+            }).catch(err => {
+                this.$router.push('/home/investor')
             })
         },
         showModel() {
             this.modelInvestor = true
         },
         confirmIncome() {
-            this.modelInvestor = false
+            addInvestor(this.addInvestor).then((res) => {
+                if (res.data.status == '200') {
+                    this.modelInvestor = false
+                }
+            })
         },
         ...mapMutations([
             'addTab' // 映射 this.addTab() 为 this.$store.commit
+        ])
+    },
+    created() {
+        this.$store.dispatch('getInvestor').then(() => {
+            this.investorData = this.investorList.list
+        })
+        this.$store.dispatch('getProType').then(() => {
+            this.chooseInfo[0].details = this.projectType
+        })
+        this.$store.dispatch('getInvType').then(() => {
+            this.typeInvestor = this.investorType
+        })
+        this.$store.dispatch('getId').then(() => {
+            this.typeId = this.idType
+        })
+        this.$store.dispatch('getArea').then(() => {
+            this.area = this.subArea
+        })
+    },
+    computed: {
+        ...mapGetters([
+            'investorList',
+            'projectType',
+            'investorType',
+            'idType',
+            'subArea'
         ])
     },
     components: {
