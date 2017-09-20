@@ -66,10 +66,10 @@
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="dialogVisible=true">
+                            <el-button type="text" size="small" @click="goJumpPref(scope.$index, tableData)">
                                 转投资
                             </el-button>
-                            <el-button type="text" size="small" @click="deleteRow(scope.$index,tableData)">
+                            <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)">
                                 删除
                             </el-button>
                             <!-- 确认转项目池 dialog -->
@@ -77,7 +77,7 @@
                                 <span>确认将该项目转投资？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="jumpPre">确 定</el-button>
+                                    <el-button type="primary" @click.native.prevent="jumpPre()">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getPres } from 'api/project';
+import { getPros, transPro } from 'api/project';
 export default {
     name: 'projectPool',
     data() {
@@ -218,15 +218,51 @@ export default {
     },
     methods: {
         init() {
-            let self = this;
-            getPres().then(resp => {
-                console.log('resp: ', resp);
+            this.initInfo();
+            this.getDatas();
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+        },
+        getDatas(projectName, projectType, industryId) {
+            if (projectType == '全部') projectName = '';
+            if (industryId == '全部') industryId = '';
+            
+            let params = {
+                merchantId: this.merchantId
+            };
+
+            if (projectName) params.projectName = projectName;
+            if (projectType) params.projectType = projectType;
+            if (industryId) params.industryId = industryId;
+            getPros(params).then(resp => {
                 let data = resp.data;
-                self.tableData = data;
+                data = this.handleDatas(data);
+                this.tableData = data;
             })
         },
+        /**
+         * [handleDatas 处理项目列表数据]
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        handleDatas(data = []) {
+            data.forEach(item => {
+                item.project = item.project_name;
+                item.mananger = item.project_leader_id;
+                item.industry = item.industry_id;
+                item.sort = item.project_type;
+                item.stage = item.project_status;
+            });
+            return data;
+        },
         handleIconClick(ev) {
-            console.log(ev);
+            let input = this.input;
+            console.log('input: ', input);
+            this.getDatas(input, this.state, this.industry);
         },
         // 点击折叠按钮，控制列表项的下拉与收起
         changeList() {
@@ -256,9 +292,32 @@ export default {
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: ind } });
             // this.$router.push({ path: 'zprojectPoolMessage/'+ind, params: { userId: ind } });
         },
+        goJumpPref(index, data) {
+            console.log('index: ', index);
+            this.dialogVisible = true;
+            this.jumpData = data[index] || {};
+        },
         jumpPre() {
-            this.addTab('投前项目', '/home/preProject', 'preProject');
-            this.$router.push({ name: 'preProject' });
+            let _data = this.jumpData;
+            let merchantId = this.merchantId;
+            let projectId = _data.id;
+            let addProjectUserId = this.addProjectUserId;
+            transPro({
+                merchantId,
+                projectId,
+                addProjectUserId
+            }).then(resp => {
+                let data = resp.data;
+                if (!data.message) {
+                    console.log(resp);
+                    this.addTab('投前项目', '/home/preProject', 'preProject');
+                    this.$router.push({ name: 'preProject' });
+                } else {
+                    this.dialogVisible = false; // 隐藏弹框
+                }
+            }).catch(e => {
+                console.log('jumpPre exists error: ', e);
+            });
         },
         addProject() {
             this.addTab('添加项目1', '/home/addProject', 'addProject');
@@ -268,13 +327,22 @@ export default {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
         deleteRow(index, rows) {
-            rows.splice(index, 1);
+            console.log(index);
+            // rows.splice(index, 1);
         },
         changeActive(index, ind) {
-            if (ind == 1) {
+            if (ind == 1) { // 状态
+                let stateList = this.stateList;
+                let state = stateList[index].states;
+                this.state = state;
                 this.currentIndex1 = index;
-            } else {
+                this.getDatas(null, this.state, this.industry);
+            } else {        // 行业
+                let industryList = this.industryList;
+                let industry = this.industryList[index].details;
+                this.industry = industry;
                 this.currentIndex2 = index;
+                this.getDatas(null, this.state, this.industry);
             }
         }
     }

@@ -16,21 +16,6 @@
                 </Tab-pane>
                 <Tab-pane :name="2" label="代办任务">
                     <Table border :data="data2" :columns="columns2" stripe></Table>
-                    <!-- <el-table :data="tableColumns2" style="width: 100%">
-                                                                    <el-table-column prop="date" label="接受日期" align="center"></el-table-column>
-                                                                    <el-table-column prop="name" label="任务名称" width="" align="center"></el-table-column>
-                                                                    <el-table-column prop="peopele1" label="接收人" align="center"></el-table-column>
-                                                                    <el-table-column prop="peopele2" label="指派人" align="center"></el-table-column>
-                                                                    <el-table-column prop="doneDate" label="完成日期" align="center"></el-table-column>
-                                                                    <el-table-column label="操作" align="center">
-                                                                        <template scope="scope">
-                                                                            <el-button type="text" @click="handleEdit(scope.$index, scope.row,2)">
-                                                                                <span>处理</span>
-                                                                            </el-button>
-
-                                                                        </template>
-                                                                    </el-table-column>
-                                                                </el-table> -->
                     <div style="margin: 10px;overflow: hidden">
                         <div style="float: right;">
                             <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
@@ -49,56 +34,60 @@
                 </Tab-pane>
             </Tabs>
             <!-- 添加任务 btn -->
-            <el-button v-show="isAddTask" type="primary" @click="dialogFormVisibles">
+            <el-button v-show="isAddTask" type="primary" @click="addTaskBtn">
                 <span>添加任务</span>
             </el-button>
             <!-- 已办任务 diglog -->
-            <el-dialog title="已办任务" :visible.sync="dialogFormVisible1">
-                <el-form :label-position="labelPosition" :model="form1" ref="numberValidateForm">
+            <el-dialog title="添加任务" :visible.sync="dialogFormVisible1">
+                <el-form :rules="rules1" :label-position="labelPosition" :model="addTaskForm1" ref="addTaskForm1">
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="任务名称" :label-width="formLabelWidth">
-                                <el-input v-model="form1.taskName" class="el_input" auto-complete="off"></el-input>
+                            <el-form-item porp="taskName" label="任务名称" :label-width="formLabelWidth">
+                                <el-input v-model="addTaskForm1.taskName" class="el_input" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="开始时间" :label-width="formLabelWidth">
-                                <el-input v-model="form1.startDate" class="el_input" auto-complete="off"></el-input>
+                            <el-form-item porp="createDate" label="开始时间" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="addTaskForm1.createDate" class="el_input" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
 
                         <el-col :span="12">
-                            <el-form-item label="完成时间" :label-width="formLabelWidth">
-                                <el-input v-model="form1.startDate" class="el_input" auto-complete="off"></el-input>
+                            <el-form-item porp="endTime" label="完成时间" :label-width="formLabelWidth">
+                                <el-date-picker @change="getDateValue" v-model="addTaskForm1.endTime" type="datetime" auto-complete="off" placeholder="选择日期时间">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="12">
-                            <el-form-item label="接收人" :label-width="formLabelWidth">
-                                <el-input v-model="form1.peopele1" class="el_input" auto-complete="off"></el-input>
+                            <el-form-item porp="receiveUserName" label="接收人" :label-width="formLabelWidth">
+                                <el-select @change="getReceiveUserId" v-model="addTaskForm1.receiveUserName" filterable placeholder="请选择">
+                                    <el-option @click="getItem(item)" v-for="item in userOptions" :key="item.id" :label="item.name" :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="指派人" :label-width="formLabelWidth">
-                                <el-input v-model="form1.peopele1_1" class="el_input" auto-complete="off"></el-input>
+                            <el-form-item porp="seedUserName" label="指派人" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="addTaskForm1.seedUserName" class="el_input" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="任务说明" :label-width="formLabelWidth">
-                                <el-input v-model="form1.textContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
+                            <el-form-item porp="taskInfo" label="任务说明" :label-width="formLabelWidth">
+                                <el-input v-model="addTaskForm1.taskInfo" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="处理记录" :label-width="formLabelWidth">
-                                <el-input v-model="form1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
+                            <el-form-item porp="recording" label="处理记录" :label-width="formLabelWidth">
+                                <el-input v-model="addTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -106,19 +95,19 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible1 = 0">取 消</el-button>
-                    <el-button type="primary" @click="tabValue1(1)">确 定</el-button>
+                    <el-button type="primary" @click="saveForm(1,'addTaskForm1')">确 定</el-button>
                 </div>
             </el-dialog>
             <!-- 代办任务 diglog -->
             <el-dialog title="待办任务" :visible.sync="dialogFormVisible2">
                 <!-- <el-table :data="gridData">
-                                                                                                                                            <el-table-column property="date" label="接受日期" width="150"></el-table-column>
-                                                                                                                                            <el-table-column property="name" label="任务名称" width="200"></el-table-column>
-                                                                                                                                            <el-table-column property="address" label="接收人"></el-table-column>
-                                                                                                                                            <el-table-column property="address" label="指派人"></el-table-column>
-                                                                                                                                            <el-table-column property="address" label="完成日期"></el-table-column>
-                                                                                                                                            <el-table-column property="address" label=""></el-table-column>
-                                                                                                                                        </el-table> -->
+                                                                                                                                                                                                                                    <el-table-column property="date" label="接受日期" width="150"></el-table-column>
+                                                                                                                                                                                                                                    <el-table-column property="name" label="任务名称" width="200"></el-table-column>
+                                                                                                                                                                                                                                    <el-table-column property="address" label="接收人"></el-table-column>
+                                                                                                                                                                                                                                    <el-table-column property="address" label="指派人"></el-table-column>
+                                                                                                                                                                                                                                    <el-table-column property="address" label="完成日期"></el-table-column>
+                                                                                                                                                                                                                                    <el-table-column property="address" label=""></el-table-column>
+                                                                                                                                                                                                                                </el-table> -->
                 <el-form :label-position="labelPosition" :model="form1" ref="numberValidateForm">
                     <el-row :gutter="20">
                         <el-col :span="24">
@@ -130,7 +119,7 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item label="开始时间" :label-width="formLabelWidth">
-                                <el-input v-model="form1.startDate" class="el_input" auto-complete="off"></el-input>
+                                <el-input :disabled="true" v-model="form1.startDate" class="el_input" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
 
@@ -148,7 +137,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="指派人" :label-width="formLabelWidth">
-                                <el-input v-model="form1.peopele1_1" class="el_input" auto-complete="off"></el-input>
+                                <el-input :disabled="true" v-model="form1.peopele1_1" class="el_input" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -193,58 +182,55 @@
                 </div>
             </el-dialog>
             <!-- 指派任务 dialog-->
-            <el-dialog title="添加任务" :visible.sync="dialogFormVisible3" class="taskDialog_title">
-                <el-form :label-position="labelPosition" :model="form" ref="numberValidateForm">
-                    <el-row :gutter="20">
-                        <el-col :span="24">
-                            <el-form-item label="任务名称" :label-width="formLabelWidth">
-                                <el-input v-model="form.taskName" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="开始时间" :label-width="formLabelWidth">
-                                <el-input v-model="form.startDate" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
+            <!-- <el-dialog title="添加任务" :visible.sync="dialogFormVisible3" class="taskDialog_title">
+                                                                                                        <el-form :label-position="labelPosition" :model="form" ref="numberValidateForm">
+                                                                                                            <el-row :gutter="20">
+                                                                                                                <el-col :span="24">
+                                                                                                                    <el-form-item label="任务名称" :label-width="formLabelWidth">
+                                                                                                                        <el-input v-model="form.taskName" class="el_input" auto-complete="off"></el-input>
+                                                                                                                    </el-form-item>
+                                                                                                                </el-col>
+                                                                                                            </el-row>
+                                                                                                            <el-row :gutter="20">
+                                                                                                                <el-col :span="12">
+                                                                                                                    <el-form-item label="开始时间" :label-width="formLabelWidth">
+                                                                                                                        <el-input v-model="form.startDate" class="el_input" auto-complete="off"></el-input>
+                                                                                                                    </el-form-item>
+                                                                                                                </el-col>
 
-                        <el-col :span="12">
-                            <el-form-item label="完成时间" :label-width="formLabelWidth">
-                                <el-date-picker @change="getValue" format="yyyy-MM-dd HH-mm-ss" v-model="form.switchDate" type="datetime" placeholder="选择日期时间" align="right" :picker-options="pickerOptions1">
-                                </el-date-picker>
-                                <!-- <el-date-picker v-model="form.switchDate" type="datetime" placeholder="选择日期时间">
-                                                                                                                                                                                                            </el-date-picker> -->
-                                <!-- <Date-picker v-model="form.switchDate" type="datetime" placeholder="选择日期和时间" style="width: 200px"></Date-picker> -->
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="12">
-                            <el-form-item label="接收人" :label-width="formLabelWidth">
-                                <el-input v-model="form.pople1" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="指派人" :label-width="formLabelWidth">
-                                <el-input v-model="form.pople1_1" class="el_input" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="24">
-                            <el-form-item label="任务说明" :label-width="formLabelWidth">
-                                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="form.textContent">
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="tableCancle">取 消</el-button>
-                    <el-button type="primary" @click="tabValue(1)">确 定</el-button>
-                </div>
-            </el-dialog>
+                                                                                                                <el-col :span="12">
+                                                                                                                    <el-form-item label="完成时间" :label-width="formLabelWidth">
+                                                                                                                        <el-date-picker @change="getValue" format="yyyy-MM-dd HH-mm-ss" v-model="form.switchDate" type="datetime" placeholder="选择日期时间" align="right" :picker-options="pickerOptions1">
+                                                                                                                        </el-date-picker>
+                                                                                                                    </el-form-item>
+                                                                                                                </el-col>
+                                                                                                            </el-row>
+                                                                                                            <el-row :gutter="20">
+                                                                                                                <el-col :span="12">
+                                                                                                                    <el-form-item label="接收人" :label-width="formLabelWidth">
+                                                                                                                        <el-input v-model="form.pople1" class="el_input" auto-complete="off"></el-input>
+                                                                                                                    </el-form-item>
+                                                                                                                </el-col>
+                                                                                                                <el-col :span="12">
+                                                                                                                    <el-form-item label="指派人" :label-width="formLabelWidth">
+                                                                                                                        <el-input v-model="form.pople1_1" class="el_input" auto-complete="off"></el-input>
+                                                                                                                    </el-form-item>
+                                                                                                                </el-col>
+                                                                                                            </el-row>
+                                                                                                            <el-row :gutter="20">
+                                                                                                                <el-col :span="24">
+                                                                                                                    <el-form-item label="任务说明" :label-width="formLabelWidth">
+                                                                                                                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="form.textContent">
+                                                                                                                        </el-input>
+                                                                                                                    </el-form-item>
+                                                                                                                </el-col>
+                                                                                                            </el-row>
+                                                                                                        </el-form>
+                                                                                                        <div slot="footer" class="dialog-footer">
+                                                                                                            <el-button @click="tableCancle">取 消</el-button>
+                                                                                                            <el-button type="primary" @click="tabValue(1)">确 定</el-button>
+                                                                                                        </div>
+                                                                                                    </el-dialog> -->
             <div>
             </div>
         </div>
@@ -326,18 +312,20 @@ export default {
         userId(state) {
             // alert(111);
             this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
-            // console.log(this.$store.state.login.merchants[0].id);
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
             // console.log(this.$store.state.login.userInfor.id);
+            // console.log(JSON.parse(sessionStorage.getItem('merchants'))[0].id);
             return this.$store.state.login.userInfor.id;
         },
     },
     created() {
-        this.getTaskList(1);
+        this.getTaskList1(1);
     },
 
     data() {
         return {
-            isAddTask:true,
+            value8: '',
+            isAddTask: true,
             taskState: {//任务状态
                 start1: '未完成',
                 start2: '已完成',
@@ -345,17 +333,51 @@ export default {
             // radio: '1',
             value1: '',//完成时间的值
             labelPosition: "left",
-            dialogFormVisible1: false,
+            dialogFormVisible1: false, //添加指派任务Diglog
             dialogFormVisible2: false,
             dialogFormVisible3: false,
             formLabelWidth: '68px',
-            form: {
+            userOptions: [], //企业用户列表
+            addTaskForm1: { //添加任务表单
+                createDate: '', //指派时间
                 taskName: '', //任务名称
-                startDate: '', //开始时间
-                switchDate: '', //完成时间
-                pople1: '', //接收人
-                pople1_1: '', //指派人
-                textContent: '' //任务说明
+                receiveUserName: '', //接收人
+                seedUserName: this.$store.state.login.userInfor.name, //指派人
+                endTime: '', //完成时间
+                taskState: '', //任务状态
+                taskInfo: '', //任务说明
+                recording: '',
+                receiveUserId: '' //处理记录
+            },
+            rules1: {
+                taskName: [
+                    { required: true, message: '请输入任务名称', trigger: 'blur' },
+                    { min: 1, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
+                ],
+                createDate: [
+                    { required: true, message: '请输入开始时间', trigger: 'blur' },
+                    // { min: 1, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+                ],
+                endTime: [
+                    { required: true, message: '请输入完成时间', trigger: 'blur' },
+                    // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+                ],
+                receiveUserName: [
+                    { required: true, message: '请输入接收人', trigger: 'blur' },
+                    // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+                ],
+                seedUserName: [
+                    { required: true, message: '请输入指派人', trigger: 'blur' },
+                    // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+                ],
+                textContent: [
+                    { required: true, message: '请输入任务说明', trigger: 'blur' },
+                    { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
+                ],
+                recording: [
+                    { required: true, message: '请输入处理记录', trigger: 'blur' },
+                    { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
+                ],
             },
             form1: {
                 radio: '1', //任务进展
@@ -411,16 +433,7 @@ export default {
                     }
                 }]
             },
-            data1: [
-                {
-                    createDate: '',
-                    taskName: '',
-                    receiveUserName: '',
-                    seedUserName: '',
-                    endTime: '',
-                    taskState: '',
-                },
-            ],
+            data1: [],
             columns1: [
                 {
                     title: '指派时间',
@@ -469,7 +482,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.showTask1(params.index)
                                     }
                                 }
                             }, '查看'),
@@ -480,7 +493,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.index)
+                                        this.removeTask1(params.index)
                                     }
                                 }
                             }, '删除')
@@ -488,15 +501,7 @@ export default {
                     }
                 }
             ],
-             data2: [
-                {
-                    createDate: '',
-                    taskName: '',
-                    receiveUserName: '',
-                    seedUserName: '',
-                    endTime: '',
-                },
-            ],
+            data2: [],
             columns2: [
                 {
                     title: '接收日期',
@@ -549,15 +554,7 @@ export default {
                     }
                 }
             ],
-            data3: [
-                {
-                    createDate: '',
-                    taskName: '',
-                    receiveUserName: '',
-                    seedUserName: '',
-                    endTime: '',
-                },
-            ],
+            data3: [],
             columns3: [
                 {
                     title: '接收日期',
@@ -601,7 +598,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.show(params.index)
+                                        this.showTask3(params.index)
                                     }
                                 }
                             }, '查看'),
@@ -612,7 +609,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.remove(params.index)
+                                        this.removeTask3(params.index)
                                     }
                                 }
                             }, '删除')
@@ -622,53 +619,52 @@ export default {
             ],
         }
     },
-    beforeCreate() {
-    },
     methods: {
-        show(index) {
+        showTask1(index) {
             this.$Modal.info({
                 title: '任务详情',
                 content: `${this.data1[index].taskInfo}`
             })
         },
-        remove(index) {
+        removeTask1(index) {
             this.data1.splice(index, 1);
         },
-        show(index) {
+        showTask3(index) {
             this.$Modal.info({
                 title: '任务详情',
                 content: `${this.data3[index].taskInfo}`
             })
         },
-        remove(index) {
+        removeTask3(index) {
             this.data3.splice(index, 1);
         },
         tableCancle() { //关闭dialog fun
+            alert(1);
             this.dialogFormVisible2 = false;
             this.dialogFormVisible3 = false;
             this.resetFields()
         },
-        tabValue1(val) { //确定 fun
-            // let name = this.form.taskName;
-            console.log(val);
+        checkformVal(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    alert('submit!');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        saveForm(val, formName) { //确定 fun
+            // this.checkformVal(formName);
             if (val == 1) { //添加任务
-                this.data1.push({
-                    taskName1: this.form.taskName,
-                    // taskNames: name,
-                    startDate1: this.form.startDate,
-                    pople1: this.form.pople1,
-                    switchDate1: this.value1,
-                    taskState1: this.taskState.start1,
-                    pople1_1: this.form.pople1_1
-                });
+                console.log(this.addTaskForm1);
+                this.sendTaskData1();//发送添加任务数据
+                // this.getTaskList1(1);
                 this.dialogFormVisible1 = false;
+                this.addTaskForm1 = {};
             } if (val == 2) { //代办任务
                 this.dialogFormVisible2 = false;
             }
-            this.resetFields();
-        },
-        changePage() { //分页方法
-
         },
         getDate() {//封装获取当前系统时间的方法
             // this.dialogFormVisible = true;
@@ -688,24 +684,51 @@ export default {
                 + seperator2 + date.getSeconds();
             return currentdate;
         },
-        resetFields() { //重置表单数据
-            this.form.taskName = '';
-            this.form.startDate = '';
-            this.form.pople1 = '';
-            this.form.switchDate = '';
-            this.form.taskState = '';
-            this.form.pople1_1 = '';
-            this.form.textContent1 = ''
-        },
-        dialogFormVisibles() { //添加任务
-            this.form.taskName == '';
+        addTaskBtn() { //添加任务
+            this.getUserList();
+            // this.getReceiveUserId();
+            let new_addTaskForm1 = {
+                createDate: '', //指派时间
+                taskName: '', //任务名称
+                receiveUserName: '', //接收人
+                seedUserName: this.$store.state.login.userInfor.name, //指派人
+                endTime: '', //完成时间
+                taskState: '', //任务状态
+                textContent: '', //任务说明
+                recording: '', //处理记录
+                receiveUserId: ''
+            };
+            this.addTaskForm1 = new_addTaskForm1;
             this.dialogFormVisible1 = true;
             let startDate = this.getDate();//获取当前系统时间
-            this.form.startDate = startDate;
+            this.addTaskForm1.createDate = startDate;
         },
-        getValue(val) { //获取完成时间的值
+
+        getReceiveUserId(val) {
             // console.log(val);
-            this.value1 = val;
+            // console.log(val);
+            this.addTaskForm1.receiveUserId = val;
+            return val;
+        },
+        getDateValue(val) { //获取完成时间的值
+            // console.log(val);
+            this.addTaskForm1.endTime = val;
+            return val;
+        },
+        getUserList() { //获取用户列表
+            this.$http.post('/api/user/queryUserList', {
+                merchantId: this.$store.state.login.merchants[0].id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res);
+                        this.userOptions = res.data.result;
+                        return;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
         handleEdit(index, data, num) { //获取当前行数据
             if (num == 2) { //is 代办任务 dialog
@@ -713,47 +736,58 @@ export default {
             } if (num == 3) { //is 已办任务 dialog
                 this.dialogFormVisible3 = true;
             }
-            // console.log(index);
-            // console.log(data);
-            this.form1.taskName = data.name;
-            this.form1.startDate = data.date;
-            this.form1.switchDate = data.doneDate;
-            this.form1.peopele1 = data.peopele1;
-            this.form1.peopele1_1 = data.peopele2;
-            this.form1.textContent = data; //任务说明
-            this.form1.recording = data; //处理记录
+        },
+        /*******发送添加任务数据 Start************/
+        sendTaskData1() {
+            console.log(this.addTaskForm1);
+            this.$http.post('/api/work/addTask', {
+                "taskName": this.addTaskForm1.taskName,
+                "startTime": this.addTaskForm1.createDate,
+                "endTime": this.addTaskForm1.endTime,
+                "seedUserId": this.userId,
+                "receiveUserId": this.addTaskForm1.receiveUserName,
+                "merchantId": this.$store.state.login.merchants[0].id,
+                "taskInfo": this.addTaskForm1.taskInfo,
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data);
+                        this.getTaskList1(1);
+                    } else if (res.status == '403') {
+                        alert(res.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
 
-        },
-        changeTabs(val) {
-            // alert(val);
-            this.getTaskList(val);
-        },
+        /*******发送添加任务数据 End************/
         handleCurrentChange1(pages) { //获取tabList1 分页数据
-            console.log(pages);
+            // console.log(pages);
             this.getTaskList1(pages);
         },
         handleCurrentChange2(pages) { //获取tabList2 分页数据
-            console.log(pages);
+            // console.log(pages);
             this.getTaskList2(pages);
         },
         handleCurrentChange3(pages) { //获取tabList3 分页数据
-            console.log(pages);
+            // console.log(pages);
             this.getTaskList3(pages);
         },
         getTaskList(tabs) {
-            // alert(tabs);
             if (tabs == '1') {
                 this.isAddTask = true;
-                this.getTaskList1();
+                this.getTaskList1(tabs);
             } else if (tabs == '2') {
                 this.isAddTask = false;
-                this.getTaskList2();
+                this.getTaskList2(tabs);
             } else if (tabs == '3') {
                 this.isAddTask = false;
-                this.getTaskList3();
+                this.getTaskList3(tabs);
             }
         },
-        getTaskList1(pages) {
+        getTaskList1(pages) { //获取指派任务列表数据
             this.$http.post('/api/work/getTaskList', {
                 "userId": this.userId,
                 "type": 1,
@@ -764,12 +798,19 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data.result);
+                        res.data.result.list.forEach(function(item,index) {
+                            if (item.taskState == '0'){
+                                item.taskState = '处理中';
+                            }else{
+                                item.taskState = '已完成';
+                            }
+                        }, this);
                         this.data1 = res.data.result.list; //任务数据列表
                         this.page1.pageNum = res.data.result.pageNum; //当前页码 
                         this.page1.total = res.data.result.total; //数据总数 
                         this.page1.pageSize = res.data.result.pageSize; //每页条数 
                         this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
-                        if (res.data.status == '49999') {
+                        if (res.data.status == '49999') { //数据为空
                             console.log(res.data.message);
                         }
                     } else if (res.status == '403') {
@@ -780,7 +821,7 @@ export default {
                     console.log(error);
                 })
         },
-        getTaskList2(pages) {
+        getTaskList2(pages) { //获取代办任务列表数据
             this.$http.post('/api/work/getTaskList', {
                 "userId": this.userId,
                 "type": 2,
@@ -807,7 +848,7 @@ export default {
                     console.log(error);
                 })
         },
-        getTaskList3(pages) {
+        getTaskList3(pages) { //获取已办任务列表数据
             this.$http.post('/api/work/getTaskList', {
                 "userId": this.userId,
                 "type": 3,
