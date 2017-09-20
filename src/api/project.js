@@ -52,7 +52,7 @@ export function getProDetail(id) {
 
 // 添加项目池
 export function addPro(params = {}) {
-	let { projectInfo, enterpriseInfo } = params;
+	let { projectInfo, enterpriseInfo, merchantId } = params;
 	/*
 	let { 
 		projectName, //项目名: "2",
@@ -65,17 +65,23 @@ export function addPro(params = {}) {
         departmentId //业务部门ID: null
     } = ( projectInfo || {} )
     let {
-    	projectName, //项目名: "2",
-        projectShortName, //项目简称: "3",
-        addressId, //项目所在地: "321",
-        createPersonId, //项目创建人: "ooo",
-        projectTypeId, //项目类型ID: null,
-        industryId, //行业ID: null,
-        projectFromId, //项目来源: null,
-        departmentId //业务部门ID: null
+    	"page": 1,
+        "pageSize": 10,
+        "projectId"//基本信息ID: "1",
+        "enterpriseName"//企业名称: "5555",
+        "legalPerson"//法人: "CESHI",
+        "registeredCapital"注册资本: null,
+        "paiclCapital"//实收资本: null,
+        "registerDate"//注册登记时间 : null,
+        "creditCode"//统一信用代码: null,
+        "registerAddress"//注册地址: null,
+        "workAddress"//办公地址: null,
+        "mainBusiness"//主营业务: null,
+        "remark"//备注: null
     } = ( enterpriseInfo || {} )
 	*/
 	const data = {
+		merchantId,
 		projectInfo,
 		enterpriseInfo
 	}

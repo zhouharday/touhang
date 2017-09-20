@@ -222,16 +222,31 @@ export default {
         // 上传 企业LOGO
         this.uploadList = this.$refs.upload.fileList;
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.initInfo();
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+        },
         submitForm(formName) {
             let basicForm = this.basicForm;
             let companyForm = this.companyForm;
+            basicForm = this.changeBasicForm(basicForm);
+            companyForm = this.changeCompanyForm(companyForm);
             // console.log('basicForm: ', basicForm, companyForm);
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     if (store.isSubmit) return;
                     store.isSubmit = true;
                     addPro({
+                        merchantId: this.addProjectUserId,
                         projectInfo: basicForm,
                         enterpriseInfo: companyForm  
                     }).then(resp => {
@@ -249,6 +264,38 @@ export default {
             });
             // this.addTab('项目池', '/home/projectPool', 'projectPool');
             // this.$router.push({ name: 'projectPool' });
+        },
+        changeBasicForm(basicForm) {
+            let obj = {
+                projectName: basicForm.projectName,
+                projectShortName: basicForm.shortName,
+                addressId: basicForm.location,
+                createPersonId: basicForm.manager, // 此处应为项目负责人，而非创建者
+                projectTypeId: basicForm.projectSort,
+                industryId: basicForm.industry,
+                projectFromId: basicForm.origin,
+                departmentId: basicForm.department
+            }
+            return obj;
+        },
+        changeCompanyForm(companyForm) {
+            let obj = {
+                page: 1,
+                pageSize: 10,
+                projectId: '',
+                enterpriseName: companyForm.companyName,
+                legalPerson: companyForm.delegate,
+                registeredCapital: companyForm.regCapital,
+                paiclCapital: companyForm.paidCapital,
+                registerDate: companyForm.regDatetime,
+                creditCode: companyForm.creditCode,
+                registerAddress: companyForm.regAddress,
+                workAddress: companyForm.workingSite,
+                mainBusiness: companyForm.service,
+                remark: companyForm.remark,
+                logo: companyForm.logo
+            }
+            return obj;
         },
         cancleForm() {
             this.isShow = true;

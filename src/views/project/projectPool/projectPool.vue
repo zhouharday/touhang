@@ -243,7 +243,7 @@ export default {
             if (projectType) params.projectType = projectType;
             if (industryId) params.industryId = industryId;
             getPros(params).then(resp => {
-                let data = resp.data;
+                let data = resp.data.listMapProjectInfo.list;
                 data = this.handleDatas(data);
                 this.tableData = data;
             })
@@ -255,6 +255,7 @@ export default {
          */
         handleDatas(data = []) {
             data.forEach(item => {
+                // console.log('item: ', JSON.stringify(item));
                 item.project = item.project_name;
                 item.mananger = item.project_leader_id;
                 item.industry = item.industry_id;
