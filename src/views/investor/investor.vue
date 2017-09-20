@@ -36,85 +36,7 @@
     </el-pagination>
     <!-- 添加投资者 -->
     <el-dialog title="新增投资者" :visible.sync="modelInvestor" :close-on-click-modal="false">
-        <el-form :model="addInvestor" label-position="left">
-            <el-row :gutter="10">
-                <el-col :span="12">
-                    <el-form-item label="投资者名称" :label-width="formLabelWidth">
-                        <el-input v-model="addInvestor.investorName" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="投资者类型" :label-width="formLabelWidth" width="100">
-                        <el-select v-model="addInvestor.investorTypeId" style="width:100%">
-                            <el-option v-for="(item, index) of typeInvestor" :key="item.id" :label="item.dicName" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="证件类型" :label-width="formLabelWidth">
-                        <el-select v-model="addInvestor.certificateTypeId" style="width:100%">
-                            <el-option v-for="(item, index) of typeId" :key="item.id" :label="item.dicName" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="证件号码" :label-width="formLabelWidth">
-                        <el-input v-model="addInvestor.certificateNum" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="机构净资产 (元)" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.organizationProperty" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="年收入 (元)" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.personalAssets">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="所属区域" :label-width="formLabelWidth">
-                        <el-select v-model="addInvestor.regionName" style="width:100%">
-                            <el-option v-for="(item, index) of area" :key="item.id" :label="item.dicName" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="投资经理" :label-width="formLabelWidth">
-                        <el-select v-model="addInvestor.investmentManagerId" style="width:100%">
-                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系人" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.contacts" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系电话" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.contactNumber">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="地址" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.address" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="备注" :label-width="formLabelWidth">
-                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="addInvestor.remark">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
+        <investor-form :investorForm="addInvestor"></investor-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalIncome = false">取 消</el-button>
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
@@ -124,10 +46,16 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {mapMutations,mapGetters} from 'vuex'
+import {
+    mapMutations,
+    mapGetters
+} from 'vuex'
+import investorForm from 'components/investorForm'
 import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
-import {addInvestor} from 'api/investor'
+import {
+    addInvestor
+} from 'api/investor'
 export default {
     data() {
         return {
@@ -144,10 +72,6 @@ export default {
             },
             investorData: [],
             modelInvestor: false,
-            formLabelWidth: '120px',
-            addInvestor: {},
-            typeInvestor: [],
-            typeId: [],
             addInvestor: {
                 investorName: '',
                 investorTypeId: '',
@@ -164,31 +88,23 @@ export default {
                 merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
                 address: '',
                 remark: ''
-            },
-            investmentManager: [{
-                dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
-                id: JSON.parse(sessionStorage.getItem('userInfor')).id
-            }],
-            area: []
+            }
         }
     },
     methods: {
         handleRouter(index, rowList) {
-            this.$store.dispatch('getInvDetails', rowList).then(() => {
-                this.$router.push({
-                    name: 'investorDetails',
-                    params: {
-                        id: rowList.id
-                    }
-                })
-                this.addTab({
-                    type: 'addTab',
-                    title: rowList.investorName + '详情页',
-                    url: '/home/investorDetails/' + rowList.id,
-                    name: 'investorDetails/' + rowList.id
-                })
-            }).catch(err => {
-                this.$router.push('/home/investor')
+            let self = this
+            self.addTab({
+                type: 'addTab',
+                title: rowList.investorName + '详情页',
+                url: '/home/investorDetails/' + rowList.id,
+                name: 'investorDetails/' + rowList.id
+            })
+            self.$router.push({
+                name: 'investorDetails',
+                params: {
+                    userId: rowList.id
+                }
             })
         },
         showModel() {
@@ -212,28 +128,17 @@ export default {
         this.$store.dispatch('getProType').then(() => {
             this.chooseInfo[0].details = this.projectType
         })
-        this.$store.dispatch('getInvType').then(() => {
-            this.typeInvestor = this.investorType
-        })
-        this.$store.dispatch('getId').then(() => {
-            this.typeId = this.idType
-        })
-        this.$store.dispatch('getArea').then(() => {
-            this.area = this.subArea
-        })
     },
     computed: {
         ...mapGetters([
             'investorList',
-            'projectType',
-            'investorType',
-            'idType',
-            'subArea'
+            'projectType'
         ])
     },
     components: {
         myFilter,
-        tableHeader
+        tableHeader,
+        investorForm
     }
 }
 </script>

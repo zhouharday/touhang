@@ -123,6 +123,17 @@ export default {
     },
     methods: {
         init() {
+            this.initInfo();
+            this.getData();
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            console.log('info: ', info);
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+        },
+        getData() {
             getFinances()
             .then(resp => {
                 console.log('resp: ', resp);
@@ -156,10 +167,13 @@ export default {
                     let capitalForm = this.capitalForm;
                     capitalForm.date = changeDate(capitalForm.date);
                     addFinance({
+                        enterpriseId: '',
                         projectTurnId: capitalForm.round,
                         financingWayId: capitalForm.way,
                         financingMoney: capitalForm.capital,
-                        financingDate: capitalForm.date
+                        financingDate: capitalForm.date,
+                        versionRecord: new Date().getTime(),
+                        merchantId: this.merchantId
                     }).then(resp => {
                         this.capitalData.push(capitalForm);
                         this.modalAdd = !this.modalAdd;
