@@ -85,7 +85,7 @@ export default {
     },
     created() {
         getAllOrgList().then((res) => {
-            if(response.data.status == '200') {
+            if(res.data.status == '200') {
                 console.log(res)
             }
         })
@@ -95,7 +95,7 @@ export default {
             }
         })
         updateOrg(this.cooperativeInfo.id).then((res) => {
-            if(response.data.status == '200') {
+            if(res.data.status == '200') {
                 console.log(res)
             }
         })
