@@ -2,7 +2,7 @@
 <div class="baseInfo">
     <tableHeader :theme="theme" :data="dataTitle"></tableHeader>
     <div class="form_wrapper">
-        <investorForm :investorForm="baseInfo"></investorForm>
+        <investor-form :investorForm="baseInfo"></investor-form>
     </div>
 </div>
 </template>
