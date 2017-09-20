@@ -73,7 +73,7 @@ export default {
     },
     methods: {
         getSummaries(param) {
-            console.log(param)
+            // console.log(param)
         },
         showDetailed() {
             this.addDetailed = true

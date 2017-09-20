@@ -93,19 +93,15 @@ export default {
     },
     methods: {
         handleRouter(index, rowList) {
-            let self = this
-            self.addTab({
-                type: 'addTab',
-                title: rowList.investorName + '详情页',
-                url: '/home/investorDetails/' + rowList.id,
-                name: 'investorDetails/' + rowList.id
-            })
-            self.$router.push({
-                name: 'investorDetails',
-                params: {
-                    userId: rowList.id
-                }
-            })
+            console.log(rowList.id)
+            // this.addTab({
+            //     type: 'addTab',
+            //     title: rowList.investorName + '详情页',
+            //     url: '/home/investorDetails/' + rowList.id,
+            //     name: 'investorDetails/' + rowList.id
+            // });
+            this.$router.push({ name: 'investorDetails', params: { userId: rowList.id }})
+            // this.$router.push('/home/investorDetails/:' + rowList.id)
         },
         showModel() {
             this.modelInvestor = true

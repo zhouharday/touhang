@@ -7,7 +7,13 @@
             </div>
             <div class="roleContent">
                 <el-table :data="roleInfo" border style="width: 100%">
-                    <el-table-column label="角色名称" prop="role" width="160"></el-table-column>
+                    <el-table-column label="角色名称" prop="role" width="160">
+                        <template scope="scope">
+                           <el-button size="small" @click="handleRole(scope.$index, scope.row)">
+                               {{scope.row.role}}
+                           </el-button>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
                            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
@@ -41,7 +47,7 @@ import roleUser from "./roleUser"
 export default {
     created(){
         // this.$http.post('api/formset/queryInfo',{
-            
+
         // })
         // .then( res => {
         //     let data = res.data;
