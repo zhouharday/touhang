@@ -190,12 +190,6 @@ ul li {
     th.el-table_1_column_1 .cell {
         margin-left: 50px;
     }
-    td.el-table_1_column_2 .cell,
-    td.el-table_1_column_3 .cell,
-    td.el-table_1_column_4 .cell,
-    td.el-table_1_column_5 .cell {
-        font-weight: bold;   
-    }
     .el-table .info-row {
         background: #fff;
     }
@@ -235,14 +229,22 @@ ul li {
         height: 30px;
         border-radius: 15px;    
     }
+    // row-table的css style
     .el-table th {
         background-color: #2A3142;  
     }
     .el-table__footer-wrapper thead div,
     .el-table__header-wrapper thead div {
-        color: white;
+        color: #fff;
         font-weight: normal;
         background-color: #2A3142;
+    }
+    .el-table .cell {
+        padding-left: 0;
+        padding-right: 0;  
+    }
+    th.el-table_1_column_1 .cell {
+        margin-left: 50px;
     }
     .el-table .info-row {
         background: #fff;

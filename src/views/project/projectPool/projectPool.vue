@@ -50,19 +50,43 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
+
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
-                    <el-table-column label="项目名称" align="center">
+                    <el-table-column label="项目" min-width="100">
                         <template scope="scope">
-                            <a class="project" @click="ShowPoolMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
+                            <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
+                            <div>{{ scope.row.project }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="mananger" label="项目创建人" align="center">
+                    <el-table-column label="行业" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.industry }}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="industry" label="所属行业" align="center">
+                    <el-table-column label="轮次" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.round }}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="sort" label="项目类型" align="center">
+                    <el-table-column label="所在地" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.location }}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="stage" label="项目阶段" align="center">
+                    <el-table-column label="项目状态" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.state }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="创建人" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.manager }}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="成立时间" align="center">
+                        <template scope="scope">
+                            <div class="fow">{{ scope.row.datetime }}</div>
+                        </template>
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
                         <template scope="scope">
@@ -147,68 +171,48 @@ export default {
             ],
             tableData: [
                 {
-                    project: '京东',
-                    mananger: '刘经理',
-                    industry: '房地产',
-                    sort: 'PE',
-                    stage: '立项会',
+                    theme: '鹿战',
+                    project: '体育赛事即时竞猜平台',
+                    industry: '体育',
+                    round: 'Pre-A轮',
+                    location: '广东省',
+                    state: '正常',
+                    manager: '刘经理',
+                    datetime: '2015/01/16',
                     id: 0
                 },
                 {
-                    project: '一号店',
-                    mananger: '王经理',
-                    industry: '旅游',
-                    sort: 'VE',
-                    stage: '管理',
+                    theme: 'Digital Asset',
+                    project: '美国结算和分类式账本服务商',
+                    industry: '金融',
+                    round: 'B+轮',
+                    location: '海外',
+                    state: '正常',
+                    manager: '王经理',
+                    datetime: '2016/04/21',
                     id: 1
                 },
                 {
-                    project: '飞志',
-                    mananger: '张经理',
-                    industry: '外汇',
-                    sort: 'PE',
-                    stage: '投决会',
+                    theme: '小六汤包',
+                    project: '中式餐应连锁品牌',
+                    industry: '生活消费',
+                    round: 'Pre-A轮',
+                    location: '陕西省',
+                    state: '观察',
+                    manager: '季经理',
+                    datetime: '2017/02/13',
                     id: 2
                 },
                 {
-                    project: '博奥',
-                    mananger: '刘经理',
-                    industry: '基金',
-                    sort: 'PE',
-                    stage: '尽职调查',
+                    theme: '智慧熊',
+                    project: '双语学前教育连锁机构',
+                    industry: '教育',
+                    round: 'A轮',
+                    location: '山东省',
+                    state: '观察',
+                    manager: '付经理',
+                    datetime: '2014/06/26',
                     id: 3
-                },
-                {
-                    project: '起亚',
-                    mananger: '刘经理',
-                    industry: '房地产',
-                    sort: '定增',
-                    stage: '考察储备',
-                    id: 4
-                },
-                {
-                    project: '中国石油',
-                    mananger: '王经理',
-                    industry: '石油',
-                    sort: 'VE',
-                    stage: '项目退出',
-                    id: 5
-                },
-                {
-                    project: '欧利',
-                    mananger: '张经理',
-                    industry: '外汇',
-                    sort: '定增',
-                    stage: '投决会',
-                    id: 6
-                },
-                {
-                    project: '上上墅',
-                    mananger: '张经理',
-                    industry: '房地产',
-                    sort: '定增',
-                    stage: '尽职调查',
-                    id: 7
                 }
             ]
         }
@@ -230,7 +234,7 @@ export default {
         getDatas(projectName, projectType, industryId) {
             if (projectType == '全部') projectName = '';
             if (industryId == '全部') industryId = '';
-            
+
             let params = {
                 merchantId: this.merchantId
             };
@@ -452,6 +456,17 @@ export default {
         }
     }
 }
+
+.theme {
+    font-size: 16px;
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
+}
+
+.fow {
+    font-weight: bold;
+}
+
 
 .project {
     color: #F05E5E;

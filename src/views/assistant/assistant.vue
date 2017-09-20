@@ -242,6 +242,10 @@
     border-bottom: 1px solid #F05E5E;
 }
 
+.fow {
+    font-weight: bold;
+}
+
 .back {
     background: #fff;
 }
