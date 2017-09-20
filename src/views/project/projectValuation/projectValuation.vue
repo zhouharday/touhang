@@ -25,30 +25,18 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item">
                     <el-table-column prop="project" label="项目名称" align="center">
                     </el-table-column>
-                    <el-table-column prop="valuationParameter" label="估值参数" align="center" width="250px">
+                    <el-table-column prop="valuationParameter" label="估值参数" align="center" width="450px">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.valuationParameter }}</span>
+                            <span v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
                             <span v-if="scope.row.editFlag" class="cell-edit-input">
                                 <el-row width="100%">
-                                    <el-col style="50px">
-                                        <el-input v-model="scope.row.parameter1" auto-complete="off"></el-input>
+                                    <el-col style="line-height:47px">
+                                        <el-input v-model="scope.row.parameter1" auto-complete="off" style="width:50px;height:47px"></el-input>
                                         *PB
-                                        <el-input v-model="scope.row.parameter2" auto-complete="off"></el-input>
+                                        <el-input v-model="scope.row.parameter2" auto-complete="off" style="width:50px;height:47px"></el-input>
                                         *股权占比
-                                        <el-input v-model="scope.row.parameter3" disabled auto-complete="off"></el-input>
+                                        <el-input v-model="scope.row.parameter3" disabled auto-complete="off" style="width:50px;height:47px"></el-input>
                                     </el-col>
-
-                                    <!-- <el-col :span="1">
-                                                <el-input v-model="scope.row.parameter1" auto-complete="off"></el-input>
-                                            </el-col>
-                                            <el-col :span="1"> 
-                                                *PB
-                                                <el-input v-model="scope.row.parameter2" auto-complete="off"></el-input>
-                                            </el-col>
-                                            <el-col :span="1">
-                                                *股权占比
-                                                <el-input v-model="scope.row.parameter3" disabled auto-complete="off"></el-input>
-                                            </el-col> -->
                                 </el-row>
                             </span>
                         </template>
@@ -224,10 +212,9 @@ export default {
             tableData: [
                 {
                     project: 'AAAAAAAA',
-                    valuationParameter: '500*450*3.5',
-                    parameter1: '',
-                    parameter2: '',
-                    parameter3: '',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
                     valuation: '',
                     valuationDate: '',
                     valuationOfficer: '',
@@ -236,10 +223,9 @@ export default {
                 },
                 {
                     project: 'AAAAAAAA',
-                    valuationParameter: '500*450*3.5',
-                    parameter1: '',
-                    parameter2: '',
-                    parameter3: '',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.4',
                     valuation: '',
                     valuationDate: '',
                     valuationOfficer: '',

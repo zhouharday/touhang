@@ -40,7 +40,11 @@
           <div class="item" v-for="(item, index) in module" :key="item.index">
             <span class="count">{{item.count}}</span>
             <p class="desc">{{item.desc}}</p>
-            <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+            <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}"
+                       @click="applyModal= true">
+              {{item.info}}
+            </el-button>
+            <!-- <span class="state" :class="{complete:item.state === true}">{{item.info}}</span> -->
           </div>
         </div>
       </div>
@@ -79,6 +83,56 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <!-- 发起申请 对话框-->
+    <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
+      <el-form :model="applyForm" ref="applyForm" label-width="100px">
+        <el-row>
+          <el-col>
+            <el-form-item label="标题" prop="name">
+              <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="申请人" prop="person">
+              <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="申请日期" prop="date">
+              <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item label="备注">
+              <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item label="考察报告">
+              <!-- action 上传的地址，必填 -->
+              <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                <div style="padding: 20px 0">
+                  <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                  <p>点击或将文件拖拽到这里上传</p>
+                </div>
+              </Upload>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item label="选择审批人" prop="date">
+              <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                <el-option v-for="item in applyForm.options" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer" style="text-align:left">
+        <el-button @click="applyModal= false">提交</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -100,6 +154,7 @@ import outingForm from './outing'
 export default {
   data() {
     return {
+      applyModal: false,
       title: '双子金服投资项目',
       step_first: '考察储备',
       step_second: '立项会',
@@ -112,17 +167,17 @@ export default {
       module: [{
         count: 1,
         desc: '上传项目考察报告',
-        state: true,
-        info: '已完成'
+        state: false,
+        info: '立即上传'
       }, {
         count: 2,
         desc: '进行保密协议申请',
-        state: true,
-        info: '已发起申请'
+        state: false,
+        info: '发起申请'
       }, {
         count: 3,
         desc: '您的保密协议正在申请中',
-        state: false,
+        state: true,
         info: '查看进度'
       }],
       basicForm: {
@@ -140,6 +195,24 @@ export default {
       industryForm: {
         baseInfo: '工商信息',
         flag: true
+      },
+      applyForm: {
+        title: '',
+        person: '',
+        date: '',
+        notes: '',
+        appendix: '',
+        auditor: '',
+        options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }]
       }
     }
   },
@@ -163,10 +236,8 @@ export default {
     riskTable,
     manageTable,
     outingForm
-
   }
 }
-
 </script>
 
 
@@ -320,8 +391,7 @@ export default {
         .count,
         .desc,
         .state {
-          float: left;
-          line-height: 36px;
+          float: left; // line-height: 36px;
         }
         .count {
           width: 20px;
