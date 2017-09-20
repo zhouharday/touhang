@@ -150,7 +150,7 @@ const r3 = [
         name: 'investor',
         component: investor, // 投资者管理 我的投资者
     }, {
-        path: 'investorDetails/:id',
+        path: 'investorDetails/:userId',
         name: 'investorDetails',
         component: investorDetails
     }, {
