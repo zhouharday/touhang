@@ -54,8 +54,12 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
+                            <!-- 
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
-                            <div>{{ scope.row.project }}</div>
+                            -->
+                            <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">
+                                <div>{{ scope.row.project }}</div>
+                            </a>
                         </template>
                     </el-table-column>
                     <el-table-column label="行业" align="center">
@@ -93,7 +97,7 @@
                             <el-button type="text" size="small" @click="goJumpPref(scope.$index, tableData)">
                                 转投资
                             </el-button>
-                            <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)">
+                            <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index, tableData)" v-show="scope.row.isCanDelete">
                                 删除
                             </el-button>
                             <!-- 确认转项目池 dialog -->
@@ -121,7 +125,7 @@
 </template>
 
 <script>
-import { getPros, transPro } from 'api/project';
+import { getPros, transPro, delPro } from 'api/project';
 export default {
     name: 'projectPool',
     data() {
@@ -255,12 +259,16 @@ export default {
          */
         handleDatas(data = []) {
             data.forEach(item => {
-                // console.log('item: ', JSON.stringify(item));
                 item.project = item.project_name;
-                item.mananger = item.project_leader_id;
+                item.manager = item.createPerson;
                 item.industry = item.industry_id;
                 item.sort = item.project_type;
-                item.stage = item.project_status;
+                item.round = item.project_turn_id;
+                item.state = item.project_status;
+                item.datetime = item.create_date;
+                item.location = item.address_id;
+                item.theme = 'e';
+                item.isCanDelete = item.project_type === '4';
             });
             return data;
         },
@@ -329,9 +337,18 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        deleteRow(index, rows) {
-            console.log(index);
-            // rows.splice(index, 1);
+        deleteRow(index, tableData) {
+            let row = tableData[index];
+            let id = row.id;
+            let projectType = row.project_type;
+            delPro(id, projectType).then(resp => {
+                let data = resp.data;
+                if (!data.message) {
+                    rows.splice(index, 1);
+                }
+            }).catch(e => {
+                console.log('deleteRow exists error: ', e);
+            });
         },
         changeActive(index, ind) {
             if (ind == 1) { // 状态

@@ -246,7 +246,7 @@ export default {
                     if (store.isSubmit) return;
                     store.isSubmit = true;
                     addPro({
-                        merchantId: this.addProjectUserId,
+                        merchantId: this.merchantId,
                         projectInfo: basicForm,
                         enterpriseInfo: companyForm  
                     }).then(resp => {
