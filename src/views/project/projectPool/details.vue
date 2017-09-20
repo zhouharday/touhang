@@ -105,7 +105,7 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
 import tabelHeader from 'components/tabelHeader'
 export default {
     props: {

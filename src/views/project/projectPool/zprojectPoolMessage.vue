@@ -42,13 +42,16 @@
         </div>
     </div>
 </template>
-<script type="text/ecmascript-6">
+<script>
 import detailForm from './details'
 import tableForm from './tables'
 import industryForm from './industry'
 import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
+
+import { getProDetail } from 'api/project';
+
 export default {
     data() {
         return {
@@ -77,9 +80,33 @@ export default {
         capitalTable,
         recordForm,
         fileTable
-
+    },
+    created() {
+        this.init();
     },
     methods: {
+        init() {
+            this.initParams();
+            this.getPoolDetail();
+        },
+        initParams() {
+            let href = window.location.href;
+            let projectPoolId = href.substr(href.lastIndexOf('/') + 1, href.length);
+            this.projectPoolId = projectPoolId;
+        },
+        /**
+         * [getPoolDetail 获取项目池详情]
+         * @return {[type]} [description]
+         */
+        getPoolDetail() {
+            let projectPoolId = this.projectPoolId;
+            console.log('id: ', projectPoolId);
+            getProDetail(projectPoolId).then(resp => {
+                console.log('projectPoolId resp: ', resp);
+            }).catch(e => {
+                console.log('getProDetail exists error: ', e);
+            })
+        },
         jumpPre() {
             this.addTab('投前项目', '/home/preProject', 'preProject');
             this.$router.push({ name: 'preProject' });
