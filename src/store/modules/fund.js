@@ -1,5 +1,4 @@
 import * as types from '../mutations-type'
-import Service from '../../common/js/fetch'
 import {getManagementType, FundInvestment, managementCompany, OrganizationType, getMyFund, fundStage, fundStatus, getAllOrgList} from '../../api/fund'
 const state = {
     getManType: [],

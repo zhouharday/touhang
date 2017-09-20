@@ -4,6 +4,7 @@ import axios from 'axios'
 import login from './modules/login'
 import register from './modules/register'
 import fund from './modules/fund'
+import investor from './modules/investor'
 import system from './modules/system'
 import createLogger from 'vuex/dist/logger'
 
@@ -14,6 +15,7 @@ export default new Vuex.Store({
     modules: {
         login,
         system,
+        investor,
         fund,
         register
     },
