@@ -286,11 +286,7 @@
 import datatime from './datetmp.vue';
 export default {
     components: { datatime },
-<<<<<<< HEAD
-    created(){
-=======
     created() {
->>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
 
     },
     data() {
