@@ -140,7 +140,8 @@
 
 
 
-<script type="text/ecmascript-6">
+<script>
+
 import detailForm from './details'
 import tableForm from './tables'
 import teamTable from './team'
@@ -151,6 +152,7 @@ import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
+
 export default {
   data() {
     return {

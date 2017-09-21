@@ -41,13 +41,13 @@
             <el-table :data="subscriberData" border style="width: 100%">
                 <el-table-column prop="name" label="姓名" width="180">
                 </el-table-column>
-                <el-table-column prop="account" label="账号" width="180">
+                <el-table-column prop="number" label="账号" width="180">
                 </el-table-column>
-                <el-table-column prop="department" label="部门" width="180">
+                <el-table-column prop="dept" label="部门" width="180">
                 </el-table-column>
                 <el-table-column prop="role" label="所属角色" width="180">
                 </el-table-column>
-                <el-table-column prop="state" label="状态" width="180">
+                <el-table-column prop="disables" label="状态" width="180">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template scope="scope">
@@ -92,6 +92,9 @@
                 <el-col :span="12">
                     <el-form-item label="部门" :label-width="formLabelWidth">
                         <el-select placeholder="请选择部门" v-model="addSubscriber.department" style="width:100%;">
+                            <div v-for="item in allDepartmentList">
+                                <el-option :value="item.deptName">{{item.deptName}}</el-option>
+                            </div>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -104,8 +107,8 @@
                 <el-col :span="12">
                     <el-form-item label="性别" :label-width="formLabelWidth">
                         <el-select placeholder="请选择性别" v-model="addSubscriber.sex" style="width: 100%">
-                            <el-option value="男">男</el-option>
                             <el-option value="女">女</el-option>
+                            <el-option value="男">男</el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -135,6 +138,10 @@
 </template>
 
 <script type="text/ecmascript-6">
+
+    import {getNodes} from 'common/js/config'
+    import {getDepartmentList} from 'api/system'
+    import {getUserlist} from 'api/system'
 export default {
     data() {
         return {
@@ -216,7 +223,9 @@ export default {
                 email: ''
             },
             modelSubscriber: false,
-            formLabelWidth: '120px'
+            formLabelWidth: '120px',
+            addId:'',
+            allDepartmentList:[]
         }
     },
     methods: {
@@ -226,7 +235,26 @@ export default {
         editRow(index, row) {
             this.modelSubscriber = true
             this.addSubscriber = row
+        },
+
+        handleNodeClick(data) {
+            this.addId = data.id;
+
+            getUserlist(data.id).then((res)=>{
+                console.log(res);
+                this.subscriberData = res.data.result
+            })
         }
+    },
+    created() {
+
+        getDepartmentList().then((res)=>{
+            var dataList = res.data.result
+            this.allDepartmentList = dataList
+            var treeList = getNodes(dataList)
+            this.structure = treeList
+        })
+
     }
 }
 </script>

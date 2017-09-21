@@ -104,7 +104,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="systemDialog = false">取 消</el-button>
-                        <el-button type="primary" @click="submitForm('form')">提 交</el-button>
+                        <el-button type="danger" @click="submitForm('form')">提 交</el-button>
                     </div>
                 </el-dialog>
             </div>

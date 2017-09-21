@@ -89,11 +89,12 @@ export function addPro(params = {}) {
 }
 
 // 删除项目
-export function delPro(preId) {
+export function delPro(id, projectType) {
 	const data = {
-
+		id,
+		projectType
 	} 
-	return service({url: 'http://192.168.0.88:9091/projectPool/deleteProject', method: 'post', data});
+	return service({url: '/projectPool/deleteProject', method: 'post', data});
 }
 
 // 转投资
@@ -106,3 +107,38 @@ export function transPro(params = {}) {
 	}
 	return service({url: '/investProject/addInvestProject', method: 'post', data});
 }
+
+
+////// 项目池记录 ////
+// 获取记录列表
+export function getRecords(projectId, recordStatus) {
+	const data = {
+		projectId,   //项目ID
+		recordStatus,  // 记录状态：1：正常 2：删除
+	}
+	return service({url: '/operatingRecord/selectOperatingRecord', method: 'post', data});
+}
+
+// 添加记录
+export function addRecord(params = {}) {
+	let { projectId, merchantId, seedUserId, seedInfo, recordType } = params;
+	const data = {
+		projectId,   //项目ID
+		seedUserId,  //用户ID
+		seedInfo,    //  提交记录内容
+		merchantId,  // 商户ID
+		recordType     //记录类型
+	}
+	console.log('addRecord: ', data);
+	return service({url: '/operatingRecord/addOperatingRecord', method: 'post', data});
+}
+
+// 删除记录
+export function delRecord(id, recordStatus) {
+	const data = {
+		id,   //项目ID
+		recordStatus,  // 记录状态：1：正常 2：删除
+	}
+	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
+}
+
