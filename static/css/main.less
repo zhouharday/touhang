@@ -168,7 +168,6 @@ ul li {
 
 
 /*领投助手assistantContent*/ 
-
 .assistantContent {
     .el-input__inner {
         border-radius: 15px;    
@@ -190,12 +189,7 @@ ul li {
     th.el-table_1_column_1 .cell {
         margin-left: 50px;
     }
-    td.el-table_1_column_2 .cell,
-    td.el-table_1_column_3 .cell,
-    td.el-table_1_column_4 .cell,
-    td.el-table_1_column_5 .cell {
-        font-weight: bold;   
-    }
+    // 隔行变色样式
     .el-table .info-row {
         background: #fff;
     }
@@ -218,15 +212,15 @@ ul li {
 
 
 /*项目详情页messageContent*/ 
-.messageContent {
-    .el-tabs__active-bar {
-       background-color: red;
-    }
-    .el-tabs__item.is-active {
-        color: #F05E5E;
-    }
+// .messageContent {
+//     .el-tabs__active-bar {
+//        background-color: red;
+//     }
+//     .el-tabs__item.is-active {
+//         color: #F05E5E;
+//     }
 
-}
+// }
 
 
 /*项目池页poolContent*/ 
@@ -235,14 +229,22 @@ ul li {
         height: 30px;
         border-radius: 15px;    
     }
+    // row-table的css style
     .el-table th {
         background-color: #2A3142;  
     }
     .el-table__footer-wrapper thead div,
     .el-table__header-wrapper thead div {
-        color: white;
+        color: #fff;
         font-weight: normal;
         background-color: #2A3142;
+    }
+    .el-table .cell {
+        padding-left: 0;
+        padding-right: 0;  
+    }
+    th.el-table_1_column_1 .cell {
+        margin-left: 50px;
     }
     .el-table .info-row {
         background: #fff;
@@ -450,9 +452,33 @@ ul li {
 
 /*项目估值页*/
 .projectValue {
+     // row-table的css style
+     .el-table th {
+        background-color: #2A3142;  
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
     .el-form-item {
         margin-bottom: 0;
    }
+}
+
+/*估值查看页*/
+.valueView {
+     // row-table的css style
+    .el-table th {
+        background-color: #2A3142;  
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
 }
 
 
@@ -491,3 +517,44 @@ ul li {
     }
 
 }
+
+/*业务配置页*/
+.configuratin {
+    // 添加 文档对话框
+    .fileDialog {
+        .el-dialog--small {
+            width: 40%;
+            height: 350px;
+        }
+        .el-dialog {
+            border-radius: 10px;
+            margin-bottom: 0px;
+        }
+        .el-dialog__body {
+            padding: 20px 20px;
+        }
+        .el-input__inner {
+            border-radius: 12px;
+            border: 1px solid #ed3f14;
+        }
+    }
+    // row-table的css style
+    .el-table th {
+        background-color: #2A3142;  
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
+    // 按钮颜色 的样式
+    .el-button--text {
+        span {
+            border-bottom: 1px solid #F05E5E;
+            color: #F05E5E;
+        } 
+    }
+}
+
+

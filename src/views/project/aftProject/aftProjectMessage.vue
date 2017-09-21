@@ -13,10 +13,7 @@
                 <el-col :span="12">
                     <div class="tableTitle">出资主体</div>
                     <el-table :data="fundTable" style="width: 100%" :row-class-name="tableRowClassName">
-                        <el-table-column label="基金名称" align="center">
-                            <template scope="scope">
-                                <a class="fundName">{{ scope.row.fundName }}</a>
-                            </template>
+                        <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investorMoney" label="投资金额（元）" align="center">
                         </el-table-column>
@@ -43,11 +40,13 @@
                             <div class="item" v-for="(item, index) in message" :key="item.index">
                                 <span class="count">{{item.count}}</span>
                                 <p class="desc">{{item.desc}}</p>
-                                <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+                                <!-- <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="modalAlarm=true">
+                                        {{item.info}}
+                                    </el-button> -->
                             </div>
                         </div>
                         <div class="img_wrapper">
-                            <img src="/static/img/double.png">
+                            <img src="/static/img/double-02.png">
                         </div>
                     </div>
                 </el-col>
@@ -115,13 +114,11 @@ export default {
                 {
                     count: 1,
                     desc: '2017【经营数据】指标出现警告',
-                    state: true,
-                    info: '已处理'
+                    state: true
                 }, {
                     count: 2,
                     desc: '2017【年报】指标出现警告',
-                    state: false,
-                    info: '立即处理'
+                    state: false
                 }
             ],
             fundTable: [
@@ -194,7 +191,13 @@ export default {
             capitalForm: {
                 baseInfo: '投资信息',
                 flag: true
-            }
+            },
+            // 风险预警 立即处理表单
+            alarmForm: {
+                result: '',
+                content: '',
+                appendix: ''
+            },
         }
     },
     methods: {
@@ -297,8 +300,7 @@ export default {
                 .count,
                 .desc,
                 .state {
-                    float: left;
-                    line-height: 36px;
+                    float: left; // line-height: 36px;
                 }
                 .count {
                     width: 20px;
@@ -322,7 +324,7 @@ export default {
             }
             .img_wrapper img {
                 position: absolute;
-                width: 100px;
+                width: 120px;
                 height: 120px;
                 bottom: 10px;
                 right: 10px;

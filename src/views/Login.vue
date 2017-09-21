@@ -16,7 +16,7 @@
                 <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval">
                 </component>
                 <div class="login_btn">
-                    <button type="button" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</button>
+                    <Button type="button" :loading="loading" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</Button>
                 </div>
                 <hr class="hr" />
                 <div class="login-right-bottom">
@@ -49,14 +49,15 @@ export default {
     //     }
     // },
     created(){
-        this.userName = '';
-        this.passWord = '';
-        console.log(this.isLogged);
+        // console.log(this.isLogged);
+    },
+    mounted(){
     },
     computed: {
         ...mapState({
             CardBox: state => state.login.CardBox,
             merchant: state => state.login.merchants,
+            loading: state => state.login.loading
         }),
     },
     data() {
@@ -90,6 +91,7 @@ export default {
         },
         submitForm() {
             if (this.valueData) {
+                this.$store.state.login.loading = true
                 sessionStorage.clear();
                 // this.$router.push({ name: 'homeContent' });
                 let number = this.userName;

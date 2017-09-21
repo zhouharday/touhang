@@ -36,75 +36,7 @@
     </el-pagination>
     <!-- 添加投资者 -->
     <el-dialog title="新增投资者" :visible.sync="modelInvestor" :close-on-click-modal="false">
-        <el-form :model="addInvestor" label-position="left">
-            <el-row :gutter="10">
-                <el-col :span="12">
-                    <el-form-item label="投资者名称" :label-width="formLabelWidth">
-                        <el-input v-model="addInvestor.investorName" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="投资者类型" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.investorTypeId" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="证件类型" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.certificateTypeId">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="证件号码" :label-width="formLabelWidth">
-                        <el-input v-model="addInvestor.certificateNum" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="机构净资产 (元)" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.organizationProperty" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="年收入 (元)" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.personalAssets">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="所属区域" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.regionName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="投资经理" :label-width="formLabelWidth">
-                        <el-input v-model="addInvestor.investmentManagerId" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系人" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.contacts" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系电话" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="addInvestor.contactNumber">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="地址" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="addInvestor.address" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="备注" :label-width="formLabelWidth">
-                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="remark">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
+        <investor-form :investorForm="addInvestor"></investor-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalIncome = false">取 消</el-button>
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
@@ -115,16 +47,21 @@
 
 <script type="text/ecmascript-6">
 import {
-    mapMutations
+    mapMutations,
+    mapGetters
 } from 'vuex'
+import investorForm from 'components/investorForm'
 import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
+import {
+    addInvestor
+} from 'api/investor'
 export default {
     data() {
         return {
             chooseInfo: [{
                 title: '项目类型',
-                details: ['全部', '机构', '个人', '政府']
+                details: []
             }],
             theme: '#fff',
             dataTitle: {
@@ -133,52 +70,71 @@ export default {
                     explain: '投资者'
                 }]
             },
-            investorData: [{
-                id: 12,
-                investorName: '投资者名称',
-                investorTypeId: '类型',
-                InvestmentManager: '安红',
-                amount: '累计投资额'
-            }, {
-                id: 13,
-                investorName: '李四',
-                investorTypeId: '类型',
-                InvestmentManager: '安红',
-                amount: 1000
-            }],
+            investorData: [],
             modelInvestor: false,
-            formLabelWidth: '120px',
-            addInvestor: {}
+            addInvestor: {
+                investorName: '',
+                investorTypeId: '',
+                certificateTypeId: '',
+                certificateNum: '',
+                organizationProperty: '',
+                personalAssets: '',
+                regionId: '',
+                regionName: '',
+                investmentManagerId: '',
+                contacts: '',
+                contactNumber: '',
+                addUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                address: '',
+                remark: ''
+            }
         }
     },
     methods: {
-        handleRouter(index, row) {
-            this.addTab({
-                type: 'addTab',
-                title: row.investorName + '详情页',
-                url: '/home/investorDetails/' + row.id,
-                name: 'investorDetails/' + row.id
-            });
-            this.$router.push({
-                name: 'investorDetails',
-                params: {
-                    id: row.id
-                }
-            })
+        handleRouter(index, rowList) {
+            console.log(rowList.id)
+            // this.addTab({
+            //     type: 'addTab',
+            //     title: rowList.investorName + '详情页',
+            //     url: '/home/investorDetails/' + rowList.id,
+            //     name: 'investorDetails/' + rowList.id
+            // });
+            this.$router.push({ name: 'investorDetails', params: { userId: rowList.id }})
+            // this.$router.push('/home/investorDetails/:' + rowList.id)
         },
         showModel() {
             this.modelInvestor = true
         },
         confirmIncome() {
-            this.modelInvestor = false
+            addInvestor(this.addInvestor).then((res) => {
+                if (res.data.status == '200') {
+                    this.modelInvestor = false
+                }
+            })
         },
         ...mapMutations([
             'addTab' // 映射 this.addTab() 为 this.$store.commit
         ])
     },
+    created() {
+        this.$store.dispatch('getInvestor').then(() => {
+            this.investorData = this.investorList.list
+        })
+        this.$store.dispatch('getProType').then(() => {
+            this.chooseInfo[0].details = this.projectType
+        })
+    },
+    computed: {
+        ...mapGetters([
+            'investorList',
+            'projectType'
+        ])
+    },
     components: {
         myFilter,
-        tableHeader
+        tableHeader,
+        investorForm
     }
 }
 </script>

@@ -45,12 +45,12 @@
     //     that.loading = !that.loading;
     //     that.bar.series[0].data = data;
     //   },
-      onReady(instance) {
-        console.log(instance);
-      },
-      onClick(event, instance, echarts) {
-        console.log(arguments);
-      }
+    //   onReady(instance) {
+    //     console.log(instance);
+    //   },
+    //   onClick(event, instance, echarts) {
+    //     console.log(arguments);
+    //   }
     }
   };
 </script>

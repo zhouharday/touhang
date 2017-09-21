@@ -39,17 +39,18 @@
         <!--搜索框 -->
         <el-row class="search-box">
            <el-col :span="5">
-               <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
+               <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                </el-input>
            </el-col>
            <el-col :span="19" class="imdo">
-               <div class="importProject">
+                <!-- 后期所做导入和下载模板功能 -->
+               <!-- <div class="importProject">
                    <el-upload class="upload-demo" ref="upload"
                         action="" :auto-upload="false">
                         <el-button type="text">导入</el-button>
                    </el-upload>
                    <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-               </div>
+               </div> -->
            </el-col>
         </el-row>
         <!--项目table -->
@@ -90,85 +91,10 @@
     </div>
 </template>
 
-
-<style lang="less" scoped>
-.preContent {
-    position: relative;
-    width: 100%;
-    height: 650px;
-    font-size: 14px;
-    background: #fff;
-}
-.common {
-    padding: 0 30px 20px 30px;
-    ul {
-        float: left;
-        li {
-            display: inline-block;
-            box-sizing: border-box;
-            margin-right: 30px;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-    }
-}
-.tag {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.tag_s {
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.active {
-    width: 70px;
-    height: 20px;
-    color: white;
-    text-align: center;
-    border-radius: 15px;
-    background: #F05E5E;
-}
-.search-box {
-    margin: 0 30px 20px 30px;
-    .imdo {
-        height:30px;
-        display: flex;
-        justify-content: flex-end;
-        .importProject {
-            width: 115px;
-            height: 100%;
-            position: relative;
-            a {
-                position: absolute;
-                bottom: 3px;
-                left: 55px;
-                color: #F05E5E;
-                border-bottom: 1px solid #F05E5E;
-            }
-        }
-    }
-}
-
-.project {
-    color: #F05E5E;
-    border-bottom: 1px solid #F05E5E;
-}
-.foot {
-    margin: 25px 30px 0 30px;
-    //  position: absolute;
-    // left: 30px;
-    // bottom: 20px;
-}
-</style>
-
-
 <script>
+import { getPres } from 'api/projectPre';
 export default {
+    name: 'preProject',
     data() {
         return {
             total: 128,
@@ -259,7 +185,54 @@ export default {
             ]
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.initInfo();
+            this.getDatas();  
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+        },
+        getDatas(projectName, projectType, industryId) {
+            if (projectType == '全部') projectName = '';
+            if (industryId == '全部') industryId = '';
+
+            let params = {
+                merchantId: this.merchantId,
+                userId: this.addProjectUserId
+            };
+
+            getPres(params).then(resp => {
+                let data = resp.data;
+                let list = data.result.list;
+                list = this.handleDatas(list);
+                this.tableData = list;
+            }).catch(e => {
+                console.log('getPres exists error: ', e);
+            });
+
+        },
+        /**
+         * [handleDatas 处理项目列表数据]
+         * @param  {[type]} data [description]
+         * @return {[type]}      [description]
+         */
+        handleDatas(data = []) {
+            data.forEach(item => {
+                item.project = item.projectName;
+                item.mananger = item.createUserId;
+                item.industry = item.industryId;
+                item.sort = item.projectTypeId;
+                item.stage = item.projectStageId;
+            });
+            return data;
+        },
         handleIconClick(ev) {
             console.log(ev);
         },
@@ -293,3 +266,78 @@ export default {
     }
 }
 </script>
+
+<style lang="less" scoped>
+.preContent {
+    position: relative;
+    width: 100%;
+    height: 650px;
+    font-size: 14px;
+    background: #fff;
+}
+.common {
+    padding: 0 30px 20px 30px;
+    ul {
+        float: left;
+        li {
+            display: inline-block;
+            box-sizing: border-box;
+            margin-right: 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    }
+}
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tag_s {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.active {
+    width: 70px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 15px;
+    background: #F05E5E;
+}
+.search-box {
+    margin: 0 30px 20px 30px;
+    .imdo {
+        height:30px;
+        display: flex;
+        justify-content: flex-end;
+        .importProject {
+            width: 115px;
+            height: 100%;
+            position: relative;
+            a {
+                position: absolute;
+                bottom: 3px;
+                left: 55px;
+                color: #F05E5E;
+                border-bottom: 1px solid #F05E5E;
+            }
+        }
+    }
+}
+
+.project {
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
+}
+.foot {
+    margin: 25px 30px 0 30px;
+    //  position: absolute;
+    // left: 30px;
+    // bottom: 20px;
+}
+</style>

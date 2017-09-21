@@ -5,16 +5,16 @@
         </el-input>
     </table-header>
     <el-table :data="teamData" border style="width: 100%">
-        <el-table-column label="机构名称" prop="investor">
+        <el-table-column label="机构名称" prop="orgName">
         </el-table-column>
-        <el-table-column label="机构类型" prop="protocol">
+        <el-table-column label="机构类型" prop="orgType">
         </el-table-column>
-        <el-table-column label="联系人" prop="sum">
+        <el-table-column label="联系人" prop="orgLinkman">
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
-                    <el-button type="text" size="small">编辑</el-button>
-                    <el-button type="text" size="small">删除</el-button>
+                    <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                    <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                   </template>
         </el-table-column>
     </el-table>
@@ -27,17 +27,17 @@
             <el-row :gutter="10">
                 <el-col :span="12">
                     <el-form-item label="机构名称" :label-width="formLabelWidth">
-                        <el-input v-model="cooperativeInfo.name" auto-complete="off"></el-input>
+                        <el-input v-model="cooperativeInfo.orgName" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="机构类型" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="cooperativeInfo.type" auto-complete="off"></el-input>
+                        <el-input v-model="cooperativeInfo.orgType" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="24">
                     <el-form-item label="联系人" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.person">
+                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgLinkman">
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -53,6 +53,7 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import {getOrgList, getAllOrgList, updateOrg} from 'api/fund'
 export default {
     data() {
         return {
@@ -69,13 +70,35 @@ export default {
                     icon: 'plus-round',
                     explain: '添加'
                 }]
-            }
+            },
+            teamData: []
         }
     },
     methods: {
         alertModle(el) {
             this.cooperativeOrg = true
+        },
+        handleEdit(index, row) {
+            this.cooperativeOrg = true
+            this.cooperativeInfo = row
         }
+    },
+    created() {
+        getAllOrgList().then((res) => {
+            if(res.data.status == '200') {
+                console.log(res)
+            }
+        })
+        getOrgList().then((response) => {
+            if(response.data.status == '200') {
+                this.teamData = response.data.result.list
+            }
+        })
+        updateOrg(this.cooperativeInfo.id).then((res) => {
+            if(res.data.status == '200') {
+                console.log(res)
+            }
+        })
     },
     components: {
         tableHeader

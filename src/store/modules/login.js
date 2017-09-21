@@ -26,6 +26,7 @@ const state = {
         text: '',
         isLogged: false, //登录状态
     },
+    loading: false
 }
 
 const mutations = {
@@ -84,13 +85,10 @@ const mutations = {
             type: msg.type
         })
     }
-}
+};
 
 const actions = {
-    loginAPI({
-        commit,
-        state
-    }, user) { //send login API
+    loginAPI({commit,state}, user) { //send login API
         // console.log(user);
         user.self.$http.post('api/user/login', {
             number: user.name,
@@ -98,26 +96,26 @@ const actions = {
             // number: "010",
             // pass: "e10adc3949ba59abbe56e057f20f883e"
         }).then(data => {
-            if (data.data.status == '403') {
-                alert(data.data.message);
+            if (data.status == '403') {
+                alert(data.message);
             } else if (data.data.status == '156') { //用户名或密码不正确
                 alert(data.data.message);
-                console.log(data.data.message);
+                // console.log(data.data.message);
                 return;
-            } else if (data.data.status == '200') { //登录成功
+            } else if (data.status == '200') { //登录成功
                 // alert('success');
                 state.approvelType.isLogged = true;
-                console.log(user);
+                // console.log(user);
                 commit('pushUserInfor', data.data.result);
                 window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
-                console.log(state.userInfor);
+                // console.log(state.userInfor);
                 // console.log(data.data);
                 if (data.data.result.userInfo.isMerchant >= '1') { //有组织
                     commit('pushMerchants', data.data.result);
                     window.sessionStorage.setItem('merchants', JSON.stringify(state.merchants));
-                    console.log(state.merchants);
+                    // console.log(state.merchants);
                     if (state.merchants.length == '1') { //只有一个组织
-                        console.log(state.merchants[0].type);
+                        // console.log(state.merchants[0].type);
 
                         if (state.merchants[0].type == '0') { //审核中
                             commit('saveApprovalStatus', { type: state.merchants[0].type, text: '您的申请正在审核中,请您耐心等待~' });
@@ -143,6 +141,7 @@ const actions = {
                             window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
                             user.self.$router.push({ //只显示通讯录菜单列表
                                 name: 'contacts'
+                                // name: 'homeContent'
                             });
                             commit('Notification', {
                                 title: '',
@@ -160,7 +159,7 @@ const actions = {
                             });
                         }
                         // console.log('um_id:' + state.merchants[0].um_id);
-                        console.log('//////////////////////////////////////////////////////////////////////////');
+                        // console.log('//////////////////////////////////////////////////////////////////////////');
                         state.logoSrc.logo = data.data.result.merchants[0].logo; //企业logo
                         state.logoSrc.merchantName = data.data.result.merchants[0].merchant_name; //企业名字
                         window.sessionStorage.setItem('logoSrc', JSON.stringify(state.logoSrc));

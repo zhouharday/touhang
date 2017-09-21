@@ -9,7 +9,7 @@
                     <ul class="listWrapper">
                         <li class="list" v-for="(list, nowIndex) of item.details" :key="list">
                             <el-button @click="changeList(index, nowIndex)" :class="{active: nowIndex==currentIndex && index==parentIndex}" class="btn">
-                                {{list}}
+                                {{list.dicName}}
                             </el-button>
                         </li>
                     </ul>
@@ -44,16 +44,9 @@ export default {
         changeList(index, val) {
             console.log(index)
             console.log(val)
-
             this.parentIndex = index
             this.currentIndex = val
-
         },
-    },
-    watch: {
-        parentIndex(val, oldval) {
-
-        }
     }
 }
 </script>

@@ -1,13 +1,15 @@
 import * as types from '../mutations-type'
-import Service from '../../common/js/fetch'
-import {getManagementType, FundInvestment, managementCompany, OrganizationType, getMyFund} from '../../api/fund'
+import {getManagementType, FundInvestment, managementCompany, OrganizationType, getMyFund, fundStage, fundStatus, getAllOrgList} from '../../api/fund'
 const state = {
-    getManType: JSON.stringify(sessionStorage.getItem('getManType')) || [],
+    getManType: [],
     fundInvestment: [],
     managementCompany: [],
     OrgType: [],
     myFundList: {},
-    fundDetails: {}
+    myFundDetails: {},
+    fundStage: {},
+    fundStatus: {},
+    getOrgList: {}
 }
 
 const getters = {
@@ -16,7 +18,10 @@ const getters = {
     managementCompany: state => state.managementCompany,
     OrgType: state => state.OrgType,
     myFundList: state => state.myFundList,
-    fundDetails: state => state.fundDetails
+    myFundDetails: state => state.myFundDetails,
+    fundStage: state => state.fundStage,
+    fundStatus: state => state.fundStatus,
+    getOrgList: state => state.getOrgList
 }
 
 const mutations = {
@@ -35,17 +40,24 @@ const mutations = {
     [types.GET_MYFUNDLIDT](state, myFundList) {
         state.myFundList = myFundList
     },
-    [types.GET_MYFUNDDETAILS](state, fundDetails) {
-        state.fundDetails = fundDetails
+    [types.GET_MYFUNDDETAILS](state, myFundDetails) {
+        state.myFundDetails = myFundDetails
+    },
+    [types.GET_FUNDSTAGE](state, fundStage) {
+        state.fundStage = fundStage
+    },
+    [types.GET_FUNDSTATUS](state, fundStatus) {
+        state.fundStatus = fundStatus
+    },
+    [types.GET_ALLORGLIST](state, getOrgList) {
+        state.getOrgList = getOrgList
     }
 }
-
 const actions = {
     getManageType({commit, dispatch}) {
         return getManagementType().then((res) => {
             if (res.status == '200') {
                 commit(types.GET_MANTYPE, res.data.result)
-                sessionStorage.setItem('getManType', JSON.stringify(res.data.result))
             }
         }).catch(err => {
             console.log(err)
@@ -82,6 +94,33 @@ const actions = {
         return getMyFund().then((res) => {
             if(res.status == '200') {
                 commit(types.GET_MYFUNDLIDT, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getFundStage({commit, dispatch}) {
+        return fundStage().then((res) => {
+            if(res.status == '200') {
+                commit(types.GET_FUNDSTAGE, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getFundStatus({commit, dispatch}) {
+        return fundStatus().then((res) => {
+            if(res.status == '200') {
+                commit(types.GET_FUNDSTATUS, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getAllOrg({commit, dispatch}) {
+        return getAllOrgList().then((res) => {
+            if(res.status == '200') {
+                commit(types.GET_ALLORGLIST, res.data.result)
             }
         }).catch(err => {
             console.log(err)

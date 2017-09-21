@@ -35,13 +35,12 @@ export default {
             name: '退出',
         }
     },
-
     methods: {
         handleCommand(command) {
             if (command == 'loginout') {
                 localStorage.removeItem('ms_username');
                 sessionStorage.clear();
-                this.delCook();
+                // this.delCook();
                 window.location.href = 'http://localhost:8081/login';
                 // this.$router.push('/login');
             }

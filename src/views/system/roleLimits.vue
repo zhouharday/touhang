@@ -22,6 +22,12 @@ export default {
             theModel: myData
         }
     },
+    // props: {
+    //     theModel: {
+    //         type: Array,
+    //         default: []
+    //     }
+    // },
     components: {
         myTree
     }

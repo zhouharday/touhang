@@ -26,9 +26,9 @@
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
-                <el-tab-pane label="工商信息" name="industry" class="tab_list">
+                <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                     <industry-form :industryForm="industryForm"></industry-form>
-                </el-tab-pane>
+                </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
                     <capital-table></capital-table>
                 </el-tab-pane>
@@ -42,13 +42,16 @@
         </div>
     </div>
 </template>
-<script type="text/ecmascript-6">
+<script>
 import detailForm from './details'
 import tableForm from './tables'
-import industryForm from './industry'
+// import industryForm from './industry'
 import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
+
+import { getProDetail } from 'api/project';
+
 export default {
     data() {
         return {
@@ -73,13 +76,37 @@ export default {
     components: {
         detailForm,
         tableForm,
-        industryForm,
+        // industryForm,
         capitalTable,
         recordForm,
         fileTable
-
+    },
+    created() {
+        this.init();
     },
     methods: {
+        init() {
+            this.initParams();
+            this.getPoolDetail();
+        },
+        initParams() {
+            let href = window.location.href;
+            let projectPoolId = href.substr(href.lastIndexOf('/') + 1, href.length);
+            this.projectPoolId = projectPoolId;
+        },
+        /**
+         * [getPoolDetail 获取项目池详情]
+         * @return {[type]} [description]
+         */
+        getPoolDetail() {
+            let projectPoolId = this.projectPoolId;
+            console.log('id: ', projectPoolId);
+            getProDetail(projectPoolId).then(resp => {
+                console.log('projectPoolId resp: ', resp);
+            }).catch(e => {
+                console.log('getProDetail exists error: ', e);
+            })
+        },
         jumpPre() {
             this.addTab('投前项目', '/home/preProject', 'preProject');
             this.$router.push({ name: 'preProject' });

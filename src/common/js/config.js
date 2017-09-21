@@ -57,5 +57,3 @@ export function getNodes(arr) {
         node.label = node.deptName
     })
 }
-
-
