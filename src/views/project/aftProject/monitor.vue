@@ -159,8 +159,8 @@
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="monitorEditing = false">取 消</el-button>
-                <el-button type="primary" @click="monitorEditing = false">确 定</el-button>
+                <el-button @click="editCancle">取 消</el-button>
+                <el-button type="primary" @click="editConfirm">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -220,19 +220,29 @@ export default {
     methods: {
         // 添加 监控设置 的方法
         monitorSettingAdd() {
-            let new_monitorForm = {
-                 dataSources: '',
-                 sort: ''
-            };
-            this.monitorForm = new_monitorForm;
+            // let new_monitorForm = {
+            //     dataSources: '',
+            //     sort: ''
+            // };
+            // this.monitorForm = new_monitorForm;
             this.monitorData.push(this.monitorForm);
             this.monitorSetting = !this.monitorSetting;
-        }, 
+        },
         // 编辑 监控设置 的方法
         editMonitor(row) {
-           this.monitorEditing = !this.monitorEditing;
-           this.monitorForm.dataSources = row.dataSources;
-           this.monitorForm.sort = row.sort;
+            this.monitorEditing = !this.monitorEditing;
+            this.monitorForm.dataSources = row.dataSources;
+            this.monitorForm.sort = row.sort;
+        },
+        // 编辑 监控设置 的取消按钮
+        editCancle() {
+            this.monitorEditing = !this.monitorEditing;
+            this.monitorForm = {};
+        },
+        // 编辑 监控设置 的确定按钮
+        editConfirm() {
+            this.monitorEditing = !this.monitorEditing;
+            this.monitorForm = {};
         },
         checkEdit(index, row) { //编辑
             row.editFlag = !row.editFlag;

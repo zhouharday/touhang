@@ -68,8 +68,8 @@
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button>保存</el-button>
-                <el-button>取消</el-button>
+                <el-button v-show="isShow" @click="confirmSave">保存</el-button>
+                <el-button v-show="isShow">取消</el-button>
             </el-col>
         </el-row>
     </section>
@@ -80,6 +80,7 @@
 export default {
     data() {
         return {
+            isShow: true,
             outingData1: {
                 title: 'AAA项目',
                 outingSort: '',
@@ -87,7 +88,6 @@ export default {
                 relativedAppendix: '',
                 operator: '',
                 handlingDate: '',
-
             },
             outingData2: [
                 {
@@ -101,9 +101,14 @@ export default {
         }
     },
     methods: {
-        checkEdit(index, row) {
+        // 保存按钮 的方法
+        confirmSave() {
+           this.isShow = !this.isShow;
+        },
+        checkEdit(index, row) { //编辑
             // console.log(row)
             row.editFlag = !row.editFlag;
+            this.isShow = true;
         }
     }
 }
