@@ -22,12 +22,14 @@ export function getNodes(arr) {
     var nodes = [];
     arr.map(function (node) {
         if (node.parentId === '0') {
+            node.label = node.deptName
             nodes.push(node)
         } else {
             pushNode(node,nodes)
         }
+
     })
-    // console.log(nodes);
+
     return nodes
 }
 
@@ -48,9 +50,11 @@ export function getNodes(arr) {
             }
         } else {
             if (pNode.children) {
+                node.label = node.deptName
                 pushNode(node, pNode.children)
             }
         }
+        node.label = node.deptName
     })
 }
 

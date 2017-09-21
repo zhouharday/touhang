@@ -6,8 +6,10 @@
                 <el-button>添加</el-button>
             </div>
             <div class="roleContent">
-                <el-table :data="roleInfo" border style="width: 100%">
-                    <el-table-column label="角色名称" prop="role" width="160"></el-table-column>
+                <el-table :data="roleInfo" border style="width: 100%" >
+                    <el-table-column label="角色名称" prop="roleName" width="160" @click="aaas">
+
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
                            <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
@@ -38,36 +40,28 @@
 <script type="text/ecmascript-6">
 import roleLimits from "./roleLimits"
 import roleUser from "./roleUser"
+import {getRoleList} from 'api/system'
 export default {
-    created(){
-        // this.$http.post('api/formset/queryInfo',{
-            
-        // })
-        // .then( res => {
-        //     let data = res.data;
-        //     console.log(data);
-        // })
-        // .catch( error => {
-
-        // })
-    },
     data() {
         return {
-            roleInfo: [{
-                role: '系统管理员'
-            }, {
-                role: '公司领导'
-            }, {
-                role: '财务'
-            }, {
-                role: '项目人员'
-            }],
+            roleInfo: [],
             activeName: 'first'
         }
     },
     components: {
         roleLimits,
         roleUser
+    },
+    methods: {
+
+    },
+        created(){
+
+        getRoleList().then((res)=>{
+            console.log(res.data.result.list)
+            this.roleInfo = res.data.result.list
+        })
+
     }
 }
 </script>
