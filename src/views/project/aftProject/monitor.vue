@@ -40,88 +40,54 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col>
-                        <!-- <el-table :data="operatingData1" border style="width:100%">
-                            <el-table-column label="指标名称" prop="targetName" align="center">
-                                <template scope="scope" prop="">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.targetName }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.targetName" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="经营目标" prop="operatingGoal" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.operatingGoal }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.operatingGoal" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="截止基准日实际情况" prop="realSituation" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.realSituation }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.realSituation" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="完成率" prop="completionRate" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.completionRate }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.completionRate" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="下半年计划" prop="secondPlan" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.secondPlan }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.secondPlan" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" min-width="100" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="operatingModal3=true">添加
-                                    </el-button>
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                                    </el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                                    </el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,operatingData1)">删除</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table> -->
+                    </el-row>
+            </el-form>
 
-                        <el-form-item label="指标名称" :label-width="formLabelWidth">
-                            <el-input v-model="monitorForm.targetName" auto-complete="off" :disabled="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="是否监控">
-                            <el-radio-group v-model="monitorForm.switch">
+            <el-table :data="addMonitorTable" border style="width:100%">
+                <el-table-column label="指标名称" prop="targetName" align="center">
+                    <template scope="scope" prop="targetName">
+                    </template>
+                </el-table-column>
+                <el-table-column label="是否监控" prop="switch" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.switch }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-radio-group v-model="scope.row.switch">
                                 <el-radio label="是"></el-radio>
                                 <el-radio label="否"></el-radio>
                             </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="预警规则">
-                            <el-radio-group v-model="monitorForm.alarmRule">
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="预警规则" prop="alarmRule" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.alarmRule }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-radio-group v-model="scope.row.alarmRule">
                                 <el-radio label="小于"></el-radio>
                                 <el-radio label="大于"></el-radio>
                             </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="阈值" :label-width="formLabelWidth">
-                            <el-input v-model="monitorForm.threshold" placeholder="请输入阈值" auto-complete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="阈值" prop="threshold" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.threshold }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.threshold" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" min-width="100" align="center">
+                    <template scope="scope">
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        </el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.$index,addMonitorTable)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="monitorSetting = false">取 消</el-button>
                 <el-button type="primary" @click="monitorSettingAdd">确 定</el-button>
@@ -141,12 +107,25 @@ export default {
             formLabelWidth: '80px',
             monitorForm: {
                 dataSources: '',
-                sort: '',
-                targetName: '',
-                switch: '',
-                alarmRule: '',
-                threshold: ''
+                sort: ''
             },
+            addMonitorTable: [
+                {
+                    targetName: '指标一',
+                    switch: '',
+                    alarmRule: '',
+                    threshold: '',
+                    editFlag: false
+                },
+                {
+                    targetName: '指标二',
+                    switch: '',
+                    alarmRule: '',
+                    threshold: '',
+                    editFlag: false
+                }
+
+            ],
             monitorData: [
                 {
                     dataSources: '资产负债表',
@@ -177,8 +156,10 @@ export default {
             this.monitorData.push(this.monitorForm);
             this.monitorForm = {};
             this.monitorSetting = false;
+        },
+        checkEdit(index, row) { //编辑
+            row.editFlag = !row.editFlag;
         }
-
     },
     components: {
         tabelHeader
