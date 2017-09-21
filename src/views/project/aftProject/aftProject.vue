@@ -1,5 +1,5 @@
 <template>
-    <div class="preContent">
+    <div class="aftProject">
         <!-- 类型ul -->
         <el-row class="common">
             <el-col :span="2">
@@ -59,7 +59,7 @@
 
 
 <style lang="less" scoped>
-.preContent {
+.aftProject {
     position: relative;
     width: 100%;
     height: 650px;

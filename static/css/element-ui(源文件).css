@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 /*@charset "UTF-8";*/
 .el-breadcrumb:after, .el-breadcrumb:before, .el-button-group:after, .el-button-group:before, .el-form-item:after, .el-form-item:before, .el-form-item__content:after, .el-form-item__content:before {
@@ -9576,6 +9577,9 @@
 }
 
 /*@charset "UTF-8";*/
+=======
+@charset "UTF-8";
+>>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
 .el-breadcrumb:after,
 .el-breadcrumb:before,
 .el-button-group:after,
@@ -19487,4 +19491,7 @@
 .el-transfer-panel__filter .el-icon-circle-close {
     cursor: pointer
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
