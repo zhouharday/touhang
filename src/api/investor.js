@@ -48,7 +48,7 @@ export function getIdType() {
 // 所属区域
 export function getSubArea() {
     const data = {
-        dicParent: "3"
+        dicParent: "501"
     }
     return service({
         url: '/dictionaryController/select2Menu',

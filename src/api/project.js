@@ -52,7 +52,7 @@ export function getProDetail(id) {
 
 // 添加项目池
 export function addPro(params = {}) {
-	let { projectInfo, enterpriseInfo } = params;
+	let { projectInfo, enterpriseInfo, merchantId } = params;
 	/*
 	let { 
 		projectName, //项目名: "2",
@@ -65,17 +65,23 @@ export function addPro(params = {}) {
         departmentId //业务部门ID: null
     } = ( projectInfo || {} )
     let {
-    	projectName, //项目名: "2",
-        projectShortName, //项目简称: "3",
-        addressId, //项目所在地: "321",
-        createPersonId, //项目创建人: "ooo",
-        projectTypeId, //项目类型ID: null,
-        industryId, //行业ID: null,
-        projectFromId, //项目来源: null,
-        departmentId //业务部门ID: null
+    	"page": 1,
+        "pageSize": 10,
+        "projectId"//基本信息ID: "1",
+        "enterpriseName"//企业名称: "5555",
+        "legalPerson"//法人: "CESHI",
+        "registeredCapital"注册资本: null,
+        "paiclCapital"//实收资本: null,
+        "registerDate"//注册登记时间 : null,
+        "creditCode"//统一信用代码: null,
+        "registerAddress"//注册地址: null,
+        "workAddress"//办公地址: null,
+        "mainBusiness"//主营业务: null,
+        "remark"//备注: null
     } = ( enterpriseInfo || {} )
 	*/
 	const data = {
+		merchantId,
 		projectInfo,
 		enterpriseInfo
 	}
@@ -83,11 +89,12 @@ export function addPro(params = {}) {
 }
 
 // 删除项目
-export function delPro(preId) {
+export function delPro(id, projectType) {
 	const data = {
-
+		id,
+		projectType
 	} 
-	return service({url: 'http://192.168.0.88:9091/projectPool/deleteProject', method: 'post', data});
+	return service({url: '/projectPool/deleteProject', method: 'post', data});
 }
 
 // 转投资
@@ -100,3 +107,38 @@ export function transPro(params = {}) {
 	}
 	return service({url: '/investProject/addInvestProject', method: 'post', data});
 }
+
+
+////// 项目池记录 ////
+// 获取记录列表
+export function getRecords(projectId, recordStatus) {
+	const data = {
+		projectId,   //项目ID
+		recordStatus,  // 记录状态：1：正常 2：删除
+	}
+	return service({url: '/operatingRecord/selectOperatingRecord', method: 'post', data});
+}
+
+// 添加记录
+export function addRecord(params = {}) {
+	let { projectId, merchantId, seedUserId, seedInfo, recordType } = params;
+	const data = {
+		projectId,   //项目ID
+		seedUserId,  //用户ID
+		seedInfo,    //  提交记录内容
+		merchantId,  // 商户ID
+		recordType     //记录类型
+	}
+	console.log('addRecord: ', data);
+	return service({url: '/operatingRecord/addOperatingRecord', method: 'post', data});
+}
+
+// 删除记录
+export function delRecord(id, recordStatus) {
+	const data = {
+		id,   //项目ID
+		recordStatus,  // 记录状态：1：正常 2：删除
+	}
+	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
+}
+

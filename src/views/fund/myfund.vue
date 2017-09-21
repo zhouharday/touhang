@@ -110,6 +110,7 @@ export default {
             this.$router.push('/home/add')
         },
         handleRouter(index, row) {
+            console.log(row.id)
             getMyFundDetails(row.id).then((res) => {
                 if (res.data.status == '200') {
                     this.GET_MYFUNDDETAILS(res.data.result)

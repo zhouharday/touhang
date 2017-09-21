@@ -39,7 +39,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
            <el-col :span="5">
-               <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
+               <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                </el-input>
            </el-col>
            <el-col :span="19" class="imdo">

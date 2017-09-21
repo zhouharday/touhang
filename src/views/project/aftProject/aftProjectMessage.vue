@@ -40,7 +40,9 @@
                             <div class="item" v-for="(item, index) in message" :key="item.index">
                                 <span class="count">{{item.count}}</span>
                                 <p class="desc">{{item.desc}}</p>
-                                <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+                                <!-- <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="modalAlarm=true">
+                                        {{item.info}}
+                                    </el-button> -->
                             </div>
                         </div>
                         <div class="img_wrapper">
@@ -112,13 +114,11 @@ export default {
                 {
                     count: 1,
                     desc: '2017【经营数据】指标出现警告',
-                    state: true,
-                    info: '已处理'
+                    state: true
                 }, {
                     count: 2,
                     desc: '2017【年报】指标出现警告',
-                    state: false,
-                    info: '立即处理'
+                    state: false
                 }
             ],
             fundTable: [
@@ -191,7 +191,13 @@ export default {
             capitalForm: {
                 baseInfo: '投资信息',
                 flag: true
-            }
+            },
+            // 风险预警 立即处理表单
+            alarmForm: {
+                result: '',
+                content: '',
+                appendix: ''
+            },
         }
     },
     methods: {
@@ -294,8 +300,7 @@ export default {
                 .count,
                 .desc,
                 .state {
-                    float: left;
-                    line-height: 36px;
+                    float: left; // line-height: 36px;
                 }
                 .count {
                     width: 20px;

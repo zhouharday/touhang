@@ -16,19 +16,29 @@
             </el-col>
             <el-col :span="12" class="homeContent_top_R" style="padding:0;">
                 <div class="grid-content bg-purple">
-                    <div style="padding:16px 24px;">
-                        <div>
-                            <img src="/static/img/Notice.png" />
-                            <span>{{RecentNotice}}</span>
-                        </div>
-                        <ul class="notice_ul">
-                            <li v-for="( item,index ) in messageShow" :key="item.index">
-                                <div>{{item.noRead}}</div>
-                                <div>{{item.data}}</div>
-                                <span>{{item.noticeMessage}}</span>
-                            </li>
-                        </ul>
-                        <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                    <div style="padding: 0px 24px;">
+                        <el-tabs v-model="activeName" @tab-click="handleClick">
+                            <el-tab-pane label="系统消息" name="first">
+                                <ul class="notice_ul">
+                                    <li v-for="( item,index ) in messageShow" :key="item.index">
+                                        <div>{{item.noRead}}</div>
+                                        <div>{{item.data}}</div>
+                                        <span>{{item.noticeMessage}}</span>
+                                    </li>
+                                </ul>
+                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                            </el-tab-pane>
+                            <el-tab-pane label="公司公告" name="second">
+                                <ul class="notice_ul">
+                                    <li v-for="( item,index ) in noticeShow" :key="item.index">
+                                        <div>{{item.noRead}}</div>
+                                        <div>{{item.data}}</div>
+                                        <span>{{item.noticeMessage}}</span>
+                                    </li>
+                                </ul>
+                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                            </el-tab-pane>
+                        </el-tabs>
                     </div>
                 </div>
             </el-col>
@@ -276,11 +286,16 @@
 import datatime from './datetmp.vue';
 export default {
     components: { datatime },
+<<<<<<< HEAD
     created(){
+=======
+    created() {
+>>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
 
     },
     data() {
         return {
+            activeName: 'first',
             loading: false,
             monthDate: [],
             RecentNotice: "系统消息 / 公司公告",
@@ -337,6 +352,28 @@ export default {
                     noRead: "未读",
                     data: "08-23",
                     noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                }
+            ],
+            noticeShow: [
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
                 }
             ],
         }
