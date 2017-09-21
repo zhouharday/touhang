@@ -1,8 +1,14 @@
 <template>
 <div class="baseInfo">
-    <tableHeader :theme="theme" :data="dataTitle"></tableHeader>
+    <tableHeader :data="dataTitle"></tableHeader>
     <div class="form_wrapper">
         <investor-form :investorForm="baseInfo"></investor-form>
+        <el-row :gutter="10">
+            <el-col :span="24" class="group">
+                <el-button type="info" class="btn" @click="handlerCancel">取消</el-button>
+                <el-button type="success" class="btn" @click="handlerConfirm">保存</el-button>
+            </el-col>
+        </el-row>
     </div>
 </div>
 </template>
@@ -10,10 +16,19 @@
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import investorForm from 'components/investorForm'
+import {
+    getInvestorDetails,
+    updateInvestor
+} from 'api/investor'
 export default {
+    props: {
+        userId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
-            theme: '#495060',
             dataTitle: {
                 desc: '基本信息',
                 btnGroup: [{
@@ -30,12 +45,28 @@ export default {
         }
     },
     methods: {
-        onCancel() {
-            alert('取消')
+        handlerCancel() {
         },
-        onSubmit() {
-            alert('确定')
+        handlerConfirm() {
+            console.log(this.baseInfo)
+            updateInvestor(this.baseInfo).then((res) => {
+                if(res.status == '200') {
+                    console.log(res)
+                    this.$Message.success(res.data.message || '提交成功！')
+                }
+            })
         }
+    },
+    created() {
+        console.log(this.userId)
+        getInvestorDetails(this.userId).then((res) => {
+            if (res.status == '200') {
+                this.baseInfo = res.data.record
+            }
+        }).catch(err => {
+            let response = err.response
+            this.$Message.error(response.data.message)
+        })
     },
     components: {
         tableHeader,
@@ -53,6 +84,12 @@ export default {
         padding: 24px 0;
         .changeWid {
             width: 120px;
+        }
+        .group {
+            text-align: center;
+            .btn {
+                width: 150px;
+            }
         }
     }
 }

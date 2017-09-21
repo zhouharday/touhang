@@ -66,6 +66,17 @@ export function addInvestor(addInv) {
         data
     })
 }
+// 获取投资者详情
+export function getInvestorDetails(uId) {
+    const data = {
+        id: uId
+    }
+    return service({
+        url: '/investor/getInvestorDetails',
+        method: 'post',
+        data
+    })
+}
 // 获取协议列表(包括详情)
 export function GetProtocolsList(protocolsID) {
     const data = {
@@ -74,6 +85,45 @@ export function GetProtocolsList(protocolsID) {
     }
     return service({
         url: '/investor/getAgreementList',
+        method: 'post',
+        data
+    })
+}
+// 提交编辑投资者信息
+export function updateInvestor(dataInfo) {
+    return service({
+        url: '/investor/updateInvestor',
+        method: 'post',
+        data: dataInfo
+    })
+}
+// 获取基金选择列表
+export function getAllNormalFund() {
+    const data = {
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+    }
+    return service({
+        url: '/investor/getAllNormalFund',
+        method: 'post',
+        data
+    })
+}
+// 获取拜访记录列表
+export function getVisitingRecordList(invId) {
+    const data = {
+        inverstorId: invId
+    }
+    return service({
+        url: '/investor/getVisitingRecordList',
+        method: 'post',
+        data
+    })
+}
+// 添加拜访记录
+export function addVisitingRecord(addVisiting) {
+    const data = addVisiting
+    return service({
+        url: '/investor/addVisitingRecord',
         method: 'post',
         data
     })

@@ -1,5 +1,5 @@
 import * as types from '../mutations-type'
-import {getInvestorList, getProjectType, getInvestorType, getIdType, getSubArea} from 'api/investor'
+import {getInvestorList, getProjectType, getIdType, getSubArea} from 'api/investor'
 const state = {
     investorList: {},
     projectType: {}
