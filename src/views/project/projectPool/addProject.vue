@@ -270,11 +270,12 @@ export default {
                 projectName: basicForm.projectName,
                 projectShortName: basicForm.shortName,
                 addressId: basicForm.location,
-                createPersonId: basicForm.manager, // 此处应为项目负责人，而非创建者
+                createPersonId: basicForm.manager, // TODO: 此处应为项目负责人，而非创建者
                 projectTypeId: basicForm.projectSort,
                 industryId: basicForm.industry,
                 projectFromId: basicForm.origin,
-                departmentId: basicForm.department
+                departmentId: basicForm.department,
+                merchantId: this.merchantId
             }
             return obj;
         },

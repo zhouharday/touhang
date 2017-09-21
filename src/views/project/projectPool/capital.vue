@@ -72,12 +72,21 @@
     </div>
 </template>
 <script style="text/ecmascript-6">
+import { mapGetters } from 'vuex';
 import { Message } from 'iview'
 
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
 import { getFinances, addFinance, editFinance, delFinance } from 'api/finance';
 export default {
+    computed: mapGetters({
+        projectData: 'getProjectData'    // 获取项目详情数据
+    }),
+    watch: {
+        projectData(val, oldVal) {
+            this.init();
+        }
+    },
     data() {
         return {
             modalAdd: false,
@@ -119,7 +128,7 @@ export default {
         }
     },
     created() {
-        this.init();
+        
     },
     methods: {
         init() {
@@ -129,12 +138,15 @@ export default {
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
-            console.log('info: ', info);
+            // console.log('info: ', info);
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
+
+            this.enterpriseInfo = this.projectData.enterpriseInfo || {};
+            // console.log('projectData: ', this.projectData);
         },
         getData() {
-            getFinances()
+            getFinances(this.enterpriseInfo.id)
             .then(resp => {
                 console.log('resp: ', resp);
                 let data = resp.data;
@@ -167,7 +179,7 @@ export default {
                     let capitalForm = this.capitalForm;
                     capitalForm.date = changeDate(capitalForm.date);
                     addFinance({
-                        enterpriseId: '',
+                        enterpriseId: this.enterpriseInfo.id,
                         projectTurnId: capitalForm.round,
                         financingWayId: capitalForm.way,
                         financingMoney: capitalForm.capital,
