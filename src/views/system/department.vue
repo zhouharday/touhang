@@ -19,34 +19,44 @@
             <el-table-column type="expand">
                 <template scope="props">
                     <el-row>
-                        <el-col v-for="(item, index) of props.row.childrenData">
+                        <el-col v-for="(item, index) of props.row.children">
                             <el-row :gutter="20">
                                 <el-col :span="12" class="item">
-                                    <span class="add_margin">{{item.title}}</span>
+                                    <span class="add_margin">{{item.deptName}}</span>
                                 </el-col>
                                 <el-col :span="12" class="item">
-                                    <span class="add_margin">{{item.desc}}</span>
+                                    <!--<span class="add_margin">{{item.desc}}</span>-->
+                                    <el-button size="small">
+                                        <Icon type="ios-arrow-thin-up"></Icon>
+                                        <Icon type="ios-arrow-thin-down"></Icon>
+                                    </el-button>
+                                    <el-button size="small" @click="editClick(item)">
+                                        编辑
+                                    </el-button>
+                                    <el-button size="small" @click="deleteClick(item)">
+                                        删除
+                                    </el-button>
                                 </el-col>
                             </el-row>
                         </el-col>
                     </el-row>
                 </template>
             </el-table-column>
-            <el-table-column label="名称" prop="name">
+            <el-table-column label="名称" prop="deptName">
             </el-table-column>
             <el-table-column label="操作">
-                <template scope="props">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-                        <Icon type="ios-arrow-thin-up"></Icon>
-                        <Icon type="ios-arrow-thin-down"></Icon>
-                    </el-button>
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-                        编辑
-                    </el-button>
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
-                        删除
-                    </el-button>
-                </template>
+                <!--<template scope="props">-->
+                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
+                        <!--<Icon type="ios-arrow-thin-up"></Icon>-->
+                        <!--<Icon type="ios-arrow-thin-down"></Icon>-->
+                    <!--</el-button>-->
+                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
+                        <!--编辑-->
+                    <!--</el-button>-->
+                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
+                        <!--删除-->
+                    <!--</el-button>-->
+                <!--</template>-->
             </el-table-column>
         </el-table>
     </div>
@@ -57,7 +67,7 @@
                 <el-col :span="24">
                     <el-form-item label="上级" :label-width="formLabelWidth">
                         <el-select v-model="departmentData.superior" clearable placeholder="请选择" style="width: 100%;">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                            <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -78,6 +88,10 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import {getNodes} from 'common/js/config'
+    import {getDepartmentList} from 'api/system'
+    import {addNewDepartment} from 'api/system'
+    import {deletDepartment} from 'api/system'
 export default {
     data() {
         return {
@@ -129,20 +143,59 @@ export default {
             // 方法不完善
             console.log(this.departmentData)
             this.department = false
+            addNewDepartment(this.departmentData.department,this.departmentData.superior).then((res)=>{
+                console.log(res)
+                getDepartmentList().then((res)=>{
+
+                    var dataList = res.data.result
+                    var treeList = getNodes(dataList)
+                    this.currentData = treeList
+                    this._getDepartmentName(this.currentData)
+
+//            this.myFund = res.data.result.list
+                })
+            })
         },
+        editClick(item) {
+            console.log(item);
+//            console.log(item.log);
+        },
+
         _getDepartmentName(arr) {
             let result = []
             arr.map((x) => {
                 result.push({
-                    label: x.name,
+                    label: x.deptName,
+
                     value: x.id
                 })
             })
+
             return this.options = result
+        },
+        deleteClick(item) {
+            console.log(item)
+//            var id = item.id;
+//            deletDepartment(item.id).then((res) => {
+//                console.log(okkkkkkkkk)
+////            },
+//            })
         }
     },
     created() {
-        this._getDepartmentName(this.currentData)
+
+
+        getDepartmentList().then((res)=>{
+
+            var dataList = res.data.result
+            var treeList = getNodes(dataList)
+            this.currentData = treeList
+            this._getDepartmentName(this.currentData)
+
+//            this.myFund = res.data.result.list
+        })
+
+
     }
 }
 </script>

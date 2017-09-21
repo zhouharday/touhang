@@ -2,18 +2,28 @@
 <div class="dictionary">
     <el-row :gutter="20">
         <el-col :span="6">
-            <el-row>
-                <el-col :span="24" v-for="(menuItem, index) in theModel">
-                    <my-tree :model="menuItem" :currentIndex="index"></my-tree>
-                </el-col>
-            </el-row>
+            <!--<el-row>-->
+                <!--<el-col :span="24" v-for="(menuItem, index) in theModel">-->
+                    <!--<my-tree :model="menuItem" :currentIndex="index" @click="handleNodeClick"></my-tree>-->
+                <!--</el-col>-->
+            <!--</el-row>-->
+            <el-collapse v-model="activeName" accordion>
+                <div v-for="(item,index) in dic"  >
+                    <el-collapse-item :title="item.dicName" :name=index>
+                        <div v-for="listDic in item.dataDictionary" class="listStyle" >
+                            <div  @click="listClick(listDic)">{{listDic.dicName}}</div>
+                        </div>
+
+                    </el-collapse-item>
+                </div>
+            </el-collapse>
         </el-col>
         <el-col :span="18">
-            <div class="tableTitle">{{setMune.menuName}}</div>
+            <div class="tableTitle">{{baseName}}</div>
             <div class="table">
-                <el-table :data="setMune.tableInfo" border style="width: 100%">
-                    <el-table-column prop="name" label="名称"></el-table-column>
-                    <el-table-column prop="remarks" label="备注"></el-table-column>
+                <el-table :data="muneData" border style="width: 100%">
+                    <el-table-column prop="dicName" label="名称"></el-table-column>
+                    <el-table-column prop="description" label="备注"></el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
                             <el-button size="small"
@@ -31,6 +41,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import {getDictionary} from 'api/system'
+    import {getSelectIndex} from 'api/system'
 import {
     mapGetters
 } from 'vuex'
@@ -42,7 +54,11 @@ export default {
     data() {
         return {
             theModel: dictionaryList,
-            title: ''
+            title: '',
+            dic:[],
+            activeName: '1',
+            baseName:'',
+            muneData:[]
         }
     },
     computed: {
@@ -50,21 +66,31 @@ export default {
             setMune: 'muen'
         })
     },
-    // methods: {
-    //     _getTitle(arr) {
-    //         arr.map((x) => {
-    //             console.log(x.children.includes(this.muen))
-    //             // if(x.children.includes(this.muen)) {
-    //             //     console.log(1)
-    //             // }
-    //         })
-    //     }
-    // },
-    // created() {
-    //     this._getTitle(dictionaryList)
-    // },
+     methods: {
+
+         listClick(dic){
+             console.log(dic);
+             this.baseName = dic.dicName
+             getSelectIndex(dic.id,'1').then((res)=>{
+                 console.log(res.data)
+                 this.muneData = res.data.result
+//            this.filterInfo = res.data.result.list
+             })
+         }
+     },
     components: {
         myTree
+    },
+    created() {
+
+
+        getDictionary('identification').then((res)=>{
+            console.log(res.data.result)
+//            this.theModel = res.data.result
+                this.dic = res.data.result
+        })
+
+
     }
 }
 </script>
@@ -84,5 +110,15 @@ export default {
         line-height: 30px;
         padding: 6px 18px;
     }
+    .listStyle{
+        line-height: 36px;
+        padding: 5px 18px;
+        &:hover{
+            background: #dfe6ec;
+        }
+    }
+
+
 }
+
 </style>

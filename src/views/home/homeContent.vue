@@ -41,7 +41,6 @@
                         </el-tabs>
                     </div>
                 </div>
-                </div>
             </el-col>
         </el-row>
 
@@ -287,7 +286,11 @@
 import datatime from './datetmp.vue';
 export default {
     components: { datatime },
+<<<<<<< HEAD
+    created(){
+=======
     created() {
+>>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
 
     },
     data() {
@@ -295,7 +298,7 @@ export default {
             activeName: 'first',
             loading: false,
             monthDate: [],
-            RecentNotice: "最近通知",
+            RecentNotice: "系统消息 / 公司公告",
             waitSth: "待办事项",
             sysPrompt: "系统提示",
             sysMessage: true,
@@ -393,7 +396,7 @@ export default {
         },
         readyfun(arr, data) {
             var arr = arr;
-            //先根据接口返回数据 修改arr 
+            //先根据接口返回数据 修改arr
             //然后再把arr赋值给monthdate
             arr.forEach(function(item) {
                 return item.yd = item.day && item.day % 3 == 1 ? true : false;
