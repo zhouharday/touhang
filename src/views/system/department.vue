@@ -165,11 +165,8 @@ export default {
             let result = []
             arr.map((x) => {
                 result.push({
-<<<<<<< HEAD
                     label: x.deptName,
-=======
-                    label: x.name,
->>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
+
                     value: x.id
                 })
             })

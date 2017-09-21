@@ -6,19 +6,15 @@
                 <el-button>添加</el-button>
             </div>
             <div class="roleContent">
-<<<<<<< HEAD
+
                 <el-table :data="roleInfo" border style="width: 100%" >
                     <el-table-column label="角色名称" prop="roleName" width="160" @click="aaas">
 
-=======
-                <el-table :data="roleInfo" border style="width: 100%">
-                    <el-table-column label="角色名称" prop="role" width="160">
                         <template scope="scope">
                            <el-button size="small" @click="handleRole(scope.$index, scope.row)">
                                {{scope.row.role}}
                            </el-button>
                         </template>
->>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
                     </el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
@@ -52,21 +48,7 @@ import roleLimits from "./roleLimits"
 import roleUser from "./roleUser"
 import {getRoleList} from 'api/system'
 export default {
-<<<<<<< HEAD
-=======
-    created(){
-        // this.$http.post('api/formset/queryInfo',{
 
-        // })
-        // .then( res => {
-        //     let data = res.data;
-        //     console.log(data);
-        // })
-        // .catch( error => {
-
-        // })
-    },
->>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
     data() {
         return {
             roleInfo: [],
