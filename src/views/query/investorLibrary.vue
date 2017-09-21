@@ -10,36 +10,37 @@
         </tableHeader>
     </div>
     <el-table :data="investorData" border style="width: 100%">
-        <el-table-column prop="name" label="投资者名称">
+        <el-table-column prop="investorName" label="投资者名称">
         </el-table-column>
-        <el-table-column prop="type" label="类型">
+        <el-table-column prop="investorType" label="类型">
         </el-table-column>
-        <el-table-column prop="manager" label="投资经理">
+        <el-table-column prop="investmentManagerName" label="投资经理">
         </el-table-column>
-        <el-table-column prop="cumulative" label="累计投资额">
+        <el-table-column prop="sumPaidAmount" label="累计投资额">
         </el-table-column>
-        <el-table-column label="操作">
-            <template scope="scope">
-                <el-button
-                  @click.native.prevent="deleteRow(scope.$index, investorData)"
-                  type="text"
-                  size="small">
-                  签约
-                </el-button>
-                <el-button
-                  @click.native.prevent="deleteRow(scope.$index, investorData)"
-                  type="text"
-                  size="small">
-                  删除
-                </el-button>
-                <el-button
-                  @click.native.prevent="deleteRow(scope.$index, investorData)"
-                  type="text"
-                  size="small">
-                  拜访
-                </el-button>
-            </template>
-        </el-table-column>
+        <!--<el-table-column label="操作">-->
+            <!--<template scope="scope">-->
+                <!--<el-button-->
+                  <!--@click.native.prevent="deleteRow(scope.$index, investorData)"-->
+                  <!--type="text"-->
+                  <!--size="small">-->
+                  <!--签约-->
+                <!--</el-button>-->
+                <!--<el-button-->
+                    <!--@click="handleDelete(scope.$index, scope.row)"-->
+
+                  <!--type="text"-->
+                  <!--size="small">-->
+                  <!--删除-->
+                <!--</el-button>-->
+                <!--<el-button-->
+                  <!--@click.native.prevent="deleteRow(scope.$index, investorData)"-->
+                  <!--type="text"-->
+                  <!--size="small">-->
+                  <!--拜访-->
+                <!--</el-button>-->
+            <!--</template>-->
+        <!--</el-table-column>-->
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
     </el-pagination>
@@ -49,6 +50,8 @@
 <script type="text/ecmascript-6">
 import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
+import {getInvestorList} from 'api/search'
+import {getSelectIndex} from 'api/search'
 export default {
     data() {
         return {
@@ -57,27 +60,31 @@ export default {
                 details: ['全部', '机构', '个人', '政府']
             }],
             theme: '#fff',
-            investorData: [{
-                name: '张三',
-                type: '个人',
-                manager: 'xxx',
-                cumulative: 100000
-            }, {
-                name: '张三',
-                type: '个人',
-                manager: 'xxx',
-                cumulative: 100000
-            }, {
-                name: '张三',
-                type: '个人',
-                manager: 'xxx',
-                cumulative: 100000
-            }]
+            investorData: []
         }
     },
     components: {
         myFilter,
-        tableHeader
+        tableHeader,
+
+
+    },
+    methods: {
+
+        handleDelete(index, row) {
+            console.log(index, row);
+        }
+    },
+    created(){
+        getInvestorList().then((res)=>{
+            console.log(res.data)
+                this.investorData = res.data.result.list
+        })
+        getSelectIndex('70').then((res)=>{
+            console.log(res.data)
+//            this.filterInfo = res.data.result.list
+        })
+
     }
 }
 </script>

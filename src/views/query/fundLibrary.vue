@@ -9,28 +9,28 @@
     <el-table :data="myFund" border style="width: 100%">
         <el-table-column fixed prop="fundName" label="基金名称" width="150">
         </el-table-column>
-        <el-table-column prop="number" label="基金编号" width="300">
+        <el-table-column prop="fundNo" label="基金编号" width="300">
         </el-table-column>
-        <el-table-column prop="orgType" label="组织类型" width="300">
+        <el-table-column prop="orgTypeId" label="组织类型" width="300">
         </el-table-column>
-        <el-table-column prop="admType" label="管理类型" width="300">
+        <el-table-column prop="manageTypeId" label="管理类型" width="300">
         </el-table-column>
         <el-table-column prop="fundScale" label="基金规模（元）" width="300">
         </el-table-column>
-        <el-table-column prop="raiseTotal" label="募集总额（元）" width="300">
+        <el-table-column prop="placementSum" label="募集总额（元）" width="300">
         </el-table-column>
-        <el-table-column prop="invTotal" label="投资总额（元）" width="300">
+        <el-table-column prop="investSum" label="投资总额（元）" width="300">
         </el-table-column>
-        <el-table-column prop="remainingQuota" label="剩余额度（元）" width="300">
+        <el-table-column prop="surplusLimit" label="剩余额度（元）" width="300">
         </el-table-column>
-        <el-table-column prop="date" label="成立日期" width="300">
+        <el-table-column prop="createDate" label="成立日期" width="300">
         </el-table-column>
-        <el-table-column prop="state" label="状态" width="300">
+        <el-table-column prop="fundStageId" label="状态" width="300">
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="200">
             <template scope="scope">
                    <el-button @click="handleClick" type="text" size="small">查看</el-button>
-                   <el-button type="text" size="small">编辑</el-button>
+                   <!--<el-button type="text" size="small">编辑</el-button>-->
                 </template>
         </el-table-column>
     </el-table>
@@ -40,55 +40,30 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import {getFundLibrary} from 'api/search'
 import tableHeader from 'components/tabelHeader'
 export default {
     data() {
         return {
             theme: '#fff',
-            myFund: [{
-                fundName: '中国联通',
-                number: 20160906,
-                orgType: '众投',
-                admType: '代理',
-                fundScale: 100000000,
-                raiseTotal: 5000000,
-                invTotal: 80000000,
-                remainingQuota: 300000,
-                date: '2016-09-01',
-                state: '持有'
-            }, {
-                fundName: '中国联通',
-                number: 20160906,
-                orgType: '众投',
-                admType: '代理',
-                fundScale: 100000000,
-                raiseTotal: 5000000,
-                invTotal: 80000000,
-                remainingQuota: 300000,
-                date: '2016-09-01',
-                state: '持有'
-            }, {
-                fundName: '中国联通',
-                number: 20160906,
-                orgType: '众投',
-                admType: '代理',
-                fundScale: 100000000,
-                raiseTotal: 5000000,
-                invTotal: 80000000,
-                remainingQuota: 300000,
-                date: '2016-09-01',
-                state: '持有'
-            }]
+            myFund: []
         }
     },
     components: {
         tableHeader
+    },
+    created(){
+        getFundLibrary().then((res)=>{
+            console.log(res.data)
+            this.myFund = res.data.result.list
+        })
     }
 }
 </script>
 
 <style lang="less" scoped>
 @import '../../common/styles/variable.less';
+
 .fundLibrary {
     width: 100%;
     height: 100%;
