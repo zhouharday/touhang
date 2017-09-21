@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .ivu-load-loop {
     animation: ani-load-loop 1s linear infinite
 }
@@ -24,7 +23,7 @@
     background-color: inherit;
     border: 1px solid transparent
 }
-
+a
 .input-group-error-prepend {
     border-right: 0
 }
@@ -14860,8 +14859,7 @@ span.ivu-date-picker-cells-cell-disabled.ivu-date-picker-cells-cell-selected em 
     max-height: none
 }
 
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
+
 .ivu-load-loop {
     animation: ani-load-loop 1s linear infinite
 }
@@ -15142,18 +15140,13 @@ textarea {
     outline-offset: -2px
 }
 
-<<<<<<< HEAD
 [type=search]::-webkit-search-cancel-button, [type=search]::-webkit-search-decoration {
     -webkit-appearance: none;
-=======
-[type=search]::-webkit-search-cancel-button,
-[type=search]::-webkit-search-decoration {
     -webkit-appearance: none
 }
 
 ::-webkit-file-upload-button {
     -webkit-appearance: button;
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     font: inherit
 }
 
@@ -18898,14 +18891,6 @@ samp {
     right: auto
 }
 
-<<<<<<< HEAD
-.ivu-col-span-xs-1, .ivu-col-span-xs-10, .ivu-col-span-xs-11, .ivu-col-span-xs-12,
-.ivu-col-span-xs-13, .ivu-col-span-xs-14, .ivu-col-span-xs-15, .ivu-col-span-xs-16,
-.ivu-col-span-xs-17, .ivu-col-span-xs-18, .ivu-col-span-xs-19, .ivu-col-span-xs-2,
-.ivu-col-span-xs-20, .ivu-col-span-xs-21, .ivu-col-span-xs-22, .ivu-col-span-xs-23,
-.ivu-col-span-xs-24, .ivu-col-span-xs-3, .ivu-col-span-xs-4, .ivu-col-span-xs-5, .ivu-col-span-xs-6,
-.ivu-col-span-xs-7, .ivu-col-span-xs-8, .ivu-col-span-xs-9 {
-=======
 .ivu-col-span-xs-1,
 .ivu-col-span-xs-10,
 .ivu-col-span-xs-11,
@@ -18930,7 +18915,6 @@ samp {
 .ivu-col-span-xs-7,
 .ivu-col-span-xs-8,
 .ivu-col-span-xs-9 {
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     float: left;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto
@@ -20260,10 +20244,6 @@ samp {
         display: block;
         width: 50%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-md-push-12 {
         left: 50%
     }
@@ -20284,10 +20264,7 @@ samp {
         display: block;
         width: 45.83333333%
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-md-push-11 {
         left: 45.83333333%
     }
@@ -20505,10 +20482,7 @@ samp {
         display: block;
         width: 4.16666667%
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-md-push-1 {
         left: 4.16666667%
     }
@@ -20703,10 +20677,6 @@ samp {
         display: block;
         width: 75%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-18 {
         left: 75%
     }
@@ -20748,10 +20718,6 @@ samp {
         display: block;
         width: 66.66666667%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-16 {
         left: 66.66666667%
     }
@@ -20793,10 +20759,6 @@ samp {
         display: block;
         width: 58.33333333%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-14 {
         left: 58.33333333%
     }
@@ -20816,10 +20778,6 @@ samp {
         display: block;
         width: 54.16666667%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-13 {
         left: 54.16666667%
     }
@@ -20968,10 +20926,6 @@ samp {
         display: block;
         width: 25%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-6 {
         left: 25%
     }
@@ -21035,10 +20989,6 @@ samp {
         display: block;
         width: 12.5%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-3 {
         left: 12.5%
     }
@@ -21049,26 +20999,14 @@ samp {
     .ivu-col-lg-offset-3 {
         margin-left: 12.5%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-order-3 {
         -ms-flex-order: 3;
         order: 3
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-span-lg-2 {
         display: block;
         width: 8.33333333%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     .ivu-col-lg-push-2 {
         left: 8.33333333%
     }
@@ -23474,13 +23412,9 @@ fieldset[disabled] .ivu-btn-info>a:only-child:after {
     border-radius: 24px
 }
 
-<<<<<<< HEAD
-.ivu-btn-group-small > .ivu-btn {
-=======
 .ivu-btn-group-small>.ivu-btn {
     padding: 2px 7px;
     font-size: 12px;
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     border-radius: 3px
 }
 
@@ -24696,17 +24630,12 @@ span.ivu-radio + * {
     cursor: not-allowed
 }
 
-<<<<<<< HEAD
-.ivu-checkbox + span,
-.ivu-checkbox-wrapper + span {
-=======
 .ivu-checkbox-wrapper.ivu-checkbox-large {
     font-size: 14px
 }
 
 .ivu-checkbox+span,
 .ivu-checkbox-wrapper+span {
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     margin-right: 4px
 }
 
@@ -26217,13 +26146,8 @@ textarea.ivu-page-options-elevator input {
     width: 100%
 }
 
-<<<<<<< HEAD
 .ivu-steps-vertical .ivu-steps-status-finish .ivu-steps-tail > i:after {
     height: 100%;
-=======
-.ivu-steps-vertical .ivu-steps-status-finish .ivu-steps-tail>i:after {
-    height: 100%
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
 }
 
 .ivu-steps-vertical .ivu-steps-head {
@@ -26264,13 +26188,8 @@ textarea.ivu-page-options-elevator input {
     padding: 22px 0 4px 0
 }
 
-<<<<<<< HEAD
 .ivu-steps-vertical.ivu-steps-small .ivu-steps-tail > i {
     height: 100%;
-=======
-.ivu-steps-vertical.ivu-steps-small .ivu-steps-tail>i {
-    height: 100%
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
 }
 
 .ivu-steps-vertical.ivu-steps-small .ivu-steps-title {
@@ -30158,16 +30077,11 @@ span.ivu-date-picker-cells-cell-disabled.ivu-date-picker-cells-cell-selected em 
     color: #2d8cf0
 }
 
-<<<<<<< HEAD
-.ivu-upload-list-file:hover > span i {
-    color: #495060;
-=======
 .ivu-upload-list-file:hover>span i {
     color: #495060
 }
 
 .ivu-upload-list-file:hover .ivu-upload-list-remove {
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
     opacity: 1
 }
 
@@ -30591,4 +30505,3 @@ span.ivu-date-picker-cells-cell-disabled.ivu-date-picker-cells-cell-selected em 
 .ivu-auto-complete.ivu-select-dropdown {
     max-height: none
 }
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
