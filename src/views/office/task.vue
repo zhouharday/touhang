@@ -14,7 +14,7 @@
                         </div>
                     </div>
                 </Tab-pane>
-                <Tab-pane :name="2" label="代办任务">
+                <Tab-pane :name="2" label="待办任务">
                     <Table border :data="data2" :columns="columns2" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div style="float: right;">
@@ -95,7 +95,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible1 = 0">取 消</el-button>
-                    <el-button type="primary" @click="saveForm(1,'addTaskForm1')">确 定</el-button>
+                    <el-button type="danger" @click="saveForm(1,'addTaskForm1')">确 定</el-button>
                 </div>
             </el-dialog>
             <!-- 代办任务 diglog -->
@@ -474,7 +474,7 @@ export default {
                         return h('div', [
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'text',
                                     size: 'small'
                                 },
                                 style: {
@@ -488,7 +488,7 @@ export default {
                             }, '查看'),
                             h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'text',
                                     size: 'small'
                                 },
                                 on: {
@@ -537,7 +537,7 @@ export default {
                         return h('div', [
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'text',
                                     size: 'small'
                                 },
                                 style: {
@@ -590,7 +590,7 @@ export default {
                         return h('div', [
                             h('Button', {
                                 props: {
-                                    type: 'primary',
+                                    type: 'text',
                                     size: 'small'
                                 },
                                 style: {
@@ -604,7 +604,7 @@ export default {
                             }, '查看'),
                             h('Button', {
                                 props: {
-                                    type: 'error',
+                                    type: 'text',
                                     size: 'small'
                                 },
                                 on: {
@@ -806,10 +806,10 @@ export default {
                             }
                         }, this);
                         this.data1 = res.data.result.list; //任务数据列表
-                        this.page1.pageNum = res.data.result.pageNum; //当前页码 
-                        this.page1.total = res.data.result.total; //数据总数 
-                        this.page1.pageSize = res.data.result.pageSize; //每页条数 
-                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        this.page1.pageNum = res.data.result.pageNum; //当前页码
+                        this.page1.total = res.data.result.total; //数据总数
+                        this.page1.pageSize = res.data.result.pageSize; //每页条数
+                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
                         if (res.data.status == '49999') { //数据为空
                             console.log(res.data.message);
                         }
@@ -833,10 +833,10 @@ export default {
                     if (res.status == '200') {
                         console.log(res.data.result);
                         this.data2 = res.data.result.list; //任务数据列表
-                        this.page2.pageNum = res.data.result.pageNum; //当前页码 
-                        this.page2.total = res.data.result.total; //数据总数 
-                        this.page2.pageSize = res.data.result.pageSize; //每页条数 
-                        this.page2.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        this.page2.pageNum = res.data.result.pageNum; //当前页码
+                        this.page2.total = res.data.result.total; //数据总数
+                        this.page2.pageSize = res.data.result.pageSize; //每页条数
+                        this.page2.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
                         if (res.data.status == '49999') {
                             console.log(res.data.message);
                         }
@@ -860,10 +860,10 @@ export default {
                     if (res.status == '200') {
                         console.log(res.data.result);
                         this.data3 = res.data.result.list; //任务数据列表
-                        this.page3.pageNum = res.data.result.pageNum; //当前页码 
-                        this.page3.total = res.data.result.total; //数据总数 
-                        this.page3.pageSize = res.data.result.pageSize; //每页条数 
-                        this.page3.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        this.page3.pageNum = res.data.result.pageNum; //当前页码
+                        this.page3.total = res.data.result.total; //数据总数
+                        this.page3.pageSize = res.data.result.pageSize; //每页条数
+                        this.page3.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
                         if (res.data.status == '49999') {
                             console.log(res.data.message);
                         }
