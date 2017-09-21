@@ -41,7 +41,6 @@
                         </el-tabs>
                     </div>
                 </div>
-                </div>
             </el-col>
         </el-row>
 
@@ -295,7 +294,7 @@ export default {
             activeName: 'first',
             loading: false,
             monthDate: [],
-            RecentNotice: "最近通知",
+            RecentNotice: "系统消息 / 公司公告",
             waitSth: "待办事项",
             sysPrompt: "系统提示",
             sysMessage: true,
@@ -393,7 +392,7 @@ export default {
         },
         readyfun(arr, data) {
             var arr = arr;
-            //先根据接口返回数据 修改arr 
+            //先根据接口返回数据 修改arr
             //然后再把arr赋值给monthdate
             arr.forEach(function(item) {
                 return item.yd = item.day && item.day % 3 == 1 ? true : false;

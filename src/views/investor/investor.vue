@@ -54,13 +54,14 @@ import investorForm from 'components/investorForm'
 import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
 import {
-    addInvestor
+    addInvestor,
+    getInvestorType
 } from 'api/investor'
 export default {
     data() {
         return {
             chooseInfo: [{
-                title: '项目类型',
+                title: '投资者类型：',
                 details: []
             }],
             theme: '#fff',
@@ -93,15 +94,13 @@ export default {
     },
     methods: {
         handleRouter(index, rowList) {
-            console.log(rowList.id)
-            // this.addTab({
-            //     type: 'addTab',
-            //     title: rowList.investorName + '详情页',
-            //     url: '/home/investorDetails/' + rowList.id,
-            //     name: 'investorDetails/' + rowList.id
-            // });
+            this.addTab({
+                type: 'addTab',
+                title: rowList.investorName + '详情页',
+                url: '/home/investorDetails/' + rowList.id,
+                name: 'investorDetails/' + rowList.id
+            });
             this.$router.push({ name: 'investorDetails', params: { userId: rowList.id }})
-            // this.$router.push('/home/investorDetails/:' + rowList.id)
         },
         showModel() {
             this.modelInvestor = true
@@ -121,14 +120,17 @@ export default {
         this.$store.dispatch('getInvestor').then(() => {
             this.investorData = this.investorList.list
         })
-        this.$store.dispatch('getProType').then(() => {
-            this.chooseInfo[0].details = this.projectType
+        getInvestorType().then((res) => {
+            if(res.status == '200') {
+                this.chooseInfo[0].details = res.data.result
+            }
+        }).catch(err => {
+            this.$Message.error(err)
         })
     },
     computed: {
         ...mapGetters([
-            'investorList',
-            'projectType'
+            'investorList'
         ])
     },
     components: {
