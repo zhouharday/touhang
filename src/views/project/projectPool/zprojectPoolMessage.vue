@@ -22,7 +22,7 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm">
+                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :projectId="projectPoolId">
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
@@ -42,7 +42,9 @@
         </div>
     </div>
 </template>
+
 <script>
+import { mapActions } from 'vuex';
 import detailForm from './details'
 import tableForm from './tables'
 // import industryForm from './industry'
@@ -61,16 +63,17 @@ export default {
             activeName: 'details',
             basicForm: {
                 baseInfo: '基本信息',
-                flag: true
+                flag: false
             },
             companyForm: {
                 baseInfo: '企业信息',
-                flag: true
+                flag: false
             },
             industryForm: {
                 baseInfo: '工商信息',
-                flag: true
-            }
+                flag: false
+            },
+            projectData: {}     // 项目池详情信息
         }
     },
     components: {
@@ -85,6 +88,9 @@ export default {
         this.init();
     },
     methods: {
+        ...mapActions([
+            'setProjectData'
+        ]),
         init() {
             this.initParams();
             this.getPoolDetail();
@@ -102,7 +108,18 @@ export default {
             let projectPoolId = this.projectPoolId;
             console.log('id: ', projectPoolId);
             getProDetail(projectPoolId).then(resp => {
-                console.log('projectPoolId resp: ', resp);
+                // console.log('projectPoolId resp: ', resp);
+                let data = resp.data.result;
+                let { projectInfo, projectInvestmentInfo} = data;
+                // this.projectData = data;
+                this.setProjectData(data);
+                // console.log('pool detail data: ', JSON.stringify(data));
+                if (projectInfo) {
+                    this.basicForm = Object.assign(this.basicForm, projectInfo);
+                }
+                if (projectInvestmentInfo) {
+                    this.companyForm = Object.assign(this.companyForm, projectInvestmentInfo);
+                }
             }).catch(e => {
                 console.log('getProDetail exists error: ', e);
             })

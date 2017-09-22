@@ -23,28 +23,43 @@
         </el-pagination>
     </div>
     <el-dialog title="合作机构" :visible.sync="cooperativeOrg" :close-on-click-modal="false">
-        <el-form :model="cooperativeInfo">
+        <el-form :model="cooperativeInfo" :rules="rules" ref="cooperativeInfo">
             <el-row :gutter="10">
                 <el-col :span="12">
-                    <el-form-item label="机构名称" :label-width="formLabelWidth">
+                    <el-form-item label="机构名称" :label-width="formLabelWidth" prop="orgName" :autofocus="autofocus">
                         <el-input v-model="cooperativeInfo.orgName" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="机构类型" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="cooperativeInfo.orgType" auto-complete="off"></el-input>
+                    <el-form-item label="机构类型" :label-width="formLabelWidth" prop="orgType">
+                        <el-select v-model="cooperativeInfo.orgType" style="width:100%">
+                            <el-option v-for="(item, index) of setOrgType" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="联系人" :label-width="formLabelWidth" prop="orgLinkman">
+                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgLinkman">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="联系电话" :label-width="formLabelWidth" prop="orgnNumber">
+                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgnNumber">
+                        </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="24">
-                    <el-form-item label="联系人" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgLinkman">
+                    <el-form-item label="公司地址" :label-width="formLabelWidth">
+                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgAddress">
                         </el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalIncome = false">取 消</el-button>
+            <el-button @click="cancelForm">取 消</el-button>
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
@@ -53,17 +68,26 @@
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
-import {getOrgList, getAllOrgList, updateOrg} from 'api/fund'
+import {
+    getOrgList,
+    getAllOrgList,
+    updateOrg,
+    addOrganization
+} from 'api/fund'
 export default {
     data() {
         return {
             theme: '#fff',
             cooperativeOrg: false,
+            autofocus: false,
             formLabelWidth: '120px',
             cooperativeInfo: {
-                name: '',
-                type: '',
-                person: ''
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                orgName: '',
+                orgType: '',
+                orgLinkman: '',
+                orgnNumber: '',
+                orgAddress: ''
             },
             headerInfo: {
                 btnGroup: [{
@@ -71,7 +95,45 @@ export default {
                     explain: '添加'
                 }]
             },
-            teamData: []
+            setOrgType: [],
+            teamData: [],
+            rules: {
+                orgName: [{
+                    required: true,
+                    message: '请输入机构名称',
+                    trigger: 'blur'
+                }, {
+                    min: 3,
+                    max: 20,
+                    message: '长度在 3 到 5 个字符',
+                    trigger: 'blur'
+                }],
+                orgType: [{
+                    required: true,
+                    message: '请选择机构类型',
+                    trigger: 'change'
+                }],
+                orgnNumber: [{
+                    required: true,
+                    message: '请输入数字',
+                    trigger: 'change'
+                }, {
+                    min: 7,
+                    max: 11,
+                    message: '长度在 7 到 11 个字符',
+                    trigger: 'blur'
+                }],
+                orgLinkman: [{
+                    required: true,
+                    message: '请输入机构名称',
+                    trigger: 'blur'
+                }, {
+                    min: 3,
+                    max: 20,
+                    message: '长度在 3 到 5 个字符',
+                    trigger: 'blur'
+                }]
+            }
         }
     },
     methods: {
@@ -81,22 +143,56 @@ export default {
         handleEdit(index, row) {
             this.cooperativeOrg = true
             this.cooperativeInfo = row
+        },
+        // updateOrg(row.id).then((res) => {
+        //     if (res.status == '200') {
+        //         console.log(res)
+        //     }
+        // }).catch(err => {
+        //     let res = err.data
+        //     if(res.status == '9005') {
+        //         this.autofocus = true
+        //         this.$Message.warning(res.message || '机构名称已经存在!')
+        //     }
+        // })
+        confirmIncome() {
+            this.$refs.cooperativeInfo.validate((valid) => {
+                if (valid) {
+                    addOrganization(this.cooperativeInfo).then((response) => {
+                        console.log(this.cooperativeInfo)
+                        if (response.status == '200') {
+                            console.log(res)
+                            this.$Message.success(res.data.message || '操作成功')
+                        }
+                    }).catch(err => {
+                        if (response.status == '9005') {
+                            this.$Message.error(response.data.message || '机构名称已经存在!')
+                        }
+                    })
+                } else {
+                    return false
+                }
+            })
+        },
+        cancelForm() {
+            this.$refs.cooperativeInfo.resetFields()
+            this.cooperativeOrg = false
         }
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.autofocus = true
+        })
     },
     created() {
         getAllOrgList().then((res) => {
-            if(res.data.status == '200') {
-                console.log(res)
+            if (res.data.status == '200') {
+                this.setOrgType = res.data.result
             }
         })
         getOrgList().then((response) => {
-            if(response.data.status == '200') {
+            if (response.data.status == '200') {
                 this.teamData = response.data.result.list
-            }
-        })
-        updateOrg(this.cooperativeInfo.id).then((res) => {
-            if(res.data.status == '200') {
-                console.log(res)
             }
         })
     },
@@ -112,7 +208,7 @@ export default {
     height: 100%;
     padding: 24px;
     background: #fff;
-    .addPadding{
+    .addPadding {
         padding-bottom: 12px;
     }
 }

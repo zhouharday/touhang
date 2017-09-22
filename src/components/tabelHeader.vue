@@ -44,7 +44,6 @@ export default {
         },
         _theme() {
             this.$refs.title.style.background = this.theme;
-            // console.log(this.$refs.btnwrapper);
             if (this.$refs.btnwrapper) {
                 for (var i = 0; i < this.$refs.btnwrapper.length; i++) {
                     var btnwrapper = this.$refs.btnwrapper
@@ -59,9 +58,6 @@ export default {
             }
         }
     },
-    // mounted() {
-    //     this._theme()
-    // }
 }
 </script>
 

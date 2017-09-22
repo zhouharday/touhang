@@ -4,9 +4,9 @@
             <div class="left">
                 <span class="desc">{{title}}</span>
             </div>
-            <div class="right">
+            <!-- <div class="right">
                 <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-            </div>
+            </div> -->
         </div>
         <div class="firstLayer">
             <el-row :gutter="40">
@@ -89,7 +89,7 @@
 </template>
     
 
-<script type="text/ecmascript-6">
+<script>
 import tableInfo from '../../../components/tableInfo'
 import echarts from '../../../components/echarts'
 import detailForm from './details'
@@ -103,6 +103,7 @@ import eventTable from './event'
 import dataTable from './data'
 import monitorTable from './monitor'
 
+import { getAfterDetail } from 'api/projectAfter';
 
 export default {
     data() {
@@ -200,7 +201,34 @@ export default {
             },
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.initInfo();
+            this.initData();
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+
+            let href = window.location.href;
+            let id = href.substr(href.lastIndexOf('/') + 1, href.length);
+            this.id = id;
+        },
+        initData() {
+            getAfterDetail({
+                id: this.id,
+                userId: this.addProjectUserId
+            }).then(resp => {
+
+            }).catch(e => {
+
+            });
+        },
         disable(name) {
             if (name.flag === false) {
                 return name.flag = true

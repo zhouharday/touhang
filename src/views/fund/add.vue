@@ -1,12 +1,12 @@
 <template>
 <div class="add">
-    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="formAccountinfo">
+    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="fundAccinfo">
     </my-details>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
-import Details from 'views/fund/details'
+import Details from './details'
 export default {
     data() {
         return {

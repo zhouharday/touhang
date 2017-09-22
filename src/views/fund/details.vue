@@ -196,12 +196,22 @@
             <el-row>
                 <el-col :span="24" class="navbar">
                     <el-row :gutter="20">
-                        <el-col span="6">账户类型</el-col>
-                        <el-col span="6">户名</el-col>
-                        <el-col span="6">开户行</el-col>
-                        <el-col span="6">账号</el-col>
+                        <el-col :span="6">账户类型</el-col>
+                        <el-col :span="6">户名</el-col>
+                        <el-col :span="6">开户行</el-col>
+                        <el-col :span="6">账号</el-col>
                     </el-row>
                 </el-col>
+                <!-- <el-col :span="24" v-for="item of formAccountinfo">
+                    <el-form-item>
+                        <el-row :gutter="20">
+                            <el-col :span="6" v-for="list in item">
+                                <el-input v-model="list[index]" :disabled="formAccountinfo.flag">
+                                </el-input>
+                            </el-col>
+                        </el-row>
+                    </el-form-item>
+                </el-col> -->
                 <el-col :span="24">
                     <el-form-item>
                         <el-row :gutter="20">

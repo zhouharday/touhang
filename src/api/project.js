@@ -99,13 +99,51 @@ export function delPro(id, projectType) {
 
 // 转投资
 export function transPro(params = {}) {
-	let { projectId, merchantId, addProjectUserId } = params;
+	let { projectId, addProjectUserId } = params;
 	const data = {
 		projectId,
-		merchantId,
 		addProjectUserId
 	}
-	return service({url: '/investProject/addInvestProject', method: 'post', data});
+	// return service({url: '/investProject/addInvestProject', method: 'post', data});
+	return service({url: '/productClieController/insertProjectPool', method: 'post', data});
+}
+
+// 提交企业信息
+export function changeEnterpriseInfo(params = {}) {
+	let { id, projectId, enterpriseName, legalPerson, registeredCapital, paiclCapital, registerDate, creditCode, registerAddress, workAddress, mainBusiness, remark } = params;
+    const data = {
+        id,  //123
+        projectId, //基本信息ID: "1"
+        enterpriseName, //企业名称: "5555"
+        legalPerson,   //法人: "CESHI"
+        registeredCapital,  //注册资本: null
+        paiclCapital,  //实收资本: null
+        registerDate,  //注册登记时间 : null
+        creditCode,  //统一信用代码: null
+        registerAddress, //注册地址: null
+        workAddress,   //办公地址: null
+        mainBusiness,  //主营业务: null
+        remark  //备注: null
+    }
+    return service({url: '/projectPool/updateEnterpriseInfo', method: 'post', data})
+}
+// 提交项目基本信息
+export function changeProjectInfo(params = {}) {
+	let { id, projectName, projectShortName, addressId, projectTypeId, industryId, statusId, projectFromId, departmentId, projectLeaderId, merchantId } = params;
+    const data = {
+       id, //必传:0875d8a18eb34f599ff3bdb7fbba3cf8
+       projectName,//项目名: "2"
+       projectShortName, //项目简称: "3"
+       addressId, //项目所在地: "321"
+       projectTypeId, //项目类型ID: null
+       industryId, //行业ID: null
+       statusId, //项目状态ID: null
+       projectFromId, //项目来源: null
+       departmentId, //业务部门ID: null
+       projectLeaderId,  //项目负责人id : null
+       merchantId //商户ID : null
+    }
+    return service({url: '/projectPool/updateProjectInfo', method: 'post', data})
 }
 
 

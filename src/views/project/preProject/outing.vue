@@ -1,29 +1,29 @@
 <template>
     <section class="outing">
-        <el-form :model="outingData1" label-width="110px">
+        <el-form :model="outingForm" label-width="110px">
             <el-row>
                 <el-col>
                     <el-form-item label="标题">
-                        <el-input v-model="outingData1.title" auto-complete="off" :disabled="true"></el-input>
+                        <el-input v-model="outingForm.title" auto-complete="off" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出类型">
-                        <el-select v-model="outingData1.outingSort" placeholder="请选择退出类型" style="width:100%;">
-                            <el-option label="类型一" value="类型一"></el-option>
-                            <el-option label="类型二" value="类型二"></el-option>
+                        <el-select v-model="outingForm.outingSort" placeholder="请选择退出类型" style="width:100%;">
+                            <el-option v-for="item in outingSortOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出金额（元）">
-                        <el-input v-model="outingData1.outingMoney" auto-complete="off"></el-input>
+                        <el-input v-model="outingForm.outingMoney" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col>
                     <el-form-item label="相关附件">
                         <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="outingData1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
+                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="outingForm.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
                                 <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
@@ -33,12 +33,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人">
-                        <el-input v-model="outingData1.operator" auto-complete="off"></el-input>
+                        <el-input placeholder="默认当前登陆用户" v-model="outingForm.operator" auto-complete="off" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="outingData1.handlingDate" style="width: 100%;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="outingForm.handlingDate" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -81,7 +81,7 @@ export default {
     data() {
         return {
             isShow: true,
-            outingData1: {
+            outingForm: {
                 title: 'AAA项目',
                 outingSort: '',
                 outingMoney: '',
@@ -89,6 +89,15 @@ export default {
                 operator: '',
                 handlingDate: '',
             },
+            outingSortOptions: [
+                 { //退出类型列表
+                    value: '选项1',
+                    label: '退出类型一'
+                }, {
+                    value: '选项2',
+                    label: '退出类型二'
+                }
+            ],
             outingData2: [
                 {
                     foundName: 'AA基金',
