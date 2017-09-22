@@ -32,7 +32,10 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="机构类型" :label-width="formLabelWidth" prop="orgType">
-                        <el-input v-model="cooperativeInfo.orgType" auto-complete="off"></el-input>
+                        <el-select v-model="cooperativeInfo.orgType" style="width:100%">
+                            <el-option v-for="(item, index) of setOrgType" :key="item.id" :label="item.orgName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -92,6 +95,7 @@ export default {
                     explain: '添加'
                 }]
             },
+            setOrgType: [],
             teamData: [],
             rules: {
                 orgName: [{
@@ -138,23 +142,26 @@ export default {
         },
         handleEdit(index, row) {
             this.cooperativeOrg = true
-            updateOrg(row.id).then((res) => {
-                if (res.status == '200') {
-                    console.log(res)
-                }
-            }).catch(err => {
-                let res = err.data
-                if(res.status == '9005') {
-                    this.autofocus = true
-                    this.$Message.warning(res.message || '机构名称已经存在!')
-                }
-            })
+            this.cooperativeInfo = row
         },
+        // updateOrg(row.id).then((res) => {
+        //     if (res.status == '200') {
+        //         console.log(res)
+        //     }
+        // }).catch(err => {
+        //     let res = err.data
+        //     if(res.status == '9005') {
+        //         this.autofocus = true
+        //         this.$Message.warning(res.message || '机构名称已经存在!')
+        //     }
+        // })
         confirmIncome() {
             this.$refs.cooperativeInfo.validate((valid) => {
                 if (valid) {
                     addOrganization(this.cooperativeInfo).then((response) => {
+                        console.log(this.cooperativeInfo)
                         if (response.status == '200') {
+                            console.log(res)
                             this.$Message.success(res.data.message || '操作成功')
                         }
                     }).catch(err => {
@@ -180,7 +187,7 @@ export default {
     created() {
         getAllOrgList().then((res) => {
             if (res.data.status == '200') {
-                console.log(res.data.result)
+                this.setOrgType = res.data.result
             }
         })
         getOrgList().then((response) => {
