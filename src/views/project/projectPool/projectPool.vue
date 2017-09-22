@@ -54,7 +54,7 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
-                            <!-- 
+                            <!--
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
                             -->
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">
@@ -105,7 +105,7 @@
                                 <span>确认将该项目转投资？</span>
                                 <span slot="footer" class="dialog-footer">
                                     <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click.native.prevent="jumpPre()">确 定</el-button>
+                                    <el-button type="danger" @click.native.prevent="jumpPre()">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>

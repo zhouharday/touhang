@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 /*@charset "UTF-8";*/
 .el-breadcrumb:after, .el-breadcrumb:before, .el-button-group:after, .el-button-group:before, .el-form-item:after, .el-form-item:before, .el-form-item__content:after, .el-form-item__content:before {
@@ -4417,7 +4416,7 @@
 }
 
 .el-row--flex.is-justify-space-around {
-    -ms-flex-pack: distribute;
+  /* -ms-flex-pack: distribute;*/
     justify-content: space-around
 }
 
@@ -8286,7 +8285,7 @@
 }
 
 .el-color-svpanel__cursor > div {
-    cursor: head;
+    cursor:pointer;
     width: 4px;
     height: 4px;
     box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0, 0, 0, .3), 0 0 1px 2px rgba(0, 0, 0, .4);
@@ -9577,9 +9576,7 @@
 }
 
 /*@charset "UTF-8";*/
-=======
-@charset "UTF-8";
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
+
 .el-breadcrumb:after,
 .el-breadcrumb:before,
 .el-button-group:after,
@@ -19491,7 +19488,4 @@
 .el-transfer-panel__filter .el-icon-circle-close {
     cursor: pointer
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 39637ea398b5c7221f27821fe628ff028ebd7271
