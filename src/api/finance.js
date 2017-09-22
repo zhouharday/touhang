@@ -1,8 +1,9 @@
 import service from 'common/js/fetch'
 
 // 获取融资列表
-export function getFinances() {
+export function getFinances(enterpriseId) {
     const data = {
+        enterpriseId
     }
     return service({url: '/financing/selectFinancingInfo', method: 'post', data})
 }
@@ -27,12 +28,12 @@ export function editFinance(id = undefined, enterpriseId = undefined, params) {
 	let { projectTurnId, financingWayId, financingMoney, financingDate } = params;
     const data = {
         id,
-        enterpriseId, // 融资日期
+        enterpriseId, 
 
         projectTurnId,
         financingWayId,
         financingMoney,
-        financingDate
+        financingDate // 融资日期
     }
     return service({url: '/financing/updateFinancingInfo', method: 'post', data})
 }

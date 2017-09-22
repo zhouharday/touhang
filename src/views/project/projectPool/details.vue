@@ -1,6 +1,6 @@
 <template>
     <div class="form">
-        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -11,12 +11,12 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目简称">
-                            <el-input v-model="basicForm.shortName" :disabled="basicForm.flag"></el-input>
+                            <el-input v-model="basicForm.projectShortName" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目类型">
-                            <el-input v-model="basicForm.projectSort" :disabled="basicForm.flag"></el-input>
+                            <el-input v-model="basicForm.projectType" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -26,50 +26,50 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目来源">
-                            <el-input v-model="basicForm.origin" :disabled="basicForm.flag"></el-input>
+                            <el-input v-model="basicForm.projectFromId" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地">
-                            <el-input v-model="basicForm.location" :disabled="basicForm.flag"></el-input>
+                            <el-input v-model="basicForm.address" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
                         <el-form-item label="业务部门">
-                            <el-input v-model="basicForm.department" :disabled="basicForm.flag"></el-input>
+                            <el-input v-model="basicForm.departmentId" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="企业名称">
-                            <el-input v-model="companyForm.companyName" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.enterpriseName" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="法人代表">
-                            <el-input v-model="companyForm.delegate" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.legalPerson" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册资本（元）">
-                            <el-input v-model="companyForm.regCapital" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.registeredCapital" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="实收资本（元）">
-                            <el-input v-model="companyForm.paidCapital" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.paiclCapital" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册登记日期">
                             <!-- <el-input></el-input> -->
-                            <el-date-picker type="date" v-model="companyForm.regDatetime" :disabled="companyForm.flag" style="width:100%">
+                            <el-date-picker type="date" v-model="companyForm.registerDate" :disabled="companyForm.flag" style="width:100%">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -80,17 +80,17 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册地址">
-                            <el-input v-model="companyForm.regAddress" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.registerAddress" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="办公地址">
-                            <el-input v-model="companyForm.workingSite" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.workAddress" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
                         <el-form-item label="主营业务">
-                            <el-input v-model="companyForm.service" :disabled="companyForm.flag"></el-input>
+                            <el-input v-model="companyForm.mainBusiness" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
@@ -107,6 +107,7 @@
 
 <script>
 import tabelHeader from 'components/tabelHeader'
+import { changeEnterpriseInfo, changeProjectInfo } from 'api/project';
 export default {
     props: {
         basicForm: {
@@ -116,6 +117,10 @@ export default {
         companyForm: {
             type: Object,
             default: {}
+        },
+        projectId: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -151,13 +156,44 @@ export default {
             }
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            setTimeout(() => {
+                this.disable(this.basicForm);
+                this.disable(this.companyForm);    
+            }, 3e3);
+        },
         disable(name) {
             if (name.flag === false) {
                 return name.flag = true
             } else {
                 return name.flag = false
             }
+        },
+        changeProjectInfo() {
+            let basicForm = this.basicForm;
+            basicForm.projectId = this.projectId;
+            console.log(JSON.stringify(basicForm));
+            changeProjectInfo(basicForm).then(resp => {
+                this.disable(basicForm);
+                console.log('changeProjectInfo resp: ', resp);
+            }).catch(e => {
+                console.log('changeProjectInfo exists error: ', e);
+            })
+        },
+        changeEnterpriseInfo() {
+            let companyForm = this.companyForm;
+            companyForm.projectId = this.projectId;
+            console.log(JSON.stringify(companyForm));
+            changeEnterpriseInfo(companyForm).then(resp => {
+                this.disable(companyForm);
+                console.log('changeEnterpriseInfo resp: ', resp);
+            }).catch(e => {
+                console.log('changeEnterpriseInfo exists error: ', e);
+            })
         }
     },
     components: {

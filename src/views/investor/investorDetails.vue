@@ -13,34 +13,25 @@
             </el-col>
         </el-row>
     </div>
-
-    <Tabs size="small">
-        <TabPane label="标签一"><baseInfo></baseInfo></TabPane>
-        <TabPane label="标签二"><investorDoc></investorDoc></TabPane>
-        <TabPane label="标签三">标签三的内容</TabPane>
-    </Tabs>
-    <!-- <el-tabs v-model="activeName" type="card"> -->
-        <!-- <el-tab-pane label="用户管理" name="first">
-        </el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
-        <!-- <el-tab-pane label="基本信息" name="first">
-            <baseInfo></baseInfo>
-        </el-tab-pane>
-        <el-tab-pane label="投资者文档" name="second">
-            <investorDoc></investorDoc>
-        </el-tab-pane>
-        <el-tab-pane label="投资协议" name="third">
-            <agreement></agreement>
-        </el-tab-pane>
-        <el-tab-pane label="资金明细" name="fourth">
-            <fundDetails></fundDetails>
-        </el-tab-pane>
-        <el-tab-pane label="资金明细" name="five">
-            <visitingRecord></visitingRecord>
-        </el-tab-pane> -->
-    <!-- </el-tabs> -->
+    <div class="tabs">
+        <Tabs v-model="detailsName" type="card">
+            <TabPane label="基本信息" name="info">
+                <baseInfo :userId="paramsId"></baseInfo>
+            </TabPane>
+            <TabPane label="投资者文档" name="invDoc" class="tab_list">
+                <investorDoc></investorDoc>
+            </TabPane>
+            <TabPane label="投资协议" name="agree" class="tab_list">
+                <agreement :userId="paramsId"></agreement>
+            </TabPane>
+            <TabPane label="资金明细" name="funddet" class="tab_list">
+                <fundDetails></fundDetails>
+            </TabPane>
+            <TabPane label="拜访记录" name="visiting" class="tab_list">
+                <visitingRecord :userId="paramsId"></visitingRecord>
+            </TabPane>
+        </Tabs>
+    </div>
 </div>
 </template>
 
@@ -63,11 +54,12 @@ export default {
                     amount: '666666'
                 }]
             },
-            activeName: 'first'
+            detailsName: 'info',
+            paramsId: ''
         }
     },
     created() {
-        console.log(this.$route.params)
+        this.paramsId = this.$route.params.userId
     },
     components: {
         baseInfo,

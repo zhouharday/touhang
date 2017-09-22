@@ -168,7 +168,7 @@
 }
 
 
-.collapseBtn {
+.collapse-btn {
     position: absolute;
     right: 0;
     top: 0;
@@ -460,6 +460,6 @@ export default {
             }
         }
     }
-}    
+}
 </script>
 

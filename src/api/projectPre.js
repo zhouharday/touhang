@@ -12,6 +12,17 @@ export function getPres(params = {}) {
 }
 
 /////// 董事会 ///////////////
+// 添加董事会成员
+export function addOwer(params = {}) {
+	let { name, enterpriseId, nature, educationalBg } = params;
+	const data = {
+		enterpriseId,
+		name,
+		nature,
+		educationalBg
+	}
+	return service({url: '/boardMember/addBoardMember', method: 'post', data});
+}
 // 修改董事会成员
 export function updateOwer(params = {}) {
 	let { id, name, enterprise_id, nature, educationalBg, tel } = params;
@@ -54,16 +65,26 @@ export function addTeam(investProjectId = undefined) {
 	return service({url: '/projectTeam/insertProjectTeam', method: 'post', data});
 }
 
+// 删除项目团队
+export function delTeam(id = undefined) {
+	const data = {
+		id
+	}
+	return service({url: '/projectTeam/insertProjectTeam', method: 'post', data});
+}
+
 ////// 股权 ////////////////
 // 股权添加
 export function addGu(params) {
-	let { enterpriseId, stockholderName, investmentAmount } = params;
+	let { stockholderNature, stockholderName, investmentAmount, stockCount, stockRatio } = params;
 	const data = {
-		enterpriseId,
-		stockholderName,
-		investmentAmount
+		stockholderName, //股东姓名: null
+		stockholderNature,//股东性质: null
+		investmentAmount,//投资金额: null
+		stockCount, //持股数量: null
+		stockRatio //股权占比: null
 	}
-	return service({url: 'OwnershipStructure/addOwnershipStructure', method: 'post', data});
+	return service({url: 'projectPool/insertOwnershipStructure', method: 'post', data});
 }
 
 // 股权删除
