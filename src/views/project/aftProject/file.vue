@@ -6,9 +6,9 @@
             <el-table :data="fileData" border style="width: 100%" align="center">
                 <el-table-column label="文档名称" prop="fileName" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column label="上传人" prop="user" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column label="上传时间" prop="date" align="center">
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
@@ -26,9 +26,9 @@
             <el-table :data="inspectionData" border style="width: 100%" align="center">
                 <el-table-column label="文档名称" prop="inspectionName" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column label="上传人" prop="user" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column label="上传时间" prop="date" align="center">
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
@@ -72,9 +72,9 @@
             <el-table :data="projectData" border style="width: 100%" align="center">
                 <el-table-column label="文档名称" prop="projectName" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column label="上传人" prop="user" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column label="上传时间" prop="date" align="center">
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
@@ -88,10 +88,10 @@
             <!-- 上传文档 对话框-->
             <el-dialog title="上传文档" :visible.sync="modalAdd3" :close-on-click-modal="false">
                 <el-form :model="projectForm" :label-width="formLabelWidth">
-                    <el-form-item label="用户">
+                    <el-form-item label="上传人">
                         <el-input v-model="projectForm.user" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="上传日期">
+                    <el-form-item label="上传时间">
                         <el-date-picker type="date" placeholder="选择日期" v-model="projectForm.date" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
