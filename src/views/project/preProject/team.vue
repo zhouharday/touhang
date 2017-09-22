@@ -7,7 +7,10 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.name"></el-input>
+                            <el-select v-model="scope.row.name" style="width:100%">
+                                <el-option v-for="item in  nameOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </span>
                     </template>
                 </el-table-column>
@@ -15,18 +18,21 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.role }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.role"></el-input>
+                            <el-select v-model="scope.row.role" style="width:100%">
+                                <el-option v-for="item in  roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="添加日期" prop="date" align="center">
-                    <template scope="scope">
+                    <!-- <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.date }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.date" style="width: 100%;">
                             </el-date-picker>
                         </span>
-                    </template>
+                    </template> -->
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
@@ -42,17 +48,20 @@
             <el-dialog title="添加项目成员" :visible.sync="modalAdd" :close-on-click-modal="false">
                 <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
                     <el-form-item label="姓名" prop="name">
-                        <el-input v-model="teamForm.name" auto-complete="off"></el-input>
+                        <el-select v-model="teamForm.name" placeholder="请选择姓名" style="width:100%">
+                            <el-option v-for="item in nameOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="角色" prop="role">
                         <el-select v-model="teamForm.role" placeholder="请选择角色" style="width:100%">
-                            <el-option label="角色一" value="角色一"></el-option>
-                            <el-option label="角色二" value="角色二"></el-option>
+                            <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="添加日期" prop="date">
-                        <el-date-picker type="date" placeholder="添加日期" v-model="teamForm.date" style="width: 100%;">
-                        </el-date-picker>
+                        <el-input placeholder="默认当前日期" v-model="teamForm.date" style="width: 100%;" disabled>
+                        </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -89,6 +98,24 @@ export default {
                 date: '',
                 editFlag: false
             },
+            nameOptions: [
+                { //姓名列表
+                    value: '选项1',
+                    label: '王二'
+                }, {
+                    value: '选项2',
+                    label: '李一'
+                }
+            ],
+            roleOptions: [
+                { //角色列表
+                    value: '选项1',
+                    label: '角色一'
+                }, {
+                    value: '选项2',
+                    label: '角色二'
+                }
+            ],
             rules: {
                 name: [
                     { required: true, message: '请输入姓名', trigger: 'blur' }
@@ -97,7 +124,7 @@ export default {
                     { required: true, message: '请选择角色', trigger: 'blur' }
                 ],
                 date: [
-                    { type: 'date', required: true, message: '请选择时间', trigger: 'blur' }
+                    { required: true, message: '添加日期', trigger: 'blur' }
                 ]
             },
             headerInfo_team: {

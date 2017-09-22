@@ -21,8 +21,8 @@
                         <el-form :model="costForm1" label-width="100px">
                             <el-form-item label="费用类型">
                                 <el-select v-model="costForm1.costSort" placeholder="请选择费用类型" style="width: 100%;">
-                                    <el-option label="类型一" value="类型一"></el-option>
-                                    <el-option label="类型二" value="类型二"></el-option>
+                                    <el-option v-for="item in costSortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="金额（元）">
@@ -39,8 +39,8 @@
                         <el-form :model="costForm2" label-width="100px">
                             <el-form-item label="费用类型">
                                 <el-select v-model="costForm2.costSort" placeholder="请选择费用类型" style="width: 100%;">
-                                    <el-option label="类型一" value="类型一"></el-option>
-                                    <el-option label="类型二" value="类型二"></el-option>
+                                    <el-option v-for="item in costSortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="金额（元）">
@@ -114,7 +114,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.operator" auto-complete="off"></el-input>
+                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -233,7 +233,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.operator" auto-complete="off"></el-input>
+                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -348,8 +348,8 @@
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
                                         <el-select v-model="paidForm1.contractName" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option label="合同一" value="合同一"></el-option>
-                                            <el-option label="合同二" value="合同二"></el-option>
+                                            <el-option v-for="item in contractOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -381,7 +381,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.operator" auto-complete="off"></el-input>
+                                        <el-input v-model="paidForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -427,7 +427,7 @@
                             <el-button type="primary" @click="confirmPaidAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
-                     <!-- 编辑投资支付 对话框-->
+                    <!-- 编辑投资支付 对话框-->
                     <el-dialog title="编辑投资支付" :visible.sync="paidAdd2" :close-on-click-modal="false" style="width：65%;">
                         <el-form :model="paidForm1" label-width="110px">
                             <el-row>
@@ -439,8 +439,8 @@
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
                                         <el-select v-model="paidForm1.contractName" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option label="合同一" value="合同一"></el-option>
-                                            <el-option label="合同二" value="合同二"></el-option>
+                                            <el-option v-for="item in contractOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -472,7 +472,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.operator" auto-complete="off"></el-input>
+                                        <el-input v-model="paidForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -552,8 +552,8 @@
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
                                         <el-select v-model="sharingForm1.contractName" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option label="合同一" value="合同一"></el-option>
-                                            <el-option label="合同二" value="合同二"></el-option>
+                                            <el-option v-for="item in contractOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -569,7 +569,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.operator" auto-complete="off"></el-input>
+                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -613,7 +613,7 @@
                             <el-button type="primary" @click="confirmSharingAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
-                      <!-- 编辑项目分红 对话框-->
+                    <!-- 编辑项目分红 对话框-->
                     <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
                         <el-form :model="sharingForm1" label-width="110px">
                             <el-row>
@@ -625,8 +625,8 @@
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
                                         <el-select v-model="sharingForm1.contractName" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option label="合同一" value="合同一"></el-option>
-                                            <el-option label="合同二" value="合同二"></el-option>
+                                            <el-option v-for="item in contractOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
@@ -642,7 +642,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.operator" auto-complete="off"></el-input>
+                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -719,6 +719,15 @@ export default {
                 costSort: '',
                 money: '',
             },
+            costSortOptions: [
+                { //费用类型列表
+                    value: '选项1',
+                    label: '类型一'
+                }, {
+                    value: '选项2',
+                    label: '类型二'
+                }
+            ],
             costData: [{
                 costSort: '类型一',
                 money: '',
@@ -800,6 +809,15 @@ export default {
                     contractMoney: '',
                     paidMoney: '10,000',
                     paidDate: '2017-9-9'
+                }
+            ],
+            contractOptions: [
+                { //合同选择列表
+                    value: '选项1',
+                    label: '合同一'
+                }, {
+                    value: '选项2',
+                    label: '合同二'
                 }
             ],
             headerInfo_paid: {
@@ -891,13 +909,13 @@ export default {
             this.costAdd1 = !this.costAdd1;
         },
         // 编辑 项目合同 确定按钮
-        confirmCostAdd2() { 
-           this.costAdd2 = !this.costAdd2;
+        confirmCostAdd2() {
+            this.costAdd2 = !this.costAdd2;
         },
 
 
         // 添加 项目合同 确定按钮
-         confirmContractAdd1() {
+        confirmContractAdd1() {
             this.contractData.push(this.contractForm1);
             this.contractForm1 = {};
             this.contractAdd1 = false;
@@ -912,7 +930,7 @@ export default {
         },
         // 编辑 项目合同  确定按钮
         confirmContractAdd2() {
-           this.contractAdd2 = !this.contractAdd2; 
+            this.contractAdd2 = !this.contractAdd2;
         },
 
 

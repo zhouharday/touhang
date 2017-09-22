@@ -34,10 +34,13 @@
             <div class="img_wrapper">
                 <img src="/static/img/double.png">
             </div>
+            <!-- 小双助手 -->
             <div class="prompt_message">
                 <span class="prompt">{{prompt}}</span>
                 <div class="item_wrapper">
                     <div class="item" v-for="(item, index) in module" :key="item.index">
+                        <!-- 立即上传 -->
+                        <!-- 发起申请等 对话框 -->
                         <span class="count">{{item.count}}</span>
                         <p class="desc">{{item.desc}}</p>
                         <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
@@ -59,9 +62,9 @@
                     <team-table></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-          <industry-form :industryForm="industryForm">
-          </industry-form>
-        </el-tab-pane> -->
+                          <industry-form :industryForm="industryForm">
+                          </industry-form>
+                        </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-Form></record-Form>
                 </el-tab-pane>
@@ -88,17 +91,17 @@
                 <el-row>
                     <el-col>
                         <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off"></el-input>
+                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off"></el-input>
+                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off"></el-input>
+                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
@@ -121,7 +124,7 @@
                     <el-col>
                         <el-form-item label="选择审批人" prop="date">
                             <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in applyForm.options" :key="item.value" :label="item.label" :value="item.value">
+                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -197,18 +200,18 @@ export default {
                 date: '',
                 notes: '',
                 appendix: '',
-                auditor: '',
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }]
-            }
+                auditor: ''
+            },
+            auditorOptions: [{ //审批人列表
+                value: '选项1',
+                label: '张三'
+            }, {
+                value: '选项2',
+                label: '李四'
+            }, {
+                value: '选项3',
+                label: '王二'
+            }]
         }
     },
     components: {
@@ -224,19 +227,19 @@ export default {
         outingForm
     },
     created() {
-      this.init();
+        this.init();
     },
     methods: {
-      init() {
-        
-      },
-      disable(name) {
-          if (name.flag === false) {
-              return name.flag = true
-          } else {
-              return name.flag = false
-          }
-      }
+        init() {
+
+        },
+        disable(name) {
+            if (name.flag === false) {
+                return name.flag = true
+            } else {
+                return name.flag = false
+            }
+        }
     }
 }
 
@@ -423,5 +426,4 @@ export default {
         }
     }
 }
-
 </style>

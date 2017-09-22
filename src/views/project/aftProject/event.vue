@@ -3,15 +3,8 @@
         <el-form :model="eventForm" label-width="80px" class="eventForm">
             <el-form-item label="汇报事项">
                 <el-select v-model="eventForm.event" placeholder="请选择汇报事项" style="width: 100%;">
-                    <el-option label="上市进展情况" value="上市进展情况"></el-option>
-                    <el-option label="重大股东会决议" value="重大股东会决议"></el-option>
-                    <el-option label="重大董事会决议" value="重大董事会决议"></el-option>
-                    <el-option label="重大监事会决议" value="重大监事会决议"></el-option>
-                    <el-option label="重大投资事项" value="重大投资事项"></el-option>
-                    <el-option label="重大筹融资事项" value="重大筹融资事项"></el-option>
-                    <el-option label="对赌执行情况" value="对赌执行情况"></el-option>
-                    <el-option label="股权变更" value="股权变更"></el-option>
-                    <el-option label="其他" value="其他"></el-option>
+                    <el-option v-for="item in eventOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="事项日期">
@@ -67,6 +60,39 @@ export default {
                 date: '',
                 content: ''
             },
+            eventOptions: [
+                 { //汇报事项列表
+                    value: '选项1',
+                    label: '上市进展情况'
+                }, {
+                    value: '选项2',
+                    label: '重大股东会决议'
+                },
+                {
+                    value: '选项3',
+                    label: '重大董事会决议'
+                }, {
+                    value: '选项4',
+                    label: '重大监事会决议'
+                }, {
+                    value: '选项5',
+                    label: '重大投资事项'
+                },
+                {
+                    value: '选项6',
+                    label: '重大筹融资事项'
+                }, {
+                    value: '选项7',
+                    label: '对赌执行情况'
+                },
+                {
+                    value: '选项8',
+                    label: '股权变更'
+                }, {
+                    value: '选项9',
+                    label: '其他'
+                }
+            ],
             recordList: [
                 {
                     userName: '张三',

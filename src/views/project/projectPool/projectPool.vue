@@ -82,11 +82,11 @@
                             <div class="fow">{{ scope.row.state }}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="创建人" align="center">
+                    <!-- <el-table-column label="创建人" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.manager }}</div>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.datetime }}</div>
@@ -181,7 +181,7 @@ export default {
                     round: 'Pre-A轮',
                     location: '广东省',
                     state: '正常',
-                    manager: '刘经理',
+                    // manager: '刘经理',
                     datetime: '2015/01/16',
                     id: 0
                 },
@@ -192,7 +192,7 @@ export default {
                     round: 'B+轮',
                     location: '海外',
                     state: '正常',
-                    manager: '王经理',
+                    // manager: '王经理',
                     datetime: '2016/04/21',
                     id: 1
                 },
@@ -203,7 +203,7 @@ export default {
                     round: 'Pre-A轮',
                     location: '陕西省',
                     state: '观察',
-                    manager: '季经理',
+                    // manager: '季经理',
                     datetime: '2017/02/13',
                     id: 2
                 },
@@ -214,7 +214,7 @@ export default {
                     round: 'A轮',
                     location: '山东省',
                     state: '观察',
-                    manager: '付经理',
+                    // manager: '付经理',
                     datetime: '2014/06/26',
                     id: 3
                 }
