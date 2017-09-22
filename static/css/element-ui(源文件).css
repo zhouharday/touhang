@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 @charset "UTF-8";
-=======
-/*@charset "UTF-8";*/
->>>>>>> 8cc38cba4896c9b3e53bce6d2abe16cd29732e8d
 .el-breadcrumb:after, .el-breadcrumb:before, .el-button-group:after, .el-button-group:before, .el-form-item:after, .el-form-item:before, .el-form-item__content:after, .el-form-item__content:before {
     display: table;
     content: ""
