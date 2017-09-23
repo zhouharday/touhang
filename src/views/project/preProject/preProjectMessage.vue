@@ -6,7 +6,7 @@
             </div>
             <div class="right">
                 <el-button type="danger" @click="changeStep">下一阶段</el-button>
-                <el-button type="danger" :class="{bgc:suspend}" :disabled=suspend>中止</el-button>
+                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend">中止</el-button>
             </div>
         </div>
         <el-row class="step">
