@@ -1,17 +1,23 @@
 import service from 'common/js/fetch'
 
 // 获取项目估值列表
-export function getProjectValuation(projectName = undefined) {
+export function getProjectValuation(params) {
+	let { projectName, page, pageSize } = params;
     const data = {
-        projectName: projectName
+        projectName: projectName,
+        page,
+		pageSize
     }
     return service({url: '/appraisement/likeAppraisement', method: 'post', data})
 }
 
 // 根据状态估值查询
-export function getProjectBySelect(selectValue) {
+export function getProjectBySelect(params) {
+	let { appraisementStatus, page, pageSize } = params;
 	const data = {
-        appraisementStatus: selectValue	// 1:已提交2：未提交 （为null时查询提交及提交的s所有）
+        appraisementStatus,	// 1:已提交2：未提交 （为null时查询提交及提交的s所有）
+        page,
+        pageSize
     }
     return service({url: '/appraisement/selectAppraisement', method: 'post', data})
 }

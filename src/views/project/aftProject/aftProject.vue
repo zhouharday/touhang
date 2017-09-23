@@ -65,8 +65,10 @@ import { getAfters } from 'api/projectAfter';
 export default {
     data() {
         return {
-            total: 128,
-            input: '',
+            total: 0,
+            page: 1,
+            pageSize: 5,
+            projectName: '',
             currentIndex: 0,
             sortList: [
                 { sorts: "全部" },
