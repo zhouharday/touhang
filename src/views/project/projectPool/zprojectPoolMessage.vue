@@ -22,15 +22,21 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :projectId="projectPoolId">
+                    <detail-form 
+                        :basicForm="basicForm" 
+                        :companyForm="companyForm" 
+                        :projectId="projectPoolId"
+                        :projectData="projectData">
                     </detail-form>
-                    <table-form></table-form>
+                    <table-form
+                        :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                     <industry-form :industryForm="industryForm"></industry-form>
                 </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
-                    <capital-table></capital-table>
+                    <capital-table
+                        :projectData="projectData"></capital-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form></record-form>
@@ -105,8 +111,8 @@ export default {
                 // console.log('projectPoolId resp: ', resp);
                 let data = resp.data.result;
                 let { projectInfo, projectInvestmentInfo} = data;
-                // this.projectData = data;
-                this.setProjectData(data);
+                this.projectData = data;
+                // this.setProjectData(data);
                 // console.log('pool detail data: ', JSON.stringify(data));
                 if (projectInfo) {
                     //Object.keys(projectInfo).forEach(key => {

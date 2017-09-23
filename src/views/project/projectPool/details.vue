@@ -117,9 +117,18 @@ export default {
             type: Object,
             default: {}
         },
+        projectData: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
+        }
+    },
+    watch: {
+        projectData(val, oldVal) {
+            this.init();
         }
     },
     data() {
@@ -156,14 +165,15 @@ export default {
         }
     },
     created() {
-        // this.init();
+        
     },
     methods: {
         init() {
-            setTimeout(() => {
-                this.disable(this.basicForm);
-                this.disable(this.companyForm);    
-            }, 3e3);
+            this.disableForm();
+        },
+        disableForm() {
+            this.disable(this.basicForm);
+            this.disable(this.companyForm); 
         },
         disable(name) {
             if (name.flag === false) {

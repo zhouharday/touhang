@@ -43,7 +43,7 @@ const router = new Router({
     ],
 })
 
-/*
+
 router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录 
     // console.log(to, from ,next);
     try {
@@ -64,6 +64,5 @@ router.beforeEach((to, from, next) => { //在所有导航完成之前先判断�
         console.log('beforeEach exists error: ', e);
     }
 })
-*/
 
 export default router

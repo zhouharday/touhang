@@ -17,6 +17,14 @@ export function getPres(params = {}) {
 }
 
 /////// 董事会 ///////////////
+// 董事会列表
+export function owers(enterpriseId) {
+	const data = {
+		enterpriseId
+	}
+	return service({url: '/boardMember/selectBoardMember', method: 'post', data});
+}
+
 // 添加董事会成员
 export function addOwer(params = {}) {
 	let { name, enterpriseId, nature, educationalBg } = params;
@@ -28,6 +36,7 @@ export function addOwer(params = {}) {
 	}
 	return service({url: '/boardMember/addBoardMember', method: 'post', data});
 }
+
 // 修改董事会成员
 export function updateOwer(params = {}) {
 	let { id, name, enterprise_id, nature, educationalBg, tel } = params;
@@ -79,6 +88,14 @@ export function delTeam(id = undefined) {
 }
 
 ////// 股权 ////////////////
+// 股权列表
+export function gus(enterpriseId) {
+	const data = {
+		enterpriseId
+	}
+	return service({url: '/OwnershipStructure/selectOwnershipStructure', method: 'post', data});
+}
+
 // 股权添加
 export function addGu(params) {
 	let { stockholderNature, stockholderName, investmentAmount, stockCount, stockRatio } = params;
@@ -89,7 +106,7 @@ export function addGu(params) {
 		stockCount, //持股数量: null
 		stockRatio //股权占比: null
 	}
-	return service({url: 'projectPool/insertOwnershipStructure', method: 'post', data});
+	return service({url: '/projectPool/insertOwnershipStructure', method: 'post', data});
 }
 
 // 股权删除
@@ -97,5 +114,5 @@ export function delGu(id = undefined) {
 	const data = {
 		id
 	}
-	return service({url: 'OwnershipStructure/deleteOwnershipStructure', method: 'post', data});
+	return service({url: '/OwnershipStructure/deleteOwnershipStructure', method: 'post', data});
 }
