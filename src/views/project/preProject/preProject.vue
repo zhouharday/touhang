@@ -33,7 +33,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
             <el-col :span="19" class="imdo">
@@ -79,7 +79,11 @@
                 <span>总记录：{{this.total}}条</span>
             </el-col>
             <el-col :span="16">
-                <Page :total="128" :current="13" style="float:right"></Page>
+                <Page style="float:right" 
+                    :total="total" 
+                    :current="page" 
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
         </el-row>
     </div>
@@ -90,7 +94,11 @@ export default {
     name: 'preProject',
     data() {
         return {
-            total: 128,
+            total: 0,    // 总数
+            page: 1,     // 当前页数
+            pageSize: 5, // 一页数量 
+            projectName: '',
+            projectType: '',
             input: '',
             currentIndex1: 0,
             currentIndex2: 0,
@@ -134,24 +142,43 @@ export default {
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
         },
-        getDatas(projectName, projectType, industryId) {
-            if (projectType == '全部') projectName = '';
-            if (industryId == '全部') industryId = '';
+        getDatas() {
+            let projectType = this.projectType;
+            let projectName = this.projectName;
+            let stageId = this.stageId;
+
+            if (projectType == '全部') projectType = '';
+            if (stageId == '全部') stageId = '';
 
             let params = {
                 merchantId: this.merchantId,
-                userId: this.addProjectUserId
+                userId: this.addProjectUserId,
+                projectStageId: stageId,
+                projectTypeId: projectType,
+                projectName: projectName,
+                page: this.page,
+                pageSize: this.pageSize
             };
 
             getPres(params).then(resp => {
                 let data = resp.data;
-                let list = data.result.list;
+                let result = data.result;
+                let list = result.list;
                 list = this.handleDatas(list);
                 this.tableData = list;
+                this.total = result.total || 0;
+                console.log(result);
             }).catch(e => {
                 // console.log('getPres exists error: ', e);
 
             });
+        },
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
+        },
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
         },
         /**
          * [handleDatas 处理项目列表数据]
@@ -168,8 +195,13 @@ export default {
             });
             return data;
         },
+        /**
+         * [handleIconClick 列表模糊查询]
+         * @param  {[type]} ev [description]
+         * @return {[type]}    [description]
+         */
         handleIconClick(ev) {
-            console.log(ev);
+            this.getDatas();
         },
         // 设置table间隔行的background-color
         tableRowClassName(row, index) {
@@ -188,15 +220,35 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        deleteRow(index, rows) {
-            rows.splice(index, 1);
+        deleteRow(index = 0, rows = []) {
+            let row = rows[index];
+            console.log('row: ', JSON.stringify(row));
+            // rows.splice(index, 1);
         },
+        /**
+         * [changeActive 搜索查询]
+         * @param  {[type]} index [description]
+         * @param  {[type]} ind   [description]
+         * @return {[type]}       [description]
+         */
         changeActive(index, ind) {
-            if (ind == 1) {
+            let data = [];
+            let currentData;
+            let object;
+            if (ind == 1) { // 项目阶段
+                data = this.stageList;
+                currentData = data[index];
+                object = currentData.stages;
+                this.stageId = object;
                 this.currentIndex1 = index;
-            } else {
+            } else {        // 项目类型
+                data = this.sortList;
+                currentData = data[index];
+                object = currentData.sorts;
+                this.projectType = object;
                 this.currentIndex2 = index;
             }
+            this.getDatas();
         }
     }
 }
