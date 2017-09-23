@@ -83,7 +83,7 @@
             <el-col :span="16">
                 <Page style="float:right" 
                     :total="total" 
-                    :current="page" 
+                    :current="page"
                     @on-change="pageChanged"
                     @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
