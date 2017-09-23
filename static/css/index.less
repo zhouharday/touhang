@@ -1,4 +1,5 @@
 /************************************/
+// elements的 分页组件颜色样式
 .el-pagination__sizes .el-input .el-input__inner{
     border-color:#F05E5E;
 }
@@ -12,6 +13,60 @@
     border-color: #F05E5E;
     background-color: #F05E5E;
 }
+// el-tabs 页样式
+.el-tabs__active-bar {
+    background-color: red;
+}
+.el-tabs__item.is-active {
+    color: #F05E5E;
+}
+// el-radio 单选框的样式
+.el-radio__inner {
+    border-color: #f05e5e;
+}
+.el-radio__inner:hover {
+    border-color: #f05e5e;
+}
+.el-radio__input.is-focus .el-radio__inner {
+    border-color: #f05e5e;
+}
+.el-radio__input.is-checked .el-radio__inner {
+    background-color: #f05e5e;
+    border-color: #f05e5e;
+}
+ // el-checkbox 多选框的样式
+ .el-checkbox__inner {
+    border-color: #f05e5e;
+}
+.el-checkbox__inner:hover {
+    border-color: #f05e5e;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner {
+    border-color: #f05e5e;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #f05e5e;
+    border-color: #f05e5e;
+}   
+.el-checkbox__label {
+    font-weight: bold;
+    padding-left: 20px;
+}
+// ivu 分页组件 的颜色样式
+.ivu-page-prev:hover,
+.ivu-page-item:hover,
+.ivu-page-item-jump-prev:hover,
+.ivu-page-item-jump-next:hover,
+.ivu-page-next:hover {
+    // color: #666;
+    border-color: #F05E5E;
+}
+.ivu-page-item-active {
+    background-color: #F05E5E;
+    border-color: #F05E5E;
+} 
+/************************************/
+
 //基金管理
 //我的基金
 .fund{
@@ -42,7 +97,7 @@
 
 //项目管理下
 //项目池
-.poolContent{
+.poolContent {
 .el-input input:focus,
 .el-input input:hover {
     border-color: #F05E5E;
@@ -64,6 +119,7 @@
 }
 //投资项目
 .preContent{
+    // 搜索框的颜色样式
     .el-input input:focus,
     .el-input input:hover {
         border-color: #F05E5E;
@@ -99,7 +155,7 @@
     }
 }
 
-    //云项目
+//云项目
 .assistantContent {
     input.el-input__inner:focus,
     input.el-input__inner:hover {
@@ -111,6 +167,28 @@
 
 }
 
+//首页 
+.homeContent {
+    // ivu的简单分页组件 颜色样式
+    .ivu-page-simple .ivu-page-simple-pager input:hover {
+        border-color: #f05e5e;
+    }
+    //  添加日程 模态框的样式
+    .el-dialog--small {
+        width: 350px;
+        border-radius: 8px;
+    }
+    .el-dialog__header {
+        padding: 10px 20px 10px;
+        background: #a0a3aa;
+        border-radius: 8px 8px 0 0;
+    }
+    .el-dialog__title {
+        line-height: 1;
+        font-size: 16px;
+        color: #fff;
+    }
+}
 
 /*******日常办公********/
 //任务
@@ -139,6 +217,7 @@
         background-color: #F05E5E;
         border-color: #F05E5E;
     }
+    // ivu的 tabs页样式
     .ivu-table-tbody .ivu-table-cell button span {
         color: #F05E5E;
     }

@@ -111,7 +111,8 @@
                 </div>
             </el-col>
         </el-row>
-        <el-dialog title="添加日程" :visible.sync="scheduleDialog" size="tiny" :before-close="handleClose" style="border-radius:5px;">
+        <!-- 添加日程模态框 -->
+        <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
             <el-form :model="scheduleForm" label-position="top">
                 <el-row>
                     <el-col>
@@ -135,12 +136,6 @@
                 </el-row>
             </el-form>
             <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
-
-            <!-- <div slot="footer" class="dialog-footer">
-                            <el-button class="dialogBtn_active" @click="addUser('teamForm')">确定</el-button>
-                            <el-button class="dialogBtn" @click="userDialog = false">取消</el-button>
-                        </div> -->
-
             <div slot="footer" class="dialog-footer">
                 <el-button class="dialogBtn_active" @click="scheduleDialog = false">保存</el-button>
                 <el-button class="dialogBtn" @click="scheduleDialog = false">取消</el-button>
@@ -362,8 +357,8 @@ export default {
     },
     data() {
         return {
-            timeShow: true,
             scheduleDialog: false,
+            checkTime: '添加日程',
             activeName: 'first',
             loading: false,
             monthDate: [],
@@ -465,8 +460,9 @@ export default {
 
         },
         changetime(data) {
-            console.log(data)
+            // console.log(data)
             this.scheduleDialog = !this.scheduleDialog;
+            this.checkTime = data;
         },
         readyfun(arr, data) {
             var arr = arr;
