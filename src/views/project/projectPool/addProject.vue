@@ -40,14 +40,34 @@
                                         <el-input v-model="basicForm.location"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目负责人" prop="manager">
-                                        <el-input v-model="basicForm.manager"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
+                                <el-col>
                                     <el-form-item label="业务部门" prop="department">
                                         <el-input v-model="basicForm.department"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <!-- 上传 企业LOGO -->
+                                <el-col>
+                                    <el-form-item label="企业LOGO" prop="logo">
+                                        <div class="demo-upload-list" v-for="item in uploadList" :key="item.index">
+                                            <template v-if="item.status === 'finished'">
+                                                <img :src="item.url">
+                                                <div class="demo-upload-list-cover">
+                                                    <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
+                                                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                                                </div>
+                                            </template>
+                                            <template v-else>
+                                                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
+                                            </template>
+                                        </div>
+                                        <Upload ref="upload" v-modeel="basicForm.logo" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" style="display: inline-block;width:58px;">
+                                            <div style="width: 58px;height:58px;line-height: 58px;">
+                                                <Icon type="camera" size="20"></Icon>
+                                            </div>
+                                        </Upload>
+                                        <Modal title="查看图片" v-model="visible">
+                                            <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+                                        </Modal>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -110,31 +130,6 @@
                                         <el-input v-model="companyForm.remark"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <!-- 上传 企业LOGO -->
-                                <el-col>
-                                    <el-form-item label="企业LOGO" prop="logo">
-                                        <div class="demo-upload-list" v-for="item in uploadList" :key="item.index">
-                                            <template v-if="item.status === 'finished'">
-                                                <img :src="item.url">
-                                                <div class="demo-upload-list-cover">
-                                                    <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                                                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                                                </div>
-                                            </template>
-                                            <template v-else>
-                                                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                                            </template>
-                                        </div>
-                                        <Upload ref="upload" v-modeel="companyForm.logo" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" style="display: inline-block;width:58px;">
-                                            <div style="width: 58px;height:58px;line-height: 58px;">
-                                                <Icon type="camera" size="20"></Icon>
-                                            </div>
-                                        </Upload>
-                                        <Modal title="查看图片" v-model="visible">
-                                            <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-                                        </Modal>
-                                    </el-form-item>
-                                </el-col>
                             </el-row>
                         </el-form>
                     </div>
@@ -171,8 +166,8 @@ export default {
                 industry: '',
                 origin: '',
                 location: '',
-                manager: '',
-                department: ''
+                department: '',
+                logo: ''
             },
             companyForm: {
                 companyName: '',
@@ -184,8 +179,7 @@ export default {
                 regAddress: '',
                 workingSite: '',
                 service: '',
-                remark: '',
-                logo: ''
+                remark: ''
             },
             // 基本信息 form验证
             rules1: {
@@ -193,13 +187,13 @@ export default {
                     { required: true, message: '请输入项目名称', trigger: 'blur' }
                 ],
                 shortName: [
-                    { required: true,  message: '请输入项目简称', trigger: 'blur' }
+                    { required: true, message: '请输入项目简称', trigger: 'blur' }
                 ],
                 projectSort: [
-                    { required: true,  message: '请输入项目类型', trigger: 'blur' }
+                    { required: true, message: '请输入项目类型', trigger: 'blur' }
                 ],
                 industry: [
-                    { required: true,  message: '请输入所属行业', trigger: 'blur' }
+                    { required: true, message: '请输入所属行业', trigger: 'blur' }
                 ]
             },
             // 上传 企业LOGO
@@ -248,7 +242,7 @@ export default {
                     addPro({
                         merchantId: this.merchantId,
                         projectInfo: basicForm,
-                        enterpriseInfo: companyForm  
+                        enterpriseInfo: companyForm
                     }).then(resp => {
                         store.isSubmit = false;
                         console.log('resp: ', resp);

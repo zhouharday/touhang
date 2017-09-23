@@ -44,8 +44,7 @@
                             <Icon type="arrow-up-c" class="mgr"></Icon>
                             <Icon type="arrow-down-c"></Icon>
                             <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
-                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存
-                            </el-button>
+                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存</el-button>
                             <el-button type="text" @click="handleDelete(index,fundMenu)">删除</el-button>
                         </p>
                     </div>
@@ -249,6 +248,7 @@ export default {
         //
         edit(index, item) {
             item.editFlag = !item.editFlag;
+            // console.log(item.fundName);
         },
         checkEdit(index, row) { //编辑
             // console.log(row)

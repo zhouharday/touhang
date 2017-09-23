@@ -20,7 +20,7 @@
                             {{item.details}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
-                            <span :class="btnObject1"></span>
+                            <span :class="btnObject1"> {{collapseBtn1}}</span>
                             {{collapseBtn1}}
                         </button>
                     </ul>

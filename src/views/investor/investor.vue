@@ -158,5 +158,8 @@ export default {
         padding: 24px 0;
         text-align: right;
     }
+    span.investorName{
+        cursor: pointer;
+    }
 }
 </style>

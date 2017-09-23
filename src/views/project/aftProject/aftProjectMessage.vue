@@ -4,9 +4,9 @@
             <div class="left">
                 <span class="desc">{{title}}</span>
             </div>
-            <div class="right">
+            <!-- <div class="right">
                 <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-            </div>
+            </div> -->
         </div>
         <div class="firstLayer">
             <el-row :gutter="40">
