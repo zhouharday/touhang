@@ -149,7 +149,7 @@ export default {
 .projectValue {
     position: relative;
     width: 100%;
-    height: 650px;
+   min-height: 100%;
     font-size: 14px;
     background: #fff;
 }

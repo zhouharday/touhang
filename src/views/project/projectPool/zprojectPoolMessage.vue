@@ -145,7 +145,7 @@ export default {
 <style lang="less" scoped>
 .zpoolMessage {
     width: 100%;
-    /*height: 100%;*/
+    min-height: 100%;
     background-color: #fff;
     padding: 24px;
     .title {

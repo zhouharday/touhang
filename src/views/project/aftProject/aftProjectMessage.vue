@@ -253,6 +253,7 @@ export default {
 <style lang="less" scoped>
 .aftProjectMessage {
     width: 100%;
+    min-height: 100%;
     background-color: #fff;
     padding: 24px;
     .title {
