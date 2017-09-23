@@ -147,13 +147,12 @@
     </div>
 </template>
 
+
 <script>
 import { addPro } from 'api/project';
-
 const store = {
     isSubmit: false
 }
-
 export default {
     name: 'addProject',
     data() {

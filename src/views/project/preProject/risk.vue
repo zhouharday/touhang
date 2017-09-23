@@ -41,13 +41,13 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出人">
-                                <el-input v-model="AddForm.proposer" auto-complete="off" disabled></el-input>
+                                <el-input placeholder="默认当前登录用户" v-model="AddForm.proposer" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出时间">
-                                <el-input placeholder="当前默认时间" v-model="AddForm.startingDate" disabled>
-                                </el-input>
+                                 <el-date-picker type="date" placeholder="当前默认时间" v-model="AddForm.startingDate">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">

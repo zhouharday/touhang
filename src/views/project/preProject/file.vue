@@ -51,7 +51,7 @@
             <el-dialog title="上传文档" :visible.sync="modalAdd2" :close-on-click-modal="false">
                 <el-form :model="inspectionForm" :label-width="formLabelWidth">
                     <el-form-item label="用户">
-                        <el-input v-model="inspectionForm.user" auto-complete="off"></el-input>
+                        <el-input  v-model="inspectionForm.user" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="上传日期">
                         <el-date-picker type="date" placeholder="选择日期" v-model="inspectionForm.date" style="width: 100%;">
