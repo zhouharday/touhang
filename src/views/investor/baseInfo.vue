@@ -21,12 +21,6 @@ import {
     updateInvestor
 } from 'api/investor'
 export default {
-    props: {
-        userId: {
-            type: String,
-            default: ''
-        }
-    },
     data() {
         return {
             dataTitle: {
@@ -48,7 +42,6 @@ export default {
         handlerCancel() {
         },
         handlerConfirm() {
-            console.log(this.baseInfo)
             updateInvestor(this.baseInfo).then((res) => {
                 if(res.status == '200') {
                     console.log(res)
@@ -58,8 +51,7 @@ export default {
         }
     },
     created() {
-        console.log(this.userId)
-        getInvestorDetails(this.userId).then((res) => {
+        getInvestorDetails(this.$route.params.userId).then((res) => {
             if (res.status == '200') {
                 this.baseInfo = res.data.record
             }

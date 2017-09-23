@@ -12,7 +12,7 @@
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
-            <el-table-column fixed label="基金名称" width="150">
+            <el-table-column fixed label="基金名称" width="200">
                 <template scope="scope">
                   <div class="name" @click="handleRouter(scope.$index, scope.row)">
                       <span class="investorName">{{ scope.row.fundName }}</span>

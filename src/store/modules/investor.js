@@ -2,12 +2,14 @@ import * as types from '../mutations-type'
 import {getInvestorList, getProjectType, getIdType, getSubArea} from 'api/investor'
 const state = {
     investorList: {},
-    projectType: {}
+    projectType: {},
+    investorName: ''
 }
 
 const getters = {
     investorList: state => state.investorList,
-    projectType: state => state.projectType
+    projectType: state => state.projectType,
+    investorName: state => state.investorName
 }
 
 const mutations = {
@@ -16,6 +18,9 @@ const mutations = {
     },
     [types.GET_PROJECTTYPE](state, projectType) {
         state.projectType = projectType
+    },
+    [types.GET_INVESTORNAME](state, investorName) {
+        state.investorName = investorName
     }
 }
 
