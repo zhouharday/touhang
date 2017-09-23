@@ -91,24 +91,25 @@ export default {
             }
         },
         sendVerificationCode() { //发送验证码 Ajax
-            this.time();
-            return service({
-                url: 'api/merchant/validationCode',
-                method: 'post',
-                data: { contactPhone: this.phonecontactPhone }
-            })
+            // this.time();
+            // return service({
+            //     url: 'api/merchant/validationCode',
+            //     method: 'post',
+            //     data: { contactPhone: this.phonecontactPhone }
+            // })
 
-                // this.$http.post('api/merchant/validationCode', {
-                //     contactPhone: this.phonecontactPhone
-                // })
+                this.$http.post('api/merchant/validationCode', {
+                    contactPhone: this.phonecontactPhone
+                })
                 .then(res => {
                     if (res.data.status == '200') {
                         // this.provinces = res.data.result;
                         // this.time();
                         // this.isValidationCode = 1;
+                        this.time();
                         console.log(res.data);
                     } else if (res.data.status == '1006') { //手机号已注册
-                        // this.isSendCode = 1;
+                        this.isSendCode = 1;
                         alert(res.data.message);
                     } else if (res.data.status == '1008') { //手机号不合法
                         // console.log(res.data);
@@ -129,9 +130,10 @@ export default {
         /***********************提交表单开始*************************/
         submitForm() {
             if (this.isSendCode && this.validationCode) {
-
+                // alert(565);
                 this.$store.state.register.register.contactPhone = this.phonecontactPhone;
                 this.$store.state.register.register.validationCode = this.validationCode;
+                window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
                 this.$router.push({ name: 'register' }); //进入下一步页面
                 console.log(this.$store.state.register.register);
             }
