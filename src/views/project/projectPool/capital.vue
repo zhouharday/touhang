@@ -78,21 +78,23 @@
     </div>
 </template>
 <script style="text/ecmascript-6">
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 import { Message } from 'iview'
 
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
-import { getFinances, addFinance, editFinance, delFinance } from 'api/finance';
+import { getFinances, addFinance, editFinance, delFinance } from 'api/finance'
 export default {
     computed: mapGetters({
         projectData: 'getProjectData'    // 获取项目详情数据
     }),
+    /*
     watch: {
         projectData(val, oldVal) {
             this.init();
         }
     },
+    */
     data() {
         return {
             modalAdd: false,

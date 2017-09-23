@@ -123,11 +123,6 @@ export default {
             default: ''
         }
     },
-    watch: {
-        basicForm(val, oldVal) {
-            console.log(val, oldVal);
-        }
-    },
     data() {
         return {
             options: [{
@@ -162,7 +157,7 @@ export default {
         }
     },
     created() {
-        this.init();
+        // this.init();
     },
     methods: {
         init() {

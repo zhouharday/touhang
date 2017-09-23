@@ -31,17 +31,19 @@ const state = {
 
 const mutations = {
     addTab(state, targetName) {
+        if (!state.TitleList) {
+            return;
+        }
         let obj = {};
         obj.title = targetName.title;
         obj.path = targetName.url;
         obj.name = targetName.name;
-        if (state.TitleList) {
-            for (let i = 0; i < state.TitleList.length; i++) {
-                if (state.TitleList[i].name == targetName.name) {
-                    return;
-                }
+        for (let i = 0; i < state.TitleList.length; i++) {
+            if (state.TitleList[i].name == targetName.name) {
+                return;
             }
         }
+        
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },

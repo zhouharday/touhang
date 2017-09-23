@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { addOwer, addGu } from 'api/projectPre';
 
@@ -148,11 +148,13 @@ export default {
     computed: mapGetters({
         projectData: 'getProjectData'    // 获取项目详情数据
     }),
+    /*
     watch: {
         projectData(val, oldVal) {
             this.init();
         }
     },
+    */
     data() {
         return {
             modalAdd1: false,

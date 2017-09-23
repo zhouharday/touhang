@@ -54,10 +54,13 @@ export default {
         }
     },
     created() {
-        this.initInfo();
-        this.getDatas();
+        // this.init();
     },
     methods: {
+        init() {
+            this.initInfo();
+            this.getDatas();
+        },
         getDatas() {
             // TODO: 1是否是对的
             getRecords(this.projectId, STATUS).then(resp => {

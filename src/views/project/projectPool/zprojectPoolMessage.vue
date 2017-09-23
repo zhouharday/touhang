@@ -44,7 +44,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
+
 import detailForm from './details'
 import tableForm from './tables'
 // import industryForm from './industry'
@@ -52,9 +53,10 @@ import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
 
-import { getProDetail } from 'api/project';
+import { getProDetail } from 'api/project'
 
 export default {
+    name: 'zprojectPoolMessage',
     data() {
         return {
             title: '双子金服投资项目',
@@ -75,14 +77,6 @@ export default {
             },
             projectData: {}     // 项目池详情信息
         }
-    },
-    components: {
-        detailForm,
-        tableForm,
-        // industryForm,
-        capitalTable,
-        recordForm,
-        fileTable
     },
     created() {
         this.init();
@@ -134,11 +128,17 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
+    },
+    components: {
+        detailForm,
+        tableForm,
+        // industryForm,
+        capitalTable,
+        recordForm,
+        fileTable
     }
 }
 </script>
-
-
 
 
 

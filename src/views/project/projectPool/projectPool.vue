@@ -50,13 +50,9 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
-
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
-                            <!--
-                            <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
-                            -->
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">
                                 <div>{{ scope.row.project }}</div>
                             </a>
@@ -184,39 +180,6 @@ export default {
                     // manager: '刘经理',
                     datetime: '2015/01/16',
                     id: 0
-                },
-                {
-                    theme: 'Digital Asset',
-                    project: '美国结算和分类式账本服务商',
-                    industry: '金融',
-                    round: 'B+轮',
-                    location: '海外',
-                    state: '正常',
-                    // manager: '王经理',
-                    datetime: '2016/04/21',
-                    id: 1
-                },
-                {
-                    theme: '小六汤包',
-                    project: '中式餐应连锁品牌',
-                    industry: '生活消费',
-                    round: 'Pre-A轮',
-                    location: '陕西省',
-                    state: '观察',
-                    // manager: '季经理',
-                    datetime: '2017/02/13',
-                    id: 2
-                },
-                {
-                    theme: '智慧熊',
-                    project: '双语学前教育连锁机构',
-                    industry: '教育',
-                    round: 'A轮',
-                    location: '山东省',
-                    state: '观察',
-                    // manager: '付经理',
-                    datetime: '2014/06/26',
-                    id: 3
                 }
             ]
         }
@@ -335,7 +298,12 @@ export default {
             this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+            this.$store.commit({ 
+                type: 'addTab', 
+                title: th, 
+                url: url, 
+                name: name 
+            });
         },
         deleteRow(index, tableData) {
             let row = tableData[index];
