@@ -41,11 +41,7 @@
                     </el-table-column>
                     <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
                     </el-table-column>
-<<<<<<< HEAD
-                    <el-table-column prop="state" label="预警状态" align="center">
-=======
                     <el-table-column prop="warnStatus" label="状态" align="center">
->>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
                     </el-table-column>
                 </el-table>
             </el-col>
