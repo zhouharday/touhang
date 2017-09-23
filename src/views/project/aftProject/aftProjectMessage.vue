@@ -103,9 +103,23 @@ import eventTable from './event'
 import dataTable from './data'
 import monitorTable from './monitor'
 
-import { getAfterDetail } from 'api/projectAfter';
+import { getProDetail } from 'api/project';
 
 export default {
+    components: {
+        echarts,
+        tableInfo,
+        detailForm,
+        tableForm,
+        approveTable,
+        recordForm,
+        fileTable,
+        manageTable,
+        riskTable,
+        eventTable,
+        dataTable,
+        monitorTable
+    },
     data() {
         return {
             title: '双子金服投资项目',
@@ -128,23 +142,6 @@ export default {
                     investorMoney: '56,000,000,000',
                     percent: '0.3%',
                     paidMoney: '24,000,000,000'
-                },
-                {
-                    fundName: '一号店',
-                    investorMoney: '24,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '24,000,000,000'
-                }, {
-                    fundName: '飞志',
-                    investorMoney: '36,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '12,000,000,000'
-                },
-                {
-                    fundName: '博奥',
-                    investorMoney: '29,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '29,000,000,000'
                 }
             ],
             tableData: [
@@ -202,7 +199,7 @@ export default {
         }
     },
     created() {
-        this.init();
+        // this.init();
     },
     methods: {
         init() {
@@ -220,11 +217,12 @@ export default {
             this.id = id;
         },
         initData() {
-            getAfterDetail({
-                id: this.id,
-                userId: this.addProjectUserId
+            getProDetail({
+                id: this.id
             }).then(resp => {
-
+                console.log('after pro detail: ', resp);
+                let data = resp.data;
+                this.fundTable = data.result.list;
             }).catch(e => {
 
             });
@@ -245,20 +243,6 @@ export default {
             }
             return '';
         }
-    },
-    components: {
-        echarts,
-        tableInfo,
-        detailForm,
-        tableForm,
-        approveTable,
-        recordForm,
-        fileTable,
-        manageTable,
-        riskTable,
-        eventTable,
-        dataTable,
-        monitorTable
     }
 }   
 </script>    

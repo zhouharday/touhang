@@ -115,10 +115,13 @@ export default {
                 this.setProjectData(data);
                 // console.log('pool detail data: ', JSON.stringify(data));
                 if (projectInfo) {
-                    this.basicForm = Object.assign(this.basicForm, projectInfo);
+                    //Object.keys(projectInfo).forEach(key => {
+                    //    this.basicForm[key] = projectInfo[key];    
+                    //})
+                    this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }
                 if (projectInvestmentInfo) {
-                    this.companyForm = Object.assign(this.companyForm, projectInvestmentInfo);
+                    this.companyForm = Object.assign({}, this.companyForm, projectInvestmentInfo);
                 }
             }).catch(e => {
                 console.log('getProDetail exists error: ', e);

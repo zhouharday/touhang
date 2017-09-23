@@ -123,6 +123,11 @@ export default {
             default: ''
         }
     },
+    watch: {
+        basicForm(val, oldVal) {
+            console.log(val, oldVal);
+        }
+    },
     data() {
         return {
             options: [{

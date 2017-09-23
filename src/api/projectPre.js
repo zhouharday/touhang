@@ -5,10 +5,14 @@ export function getPres(params = {}) {
 	let { userId, merchantId } = params;
 	const data = {
 		userId,
-		merchantId
+		merchantId,
+		projectStageId:"123456",//阶段不是必传，不传时候为全部
+		projectTypeId:"123456",//项目类型，同上
+		projectName:"测",//模糊查询 非必传字段"page": 1,//分页 
+    	pageSize: 5
 	}
 
-	return service({url: '/appPreInvest/selectInvestProject', method: 'post', data})
+	return service({url: '/investProject/getInvestProjectList', method: 'post', data})
 }
 
 /////// 董事会 ///////////////

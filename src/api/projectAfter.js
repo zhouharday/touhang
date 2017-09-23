@@ -2,22 +2,23 @@ import service from 'common/js/fetch'
 
 // 投后项目列表
 export function getAfters(params = {}) {
-	let { projectName, merchantId } = params;
+	let { merchantId, projectTypeId, projectName, page, pageSize } = params;
 	const data = {
-		projectName,
-		merchantId
+		merchantId,
+		projectTypeId,//项目类型 索引id 全部状态 可以不传
+		projectName,//模糊查询
+		page,
+		pageSize
 	}
-
-	return service({url: '/appPostInverst/selectInvestProject', method: 'post', data})
+	return service({url: '/investProject/getInvestLaterProjectList', method: 'post', data})
 }
 
-// 投后项目详情
-export function getAfterDetail(params = {}) {
+// 获取投后详情
+export function getAfterDetail(params) {
 	let { id, userId } = params;
 	const data = {
 		id,
 		userId
-	}
-
-	return service({url: '/appPostInverst/getInvestProject', method: 'post', data})
+	};
+	return service({url: '', method: 'post', data});
 }
