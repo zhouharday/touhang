@@ -233,5 +233,8 @@ export default {
         bottom: 0;
         right: 0;
     }
+    span.investorName{
+        cursor: pointer;
+    }
 }
 </style>

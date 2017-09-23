@@ -189,7 +189,7 @@ export default {
     width: 100%;
     min-height: 100%;
     background: @color-base;
-    padding: @height-small;
+    padding: 20px 30px;
     .choose {
         width: 100%;
         .lists {
@@ -232,6 +232,9 @@ export default {
         .addPadding {
             padding-bottom: 12px;
         }
+    }
+    span.investorName{
+        cursor: pointer;
     }
 }
 </style>

@@ -24,19 +24,16 @@
                     <el-col :span="12">
                         <el-form-item label="数据来源" :label-width="formLabelWidth">
                             <el-select v-model="monitorForm.dataSources" placeholder="请选择数据来源" style="width:100%;">
-                                <el-option label="资产负债表" value="资产负债表"></el-option>
-                                <el-option label="利润表" value="利润表"></el-option>
-                                <el-option label="现金流量表" value="现金流量表"></el-option>
+                                  <el-option v-for="item in dataSourcesOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="类型">
                             <el-select v-model="monitorForm.sort" placeholder="请选择类型" style="width:100%;">
-                                <el-option label="年报" value="年报"></el-option>
-                                <el-option label="半年报" value="半年报"></el-option>
-                                <el-option label="季报" value="季报"></el-option>
-                                <el-option label="月报" value="月报"></el-option>
+                                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -180,6 +177,33 @@ export default {
                 dataSources: '',
                 sort: ''
             },
+            dataSourcesOptions: [
+                { //数据来源列表
+                    value: '选项1',
+                    label: '资产负债表'
+                }, {
+                    value: '选项2',
+                    label: '利润表'
+                }, {
+                    value: '选项1',
+                    label: '现金流量表'
+                }
+            ],
+            sortOptions: [
+                { //数据类型列表
+                    value: '选项1',
+                    label: '年报'
+                }, {
+                    value: '选项2',
+                    label: '半年报'
+                }, {
+                    value: '选项1',
+                    label: '季报'
+                }, {
+                    value: '选项2',
+                    label: '月报'
+                }
+            ],
             addMonitorTable: [
                 {
                     targetName: '指标一',

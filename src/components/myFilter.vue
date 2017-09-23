@@ -62,9 +62,11 @@ export default {
         margin: 6px 0;
         display: flex;
         .title {
-            flex: 0 0 120px;
+            flex: 0 0 80px;
             height: 100%;
             line-height: 42px;
+            font-size: 14px;
+            font-weight: bold;
         }
         .ul_list {
             flex: 1;
@@ -73,11 +75,20 @@ export default {
                 display: flex;
                 .list {
                     margin-right: 24px;
+                    width:70px;
+                    height:20px;
                 }
                 .btn {
                     border: none;
                     &.active {
                         background: @color-theme-red;
+                        color:@color-base;
+                        width: 70px;
+                        height: 20px;
+                        text-align: center;
+                        border-radius: 15px;
+                        padding: 0;
+
                     }
                 }
             }

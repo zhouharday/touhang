@@ -5466,6 +5466,10 @@ code, kbd, pre, samp {
         display: block;
         width: 66.66666667%
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
     .ivu-col-lg-push-16 {
         left: 66.66666667%
     }
@@ -5517,6 +5521,10 @@ code, kbd, pre, samp {
         display: block;
         width: 54.16666667%
     }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
     .ivu-col-lg-push-13 {
         left: 54.16666667%
     }
@@ -14058,6 +14066,11 @@ span.ivu-date-picker-cells-cell-disabled.ivu-date-picker-cells-cell-selected em 
     color: #2d8cf0
 }
 
+<<<<<<< HEAD
+.ivu-upload-list-file:hover > span i {
+    color: #495060;}
+=======
+>>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
 .ivu-upload-list-file:hover>span i {
     color: #495060
 }

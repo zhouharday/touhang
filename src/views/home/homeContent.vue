@@ -1,5 +1,5 @@
 <template>
-    <section v-loading.body="loading">
+    <section v-loading.body="loading" class="homeContent">
         <!-- 这是首页内容 -->
         <el-row :gutter="20" style="margin:0;">
             <el-col :span="12" style="padding:0;">
@@ -8,7 +8,7 @@
                         <div class="homeContent_top_L">
                             <!-- <div>这是日期内容</div> -->
                             <div>
-                                <datatime title="" :month-date="monthDate" v-on:changetime="changetime" v-on:readyfun="readyfun"></datatime>
+                                <datatime :month-date="monthDate" v-on:changetime="changetime" v-on:readyfun="readyfun"></datatime>
                             </div>
                         </div>
                     </div>
@@ -94,18 +94,83 @@
                             <img src="/static/img/sysPrompt.png">
                             <span>{{sysPrompt}}</span>
                         </div>
-                        <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div>
+                        <div class="grid-content bg-purple">
+                            <div style="padding: 0px 0px;">
+                                <ul class="notice_ul">
+                                    <li v-for="( item,index ) in messageShow" :key="item.index">
+                                        <div>{{item.noRead}}</div>
+                                        <div>{{item.data}}</div>
+                                        <span>{{item.noticeMessage}}</span>
+                                    </li>
+                                </ul>
+                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                            </div>
+                        </div>
+                        <!-- <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div> -->
                     </div>
                 </div>
             </el-col>
         </el-row>
+        <!-- 添加日程模态框 -->
+        <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
+            <el-form :model="scheduleForm" label-position="top">
+                <el-row>
+                    <el-col>
+                        <el-form-item label="主题：" prop="theme">
+                            <el-input placeholder="请输入日程主题" v-model="scheduleForm.theme"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="时间：" prop="time">
+                            <el-time-select v-model="scheduleForm.time" :picker-options="{
+                                                        start: '08:30',
+                                                        step: '00:15',
+                                                        end: '18:30'
+                                                        }" placeholder="选择时间" style="width:100%">
+                            </el-time-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="scheduleDialog = false">保存</el-button>
+                <el-button class="dialogBtn" @click="scheduleDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
+
     </section>
 </template>
 
 <style lang="less" scoped>
+.homeContent {
+    .dialog-footer {
+        text-align: center;
+        // margin-top: 15px;
+        .dialogBtn_active {
+            padding: 5px 15px;
+            color: #fff;
+            border-radius: 5px;
+            border-color: #f05e5e;
+            background-color: #f05e5e;
+        }
+        .dialogBtn {
+            padding: 5px 15px;
+            color: #f05e5e;
+            border-radius: 5px;
+            border-color: #f05e5e;
+            background-color: #fff;
+        }
+    }
+}
+
 .homeContent_top_L {
     overflow: hidden;
     margin-right: 24px;
+    position: relative;
     >div {
         width: 100%;
         height: 362px;
@@ -118,7 +183,8 @@
     }
 }
 
-.homeContent_top_R {
+.homeContent_top_R,
+.homeContentBot_r {
     background: #fff;
     padding: 16px 24px;
     height: 362px; // float: left;
@@ -291,6 +357,8 @@ export default {
     },
     data() {
         return {
+            scheduleDialog: false,
+            checkTime: '添加日程',
             activeName: 'first',
             loading: false,
             monthDate: [],
@@ -299,6 +367,10 @@ export default {
             sysPrompt: "系统提示",
             sysMessage: true,
             sysMessageTitle: "暂时没有系统提示哦~",
+            scheduleForm: {
+                theme: '',
+                time: ''
+            },
             projectList: [
                 {
                     craetProject: "立项",
@@ -388,7 +460,9 @@ export default {
 
         },
         changetime(data) {
-            console.log(data)
+            // console.log(data)
+            this.scheduleDialog = !this.scheduleDialog;
+            this.checkTime = data;
         },
         readyfun(arr, data) {
             var arr = arr;

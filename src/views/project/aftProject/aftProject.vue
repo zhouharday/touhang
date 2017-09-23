@@ -105,11 +105,10 @@ export default {
 
             getAfters(params).then(resp => {
                 let data = resp.data;
-                let list = data.result;
+                let list = data.result.list;
                 this.tableData = list;
             }).catch(e => {
-                // console.log('getPres exists error: ', e);
-
+                console.log('getPres exists error: ', e);
             });
         },
         handleIconClick(ev) {

@@ -4415,7 +4415,7 @@
 }
 
 .el-row--flex.is-justify-space-around {
-    -ms-flex-pack: distribute;
+  /* -ms-flex-pack: distribute;*/
     justify-content: space-around
 }
 

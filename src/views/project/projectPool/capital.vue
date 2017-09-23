@@ -7,7 +7,10 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.round }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.round"></el-input>
+                            <el-select v-model="scope.row.round" placeholder="请选择融资轮次" style="width:100%">
+                                <el-option v-for="item in  roundOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </span>
                     </template>
                 </el-table-column>
@@ -50,7 +53,10 @@
             <el-dialog title="添加融资信息" :visible.sync="modalAdd" :close-on-click-modal="false">
                 <el-form :model="capitalForm" :rules="rules" ref="capitalForm" label-width="140px">
                     <el-form-item label="融资轮次" prop="round">
-                        <el-input v-model="capitalForm.round" auto-complete="off"></el-input>
+                        <el-select v-model="capitalForm.round" placeholder="请选择融资轮次" style="width:100%">
+                            <el-option v-for="item in roundOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="融资方式" prop="way">
                         <el-input v-model="capitalForm.way" auto-complete="off"></el-input>
@@ -104,6 +110,13 @@ export default {
                 date: '',
                 editFlag: false
             },
+            roundOptions: [{ //融资轮次列表
+                value: '选项1',
+                label: '天使轮'
+            }, {
+                value: '选项2',
+                label: 'A轮'
+            }],
             rules: {
                 round: [
                     { required: true, message: '请输入融资轮次', trigger: 'blur' }
@@ -128,7 +141,7 @@ export default {
         }
     },
     created() {
-        
+
     },
     methods: {
         init() {
@@ -147,19 +160,19 @@ export default {
         },
         getData() {
             getFinances(this.enterpriseInfo.id)
-            .then(resp => {
-                console.log('resp: ', resp);
-                let data = resp.data;
-                let message = data.message;
-                if (!message) {
-                    
-                } else {
-                    this.capitalData = [];
-                    Message.info(message);
-                }
-            }).catch(e => {
-                console.log('getFinances exists error: ', e);
-            })
+                .then(resp => {
+                    console.log('resp: ', resp);
+                    let data = resp.data;
+                    let message = data.message;
+                    if (!message) {
+
+                    } else {
+                        this.capitalData = [];
+                        Message.info(message);
+                    }
+                }).catch(e => {
+                    console.log('getFinances exists error: ', e);
+                })
         },
         //添加 融资信息的方法
         addCapital() {
@@ -220,5 +233,4 @@ export default {
         height: 100%;
     }
 }
-
 </style>

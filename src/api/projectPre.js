@@ -2,13 +2,18 @@ import service from 'common/js/fetch'
 
 // 投前项目列表
 export function getPres(params = {}) {
-	let { userId, merchantId } = params;
+	let { userId, merchantId, projectStageId, projectTypeId, projectName, page, pageSize } = params;
 	const data = {
 		userId,
-		merchantId
+		merchantId,
+		projectStageId, //阶段不是必传，不传时候为全部
+		projectTypeId, //项目类型，同上
+		projectName,//模糊查询 非必传字段
+		page,//分页 
+    	pageSize
 	}
 
-	return service({url: '/appPreInvest/selectInvestProject', method: 'post', data})
+	return service({url: '/investProject/getInvestProjectList', method: 'post', data})
 }
 
 /////// 董事会 ///////////////

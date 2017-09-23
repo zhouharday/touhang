@@ -5,28 +5,28 @@
                 <span class="desc">{{title}}</span>
             </div>
             <div class="right">
-                <el-button type="danger">下一阶段</el-button>
-                <el-button type="danger">中止</el-button>
+                <el-button type="danger" @click="changeStep">下一阶段</el-button>
+                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend">中止</el-button>
             </div>
         </div>
         <el-row class="step">
-            <el-col :span="4" class="step_first step_span">
+            <el-col :span="4" class="step_first step_span" :class="{'step_span_change step_first_change':!first_step}">
                 <span>{{step_first}}</span>
             </el-col>
-            <el-col :span="4" class="step_second step_span">
+            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':second_step}">
                 <span>{{step_second}}</span>
             </el-col>
-            <el-col :span="4" class="step_second step_span">
+            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':third_step}">
                 <span>{{step_third}}</span>
             </el-col>
-            <el-col :span="4" class="step_second step_span">
+            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fourth_step}">
                 <span>{{step_fourth}}</span>
             </el-col>
-            <el-col :span="4" class="step_second step_span">
+            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fiveth_step}">
                 <span>{{step_fiveth}}</span>
             </el-col>
             </el-col>
-            <el-col :span="4" class="step_third step_span">
+            <el-col :span="4" class="step_third step_span" :class="{'step_span_change step_third_change':sixth_step}">
                 <span>{{step_sixth}}</span>
             </el-col>
         </el-row>
@@ -34,10 +34,13 @@
             <div class="img_wrapper">
                 <img src="/static/img/double.png">
             </div>
+            <!-- 小双助手 -->
             <div class="prompt_message">
                 <span class="prompt">{{prompt}}</span>
                 <div class="item_wrapper">
                     <div class="item" v-for="(item, index) in module" :key="item.index">
+                        <!-- 立即上传 -->
+                        <!-- 发起申请等 对话框 -->
                         <span class="count">{{item.count}}</span>
                         <p class="desc">{{item.desc}}</p>
                         <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
@@ -59,9 +62,9 @@
                     <team-table></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-          <industry-form :industryForm="industryForm">
-          </industry-form>
-        </el-tab-pane> -->
+                                              <industry-form :industryForm="industryForm">
+                                              </industry-form>
+                                            </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-Form></record-Form>
                 </el-tab-pane>
@@ -88,17 +91,17 @@
                 <el-row>
                     <el-col>
                         <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off"></el-input>
+                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off"></el-input>
+                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off"></el-input>
+                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
@@ -121,7 +124,7 @@
                     <el-col>
                         <el-form-item label="选择审批人" prop="date">
                             <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in applyForm.options" :key="item.value" :label="item.label" :value="item.value">
+                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -149,6 +152,13 @@ import outingForm from './outing'
 export default {
     data() {
         return {
+            first_step: true,
+            second_step: false,
+            third_step: false,
+            fourth_step: false,
+            fiveth_step: false,
+            sixth_step: false,
+            suspend: false,
             applyModal: false,
             title: '双子金服投资项目',
             step_first: '考察储备',
@@ -197,18 +207,18 @@ export default {
                 date: '',
                 notes: '',
                 appendix: '',
-                auditor: '',
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }]
-            }
+                auditor: ''
+            },
+            auditorOptions: [{ //审批人列表
+                value: '选项1',
+                label: '张三'
+            }, {
+                value: '选项2',
+                label: '李四'
+            }, {
+                value: '选项3',
+                label: '王二'
+            }]
         }
     },
     components: {
@@ -224,22 +234,41 @@ export default {
         outingForm
     },
     created() {
-      this.init();
+        this.init();
     },
     methods: {
-      init() {
-        
-      },
-      disable(name) {
-          if (name.flag === false) {
-              return name.flag = true
-          } else {
-              return name.flag = false
-          }
-      }
+        init() {
+
+        },
+        // 转至下一阶段 的方法
+        changeStep() {
+            if (this.first_step) {
+                this.first_step = !this.first_step;
+                this.second_step = !this.second_step;
+            } else if (this.second_step) {
+                this.second_step = !this.second_step;
+                this.third_step = !this.third_step;
+            } else if (this.third_step) {
+                this.third_step = !this.third_step;
+                this.fourth_step = !this.fourth_step;
+            } else if (this.fourth_step) {
+                this.fourth_step = !this.fourth_step;
+                this.fiveth_step = !this.fiveth_step;
+                this.suspend = true;
+            } else if (this.fiveth_step) {
+                this.fiveth_step = !this.fiveth_step;
+                this.sixth_step = !this.sixth_step;
+            }
+        }
+    },
+    disable(name) {
+        if (name.flag === false) {
+            return name.flag = true
+        } else {
+            return name.flag = false
+        }
     }
 }
-
 </script>
 <style lang="less" scoped>
 .preProjectMessage {
@@ -272,6 +301,10 @@ export default {
                 padding: 5px 15px;
             }
         }
+        .bgc {
+            background: #a0a3aa;
+            border: 1px solid #a0a3aa;
+        }
     }
     .step {
         width: 100%;
@@ -286,9 +319,12 @@ export default {
             border: 1px solid #000;
             position: relative;
         }
+        .step_span_change {
+            border: 1px solid #f05e5e;
+        }
         .step_first {
             color: #F05E5E;
-            border: 1px solid red;
+            border: 1px solid #f05e5e;
             &::after {
                 content: '';
                 width: 36px;
@@ -298,9 +334,16 @@ export default {
                 top: 7px;
                 right: -19px;
                 border: 1px solid;
-                border-color: red red transparent transparent;
+                border-color: #f05e5e #f05e5e transparent transparent;
                 transform: rotate(45deg);
                 z-index: 1;
+            }
+        }
+        .step_first_change {
+            color: #000;
+            border: 1px solid #000;
+            &::after {
+                border-color: black black transparent transparent;
             }
         }
         .step_second {
@@ -332,6 +375,15 @@ export default {
                 transform: rotate(45deg);
             }
         }
+        .step_second_change {
+            color: #f05e5e;
+            &::after {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+            &::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+        }
         .step_third {
             margin-left: 3%;
             &::before {
@@ -345,6 +397,12 @@ export default {
                 border: 1px solid;
                 border-color: #000 #000 transparent transparent;
                 transform: rotate(45deg);
+            }
+        }
+        .step_third_change {
+            color: #f05e5e;
+            &::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
             }
         }
     }
@@ -423,5 +481,4 @@ export default {
         }
     }
 }
-
 </style>

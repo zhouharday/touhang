@@ -48,18 +48,21 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出人">
-                                <el-input v-model="AddForm.proposer" auto-complete="off"></el-input>
+                                <el-input v-model="AddForm.proposer" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出时间">
-                                <el-date-picker type="date" placeholder="提出时间" v-model="AddForm.startingDate" style="width: 100%;">
-                                </el-date-picker>
+                                <el-input placeholder="当前默认时间" v-model="AddForm.startingDate" disabled>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接收人">
-                                <el-input v-model="AddForm.recipient" auto-complete="off"></el-input>
+                                <el-select v-model="AddForm.recipient" placeholder="请选择接收人" style="width:100%">
+                                    <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -187,7 +190,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                         <el-button type="text" size="small" @click="modalAlarmView=true">查看详情</el-button>
+                        <el-button type="text" size="small" @click="modalAlarmView=true">查看详情</el-button>
                         <el-button type="text" size="small" @click="modalAlarm=true">立即处理</el-button>
                     </template>
                 </el-table-column>
@@ -255,8 +258,8 @@
                 <el-form :model="alarmForm" style="margin-top:20px;background:#eef1f6;padding:10px;" :label-width="formLabelWidth">
                     <el-form-item label="处理结果">
                         <el-select v-model="alarmForm.result" placeholder="请选择处理状态">
-                            <el-option label="处理中" value="处理中"></el-option>
-                            <el-option label="已解决" value="已解决"></el-option>
+                            <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="汇报内容">
@@ -312,6 +315,15 @@ export default {
                 appendix: '',
                 Records: ''
             },
+            recipientOptions: [
+                { //接收人列表
+                    value: '选项1',
+                    label: '研发李一'
+                }, {
+                    value: '选项2',
+                    label: '研发张三'
+                }
+            ],
             // 风险跟踪 table
             riskData1: [
                 {
@@ -341,6 +353,15 @@ export default {
                 content: '',
                 appendix: ''
             },
+            resultOptions: [
+                { //处理结果列表
+                    value: '选项1',
+                    label: '处理中'
+                }, {
+                    value: '选项2',
+                    label: '已解决'
+                }
+            ],
             riskData: [
                 {
                     riskTheme: '京东',
