@@ -12,7 +12,7 @@
             <el-row :gutter="40">
                 <el-col :span="12">
                     <div class="tableTitle">出资主体</div>
-                    <el-table :data="fundTable" style="width: 100%" :row-class-name="tableRowClassName">
+                    <el-table :data="fundTable" style="width:100%;height:260px;overflow:hidden" :row-class-name="tableRowClassName">
                         <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investorMoney" label="投资金额（元）" align="center">
@@ -253,6 +253,7 @@ export default {
 <style lang="less" scoped>
 .aftProjectMessage {
     width: 100%;
+    min-height: 100%;
     background-color: #fff;
     padding: 24px;
     .title {

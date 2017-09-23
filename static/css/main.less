@@ -375,7 +375,7 @@ ul li {
      .el-tabs__item.is-active {
          color: #F05E5E;
      }
-    // 上传附件 的样式
+    // el-upload 上传附件 的样式
     .upload-demo {
         display: inline-block;
         .el-upload--text {
@@ -385,6 +385,43 @@ ul li {
             span {
                border-bottom: 1px solid #F05E5E;
             }
+        }
+    }
+    // ivu-upload 小双立即上传按钮样式
+    .ivu-upload {
+        .ivu-btn-ghost {
+            color: #f05e5e;
+            border: none;
+        }
+        .ivu-btn {
+            padding: 0;
+            font-size: 14px;
+            .ivu-icon {
+                display: none;
+            }
+       }
+    }
+    // 查看进度对话框内 的table样式
+    .progressBox {
+        .el-dialog--small {
+            width: 1300px;
+        }
+       // row-table的css style
+        .el-table th {
+            background-color: #2A3142;
+        }
+        .el-table__footer-wrapper thead div,
+        .el-table__header-wrapper thead div {
+            color: #fff;
+            font-weight: normal;
+            background-color: #2A3142;
+        }
+        // 隔行变色样式
+        .el-table .info-row {
+            background: #fff;
+        }
+        .el-table .positive-row {
+            background: #EEF0F4;
         }
     }
     // 投资详情页的风险登记模块

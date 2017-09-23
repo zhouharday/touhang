@@ -147,13 +147,12 @@
     </div>
 </template>
 
+
 <script>
 import { addPro } from 'api/project';
-
 const store = {
     isSubmit: false
 }
-
 export default {
     name: 'addProject',
     data() {
@@ -341,45 +340,7 @@ export default {
 
 <style lang="less" scoped>
 .addProject {
-    .addProjectContentf {
-        width: 100%;
-        height: 650px;
-        padding: 50px 20px;
-        font-size: 14px;
-        background: #fff;
-        .searchAddProject {
-            .inputSearch {
-                div {
-                    margin-left: 15px;
-                    cursor: pointer;
-                }
-            }
-            .text {
-                margin: 40px 0 30px 0;
-                padding-bottom: 3px;
-                border-bottom: 2px solid #F05E5E;
-                span {
-                    color: #F05E5E;
-                    border-bottom: 1px solid #F05E5E;
-                    cursor: pointer;
-                }
-            }
-            .dataList {
-                .dataBox {
-                    h3 {
-                        margin: 5px 0;
-                    }
-                    p {
-                        height: 200px;
-                        overflow: hidden;
-                        padding-bottom: 5px;
-                        text-indent: 20px;
-                        text-align: left;
-                    }
-                }
-            }
-        }
-    }
+    min-height: 100%;
     .addProjectContents {
         width: 100%; // height: 800px;
         padding: 20px;

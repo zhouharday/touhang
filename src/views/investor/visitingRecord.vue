@@ -2,11 +2,11 @@
 <div class="visitingRecord">
     <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader>
     <el-table :data="visitingRecord" border style="width: 100%">
-        <el-table-column prop="name" label="拜访人">
+        <el-table-column prop="manageName" label="拜访人">
         </el-table-column>
-        <el-table-column prop="date" label="拜访时间">
+        <el-table-column prop="seeDate" label="拜访时间">
         </el-table-column>
-        <el-table-column prop="content" label="拜访内容">
+        <el-table-column prop="seeContent" label="拜访内容">
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
@@ -32,7 +32,7 @@
                 <el-col :span="12">
                     <el-form-item label="拜访人">
                         <el-select v-model="addVisiting.merchantId" style="width:100%">
-                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
+                            <el-option :key="addVisiting.merchantId" :label="addVisiting.manageName" :value="addVisiting.merchantId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -62,19 +62,25 @@
             </el-row>
         </el-form>
     </Modal>
+    <!-- 确实删除模态框 -->
+    <delete-reminders :deleteReminders="deleteModal" @del="comfirmDel" @cancel="comfirmDelete"></delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import tableHeader from "components/tabelHeader"
+import deleteReminders from "components/deleteReminders"
 import {
-    getVisitingRecordList,
-    addVisitingRecord
+    addVisitingRecord,
+    updateVisitingRecord,
+    deleteVisitingRecord
 } from "api/investor"
 export default {
     props: {
-        userId: String,
-        default: ''
+        visitingRecord: {
+            type: Array,
+            default: []
+        }
     },
     data() {
         return {
@@ -84,66 +90,76 @@ export default {
                     explain: '添加'
                 }]
             },
-            visitingRecord: [{
-                name: '张三',
-                date: '2016-09-08',
-                content: '安红, 俺想你'
-            }, {
-                name: '李四',
-                date: '2016-09-08',
-                content: '安红, 俺想你'
-            }, {
-                name: '王五',
-                date: '2016-09-08',
-                content: '老司机'
-            }],
-            investmentManager: [{
-                dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
-                id: JSON.parse(sessionStorage.getItem('userInfor')).id
-            }],
+            id: '',
+            deleteModal: false,
             modelVisiting: false,
             addVisiting: {
+                id: '',
+                inverstorId: this.$route.params.userId,
+                manageName: '',
                 merchantId: '',
+                seeContent: '',
                 seeDate: '',
-                seeContent: ''
-            }
+            },
+            addOrEdit: true // 用来判断点击了添加还是编辑
         }
     },
     methods: {
         showVisiting() {
             this.modelVisiting = true
+            this.addOrEdit = true
+            this.addVisiting = {
+                inverstorId: this.$route.params.userId,
+                manageName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+                merchantId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+                seeContent: '',
+                seeDate: '',
+            }
         },
         editRow(index, row) {
-            // console.log(row)
             this.modelVisiting = true
             this.addVisiting = row
+            this.addOrEdit = false
         },
         deleteRow(index, row) {
-            // console.log(index)
-            this.visitingRecord.splice(index, 1)
+            this.deleteModal = !this.deleteModal
+            this.id = row.id
         },
         confirmVisiting() {
-            addVisitingRecord(this.addVisiting).then((res) => {
-                if(res.status == '200') {
+            if (this.addOrEdit == true) {
+                console.log(this.$route.params.userId)
+                addVisitingRecord(this.addVisiting).then((res) => {
+                    this.$Message.success(res.data.message || '添加拜访记录成功')
+                }).catch(err => {
+                    let res = err.data
+                    this.$Message.success(res.message || '添加拜访记录失败')
+                })
+            } else {
+                console.log(this.addVisiting)
+                updateVisitingRecord(this.addVisiting).then((res) => {
                     console.log(res)
+                    this.$Message.success(res.data.message || '修改拜访记录成功')
+                }).catch(err => {
+                    console.log(err)
+                    this.$Message.success(res.message || '修改拜访记录失败')
+                })
+            }
+        },
+        comfirmDel(el) {
+            deleteVisitingRecord(this.id).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.info(res.data.message || '删除成功！')
+                    this.deleteModal = false
                 }
-            }).catch(err => {
-                console.log(err)
             })
+        },
+        comfirmDelete() {
+            this.deleteModal = false
         }
     },
-    created() {
-        getVisitingRecordList(this.userId).then((res) => {
-            if (res.status = '200') {
-                console.log(res)
-            }
-        }).catch(err => {
-            let response = err.response
-            this.$Message.error(response.data.message || '获取拜访记录失败！')
-        })
-    },
     components: {
-        tableHeader
+        tableHeader,
+        deleteReminders
     }
 }
 </script>

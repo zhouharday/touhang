@@ -14,23 +14,34 @@
         </el-row>
     </div>
     <div class="tabs">
-        <Tabs v-model="detailsName" type="card">
+        <Tabs v-model="detailsName" type="card" @on-click="getTabs">
             <TabPane label="基本信息" name="info">
-                <baseInfo :userId="paramsId"></baseInfo>
+                <baseInfo></baseInfo>
             </TabPane>
-            <TabPane label="投资者文档" name="invDoc" class="tab_list">
+            <TabPane label="投资者文档" name="invDoc">
                 <investorDoc></investorDoc>
             </TabPane>
-            <TabPane label="投资协议" name="agree" class="tab_list">
-                <agreement :userId="paramsId"></agreement>
+            <TabPane label="投资协议" name="agree">
+                <agreement :agreementData="agreementData"></agreement>
             </TabPane>
             <TabPane label="资金明细" name="funddet" class="tab_list">
-                <fundDetails></fundDetails>
+                <investment :investorData="investorData"></investment>
+                <!-- <Tabs>
+                    <TabPane label="出资">
+                        <fundDetails :investorData="investorData"></fundDetails>
+                    </TabPane>
+                    <TabPane label="退出">标签二的内容</TabPane>
+                    <Button type="ghost" @click="handleTabsAdd" slot="extra">添加</Button>
+                </Tabs> -->
             </TabPane>
-            <TabPane label="拜访记录" name="visiting" class="tab_list">
-                <visitingRecord :userId="paramsId"></visitingRecord>
+            <TabPane label="拜访记录" name="visiting">
+                <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
             </TabPane>
         </Tabs>
+    </div>
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        </el-pagination>
     </div>
 </div>
 </template>
@@ -39,8 +50,13 @@
 import baseInfo from "./baseInfo"
 import investorDoc from './investorDoc'
 import agreement from "./agreement"
-import fundDetails from "./fundDetails"
 import visitingRecord from "./visitingRecord"
+import investment from './investment'
+import {
+    GetProtocolsList,
+    getVisitingRecordList,
+    getAgreementAmountList
+} from 'api/investor'
 export default {
     data() {
         return {
@@ -54,18 +70,54 @@ export default {
                     amount: '666666'
                 }]
             },
+            agreementData: [],
+            visitingRecord: [],
+            investorData: [],
             detailsName: 'info',
             paramsId: ''
         }
     },
-    created() {
-        this.paramsId = this.$route.params.userId
+    methods: {
+        getTabs(name) {
+            if (name == 'agree') {
+                GetProtocolsList(this.$route.params.userId).then((res) => {
+                    console.log(res)
+                    if (res.status == '200') {
+                        this.agreementData = res.data.result.list
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    // let response = err.data
+                    // this.$Message.error(response.message || '获取结构失败！')
+                })
+            } else if (name == 'visiting') {
+                getVisitingRecordList(this.$route.params.userId).then((res) => {
+                    if (res.status == '200') {
+                        this.visitingRecord = res.data.result.list
+                    }
+                }).catch(err => {
+                    let response = err.data
+                    this.$Message.error(response.message || '获取拜访记录失败！')
+                })
+            } else if (name == 'funddet') {
+                var invId = this.$route.params.userId
+                var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+                getAgreementAmountList(invId, merId).then((res) => {
+                    if (res.status == '200') {
+                        this.investorData = res.data.result.list
+                    }
+                }).catch(err => {
+                    let response = err.data
+                    this.$Message.error(response.message || '获取资金明细失败！')
+                })
+            }
+        }
     },
     components: {
         baseInfo,
         investorDoc,
         agreement,
-        fundDetails,
+        investment,
         visitingRecord
     }
 }
@@ -75,6 +127,7 @@ export default {
 @import '../../common/styles/mixin.less';
 @import '../../common/styles/variable.less';
 .investorDetails {
+    position: relative;
     .base-style();
     .header {
         width: 100%;
@@ -103,6 +156,15 @@ export default {
             }
 
         }
+    }
+    .page {
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        text-align: right;
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
 }
 </style>

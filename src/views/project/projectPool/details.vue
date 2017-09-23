@@ -5,37 +5,37 @@
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="项目名称">
+                        <el-form-item label="项目名称" prop="projectName">
                             <el-input v-model="basicForm.projectName" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目简称">
+                        <el-form-item label="项目简称" prop="projectShortName">
                             <el-input v-model="basicForm.projectShortName" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目类型">
+                        <el-form-item label="项目类型" prop="projectType">
                             <el-input v-model="basicForm.projectType" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="所属行业">
+                        <el-form-item label="所属行业" prop="industry">
                             <el-input v-model="basicForm.industry" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目来源">
+                        <el-form-item label="项目来源" prop="projectFromId">
                             <el-input v-model="basicForm.projectFromId" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="所在地">
+                        <el-form-item label="所在地" prop="ddress">
                             <el-input v-model="basicForm.address" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="业务部门">
+                        <el-form-item label="业务部门" prop="departmentId">
                             <el-input v-model="basicForm.departmentId" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
@@ -47,54 +47,53 @@
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="企业名称">
+                        <el-form-item label="企业名称" prop="enterpriseName">
                             <el-input v-model="companyForm.enterpriseName" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="法人代表">
+                        <el-form-item label="法人代表" prop="legalPerson">
                             <el-input v-model="companyForm.legalPerson" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="注册资本（元）">
+                        <el-form-item label="注册资本（元）" prop="registeredCapital">
                             <el-input v-model="companyForm.registeredCapital" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="实收资本（元）">
+                        <el-form-item label="实收资本（元）" prop="paiclCapital">
                             <el-input v-model="companyForm.paiclCapital" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="注册登记日期">
-                            <!-- <el-input></el-input> -->
+                        <el-form-item label="注册登记日期" prop="registerDate">
                             <el-date-picker type="date" v-model="companyForm.registerDate" :disabled="companyForm.flag" style="width:100%">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="统一信用代码">
+                        <el-form-item label="统一信用代码" prop="creditCode">
                             <el-input v-model="companyForm.creditCode" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="注册地址">
+                        <el-form-item label="注册地址" prop="registerAddress">
                             <el-input v-model="companyForm.registerAddress" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="办公地址">
+                        <el-form-item label="办公地址" prop="workAddress">
                             <el-input v-model="companyForm.workAddress" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="主营业务">
+                        <el-form-item label="主营业务" prop="mainBusiness">
                             <el-input v-model="companyForm.mainBusiness" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="备注">
+                        <el-form-item label="备注" prop="remark">
                             <el-input v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>

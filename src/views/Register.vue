@@ -62,7 +62,7 @@ export default {
         }
     },
 
-    mounted() { },
+    mounted() {},
     created() {
         this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>行业
             "dicParent": '1'
@@ -77,7 +77,7 @@ export default {
 
             });
         this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>省份
-            "dicParent": '3'
+            "dicParent": 501
         })
             .then(res => {
                 if (res.data.status == '200') {
@@ -90,12 +90,12 @@ export default {
             });
         function getIndustry(self) { //获取行业数据
             return self.$http.post('api/dictionaryController/select2Menu', {
-                "dicParent": '1'
+                "dicParent": 1
             })
         };
         function getRegister(self) { //获取省份数据
             return self.$http.post('api/dictionaryController/select2Menu', {
-                "dicParent": '3'
+                "dicParent": 501
             })
         };
         // let self = this;
@@ -114,10 +114,10 @@ export default {
         //     }))
     },
     computed: mapState({
-        // register(state){
-        //     state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
-        //     return state.register.register;
-        // }
+        register(state){
+            state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
+            return state.register.register;
+        }
     }),
     methods: {
         checkVata(province) { //选择省份回调
@@ -133,6 +133,8 @@ export default {
                 this.$store.state.register.register.industry = this.register.industry;
                 this.$store.state.register.register.province = this.register.province;
                 this.$store.state.register.register.contactUser = this.register.contactUser;
+                window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
+                this.$store.state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
                 this.$http.post('api/merchant/register', this.$store.state.register.register)
                     .then(res => {
                         if (res.data.status == '200') { //注册数据验证通过

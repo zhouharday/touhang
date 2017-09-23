@@ -70,9 +70,7 @@
 import tableHeader from 'components/tabelHeader'
 import {
     getOrgList,
-    getAllOrgList,
-    updateOrg,
-    addOrganization
+    getAllOrgList
 } from 'api/fund'
 export default {
     data() {
@@ -97,6 +95,7 @@ export default {
             },
             setOrgType: [],
             teamData: [],
+            trueOrFalse: true,
             rules: {
                 orgName: [{
                     required: true,
@@ -143,36 +142,47 @@ export default {
         handleEdit(index, row) {
             this.cooperativeOrg = true
             this.cooperativeInfo = row
+            this.trueOrFalse = false
         },
-        // updateOrg(row.id).then((res) => {
-        //     if (res.status == '200') {
-        //         console.log(res)
-        //     }
-        // }).catch(err => {
-        //     let res = err.data
-        //     if(res.status == '9005') {
-        //         this.autofocus = true
-        //         this.$Message.warning(res.message || '机构名称已经存在!')
-        //     }
-        // })
         confirmIncome() {
-            this.$refs.cooperativeInfo.validate((valid) => {
-                if (valid) {
-                    addOrganization(this.cooperativeInfo).then((response) => {
-                        console.log(this.cooperativeInfo)
-                        if (response.status == '200') {
-                            console.log(res)
-                            this.$Message.success(res.data.message || '操作成功')
-                        }
-                    }).catch(err => {
-                        if (response.status == '9005') {
+            if (this.trueOrFalse == true) {
+                this.$refs.cooperativeInfo.validate((valid) => {
+                    if (valid) {
+                        this.$http.post('/api/organization/addOrganization', this.cooperativeInfo).then((response) => {
+                            if (response.status == '200') {
+                                this.$Message.success(response.data.message || '操作成功')
+                            } else if (response.status == '9005') {
+                                return Promise.reject(error)
+                            }
+                            this.cooperativeOrg = false
+                        }).catch(error => {
                             this.$Message.error(response.data.message || '机构名称已经存在!')
-                        }
-                    })
-                } else {
-                    return false
-                }
-            })
+                        })
+                    } else {
+                        return false
+                    }
+                })
+            } else {
+                this.$refs.cooperativeInfo.validate((valid) => {
+                    if (valid) {
+                        this.$http.post('/api/organization/updateOrg', this.cooperativeInfo).then((response) => {
+                            if (response.status == '200') {
+                                this.cooperativeOrg = false
+                                this.$Message.success(response.data.message || '操作成功')
+                            } else {
+                                return Promise.reject(error)
+                            }
+                        }).catch(error => {
+                            let response = response.data
+                            if (response.status == '9005') {
+                                this.$Message.error(response.data.message || '机构名称已经存在!')
+                            }
+                        })
+                    } else {
+                        return false
+                    }
+                })
+            }
         },
         cancelForm() {
             this.$refs.cooperativeInfo.resetFields()

@@ -101,6 +101,17 @@
                                         <el-input v-model="contractForm1.percent" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办人">
+                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办日期">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlingDate" style="width: 100%;">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
                                         <!-- action 上传的地址，必填 -->
@@ -110,17 +121,6 @@
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlingDate" style="width: 100%;">
-                                        </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -220,7 +220,18 @@
                                         <el-input v-model="contractForm1.percent" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办人">
+                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办日期">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlingDate" style="width: 100%;">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                 <el-col>
                                     <el-form-item label="合同附件">
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="contractForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
@@ -229,17 +240,6 @@
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlingDate" style="width: 100%;">
-                                        </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -368,7 +368,18 @@
                                         <el-input v-model="paidForm1. restingMoney" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办人">
+                                        <el-input v-model="paidForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办日期">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.handlingDate" style="width: 100%;">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                 <el-col>
                                     <el-form-item label="相关附件">
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
@@ -377,17 +388,6 @@
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.handlingDate" style="width: 100%;">
-                                        </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -459,7 +459,18 @@
                                         <el-input v-model="paidForm1. restingMoney" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办人">
+                                        <el-input v-model="paidForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办日期">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.handlingDate" style="width: 100%;">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                 <el-col>
                                     <el-form-item label="相关附件">
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
@@ -468,17 +479,6 @@
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.handlingDate" style="width: 100%;">
-                                        </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -569,7 +569,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
+                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -642,7 +642,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
+                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">

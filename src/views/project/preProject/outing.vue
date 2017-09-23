@@ -33,7 +33,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人">
-                        <el-input placeholder="默认当前登陆用户" v-model="outingForm.operator" auto-complete="off" disabled></el-input>
+                        <el-input placeholder="默认当前登陆用户" v-model="outingForm.operator" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">

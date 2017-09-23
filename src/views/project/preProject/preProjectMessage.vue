@@ -38,15 +38,20 @@
             <div class="prompt_message">
                 <span class="prompt">{{prompt}}</span>
                 <div class="item_wrapper">
-                    <div class="item" v-for="(item, index) in module" :key="item.index">
-                        <!-- 立即上传 -->
-                        <!-- 发起申请等 对话框 -->
+                    <div class="item" v-for="(item,index) in module" :key="item.index">
                         <span class="count">{{item.count}}</span>
                         <p class="desc">{{item.desc}}</p>
-                        <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
+                        <!-- 立即上传 -->
+                        <Upload v-show="index == 0" action="//jsonplaceholder.typicode.com/posts/">
+                            <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
+                        </Upload>
+                        <!-- 发起申请等 对话框 -->
+                        <el-button v-show="index != 0" type="text" class="state" @click="openDialog(index)">
                             {{item.info}}
                         </el-button>
-                        <!-- <span class="state" :class="{complete:item.state === true}">{{item.info}}</span> -->
+                        <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
+                                                                {{item.info}}
+                                                            </el-button> -->
                     </div>
                 </div>
             </div>
@@ -62,9 +67,9 @@
                     <team-table></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                              <industry-form :industryForm="industryForm">
-                                              </industry-form>
-                                            </el-tab-pane> -->
+                                                                                              <industry-form :industryForm="industryForm">
+                                                                                              </industry-form>
+                                                                                            </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-Form></record-Form>
                 </el-tab-pane>
@@ -105,13 +110,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="备注">
+                        <el-form-item label="备注" prop="notes">
                             <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="考察报告">
+                        <el-form-item label="考察报告" prop="appendix">
                             <!-- action 上传的地址，必填 -->
                             <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                 <div style="padding: 20px 0">
@@ -135,6 +140,24 @@
                 <el-button @click="applyModal= false">提交</el-button>
             </div>
         </el-dialog>
+        <!-- 查看进度 对话框 -->
+        <div class="progressBox">
+            <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
+                <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
+                    <el-table-column prop="node" label="节点" align="center">
+                    </el-table-column>
+                    <el-table-column prop="operator" label="处理人" align="center">
+                    </el-table-column>
+                    <el-table-column prop="conclusion" label="结论" align="center">
+                    </el-table-column>
+                    <el-table-column prop="startingTime" label="开始日期" align="center">
+                    </el-table-column>
+                    <el-table-column prop="time" label="用时" align="center">
+                    </el-table-column>
+                </el-table>
+
+            </el-dialog>
+        </div>
     </div>
 </template>
 <script>
@@ -160,6 +183,7 @@ export default {
             sixth_step: false,
             suspend: false,
             applyModal: false,
+            progressModal: false,
             title: '双子金服投资项目',
             step_first: '考察储备',
             step_second: '立项会',
@@ -201,7 +225,7 @@ export default {
                 baseInfo: '工商信息',
                 flag: true
             },
-            applyForm: {
+            applyForm: { // 发起申请表单
                 title: '',
                 person: '',
                 date: '',
@@ -209,7 +233,7 @@ export default {
                 appendix: '',
                 auditor: ''
             },
-            auditorOptions: [{ //审批人列表
+            auditorOptions: [{ //发起申请表单 审批人列表
                 value: '选项1',
                 label: '张三'
             }, {
@@ -218,7 +242,24 @@ export default {
             }, {
                 value: '选项3',
                 label: '王二'
-            }]
+            }],
+            progressTable: [
+                {
+                    node: '发起申请',
+                    operator: '管理员 2017/8/15 16:25:14',
+                    conclusion: '同意',
+                    startingTime: '2017/8/15 16:25:14',
+                    time: '4秒'
+                },
+                {
+                    node: '法务意见',
+                    operator: '管理员 2017/8/15 16:25:14',
+                    conclusion: '不同意',
+                    startingTime: '2017/8/15 16:25:14',
+                    time: '12秒'
+                }
+            ],//查看进度表单 节点table
+
         }
     },
     components: {
@@ -238,7 +279,6 @@ export default {
     },
     methods: {
         init() {
-
         },
         // 转至下一阶段 的方法
         changeStep() {
@@ -259,13 +299,39 @@ export default {
                 this.fiveth_step = !this.fiveth_step;
                 this.sixth_step = !this.sixth_step;
             }
-        }
-    },
-    disable(name) {
-        if (name.flag === false) {
-            return name.flag = true
-        } else {
-            return name.flag = false
+        },
+        // 小双助手 打开不同的对话框
+        openDialog(index) {
+            if (index == 1) {
+                this.applyModal = true;
+            } else if (index == 2) {
+                this.progressModal = true;
+            }
+            
+            // switch (index) {
+            //    case 1:
+            //      this.applyModal = true;
+            //      break;
+            //    case 2:
+            //      this.progressModal = true;
+            //      break; 
+            // }
+        },
+        disable(name) {
+            if (name.flag === false) {
+                return name.flag = true
+            } else {
+                return name.flag = false
+            }
+        },
+        // 设置table间隔行的background-color
+        tableRowClassName(row, index) {
+            if ((index % 2) == 0) {
+                return 'info-row';
+            } else {
+                return 'positive-row';
+            }
+            return '';
         }
     }
 }
@@ -273,7 +339,7 @@ export default {
 <style lang="less" scoped>
 .preProjectMessage {
     width: 100%;
-    /*height: 100%;*/
+    min-height: 100%;
     background-color: #fff;
     padding: 24px;
     .title {

@@ -60,7 +60,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="添加日期" prop="date">
-                        <el-input placeholder="默认当前日期" v-model="teamForm.date" style="width: 100%;" disabled>
+                        <el-input placeholder="默认当前日期" v-model="teamForm.date" style="width: 100%;">
                         </el-input>
                     </el-form-item>
                 </el-form>
