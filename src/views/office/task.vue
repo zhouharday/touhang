@@ -193,8 +193,8 @@
                         <el-row :gutter="20">
                             <el-col :span="24">
                                 <el-form-item label="任务进展" :label-width="formLabelWidth">
-                                    <el-radio class="radio" v-model="form1.radio" label="1" @change="radios(radio)">处理中</el-radio>
-                                    <el-radio class="radio" v-model="form1.radio" label="2">已完成</el-radio>
+                                    <el-radio class="radio" v-model="form1.radio" label="0" @change="radios(radio)">处理中</el-radio>
+                                    <el-radio class="radio" v-model="form1.radio" label="1">已完成</el-radio>
                                 </el-form-item>
                             </el-col>
                         </el-row>
