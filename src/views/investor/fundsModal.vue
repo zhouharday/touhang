@@ -2,9 +2,12 @@
 <div class="fundsModal">
     <el-form :model="fundsInfo" label-position="left" label-width="120px">
         <el-row :gutter="10">
-            <el-col :span="12">
+            <el-col :span="24">
                 <el-form-item label="协议名称">
-                    <el-input v-model="fundsInfo.agreementName" auto-complete="off"></el-input>
+                    <el-select v-model="fundsInfo.agreementName" style="width:100%">
+                        <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.agreementName" :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -39,16 +42,16 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="投资经理">
-                    <el-select v-model="fundsInfo.managerId" style="width:100%">
+                <el-form-item label="经办人">
+                    <el-select v-model="fundsInfo.handler" style="width:100%">
                         <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="登记日期">
-                    <el-date-picker v-model="fundsInfo.registerDate" type="date" placeholder="选择日期" style="width: 100%;">
+                <el-form-item label="经办日期">
+                    <el-date-picker v-model="fundsInfo.handlingDate" type="date" placeholder="选择日期" style="width: 100%;">
                     </el-date-picker>
                 </el-form-item>
             </el-col>
@@ -68,15 +71,30 @@
 </template>
 
 <script type="text/ecmascript-6">
-// {
-//               "agreementId": "ff6f971d142a48389988b9f4aca12b02",//协议ID
-//               "paidAmount": "100.00",//实缴金额
-//               "residueAmount": "50",//剩余金额
-//               "paidDate": "2017-08-09 08:51:35",//出资日期
-//               "managerId": "asdffsdfdsf",//投资经理ID 当前登录用户ID
-//                  "documentInfo":[{"fileUrl":"https://123.sogou.com/","fileName":"搜狗网址"},{"fileUrl":"https://www.zhibo8.cc/","fileName":"直播吧地址"}],//上传附件的字段以数组的形式
-//           }
-export default {}
+import {getAgreementAmountList} from 'api/investor'
+export default {
+    props: {
+        fundsInfo: {
+            type: Object,
+            default: {}
+        }
+    },
+    data() {
+        return {
+            allAgreement: []
+        }
+    },
+    created() {
+        getAgreementAmountList(this.$route.params.userId, JSON.parse(sessionStorage.getItem('merchants'))[0].id).then((res) => {
+            if (res.status == '200') {
+                this.allAgreement = res.data.result.list
+            }
+        }).catch(err => {
+            let response = err.data
+            this.$Message.error(response.message || '获取资金明细失败！')
+        })
+    }
+}
 </script>
 
 <style lang="less" scoped>
