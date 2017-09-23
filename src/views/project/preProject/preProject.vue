@@ -64,6 +64,7 @@
                     </el-table-column>
                     <el-table-column prop="stage" label="项目阶段" align="center">
                     </el-table-column>
+                    <!--
                     <el-table-column label="操作" min-width="100" align="center">
                         <template scope="scope">
                             <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
@@ -71,6 +72,7 @@
                             </el-button>
                         </template>
                     </el-table-column>
+                    -->
                 </el-table>
             </el-col>
         </el-row>
