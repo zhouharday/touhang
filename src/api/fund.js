@@ -104,15 +104,7 @@ export function getAllOrgList() {
         data
     })
 }
-// 新增机构
-export function addOrganization(addOrg) {
-    const data = addOrg
-    return service({
-        url: '/organization/addOrganization',
-        method: 'post',
-        data
-    })
-}
+
 // 修改机构
 export function updateOrg(orgData) {
     const data = orgData
