@@ -43,7 +43,7 @@ const router = new Router({
     ],
 })
 router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录
-    if(to.path == '/login'){
+    if(to.path == '/login' || to.path == '/registerphone' || to.path == '/register'){
         next();
         return;
     };

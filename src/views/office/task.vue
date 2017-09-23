@@ -342,7 +342,7 @@ section {
 export default {
     computed: {
         userId(state) {
-            // alert(111);
+            // alert(666);
             this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
             this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
             // console.log(this.$store.state.login.userInfor.id);
@@ -792,7 +792,8 @@ export default {
             })
                 .then(res => {
                     if (res.status == '200') {
-                        this.getTaskList(4);
+                        // this.closeTask(this.form1.taskId);
+                        this.getTaskList(2);
                         this.$Message.success(res.data.message);
                     } else if (res.status == '403') {
                         this.$Message.error(res.data.message);
