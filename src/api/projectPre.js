@@ -235,7 +235,79 @@ export function delFee(id = undefined) {
 // 合同列表
 export function contracts(userid = undefined) {
 	const data = {
-		userid
+		projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301"//合同id
+   		page, // ": 1,//分页 
+    	pageSize // ": 5
 	}
-	return service({url: '/projectCost/selectProjectCost', method: 'post', data});
+	return service({url: '/projectContract/selectAllProjectContract', method: 'post', data});
+}
+
+// 添加项目合同 
+export function addContract(projectContract = {}, fundInfo = []) {
+	let { projectId, contractName, signDate, contractAmount, stockRatio, handlerUserId, handlerDate, documentInfo } = projectContract;
+	const data = {
+	    projectContract: {
+	    	projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301",
+	        contractName, // ": "测试合同1",//合同名称
+	        signDate, // ": "2017-08-27",//签订日期
+	        contractAmount, // ": "25",//合同金额
+	        stockRatio, // ": "0.45",//股权占比
+	        handlerUserId, // ": "d878a28b510e4e2993ff40cef98de33d",//经办人ID当前登录用户ID
+	        handlerDate, // ": "2017-09-01"//经办日期
+	        documentInfo //文档地址
+	        /*
+	        ":[{
+	        	"fileUrl":"https://123.sogou.com/",
+	        	"fileName":"搜狗网址"
+	        }] */
+	 	},
+	    fundInfo: fundInfo//基金列表
+	    /*[{ 
+	    	fundId, // ": "361e776103574723abab0a6df55b7eab",//基金id
+	        investAmount, // ": "25456",投资金额
+	        stockRatio // ": "0.45"//股权占比
+	    }
+	    ]*/
+	}
+	return service({url: '/projectContract/addProjectContract', method: 'post', data});
+}
+
+// 编辑项目合同
+export function editContract(projectContract = {}, fundInfo = []) {
+	let { projectId, contractName, signDate, contractAmount, stockRatio, handlerUserId, handlerDate, documentInfo } = projectContract;
+	const data = {
+	    projectContract: {
+	    	projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301",
+	        contractName, // ": "测试合同1",//合同名称
+	        signDate, // ": "2017-08-27",//签订日期
+	        contractAmount, // ": "25",//合同金额
+	        stockRatio, // ": "0.45",//股权占比
+	        handlerUserId, // ": "d878a28b510e4e2993ff40cef98de33d",//经办人ID当前登录用户ID
+	        handlerDate, // ": "2017-09-01"//经办日期
+	        documentInfo //文档地址
+	        /*
+	        ":[{
+	        	"fileUrl":"https://123.sogou.com/",
+	        	"fileName":"搜狗网址"
+	        }] */
+	 	},
+	    fundInfo: fundInfo//基金列表
+	    /*[{ 
+	    	"id": "577c7528b96a406fa0ef5e32a44afc1f",//必传
+            "contractId": "fff2ae16768b445f9c807a28804680d1", // 合同id
+            "fundId": "e7f8e145920f4c91a7e559b61dee8ec7", // 基金id
+	        investAmount, // ": "25456",投资金额
+	        stockRatio // ": "0.45"//股权占比
+	    }
+	    ]*/
+	}
+	return service({url: '/projectContract/updateProjectContract', method: 'post', data});	
+}
+
+// 删除合同
+export function delContract(id = undefined) {
+	const data = {
+		id // ": "dc3e4b66ed5944ec9fa10e83aa0c3301"//合同id
+	}
+	return service({url: '/projectContract/deleteProjectContract', method: 'post', data});
 }

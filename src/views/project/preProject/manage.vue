@@ -694,7 +694,16 @@
 
 <script>
 import tabelHeader from 'components/tabelHeader'
+
+import { delGu, delContract, delFee, fees, contracts } from 'api/projectPre';
+
 export default {
+    props: {
+        proId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             activeNames: ['1'],
@@ -867,7 +876,13 @@ export default {
             ]
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+
+        },
         // 添加 项目合同  确定按钮
         confirmCostAdd1() {
             this.costData.push(this.costForm1);
@@ -878,14 +893,11 @@ export default {
         confirmCostAdd2() {
             this.costAdd2 = !this.costAdd2;
         },
-
-
         // 添加 项目合同 确定按钮
         confirmContractAdd1() {
             this.contractData.push(this.contractForm1);
             this.contractForm1 = {};
             this.contractAdd1 = false;
-
         },
         // 出资主体 确定按钮
         confirmFundAdd1() {
@@ -898,8 +910,6 @@ export default {
         confirmContractAdd2() {
             this.contractAdd2 = !this.contractAdd2;
         },
-
-
         // 添加 投资支付 确定按钮
         confirmPaidAdd1() {
             this.paidData.push(this.paidForm1);
@@ -910,8 +920,6 @@ export default {
         confirmPaidAdd2() {
             this.paidAdd2 = !this.paidAdd2;
         },
-
-
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
             this.sharingAdd1 = false;
@@ -929,18 +937,34 @@ export default {
         handleDelete(index, rows = [], type = '') {
             let row = rows[index];
             if (!row) return console.warn('del row was null', row);
+            let id = row.id;
             switch(type) {
                 case 'fee': // 删除费用
-                    delFee(row.id).then(resp => {
+                    delFee(id).then(resp => {
                         console.log('delFee resp: ', resp);
                         rows.splice(index, 1);
+                        // TODO: 请求列表接口,
                     }).catch(e => {
                         consle.log('delFee() exists error: ', e);
                     })
                     break;
                 case 'contract': // 删除合同
+                    delContract(id).then(resp => {
+                        console.log('delContract resp: ', resp);
+                        rows.splice(index, 1);
+                        // TODO: 请求列表接口
+                    }).catch(e => {
+                        console.log('delContract() exists error: ', e);
+                    })
                     break;
                 case 'gu':       // 删除股权
+                    delGu(id).then(resp => {
+                        console.log('delGu resp: ', resp);
+                        rows.splice(index, 1);
+                        // TODO: 请求列表接口
+                    }).catch(e => {
+                        console.log('delGu() exists error: ', e);
+                    })
                     break;
                 case 'pay':      // 删除?
                     break;
@@ -955,7 +979,6 @@ export default {
     components: {
         tabelHeader
     }
-
 }
 </script>
 

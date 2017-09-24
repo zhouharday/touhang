@@ -75,7 +75,8 @@
                   </industry-form>
                 </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form></record-form>
+                    <record-form
+                        :proId="proId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
                     <approve-table></approve-table>
