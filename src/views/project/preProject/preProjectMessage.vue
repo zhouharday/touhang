@@ -68,7 +68,9 @@
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
                     <team-table
-                        :proId="proId"></team-table>
+                        :proId="proId"
+                        :proUsers="proUsers"
+                        :proRoles="proRoles"></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                   <industry-form :industryForm="industryForm">
@@ -86,7 +88,8 @@
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
                     <risk-table
-                        :proId="proId"></risk-table>
+                        :proId="proId"
+                        :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
                     <manage-table
@@ -179,6 +182,9 @@ import manageTable from './manage'
 import outingForm from './outing'
 
 import { getPreDetail } from 'api/projectPre';
+import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+
+const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 
 export default {
     data() {
@@ -201,6 +207,8 @@ export default {
             step_sixth: '退出',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
+            proUsers: [],   // 项目用户列表
+            proRoles: [],   // 项目角色列表 
             module: [{
                 count: 1,
                 desc: '上传项目考察报告',
@@ -285,12 +293,79 @@ export default {
         initInfo() {
             let href = window.location.href;
             this.proId = href.substr(href.lastIndexOf('/') + 1, href.length);
+
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+
+            // 项目用户和角色
+            Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
+                // console.log('values: ', values);
+                this.proUsers = values[0] || [];
+                this.proRoles = values[1] || [];
+            }).catch(e => {
+                console.log('getProUsers() or getProRoles() exists error: ', e);
+            });
         },
+        /**
+         * [getPreProDetail 项目详情]
+         * @return {[type]} [description]
+         */
         getPreProDetail() {
             getPreDetail(this.proId).then(resp => {
                 console.log('prodetail: ', resp);
             }).catch(e => {
                 console.log('getProDetail() exists error: ', e);
+            });
+        },
+        /**
+         * [getProUsers 获取项目用户列表]
+         * @return {[type]} [description]
+         */
+        getProUsers() {
+            return new Promise((resolve, reject) => {
+                let proUsers = this.proUsers;
+                if (proUsers.length) {
+                    resolve(proUsers);
+                } else {
+                    getProjectUsers({
+                        merchantId: this.merchantId
+                    }).then(resp => {
+                        let data = resp.data;
+                        if (+data.status === 200) {
+                            resolve(data.result);
+                        } else {
+                            reject(data.message);
+                        }
+                        // console.log('users resp', resp);
+                    }).catch(reject);
+                }
+            });
+        },
+        /**
+         * [getProRoles 获取项目角色列表]
+         * @return {[type]} [description]
+         */
+        getProRoles() {
+            return new Promise((resolve, reject) => {
+                let proRoles = this.proRoles;
+                if (proRoles.length) {
+                    resolve(proRoles);
+                } else {
+                    getProjectRoles({
+                        merchantId: this.merchantId,
+                        roleType: PROJECT_TYPE
+                    }).then(resp => {
+                        let data = resp.data;
+                        if (+data.status === 200) {
+                            resolve(data.result);
+                        } else {
+                            reject(data.message);
+                        }
+                        // console.log('roles resp', resp);
+                    }).catch(reject);
+                }
             });
         },
         // 转至下一阶段 的方法

@@ -83,6 +83,20 @@ export default {
         proId: {
             type: String,
             default: ''
+        },
+        proUsers: {
+            type: Array,
+            default: []
+        },
+        proRoles: {
+            type: Array,
+            default: []
+        }
+    },
+    watch: {
+        proUsers(val, oldVal) {
+            // console.log('team val, oldVal', val, oldVal);
+            this.initInfo();
         }
     },
     data() {
@@ -106,18 +120,12 @@ export default {
                 { //姓名列表
                     value: '选项1',
                     label: '王二'
-                }, {
-                    value: '选项2',
-                    label: '李一'
                 }
             ],
             roleOptions: [
                 { //角色列表
                     value: '选项1',
                     label: '角色一'
-                }, {
-                    value: '选项2',
-                    label: '角色二'
                 }
             ],
             rules: {
@@ -141,12 +149,30 @@ export default {
         }
     },
     created() {
-        this.init();
+        this.init(); 
     },
     methods: {
         init () {
             this.getDatas();
         },
+        initInfo() {
+            let proUsers = this.proUsers;
+            let proRoles = this.proRoles;
+            
+            this.handleToOptions(proUsers);
+            this.handleToOptions(proRoles);
+
+            this.nameOptions = proUsers;
+            this.roleOptions = proRoles;
+        },
+        handleToOptions(datas = []) {
+            datas.forEach(item => {
+                item.value = item.id;
+                item.label = item.name;
+            })   
+            return datas;         
+        },
+        // 项目成员列表
         getDatas() {
             getTeams(this.proId).then(resp => {
                 // console.log('getTeams resp', resp);
@@ -157,7 +183,7 @@ export default {
                 console.log('getDatas() exists error: ', e);
             })
         },
-        //添加 项目成员的方法
+        // 添加 项目成员的方法
         addTeam() {
             let new_teamForm = {
                 name: '',
@@ -177,7 +203,6 @@ export default {
                 } else {
                     return false;
                 }
-
             });
         },
         checkEdit(index, row) { //编辑

@@ -5,9 +5,9 @@
             <el-table :data="riskData" border style="width: 100%" align="center">
                 <el-table-column label="主题" prop="riskTheme" align="center">
                 </el-table-column>
-                <el-table-column label="处理人" prop="handlePerson" align="center">
+                <el-table-column label="处理人" prop="seedUserId" align="center">
                 </el-table-column>
-                <el-table-column label="指派人" prop="assignor" align="center">
+                <el-table-column label="指派人" prop="receivedUserId" align="center">
                 </el-table-column>
                 <el-table-column label="开始时间" prop="startingDate" align="center">
                 </el-table-column>
@@ -30,18 +30,18 @@
                     <el-row>
                         <el-col>
                             <el-form-item label="风险主题">
-                                <el-input v-model="AddForm.theme" auto-complete="off"></el-input>
+                                <el-input v-model="AddForm.riskTheme" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="风险描述">
-                                <el-input type="textarea" :rows="3" v-model="AddForm.description" auto-complete="off">
+                                <el-input type="textarea" :rows="3" v-model="AddForm.riskDescribe" auto-complete="off">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出人">
-                                <el-input placeholder="默认当前登录用户" v-model="AddForm.proposer" auto-complete="off"></el-input>
+                                <el-input placeholder="默认当前登录用户" v-model="AddForm.seedUserId" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -52,7 +52,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接收人">
-                                <el-select v-model="AddForm.recipient" placeholder="请选择接收人" style="width:100%">
+                                <el-select v-model="AddForm.receivedUserId" placeholder="请选择接收人" style="width:100%">
                                     <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
@@ -95,7 +95,7 @@
                     </el-table-column>
                     <el-table-column prop="receivedUserId" label="接收人" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column label="完成时间" width="200px" align="center">
+                    <el-table-column prop="endingDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="appendix" label="附件" width="150px" align="center">
                     </el-table-column>
@@ -125,7 +125,7 @@
                     </el-table-column>
                     <el-table-column prop="receivedUserId" label="接收人" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column label="完成时间" width="200px" align="center">
+                    <el-table-column prop="endingDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="appendix" label="附件" width="150px" align="center">
                     </el-table-column>
@@ -144,7 +144,10 @@
                 <el-form :model="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.result" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <el-option v-for="item in resultOptions" 
+                                :key="item.value" 
+                                :label="item.label" 
+                                :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -183,6 +186,15 @@ export default {
         proId: {
             type: String,
             default: ''
+        },
+        proUsers: {
+            type: Array,
+            default: []
+        }
+    },
+    watch: {
+        proUsers(val, oldVal) {
+            this.initInfo();
         }
     },
     data() {
@@ -214,16 +226,13 @@ export default {
                 { //接收人列表
                     value: '选项1',
                     label: '研发李一'
-                }, {
-                    value: '选项2',
-                    label: '研发张三'
                 }
             ],
             tableData: [
                 {
-                    theme: 'AAAAAA',
-                    description: '',
-                    proposer: '',
+                    riskTheme: 'AAAAAA',
+                    riskDescribe: '',
+                    seedUserId: '',
                     startingDate: '',
                     recipient: '',
                     endingDate: '',
@@ -234,10 +243,6 @@ export default {
                 {
                     record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
                     file: 'AAA.doc'
-                },
-                {
-                    record: '2017-06-28 18:42:55   刘备  【已完成】 已经完成处理',
-                    file: 'AAA.PDF'
                 }
             ],
             trackingForm: {
@@ -249,9 +254,6 @@ export default {
                 { //处理结果列表
                     value: '选项1',
                     label: '处理中'
-                }, {
-                    value: '选项2',
-                    label: '已解决'
                 }
             ],
             riskData: [
@@ -275,10 +277,22 @@ export default {
             this.getDatas();
         },
         initInfo() {
+            let proUsers = this.proUsers;
+            
+            this.handleToOptions(proUsers);
 
+            this.recipientOptions = proUsers;
+        },
+        handleToOptions(datas = []) {
+            datas.forEach(item => {
+                item.value = item.id;
+                item.label = item.name;
+            })   
+            return datas;         
         },
         getDatas() {
             dangers(this.proId).then(resp => {
+                // TODO: 数据赋值,目前无数据
                 console.log('dangers resp: ', resp);
             }).catch(e => {
                 console.log('dangers exists error: ', e);
@@ -303,11 +317,18 @@ export default {
         },
         confirmTracking() {
             let params = {
-                projectId: this.proId,
-                riskTheme
+                projectId: this.proId
+                /*
+                riskTheme:
+                seedUserId: 
+                receivedUserId: 
+                riskDescribe: */ 
             };
+            params = Object.assign({}, params, this.AddForm);
+            console.log('params: ', params);
             addDanger(params).then(resp => {
                 this.modalTracking = false;
+                this.getDatas();
             }).catch(e => {
                 console.log('confirmTracking() exists error: ', e);
             })
@@ -329,7 +350,6 @@ export default {
     components: {
         tabelHeader
     }
-
 }
 </script>
 
