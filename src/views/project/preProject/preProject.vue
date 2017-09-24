@@ -167,7 +167,7 @@ export default {
                 let result = data.result;
                 let list = result.list;
                 list = this.handleDatas(list);
-                this.tableData = list;
+                this.tableData = list || [];
                 this.total = result.total || 0;
                 console.log(result);
             }).catch(e => {

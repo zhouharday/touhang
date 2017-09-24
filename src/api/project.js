@@ -133,6 +133,7 @@ export function changeEnterpriseInfo(params = {}) {
     }
     return service({url: '/projectPool/updateEnterpriseInfo', method: 'post', data})
 }
+
 // 提交项目基本信息
 export function changeProjectInfo(params = {}) {
 	let { id, projectName, projectShortName, addressId, projectTypeId, industryId, statusId, projectFromId, departmentId, projectLeaderId, merchantId } = params;
@@ -178,11 +179,10 @@ export function addRecord(params = {}) {
 }
 
 // 删除记录
-export function delRecord(id, recordStatus) {
+export function delRecord(id = undefined, recordStatus = undefined) {
 	const data = {
 		id,   //项目ID
 		recordStatus,  // 记录状态：1：正常 2：删除
 	}
 	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
 }
-

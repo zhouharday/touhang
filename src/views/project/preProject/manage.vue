@@ -12,7 +12,7 @@
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
                                 <el-button type="text" size="small" @click="costAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,costData)">删除</el-button>
+                                <el-button type="text" size="small" @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -72,7 +72,7 @@
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
                                 <el-button type="text" size="small" @click="contractAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,contractData)">删除</el-button>
+                                <el-button type="text" size="small" @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -165,7 +165,7 @@
                                 <template scope="scope">
                                     <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑</el-button>
                                     <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(index,fundData1)">删除</el-button>
+                                    <el-button type="text" size="small" @click="handleDelete(index,fundData1, 'gu')">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -332,7 +332,7 @@
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
                                 <el-button type="text" size="small" @click="paidAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,paidData)">删除</el-button>
+                                <el-button type="text" size="small" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -418,7 +418,7 @@
                                 <template scope="scope">
                                     <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑</el-button>
                                     <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(index,fundData2)">删除</el-button>
+                                    <el-button type="text" size="small" @click="handleDelete(index,fundData2, 'fund2')">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -509,7 +509,7 @@
                                 <template scope="scope">
                                     <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑</el-button>
                                     <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(index,fundData2)">删除</el-button>
+                                    <el-button type="text" size="small" @click="handleDelete(index,fundData2,'last')">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -536,7 +536,7 @@
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
                                 <el-button type="text" size="small" @click="sharingAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,sharingData)">删除</el-button>
+                                <el-button type="text" size="small" @click="handleDelete(scope.$index,sharingData,'share')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -692,10 +692,7 @@
     </section>
 </template>
 
-
-
-
-<script type="text/ecmascript-6">
+<script>
 import tabelHeader from 'components/tabelHeader'
 export default {
     data() {
@@ -778,12 +775,6 @@ export default {
                     investment: '',
                     percent: '',
                     editFlag: false
-                },
-                {
-                    fundName: 'BBBBBB基金',
-                    investment: '',
-                    percent: '',
-                    editFlag: false
                 }
             ],
             //投资支付
@@ -800,11 +791,6 @@ export default {
             },
             paidData: [
                 {
-                    contractName: '合同名称',
-                    contractMoney: '',
-                    paidMoney: '10,000',
-                    paidDate: '2017-9-9'
-                }, {
                     contractName: '合同名称',
                     contractMoney: '',
                     paidMoney: '10,000',
@@ -836,14 +822,6 @@ export default {
                     restingMoney: '',
                     paidMoney: '',
                     editFlag: false
-                },
-                {
-                    foundName: 'AA基金',
-                    investment: '500,000',
-                    percent: '10',
-                    restingMoney: '',
-                    paidMoney: '',
-                    editFlag: false
                 }
             ],
             // 项目分红
@@ -868,11 +846,6 @@ export default {
                     contractMoney: '',
                     sharingMoney: '10,000',
                     sharingDate: '2017-9-9'
-                }, {
-                    contractName: '合同名称',
-                    contractMoney: '',
-                    sharingMoney: '10,000',
-                    sharingDate: '2017-9-9'
                 }
             ],
             headerInfo_sharing: {
@@ -884,13 +857,6 @@ export default {
             },
             // 添加 项目分红时 的基金table
             fundData3: [
-                {
-                    foundName: 'AA基金',
-                    investment: '500,000',
-                    percent: '10',
-                    sharingMoney: '',
-                    editFlag: false
-                },
                 {
                     foundName: 'AA基金',
                     investment: '500,000',
@@ -955,16 +921,35 @@ export default {
         confirmSharingAdd2() {
             this.sharingAdd2 = !this.sharingAdd2;
         },
-
-
-
         checkEdit(index, row) { // 出资主体的table 编辑
             // console.log(row)
             row.editFlag = !row.editFlag;
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        // 删除当前行
+        handleDelete(index, rows = [], type = '') {
+            let row = rows[index];
+            if (!row) return console.warn('del row was null', row);
+            switch(type) {
+                case 'fee': // 删除费用
+                    delFee(row.id).then(resp => {
+                        console.log('delFee resp: ', resp);
+                        rows.splice(index, 1);
+                    }).catch(e => {
+                        consle.log('delFee() exists error: ', e);
+                    })
+                    break;
+                case 'contract': // 删除合同
+                    break;
+                case 'gu':       // 删除股权
+                    break;
+                case 'pay':      // 删除?
+                    break;
+                case 'fund2':    // 删除基金
+                    break;
+                case 'share':    // 删除分红
+
+                    break;
+            }
         }
     },
     components: {
@@ -972,7 +957,6 @@ export default {
     }
 
 }
-
 </script>
 
 

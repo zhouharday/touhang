@@ -59,31 +59,37 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                    <detail-form 
+                        :basicForm="basicForm" 
+                        :companyForm="companyForm" 
+                        :capitalForm="capitalForm">
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table></team-table>
+                    <team-table
+                        :proId="proId"></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                                                                              <industry-form :industryForm="industryForm">
-                                                                                              </industry-form>
-                                                                                            </el-tab-pane> -->
+                  <industry-form :industryForm="industryForm">
+                  </industry-form>
+                </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-Form></record-Form>
+                    <record-form></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
-                    <approve-Table></approve-Table>
+                    <approve-table></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
                     <file-table></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table></risk-table>
+                    <risk-table
+                        :proId="proId"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table></manage-table>
+                    <manage-table
+                        :proId="proId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>
@@ -155,7 +161,6 @@
                     <el-table-column prop="time" label="用时" align="center">
                     </el-table-column>
                 </el-table>
-
             </el-dialog>
         </div>
     </div>
@@ -171,6 +176,8 @@ import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
+
+import { getPreDetail } from 'api/projectPre';
 
 export default {
     data() {
@@ -250,16 +257,8 @@ export default {
                     conclusion: '同意',
                     startingTime: '2017/8/15 16:25:14',
                     time: '4秒'
-                },
-                {
-                    node: '法务意见',
-                    operator: '管理员 2017/8/15 16:25:14',
-                    conclusion: '不同意',
-                    startingTime: '2017/8/15 16:25:14',
-                    time: '12秒'
                 }
-            ],//查看进度表单 节点table
-
+            ]
         }
     },
     components: {
@@ -279,6 +278,19 @@ export default {
     },
     methods: {
         init() {
+            this.initInfo();
+            this.getPreProDetail();
+        },
+        initInfo() {
+            let href = window.location.href;
+            this.proId = href.substr(href.lastIndexOf('/') + 1, href.length);
+        },
+        getPreProDetail() {
+            getPreDetail(this.proId).then(resp => {
+                console.log('prodetail: ', resp);
+            }).catch(e => {
+                console.log('getProDetail() exists error: ', e);
+            });
         },
         // 转至下一阶段 的方法
         changeStep() {

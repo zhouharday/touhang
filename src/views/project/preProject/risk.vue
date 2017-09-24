@@ -85,15 +85,15 @@
             <!-- 查看风险详情 对话框 -->
             <el-dialog title="查看风险上报详情" :visible.sync="modalRiskView" :close-on-click-modal="false">
                 <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="theme" label="风险主题" width="150px" align="center">
+                    <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column prop="description" label="风险描述" width="150px" align="center">
+                    <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column prop="proposer" label="提出人" width="150px" align="center">
+                    <el-table-column prop="seedUserId" label="提出人" width="150px" align="center">
                     </el-table-column>
                     <el-table-column prop="startingDate" label="提出时间" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column prop="recipient" label="接收人" width="150px" align="center">
+                    <el-table-column prop="receivedUserId" label="接收人" width="150px" align="center">
                     </el-table-column>
                     <el-table-column label="完成时间" width="200px" align="center">
                     </el-table-column>
@@ -115,15 +115,15 @@
             <!-- 风险跟踪  对话框 -->
             <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
                 <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="theme" label="风险主题" width="150px" align="center">
+                    <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column prop="description" label="风险描述" width="150px" align="center">
+                    <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column prop="proposer" label="提出人" width="150px" align="center">
+                    <el-table-column prop="seedUserId" label="提出人" width="150px" align="center">
                     </el-table-column>
                     <el-table-column prop="startingDate" label="提出时间" width="150px" align="center">
                     </el-table-column>
-                    <el-table-column prop="recipient" label="接收人" width="150px" align="center">
+                    <el-table-column prop="receivedUserId" label="接收人" width="150px" align="center">
                     </el-table-column>
                     <el-table-column label="完成时间" width="200px" align="center">
                     </el-table-column>
@@ -172,10 +172,19 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
+
+import { dangers, addDanger, editDanger, delDanger, danger } from 'api/projectPre'
+
 export default {
+    props: {
+        proId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             modalAdd: false,
@@ -257,10 +266,35 @@ export default {
             ],
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.initInfo();
+            this.getDatas();
+        },
+        initInfo() {
+
+        },
+        getDatas() {
+            dangers(this.proId).then(resp => {
+                console.log('dangers resp: ', resp);
+            }).catch(e => {
+                console.log('dangers exists error: ', e);
+            })
+        },
         // 删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        handleDelete(index, rows = []) {
+            let row = rows[index];
+            if (!row) return;
+            delDanger(row.id).then(resp => {
+                console.log('del succes');
+                // rows.splice(index, 1);
+                this.getDatas();
+            }).catch(e => {
+                console.log('delDanger() exists error: ', e);
+            })
         },
         confirmAdd() {
             this.modalAdd = false;
@@ -268,7 +302,15 @@ export default {
             this.AddForm.endingDate = changeDate(this.AddForm.endingDate);
         },
         confirmTracking() {
-            this.modalTracking = false;
+            let params = {
+                projectId: this.proId,
+                riskTheme
+            };
+            addDanger(params).then(resp => {
+                this.modalTracking = false;
+            }).catch(e => {
+                console.log('confirmTracking() exists error: ', e);
+            })
         },
         // 上传附件的方法
         handleUpload(file) {

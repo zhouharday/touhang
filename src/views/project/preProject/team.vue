@@ -73,14 +73,18 @@
     </div>
 </template>
 
-
-
-
-
-<script type="txt/ecmascript-6">
+<script>
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
+import { getTeams } from 'api/projectPre';
+
 export default {
+    props: {
+        proId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             modalAdd: false,
@@ -136,7 +140,23 @@ export default {
             }
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init () {
+            this.getDatas();
+        },
+        getDatas() {
+            getTeams(this.proId).then(resp => {
+                // console.log('getTeams resp', resp);
+                let data = resp.data;
+                let result = data.result;
+                this.teamData = result;               
+            }).catch(e => {
+                console.log('getDatas() exists error: ', e);
+            })
+        },
         //添加 项目成员的方法
         addTeam() {
             let new_teamForm = {

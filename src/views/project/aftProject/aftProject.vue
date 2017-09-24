@@ -147,7 +147,7 @@ export default {
         },
         ShowPreMessage(title, ind) {
             this.index = ind;
-            this.addTab('投后' + title.project + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
+            this.addTab('投后' + title.projectName + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
             this.$router.push({ name: 'aftProjectMessage', params: { userId: title.id } });
         },
         addTab(th, url, name) {
