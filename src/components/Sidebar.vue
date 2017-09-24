@@ -19,7 +19,7 @@
                             <img style="margin-top: 18px;display: block;float: left; margin-right: 7px;" src="/static/img/office.png" />
                             <span>{{title_01}}</span>
                         </template>
-                        <el-menu-item index="contacts" @click="addTab(title3,'/home/contacts','contacts')">{{title3}}</el-menu-item>
+                        <el-menu-item index="contacts">{{title3}}</el-menu-item>
                     </el-submenu>
                 </el-menu>
             </div>
@@ -158,8 +158,8 @@ export default {
         // alert(111);
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // console.log(this.$store.state.login.merchants[0].um_id);
-        // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-        //     // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
+        // this.$http.post(this.api + '/user/findResourceByUid', { //请求用户权限列表数据
+        //     // this.$http.post(this.api + '/user/findResourceByMid', { //请求用户权限列表数据
         //     // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
         //     "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
         // })
@@ -181,8 +181,8 @@ export default {
         // alert(222)
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // // console.log(this.$store.state.login.merchants[0].um_id);
-        // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
-        // // this.$http.post('api/user/findResourceByMid', { //请求用户权限列表数据
+        // this.$http.post(this.api + '/user/findResourceByUid', { //请求用户权限列表数据
+        // // this.$http.post(this.api + '/user/findResourceByMid', { //请求用户权限列表数据
         //     // "merchantId": this.$store.state.login.merchants[0].id //用户、机构中间id
         //     "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
         // })
@@ -201,7 +201,7 @@ export default {
 
         // this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
         // // console.log(this.$store.state.login.merchants[0].um_id);
-        // this.$http.post('api/user/findResourceByUid', { //请求用户权限列表数据
+        // this.$http.post(this.api + '/user/findResourceByUid', { //请求用户权限列表数据
         //     "um_id": this.$store.state.login.merchants[0].um_id //用户、机构中间id
         // })
         // .then(Response => {
