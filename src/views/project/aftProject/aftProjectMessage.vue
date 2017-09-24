@@ -103,7 +103,7 @@ import eventTable from './event'
 import dataTable from './data'
 import monitorTable from './monitor'
 
-import { getProDetail } from 'api/project';
+import { getPreDetail } from 'api/projectPre';
 
 export default {
     components: {
@@ -199,7 +199,7 @@ export default {
         }
     },
     created() {
-        // this.init();
+        this.init();
     },
     methods: {
         init() {
@@ -217,9 +217,7 @@ export default {
             this.id = id;
         },
         initData() {
-            getProDetail({
-                id: this.id
-            }).then(resp => {
+            getPreDetail(this.id).then(resp => {
                 console.log('after pro detail: ', resp);
                 let data = resp.data;
                 this.fundTable = data.result.list;

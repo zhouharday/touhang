@@ -140,14 +140,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
-import { addOwer, addGu } from 'api/projectPre';
+import { addOwer, addGu, owers, gus } from 'api/projectPre';
 
 export default {
+    /*
     computed: mapGetters({
         projectData: 'getProjectData'    // 获取项目详情数据
     }),
+    */
+    props: {
+        projectData: {
+            type: Object,
+            default: {}
+        }
+    },
     watch: {
         projectData(val, oldVal) {
             this.init();
@@ -244,10 +252,12 @@ export default {
     methods: {
         init() {
             this.initInfo();
+            this.getMembers();
+            this.getStructures();
         },
         initInfo() {
             let projectData = this.projectData;
-            // console.log('tables projectData: ', JSON.stringify(this.projectData));
+            //console.log('tables projectData: ', JSON.stringify(this.projectData));
             this.enterpriseInfo = projectData.enterpriseInfo || {};
             this.memberData = projectData.listBoardMember || [];
             this.structureData = projectData.listOwnershipStructure || [];
@@ -257,7 +267,7 @@ export default {
         },
         // TODO: 获取董事会列表
         getMembers() {
-
+            this.memberData = this.projectData.listBoardMember || [];
         },
         //添加 董事会成员的方法
         addMember() {
@@ -296,7 +306,7 @@ export default {
         },
         // TODO: 获取股权列表
         getStructures() {
-
+            this.structureData = this.projectData.listOwnershipStructure || [];
         },
         //添加 股权结构的方法
         addStructure() {

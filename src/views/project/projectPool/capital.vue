@@ -41,9 +41,9 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'edit')">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'save')">保存
                         </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,capitalData)">删除</el-button>
                     </template>
@@ -78,16 +78,24 @@
     </div>
 </template>
 <script style="text/ecmascript-6">
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 import { Message } from 'iview'
 
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
-import { getFinances, addFinance, editFinance, delFinance } from 'api/finance';
+import { getFinances, addFinance, editFinance, delFinance } from 'api/finance'
 export default {
+    /*
     computed: mapGetters({
         projectData: 'getProjectData'    // 获取项目详情数据
     }),
+    */
+    props: {
+        projectData: {
+            type: Object,
+            default: {}
+        }
+    },
     watch: {
         projectData(val, oldVal) {
             this.init();
@@ -210,12 +218,40 @@ export default {
                 }
             });
         },
-        checkEdit(index, row) { //编辑
+        checkEdit(index, row, type) { 
             row.editFlag = !row.editFlag;
+            if (type === 'save') { // 编辑
+                console.log(index, row);
+                let projectData = this.projectData;
+                let projectInfo = projectData.projectInfo || {};
+                let enterpriseInfo = projectInfo.enterpriseInfo || {};
+                editFinance({
+                    id: row.id,
+                    enterpriseId: enterpriseInfo.id,
+                    projectTurnId: row.round,
+                    financingWayId: row.way,
+                    financingMoney: row.capital,
+                    financingDate: row.date
+                }).then(resp => {
+                    console.log('edit resp: ', resp);
+
+                }).catch(e => {
+                    console.log('checkEdit exists error: ', e);
+                })
+            }
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        // 删除当前行
+        handleDelete(index, rows = []) {
+            let row = rows[index] || {};
+            console.log('row: ', row);
+            delFinance({
+                id: row.id
+            }).then(resp => {
+                console.log('del resp: ', resp);
+                rows.splice(index, 1);
+            }).catch(e => {
+                console.log('delFinance exists error: ', e);
+            });
         },
     },
     components: {
