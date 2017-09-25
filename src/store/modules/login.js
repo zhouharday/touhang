@@ -43,7 +43,7 @@ const mutations = {
                 return;
             }
         }
-        
+
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },
@@ -91,12 +91,7 @@ const mutations = {
 
 const actions = {
     loginAPI({commit,state}, user) { //send login API
-<<<<<<< HEAD
-        // console.log(user);
-        user.self.$http.post('/api/user/login', {
-=======
         user.self.$http.post(user.self.api + '/user/login', {
->>>>>>> 81e568fcc9c6344fe83a774ff4374e665dc7bf71
             number: user.name,
             pass: user.pwd
             // number: "010",
