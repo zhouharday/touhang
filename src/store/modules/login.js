@@ -90,7 +90,7 @@ const mutations = {
 const actions = {
     loginAPI({commit,state}, user) { //send login API
         // console.log(user);
-        user.self.$http.post('api/user/login', {
+        user.self.$http.post('/api/user/login', {
             number: user.name,
             pass: user.pwd
             // number: "010",
