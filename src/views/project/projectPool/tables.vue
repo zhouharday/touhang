@@ -139,11 +139,28 @@
     </div>
 </template>
 
-
-
-<script style="text/ecmascript-6">
+<script>
+import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
+import { addOwer, addGu, owers, gus } from 'api/projectPre';
+
 export default {
+    /*
+    computed: mapGetters({
+        projectData: 'getProjectData'    // 获取项目详情数据
+    }),
+    */
+    props: {
+        projectData: {
+            type: Object,
+            default: {}
+        }
+    },
+    watch: {
+        projectData(val, oldVal) {
+            this.init();
+        }
+    },
     data() {
         return {
             modalAdd1: false,
@@ -154,11 +171,6 @@ export default {
                     name: '张飞',
                     property: '合伙人',
                     edu: '北大金融系研究院博士后',
-                    editFlag: false
-                }, {
-                    name: '李四',
-                    property: '创建人',
-                    edu: '中国人民大学金融系博士',
                     editFlag: false
                 }
             ],
@@ -188,14 +200,6 @@ export default {
                     capital: '10,000,000,000',
                     num: '20',
                     percent: '12%',
-                    editFlag: false
-                },
-                {
-                    name: '李四',
-                    property: '创建人',
-                    capital: '10,000,000,000',
-                    num: '15',
-                    percent: '10%',
                     editFlag: false
                 }
             ],
@@ -238,10 +242,33 @@ export default {
                     icon: 'plus-round',
                     explain: '添加'
                 }]
-            }
+            },
+            enterpriseInfo: {}
         }
     },
+    created() {
+        
+    },
     methods: {
+        init() {
+            this.initInfo();
+            this.getMembers();
+            this.getStructures();
+        },
+        initInfo() {
+            let projectData = this.projectData;
+            //console.log('tables projectData: ', JSON.stringify(this.projectData));
+            this.enterpriseInfo = projectData.enterpriseInfo || {};
+            this.memberData = projectData.listBoardMember || [];
+            this.structureData = projectData.listOwnershipStructure || [];
+        },
+        changeOwer(ower) {
+
+        },
+        // TODO: 获取董事会列表
+        getMembers() {
+            this.memberData = this.projectData.listBoardMember || [];
+        },
         //添加 董事会成员的方法
         addMember() {
             let new_memberForm = {
@@ -256,13 +283,30 @@ export default {
         confirmAdd1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.memberData.push(this.memberForm);
-                    this.modalAdd1 = !this.modalAdd1;
+                    // addOwer
+                    let memberForm = this.memberForm;
+                    addOwer({
+                        enterpriseId: this.enterpriseInfo.id,
+                        name: memberForm.name,
+                        nature: memberForm.property,
+                        educationalBg: memberForm.edu
+                    }).then(resp => {
+                        console.log('add ower resp: ', resp);
+                        this.memberData.push(memberForm);
+                        
+                        this.modalAdd1 = !this.modalAdd1;
+                    }).catch(e => {
+                        console.log('addOwer exists error: ', e);
+                    });
                 } else {
                     return false;
                 }
 
             });
+        },
+        // TODO: 获取股权列表
+        getStructures() {
+            this.structureData = this.projectData.listOwnershipStructure || [];
         },
         //添加 股权结构的方法
         addStructure() {
@@ -280,8 +324,20 @@ export default {
         confirmAdd2(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.structureData.push(this.structureForm);
-                    this.modalAdd2 = !this.modalAdd2;
+                    let structureForm = this.structureForm;
+                    addGu({
+                        stockholderName: structureForm.name, //股东姓名: null
+                        stockholderNature: structureForm.property,//股东性质: null
+                        investmentAmount: structureForm.capital,//投资金额: null
+                        stockCount: structureForm.num, //持股数量: null
+                        stockRatio: structureForm.percent
+                    }).then(resp => {
+                        console.log('addGu resp: ', resp);
+                        this.structureData.push(this.structureForm);
+                        this.modalAdd2 = !this.modalAdd2;
+                    }).catch(e => {
+                        console.log('addGu exists error: ', e);
+                    });
                 } else {
                     return false;
                 }

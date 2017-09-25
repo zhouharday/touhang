@@ -25,11 +25,12 @@
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getRecords, addRecord, delRecord } from 'api/project';
 
-const STATUS = 1;
+const STATUS_NORMAL = 1; // 正常
+const STATUS_DELETE = 2; // 删除
 
 export default {
     // computed: mapState({
@@ -54,13 +55,16 @@ export default {
         }
     },
     created() {
-        this.initInfo();
-        this.getDatas();
+        this.init();
     },
     methods: {
+        init() {
+            this.initInfo();
+            this.getDatas();
+        },
         getDatas() {
             // TODO: 1是否是对的
-            getRecords(this.projectId, STATUS).then(resp => {
+            getRecords(this.projectId, STATUS_NORMAL).then(resp => {
                 console.log('getDatas resp: ', resp);
                 let data = resp.data.result;
                 this.recordList = this.handleDatas(data);
@@ -116,7 +120,7 @@ export default {
             this.value.recordText = '';
         },
         delRecord(index, item) {
-            delRecord(item.id, STATUS).then(resp => {
+            delRecord(item.id, STATUS_DELETE).then(resp => {
                 console.log('del resp: ', resp);
                 let data = resp.data;
                 if (+data.status === 200) {

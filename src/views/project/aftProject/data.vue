@@ -40,22 +40,20 @@
                         <el-col :span="12">
                             <el-form-item label="类型">
                                 <el-select v-model="operatingForm1.sort" placeholder="请选择类型" style="width:100%;">
-                                    <el-option label="年报" value="年报"></el-option>
-                                    <el-option label="半年报" value="半年报"></el-option>
-                                    <el-option label="季报" value="季报"></el-option>
-                                    <el-option label="月报" value="月报"></el-option>
+                                    <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报人">
-                                <el-input v-model="operatingForm1.informant" auto-complete="off"></el-input>
+                                <el-input  placeholder="默认登录用户" v-model="operatingForm1.informant" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报日期">
-                                <el-date-picker type="date" placeholder="选择日期" v-model="operatingForm1.date" style="width:100%;">
-                                </el-date-picker>
+                                <el-input  placeholder="当前默认日期" v-model="operatingForm1.date" style="width:100%;" disabled>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
@@ -209,20 +207,20 @@
                         <el-col :span="12">
                             <el-form-item label="类型">
                                 <el-select v-model="financialForm1.sort" placeholder="请选择类型" style="width:100%;">
-                                    <el-option label="类型一" value="类型一"></el-option>
-                                    <el-option label="类型二" value="类型二"></el-option>
+                                    <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报人">
-                                <el-input v-model="financialForm1.informant" auto-complete="off"></el-input>
+                                <el-input  placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报日期">
-                                <el-date-picker type="date" placeholder="选择日期" v-model="financialForm1.date" style="width:100%;">
-                                </el-date-picker>
+                                <el-input  placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
+                                </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
@@ -541,6 +539,21 @@ export default {
                 remark: '',
                 appendix: ''
             },
+            sortOptions: [
+                 { //数据类型列表
+                    value: '选项1',
+                    label: '年报'
+                }, {
+                    value: '选项2',
+                    label: '半年报'
+                }, { 
+                    value: '选项1',
+                    label: '季报'
+                }, {
+                    value: '选项2',
+                    label: '月报'
+                }
+            ],
             // 编辑/添加 经营数据 table
             operatingData1: [
                 {
@@ -664,10 +677,10 @@ export default {
             this.operatingModal2 = false;
         },
         // 添加 经营数据明细 的方法
-        confirmOperating () {
-           this.operatingData1.push(this.operatingForm2);
-           this.operatingForm2={};
-           this.operatingModal3=false;
+        confirmOperating() {
+            this.operatingData1.push(this.operatingForm2);
+            this.operatingForm2 = {};
+            this.operatingModal3 = false;
         },
 
 

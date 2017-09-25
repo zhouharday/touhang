@@ -104,7 +104,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer">
                         <el-button @click="systemDialog = false">取 消</el-button>
-                        <el-button type="primary" @click="submitForm('form')">提 交</el-button>
+                        <el-button type="danger" @click="submitForm('form')">提 交</el-button>
                     </div>
                 </el-dialog>
             </div>
@@ -278,11 +278,9 @@ import service from 'common/js/fetch'
 import axios from 'axios'
 
 export default {
-    beforeCreate() {
-
-    },
+    beforeCreate() {},
     created() {
-        this.$http.post('/api/merchantType/queryList', {})
+        this.$http.post( this.api + '/merchantType/queryList', {})
             .then(res => {
                 if (res.status == '200') {
                     this.typePostage = res.data.result;
@@ -384,7 +382,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     // console.log(this.form);
-                    this.$http.post('/api/merchant/apply', {
+                    this.$http.post(this.api + '/merchant/apply', {
                         "id": this.id,
                         "socialCode": this.form.creditCode,
                         "merchantName": this.form.companyName,

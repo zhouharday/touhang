@@ -6,10 +6,11 @@ import register from './modules/register'
 import fund from './modules/fund'
 import investor from './modules/investor'
 import system from './modules/system'
+import project from './modules/project'
 import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex);
-// const debug = process.env.NODE_ENV !== 'production'
+//const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
     modules: {
@@ -17,8 +18,9 @@ export default new Vuex.Store({
         system,
         investor,
         fund,
-        register
+        register,
+        project
     },
-    // strict: debug,
-    // plugins: debug ? [createLogger()] : []
+    //strict: debug,
+    //plugins: debug ? [createLogger()] : []
 })

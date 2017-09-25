@@ -62,6 +62,7 @@ Object.keys(proxyTable).forEach(function (context) {
             target: options
         }
     }
+    //请求公司IP 时启用代理
     app.use(proxyMiddleware(options.filter || context, options))
 })
 

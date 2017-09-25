@@ -8,10 +8,7 @@
             <el-col :span="22" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stageList"
-                            :key="item.index"
-                            :class="{active: index==currentIndex1}"
-                            @click="changeActive(index,1)">
+                        <li v-for="(item,index) in stageList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
                             {{item.stages}}
                         </li>
                     </ul>
@@ -26,10 +23,7 @@
             <el-col :span="22">
                 <div class="sort-ul">
                     <ul ref="sort">
-                        <li v-for="(item,index) in sortList" 
-                            :key="item.index" 
-                            :class="{active: index==currentIndex2}"
-                            @click="changeActive(index,2)">
+                        <li v-for="(item,index) in sortList" :key="item.index" :class="{active: index==currentIndex2}" @click="changeActive(index,2)">
                             {{item.sorts}}
                         </li>
                     </ul>
@@ -38,29 +32,29 @@
         </el-row>
         <!--搜索框 -->
         <el-row class="search-box">
-           <el-col :span="5">
-               <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
-               </el-input>
-           </el-col>
-           <el-col :span="19" class="imdo">
+            <el-col :span="5">
+                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                </el-input>
+            </el-col>
+            <el-col :span="19" class="imdo">
                 <!-- 后期所做导入和下载模板功能 -->
-               <!-- <div class="importProject">
+                <!-- <div class="importProject">
                    <el-upload class="upload-demo" ref="upload"
                         action="" :auto-upload="false">
                         <el-button type="text">导入</el-button>
                    </el-upload>
                    <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
                </div> -->
-           </el-col>
+            </el-col>
         </el-row>
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目名称" align="center">
-                            <template scope="scope">
-                                <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
-                            </template>
+                        <template scope="scope">
+                            <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="mananger" label="项目创建人" align="center">
                     </el-table-column>
@@ -70,34 +64,45 @@
                     </el-table-column>
                     <el-table-column prop="stage" label="项目阶段" align="center">
                     </el-table-column>
+                    <!--
                     <el-table-column label="操作" min-width="100" align="center">
-                            <template scope="scope">
-                                <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
-                                    删除
-                                </el-button>
-                            </template>
+                        <template scope="scope">
+                            <el-button type="text" size="small" @click.native.prevent="deleteRow(scope.$index,tableData)">
+                                删除
+                            </el-button>
+                        </template>
                     </el-table-column>
+                    -->
                 </el-table>
             </el-col>
         </el-row>
-        <el-row type="flex"  align="bottom" class="foot">
-           <el-col :span="8">
-               <span>总记录：{{this.total}}条</span>
-           </el-col>
-           <el-col :span="16">
-               <Page :total="128" :current="13" style="float:right"></Page>
-           </el-col>
+        <el-row type="flex" align="bottom" class="foot">
+            <el-col :span="8">
+                <span>总记录：{{this.total}}条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page style="float:right" 
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
+            </el-col>
         </el-row>
     </div>
 </template>
-
 <script>
 import { getPres } from 'api/projectPre';
+import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+
 export default {
     name: 'preProject',
     data() {
         return {
-            total: 128,
+            total: 0,    // 总数
+            page: 1,     // 当前页数
+            pageSize: 5, // 一页数量 
+            projectName: '',
+            projectType: '',
             input: '',
             currentIndex1: 0,
             currentIndex2: 0,
@@ -117,72 +122,14 @@ export default {
                 { sorts: "PE" },
                 { sorts: "VC" }
             ],
-            tableData: [
-                {
-                    project: '京东',
-                    mananger: '刘经理',
-                    industry: '房地产',
-                    sort: 'PE',
-                    stage: '立项会',
-                    id: 0
-                },
-                {
-                    project: '一号店',
-                    mananger: '王经理',
-                    industry: '旅游',
-                    sort: 'VE',
-                    stage: '管理',
-                    id: 1
-                },
-                {
-                    project: '飞志',
-                    mananger: '张经理',
-                    industry: '外汇',
-                    sort: 'PE',
-                    stage: '投决会',
-                    id: 2
-                },
-                {
-                    project: '博奥',
-                    mananger: '刘经理',
-                    industry: '基金',
-                    sort: 'PE',
-                    stage: '尽职调查',
-                    id: 3
-                },
-                {
-                    project: '起亚',
-                    mananger: '刘经理',
-                    industry: '房地产',
-                    sort: '定增',
-                    stage: '考察储备',
-                    id: 4
-                },
-                {
-                    project: '中国石油',
-                    mananger: '王经理',
-                    industry: '石油',
-                    sort: 'VE',
-                    stage: '项目退出',
-                    id: 4
-                },
-                {
-                    project: '欧利',
-                    mananger: '张经理',
-                    industry: '外汇',
-                    sort: '定增',
-                    stage: '投决会',
-                    id: 6
-                },
-                {
-                    project: '上上墅',
-                    mananger: '张经理',
-                    industry: '房地产',
-                    sort: '定增',
-                    stage: '尽职调查',
-                    id: 7
-                }
-            ]
+            tableData: [{
+                project: '京东',
+                mananger: '刘经理',
+                industry: '房地产',
+                sort: 'PE',
+                stage: '立项会',
+                id: 0
+            }]
         }
     },
     created() {
@@ -191,7 +138,7 @@ export default {
     methods: {
         init() {
             this.initInfo();
-            this.getDatas();  
+            this.getDatas();
         },
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
@@ -199,24 +146,43 @@ export default {
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
         },
-        getDatas(projectName, projectType, industryId) {
-            if (projectType == '全部') projectName = '';
-            if (industryId == '全部') industryId = '';
+        getDatas() {
+            let projectType = this.projectType;
+            let projectName = this.projectName;
+            let stageId = this.stageId;
+
+            if (projectType == '全部') projectType = '';
+            if (stageId == '全部') stageId = '';
 
             let params = {
                 merchantId: this.merchantId,
-                userId: this.addProjectUserId
+                userId: this.addProjectUserId,
+                projectStageId: stageId,
+                projectTypeId: projectType,
+                projectName: projectName,
+                page: this.page,
+                pageSize: this.pageSize
             };
 
             getPres(params).then(resp => {
                 let data = resp.data;
-                let list = data.result.list;
+                let result = data.result;
+                let list = result.list;
                 list = this.handleDatas(list);
-                this.tableData = list;
+                this.tableData = list || [];
+                this.total = result.total || 0;
+                console.log(result);
             }).catch(e => {
-                console.log('getPres exists error: ', e);
-            });
+                // console.log('getPres exists error: ', e);
 
+            });
+        },
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
+        },
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
         },
         /**
          * [handleDatas 处理项目列表数据]
@@ -233,8 +199,13 @@ export default {
             });
             return data;
         },
+        /**
+         * [handleIconClick 列表模糊查询]
+         * @param  {[type]} ev [description]
+         * @return {[type]}    [description]
+         */
         handleIconClick(ev) {
-            console.log(ev);
+            this.getDatas();
         },
         // 设置table间隔行的background-color
         tableRowClassName(row, index) {
@@ -245,36 +216,57 @@ export default {
             }
             return '';
         },
-        ShowPreMessage(title,ind) {
+        ShowPreMessage(title, ind) {
             this.index = ind;
-            this.addTab( '投前'+ title.project + '详情页', '/home/preProjectMessage/'+ind, 'preProjectMessage/'+ind );
-            this.$router.push({ name: 'preProjectMessage', params: { userId: ind } });
+            this.addTab('投前' + title.project + '详情页', '/home/preProjectMessage/' + ind, 'preProjectMessage/' + ind);
+            this.$router.push({ name: 'preProjectMessage', params: { userId: title.id } });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        deleteRow(index,rows) {
-           rows.splice(index,1);
+        deleteRow(index = 0, rows = []) {
+            let row = rows[index];
+            console.log('row: ', JSON.stringify(row));
+            // rows.splice(index, 1);
         },
-        changeActive(index,ind) {
-            if(ind==1) {
-                 this.currentIndex1=index;
-            } else {
-                this.currentIndex2=index;
+        /**
+         * [changeActive 搜索查询]
+         * @param  {[type]} index [description]
+         * @param  {[type]} ind   [description]
+         * @return {[type]}       [description]
+         */
+        changeActive(index, ind) {
+            let data = [];
+            let currentData;
+            let object;
+            if (ind == 1) { // 项目阶段
+                data = this.stageList;
+                currentData = data[index];
+                object = currentData.stages;
+                this.stageId = object;
+                this.currentIndex1 = index;
+            } else {        // 项目类型
+                data = this.sortList;
+                currentData = data[index];
+                object = currentData.sorts;
+                this.projectType = object;
+                this.currentIndex2 = index;
             }
+            this.getDatas();
         }
     }
 }
-</script>
 
+</script>
 <style lang="less" scoped>
 .preContent {
     position: relative;
     width: 100%;
-    height: 650px;
+    min-height: 100%;
     font-size: 14px;
     background: #fff;
 }
+
 .common {
     padding: 0 30px 20px 30px;
     ul {
@@ -288,6 +280,7 @@ export default {
         }
     }
 }
+
 .tag {
     margin-top: 20px;
     margin-bottom: 5px;
@@ -309,10 +302,11 @@ export default {
     border-radius: 15px;
     background: #F05E5E;
 }
+
 .search-box {
     margin: 0 30px 20px 30px;
     .imdo {
-        height:30px;
+        height: 30px;
         display: flex;
         justify-content: flex-end;
         .importProject {
@@ -334,10 +328,11 @@ export default {
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
+
 .foot {
-    margin: 25px 30px 0 30px;
-    //  position: absolute;
+    margin: 25px 30px 0 30px; //  position: absolute;
     // left: 30px;
     // bottom: 20px;
 }
+
 </style>

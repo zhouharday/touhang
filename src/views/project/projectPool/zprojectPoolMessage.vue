@@ -22,15 +22,21 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm">
+                    <detail-form 
+                        :basicForm="basicForm" 
+                        :companyForm="companyForm" 
+                        :projectId="projectPoolId"
+                        :projectData="projectData">
                     </detail-form>
-                    <table-form></table-form>
+                    <table-form
+                        :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                     <industry-form :industryForm="industryForm"></industry-form>
                 </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
-                    <capital-table></capital-table>
+                    <capital-table
+                        :projectData="projectData"></capital-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form></record-form>
@@ -42,7 +48,10 @@
         </div>
     </div>
 </template>
+
 <script>
+import { mapActions } from 'vuex'
+
 import detailForm from './details'
 import tableForm from './tables'
 // import industryForm from './industry'
@@ -50,9 +59,10 @@ import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
 
-import { getProDetail } from 'api/project';
+import { getProDetail } from 'api/project'
 
 export default {
+    name: 'zprojectPoolMessage',
     data() {
         return {
             title: '双子金服投资项目',
@@ -61,30 +71,26 @@ export default {
             activeName: 'details',
             basicForm: {
                 baseInfo: '基本信息',
-                flag: true
+                flag: false
             },
             companyForm: {
                 baseInfo: '企业信息',
-                flag: true
+                flag: false
             },
             industryForm: {
                 baseInfo: '工商信息',
-                flag: true
-            }
+                flag: false
+            },
+            projectData: {}     // 项目池详情信息
         }
-    },
-    components: {
-        detailForm,
-        tableForm,
-        // industryForm,
-        capitalTable,
-        recordForm,
-        fileTable
     },
     created() {
         this.init();
     },
     methods: {
+        ...mapActions([
+            'setProjectData'
+        ]),
         init() {
             this.initParams();
             this.getPoolDetail();
@@ -102,7 +108,21 @@ export default {
             let projectPoolId = this.projectPoolId;
             console.log('id: ', projectPoolId);
             getProDetail(projectPoolId).then(resp => {
-                console.log('projectPoolId resp: ', resp);
+                // console.log('projectPoolId resp: ', resp);
+                let data = resp.data.result;
+                let { projectInfo, projectInvestmentInfo} = data;
+                this.projectData = data;
+                // this.setProjectData(data);
+                // console.log('pool detail data: ', JSON.stringify(data));
+                if (projectInfo) {
+                    //Object.keys(projectInfo).forEach(key => {
+                    //    this.basicForm[key] = projectInfo[key];    
+                    //})
+                    this.basicForm = Object.assign({}, this.basicForm, projectInfo);
+                }
+                if (projectInvestmentInfo) {
+                    this.companyForm = Object.assign({}, this.companyForm, projectInvestmentInfo);
+                }
             }).catch(e => {
                 console.log('getProDetail exists error: ', e);
             })
@@ -114,18 +134,24 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
+    },
+    components: {
+        detailForm,
+        tableForm,
+        // industryForm,
+        capitalTable,
+        recordForm,
+        fileTable
     }
 }
 </script>
 
 
 
-
-
 <style lang="less" scoped>
 .zpoolMessage {
     width: 100%;
-    /*height: 100%;*/
+    min-height: 100%;
     background-color: #fff;
     padding: 24px;
     .title {

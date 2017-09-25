@@ -12,6 +12,17 @@ export function getInvestorList() {
         data
     })
 }
+// 删除投资者
+export function deleteInvestor(investorId) {
+    const data = {
+        id: investorId
+    }
+    return service({
+        url: '/investor/deleteInvestor',
+        method: 'post',
+        data
+    })
+}
 // 项目类型
 export function getProjectType() {
     const data = {
@@ -66,6 +77,17 @@ export function addInvestor(addInv) {
         data
     })
 }
+// 获取投资者详情
+export function getInvestorDetails(uId) {
+    const data = {
+        id: uId
+    }
+    return service({
+        url: '/investor/getInvestorDetails',
+        method: 'post',
+        data
+    })
+}
 // 获取协议列表(包括详情)
 export function GetProtocolsList(protocolsID) {
     const data = {
@@ -74,6 +96,106 @@ export function GetProtocolsList(protocolsID) {
     }
     return service({
         url: '/investor/getAgreementList',
+        method: 'post',
+        data
+    })
+}
+// 签约协议
+export function addAgreement(agreement) {
+    const data = agreement
+    return service({
+        url: '/investor/addAgreement',
+        method: 'post',
+        data
+    })
+}
+// 编辑协议
+export function updateAgreement(agreementData) {
+    const data = agreementData
+    return service({
+        url: '/investor/updateAgreement',
+        method: 'post',
+        data
+    })
+}
+// 删除协议
+export function deleteAgreement(deleteId) {
+    const data = {
+        id: deleteId
+    }
+    return service({
+        url: '/investor/deleteAgreement',
+        method: 'post',
+        data
+    })
+}
+// 提交编辑投资者信息
+export function updateInvestor(dataInfo) {
+    return service({
+        url: '/investor/updateInvestor',
+        method: 'post',
+        data: dataInfo
+    })
+}
+// 获取基金选择列表
+export function getAllNormalFund() {
+    const data = {
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+    }
+    return service({
+        url: '/investor/getAllNormalFund',
+        method: 'post',
+        data
+    })
+}
+// 获取拜访记录列表
+export function getVisitingRecordList(invId) {
+    const data = {
+        inverstorId: invId
+    }
+    return service({
+        url: '/investor/getVisitingRecordList',
+        method: 'post',
+        data
+    })
+}
+// 添加拜访记录
+export function addVisitingRecord(addVisiting) {
+    const data = addVisiting
+    return service({
+        url: '/investor/addVisitingRecord',
+        method: 'post',
+        data
+    })
+}
+// 修改拜访记录
+export function updateVisitingRecord(updateInfo) {
+    const data = updateInfo
+    return service({
+        url: '/investor/updateVisitingRecord',
+        method: 'post',
+        data
+    })
+}
+// 删除拜访记录 /investor/deleteVisitingRecord
+export function deleteVisitingRecord(deleteId) {
+    const data = {
+        id: deleteId
+    }
+    return service({
+        url: '/investor/deleteVisitingRecord',
+        method: 'post',
+        data
+    })
+}
+// 获取出资协议列表
+export function getAgreementAmountList(invId, merId) {
+    const data = {
+        inverstorId: invId,
+        merchantId: merId
+    }
+    return service({
+        url: '/investor/getAgreementAmountList',
         method: 'post',
         data
     })

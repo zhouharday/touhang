@@ -13,34 +13,36 @@
             </el-col>
         </el-row>
     </div>
-
-    <Tabs size="small">
-        <TabPane label="标签一"><baseInfo></baseInfo></TabPane>
-        <TabPane label="标签二"><investorDoc></investorDoc></TabPane>
-        <TabPane label="标签三">标签三的内容</TabPane>
-    </Tabs>
-    <!-- <el-tabs v-model="activeName" type="card"> -->
-        <!-- <el-tab-pane label="用户管理" name="first">
-        </el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-        <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
-        <!-- <el-tab-pane label="基本信息" name="first">
-            <baseInfo></baseInfo>
-        </el-tab-pane>
-        <el-tab-pane label="投资者文档" name="second">
-            <investorDoc></investorDoc>
-        </el-tab-pane>
-        <el-tab-pane label="投资协议" name="third">
-            <agreement></agreement>
-        </el-tab-pane>
-        <el-tab-pane label="资金明细" name="fourth">
-            <fundDetails></fundDetails>
-        </el-tab-pane>
-        <el-tab-pane label="资金明细" name="five">
-            <visitingRecord></visitingRecord>
-        </el-tab-pane> -->
-    <!-- </el-tabs> -->
+    <div class="tabs">
+        <Tabs v-model="detailsName" type="card" @on-click="getTabs">
+            <TabPane label="基本信息" name="info">
+                <baseInfo></baseInfo>
+            </TabPane>
+            <TabPane label="投资者文档" name="invDoc">
+                <investorDoc></investorDoc>
+            </TabPane>
+            <TabPane label="投资协议" name="agree">
+                <agreement :agreementData="agreementData"></agreement>
+            </TabPane>
+            <TabPane label="资金明细" name="funddet" class="tab_list">
+                <investment :investorData="investorData"></investment>
+                <!-- <Tabs>
+                    <TabPane label="出资">
+                        <fundDetails :investorData="investorData"></fundDetails>
+                    </TabPane>
+                    <TabPane label="退出">标签二的内容</TabPane>
+                    <Button type="ghost" @click="handleTabsAdd" slot="extra">添加</Button>
+                </Tabs> -->
+            </TabPane>
+            <TabPane label="拜访记录" name="visiting">
+                <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
+            </TabPane>
+        </Tabs>
+    </div>
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        </el-pagination>
+    </div>
 </div>
 </template>
 
@@ -48,8 +50,13 @@
 import baseInfo from "./baseInfo"
 import investorDoc from './investorDoc'
 import agreement from "./agreement"
-import fundDetails from "./fundDetails"
 import visitingRecord from "./visitingRecord"
+import investment from './investment'
+import {
+    GetProtocolsList,
+    getVisitingRecordList,
+    getAgreementAmountList
+} from 'api/investor'
 export default {
     data() {
         return {
@@ -63,17 +70,54 @@ export default {
                     amount: '666666'
                 }]
             },
-            activeName: 'first'
+            agreementData: [],
+            visitingRecord: [],
+            investorData: [],
+            detailsName: 'info',
+            paramsId: ''
         }
     },
-    created() {
-        console.log(this.$route.params)
+    methods: {
+        getTabs(name) {
+            if (name == 'agree') {
+                GetProtocolsList(this.$route.params.userId).then((res) => {
+                    console.log(res)
+                    if (res.status == '200') {
+                        this.agreementData = res.data.result.list
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    // let response = err.data
+                    // this.$Message.error(response.message || '获取结构失败！')
+                })
+            } else if (name == 'visiting') {
+                getVisitingRecordList(this.$route.params.userId).then((res) => {
+                    if (res.status == '200') {
+                        this.visitingRecord = res.data.result.list
+                    }
+                }).catch(err => {
+                    let response = err.data
+                    this.$Message.error(response.message || '获取拜访记录失败！')
+                })
+            } else if (name == 'funddet') {
+                var invId = this.$route.params.userId
+                var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+                getAgreementAmountList(invId, merId).then((res) => {
+                    if (res.status == '200') {
+                        this.investorData = res.data.result.list
+                    }
+                }).catch(err => {
+                    let response = err.data
+                    this.$Message.error(response.message || '获取资金明细失败！')
+                })
+            }
+        }
     },
     components: {
         baseInfo,
         investorDoc,
         agreement,
-        fundDetails,
+        investment,
         visitingRecord
     }
 }
@@ -83,6 +127,7 @@ export default {
 @import '../../common/styles/mixin.less';
 @import '../../common/styles/variable.less';
 .investorDetails {
+    position: relative;
     .base-style();
     .header {
         width: 100%;
@@ -111,6 +156,15 @@ export default {
             }
 
         }
+    }
+    .page {
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        text-align: right;
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
 }
 </style>

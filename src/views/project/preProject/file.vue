@@ -2,62 +2,46 @@
     <div>
         <!-- 前期文档部分 -->
         <div class="fileTable" v-show="isShow">
-            <tabel-header :data="headerInfo_file" @add="fileDialog"></tabel-header>
+            <!-- <tabel-header :data="headerInfo_file"></tabel-header> -->
+            <div class="title1" style="background:#2a3142;color:#fff">
+                <div class="desc">
+                    <span>前期文档</span>
+                </div>
+            </div>
             <el-table :data="fileData" border style="width: 100%" align="center">
-                <el-table-column label="文档名称" prop="fileName" align="center">
+                <el-table-column label="前期文档" prop="stageFile" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column  prop="fileName" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column  prop="user" align="center">
                 </el-table-column>
-                <el-table-column label="操作" align="center">
+                <el-table-column  prop="date" align="center">
+                </el-table-column>
+                <el-table-column align="center">
                     <template scope="scope">
-                        <a href="/static/img/templet.txt" download="xxxxx文档">下载</a>
+                        <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
                         <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 上传文档 对话框-->
-            <el-dialog title="上传文档" :visible.sync="modalAdd1" :close-on-click-modal="false">
-                <el-form :model="fileForm" :label-width="formLabelWidth">
-                    <el-form-item label="用户">
-                        <el-input v-model="fileForm.user" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="上传日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="fileForm.date" style="width: 100%;">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="上传文件">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd1 = false">取 消</el-button>
-                    <el-button type="primary" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
-                </div>
-            </el-dialog>
         </div>
 
         <!-- 考察报告部分 -->
         <div class="fileTable" v-show="isShow">
-            <tabel-header :data="headerInfo_inspection" @add="inspectionDialog" class="title"></tabel-header>
-            <el-table :data="inspectionData" border style="width: 100%" align="center">
-                <el-table-column label="文档名称" prop="inspectionName" align="center">
+            <el-table :data="inspectionData" border style="width: 100%;margin-top:30px" align="center">
+                 <el-table-column label="考察储备" prop="stageFile" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column  prop="inspectionName" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column  prop="user" align="center">
                 </el-table-column>
-                <el-table-column label="操作" align="center">
+                <el-table-column  prop="date" align="center">
+                </el-table-column>
+                <el-table-column  align="center">
                     <template scope="scope">
-                        <a href="/static/img/templet.txt" download="xxxxx文档">下载</a>
+                        <el-button type="text" size="small" class="border_right" @click="inspectionDialog">上传</el-button>
+                        <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
                         <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,inspectionData)">删除</el-button>
                     </template>
@@ -67,7 +51,7 @@
             <el-dialog title="上传文档" :visible.sync="modalAdd2" :close-on-click-modal="false">
                 <el-form :model="inspectionForm" :label-width="formLabelWidth">
                     <el-form-item label="用户">
-                        <el-input v-model="inspectionForm.user" auto-complete="off"></el-input>
+                        <el-input  v-model="inspectionForm.user" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="上传日期">
                         <el-date-picker type="date" placeholder="选择日期" v-model="inspectionForm.date" style="width: 100%;">
@@ -92,17 +76,19 @@
 
         <!-- 立项报告部分 -->
         <div class="fileTable" v-show="isShow">
-            <tabel-header :data="headerInfo_project" @add="projectDialog" class="title"></tabel-header>
-            <el-table :data="projectData" border style="width: 100%" align="center">
-                <el-table-column label="文档名称" prop="projectName" align="center">
+            <el-table :data="projectData" border style="width: 100%;margin-top:30px" align="center">
+                <el-table-column label="立项会" prop="stageFile" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column  prop="projectName" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column prop="user" align="center">
                 </el-table-column>
-                <el-table-column label="操作" align="center">
+                <el-table-column  prop="date" align="center">
+                </el-table-column>
+                <el-table-column  align="center">
                     <template scope="scope">
-                        <a href="/static/img/templet.txt" download="xxxxx文档">下载</a>
+                        <el-button type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
+                        <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
                         <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,projectData)">删除</el-button>
                     </template>
@@ -111,10 +97,10 @@
             <!-- 上传文档 对话框-->
             <el-dialog title="上传文档" :visible.sync="modalAdd3" :close-on-click-modal="false">
                 <el-form :model="projectForm" :label-width="formLabelWidth">
-                    <el-form-item label="用户">
+                    <el-form-item label="上传人">
                         <el-input v-model="projectForm.user" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="上传日期">
+                    <el-form-item label="上传时间">
                         <el-date-picker type="date" placeholder="选择日期" v-model="projectForm.date" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
@@ -149,7 +135,6 @@
 
 
 <script type="text/ecmascript-6">
-import tabelHeader from 'components/tabelHeader'
 export default {
     data() {
         return {
@@ -158,7 +143,6 @@ export default {
             file: null,
             loadingStatus: false,
             formLabelWidth: '80px',
-            modalAdd1: false,
             modalAdd2: false,
             modalAdd3: false,
             fileForm: {
@@ -166,60 +150,40 @@ export default {
                 date: ''
             },
             fileData: [{
-                fileName: 'AAAAAAAAA',
+                stageFile: 'AAAAAAAAA.PDF',
+                fileName: 'AAAAAAAAA.PDF',
                 user: '张三',
                 date: '2017-09-09'
             }],
-            headerInfo_file: {
-                desc: '前期文档',
-                btnGroup: [{
-                    icon: 'upload',
-                    explain: '上传'
-                }]
-            },
             inspectionForm: {
                 user: '',
                 date: ''
             },
             inspectionData: [{
-                inspectionName: 'AAAAAAAAA',
+                stageFile: 'AAAAAAAAA.PDF',
+                inspectionName: 'AAAAAAAAA.PDF',
                 user: '张三',
                 date: '2017-09-09'
             }],
-            headerInfo_inspection: {
-                desc: '考察报告',
-                btnGroup: [{
-                    icon: 'upload',
-                    explain: '上传'
-                }]
-            },
             projectForm: {
                 user: '',
                 date: ''
             },
             projectData: [{
-                projectName: 'AAAAAAAAA',
+                stageFile: 'AAAAAAAAA.PDF',
+                projectName:'AAAAAAAAA.PDF',
                 user: '张三',
                 date: '2017-09-09'
             },
             {
-                projectName: 'AAAAAAAAA',
+                stageFile: 'AAAAAAAAA.PDF',
+                projectName: 'AAAAAAAAA.PDF',
                 user: '张三',
                 date: '2017-09-09'
-            }],
-            headerInfo_project: {
-                desc: '立项报告',
-                btnGroup: [{
-                    icon: 'upload',
-                    explain: '上传'
-                }]
-            }
+            }]
         }
     },
     methods: {
-        fileDialog() {
-            this.modalAdd1 = true
-        },
         inspectionDialog() {
             this.modalAdd2 = true
         },
@@ -250,11 +214,7 @@ export default {
         handleDelete(index, rows) {
             rows.splice(index, 1);
         }
-    },
-    components: {
-        tabelHeader
     }
-
 }
 </script>
 
@@ -262,19 +222,39 @@ export default {
 
 <style lang="less" scoped>
 .fileTable {
+    width: 100%;
+    height: 100%;
+    .title1 {
+        margin-top: 30px;
+        width: 100%;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        background: #eef1f6; // background: rgb(42, 49, 66);
+        .desc {
+            flex: 1;
+            text-align: left;
+            span {
+                color: #1f2d3d;
+                font-weight: 700;
+                margin-left: 24px;
+            }
+        }
+    }
     .title {
         margin-top: 30px;
     }
-    width: 100%;
-    height: 100%;
     .el-table {
         a {
-            margin-right: 10px;
+            margin: 0 10px;
+        }
+        .border_right {
+            border-right: 1px solid #ddd;
+            padding: 0 12px;
         }
         .btn_border {
             border-right: 1px solid #ddd;
             border-left: 1px solid #ddd;
-            border-radius: 0;
             padding: 0 12px;
         }
     }

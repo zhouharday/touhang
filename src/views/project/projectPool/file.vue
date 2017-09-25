@@ -21,7 +21,7 @@
             <el-dialog title="上传文档" :visible.sync="modalAdd" :close-on-click-modal="false">
                 <el-form :model="fileForm" :label-width="formLabelWidth">
                     <el-form-item label="用户">
-                        <el-input v-model="fileForm.user" auto-complete="off"></el-input>
+                        <el-input v-model="fileForm.user" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="上传日期">
                         <el-date-picker type="date" placeholder="选择日期" v-model="fileForm.date" style="width: 100%;">
@@ -55,7 +55,7 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
 import tabelHeader from 'components/tabelHeader'
 export default {
     data() {

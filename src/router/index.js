@@ -42,19 +42,26 @@ const router = new Router({
         }
     ],
 })
-router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录
-    if(to.path == '/login'){
-        next();
-        return;
-    };
-    store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
-    var isLogin = store.state.login.approvelType.isLogged;
-    // console.log(isLogin);
-    if (isLogin ) {
-        // alert(111);
-        next()   // 进行下一个钩子函数  
-    }else {
-       next({path: '/login'})   //  跳转到login页面  
+
+
+router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录 
+    // console.log(to, from ,next);
+    try {
+        let loginInfo = JSON.parse(sessionStorage.getItem('saveApprovalStatus') || '{}');
+        let isLogin = loginInfo.isLogged;
+        store.state.login.approvelType = loginInfo;
+        
+        if (loginInfo) {
+            next();
+        } else {
+            if(to.path == '/login'){//如果是登录页面路径，就直接next()
+              next();
+            }else{//不然就跳转到登录；
+              next('/login');
+            }
+        }
+    } catch (e) {
+        console.log('beforeEach exists error: ', e);
     }
 })
 

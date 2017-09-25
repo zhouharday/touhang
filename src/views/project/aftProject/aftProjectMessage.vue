@@ -4,15 +4,15 @@
             <div class="left">
                 <span class="desc">{{title}}</span>
             </div>
-            <div class="right">
+            <!-- <div class="right">
                 <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-            </div>
+            </div> -->
         </div>
         <div class="firstLayer">
             <el-row :gutter="40">
                 <el-col :span="12">
                     <div class="tableTitle">出资主体</div>
-                    <el-table :data="fundTable" style="width: 100%" :row-class-name="tableRowClassName">
+                    <el-table :data="fundTable" style="width:100%;height:260px;overflow:hidden" :row-class-name="tableRowClassName">
                         <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investorMoney" label="投资金额（元）" align="center">
@@ -89,7 +89,7 @@
 </template>
     
 
-<script type="text/ecmascript-6">
+<script>
 import tableInfo from '../../../components/tableInfo'
 import echarts from '../../../components/echarts'
 import detailForm from './details'
@@ -103,8 +103,23 @@ import eventTable from './event'
 import dataTable from './data'
 import monitorTable from './monitor'
 
+import { getPreDetail } from 'api/projectPre';
 
 export default {
+    components: {
+        echarts,
+        tableInfo,
+        detailForm,
+        tableForm,
+        approveTable,
+        recordForm,
+        fileTable,
+        manageTable,
+        riskTable,
+        eventTable,
+        dataTable,
+        monitorTable
+    },
     data() {
         return {
             title: '双子金服投资项目',
@@ -127,23 +142,6 @@ export default {
                     investorMoney: '56,000,000,000',
                     percent: '0.3%',
                     paidMoney: '24,000,000,000'
-                },
-                {
-                    fundName: '一号店',
-                    investorMoney: '24,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '24,000,000,000'
-                }, {
-                    fundName: '飞志',
-                    investorMoney: '36,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '12,000,000,000'
-                },
-                {
-                    fundName: '博奥',
-                    investorMoney: '29,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '29,000,000,000'
                 }
             ],
             tableData: [
@@ -200,7 +198,33 @@ export default {
             },
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.initInfo();
+            this.initData();
+        },
+        initInfo() {
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+
+            let href = window.location.href;
+            let id = href.substr(href.lastIndexOf('/') + 1, href.length);
+            this.id = id;
+        },
+        initData() {
+            getPreDetail(this.id).then(resp => {
+                console.log('after pro detail: ', resp);
+                let data = resp.data;
+                this.fundTable = data.result.list;
+            }).catch(e => {
+
+            });
+        },
         disable(name) {
             if (name.flag === false) {
                 return name.flag = true
@@ -217,20 +241,6 @@ export default {
             }
             return '';
         }
-    },
-    components: {
-        echarts,
-        tableInfo,
-        detailForm,
-        tableForm,
-        approveTable,
-        recordForm,
-        fileTable,
-        manageTable,
-        riskTable,
-        eventTable,
-        dataTable,
-        monitorTable
     }
 }   
 </script>    
@@ -241,6 +251,7 @@ export default {
 <style lang="less" scoped>
 .aftProjectMessage {
     width: 100%;
+    min-height: 100%;
     background-color: #fff;
     padding: 24px;
     .title {

@@ -2,15 +2,15 @@
 <div class="agreement">
     <tableHeader :data="dataTitle" @add="showAgreement"></tableHeader>
     <el-table :data="agreementData" border style="width: 100%;">
-        <el-table-column label="协议名称" prop="protocolName">
+        <el-table-column label="协议名称" prop="agreementName">
         </el-table-column>
         <el-table-column label="基金名称" prop="fundName">
         </el-table-column>
-        <el-table-column label="结构级" prop="structural">
+        <el-table-column label="结构级" prop="structuralLevelId">
         </el-table-column>
-        <el-table-column label="认缴金额（元)" prop="amount">
+        <el-table-column label="认缴金额（元)" prop="subscribeAmount">
         </el-table-column>
-        <el-table-column label="签订日期" prop="date">
+        <el-table-column label="签订日期" prop="signDate">
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
@@ -18,78 +18,33 @@
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
+              <el-button size="small"
+                      @click="handleDelete(scope.$index, scope.row)">
+                      删除
+              </el-button>
             </template>
         </el-table-column>
     </el-table>
-    <el-dialog title="协议信息详情" :visible.sync="modelAgreement" :close-on-click-modal="false">
-        <el-form :model="AgreementInfo" label-position="left">
-            <el-row :gutter="10">
-                <el-col :span="12">
-                    <el-form-item label="协议名称" :label-width="formLabelWidth">
-                        <el-input v-model="AgreementInfo.investorName" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="结构级" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="AgreementInfo.investorTypeId" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="投资者" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="AgreementInfo.certificateTypeId">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="基金名称" :label-width="formLabelWidth">
-                        <el-input v-model="AgreementInfo.certificateNum" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="认缴金额（元）" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="AgreementInfo.organizationProperty" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="签订日期" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="AgreementInfo.personalAssets">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="投资经理" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="AgreementInfo.regionName">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="登记日期" :label-width="formLabelWidth">
-                        <el-input v-model="AgreementInfo.investmentManagerId" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="投资协议附件" :label-width="formLabelWidth">
-                        <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="modalIncome = false">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
-        </div>
-    </el-dialog>
+    <Modal v-model="modelAgreement" title="协议信息详情" @on-ok="confirmIncome" @on-cancel="cancel" width="800">
+        <protocol-details :AgreementInfo="AgreementInfo"></protocol-details>
+    </Modal>
+    <!-- 确认删除模态框 -->
+    <delete-reminders :deleteReminders="deleteReminders" @cancel="cancelAgreement" @del="delAgreement"></delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import protocolDetails from './protocolDetails'
+import deleteReminders from 'components/deleteReminders'
+import {addAgreement, updateAgreement, deleteAgreement} from 'api/investor'
 export default {
+    props: {
+        agreementData: {
+            type: Array,
+            default: []
+        }
+    },
     data() {
         return {
             dataTitle: {
@@ -97,37 +52,73 @@ export default {
                     explain: '添加'
                 }]
             },
+            addOrModify: true,
             modelAgreement: false,
-            agreementData: [{
-                protocolName: '双子金服合伙协议',
-                fundName: '红杉资本',
-                structural: '优先级',
-                amount: 10000,
-                date: '2017-9-9'
-            }, {
-                protocolName: '双子金服合伙协议',
-                fundName: '红杉资本',
-                structural: '优先级',
-                amount: 10000,
-                date: '2017-9-9'
-            }, {
-                protocolName: '双子金服合伙协议',
-                fundName: '红杉资本',
-                structural: '优先级',
-                amount: 10000,
-                date: '2017-9-9'
-            }],
-            formLabelWidth: '120px',
-            AgreementInfo: {}
+            deleteReminders: false,
+            deleteId: '',
+            AgreementInfo: {
+                id: '',
+                agreementName: '',
+                structuralLevelId: '',
+                investorName: this.$store.state.investor.investorName,
+                inverstorId: this.$route.params.userId,
+                fundId: '',
+                subscribeAmount: '',
+                signDate: '',
+                regionName: '',
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                registerDate: new Date()
+            }
         }
     },
     methods: {
         showAgreement() {
             this.modelAgreement = true
+            this.addOrModify = true
+        },
+        handleEdit(index, row) {
+            this.modelAgreement = true
+            this.addOrModify = false
+            this.AgreementInfo = row
+            this.AgreementInfo.registerDate = row.register_date
+        },
+        handleDelete(index, row) {
+            this.deleteReminders = !this.deleteReminders
+            this.deleteId = row.id
+        },
+        confirmIncome() {
+            if(this.addOrModify == true) {
+                addAgreement(this.AgreementInfo).then((res) => {
+                    if(res.status == '200') {
+                        this.$Message.success(res.data.message || '签约成功！')
+                        this.modelSign = false
+                    }
+                })
+            } else {
+                console.log(this.AgreementInfo)
+                updateAgreement(this.AgreementInfo).then((res) => {
+                    if(res.status == '200') {
+                        this.$Message.success(res.data.message || '修改成功！')
+                        this.modelSign = false
+                    }
+                })
+            }
+        },
+        delAgreement() {
+            deleteAgreement(this.deleteId).then((res) => {
+                if(res.status == '200') {
+                    this.$Message.success(res.data.message || '删除协议成功！')
+                }
+            })
+        },
+        cancelAgreement() {
+            this.deleteReminders = false
         }
     },
     components: {
-        tableHeader
+        tableHeader,
+        protocolDetails,
+        deleteReminders
     }
 }
 </script>

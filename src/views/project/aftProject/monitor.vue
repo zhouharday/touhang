@@ -10,15 +10,85 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                    <el-button type="text" size="small" @click="handleEditm(scope.row)">编辑</el-button>
+                    <el-button type="text" size="small" @click="editMonitor(scope.row)">编辑</el-button>
                     <el-button type="text" size="small" @click="handleDelete(scope.$index,monitorData)">删除</el-button>
                     <el-button type="text" size="small">关闭</el-button>
                     <el-button type="text" size="small">开启</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <!--监控设置 对话框 -->
-        <el-dialog title="监控设置" :visible.sync="monitorSetting" :close-on-click-modal="false">
+        <!--添加监控设置 对话框 -->
+        <el-dialog title="添加监控设置" :visible.sync="monitorSetting">
+            <el-form :model="monitorForm" :label-width="formLabelWidth">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="数据来源" :label-width="formLabelWidth">
+                            <el-select v-model="monitorForm.dataSources" placeholder="请选择数据来源" style="width:100%;">
+                                  <el-option v-for="item in dataSourcesOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="类型">
+                            <el-select v-model="monitorForm.sort" placeholder="请选择类型" style="width:100%;">
+                                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <el-table :data="addMonitorTable" border style="width:100%">
+                <el-table-column label="指标名称" prop="targetName" align="center">
+                </el-table-column>
+                <el-table-column label="是否监控" prop="switch" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.switch }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-radio-group v-model="scope.row.switch">
+                                <el-radio label="是"></el-radio>
+                                <el-radio label="否"></el-radio>
+                            </el-radio-group>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="预警规则" prop="alarmRule" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.alarmRule }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-radio-group v-model="scope.row.alarmRule">
+                                <el-radio label="小于"></el-radio>
+                                <el-radio label="大于"></el-radio>
+                            </el-radio-group>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="阈值" prop="threshold" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.threshold }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.threshold" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" min-width="100" align="center">
+                    <template scope="scope">
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        </el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.$index,addMonitorTable)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="monitorSetting = false">取 消</el-button>
+                <el-button type="primary" @click="monitorSettingAdd">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!--编辑监控设置 对话框 -->
+        <el-dialog title="编辑监控设置" :visible.sync="monitorEditing">
             <el-form :model="monitorForm" :label-width="formLabelWidth">
                 <el-row>
                     <el-col :span="12">
@@ -40,37 +110,54 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col>
-                        <el-form-item label="指标名称" :label-width="formLabelWidth">
-                            <el-input v-model="monitorForm.targetName" auto-complete="off" :disabled="true"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="是否监控">
-                            <el-radio-group v-model="monitorForm.switch">
+                </el-row>
+            </el-form>
+            <el-table :data="addMonitorTable" border style="width:100%">
+                <el-table-column label="指标名称" prop="targetName" align="center">
+                </el-table-column>
+                <el-table-column label="是否监控" prop="switch" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.switch }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-radio-group v-model="scope.row.switch">
                                 <el-radio label="是"></el-radio>
                                 <el-radio label="否"></el-radio>
                             </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="预警规则">
-                            <el-radio-group v-model="monitorForm.alarmRule">
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="预警规则" prop="alarmRule" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.alarmRule }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-radio-group v-model="scope.row.alarmRule">
                                 <el-radio label="小于"></el-radio>
                                 <el-radio label="大于"></el-radio>
                             </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="阈值" :label-width="formLabelWidth">
-                            <el-input v-model="monitorForm.threshold" placeholder="请输入阈值" auto-complete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="阈值" prop="threshold" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.threshold }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.threshold" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" min-width="100" align="center">
+                    <template scope="scope">
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        </el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.$index,addMonitorTable)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="monitorSetting = false">取 消</el-button>
-                <el-button type="primary" @click="monitorSettingAdd">确 定</el-button>
+                <el-button @click="editCancle">取 消</el-button>
+                <el-button type="primary" @click="editConfirm">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -84,15 +171,56 @@ export default {
     data() {
         return {
             monitorSetting: false,
+            monitorEditing: false,
             formLabelWidth: '80px',
             monitorForm: {
                 dataSources: '',
-                sort: '',
-                targetName: '',
-                switch: '',
-                alarmRule: '',
-                threshold: ''
+                sort: ''
             },
+            dataSourcesOptions: [
+                { //数据来源列表
+                    value: '选项1',
+                    label: '资产负债表'
+                }, {
+                    value: '选项2',
+                    label: '利润表'
+                }, {
+                    value: '选项1',
+                    label: '现金流量表'
+                }
+            ],
+            sortOptions: [
+                { //数据类型列表
+                    value: '选项1',
+                    label: '年报'
+                }, {
+                    value: '选项2',
+                    label: '半年报'
+                }, {
+                    value: '选项1',
+                    label: '季报'
+                }, {
+                    value: '选项2',
+                    label: '月报'
+                }
+            ],
+            addMonitorTable: [
+                {
+                    targetName: '指标一',
+                    switch: '',
+                    alarmRule: '',
+                    threshold: '',
+                    editFlag: false
+                },
+                {
+                    targetName: '指标二',
+                    switch: '',
+                    alarmRule: '',
+                    threshold: '',
+                    editFlag: false
+                }
+
+            ],
             monitorData: [
                 {
                     dataSources: '资产负债表',
@@ -114,17 +242,39 @@ export default {
         }
     },
     methods: {
+        // 添加 监控设置 的方法
+        monitorSettingAdd() {
+            // let new_monitorForm = {
+            //     dataSources: '',
+            //     sort: ''
+            // };
+            // this.monitorForm = new_monitorForm;
+            this.monitorData.push(this.monitorForm);
+            this.monitorSetting = !this.monitorSetting;
+        },
+        // 编辑 监控设置 的方法
+        editMonitor(row) {
+            this.monitorEditing = !this.monitorEditing;
+            this.monitorForm.dataSources = row.dataSources;
+            this.monitorForm.sort = row.sort;
+        },
+        // 编辑 监控设置 的取消按钮
+        editCancle() {
+            this.monitorEditing = !this.monitorEditing;
+            this.monitorForm = {};
+        },
+        // 编辑 监控设置 的确定按钮
+        editConfirm() {
+            this.monitorEditing = !this.monitorEditing;
+            this.monitorForm = {};
+        },
+        checkEdit(index, row) { //编辑
+            row.editFlag = !row.editFlag;
+        },
         // 删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
         },
-        // 添加 监控设置 的方法
-        monitorSettingAdd() {
-           this.monitorData.push(this.monitorForm);
-           this.monitorForm ={};
-           this.monitorSetting=false;
-        }
-
     },
     components: {
         tabelHeader

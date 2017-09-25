@@ -164,7 +164,7 @@ export default {
         /************公告 Start***************/
         getNoticeUserList1(pages) { //获取公司公告列表数据
             // alert(1);
-            this.$http.post('/api/work/getNoticeList', {
+            this.$http.post(this.api + '/work/getNoticeList', {
                 "seedUserId": this.userId,
                 "page": pages,
                 "pageSize": 10,
@@ -199,7 +199,7 @@ export default {
         },
         getNoticeUserList2(num) { //保存/发布公司公告列表数据
             // alert(2);
-            this.$http.post('/api/work/addNotice', {
+            this.$http.post(this.api + '/work/addNotice', {
                 "seedUserId": this.userId,
                 "noticeTitle": this.sendNoticeform.noticeTitle,
                 "seedNoticeDate": this.sendNoticeform.seedNoticeDate,
@@ -225,7 +225,7 @@ export default {
         releaseNotice(row) { //发布公司公告列表数据
             // console.log(id);
             // alert(2);
-            this.$http.post('/api/work/seedNotice', {
+            this.$http.post(this.api + '/work/seedNotice', {
                 id: row.id
             })
                 .then(res => {
@@ -246,7 +246,7 @@ export default {
         editNotice(row) { //编辑公告列表
             console.log(row);
             this.dialogFormVisible = true;
-            this.$http.post('/api/work/modifyNoticeInfo', {
+            this.$http.post(this.api + '/work/modifyNoticeInfo', {
                 "id": row.id,
                 "noticeTitle": row.noticeTitle,
                 "seedNoticeDate": row.seedNoticeDate,
@@ -273,7 +273,7 @@ export default {
         },
         deleteNotice(row) { //删除公告列表
             // console.log(row);
-            this.$http.post('/api/work/deleteNotice', {
+            this.$http.post(this.api + '/work/deleteNotice', {
                 id: row.id
             })
                 .then(res => {
@@ -294,7 +294,7 @@ export default {
         /***************公告 End******************* */
         /***************系统消息 Start********************/
         getSysNoticeList2(pages) { //获取系统消息列表数据
-            this.$http.post('/api/sysManage/selectSysMessageList', {
+            this.$http.post(this.api + '/sysManage/selectSysMessageList', {
                 "seedUserId": this.userId,
                 "page": pages,
                 "pageSize": 10,

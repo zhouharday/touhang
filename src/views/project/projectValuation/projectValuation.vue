@@ -5,7 +5,7 @@
             <el-col :span="24" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index)">
+                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index, item)">
                             {{item.state}}
                         </li>
                     </ul>
@@ -15,7 +15,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
         </el-row>
@@ -79,7 +79,11 @@
                 <span>总记录：{{this.total}}条</span>
             </el-col>
             <el-col :span="16">
-                <Page :current="13" style="float:right"></Page>
+                <Page style="float:right"
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
         </el-row>
     </div>
@@ -90,8 +94,10 @@ import { getProjectValuation } from 'api/project';
 export default {
     data() {
         return {
-            total: 2,
-            input: '',
+            total: 0,
+            page: 1,
+            pageSize: 5,
+            projectName: '',
             currentIndex: 1,
             stateList: [
                 { state: "状态：" },
@@ -107,20 +113,11 @@ export default {
                     valuationDate: '',
                     valuationOfficer: '',
                     state: ''
-                },
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
                 }
             ],
             form: {
                 algorithmType: ''
             }
-            // total: this.tableData.length
         }
     },
     created() {
@@ -128,17 +125,43 @@ export default {
     },
     methods: {
         init() {
-            let self = this;
-            getProjectValuation().then(resp => {
-                let data = resp.data.result;
-                self.tableData = data;
+            this.getDatas();
+        },
+        getDatas() {
+            let appraisementStatus = this.appraisementStatus;
+
+            let params = {
+                projectName: this.projectName,
+                page: this.page,
+                pageSize: this.pageSize
+            };
+
+            getProjectValuation(params).then(resp => {
+                let result = resp.data.result;
+                this.tableData = result.data || [];
+                this.total = result.total || 0;
+            }).catch(e => {
+                console.log('getProjectValuation() exists error: ', e);
             });
         },
-        handleIconClick(ev) {
-            console.log(ev);
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
         },
-        changeActive(index) {
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
+        },
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
+        },
+        handleIconClick(ev) {
+            // console.log(ev);
+            this.getDatas();
+        },
+        changeActive(index, item) {
             this.currentIndex = index;
+            console.log(item);
         }
     }
 }
@@ -149,7 +172,7 @@ export default {
 .projectValue {
     position: relative;
     width: 100%;
-    height: 650px;
+   min-height: 100%;
     font-size: 14px;
     background: #fff;
 }
@@ -194,62 +217,3 @@ export default {
     margin: 25px 30px 0 30px;
 }
 </style>
-
-
-<script>
-export default {
-    data() {
-        return {
-            total: 2,
-            input: '',
-            currentIndex: 1,
-            stateList: [
-                { state: "状态：" },
-                { state: "全部" },
-                { state: "未提交" },
-                { state: "已提交" }
-            ],
-            tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.3',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: '',
-                    editFlag: false
-                },
-                {
-                    project: 'AAAAAAAA',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.4',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: '',
-                    editFlag: false
-                }
-            ],
-            form: {
-                algorithmType: ''
-            }
-            // total: this.tableData.length
-        }
-    },
-    methods: {
-        checkEdit(index, row) { //编辑
-            // console.log(row)
-            row.editFlag = !row.editFlag;
-        },
-        handleIconClick(ev) {
-            console.log(ev);
-        },
-        changeActive(index) {
-            this.currentIndex = index;
-        }
-    }
-}
-</script>

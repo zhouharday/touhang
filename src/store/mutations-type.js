@@ -12,3 +12,7 @@ export const GET_ALLORGLIST = 'GET_ALLORGLIST' // 下拉获取所有的合作机
 //投资者管理
 export const GET_INVESTORLIST = 'GET_INVESTORLIST' // 获取投资者列表
 export const GET_PROJECTTYPE = 'GET_PROJECTTYPE' // 项目类型
+export const GET_INVESTOR = 'GET_INVESTOR' // 获取当前点击投资者
+export const GET_INVESTORNAME = 'GET_INVESTORNAME' // 获取当前投资者名称
+// 项目管理
+export const SET_PROJECT_DATA = 'SET_PROJECT_DATA' // 项目详情

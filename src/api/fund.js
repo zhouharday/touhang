@@ -93,7 +93,7 @@ export function getOrgList() {
         data
     })
 }
-// 下拉获取所有的合作机构
+// 下拉获取合作机构
 export function getAllOrgList() {
     const data = {
         merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id必传"
@@ -104,13 +104,23 @@ export function getAllOrgList() {
         data
     })
 }
+
 // 修改机构
-export function updateOrg(OrgId) {
+export function updateOrg(orgData) {
+    const data = orgData
+    return service({
+        url: '/organization/updateOrg',
+        method: 'post',
+        data
+    })
+}
+// 删除某个机构 /organization/deleteOrg
+export function deleteOrg(orgId) {
     const data = {
-        id: OrgId
+        id: orgId
     }
     return service({
-        url: '/organization/getOrgListByMerchantId',
+        url: '/organization/deleteOrg',
         method: 'post',
         data
     })

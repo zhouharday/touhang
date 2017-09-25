@@ -1,5 +1,197 @@
 /************************************/
+// elements的 分页组件颜色样式
+.el-pagination__sizes .el-input .el-input__inner{
+    border-color:#F05E5E;
+}
+.el-pagination__sizes:hover {
+    border-color: #F05E5E;
+}
+.el-pagination__sizes:focus {
+    border-color: #F05E5E
+}
+.el-pager li.active {
+    border-color: #F05E5E;
+    background-color: #F05E5E;
+}
+// el-tabs 页样式
+.el-tabs__active-bar {
+    background-color: red;
+}
+.el-tabs__item.is-active {
+    color: #F05E5E;
+}
+// el-radio 单选框的样式
+.el-radio__inner {
+    border-color: #f05e5e;
+}
+.el-radio__inner:hover {
+    border-color: #f05e5e;
+}
+.el-radio__input.is-focus .el-radio__inner {
+    border-color: #f05e5e;
+}
+.el-radio__input.is-checked .el-radio__inner {
+    background-color: #f05e5e;
+    border-color: #f05e5e;
+}
+ // el-checkbox 多选框的样式
+ .el-checkbox__inner {
+    border-color: #f05e5e;
+}
+.el-checkbox__inner:hover {
+    border-color: #f05e5e;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner {
+    border-color: #f05e5e;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #f05e5e;
+    border-color: #f05e5e;
+}   
+.el-checkbox__label {
+    font-weight: bold;
+    padding-left: 20px;
+}
+// ivu 分页组件 的颜色样式
+.ivu-page-prev:hover,
+.ivu-page-item:hover,
+.ivu-page-item-jump-prev:hover,
+.ivu-page-item-jump-next:hover,
+.ivu-page-next:hover {
+    // color: #666;
+    border-color: #F05E5E;
+}
+.ivu-page-item-active {
+    background-color: #F05E5E;
+    border-color: #F05E5E;
+} 
+/************************************/
 
+//基金管理
+//我的基金
+.fund{
+    .el-input__inner:hover,
+    .el-input__inner:focus {
+        border-color: #F05E5E;
+    }
+    .el-input__icon + .el-input__inner{
+        border-color: #F05E5E;
+    }
+}
+
+//投资者管理
+//我的投资者
+
+.investor{
+    .el-button--default{
+        border-color:  #F05E5E;
+        color: #F05E5E;
+    }
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+
+}
+
+
+//项目管理下
+//项目池
+.poolContent {
+.el-input input:focus,
+.el-input input:hover {
+    border-color: #F05E5E;
+}
+
+.el-input i:hover {
+    border-color: #F05E5E;
+}
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+
+}
+//投资项目
+.preContent{
+    // 搜索框的颜色样式
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+}
+//投后项目
+.aftProject{
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+//项目估值
+.projectValue{
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+}
+//估值查看
+.valueView{
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+}
+
+//云项目
+.assistantContent {
+    input.el-input__inner:focus,
+    input.el-input__inner:hover {
+        border-color: #F05E5E;
+    }
+    .el-input__icon:hover{
+        border-color: #F05E5E;
+    }
+
+}
+
+//首页 
+.homeContent {
+    // ivu的简单分页组件 颜色样式
+    .ivu-page-simple .ivu-page-simple-pager input:hover {
+        border-color: #f05e5e;
+    }
+    //  添加日程 模态框的样式
+    .el-dialog--small {
+        width: 350px;
+        border-radius: 8px;
+    }
+    .el-dialog__header {
+        padding: 10px 20px 10px;
+        background: #a0a3aa;
+        border-radius: 8px 8px 0 0;
+    }
+    .el-dialog__title {
+        line-height: 1;
+        font-size: 16px;
+        color: #fff;
+    }
+}
+
+/*******日常办公********/
+//任务
 .Task {
     .el-dialog--small {
         width: 880px;
@@ -7,17 +199,73 @@
     .el-date-editor.el-input {
         width: 100%;
     }
+    .el-input__inner {
+        border-radius: 15px;
+    }
+
+    .ivu-table th {
+        background-color: #2a3142;
+        color: #fff;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    // ivu的 tabs页样式
+    .ivu-table-tbody .ivu-table-cell button span {
+        color: #F05E5E;
+    }
+    .ivu-table-row-hover {
+        border-color: #F05E5E;
+    }
+    .ivu-tabs-tab:hover{
+        color:#ED898E;
+    }
+    .ivu-tabs-tab-active{
+         color:#F05E5E;
+     }
+    .ivu-tabs-ink-bar{
+        background-color: #F05E5E;
+    }
+}
+//通讯录
+//消息公告
+.messageShow {
+    .el-table__row .el-button > span {
+        color: #F05E5E;
+    }
+}
+
+.contacts_list {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
 }
 
 .cursor {
     cursor: pointer;
 }
-.fl{
+
+.fl {
     float: left;
 }
-.fr{
+
+.fr {
     float: right;
 }
+
 @color: #f05e5e;
 @c1: #515511;
 @c2: #888888;
@@ -46,7 +294,7 @@
                 box-sizing: border-box;
                 padding: 0 5px;
                 margin-bottom: 5px;
-                >span {
+                > span {
                     display: block;
                     float: left;
                     width: 100px;
@@ -56,7 +304,7 @@
                     color: @c2;
                     line-height: 30px;
                 }
-                >i {
+                > i {
                     display: block;
                     width: 20px;
                     height: 30px;
@@ -76,19 +324,20 @@
                     &.i3 {
                         margin-left: 20px;
                         margin-right: 10px;
-                    } // &.i4 {}
+                    }
+                    // &.i4 {}
                 }
             }
             &.week_title {
                 color: @c3;
-                >span {
+                > span {
                     border-top: none;
                     &.actives {
                         color: @color;
                     }
                 }
             }
-            >span {
+            > span {
                 display: block;
                 height: 30px;
                 width: 14%;
@@ -98,7 +347,7 @@
                 float: left;
                 position: relative;
                 margin-bottom: 10px;
-                >span {
+                > span {
                     display: block;
                     width: 30px;
                     height: 30px;
@@ -163,13 +412,13 @@
     width: 100%;
 }
 
-.myFilter{
-    .choose{
-        .ul_list{
-            .listWrapper{
-                .list{
-                    button{
-                        &:active{
+.myFilter {
+    .choose {
+        .ul_list {
+            .listWrapper {
+                .list {
+                    button {
+                        &:active {
                             // background: red;
                             color: #fff;
                         }
@@ -183,8 +432,8 @@
 
 #zTree {
     li {
-        >a {
-            >span {
+        > a {
+            > span {
                 color: #ffffff;
                 font-size: 15px;
             }
