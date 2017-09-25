@@ -50,8 +50,8 @@
                             {{item.info}}
                         </el-button>
                         <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                {{item.info}}
-                                                            </el-button> -->
+                                                                                                                                            {{item.info}}
+                                                                                                                                        </el-button> -->
                     </div>
                 </div>
             </div>
@@ -67,9 +67,9 @@
                     <team-table></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                                                                              <industry-form :industryForm="industryForm">
-                                                                                              </industry-form>
-                                                                                            </el-tab-pane> -->
+                                                                                                                                                                          <industry-form :industryForm="industryForm">
+                                                                                                                                                                          </industry-form>
+                                                                                                                                                                        </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-Form></record-Form>
                 </el-tab-pane>
@@ -143,6 +143,7 @@
         <!-- 查看进度 对话框 -->
         <div class="progressBox">
             <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
+                <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
                 <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
                     <el-table-column prop="node" label="节点" align="center">
                     </el-table-column>
@@ -155,7 +156,65 @@
                     <el-table-column prop="time" label="用时" align="center">
                     </el-table-column>
                 </el-table>
-
+                <div>
+                    <div class="title_f" style="background:#2a3142;color:#fff">
+                        <div class="desc">
+                            <span>申请详情</span>
+                        </div>
+                    </div>
+                    <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
+                        <el-row>
+                            <el-col>
+                                <el-form-item label="标题" prop="name">
+                                    <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="申请人" prop="person">
+                                    <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="申请日期" prop="date">
+                                    <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col>
+                                <el-form-item label="备注" prop="notes">
+                                    <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
+                                    <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1">
+                                <div style="text-align:center;line-height:35px;">
+                                    <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </div>
+                <div>
+                    <div class="title_f" style="background:#2a3142;color:#fff">
+                        <div class="desc">
+                            <span>意见汇总</span>
+                        </div>
+                    </div>
+                    <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
+                        <p class="comment_left">
+                            <span>{{item.comment}}</span>
+                        </p>
+                        <p class="comment_right">
+                            <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
+                            <span>{{item.note}}</span>
+                        </p>
+                    </div>
+                </div>
             </el-dialog>
         </div>
     </div>
@@ -233,6 +292,15 @@ export default {
                 appendix: '',
                 auditor: ''
             },
+            applyForm2: { // 发起申请表单
+                title: '',
+                person: '',
+                date: '',
+                notes: '',
+                appendix: '',
+                auditor: '',
+                reports: ''
+            },
             auditorOptions: [{ //发起申请表单 审批人列表
                 value: '选项1',
                 label: '张三'
@@ -243,7 +311,7 @@ export default {
                 value: '选项3',
                 label: '王二'
             }],
-            progressTable: [
+            progressTable: [//查看进度表单 节点table
                 {
                     node: '发起申请',
                     operator: '管理员 2017/8/15 16:25:14',
@@ -258,7 +326,19 @@ export default {
                     startingTime: '2017/8/15 16:25:14',
                     time: '12秒'
                 }
-            ],//查看进度表单 节点table
+            ],
+            commentLists: [ //查看进度表单  意见汇总列表
+                {
+                    comment: '法务意见',
+                    num: '2',
+                    note: '【管理员】2017/08/15'
+                },
+                {
+                    comment: '反馈项目负责人',
+                    num: '2',
+                    note: '【管理员】2017/08/15'
+                }
+            ]
 
         }
     },
@@ -307,7 +387,7 @@ export default {
             } else if (index == 2) {
                 this.progressModal = true;
             }
-            
+
             // switch (index) {
             //    case 1:
             //      this.applyModal = true;
@@ -535,6 +615,42 @@ export default {
                 }
             }
         }
+    } // 小双助手 查看进度对话框中的样式
+    .title_f {
+        margin-top: 30px;
+        width: 100%;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        .desc {
+            flex: 1;
+            text-align: left;
+            span {
+                color: #fff;
+                margin-left: 90px;
+            }
+        }
+    }
+    .comment_box {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        padding-left: 90px;
+        .comment_left {
+            width: 100px;
+            margin-right: 150px;
+            text-align: center
+        }
+        .comment_right {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    .bgh {
+        background: #fff;
+    }
+    .bgl {
+        background: #EEF0F4;
     }
     .tabs {
         width: 100%;

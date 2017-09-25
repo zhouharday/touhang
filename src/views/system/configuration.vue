@@ -49,6 +49,29 @@
                         </p>
                     </div>
                 </div>
+                <!-- 投资阶段 配置 -->
+                <div class="rightAdd_btn">
+                    <el-button type="danger" style="width:80px" @click="openInvest">添加</el-button>
+                </div>
+                <b style="padding-left:15px;">投资阶段配置</b>
+                <div class="project_config">
+                    <div class="menu_title">
+                        <div>投资者配置</div>
+                    </div>
+                    <div class="menu_box">
+                        <p class="menu_list" v-for="item in investMenu" :key="item.index">
+                            <span v-if="!item.editFlag">{{item.investName}}</span>
+                            <span v-if="item.editFlag" class="cell-edit-input">
+                                <el-input v-model="item.investName"></el-input>
+                            </span>
+                            <Icon type="arrow-up-c" class="mgr"></Icon>
+                            <Icon type="arrow-down-c"></Icon>
+                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
+                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存</el-button>
+                            <el-button type="text" @click="handleDelete(index,investMenu)">删除</el-button>
+                        </p>
+                    </div>
+                </div>
             </el-col>
             <el-col :span="18">
                 <el-row>
@@ -127,6 +150,25 @@
                 <el-button class="dialogBtn" @click="fundDialog = false">取消</el-button>
             </div>
         </el-dialog>
+        <!-- 添加 投资者阶段 对话框-->
+        <el-dialog title="阶段名称" :visible.sync="investDialog" class="fileDialog">
+            <el-form :model="fundForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="阶段名称：" prop="investName" label-width="100px">
+                            <el-input v-model="investForm.investName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addInvest">保存</el-button>
+                <el-button class="dialogBtn" @click="investDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
         <!-- 添加  文档 对话框-->
         <el-dialog title="文档名称" :visible.sync="fileDialog" class="fileDialog">
             <el-form :model="fileForm">
@@ -155,6 +197,7 @@ export default {
         return {
             projectDialog: false,
             fundDialog: false,
+            investDialog: false,
             fileDialog: false,
             fileData: [
                 {
@@ -199,6 +242,20 @@ export default {
                     fundName: '基金撤资',
                     editFlag: false
                 }
+            ],
+            investForm: {
+                investName: '',
+                editFlag: false
+            },
+            investMenu: [
+                {
+                    investName: '投资文档',
+                    editFlag: false
+                },
+                {
+                    investName: '资质文件',
+                    editFlag: false
+                }
             ]
         }
     },
@@ -230,6 +287,20 @@ export default {
             this.fundMenu.push(this.fundForm);
             this.fundForm = {};
             this.fundDialog = !this.fundDialog;
+        },
+        //添加 投资者配置的方法
+        openInvest() {
+            let new_investForm = {
+                investName: '',
+                editFlag: false
+            };
+            this.investForm = new_investForm;
+            this.investDialog = !this.investDialog;
+        },
+        addInvest() {
+             this.investMenu.push(this.investForm);
+            this.investForm = {};
+            this.investDialog = !this.investDialog;
         },
         // 添加 文档 的方法
         openFile() {

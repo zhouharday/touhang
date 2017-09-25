@@ -123,6 +123,10 @@
                 </el-table>
             </el-col>
         </el-row>
+        <div class="page">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            </el-pagination>
+       </div>
     </section>
 </template>
 
@@ -132,7 +136,8 @@
 <style lang="less" scoped>
 .assistantContent {
     width: 100%;
-    height: 650px;
+    min-height: 100%;
+    position: relative;
     font-size: 14px;
     background: #fff;
 }
@@ -166,7 +171,6 @@
     overflow: hidden;
     position: relative;
 }
-
 
 .collapse-btn {
     position: absolute;
@@ -249,6 +253,14 @@
 .back {
     background: #fff;
 }
+.page {
+   width: 100%;
+   padding: 15px 30px;
+   text-align: right;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+ }
 </style>
 
 
