@@ -10,7 +10,7 @@
                         </el-table-column>
                         <el-table-column prop="seedUserName" label="发布人" align="center">
                         </el-table-column>
-                        <el-table-column prop="createDate" label="发布日期" align="center">
+                        <el-table-column prop="seedNoticeDate" label="发布日期" align="center">
                         </el-table-column>
                         <el-table-column prop="noticeType" label="状态" align="center">
                         </el-table-column>
@@ -181,7 +181,6 @@ export default {
                             }
                         }, this);
                         this.tableData1 = res.data.result.list;
-                        this.tableData1 = res.data.result.list; //任务数据列表
                         this.page1.pageNum = res.data.result.pageNum; //当前页码 
                         this.page1.total = res.data.result.total; //数据总数 
                         this.page1.pageSize = res.data.result.pageSize; //每页条数 
