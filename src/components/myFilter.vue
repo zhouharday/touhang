@@ -8,7 +8,7 @@
                 <div class="ul_list">
                     <ul class="listWrapper">
                         <li class="list" v-for="(list, nowIndex) of item.details" :key="list">
-                            <el-button @click="changeList(index, nowIndex)" :class="{active: nowIndex==currentIndex && index==parentIndex}" class="btn">
+                            <el-button @click="changeList(index, nowIndex,item.details)" :class="{active: nowIndex==currentIndex && index==parentIndex}" class="btn">
                                 {{list.dicName}}
                             </el-button>
                         </li>
@@ -41,11 +41,16 @@ export default {
         }
     },
     methods: {
-        changeList(index, val) {
-            console.log(index)
-            console.log(val)
+        changeList(index, val,content) {
+//            console.log(index)
+//            console.log(val)
             this.parentIndex = index
             this.currentIndex = val
+//            console.log(content[val].id)
+            if(content[val].id == 0){
+                content[val].id = '';
+            }
+            this.$emit('postID',content[val].id)
         },
     }
 }

@@ -53,9 +53,12 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
+<<<<<<< HEAD
                             <!--
                                 <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
                                 -->
+=======
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">
                                 <div>{{ scope.row.project }}</div>
                             </a>
@@ -112,6 +115,7 @@
                 </el-table>
             </el-col>
         </el-row>
+<<<<<<< HEAD
         <el-row>
            <el-col>
                 <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
@@ -119,6 +123,19 @@
                     </el-pagination>
                 </div>
            </el-col>
+=======
+        <el-row type="flex" align="bottom" class="page">
+            <el-col :span="8">
+                <span>总记录：{{this.total}}条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page style="float:right"
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
+            </el-col>
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
         </el-row>
     </div>
 </template>
@@ -129,6 +146,12 @@ export default {
     name: 'projectPool',
     data() {
         return {
+<<<<<<< HEAD
+=======
+            total: 0,    // 总数
+            page: 1,     // 当前页数
+            pageSize: 5, // 一页数量 
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
@@ -182,39 +205,6 @@ export default {
                     // manager: '刘经理',
                     datetime: '2015/01/16',
                     id: 0
-                },
-                {
-                    theme: 'Digital Asset',
-                    project: '美国结算和分类式账本服务商',
-                    industry: '金融',
-                    round: 'B+轮',
-                    location: '海外',
-                    state: '正常',
-                    // manager: '王经理',
-                    datetime: '2016/04/21',
-                    id: 1
-                },
-                {
-                    theme: '小六汤包',
-                    project: '中式餐应连锁品牌',
-                    industry: '生活消费',
-                    round: 'Pre-A轮',
-                    location: '陕西省',
-                    state: '观察',
-                    // manager: '季经理',
-                    datetime: '2017/02/13',
-                    id: 2
-                },
-                {
-                    theme: '智慧熊',
-                    project: '双语学前教育连锁机构',
-                    industry: '教育',
-                    round: 'A轮',
-                    location: '山东省',
-                    state: '观察',
-                    // manager: '付经理',
-                    datetime: '2014/06/26',
-                    id: 3
                 }
             ]
         }
@@ -233,7 +223,11 @@ export default {
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
         },
-        getDatas(projectName, projectType, industryId) {
+        getDatas() {
+            let projectName = this.input;
+            let projectType = this.state;
+            let industryId = this.industry;
+
             if (projectType == '全部') projectName = '';
             if (industryId == '全部') industryId = '';
 
@@ -244,11 +238,21 @@ export default {
             if (projectName) params.projectName = projectName;
             if (projectType) params.projectType = projectType;
             if (industryId) params.industryId = industryId;
+
             getPros(params).then(resp => {
-                let data = resp.data.listMapProjectInfo.list;
+                let info = resp.data.listMapProjectInfo;
+                let data = info.list;
                 data = this.handleDatas(data);
                 this.tableData = data;
+                this.total = info.total || 0;
             })
+        },
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
+        },
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
         },
         /**
          * [handleDatas 处理项目列表数据]
@@ -271,9 +275,7 @@ export default {
             return data;
         },
         handleIconClick(ev) {
-            let input = this.input;
-            console.log('input: ', input);
-            this.getDatas(input, this.state, this.industry);
+            this.getDatas();
         },
         // 点击折叠按钮，控制列表项的下拉与收起
         changeList() {
@@ -333,7 +335,12 @@ export default {
             this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+            this.$store.commit({ 
+                type: 'addTab', 
+                title: th, 
+                url: url, 
+                name: name 
+            });
         },
         deleteRow(index, tableData) {
             let row = tableData[index];
@@ -354,13 +361,13 @@ export default {
                 let state = stateList[index].states;
                 this.state = state;
                 this.currentIndex1 = index;
-                this.getDatas(null, this.state, this.industry);
+                this.getDatas();
             } else {        // 行业
                 let industryList = this.industryList;
                 let industry = this.industryList[index].details;
                 this.industry = industry;
                 this.currentIndex2 = index;
-                this.getDatas(null, this.state, this.industry);
+                this.getDatas();
             }
         }
     }

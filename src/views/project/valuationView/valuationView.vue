@@ -8,7 +8,7 @@
             <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index)">
+                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index, item)">
                             {{item.state}}
                         </li>
                     </ul>
@@ -18,7 +18,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick">
+                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
         </el-row>
@@ -41,13 +41,100 @@
                 </el-table>
             </el-col>
         </el-row>
+<<<<<<< HEAD
        <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
        </div>
+=======
+        <el-row type="flex" align="bottom" class="foot">
+            <el-col :span="8">
+                <span>总记录：{{total}} 条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page style="float:right"
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
+            </el-col>
+        </el-row>
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
     </div>
 </template>
 
+<script>
+import { getProjectBySelect } from 'api/project';
+export default {
+    data() {
+        return {
+            total: 0,
+            page: 1,
+            pageSize: 5,
+            projectName: '',
+            currentIndex: 0,
+            stateList: [
+                { state: "全部" },
+                { state: "未估值" },
+                { state: "已估值" }
+            ],
+            tableData: [
+                {
+                    project: 'AAAAAAAA',
+                    valuationParameter: '市净率1000*20*5%',
+                    valuation: '',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: ''
+                }
+            ]
+        }
+    },
+    created() {
+        this.init();
+    },
+    methods: {
+        init() {
+            this.getDatas();
+        },
+        getDatas() {
+            let appraisementStatus = this.appraisementStatus;
+
+            if (appraisementStatus == '全部') appraisementStatus = '';
+
+            let params = {
+                projectName: this.projectName,
+                page: this.page,
+                pageSize: this.pageSize
+            };
+
+            getProjectBySelect(params).then(resp => {
+                let result = resp.data.result;
+                this.tableData = result.data || [];
+                this.total = result.total || [];
+            }).catch(e => {
+                console.log('getProjectBySelect() exists error: ', e);
+            });
+        },
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
+        },
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
+        },
+        handleIconClick(ev) {
+            // console.log(ev);
+            this.getDatas();
+        },
+        changeActive(index, item) {
+            this.currentIndex = index;
+            console.log(item);
+            this.appraisementStatus = item.state;
+        }
+    }
+}
+</script>
 
 <style lang="less" scoped>
 .valueView {
@@ -106,65 +193,3 @@
    right: 0;
  }
 </style>
-
-
-<script>
-export default {
-    created() {
-        // this.$http.post('api/url',{
-
-        // })
-        // .then( res => {
-        //     let data = res.data;
-        //     if(data.length == 0 ){
-        //         this.tatal = 0;
-        //     } else if ( data.length != 0 ){
-        //         this.total = data.length;
-        //     }
-        // })
-        // .catch( error => {
-
-        // });
-        this.total = this.tableData.length
-    },
-    data() {
-        return {
-            total: '',
-            input: '',
-            currentIndex: 0,
-            stateList: [
-                { state: "全部" },
-                { state: "未估值" },
-                { state: "已估值" }
-            ],
-            tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
-                },
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
-                }
-            ],
-            // total: this.tableData.length
-        }
-    },
-    methods: {
-        handleIconClick(ev) {
-            console.log(ev);
-        },
-        changeActive(index) {
-            this.currentIndex = index;
-        }
-    }
-}
-</script>

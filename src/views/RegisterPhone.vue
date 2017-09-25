@@ -93,12 +93,12 @@ export default {
         sendVerificationCode() { //发送验证码 Ajax
             // this.time();
             // return service({
-            //     url: 'api/merchant/validationCode',
+            //     url: this.api + '/merchant/validationCode',
             //     method: 'post',
             //     data: { contactPhone: this.phonecontactPhone }
             // })
 
-                this.$http.post('api/merchant/validationCode', {
+                this.$http.post(this.api + '/merchant/validationCode', {
                     contactPhone: this.phonecontactPhone
                 })
                 .then(res => {

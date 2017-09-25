@@ -26,10 +26,14 @@
             </template>
         </el-table-column>
     </el-table>
+    <Modal v-model="fundsDetailsModal" title="添加出资明细" @on-ok="confirmModal" @on-cancel="confirmCancel" width="800px">
+        <funds-modal :fundsInfo="fundsInfo"></funds-modal>
+    </Modal>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+import fundsModal from './fundsModal'
 export default {
     props: {
         investorData: {
@@ -39,43 +43,30 @@ export default {
     },
     data() {
         return {
-            detailsData: [{
-                protocolName: 'xxxxx',
-                fundName: '深度并购基金',
-                amount: '100,000',
-                ratio: '5%',
-                actual: 565.56,
-                date: '2016-09-08'
-            }, {
-                protocolName: 'xxx',
-                fundName: '深度并购基金',
-                amount: '100,000',
-                ratio: '5.6%',
-                actual: 565.56,
-                date: '2016-09-08'
-            }],
-            formLabelWidth: '120px',
-            addDetailed: false,
-            Detailed: {
-
-            },
-            options: [{
-                value: '名称a',
-                label: '名称a'
-            }, {
-                value: '名称b',
-                label: '名称b'
-            }]
+            fundsDetailsModal: false,
+            fundsInfo: {
+                investorName: '',
+                subscribeAmount: '', //认缴金额
+                fundName: '', //基金
+                paidDate: '', //出资日期
+                agreementName: '', //协议名称
+                residueAmount: '',//剩余金额
+                contributiveRatio: '', //出资占比
+                id: '', //本条记录ID
+                paidAmount: '', //实缴金额
+                handler: '',  // 经办人
+                handlingDate: new Date()
+            }
         }
     },
     methods: {
-        getSummaries(param) {
-            // console.log(param)
-        },
-        showDetailed() {
-            this.addDetailed = true
-        },
-        Detailed: {}
+        handleEdit(index, row) {
+            this.fundsDetailsModal = true
+            this.fundsInfo = row
+        }
+    },
+    components: {
+        fundsModal
     }
 }
 </script>

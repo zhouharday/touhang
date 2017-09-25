@@ -76,6 +76,7 @@
                 </el-table>
             </el-col>
         </el-row>
+<<<<<<< HEAD
          <el-row>
            <el-col>
                 <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
@@ -83,11 +84,26 @@
                     </el-pagination>
                 </div>
            </el-col>
+=======
+        <el-row type="flex" align="bottom" class="foot">
+            <el-col :span="8">
+                <span>总记录：{{this.total}}条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page style="float:right" 
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
+            </el-col>
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
         </el-row>
     </div>
 </template>
 <script>
 import { getPres } from 'api/projectPre';
+import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+
 export default {
     name: 'preProject',
     data() {
@@ -163,7 +179,7 @@ export default {
                 let result = data.result;
                 let list = result.list;
                 list = this.handleDatas(list);
-                this.tableData = list;
+                this.tableData = list || [];
                 this.total = result.total || 0;
                 console.log(result);
             }).catch(e => {

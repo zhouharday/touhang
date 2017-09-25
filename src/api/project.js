@@ -1,17 +1,23 @@
 import service from 'common/js/fetch'
 
 // 获取项目估值列表
-export function getProjectValuation(projectName = undefined) {
+export function getProjectValuation(params) {
+	let { projectName, page, pageSize } = params;
     const data = {
-        projectName: projectName
+        projectName: projectName,
+        page,
+		pageSize
     }
     return service({url: '/appraisement/likeAppraisement', method: 'post', data})
 }
 
 // 根据状态估值查询
-export function getProjectBySelect(selectValue) {
+export function getProjectBySelect(params) {
+	let { appraisementStatus, page, pageSize } = params;
 	const data = {
-        appraisementStatus: selectValue	// 1:已提交2：未提交 （为null时查询提交及提交的s所有）
+        appraisementStatus,	// 1:已提交2：未提交 （为null时查询提交及提交的s所有）
+        page,
+        pageSize
     }
     return service({url: '/appraisement/selectAppraisement', method: 'post', data})
 }
@@ -127,6 +133,7 @@ export function changeEnterpriseInfo(params = {}) {
     }
     return service({url: '/projectPool/updateEnterpriseInfo', method: 'post', data})
 }
+
 // 提交项目基本信息
 export function changeProjectInfo(params = {}) {
 	let { id, projectName, projectShortName, addressId, projectTypeId, industryId, statusId, projectFromId, departmentId, projectLeaderId, merchantId } = params;
@@ -172,11 +179,10 @@ export function addRecord(params = {}) {
 }
 
 // 删除记录
-export function delRecord(id, recordStatus) {
+export function delRecord(id = undefined, recordStatus = undefined) {
 	const data = {
 		id,   //项目ID
 		recordStatus,  // 记录状态：1：正常 2：删除
 	}
 	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
 }
-

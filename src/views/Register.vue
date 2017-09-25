@@ -64,7 +64,7 @@ export default {
 
     mounted() {},
     created() {
-        this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>行业
+        this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>行业
             "dicParent": '1'
         })
             .then(res => {
@@ -76,7 +76,7 @@ export default {
             .catch(error => {
 
             });
-        this.$http.post('api/dictionaryController/select2Menu', { //数据字典=>省份
+        this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>省份
             "dicParent": 501
         })
             .then(res => {
@@ -89,12 +89,12 @@ export default {
                 console.log(error);
             });
         function getIndustry(self) { //获取行业数据
-            return self.$http.post('api/dictionaryController/select2Menu', {
+            return self.$http.post(this.api + '/dictionaryController/select2Menu', {
                 "dicParent": 1
             })
         };
         function getRegister(self) { //获取省份数据
-            return self.$http.post('api/dictionaryController/select2Menu', {
+            return self.$http.post(this.api + '/dictionaryController/select2Menu', {
                 "dicParent": 501
             })
         };
@@ -135,7 +135,7 @@ export default {
                 this.$store.state.register.register.contactUser = this.register.contactUser;
                 window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
                 this.$store.state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
-                this.$http.post('api/merchant/register', this.$store.state.register.register)
+                this.$http.post(this.api + '/merchant/register', this.$store.state.register.register)
                     .then(res => {
                         if (res.data.status == '200') { //注册数据验证通过
                             // this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页

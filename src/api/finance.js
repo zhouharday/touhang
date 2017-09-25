@@ -24,8 +24,8 @@ export function addFinance(params = {}) {
 }
 
 // 编辑融资信息
-export function editFinance(id = undefined, enterpriseId = undefined, params) {
-	let { projectTurnId, financingWayId, financingMoney, financingDate } = params;
+export function editFinance(params) {
+	let { id, enterpriseId, projectTurnId, financingWayId, financingMoney, financingDate } = params;
     const data = {
         id,
         enterpriseId, 

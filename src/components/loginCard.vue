@@ -121,6 +121,7 @@ export default {
     },
     methods: {
         checkVataa() {
+            this.$store.state.login.loading = false;
             if (this.name && this.password) {
                 this.$emit("sendVal", 1)
             } else {

@@ -8,7 +8,7 @@
             <el-col :span="22" style="margin-top:20px">
                 <div class="sort-ul">
                     <ul ref="sort">
-                        <li v-for="(item,index) in sortList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index)">
+                        <li v-for="(item,index) in sortList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index, item)">
                             {{item.sorts}}
                         </li>
                     </ul>
@@ -18,7 +18,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
         </el-row>
@@ -46,10 +46,25 @@
                 </el-table>
             </el-col>
         </el-row>
+<<<<<<< HEAD
         <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
        </div>
+=======
+        <el-row type="flex" align="bottom" class="foot">
+            <el-col :span="8">
+                <span>总记录：{{this.total}}条</span>
+            </el-col>
+            <el-col :span="16">
+                <Page style="float:right"
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
+            </el-col>
+        </el-row>
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
     </div>
 </template>
 <script>
@@ -57,7 +72,14 @@ import { getAfters } from 'api/projectAfter';
 export default {
     data() {
         return {
+<<<<<<< HEAD
             input: '',
+=======
+            total: 0,
+            page: 1,
+            pageSize: 5,
+            projectName: '',
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
             currentIndex: 0,
             sortList: [
                 { sorts: "全部" },
@@ -92,22 +114,38 @@ export default {
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
         },
-        getDatas(projectName) {
+        getDatas() {
+            let projectTypeId = this.projectTypeId;
+            if (projectTypeId == '全部') projectTypeId = '';
+
             let params = {
                 merchantId: this.merchantId,
-                projectName: projectName
+                projectName: this.projectName,
+                projectTypeId: projectTypeId,
+                page: this.page,
+                pageSize: this.pageSize
             };
 
             getAfters(params).then(resp => {
                 let data = resp.data;
-                let list = data.result.list;
+                let result = data.result;
+                let list = result.list;
                 this.tableData = list;
+                this.total = result.total;
             }).catch(e => {
                 console.log('getPres exists error: ', e);
             });
         },
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
+        },
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
+        },
         handleIconClick(ev) {
-            console.log(ev);
+            // console.log(ev);
+            this.getDatas();
         },
         // 设置table间隔行的background-color
         tableRowClassName(row, index) {
@@ -120,15 +158,16 @@ export default {
         },
         ShowPreMessage(title, ind) {
             this.index = ind;
-            this.addTab('投后' + title.project + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
+            this.addTab('投后' + title.projectName + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
             this.$router.push({ name: 'aftProjectMessage', params: { userId: title.id } });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        changeActive(index) {
+        changeActive(index, item) {
             this.currentIndex = index;
-
+            this.projectTypeId = item.sorts;
+            this.getDatas();
         }
     }
 }
