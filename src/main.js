@@ -19,18 +19,17 @@ import store from './store';
 // import mainCss from "../static/css/main.css";
 
 
-
 Vue.use(iView);
 Vue.use(echarts);
 Vue.use(ElementUI);
 Vue.prototype.md5 = md5;
 Vue.prototype.$http = axios;
-Vue.prototype.api = '/api'; //公司IP请求时 URL
-// Vue.prototype.api = 'http://18f46963j4.iok.la'; //外网请求时 URL
+// Vue.prototype.api = '/api'; //公司IP请求时 URL
+Vue.prototype.api = 'http://18f46963j4.iok.la'; //外网请求时 URL
 // Vue.prototype.api = ''; //上线时 URL
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
 // Vue.prototype.$http = axios.create();
-// Vue.prototype.$http.defaults.baseURL = 'http://192.168.0.198:9091';
+// Vue.prototype.$http.defaults.baseURL = 'http://18f46963j4.iok.la';
 // Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.prototype.$http = axios.create({
 
