@@ -31,14 +31,9 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api': {
-<<<<<<< HEAD
                 // target: 'http://zhqwjmw.eicp.net',
                 target:'http://192.168.0.198:9091',
                 //target:'http://192.168.0.126:9091',
-=======
-                target: 'http://zhqwjmw.eicp.net',
-                // target:'http://192.168.0.198:9091',
->>>>>>> c336bc35cee379cb9acf4c2ab1d4271bdc565ac7
                 // target:'http://192.168.0.122:9091',
                 // target:'http://192.168.0.117:9091',
                 // target:'http://100.64.33.181:9091',

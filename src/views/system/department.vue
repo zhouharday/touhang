@@ -21,8 +21,14 @@
                     <el-row>
                         <el-col v-for="(item, index) of props.row.children">
                             <el-row :gutter="20">
-                                <el-col :span="12" class="item">
-                                    <span class="add_margin">{{item.deptName}}</span>
+                                <el-col :span="12" class="item" >
+
+                                    <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>
+                                    <span class="add_margin" v-if="item.editFlag">
+                                        <el-input v-model="item.deptName" ></el-input>
+                                        <!--{{item.deptName}}-->
+                                    </span>
+
                                 </el-col>
                                 <el-col :span="12" class="item">
                                     <!--<span class="add_margin">{{item.desc}}</span>-->
@@ -30,8 +36,11 @@
                                         <Icon type="ios-arrow-thin-up"></Icon>
                                         <Icon type="ios-arrow-thin-down"></Icon>
                                     </el-button>
-                                    <el-button size="small" @click="editClick(item)">
+                                    <el-button size="small" @click="editClick(item)" v-if="!item.editFlag">
                                         编辑
+                                    </el-button>
+                                    <el-button size="small" @click="editClick(item)" v-if="item.editFlag">
+                                        保存
                                     </el-button>
                                     <el-button size="small" @click="deleteClick(item)">
                                         删除
@@ -45,7 +54,7 @@
             <el-table-column label="名称" prop="deptName">
             </el-table-column>
             <el-table-column label="操作">
-                <!--<template scope="props">-->
+                <template scope="props">
                     <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
                         <!--<Icon type="ios-arrow-thin-up"></Icon>-->
                         <!--<Icon type="ios-arrow-thin-down"></Icon>-->
@@ -56,7 +65,7 @@
                     <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
                         <!--删除-->
                     <!--</el-button>-->
-                <!--</template>-->
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -89,10 +98,17 @@
 
 <script type="text/ecmascript-6">
     import {getNodes} from 'common/js/config'
+    import {addEdit} from 'api/system'
     import {getDepartmentList} from 'api/system'
     import {addNewDepartment} from 'api/system'
+    import {SetDepartment} from 'api/system'
     import {deletDepartment} from 'api/system'
+    import Input from "../../../node_modules/iview/src/components/input/input.vue";
+    import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
 export default {
+    components: {
+        ElInput,
+        Input},
     data() {
         return {
             currentData: [{
@@ -132,7 +148,8 @@ export default {
                 superior: '',
                 department: 'aaa'
             },
-            options: []
+            options: [],
+
         }
     },
     methods: {
@@ -146,8 +163,8 @@ export default {
             addNewDepartment(this.departmentData.department,this.departmentData.superior).then((res)=>{
                 console.log(res)
                 getDepartmentList().then((res)=>{
+                    var dataList = addEdit(res.data.result)
 
-                    var dataList = res.data.result
                     var treeList = getNodes(dataList)
                     this.currentData = treeList
                     this._getDepartmentName(this.currentData)
@@ -157,8 +174,17 @@ export default {
             })
         },
         editClick(item) {
-            console.log(item);
-//            console.log(item.log);
+//            console.log(item);
+
+            if(item.editFlag == true){
+
+                console.log(item.deptName)
+             /***********************/
+                SetDepartment(item.deptName,item.parentId,item.id).then((res)=> {
+                    console.log(res)
+                })
+            }
+            item.editFlag = !item.editFlag
         },
 
         _getDepartmentName(arr) {
@@ -174,25 +200,26 @@ export default {
             return this.options = result
         },
         deleteClick(item) {
-            console.log(item)
-//            var id = item.id;
-//            deletDepartment(item.id).then((res) => {
-//                console.log(okkkkkkkkk)
-////            },
-//            })
+//            console.log(item)
+            var id = item.id;
+            deletDepartment(item.id).then((res) => {
+                getDepartmentList().then((res)=>{
+                    var dataList = addEdit(res.data.result)
+                    var treeList = getNodes(dataList)
+                    this.currentData = treeList
+                    this._getDepartmentName(this.currentData)
+                })
+            })
         }
     },
     created() {
 
-
         getDepartmentList().then((res)=>{
 
-            var dataList = res.data.result
+            var dataList = addEdit(res.data.result)
             var treeList = getNodes(dataList)
             this.currentData = treeList
             this._getDepartmentName(this.currentData)
-
-//            this.myFund = res.data.result.list
         })
 
 
