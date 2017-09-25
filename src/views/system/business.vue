@@ -3,7 +3,7 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button @click="roleDialog=true">添加</el-button>
+                    <el-button type="danger" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%">
                     <el-table-column prop="role" label="角色名称" align="center">
@@ -29,8 +29,8 @@
                 <el-row>
                     <el-col>
                         <div class="limitBtn">
-                            <el-button>修改权限</el-button>
-                            <el-button>保存</el-button>
+                            <el-button type="default">修改权限</el-button>
+                            <el-button type="danger">保存</el-button>
                         </div>
                     </el-col>
                     <el-col :span="6">
@@ -139,8 +139,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="roleDialog = false">取 消</el-button>
-                <el-button type="primary" @click="addRole">确 定</el-button>
+                <el-button type="default" @click="roleDialog = false">取 消</el-button>
+                <el-button type="danger" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
     </section>

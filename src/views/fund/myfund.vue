@@ -85,7 +85,17 @@ export default {
                 btnGroup: [{
                     icon: 'plus-round',
                     explain: '基金'
+<<<<<<< HEAD
                 }]
+=======
+                }
+//                , {
+//                    explain: '导入'
+//                }, {
+//                    explain: '模板下载'
+//                }
+                ]
+>>>>>>> 81e568fcc9c6344fe83a774ff4374e665dc7bf71
             },
             chooseInfo: [{
                 title: '组织类型：',

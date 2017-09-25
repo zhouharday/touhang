@@ -31,17 +31,19 @@ const state = {
 
 const mutations = {
     addTab(state, targetName) {
+        if (!state.TitleList) {
+            return;
+        }
         let obj = {};
         obj.title = targetName.title;
         obj.path = targetName.url;
         obj.name = targetName.name;
-        if (state.TitleList) {
-            for (let i = 0; i < state.TitleList.length; i++) {
-                if (state.TitleList[i].name == targetName.name) {
-                    return;
-                }
+        for (let i = 0; i < state.TitleList.length; i++) {
+            if (state.TitleList[i].name == targetName.name) {
+                return;
             }
         }
+        
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },
@@ -89,8 +91,12 @@ const mutations = {
 
 const actions = {
     loginAPI({commit,state}, user) { //send login API
+<<<<<<< HEAD
         // console.log(user);
         user.self.$http.post('/api/user/login', {
+=======
+        user.self.$http.post(user.self.api + '/user/login', {
+>>>>>>> 81e568fcc9c6344fe83a774ff4374e665dc7bf71
             number: user.name,
             pass: user.pwd
             // number: "010",
@@ -99,8 +105,12 @@ const actions = {
             if (data.status == '403') {
                 alert(data.message);
             } else if (data.data.status == '156') { //用户名或密码不正确
-                alert(data.data.message);
-                // console.log(data.data.message);
+                commit('Notification', {
+                    title: '',
+                    message: '用户名或密码不正确，请重新输入',
+                    type: 'error'
+                });
+                // this.$Message.error('用户名或密码不正确，请重新输入');
                 return;
             } else if (data.status == '200') { //登录成功
                 // alert('success');

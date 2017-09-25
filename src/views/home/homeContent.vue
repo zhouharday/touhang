@@ -36,7 +36,18 @@
                                         <span>{{item.noticeMessage}}</span>
                                     </li>
                                 </ul>
-                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                                <!-- <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page> -->
+                                <div class="pagination">
+                                     <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage4"
+      :page-sizes="[100, 200, 300, 400]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="400">
+    </el-pagination>
+                                </div>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -61,7 +72,7 @@
                                 <div>【{{item.projectText1}}】</div>
                                 <div>
                                     <span>{{item.projectText2}}</span>
-                                    <span>{{item.projectText3}}</span>
+                                    <span @click="applyModal=true">{{item.projectText3}}</span>
                                     <span>{{item.time}}</span>
                                 </div>
                             </div>
@@ -112,44 +123,94 @@
             </el-col>
         </el-row>
         <!-- 添加日程模态框 -->
-        <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
-            <el-form :model="scheduleForm" label-position="top">
+        <div class="scheduleBox">
+            <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
+                <el-form :model="scheduleForm" label-position="top">
+                    <el-row>
+                        <el-col>
+                            <el-form-item label="主题：" prop="theme">
+                                <el-input placeholder="请输入日程主题" v-model="scheduleForm.theme"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="时间：" prop="time">
+                                <el-time-select v-model="scheduleForm.time" :picker-options="{
+                                                                    start: '08:30',
+                                                                    step: '00:15',
+                                                                    end: '18:30'
+                                                                    }" placeholder="选择时间" style="width:100%">
+                                </el-time-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
+                <div slot="footer" class="dialog-footer">
+                    <el-button class="dialogBtn_active" @click="scheduleDialog = false">保存</el-button>
+                    <el-button class="dialogBtn" @click="scheduleDialog = false">取消</el-button>
+                </div>
+            </el-dialog>
+        </div>
+        <!-- 发起申请 对话框-->
+        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
+            <el-form :model="applyForm" ref="applyForm" label-width="100px">
                 <el-row>
                     <el-col>
-                        <el-form-item label="主题：" prop="theme">
-                            <el-input placeholder="请输入日程主题" v-model="scheduleForm.theme"></el-input>
+                        <el-form-item label="标题" prop="name">
+                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="申请人" prop="person">
+                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="申请日期" prop="date">
+                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="时间：" prop="time">
-                            <el-time-select v-model="scheduleForm.time" :picker-options="{
-                                                        start: '08:30',
-                                                        step: '00:15',
-                                                        end: '18:30'
-                                                        }" placeholder="选择时间" style="width:100%">
-                            </el-time-select>
+                        <el-form-item label="备注" prop="notes">
+                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                            </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
+                        <el-form-item label="考察报告" prop="appendix">
+                            <!-- action 上传的地址，必填 -->
+                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                <div style="padding: 20px 0">
+                                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                    <p>点击或将文件拖拽到这里上传</p>
+                                </div>
+                            </Upload>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="选择审批人" prop="date">
+                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
-            <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
-            <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn_active" @click="scheduleDialog = false">保存</el-button>
-                <el-button class="dialogBtn" @click="scheduleDialog = false">取消</el-button>
+            <div slot="footer" class="dialog-footer" style="text-align:left">
+                <el-button @click="applyModal= false">提交</el-button>
             </div>
         </el-dialog>
-
     </section>
 </template>
 
 <style lang="less" scoped>
 .homeContent {
     .dialog-footer {
-        text-align: center;
-        // margin-top: 15px;
+        text-align: center; // margin-top: 15px;
         .dialogBtn_active {
             padding: 5px 15px;
             color: #fff;
@@ -360,6 +421,7 @@ export default {
             scheduleDialog: false,
             checkTime: '添加日程',
             activeName: 'first',
+            applyModal: false,
             loading: false,
             monthDate: [],
             RecentNotice: "系统消息 / 公司公告",
@@ -422,6 +484,14 @@ export default {
                     noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
                 }
             ],
+            applyForm: { // 立即申请表单
+                title: '',
+                person: '',
+                date: '',
+                notes: '',
+                appendix: '',
+                auditor: ''
+            },
             noticeShow: [
                 {
                     noRead: "已读",

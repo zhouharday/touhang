@@ -5,7 +5,7 @@
             <el-col :span="24" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index)">
+                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index, item)">
                             {{item.state}}
                         </li>
                     </ul>
@@ -15,7 +15,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
         </el-row>
@@ -74,14 +74,25 @@
                 </el-table>
             </el-col>
         </el-row>
+<<<<<<< HEAD
+       <div class="page">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            </el-pagination>
+       </div>
+=======
         <el-row type="flex" align="bottom" class="foot">
             <el-col :span="8">
                 <span>总记录：{{this.total}}条</span>
             </el-col>
             <el-col :span="16">
-                <Page :current="13" style="float:right"></Page>
+                <Page style="float:right"
+                    :total="total" 
+                    :current="page"
+                    @on-change="pageChanged"
+                    @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
         </el-row>
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
     </div>
 </template>
 
@@ -90,8 +101,10 @@ import { getProjectValuation } from 'api/project';
 export default {
     data() {
         return {
-            total: 2,
-            input: '',
+            total: 0,
+            page: 1,
+            pageSize: 5,
+            projectName: '',
             currentIndex: 1,
             stateList: [
                 { state: "状态：" },
@@ -107,20 +120,11 @@ export default {
                     valuationDate: '',
                     valuationOfficer: '',
                     state: ''
-                },
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
                 }
             ],
             form: {
                 algorithmType: ''
             }
-            // total: this.tableData.length
         }
     },
     created() {
@@ -128,17 +132,43 @@ export default {
     },
     methods: {
         init() {
-            let self = this;
-            getProjectValuation().then(resp => {
-                let data = resp.data.result;
-                self.tableData = data;
+            this.getDatas();
+        },
+        getDatas() {
+            let appraisementStatus = this.appraisementStatus;
+
+            let params = {
+                projectName: this.projectName,
+                page: this.page,
+                pageSize: this.pageSize
+            };
+
+            getProjectValuation(params).then(resp => {
+                let result = resp.data.result;
+                this.tableData = result.data || [];
+                this.total = result.total || 0;
+            }).catch(e => {
+                console.log('getProjectValuation() exists error: ', e);
             });
         },
-        handleIconClick(ev) {
-            console.log(ev);
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
         },
-        changeActive(index) {
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
+        },
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
+        },
+        handleIconClick(ev) {
+            // console.log(ev);
+            this.getDatas();
+        },
+        changeActive(index, item) {
             this.currentIndex = index;
+            console.log(item);
         }
     }
 }
@@ -147,9 +177,9 @@ export default {
 
 <style lang="less" scoped>
 .projectValue {
-    position: relative;
     width: 100%;
-   min-height: 100%;
+    min-height: 100%;
+    position: relative;
     font-size: 14px;
     background: #fff;
 }
@@ -190,17 +220,22 @@ export default {
     border-bottom: 1px solid #F05E5E;
 }
 
-.foot {
-    margin: 25px 30px 0 30px;
-}
+.page {
+   width: 100%;
+   padding: 15px 30px;
+   text-align: right;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+ }
 </style>
+<<<<<<< HEAD
 
 
 <script>
 export default {
     data() {
         return {
-            total: 2,
             input: '',
             currentIndex: 1,
             stateList: [
@@ -253,3 +288,5 @@ export default {
     }
 }
 </script>
+=======
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084

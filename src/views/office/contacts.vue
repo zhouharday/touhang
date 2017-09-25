@@ -278,11 +278,9 @@ import service from 'common/js/fetch'
 import axios from 'axios'
 
 export default {
-    beforeCreate() {
-
-    },
+    beforeCreate() {},
     created() {
-        this.$http.post('/api/merchantType/queryList', {})
+        this.$http.post( this.api + '/merchantType/queryList', {})
             .then(res => {
                 if (res.status == '200') {
                     this.typePostage = res.data.result;
@@ -384,7 +382,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     // console.log(this.form);
-                    this.$http.post('/api/merchant/apply', {
+                    this.$http.post(this.api + '/merchant/apply', {
                         "id": this.id,
                         "socialCode": this.form.creditCode,
                         "merchantName": this.form.companyName,

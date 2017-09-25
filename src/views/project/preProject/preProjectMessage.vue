@@ -50,8 +50,8 @@
                             {{item.info}}
                         </el-button>
                         <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                {{item.info}}
-                                                            </el-button> -->
+                                                                                                                                            {{item.info}}
+                                                                                                                                        </el-button> -->
                     </div>
                 </div>
             </div>
@@ -59,31 +59,44 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                    <detail-form 
+                        :basicForm="basicForm" 
+                        :companyForm="companyForm" 
+                        :capitalForm="capitalForm">
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table></team-table>
+                    <team-table
+                        :proId="proId"
+                        :proUsers="proUsers"
+                        :proRoles="proRoles"></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                                                                              <industry-form :industryForm="industryForm">
-                                                                                              </industry-form>
-                                                                                            </el-tab-pane> -->
+                                                                                                                                                                          <industry-form :industryForm="industryForm">
+                                                                                                                                                                          </industry-form>
+                                                                                                                                                                        </el-tab-pane> -->
+                  <industry-form :industryForm="industryForm">
+                  </industry-form>
+                </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-Form></record-Form>
+                    <record-form
+                        :proId="proId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
-                    <approve-Table></approve-Table>
+                    <approve-table></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
                     <file-table></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table></risk-table>
+                    <risk-table
+                        :proId="proId"
+                        :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table></manage-table>
+                    <manage-table
+                        :proId="proId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>
@@ -143,6 +156,7 @@
         <!-- 查看进度 对话框 -->
         <div class="progressBox">
             <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
+                <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
                 <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
                     <el-table-column prop="node" label="节点" align="center">
                     </el-table-column>
@@ -155,7 +169,65 @@
                     <el-table-column prop="time" label="用时" align="center">
                     </el-table-column>
                 </el-table>
-
+                <div>
+                    <div class="title_f" style="background:#2a3142;color:#fff">
+                        <div class="desc">
+                            <span>申请详情</span>
+                        </div>
+                    </div>
+                    <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
+                        <el-row>
+                            <el-col>
+                                <el-form-item label="标题" prop="name">
+                                    <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="申请人" prop="person">
+                                    <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="申请日期" prop="date">
+                                    <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col>
+                                <el-form-item label="备注" prop="notes">
+                                    <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
+                                    <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1">
+                                <div style="text-align:center;line-height:35px;">
+                                    <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </div>
+                <div>
+                    <div class="title_f" style="background:#2a3142;color:#fff">
+                        <div class="desc">
+                            <span>意见汇总</span>
+                        </div>
+                    </div>
+                    <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
+                        <p class="comment_left">
+                            <span>{{item.comment}}</span>
+                        </p>
+                        <p class="comment_right">
+                            <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
+                            <span>{{item.note}}</span>
+                        </p>
+                    </div>
+                </div>
             </el-dialog>
         </div>
     </div>
@@ -171,6 +243,11 @@ import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
+
+import { getPreDetail } from 'api/projectPre';
+import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+
+const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 
 export default {
     data() {
@@ -193,6 +270,8 @@ export default {
             step_sixth: '退出',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
+            proUsers: [],   // 项目用户列表
+            proRoles: [],   // 项目角色列表 
             module: [{
                 count: 1,
                 desc: '上传项目考察报告',
@@ -233,6 +312,15 @@ export default {
                 appendix: '',
                 auditor: ''
             },
+            applyForm2: { // 发起申请表单
+                title: '',
+                person: '',
+                date: '',
+                notes: '',
+                appendix: '',
+                auditor: '',
+                reports: ''
+            },
             auditorOptions: [{ //发起申请表单 审批人列表
                 value: '选项1',
                 label: '张三'
@@ -243,23 +331,27 @@ export default {
                 value: '选项3',
                 label: '王二'
             }],
-            progressTable: [
+            progressTable: [//查看进度表单 节点table
                 {
                     node: '发起申请',
                     operator: '管理员 2017/8/15 16:25:14',
                     conclusion: '同意',
                     startingTime: '2017/8/15 16:25:14',
                     time: '4秒'
+                }
+            ],
+            commentLists: [ //查看进度表单  意见汇总列表
+                {
+                    comment: '法务意见',
+                    num: '2',
+                    note: '【管理员】2017/08/15'
                 },
                 {
-                    node: '法务意见',
-                    operator: '管理员 2017/8/15 16:25:14',
-                    conclusion: '不同意',
-                    startingTime: '2017/8/15 16:25:14',
-                    time: '12秒'
+                    comment: '反馈项目负责人',
+                    num: '2',
+                    note: '【管理员】2017/08/15'
                 }
-            ],//查看进度表单 节点table
-
+            ]
         }
     },
     components: {
@@ -279,6 +371,86 @@ export default {
     },
     methods: {
         init() {
+            this.initInfo();
+            this.getPreProDetail();
+        },
+        initInfo() {
+            let href = window.location.href;
+            this.proId = href.substr(href.lastIndexOf('/') + 1, href.length);
+
+            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+            this.merchantId = merchants[0].id;
+            this.addProjectUserId = info.id;
+
+            // 项目用户和角色
+            Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
+                // console.log('values: ', values);
+                this.proUsers = values[0] || [];
+                this.proRoles = values[1] || [];
+            }).catch(e => {
+                console.log('getProUsers() or getProRoles() exists error: ', e);
+            });
+        },
+        /**
+         * [getPreProDetail 项目详情]
+         * @return {[type]} [description]
+         */
+        getPreProDetail() {
+            getPreDetail(this.proId).then(resp => {
+                console.log('prodetail: ', resp);
+            }).catch(e => {
+                console.log('getProDetail() exists error: ', e);
+            });
+        },
+        /**
+         * [getProUsers 获取项目用户列表]
+         * @return {[type]} [description]
+         */
+        getProUsers() {
+            return new Promise((resolve, reject) => {
+                let proUsers = this.proUsers;
+                if (proUsers.length) {
+                    resolve(proUsers);
+                } else {
+                    getProjectUsers({
+                        merchantId: this.merchantId
+                    }).then(resp => {
+                        let data = resp.data;
+                        if (+data.status === 200) {
+                            resolve(data.result);
+                        } else {
+                            reject(data.message);
+                        }
+                        // console.log('users resp', resp);
+                    }).catch(reject);
+                }
+            });
+        },
+        /**
+         * [getProRoles 获取项目角色列表]
+         * @return {[type]} [description]
+         */
+        getProRoles() {
+            return new Promise((resolve, reject) => {
+                let proRoles = this.proRoles;
+                if (proRoles.length) {
+                    resolve(proRoles);
+                } else {
+                    getProjectRoles({
+                        merchantId: this.merchantId,
+                        roleType: PROJECT_TYPE
+                    }).then(resp => {
+                        let data = resp.data;
+                        if (+data.status === 200) {
+                            resolve(data.result);
+                        } else {
+                            reject(data.message);
+                        }
+                        // console.log('roles resp', resp);
+                    }).catch(reject);
+                }
+            });
         },
         // 转至下一阶段 的方法
         changeStep() {
@@ -307,7 +479,7 @@ export default {
             } else if (index == 2) {
                 this.progressModal = true;
             }
-            
+
             // switch (index) {
             //    case 1:
             //      this.applyModal = true;
@@ -535,6 +707,42 @@ export default {
                 }
             }
         }
+    } // 小双助手 查看进度对话框中的样式
+    .title_f {
+        margin-top: 30px;
+        width: 100%;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        .desc {
+            flex: 1;
+            text-align: left;
+            span {
+                color: #fff;
+                margin-left: 90px;
+            }
+        }
+    }
+    .comment_box {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        padding-left: 90px;
+        .comment_left {
+            width: 100px;
+            margin-right: 150px;
+            text-align: center
+        }
+        .comment_right {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+    .bgh {
+        background: #fff;
+    }
+    .bgl {
+        background: #EEF0F4;
     }
     .tabs {
         width: 100%;

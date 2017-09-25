@@ -27,7 +27,7 @@
                                     <el-dropdown-item>蚵仔煎</el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown> -->
-                            <el-select v-model="value" placeholder="请选择">
+                            <el-select v-model="value2" placeholder="请选择">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
@@ -35,7 +35,7 @@
                     </el-form>
                 </div>
                 <div class="btn">
-                    <el-button @click="showSubscriber">添加</el-button>
+                    <el-button type="danger" @click="showSubscriber">添加</el-button>
                 </div>
             </div>
             <el-table :data="subscriberData" border style="width: 100%">
@@ -63,12 +63,15 @@
                           size="small">
                           锁定/启用
                         </el-button>
-                        <el-button
-                          @click.native.prevent="deleteRow(scope.$index, scope.row)"
-                          type="text"
-                          size="small">
-                          密码初始化
-                        </el-button>
+<<<<<<< HEAD
+                        <!--<el-button-->
+                          <!--@click.native.prevent="deleteRow(scope.$index, scope.row)"-->
+                          <!--type="text"-->
+                          <!--size="small">-->
+                          <!--密码初始化-->
+                        <!--</el-button>-->
+=======
+>>>>>>> 4d920d3e87855b106133033b62489796c5c3f592
                     </template>
                 </el-table-column>
             </el-table>
@@ -130,8 +133,13 @@
             </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalIncome = false">取 消</el-button>
+<<<<<<< HEAD
+            <el-button type="default" @click="modalIncome = false">取 消</el-button>
+            <el-button type="danger" @click="confirmIncome">确 定</el-button>
+=======
+            <el-button @click="modalIncome">取 消</el-button>
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
+>>>>>>> 4d920d3e87855b106133033b62489796c5c3f592
         </div>
     </el-dialog>
 </div>
@@ -145,73 +153,21 @@
 export default {
     data() {
         return {
-            structure: [{
-                label: '双子金服基金公司',
-                children: [{
-                    label: '市场部',
-                    children: [{
-                        label: 'a小组'
-                    }, {
-                        label: 'b小组'
-                    }]
-                }, {
-                    label: '人事部'
-                }, {
-                    label: '开发部',
-                    children: [{
-                        label: '前端组'
-                    }, {
-                        label: '后台组'
-                    }, {
-                        label: 'UI组'
-                    }]
-                }]
-            }, {
-                label: '深度网络科技有限公司',
-                children: [{
-                    label: '市场部',
-                    children: [{
-                        label: 'a小组'
-                    }, {
-                        label: 'b小组'
-                    }]
-                }, {
-                    label: '人事部'
-                }, {
-                    label: '开发部',
-                    children: [{
-                        label: '前端组'
-                    }, {
-                        label: '后台组'
-                    }, {
-                        label: 'UI组'
-                    }]
-                }]
-            }],
-            options: [{
-                value: '所有',
-                label: '所有'
-            }, {
-                value: '锁定',
-                label: '锁定'
-            }, {
-                value: '启用',
-                label: '启用'
-            }],
-            value: '',
-            subscriberData: [{
-                name: '',
-                account: '',
-                department: '',
-                role: '',
-                state: '启用'
-            }, {
-                name: '张三',
-                account: '',
-                department: '',
-                role: '',
-                state: '锁定'
-            }],
+            structure: [],
+            options: [
+                {
+                    lable:'',
+                    value:'所有'
+                },{
+                    lable:'0',
+                    value:'锁定'
+                },{
+                    lable:'1',
+                    value:'启用'
+                }
+            ],
+            value2: '',
+            subscriberData: [],
             addSubscriber: {
                 account: '',
                 name: '',
@@ -225,7 +181,8 @@ export default {
             modelSubscriber: false,
             formLabelWidth: '120px',
             addId:'',
-            allDepartmentList:[]
+            allDepartmentList:[],
+            input2:''
         }
     },
     methods: {
@@ -244,7 +201,32 @@ export default {
                 console.log(res);
                 this.subscriberData = res.data.result
             })
+        },
+        confirmIncome(){
+            this.modelSubscriber = false
+        },
+        modalIncome(){
+            this.modelSubscriber = false
+        },
+        handleIconClick(){
+        alert(this.value2)
+            var LockStatus //锁定状态
+            this.options.forEach(function (item , index) {
+                if (item.value == this.value2)
+                {
+                    LockStatus = item.label
+                }
+            })
+
+
+            getDepartmentList('',LockStatus).then((res)=>{
+                var dataList = res.data.result
+                this.allDepartmentList = dataList
+                var treeList = getNodes(dataList)
+                this.structure = treeList
+            })
         }
+
     },
     created() {
 

@@ -1,7 +1,7 @@
 <template>
 <div class="investorLibrary">
     <div class="investorFilter">
-        <myFilter :chooseInfo="filterInfo"></myFilter>
+        <myFilter :chooseInfo="filterInfo" @postID="changelist"></myFilter>
     </div>
     <div class="header">
         <tableHeader :theme="theme" :data="titleHeader" class="addPadding">
@@ -56,11 +56,12 @@ export default {
     data() {
         return {
             filterInfo: [{
-                title: '组织类型：',
-                details: ['全部', '机构', '个人', '政府']
+                title: '投资者类型：',
+                details: [{"dicName":'全部'}, '机构', '个人', '政府']
             }],
             theme: '#fff',
-            investorData: []
+            investorData: [],
+            input2:'',
         }
     },
     components: {
@@ -70,20 +71,35 @@ export default {
 
     },
     methods: {
-
+        handleIconClick(){
+console.log(this.input2)
+            getInvestorList(this.input2,this.type).then((res)=>{
+                this.investorData = res.data.result.list
+            })
+        },
         handleDelete(index, row) {
             console.log(index, row);
+        },
+
+        changelist(el){
+            this.type = el
+            getInvestorList(this.input2,this.type).then((res)=>{
+//            console.log(res.data)
+                this.investorData = res.data.result.list
+            })
         }
     },
     created(){
         getInvestorList().then((res)=>{
-            console.log(res.data)
+//            console.log(res.data)
                 this.investorData = res.data.result.list
         })
         getSelectIndex('70').then((res)=>{
-            console.log(res.data)
-//            this.filterInfo = res.data.result.list
+            console.log(res.data.result)
+            this.filterInfo[0].details = res.data.result
+
         })
+
 
     }
 }

@@ -76,14 +76,23 @@
                 </el-table>
             </el-col>
         </el-row>
+         <el-row>
+           <el-col>
+                <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+                    </el-pagination>
+                </div>
+           </el-col>
+           </el-row>
         <el-row type="flex" align="bottom" class="foot">
             <el-col :span="8">
                 <span>总记录：{{this.total}}条</span>
             </el-col>
+
             <el-col :span="16">
                 <Page style="float:right" 
                     :total="total" 
-                    :current="page" 
+                    :current="page"
                     @on-change="pageChanged"
                     @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
@@ -92,13 +101,15 @@
 </template>
 <script>
 import { getPres } from 'api/projectPre';
+import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+
 export default {
     name: 'preProject',
     data() {
         return {
-            total: 0,    // 总数
-            page: 1,     // 当前页数
-            pageSize: 5, // 一页数量 
+            // total: 0,    // 总数
+            // page: 1,     // 当前页数
+            // pageSize: 5, // 一页数量 
             projectName: '',
             projectType: '',
             input: '',
@@ -167,7 +178,7 @@ export default {
                 let result = data.result;
                 let list = result.list;
                 list = this.handleDatas(list);
-                this.tableData = list;
+                this.tableData = list || [];
                 this.total = result.total || 0;
                 console.log(result);
             }).catch(e => {
@@ -325,12 +336,6 @@ export default {
 .project {
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
-}
-
-.foot {
-    margin: 25px 30px 0 30px; //  position: absolute;
-    // left: 30px;
-    // bottom: 20px;
 }
 
 </style>

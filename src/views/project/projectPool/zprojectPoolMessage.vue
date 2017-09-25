@@ -3,12 +3,12 @@
         <div class="title">
             <div class="left">
                 <span class="desc">{{title}}</span>
-                <el-button class="state">{{state}}</el-button>
+                <el-button size="small" class="state">{{state}}</el-button>
             </div>
             <div class="right">
-                <el-button type="danger" @click="dialogVisible=true">投资</el-button>
-                <el-button type="danger">观察</el-button>
-                <el-button type="danger">淘汰</el-button>
+                <el-button type="danger" size="small" @click="dialogVisible=true">投资</el-button>
+                <el-button type="danger" size="small">观察</el-button>
+                <el-button type="danger" size="small">淘汰</el-button>
             </div>
             <!-- 确认转项目池 dialog -->
             <el-dialog title="转投资" :visible.sync="dialogVisible" size="tiny">
@@ -22,15 +22,21 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :projectId="projectPoolId">
+                    <detail-form
+                        :basicForm="basicForm"
+                        :companyForm="companyForm"
+                        :projectId="projectPoolId"
+                        :projectData="projectData">
                     </detail-form>
-                    <table-form></table-form>
+                    <table-form
+                        :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                     <industry-form :industryForm="industryForm"></industry-form>
                 </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
-                    <capital-table></capital-table>
+                    <capital-table
+                        :projectData="projectData"></capital-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form></record-form>
@@ -44,7 +50,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions } from 'vuex'
+
 import detailForm from './details'
 import tableForm from './tables'
 // import industryForm from './industry'
@@ -52,9 +59,10 @@ import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
 
-import { getProDetail } from 'api/project';
+import { getProDetail } from 'api/project'
 
 export default {
+    name: 'zprojectPoolMessage',
     data() {
         return {
             title: '双子金服投资项目',
@@ -75,14 +83,6 @@ export default {
             },
             projectData: {}     // 项目池详情信息
         }
-    },
-    components: {
-        detailForm,
-        tableForm,
-        // industryForm,
-        capitalTable,
-        recordForm,
-        fileTable
     },
     created() {
         this.init();
@@ -111,12 +111,12 @@ export default {
                 // console.log('projectPoolId resp: ', resp);
                 let data = resp.data.result;
                 let { projectInfo, projectInvestmentInfo} = data;
-                // this.projectData = data;
-                this.setProjectData(data);
+                this.projectData = data;
+                // this.setProjectData(data);
                 // console.log('pool detail data: ', JSON.stringify(data));
                 if (projectInfo) {
                     //Object.keys(projectInfo).forEach(key => {
-                    //    this.basicForm[key] = projectInfo[key];    
+                    //    this.basicForm[key] = projectInfo[key];
                     //})
                     this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }
@@ -134,11 +134,17 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
+    },
+    components: {
+        detailForm,
+        tableForm,
+        // industryForm,
+        capitalTable,
+        recordForm,
+        fileTable
     }
 }
 </script>
-
-
 
 
 

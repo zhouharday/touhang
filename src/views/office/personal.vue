@@ -171,15 +171,15 @@ export default {
         /************************验证码倒计时结束*********************/
         sendVerificationCode() { //发送验证码 Ajax
             this.time();
-            return service({
-                url: 'api/merchant/validationCode',
-                method: 'post',
-                data: { contactPhone: this.form2.Phone }
-            })
+            // return service({
+            //     url: 'api/merchant/validationCode',
+            //     method: 'post',
+            //     data: { contactPhone: this.form2.Phone }
+            // })
 
-                // this.$http.post('api/merchant/validationCode', {
-                //     contactPhone: this.phonecontactPhone
-                // })
+                this.$http.post(this.api + '/merchant/validationCode', {
+                    contactPhone: this.phonecontactPhone
+                })
                 .then(res => {
                     if (res.data.status == '200') {
                         // this.provinces = res.data.result;

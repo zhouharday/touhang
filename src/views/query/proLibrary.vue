@@ -1,6 +1,6 @@
 <template>
 <div class="proLibrary">
-    <myFilter :chooseInfo="chooseInfo"></myFilter>
+    <myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>
     <div class="title">
         <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
@@ -8,7 +8,7 @@
         </tableHeader>
     </div>
     <el-table :data="proLibrary" border style="width: 100%">
-        <el-table-column prop="projectName" label="项目名称">
+        <el-table-column prop="projectName" label="项目名称" >
         </el-table-column>
         <el-table-column prop="createUserName" label="项目创建人">
         </el-table-column>
@@ -33,45 +33,62 @@ import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
 import {getProjectList} from 'api/search'
 import {getSelectIndex} from 'api/search'
+import Button from "../../../node_modules/iview/src/components/button/button.vue";
 
 export default {
     data() {
         return {
             theme: '#fff',
             titleInfo: {
-                // btnGroup: [{
-                //     icon: 'plus-round',
-                //     explain: '基金'
-                // }, {
-                //     explain: '导入'
-                // }, {
-                //     explain: '模板下载'
-                // }]
+
             },
             chooseInfo: [{
                 title: '项目类型:',
                 details: ['全部', 'PE', 'VC', '定增']
             }],
-            proLibrary: []
+            proLibrary: [],
+            type:'',
+            seartext:'',
+            input:''
         }
     },
     components: {
+        Button,
         tableHeader,
         myFilter
     },
     methods:{
+        aaa(){
+            alert(1)
+        },
         handleIconClick(){
-            alert(a)
+            this.seartext = this.input
+            alert(this.seartext)
+            getProjectList('',this.type,this.seartext).then((res)=>{
+                console.log(res.data)
+                this.proLibrary = res.data.result.list
+            })
+        },
+
+        changelist(el){
+            this.type = el
+            getProjectList('',this.type,this.seartext).then((res)=>{
+                console.log(res.data)
+                this.proLibrary = res.data.result.list
+            })
         }
+
+
     },
     created(){
-        getProjectList().then((res)=>{
+
+        getProjectList('',this.type,this.seartext).then((res)=>{
             console.log(res.data)
             this.proLibrary = res.data.result.list
         })
         getSelectIndex('202').then((res)=>{
             console.log(res.data)
-//            this.chooseInfo = res.data.result.list
+            this.chooseInfo[0].details = res.data.result
         })
     }
 

@@ -210,7 +210,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="tableCancle">取 消</el-button>
-                    <el-button type="primary" @click="saveTabValue(2)">提 交</el-button>
+                    <el-button type="danger" @click="saveTabValue(2)">提 交</el-button>
                 </div>
             </el-dialog>
             <!-- 指派任务 dialog-->
@@ -271,9 +271,10 @@
 
 <style lang="less" scoped>
 section {
+       position: relative;
     >div {
+        min-height: 100%;
         background: #fff;
-        position: relative;
         padding: 24px;
         >button {
             position: absolute;
@@ -784,7 +785,7 @@ export default {
             this.dialogFormVisible2 = false;
         },
         addTaskRecord() { //提交处理过的任务
-            this.$http.post('/api/work/addTaskRecord', {
+            this.$http.post(this.api + '/work/addTaskRecord', {
                 "taskId": this.form1.taskId,
                 "recordDetails": this.form1.reportContent,
                 "disposeUserId": this.userId,
@@ -804,7 +805,7 @@ export default {
                 });
         },
         closeTask(id,num) { //删除任务
-            this.$http.post('/api/work/closeTask', {
+            this.$http.post(this.api + '/work/closeTask', {
                 id: id
             })
                 .then(res => {
@@ -831,7 +832,7 @@ export default {
             return val;
         },
         getUserList() { //获取用户列表
-            this.$http.post('/api/user/queryUserList', {
+            this.$http.post(this.api + '/user/queryUserList', {
                 merchantId: this.$store.state.login.merchants[0].id
             })
                 .then(res => {
@@ -855,7 +856,7 @@ export default {
         /*******发送添加任务数据 Start************/
         sendTaskData1() {
             console.log(this.addTaskForm1);
-            this.$http.post('/api/work/addTask', {
+            this.$http.post(this.api + '/work/addTask', {
                 "taskName": this.addTaskForm1.taskName,
                 "startTime": this.addTaskForm1.createDate,
                 "endTime": this.addTaskForm1.endTime,
@@ -902,7 +903,7 @@ export default {
             }
         },
         getTaskList1(pages) { //获取指派任务列表数据
-            this.$http.post('/api/work/getTaskList', {
+            this.$http.post(this.api + '/work/getTaskList', {
                 "userId": this.userId,
                 "type": 1,
                 "page": pages,
@@ -936,7 +937,7 @@ export default {
                 })
         },
         getTaskList2(pages) { //获取代办任务列表数据
-            this.$http.post('/api/work/getTaskList', {
+            this.$http.post(this.api + '/work/getTaskList', {
                 "userId": this.userId,
                 "type": 2,
                 "page": pages,
@@ -963,7 +964,7 @@ export default {
                 })
         },
         getTaskList3(pages) { //获取已办任务列表数据
-            this.$http.post('/api/work/getTaskList', {
+            this.$http.post(this.api + '/work/getTaskList', {
                 "userId": this.userId,
                 "type": 3,
                 "page": pages,
@@ -990,7 +991,7 @@ export default {
                 })
         },
         getTaskList4(id) { //获取任务详情数据
-            this.$http.post('/api/work/getTaskRecord', {
+            this.$http.post(this.api + '/work/getTaskRecord', {
                 "id": id,
                 "merchantId": this.$store.state.login.merchants[0].id
             })
