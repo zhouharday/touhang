@@ -19,17 +19,17 @@ import {myData} from "common/js/myData"
 export default {
     data() {
         return {
-            theModel: myData
+            theModel: myData,
+            treeData:"",
         }
     },
-    // props: {
-    //     theModel: {
-    //         type: Array,
-    //         default: []
-    //     }
-    // },
     components: {
+
         myTree
+    },
+    props:this.treeData,
+    created() {
+
     }
 }
 </script>

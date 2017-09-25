@@ -34,12 +34,10 @@ export function getNodes(arr) {
 }
 
  function pushNode(node, pNodes) {
-    //  alert(111);
      let charlds = [];
     pNodes.map(function (pNode) {
-        // console.log(pNode.children);
         if (pNode.id == node.parentId) {
-            // console.log('*****:'+ pNode.children);
+
             if (!pNode.children) {
                 // console.log('//////'+pNode);
                 // alert(111)

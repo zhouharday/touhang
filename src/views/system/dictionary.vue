@@ -13,7 +13,6 @@
                         <div v-for="listDic in item.dataDictionary" class="listStyle" >
                             <div  @click="listClick(listDic)">{{listDic.dicName}}</div>
                         </div>
-
                     </el-collapse-item>
                 </div>
             </el-collapse>

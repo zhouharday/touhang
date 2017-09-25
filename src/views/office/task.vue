@@ -9,7 +9,7 @@
                     <Table border :data="data1" :columns="columns1" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div style="float: right;">
-                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page1.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
+                            <el-pagination @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="page3.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page3.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page3.total">
                             </el-pagination>
                         </div>
                     </div>
@@ -271,9 +271,10 @@
 
 <style lang="less" scoped>
 section {
+       position: relative;
     >div {
+        min-height: 100%;
         background: #fff;
-        position: relative;
         padding: 24px;
         >button {
             position: absolute;

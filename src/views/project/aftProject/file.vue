@@ -3,19 +3,31 @@
         <!-- 前期文档部分 -->
         <div class="fileTable" v-show="isShow">
             <!-- <tabel-header :data="headerInfo_file"></tabel-header> -->
-            <div class="title1" style="background:#2a3142;color:#fff">
+            <div class="title_f" style="background:#2a3142;color:#fff">
                 <div class="desc">
-                    <span>前期文档</span>
+                    <span>项目阶段</span>
+                </div>
+                <div class="desc">
+                    <span>文档名称</span>
+                </div>
+                <div class="desc">
+                    <span>上传人</span>
+                </div>
+                <div class="desc">
+                    <span>上传时间</span>
+                </div>
+                <div class="desc">
+                    <span>操作</span>
                 </div>
             </div>
             <el-table :data="fileData" border style="width: 100%" align="center">
                 <el-table-column label="前期文档" prop="stageFile" align="center">
                 </el-table-column>
-                <el-table-column  prop="fileName" align="center">
+                <el-table-column prop="fileName" align="center">
                 </el-table-column>
-                <el-table-column  prop="user" align="center">
+                <el-table-column prop="user" align="center">
                 </el-table-column>
-                <el-table-column  prop="date" align="center">
+                <el-table-column prop="date" align="center">
                 </el-table-column>
                 <el-table-column align="center">
                     <template scope="scope">
@@ -30,15 +42,15 @@
         <!-- 考察报告部分 -->
         <div class="fileTable" v-show="isShow">
             <el-table :data="inspectionData" border style="width: 100%;margin-top:30px" align="center">
-                 <el-table-column label="考察储备" prop="stageFile" align="center">
+                <el-table-column label="考察储备" prop="stageFile" align="center">
                 </el-table-column>
-                <el-table-column  prop="inspectionName" align="center">
+                <el-table-column prop="inspectionName" align="center">
                 </el-table-column>
-                <el-table-column  prop="user" align="center">
+                <el-table-column prop="user" align="center">
                 </el-table-column>
-                <el-table-column  prop="date" align="center">
+                <el-table-column prop="date" align="center">
                 </el-table-column>
-                <el-table-column  align="center">
+                <el-table-column align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" class="border_right" @click="inspectionDialog">上传</el-button>
                         <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
@@ -79,13 +91,13 @@
             <el-table :data="projectData" border style="width: 100%;margin-top:30px" align="center">
                 <el-table-column label="立项会" prop="stageFile" align="center">
                 </el-table-column>
-                <el-table-column  prop="projectName" align="center">
+                <el-table-column prop="projectName" align="center">
                 </el-table-column>
                 <el-table-column prop="user" align="center">
                 </el-table-column>
-                <el-table-column  prop="date" align="center">
+                <el-table-column prop="date" align="center">
                 </el-table-column>
-                <el-table-column  align="center">
+                <el-table-column align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
                         <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
@@ -171,7 +183,7 @@ export default {
             },
             projectData: [{
                 stageFile: 'AAAAAAAAA.PDF',
-                projectName:'AAAAAAAAA.PDF',
+                projectName: 'AAAAAAAAA.PDF',
                 user: '张三',
                 date: '2017-09-09'
             },
@@ -224,18 +236,18 @@ export default {
 .fileTable {
     width: 100%;
     height: 100%;
-    .title1 {
-        margin-top: 30px;
+    .title_f {
+        margin-top: 20px;
         width: 100%;
         height: 42px;
         display: flex;
         align-items: center;
-        background: #eef1f6; // background: rgb(42, 49, 66);
         .desc {
+            width: 20%;
             flex: 1;
-            text-align: left;
+            text-align: center;
             span {
-                color: #1f2d3d;
+                color: #fff;
                 font-weight: 700;
                 margin-left: 24px;
             }

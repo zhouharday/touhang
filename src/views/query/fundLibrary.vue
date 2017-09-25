@@ -46,7 +46,16 @@ export default {
     data() {
         return {
             theme: '#fff',
-            myFund: []
+            myFund: [],
+            input:'',
+        }
+    },
+    methods: {
+        handleIconClick() {
+            getFundLibrary(this.input).then((res)=>{
+                console.log(res.data)
+                this.myFund = res.data.result.list
+            })
         }
     },
     components: {
