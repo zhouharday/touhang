@@ -46,12 +46,10 @@
                 </el-table>
             </el-col>
         </el-row>
-<<<<<<< HEAD
         <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
        </div>
-=======
         <el-row type="flex" align="bottom" class="foot">
             <el-col :span="8">
                 <span>总记录：{{this.total}}条</span>
@@ -64,7 +62,6 @@
                     @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
         </el-row>
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
     </div>
 </template>
 <script>
@@ -72,14 +69,11 @@ import { getAfters } from 'api/projectAfter';
 export default {
     data() {
         return {
-<<<<<<< HEAD
             input: '',
-=======
             total: 0,
             page: 1,
             pageSize: 5,
             projectName: '',
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
             currentIndex: 0,
             sortList: [
                 { sorts: "全部" },

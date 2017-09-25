@@ -73,15 +73,12 @@
                         :proRoles="proRoles"></team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-<<<<<<< HEAD
                                                                                                                                                                           <industry-form :industryForm="industryForm">
                                                                                                                                                                           </industry-form>
                                                                                                                                                                         </el-tab-pane> -->
-=======
                   <industry-form :industryForm="industryForm">
                   </industry-form>
                 </el-tab-pane> -->
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form
                         :proId="proId"></record-form>
@@ -172,7 +169,6 @@
                     <el-table-column prop="time" label="用时" align="center">
                     </el-table-column>
                 </el-table>
-<<<<<<< HEAD
                 <div>
                     <div class="title_f" style="background:#2a3142;color:#fff">
                         <div class="desc">
@@ -232,8 +228,6 @@
                         </p>
                     </div>
                 </div>
-=======
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
             </el-dialog>
         </div>
     </div>
@@ -345,7 +339,6 @@ export default {
                     startingTime: '2017/8/15 16:25:14',
                     time: '4秒'
                 }
-<<<<<<< HEAD
             ],
             commentLists: [ //查看进度表单  意见汇总列表
                 {
@@ -359,10 +352,6 @@ export default {
                     note: '【管理员】2017/08/15'
                 }
             ]
-
-=======
-            ]
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
         }
     },
     components: {

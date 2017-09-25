@@ -53,12 +53,6 @@
                 <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
-<<<<<<< HEAD
-                            <!--
-                                <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
-                                -->
-=======
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">
                                 <div>{{ scope.row.project }}</div>
                             </a>
@@ -115,7 +109,7 @@
                 </el-table>
             </el-col>
         </el-row>
-<<<<<<< HEAD
+
         <el-row>
            <el-col>
                 <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
@@ -123,7 +117,8 @@
                     </el-pagination>
                 </div>
            </el-col>
-=======
+           </el-row>
+
         <el-row type="flex" align="bottom" class="page">
             <el-col :span="8">
                 <span>总记录：{{this.total}}条</span>
@@ -135,7 +130,7 @@
                     @on-change="pageChanged"
                     @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
+
         </el-row>
     </div>
 </template>
@@ -146,12 +141,9 @@ export default {
     name: 'projectPool',
     data() {
         return {
-<<<<<<< HEAD
-=======
             total: 0,    // 总数
             page: 1,     // 当前页数
             pageSize: 5, // 一页数量 
->>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
