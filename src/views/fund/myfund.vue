@@ -5,10 +5,12 @@
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
             <el-input placeholder="请输入搜索内容"
                       icon="search"
-                      v-model="input2"
+                      v-model="fundSearch"
                       :on-icon-click="handleIconClick"
                       autofocus='true'
-                      style="width: 320px;">
+                      style="width: 320px;"
+                      @click="submitSearch"
+                      @blur="submitSearch">
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
@@ -37,13 +39,22 @@
             </el-table-column>
             <el-table-column prop="fundStageId" label="状态" width="200">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="150">
+            <el-table-column fixed="right" label="操作" width="200">
                 <template scope="scope">
+                    <el-button type="text" size="small">基金团队</el-button>
                    <el-button type="text" size="small">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
+    </div>
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange"
+                       @current-change="handleCurrentChange"
+                       :current-page="currentPage"
+                       :page-sizes="[10, 20, 30, 40]"
+                       :page-size="50"
+                       layout="total, sizes, prev, pager, next, jumper"
+                       :total=pageTotal>
         </el-pagination>
     </div>
 </div>
@@ -59,7 +70,8 @@ import {
 } from 'vuex'
 import {
     getManagementType,
-    getMyFundDetails
+    getMyFundDetails,
+    getMyFund
 } from 'api/fund'
 const INDEX = 0;
 const NOW = 0;
@@ -73,13 +85,7 @@ export default {
                 btnGroup: [{
                     icon: 'plus-round',
                     explain: '基金'
-                }
-//                , {
-//                    explain: '导入'
-//                }, {
-//                    explain: '模板下载'
-//                }
-                ]
+                }]
             },
             chooseInfo: [{
                 title: '组织类型：',
@@ -94,7 +100,11 @@ export default {
                 title: '基金状态：',
                 details: ['全部', '中止']
             }],
-            myFund: []
+            fundSearch: '',
+            myFund: [],
+            pageTotal: '',
+            page: 1,
+            pageSize: 10,
         }
     },
     methods: {
@@ -112,7 +122,6 @@ export default {
             this.$router.push('/home/add')
         },
         handleRouter(index, row) {
-            console.log(row.id)
             getMyFundDetails(row.id).then((res) => {
                 if (res.data.status == '200') {
                     this.GET_MYFUNDDETAILS(res.data.result)
@@ -141,10 +150,27 @@ export default {
             alert(2)
         },
         handleSizeChange(val) {
-            console.log(`每页 ${val} 条`);
+            this.pageSize = val
+            getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                }
+            })
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            this.page = val
+            getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                }
+            })
+        },
+        submitSearch() {
+            getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                }
+            })
         },
         ...mapMutations([
             'addTab', // 映射 this.addTab() 为 this.$store.commit
@@ -166,6 +192,13 @@ export default {
         }),
         this.$store.dispatch('getFundStatus').then(() => {
             this.chooseInfo[3].details = this.fundStatus
+        }),
+        getMyFund().then((res) => {
+            if(res.status == '200') {
+                console.log(res)
+                this.pageTotal = res.data.result.total
+                console.log(this.pageTotal)
+            }
         })
     },
     computed: {
@@ -192,6 +225,7 @@ export default {
     min-height: 100%;
     background: @color-base;
     padding: 20px 30px;
+    position: relative;
     .choose {
         width: 100%;
         .lists {
@@ -225,15 +259,19 @@ export default {
     .tables {
         width: 100%;
         padding-top: @font-size-small;
+        padding-bottom: @height-large;
         .table-router();
-        .page {
-            width: 100%;
-            text-align: right;
-            padding: @font-size-large-x 0;
-        }
         .addPadding {
             padding-bottom: 12px;
         }
+    }
+    .page {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        text-align: right;
+        padding: @font-size-large-x 0;
     }
     span.investorName{
         cursor: pointer;

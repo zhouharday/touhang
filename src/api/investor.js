@@ -200,3 +200,73 @@ export function getAgreementAmountList(invId, merId) {
         data
     })
 }
+// 修改出资协议 /investor/updateAgreementAmount
+export function updateAgreementAmount(updateInfo) {
+    const data = updateInfo
+    return service({
+        url: '/investor/updateAgreementAmount',
+        method: 'post',
+        data
+    })
+}
+// 删除出资协议 /investor/deleteAgreementAmount
+export function deleteAgreementAmount(deleteId){
+    const data = {
+        id: deleteId
+    }
+    return service({
+        url: '/investor/updateAgreementAmount',
+        method: 'post',
+        data
+    })
+}
+// 添加出资协议 /investor/addAgreementAmount
+export function addAgreementAmount(addInfo) {
+    const data = addInfo
+    return service({
+        url: '/investor/addAgreementAmount',
+        method: 'post',
+        data
+    })
+}
+// 获取该投资者的退出/分红协议列表 /investor/getEarningsAmountList
+export function getEarningsAmountList(inverstorId, merchantId) {
+    const data = {
+        inverstorId: inverstorId,
+        merchantId: merchantId
+    }
+    return service({
+        url: '/investor/getEarningsAmountList',
+        method: 'post',
+        data
+    })
+}
+// 添加退出协议 /investor/addEarningsAmount
+export function addEarningsAmount(addInfo) {
+    const data = addInfo
+    return service({
+        url: '/investor/addEarningsAmount',
+        method: 'post',
+        data
+    })
+}
+// 编辑退出协议 /investor/updateEarningsAmount
+export function updateEarningsAmount(updateInfo) {
+    const data = updateInfo
+    return service({
+        url: '/investor/updateEarningsAmount',
+        method: 'post',
+        data
+    })
+}
+// 删除退出协议 /investor/deleteEarningsAmount
+export function deleteEarningsAmount(deleteId){
+    const data = {
+        id: deleteId
+    }
+    return service({
+        url: '/investor/deleteEarningsAmount',
+        method: 'post',
+        data
+    })
+}

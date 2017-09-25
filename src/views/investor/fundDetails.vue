@@ -34,6 +34,7 @@
 
 <script type="text/ecmascript-6">
 import fundsModal from './fundsModal'
+import {updateAgreementAmount, deleteAgreementAmount} from 'api/investor'
 export default {
     props: {
         investorData: {
@@ -54,7 +55,7 @@ export default {
                 contributiveRatio: '', //出资占比
                 id: '', //本条记录ID
                 paidAmount: '', //实缴金额
-                handler: '',  // 经办人
+                managerId: '',  // 经办人
                 handlingDate: new Date()
             }
         }
@@ -63,6 +64,23 @@ export default {
         handleEdit(index, row) {
             this.fundsDetailsModal = true
             this.fundsInfo = row
+        },
+        handleDelete(index, row) {
+            deleteAgreementAmount(row.id).then((res) => {
+                if(res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！')
+                }
+            })
+        },
+        confirmCancel() {
+            this.fundsDetailsModal = false
+        },
+        confirmModal() {
+            updateAgreementAmount(this.fundsInfo).then((res) => {
+                if(res.status == '200') {
+                    this.$Message.success(res.data.message || '修改出资成功！')
+                }
+            })
         }
     },
     components: {

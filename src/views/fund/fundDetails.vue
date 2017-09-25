@@ -58,19 +58,19 @@
                 </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
-                <team></team>
+                <team :teamData="teamData"></team>
             </el-tab-pane>
             <el-tab-pane label="审批" name="examine" class="tab_list">
                 <examine></examine>
             </el-tab-pane>
             <el-tab-pane label="投资者" name="Investor" class="tab_list">
-                <investor></investor>
+                <investor :investorData="investorData"></investor>
             </el-tab-pane>
             <el-tab-pane label="投资项目" name="project" class="tab_list">
-                <projects></projects>
+                <projects :projectsData="projectsData"></projects>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
-                <my-file></my-file>
+                <my-file :fileListData="fileListData"></my-file>
             </el-tab-pane>
             <el-tab-pane label="运营管理" name="manage" class="tab_list">
                 <manage></manage>
@@ -93,6 +93,9 @@ import echarts from '../../components/echarts'
 import {
     mapGetters
 } from 'vuex'
+
+import {getFundTeamList, getInvestorByFund, getProjectContractByFund, selectProjectOrFundDocument} from 'api/fund'
+
 export default {
     data() {
         return {
@@ -150,7 +153,44 @@ export default {
             formDetails: {},
             // formMIS: {},
             // formRegistration: {},
-            // formAccountinfo: {}
+            // formAccountinfo: {},
+            teamData: [], //团队列表
+            investorData: [], // 投资者列表
+            fileListData: [], // 文档列表
+            projectsData: [] // 投资项目
+        }
+    },
+    methods: {
+        handleClick() {
+            if(this.activeName == 'team') {
+                getFundTeamList(this.$route.params.id).then((res) => {
+                    if(res.status == '200') {
+                        console.log('团队：' + res.data.result)
+                        this.teamData = res.data.result
+                    }
+                })
+            } else if (this.activeName == 'Investor') {
+                getInvestorByFund(this.$route.params.id).then((res) => {
+                    if(res.status == '200') {
+                        console.log(res.data.result) // 投资者数据为空
+                        this.investorData = res.data.result
+                    }
+                })
+            } else if (this.activeName == 'project') {
+                getProjectContractByFund(this.$route.params.id).then((res) => {
+                    if(res.status == '200') {
+                        console.log(res) // 投资项目数据为空
+                        this.projectsData = res.data.result
+                    }
+                })
+            } else if(this.activeName == 'file') {
+                selectProjectOrFundDocument(this.$route.params.id).then((res) => {
+                    if(res.status == '200') {
+                        console.log(res.data.result)
+                        this.fileListData = res.data.result
+                    }
+                })
+            }
         }
     },
     computed: {

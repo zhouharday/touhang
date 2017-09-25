@@ -43,7 +43,7 @@ const mutations = {
                 return;
             }
         }
-        
+
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },
