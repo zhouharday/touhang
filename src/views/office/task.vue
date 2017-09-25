@@ -210,7 +210,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="tableCancle">取 消</el-button>
-                    <el-button type="primary" @click="saveTabValue(2)">提 交</el-button>
+                    <el-button type="danger" @click="saveTabValue(2)">提 交</el-button>
                 </div>
             </el-dialog>
             <!-- 指派任务 dialog-->

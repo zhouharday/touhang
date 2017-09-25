@@ -3,7 +3,7 @@
     <el-row :gutter="20">
         <el-col :span="8">
             <div class="roleBtn">
-                <el-button>添加</el-button>
+                <el-button type="danger">添加</el-button>
             </div>
             <div class="roleContent">
 
@@ -87,6 +87,9 @@ export default {
     }
     .right {
         text-align: right;
+    }
+    th{
+        background-color: #2A3142;
     }
 }
 </style>

@@ -73,11 +73,13 @@ export default {
                 btnGroup: [{
                     icon: 'plus-round',
                     explain: '基金'
-                }, {
-                    explain: '导入'
-                }, {
-                    explain: '模板下载'
-                }]
+                }
+//                , {
+//                    explain: '导入'
+//                }, {
+//                    explain: '模板下载'
+//                }
+                ]
             },
             chooseInfo: [{
                 title: '组织类型：',

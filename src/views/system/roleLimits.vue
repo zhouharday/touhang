@@ -1,7 +1,7 @@
 <template>
     <div class="roleLimits">
         <div class="btn_wrapper">
-            <el-button>修改权限</el-button>
+            <el-button type="danger">修改权限</el-button>
         </div>
         <div class="textWrapper">
             <el-row>

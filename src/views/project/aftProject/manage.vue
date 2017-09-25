@@ -31,7 +31,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="costAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmCostAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmCostAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目费用 对话框-->
@@ -49,7 +49,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="costAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmCostAdd2()">确 定</el-button>
+                            <el-button type="danger" @click="confirmCostAdd2()">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -171,7 +171,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="contractAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmContractAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmContractAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 添加 出资主体dialog -->
@@ -192,7 +192,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="fundAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmFundAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmFundAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目合同 对话框-->
@@ -290,7 +290,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="contractAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmContractAdd2">确 定</el-button>
+                            <el-button type="danger" @click="confirmContractAdd2">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 添加 出资主体dialog -->
@@ -311,7 +311,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="fundAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmFundAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmFundAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -424,7 +424,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="paidAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmPaidAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmPaidAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑投资支付 对话框-->
@@ -515,7 +515,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="paidAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmPaidAdd2">确 定</el-button>
+                            <el-button type="danger" @click="confirmPaidAdd2">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -610,7 +610,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="sharingAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmSharingAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目分红 对话框-->
@@ -683,7 +683,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="sharingAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmSharingAdd2">确 定</el-button>
+                            <el-button type="danger" @click="confirmSharingAdd2">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>

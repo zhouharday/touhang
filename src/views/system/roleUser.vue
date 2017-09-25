@@ -1,7 +1,7 @@
 <template>
     <div class="roleUser">
         <div class="btn_wrapper">
-            <el-button @click="openDialog">添加用户</el-button>
+            <el-button type="danger" @click="openDialog">添加用户</el-button>
         </div>
         <el-table :data="roleUser" border style="width: 100%">
             <el-table-column label="名称" prop="name"></el-table-column>

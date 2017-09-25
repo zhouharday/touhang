@@ -35,7 +35,7 @@
                     </el-form>
                 </div>
                 <div class="btn">
-                    <el-button @click="showSubscriber">添加</el-button>
+                    <el-button type="danger" @click="showSubscriber">添加</el-button>
                 </div>
             </div>
             <el-table :data="subscriberData" border style="width: 100%">
@@ -63,12 +63,12 @@
                           size="small">
                           锁定/启用
                         </el-button>
-                        <el-button
-                          @click.native.prevent="deleteRow(scope.$index, scope.row)"
-                          type="text"
-                          size="small">
-                          密码初始化
-                        </el-button>
+                        <!--<el-button-->
+                          <!--@click.native.prevent="deleteRow(scope.$index, scope.row)"-->
+                          <!--type="text"-->
+                          <!--size="small">-->
+                          <!--密码初始化-->
+                        <!--</el-button>-->
                     </template>
                 </el-table-column>
             </el-table>
@@ -130,8 +130,8 @@
             </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalIncome = false">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
+            <el-button type="default" @click="modalIncome = false">取 消</el-button>
+            <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
 </div>
