@@ -9,14 +9,14 @@
                 <el-form-item label="企业logo:">
                     <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
                         <div style="padding: 20px 0">
-                            <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                            <Icon type="ios-cloud-upload" size="52" style="color: #F05E5E"></Icon>
                             <p>点击或将文件拖拽到这里上传</p>
                         </div>
                     </Upload>
                 </el-form-item>
                 <el-form-item class="btn_wrapper">
-                    <el-button class="changeWidth" type="primary" @click="onSubmit">立即创建</el-button>
-                    <el-button class="changeWidth">取消</el-button>
+                    <el-button class="changeWidth" type="danger" @click="onSubmit">立即创建</el-button>
+                    <el-button type="default" class="changeWidth">取消</el-button>
                 </el-form-item>
             </el-form>
         </el-col>

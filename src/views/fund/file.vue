@@ -197,7 +197,7 @@ export default {
         .right {
             flex: 1;
             color: #1f2d3d;
-            font-weight: blod;
+            font-weight: bold;
             line-height: 42px;
         }
     }

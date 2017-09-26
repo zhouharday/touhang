@@ -35,7 +35,7 @@
                     </el-form>
                 </div>
                 <div class="btn">
-                    <el-button type="danger" @click="showSubscriber">添加</el-button>
+                    <el-button type="danger" size="small" @click="showSubscriber">添加</el-button>
                 </div>
             </div>
             <el-table :data="subscriberData" border style="width: 100%">

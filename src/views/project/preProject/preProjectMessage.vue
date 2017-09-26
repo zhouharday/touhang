@@ -25,7 +25,7 @@
             <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fiveth_step}">
                 <span>{{step_fiveth}}</span>
             </el-col>
-            </el-col>
+
             <el-col :span="4" class="step_third step_span" :class="{'step_span_change step_third_change':sixth_step}">
                 <span>{{step_sixth}}</span>
             </el-col>
@@ -59,9 +59,9 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form 
-                        :basicForm="basicForm" 
-                        :companyForm="companyForm" 
+                    <detail-form
+                        :basicForm="basicForm"
+                        :companyForm="companyForm"
                         :capitalForm="capitalForm">
                     </detail-form>
                     <table-form></table-form>
@@ -75,7 +75,7 @@
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
                                                                                                                                                                           <industry-form :industryForm="industryForm">
                                                                                                                                                                           </industry-form>
-                                                                                                                                                                        </el-tab-pane> -->
+                                                                                                                                                                        </el-tab-pane>
                   <industry-form :industryForm="industryForm">
                   </industry-form>
                 </el-tab-pane> -->
@@ -271,7 +271,7 @@ export default {
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
             proUsers: [],   // 项目用户列表
-            proRoles: [],   // 项目角色列表 
+            proRoles: [],   // 项目角色列表
             module: [{
                 count: 1,
                 desc: '上传项目考察报告',
@@ -486,7 +486,7 @@ export default {
             //      break;
             //    case 2:
             //      this.progressModal = true;
-            //      break; 
+            //      break;
             // }
         },
         disable(name) {
