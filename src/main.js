@@ -29,6 +29,7 @@ Vue.prototype.api = 'http://18f46963j4.iok.la'; //外网请求时 URL
 // Vue.prototype.api = ''; //上线时 URL
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
 // Vue.prototype.$http = axios.create();
+<<<<<<< HEAD
 // Vue.prototype.$http.defaults.baseURL = 'http://18f46963j4.iok.la';
 // Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.prototype.$http = axios.create({
@@ -49,6 +50,8 @@ Vue.prototype.api = 'http://18f46963j4.iok.la'; //外网请求时 URL
 // });
 
 
+=======
+>>>>>>> 60234c3bbb0d4001862ee3748e911417c40576cc
 
 var vm = new Vue({
     router,

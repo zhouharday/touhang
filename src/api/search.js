@@ -47,6 +47,46 @@ export  function getFundLibrary(searchText) {
 }
 
 
+/*******************************项目文档******************************************/
+//左侧列表and搜索
+export  function getLeftList(name) {
+    const data = {
+        "projectName" : name,
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    return service({url: 'investProject/getProjectAllList', method: 'post', data})
+}
+// /dictionaryController/selectAllStageDocument
+export  function getRightList(typeId) {
+    const data = {
+        "typeId" : typeId,
+        "type":'1', //标识 1：项目 2：基金
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    console.log(data)
+    return service({url: '/dictionaryController/selectAllStageDocument', method: 'post', data})
+}
+
+/*******************************项目文档******************************************/
+//左侧列表and搜索
+export  function getFundLeftList(name) {
+    const data = {
+        "fundName" : name,
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    return service({url: '/fund/selectAllFund', method: 'post', data})
+}
+// /dictionaryController/selectAllStageDocument
+export  function getFundRightList(typeId) {
+    const data = {
+        "typeId" : typeId,
+        "type":'2', //标识 1：项目 2：基金
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    console.log(data)
+    return service({url: '/dictionaryController/selectAllStageDocument', method: 'post', data})
+}
+
 
 /*******************************公用请求******************************************/
 //公用索引
