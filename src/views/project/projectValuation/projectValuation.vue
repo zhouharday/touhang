@@ -8,12 +8,7 @@
             <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-<<<<<<< HEAD
-                        <li v-for="(item,index) in stateList" :key="item.index"
-                            :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index, item)">
-=======
                         <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index, item)">
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                             {{item.state}}
                         </li>
                     </ul>
@@ -49,19 +44,15 @@
                     </el-table-column>
                     <el-table-column prop="valuationParameter" label="估值参数" align="center" width="400px">
                         <template scope="scope">
-                            <span
-                                v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
+                            <span v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
                             <span v-if="scope.row.editFlag" class="cell-edit-input">
                                 <el-row width="100%">
                                     <el-col style="line-height:47px">
-                                        <el-input v-model="scope.row.parameter1" auto-complete="off"
-                                                  style="width:50px;height:47px"></el-input>
+                                        <el-input v-model="scope.row.parameter1" auto-complete="off" style="width:50px;height:47px"></el-input>
                                         *PB
-                                        <el-input v-model="scope.row.parameter2" auto-complete="off"
-                                                  style="width:50px;height:47px"></el-input>
+                                        <el-input v-model="scope.row.parameter2" auto-complete="off" style="width:50px;height:47px"></el-input>
                                         *股权占比
-                                        <el-input v-model="scope.row.parameter3" disabled auto-complete="off"
-                                                  style="width:50px;height:47px"></el-input>
+                                        <el-input v-model="scope.row.parameter3" disabled auto-complete="off" style="width:50px;height:47px"></el-input>
                                     </el-col>
                                 </el-row>
                             </span>
@@ -77,11 +68,9 @@
                     </el-table-column>
                     <el-table-column fixed="right" label="操作" align="center" width="200px">
                         <template scope="scope">
-                            <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e"
-                                       @click="checkEdit(scope.$index,scope.row)">编辑
+                            <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
                             </el-button>
-                            <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e"
-                                       @click="checkEdit(scope.$index,scope.row)">保存
+                            <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">保存
                             </el-button>
                         </template>
                     </el-table-column>
@@ -89,36 +78,14 @@
             </el-col>
         </el-row>
         <div class="page">
-<<<<<<< HEAD
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                           :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100"
-                           layout="total, sizes, prev, pager, next, jumper" :total="400">
-            </el-pagination>
-        </div>
-        <el-row type="flex" align="bottom" class="foot">
-            <el-col :span="8">
-                <span>总记录：{{this.total}}条</span>
-            </el-col>
-            <el-col :span="16">
-                <Page style="float:right"
-                      :total="total"
-                      :current="page"
-                      @on-change="pageChanged"
-                      @on-page-size-change="pageSizeChanged"></Page>
-            </el-col>
-        </el-row>
-=======
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
         </div>
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
     </div>
 </template>
 
 <script>
-<<<<<<< HEAD
-    import {getProjectValuation} from 'api/project';
-
+    import { getProjectValuation } from 'api/project';
     export default {
         data() {
             return {
@@ -128,16 +95,15 @@
                 projectName: '',
                 currentIndex: 1,
                 stateList: [
-                    {state: "状态："},
-                    {state: "全部"},
-                    {state: "未提交"},
-                    {state: "已提交"}
+                    { state: "全部" },
+                    { state: "未估值" },
+                    { state: "已估值" }
                 ],
                 tableData: [
                     {
                         project: 'AAAAAAAA',
                         valuationParameter: '市净率1000*20*5%',
-                        valuation: '',
+                        valuation: '0.00',
                         valuationDate: '',
                         valuationOfficer: '',
                         state: ''
@@ -145,30 +111,6 @@
                 ],
                 form: {
                     algorithmType: ''
-=======
-import { getProjectValuation } from 'api/project';
-export default {
-    data() {
-        return {
-            total: 0,
-            page: 1,
-            pageSize: 5,
-            projectName: '',
-            currentIndex: 1,
-            stateList: [
-                { state: "全部" },
-                { state: "未估值" },
-                { state: "已估值" }
-            ],
-            tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '0.00',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                 }
             }
         },
@@ -243,18 +185,12 @@ export default {
         }
     }
 
-<<<<<<< HEAD
-    .fow {
+    .tag {
+        margin-top: 20px;
+        margin-bottom: 5px;
+        font-size: 14px;
         font-weight: bold;
     }
-=======
-.tag {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
 
     .active {
         width: 70px;
@@ -274,7 +210,6 @@ export default {
         border-bottom: 1px solid #F05E5E;
     }
 
-<<<<<<< HEAD
     .page {
         width: 100%;
         padding: 15px 30px;
@@ -283,16 +218,6 @@ export default {
         bottom: 0;
         right: 0;
     }
-=======
-.page {
-    width: 100%;
-    padding: 15px 30px;
-    text-align: right;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
 </style>
 
 
@@ -303,10 +228,10 @@ export default {
                 input: '',
                 currentIndex: 1,
                 stateList: [
-                    {state: "状态："},
-                    {state: "全部"},
-                    {state: "未提交"},
-                    {state: "已提交"}
+                    { state: "状态：" },
+                    { state: "全部" },
+                    { state: "未提交" },
+                    { state: "已提交" }
                 ],
                 tableData: [
                     {
