@@ -63,7 +63,7 @@ Object.keys(proxyTable).forEach(function (context) {
         }
     }
     //请求公司IP 时启用代理
-    // app.use(proxyMiddleware(options.filter || context, options))
+    app.use(proxyMiddleware(options.filter || context, options))
 })
 
 // handle fallback for HTML5 history API
