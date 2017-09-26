@@ -84,6 +84,7 @@ export default {
 
 
         getDictionary('identification').then((res)=>{
+            console.log('******')
             console.log(res.data.result)
 //            this.theModel = res.data.result
                 this.dic = res.data.result
