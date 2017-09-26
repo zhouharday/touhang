@@ -45,7 +45,7 @@
         <!--所在地ul-->
         <div class="common">
             <el-row>
-                <el-col :span="1" style="width:66px">
+                <el-col :span="1">
                     <div class="tag_s">所在地：</div>
                 </el-col>
                 <el-col :span="23">

@@ -39,12 +39,12 @@
             <el-col :span="19" class="imdo">
                 <!-- 后期所做导入和下载模板功能 -->
                 <!-- <div class="importProject">
-                                           <el-upload class="upload-demo" ref="upload"
-                                                action="" :auto-upload="false">
-                                                <el-button type="text">导入</el-button>
-                                           </el-upload>
-                                           <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-                                       </div> -->
+                                                   <el-upload class="upload-demo" ref="upload"
+                                                        action="" :auto-upload="false">
+                                                        <el-button type="text">导入</el-button>
+                                                   </el-upload>
+                                                   <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
+                                               </div> -->
             </el-col>
         </el-row>
         <!--项目table -->
@@ -69,7 +69,7 @@
                             <el-button type="text" size="small" @click="modalAdd=true">
                                 项目团队
                             </el-button>
-                            <el-button type="text" size="small" @click="deleteRow(scope.$index,tableData)">
+                            <el-button type="text" size="small" @click="deleteReminders=true">
                                 删除
                             </el-button>
                         </template>
@@ -112,20 +112,25 @@
                 </div>
             </el-dialog>
         </div>
+        <!-- 删除弹出框 -->
+        <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="deleteReminders=false" @cancel="deleteReminders=false">
+        </delete-reminders>
     </div>
 </template>
 <script>
 import { getPres } from 'api/projectPre';
 import { getProjectUsers, getProjectRoles } from 'api/projectSys';
-
+import deleteReminders from 'components/deleteReminders'
 export default {
     name: 'preProject',
     data() {
         return {
-            // total: 0,    // 总数
-            // page: 1,     // 当前页数
-            // pageSize: 5, // 一页数量 
+            // 项目成员
             modalAdd: false,
+            // 删除按钮组件
+            deleteReminders: false,
+            modal_loading: false,
+            message: '是否确认从投资项目中删除该项目？',
             projectName: '',
             projectType: '',
             input: '',
@@ -172,8 +177,11 @@ export default {
                     value: '选项1',
                     label: '角色一'
                 }
-            ],
+            ]
         }
+    },
+    components: {
+        deleteReminders
     },
     created() {
         this.init();
@@ -299,8 +307,9 @@ export default {
         }
     }
 }
-
 </script>
+
+
 <style lang="less" scoped>
 .preContent {
     position: relative;

@@ -635,14 +635,16 @@ ul li {
 /*项目估值页*/
 .projectValue {
      // row-table的css style
-     .el-table th {
+     .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
         background-color: #2A3142;
     }
-    .el-table__footer-wrapper thead div,
-    .el-table__header-wrapper thead div {
-        color: #fff;
-        font-weight: normal;
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
         background-color: #2A3142;
+        color: #fff;
     }
     .el-form-item {
         margin-bottom: 0;
