@@ -75,11 +75,12 @@ export function fundStatus() {
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
 // 获取所有的合作机构
-export function getOrgList() {
+export function getOrgList(name, num, lists) {
     const data = {
-        orgName: "", //传空的时候为全部 机构名称
+        orgName: name, //传空的时候为全部 机构名称
         merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id必传"
-        // merchantId: "123456"
+        page: num,
+        pageSize: lists
     }
     return service({url: '/organization/getOrgList', method: 'post', data})
 }
@@ -159,4 +160,15 @@ export function selectProjectOrFundDocument(fundId) {
         type: 2 //标识1：项目 2：基金 3：投资者
     }
     return service({url: '/dictionaryController/selectProjectOrFundDocument', method: 'post', data})
+}
+//基金估值信息 /fund/getFunAppraisement
+export function getFunAppraisement(id) {
+    const data = {
+        fundId: id
+    }
+    return service({
+        url: '/fund/getFunAppraisement',
+        method: 'post',
+        data
+    })
 }

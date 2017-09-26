@@ -79,10 +79,10 @@
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                            <template scope="scope">
-                                <div class="fow">{{ scope.row.manager }}</div>
-                            </template>
-                        </el-table-column> -->
+                                <template scope="scope">
+                                    <div class="fow">{{ scope.row.manager }}</div>
+                                </template>
+                            </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.datetime }}</div>
@@ -100,8 +100,8 @@
                             <el-dialog title="转投资" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转投资？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="danger" @click.native.prevent="jumpPre()">确 定</el-button>
+                                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="danger" @click="jumpPre">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -109,28 +109,13 @@
                 </el-table>
             </el-col>
         </el-row>
-
         <el-row>
-           <el-col>
+            <el-col>
                 <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
                     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
                     </el-pagination>
                 </div>
-           </el-col>
-           </el-row>
-
-        <el-row type="flex" align="bottom" class="page">
-            <el-col :span="8">
-                <span>总记录：{{this.total}}条</span>
             </el-col>
-            <el-col :span="16">
-                <Page style="float:right"
-                    :total="total" 
-                    :current="page"
-                    @on-change="pageChanged"
-                    @on-page-size-change="pageSizeChanged"></Page>
-            </el-col>
-
         </el-row>
     </div>
 </template>
@@ -327,11 +312,11 @@ export default {
             this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {
-            this.$store.commit({ 
-                type: 'addTab', 
-                title: th, 
-                url: url, 
-                name: name 
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
             });
         },
         deleteRow(index, tableData) {
@@ -376,16 +361,16 @@ export default {
     background: #fff;
     .common {
         padding: 0 30px 20px 30px;
-          ul {
-             float: left;
-               li {
-                    display: inline-block;
-                    box-sizing: border-box;
-                    margin-right: 30px;
-                    margin-bottom: 5px;
-                    cursor: pointer;
-               }
-          }
+        ul {
+            float: left;
+            li {
+                display: inline-block;
+                box-sizing: border-box;
+                margin-right: 30px;
+                margin-bottom: 5px;
+                cursor: pointer;
+            }
+        }
     }
     .changeList {
         height: 20px;
@@ -479,5 +464,4 @@ export default {
         border-bottom: 1px solid #F05E5E;
     }
 }
-
 </style>

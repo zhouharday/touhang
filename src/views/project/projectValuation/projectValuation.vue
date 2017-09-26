@@ -2,11 +2,18 @@
     <div class="projectValue">
         <!-- 状态ul -->
         <el-row class="common">
-            <el-col :span="24" style="margin-top:20px">
+            <el-col :span="1">
+                <div class="tag">状态：</div>
+            </el-col>
+            <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
+<<<<<<< HEAD
                         <li v-for="(item,index) in stateList" :key="item.index"
                             :class="{active: index==currentIndex,fow: index==0}" @click="changeActive(index, item)">
+=======
+                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index, item)">
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                             {{item.state}}
                         </li>
                     </ul>
@@ -23,10 +30,24 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
-                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item">
-                    <el-table-column prop="project" label="项目名称" align="center">
+                <el-table :data="tableData" style="width:100%" border class="table-item">
+                    <el-table-column prop="project" fixed label="项目名称" align="center" width="200px">
                     </el-table-column>
-                    <el-table-column prop="valuationParameter" label="估值参数" align="center" width="450px">
+                    <el-table-column label="算法类型" align="center" width="215px">
+                        <template scope="scope">
+                            <el-form :model="form">
+                                <el-form-item>
+                                    <el-select v-model="form.algorithmType" placeholder="请选择算法类型">
+                                        <el-option label="市净率法" value="市净率法"></el-option>
+                                        <el-option label="市盈率法" value="市盈率法"></el-option>
+                                        <el-option label="市销售法" value="市销售法"></el-option>
+                                        <el-option label="市场率" value="市场率"></el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-form>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="valuationParameter" label="估值参数" align="center" width="400px">
                         <template scope="scope">
                             <span
                                 v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
@@ -46,29 +67,15 @@
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="valuation" label="估值（元）" align="center">
+                    <el-table-column prop="valuation" label="估值（元）" align="center" width="200px">
                     </el-table-column>
-                    <el-table-column prop="valuationDate" label="估值日期" align="center">
+                    <el-table-column prop="valuationDate" label="估值日期" align="center" width="200px">
                     </el-table-column>
-                    <el-table-column prop="valuationOfficer" label="估值人员" align="center">
+                    <el-table-column prop="valuationOfficer" label="估值人员" align="center" width="200px">
                     </el-table-column>
-                    <el-table-column prop="state" label="状态" align="center">
+                    <el-table-column prop="state" label="状态" align="center" width="200px">
                     </el-table-column>
-                    <el-table-column label="算法类型" align="center" width="215px">
-                        <template scope="scope">
-                            <el-form :model="form">
-                                <el-form-item>
-                                    <el-select v-model="form.algorithmType" placeholder="请选择算法类型">
-                                        <el-option label="市净率法" value="市净率法"></el-option>
-                                        <el-option label="市盈率法" value="市盈率法"></el-option>
-                                        <el-option label="市销售法" value="市销售法"></el-option>
-                                        <el-option label="市场率" value="市场率"></el-option>
-                                    </el-select>
-                                </el-form-item>
-                            </el-form>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作" align="center">
+                    <el-table-column fixed="right" label="操作" align="center" width="200px">
                         <template scope="scope">
                             <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e"
                                        @click="checkEdit(scope.$index,scope.row)">编辑
@@ -82,6 +89,7 @@
             </el-col>
         </el-row>
         <div class="page">
+<<<<<<< HEAD
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
                            :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100"
                            layout="total, sizes, prev, pager, next, jumper" :total="400">
@@ -99,10 +107,16 @@
                       @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
         </el-row>
+=======
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            </el-pagination>
+        </div>
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
     </div>
 </template>
 
 <script>
+<<<<<<< HEAD
     import {getProjectValuation} from 'api/project';
 
     export default {
@@ -131,6 +145,30 @@
                 ],
                 form: {
                     algorithmType: ''
+=======
+import { getProjectValuation } from 'api/project';
+export default {
+    data() {
+        return {
+            total: 0,
+            page: 1,
+            pageSize: 5,
+            projectName: '',
+            currentIndex: 1,
+            stateList: [
+                { state: "全部" },
+                { state: "未估值" },
+                { state: "已估值" }
+            ],
+            tableData: [
+                {
+                    project: 'AAAAAAAA',
+                    valuationParameter: '市净率1000*20*5%',
+                    valuation: '0.00',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: ''
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                 }
             }
         },
@@ -205,9 +243,18 @@
         }
     }
 
+<<<<<<< HEAD
     .fow {
         font-weight: bold;
     }
+=======
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
 
     .active {
         width: 70px;
@@ -227,6 +274,7 @@
         border-bottom: 1px solid #F05E5E;
     }
 
+<<<<<<< HEAD
     .page {
         width: 100%;
         padding: 15px 30px;
@@ -235,6 +283,16 @@
         bottom: 0;
         right: 0;
     }
+=======
+.page {
+    width: 100%;
+    padding: 15px 30px;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
 </style>
 
 

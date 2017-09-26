@@ -94,7 +94,7 @@ import {
     mapGetters
 } from 'vuex'
 
-import {getFundTeamList, getInvestorByFund, getProjectContractByFund, selectProjectOrFundDocument} from 'api/fund'
+import {getFundTeamList, getInvestorByFund, getProjectContractByFund, selectProjectOrFundDocument, getFunAppraisement} from 'api/fund'
 
 export default {
     data() {

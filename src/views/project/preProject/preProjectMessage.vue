@@ -6,7 +6,7 @@
             </div>
             <div class="right">
                 <el-button type="danger" @click="changeStep">下一阶段</el-button>
-                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend">中止</el-button>
+                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止</el-button>
             </div>
         </div>
         <el-row class="step">
@@ -50,8 +50,8 @@
                             {{item.info}}
                         </el-button>
                         <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                                                                                            {{item.info}}
-                                                                                                                                        </el-button> -->
+                                                                                                                                                                {{item.info}}
+                                                                                                                                                            </el-button> -->
                     </div>
                 </div>
             </div>
@@ -59,29 +59,35 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
+<<<<<<< HEAD
                     <detail-form
                         :basicForm="basicForm"
                         :companyForm="companyForm"
                         :capitalForm="capitalForm">
+=======
+                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table
-                        :proId="proId"
-                        :proUsers="proUsers"
-                        :proRoles="proRoles"></team-table>
+                    <team-table :proId="proId" :proUsers="proUsers" :proRoles="proRoles">
+                    </team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
+<<<<<<< HEAD
                                                                                                                                                                           <industry-form :industryForm="industryForm">
                                                                                                                                                                           </industry-form>
                                                                                                                                                                         </el-tab-pane>
                   <industry-form :industryForm="industryForm">
                   </industry-form>
                 </el-tab-pane> -->
+=======
+                                <industry-form :industryForm="industryForm"></industry-form>
+                            </el-tab-pane> -->
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form
-                        :proId="proId"></record-form>
+                    <record-form :proId="proId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
                     <approve-table></approve-table>
@@ -90,19 +96,19 @@
                     <file-table></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table
-                        :proId="proId"
-                        :proUsers="proUsers"></risk-table>
+                    <risk-table :proId="proId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table
-                        :proId="proId"></manage-table>
+                    <manage-table :proId="proId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>
                 </el-tab-pane>
             </el-tabs>
         </div>
+        <!-- 中止确认弹框 -->
+        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
+        </delete-reminders>
         <!-- 发起申请 对话框-->
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
@@ -243,6 +249,7 @@ import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
+import deleteReminders from 'components/deleteReminders'
 
 import { getPreDetail } from 'api/projectPre';
 import { getProjectUsers, getProjectRoles } from 'api/projectSys';
@@ -252,6 +259,11 @@ const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基
 export default {
     data() {
         return {
+            deleteReminders: false,
+            message_title: '确认中止',
+            message: '是否确认中止该项目？',
+            btnText: '中止',
+            modal_loading: false,
             first_step: true,
             second_step: false,
             third_step: false,
@@ -355,6 +367,7 @@ export default {
         }
     },
     components: {
+        deleteReminders,
         detailForm,
         tableForm,
         teamTable,
@@ -479,7 +492,6 @@ export default {
             } else if (index == 2) {
                 this.progressModal = true;
             }
-
             // switch (index) {
             //    case 1:
             //      this.applyModal = true;
@@ -504,10 +516,22 @@ export default {
                 return 'positive-row';
             }
             return '';
+        },
+        jumpPool() {
+            this.deleteReminders = !this.deleteReminders;
+            this.addTab('项目池', '/home/projectPool', 'projectPool');
+            this.$router.push({ name: 'projectPool' });
+        },
+        addTab(th, url, name) {
+            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         }
     }
 }
 </script>
+
+
+
+
 <style lang="less" scoped>
 .preProjectMessage {
     width: 100%;

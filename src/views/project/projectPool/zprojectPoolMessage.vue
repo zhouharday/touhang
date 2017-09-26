@@ -6,37 +6,53 @@
                 <el-button size="small" class="state">{{state}}</el-button>
             </div>
             <div class="right">
-                <el-button type="danger" size="small" @click="dialogVisible=true">投资</el-button>
-                <el-button type="danger" size="small">观察</el-button>
-                <el-button type="danger" size="small">淘汰</el-button>
+                <el-button v-show="isShow" type="danger" size="small" @click="changeNormal">正常</el-button>
+                <el-button v-show="show_f" type="danger" size="small" @click="investDialog=true">{{invest}}</el-button>
+                <el-button v-show="show_s" type="danger" size="small" @click="observeDialog=true">{{observe}}</el-button>
+                <el-button v-show="show_t" type="danger" size="small" @click="eliminateDialog=true">{{eliminate}}</el-button>
             </div>
             <!-- 确认转项目池 dialog -->
-            <el-dialog title="转投资" :visible.sync="dialogVisible" size="tiny">
+            <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
                 <span>确认将该项目转投资？</span>
                 <span slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                     <el-button type="default" @click="dialogVisible=false">取 消</el-button>
                     <el-button type="danger" @click="jumpPre">确 定</el-button>
+=======
+                    <el-button type="default" @click="investDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpPre">确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 确认转观察 dialog -->
+            <el-dialog title="转观察" :visible.sync="observeDialog" size="tiny">
+                <span>确认将该项目转观察？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="observeDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpObserve">确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 确认转淘汰 dialog -->
+            <el-dialog title="转淘汰" :visible.sync="eliminateDialog" size="tiny">
+                <span>确认将该项目转淘汰？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpEliminate">确 定</el-button>
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                 </span>
             </el-dialog>
         </div>
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form
-                        :basicForm="basicForm"
-                        :companyForm="companyForm"
-                        :projectId="projectPoolId"
-                        :projectData="projectData">
+                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :projectId="projectPoolId" :projectData="projectData">
                     </detail-form>
-                    <table-form
-                        :projectData="projectData"></table-form>
+                    <table-form :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                    <industry-form :industryForm="industryForm"></industry-form>
-                </el-tab-pane> -->
+                                <industry-form :industryForm="industryForm"></industry-form>
+                            </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
-                    <capital-table
-                        :projectData="projectData"></capital-table>
+                    <capital-table :projectData="projectData"></capital-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form></record-form>
@@ -67,7 +83,16 @@ export default {
         return {
             title: '双子金服投资项目',
             state: '正常',
-            dialogVisible: false,
+            invest: '投资',
+            observe: '观察',
+            eliminate: '淘汰',
+            isShow: false,
+            show_f: true,
+            show_s: true,
+            show_t: true,
+            investDialog: false,
+            observeDialog: false,
+            eliminateDialog: false,
             activeName: 'details',
             basicForm: {
                 baseInfo: '基本信息',
@@ -110,7 +135,7 @@ export default {
             getProDetail(projectPoolId).then(resp => {
                 // console.log('projectPoolId resp: ', resp);
                 let data = resp.data.result;
-                let { projectInfo, projectInvestmentInfo} = data;
+                let { projectInfo, projectInvestmentInfo } = data;
                 this.projectData = data;
                 // this.setProjectData(data);
                 // console.log('pool detail data: ', JSON.stringify(data));
@@ -130,6 +155,27 @@ export default {
         jumpPre() {
             this.addTab('投前项目', '/home/preProject', 'preProject');
             this.$router.push({ name: 'preProject' });
+        },
+        jumpObserve() {
+            this.observeDialog = !this.observeDialog;
+            this.show_f = false;
+            this.show_s = false;
+            this.isShow = true;
+            this.state = "观察";
+        },
+        jumpEliminate() {
+            this.eliminateDialog = !this.eliminateDialog;
+            this.show_f = false;
+            this.show_t = false,
+            this.isShow = true;
+            this.state = "淘汰";
+        },
+        changeNormal() {
+          this.isShow = false;
+          this.show_f = true;
+          this.show_s = true;
+          this.show_t = true;
+          this.state = "正常";
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
@@ -174,6 +220,8 @@ export default {
             .state {
                 margin-left: 24px;
                 vertical-align: middle;
+                border-color: #ddd;
+                cursor: default;
             }
         }
         .right {

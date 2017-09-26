@@ -79,10 +79,12 @@
         },
         methods: {
             handleRole(index,row){
-
+//                console.log("*******")
+//                console.log(row.id)
 //                获取角色权限
                 getUserRole(row.id).then((res)=>{
                     var arr = res.data.result
+//                    console.log(arr)
 //                    获取所有权限
                     getUserAllRole().then((res)=>{
                         this.treeData = getNodes(res.data.result,arr)

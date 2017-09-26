@@ -1,9 +1,17 @@
 <template>
 <div class="cooperative">
     <table-header :data="headerInfo" @add="alertModle" :theme="theme" class="addPadding">
-        <el-input placeholder="请输入搜索内容" icon="search" v-model="input2" :on-icon-click="handleIconClick" style="width: 320px;">
+        <el-input placeholder="请输入搜索内容"
+                  icon="search"
+                  v-model="searchValue"
+                  :on-icon-click="handleIconClick"
+                  style="width: 320px;"
+                  @click="submitSearch"
+                  @blur="submitSearch"
+                  :autofocus="true">
         </el-input>
     </table-header>
+<<<<<<< HEAD
     <el-table :data="teamData" border style="width: 100%">
         <el-table-column label="机构名称" prop="orgName">
         </el-table-column>
@@ -20,6 +28,28 @@
     </el-table>
     <div class="pagination">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+=======
+    <!-- table_content start-->
+    <div class="table_content">
+        <el-table :data="teamData" border style="width: 100%">
+            <el-table-column label="机构名称" prop="orgName">
+            </el-table-column>
+            <el-table-column label="机构类型" prop="orgType">
+            </el-table-column>
+            <el-table-column label="联系人" prop="orgLinkman">
+            </el-table-column>
+            <el-table-column label="操作">
+                <template scope="scope">
+                        <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                      </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <!-- table_content end-->
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 50]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total=totalPage>
+>>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
         </el-pagination>
     </div>
     <el-dialog title="合作机构" :visible.sync="cooperativeOrg" :close-on-click-modal="false">
@@ -63,14 +93,21 @@
             <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
+    <delete-reminders :deleteReminders="deleteReminders"
+                      :modal_loading="modal_loading"
+                      @del="confirmDel"
+                      @cancel="confirmCancel">
+    </delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
+import deleteReminders from 'components/deleteReminders'
 import {
     getOrgList,
-    getAllOrgList
+    getAllOrgList,
+    deleteOrg
 } from 'api/fund'
 export default {
     data() {
@@ -96,6 +133,14 @@ export default {
             setOrgType: [],
             teamData: [],
             trueOrFalse: true,
+            deleteReminders: false,
+            modal_loading: false,
+            id: '',
+            currentPage: 1,
+            totalPage: '',
+            page: 1,
+            pageSize: 10,
+            searchValue: '',
             rules: {
                 orgName: [{
                     required: true,
@@ -144,11 +189,15 @@ export default {
             this.cooperativeInfo = row
             this.trueOrFalse = false
         },
+        handleDelete(index, row) {
+            this.deleteReminders = !this.deleteReminders
+            this.id = row.id
+        },
         confirmIncome() {
             if (this.trueOrFalse == true) {
                 this.$refs.cooperativeInfo.validate((valid) => {
                     if (valid) {
-                        this.$http.post('/api/organization/addOrganization', this.cooperativeInfo).then((response) => {
+                        this.$http.post(this.api + '/organization/addOrganization', this.cooperativeInfo).then((response) => {
                             if (response.status == '200') {
                                 this.$Message.success(response.data.message || '操作成功')
                             } else if (response.status == '9005') {
@@ -165,7 +214,7 @@ export default {
             } else {
                 this.$refs.cooperativeInfo.validate((valid) => {
                     if (valid) {
-                        this.$http.post('/api/organization/updateOrg', this.cooperativeInfo).then((response) => {
+                        this.$http.post(this.api + '/organization/updateOrg', this.cooperativeInfo).then((response) => {
                             if (response.status == '200') {
                                 this.cooperativeOrg = false
                                 this.$Message.success(response.data.message || '操作成功')
@@ -187,6 +236,45 @@ export default {
         cancelForm() {
             this.$refs.cooperativeInfo.resetFields()
             this.cooperativeOrg = false
+        },
+        confirmDel() {
+            this.modal_loading = true
+            deleteOrg(this.id).then((res) => {
+                if(res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！')
+                    this.modal_loading = false
+                    this.deleteReminders = false
+                }
+            })
+        },
+        confirmCancel() {
+            this.deleteReminders = false
+        },
+        handleSizeChange(val) { // 下拉选择每页显示多少条数据
+            this.pageSize = val
+            getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
+                if (response.data.status == '200') {
+                    this.totalPage = response.data.result.total
+                    this.teamData = response.data.result.list
+                }
+            })
+        },
+        handleCurrentChange(val) { // 获取当前页码
+            this.page = val
+            getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
+                if (response.data.status == '200') {
+                    this.totalPage = response.data.result.total
+                    this.teamData = response.data.result.list
+                }
+            })
+        },
+        submitSearch() {
+            getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
+                if (response.data.status == '200') {
+                    this.totalPage = response.data.result.total
+                    this.teamData = response.data.result.list
+                }
+            })
         }
     },
     mounted() {
@@ -200,27 +288,35 @@ export default {
                 this.setOrgType = res.data.result
             }
         })
-        getOrgList().then((response) => {
+        getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
             if (response.data.status == '200') {
+                console.log(response.data.result)
+                this.totalPage = response.data.result.total
                 this.teamData = response.data.result.list
             }
         })
     },
     components: {
-        tableHeader
+        tableHeader,
+        deleteReminders
     }
 }
 </script>
 
 <style lang="less" scoped>
+@import "../../common/styles/variable.less";
 .cooperative {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     position: relative;
     padding: 24px;
     background: #fff;
     .addPadding {
         padding-bottom: 12px;
+    }
+    .table_content{
+        width: 100%;
+        padding-bottom: @height-large;
     }
     .page {
         width: 100%;

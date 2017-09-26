@@ -166,6 +166,20 @@ ul li {
     margin-top: 20px;
 }
 
+/*消息公告messageShow*/
+.messageShow {
+     // row-table的css style
+     .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
+
+}
 
 /*云项目assistantContent*/
 .assistantContent {
@@ -196,10 +210,14 @@ ul li {
     .el-table .positive-row {
         background: #EEF0F4;
     }
-    //.el-button {
-    //       border: none;
-    //       color: #F05E5E;
-    //   }
+    // 列表中操作按钮的样式
+    .el-button--text {
+        color: #F05E5E;
+    }
+    // 转项目池弹框 的样式
+    .el-dialog--tiny {
+        width: 300px;
+    }
     .el-dialog {
         border: 1px solid #ddd;
         border-radius: 10px;
@@ -208,6 +226,16 @@ ul li {
         width: 100%;
         margin: 0 auto;
     }
+    // 转项目池弹框 的按钮样式
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+
 }
 
 
@@ -252,23 +280,31 @@ ul li {
     .el-table .positive-row {
         background: #EEF0F4;
     }
-    //.el-button {
-    //    border: none;
-    //    color: #F05E5E;
-    //}
-     // ivu 分页组件 的颜色样式
-     .ivu-page-prev:hover,
-     .ivu-page-item:hover,
-     .ivu-page-item-jump-prev:hover,
-     .ivu-page-item-jump-next:hover,
-     .ivu-page-next:hover {
-         // color: #666;
-         border-color: #F05E5E;
-     }
-     .ivu-page-item-active {
-         background-color: #F05E5E;
-         border-color: #F05E5E;
-     }
+    // 列表中操作按钮的样式
+    .el-button--text {
+        color: #F05E5E;
+    }
+    // 转投资弹框 的样式
+    .el-dialog--tiny {
+        width: 300px;
+    }
+    .el-dialog {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+    .el-dialog__body span {
+        width: 100%;
+        margin: 0 auto;
+    }
+    // 转投资弹框 的按钮样式
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }  
 }
 
 /*添加项目页addProjectContent*/
@@ -322,14 +358,39 @@ ul li {
      .el-tabs__item.is-active {
          color: #F05E5E;
      }
+     .title {
+        //项目状态三个弹框 的样式
+        .el-dialog--tiny {
+            width: 300px;
+        }
+        .el-dialog {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .el-dialog__body span {
+            width: 100%;
+            margin: 0 auto;
+        }
+        // 转项目池弹框 的按钮样式
+        .el-button--default {
+            border: 1px solid #F05E5E;
+            color: #F05E5E;
+        }
+        .el-button--danger {
+            background-color: #F05E5E;
+            border-color: #F05E5E;
+        }
+     }
 }
 
 
 /*投资项目页preContent*/
 .preContent {
-    .el-input__inner {
-        height: 30px;
-        border-radius: 15px;
+    .search-box {
+        .el-input__inner {
+            height: 30px;
+            border-radius: 15px;
+        }
     }
     .el-table th {
         background-color: #2A3142;
@@ -346,23 +407,28 @@ ul li {
     .el-table .positive-row {
         background: #EEF0F4;
     }
-    .el-button {
-        border: none;
+    .el-button--text {
         color: #F05E5E;
     }
-    // ivu 分页组件 的颜色样式
-    .ivu-page-prev:hover,
-    .ivu-page-item:hover,
-    .ivu-page-item-jump-prev:hover,
-    .ivu-page-item-jump-next:hover,
-    .ivu-page-next:hover {
-        // color: #666;
-        border-color: #F05E5E;
+    // 弹框按钮 样式
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
     }
-    .ivu-page-item-active {
+    .el-button--danger {
         background-color: #F05E5E;
         border-color: #F05E5E;
     }
+    .teamBox {
+        //弹框 样式
+        .el-dialog--tiny {
+            width: 450px;
+        }
+        .el-dialog {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+     }
 }
 
 
@@ -569,14 +635,16 @@ ul li {
 /*项目估值页*/
 .projectValue {
      // row-table的css style
-     .el-table th {
+     .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
         background-color: #2A3142;
     }
-    .el-table__footer-wrapper thead div,
-    .el-table__header-wrapper thead div {
-        color: #fff;
-        font-weight: normal;
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
         background-color: #2A3142;
+        color: #fff;
     }
     .el-form-item {
         margin-bottom: 0;
