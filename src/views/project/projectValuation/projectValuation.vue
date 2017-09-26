@@ -74,6 +74,12 @@
                 </el-table>
             </el-col>
         </el-row>
+<<<<<<< HEAD
+       <div class="page">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            </el-pagination>
+       </div>
+=======
         <el-row type="flex" align="bottom" class="foot">
             <el-col :span="8">
                 <span>总记录：{{this.total}}条</span>
@@ -86,6 +92,7 @@
                     @on-page-size-change="pageSizeChanged"></Page>
             </el-col>
         </el-row>
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084
     </div>
 </template>
 
@@ -170,9 +177,9 @@ export default {
 
 <style lang="less" scoped>
 .projectValue {
-    position: relative;
     width: 100%;
-   min-height: 100%;
+    min-height: 100%;
+    position: relative;
     font-size: 14px;
     background: #fff;
 }
@@ -213,7 +220,73 @@ export default {
     border-bottom: 1px solid #F05E5E;
 }
 
-.foot {
-    margin: 25px 30px 0 30px;
-}
+.page {
+   width: 100%;
+   padding: 15px 30px;
+   text-align: right;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+ }
 </style>
+<<<<<<< HEAD
+
+
+<script>
+export default {
+    data() {
+        return {
+            input: '',
+            currentIndex: 1,
+            stateList: [
+                { state: "状态：" },
+                { state: "全部" },
+                { state: "未提交" },
+                { state: "已提交" }
+            ],
+            tableData: [
+                {
+                    project: 'AAAAAAAA',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
+                    valuation: '',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: '',
+                    editFlag: false
+                },
+                {
+                    project: 'AAAAAAAA',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.4',
+                    valuation: '',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: '',
+                    editFlag: false
+                }
+            ],
+            form: {
+                algorithmType: ''
+            }
+            // total: this.tableData.length
+        }
+    },
+    methods: {
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
+        },
+        handleIconClick(ev) {
+            console.log(ev);
+        },
+        changeActive(index) {
+            this.currentIndex = index;
+        }
+    }
+}
+</script>
+=======
+>>>>>>> ef9089d143d71772fe6944700f2e742b81b0e084

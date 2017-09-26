@@ -1,37 +1,46 @@
 <template>
 <div class="file">
-    <tabel-header :data="headerInfo" @ensure="reportDialog"></tabel-header>
-    <el-table :data="fileData" border style="width: 100%">
-        <el-table-column label="文档名称" prop="name">
-        </el-table-column>
-        <el-table-column label="用户" prop="user">
-        </el-table-column>
-        <el-table-column label="上传日期" prop="date">
-        </el-table-column>
-        <el-table-column label="操作">
-            <template scope="scope">
-                    <el-button type="text" size="small">下载</el-button>
-                    <el-button type="text" size="small" class="btn_border">预览</el-button>
-                    <el-button type="text" size="small">删除</el-button>
-                  </template>
-        </el-table-column>
-    </el-table>
-    <tabel-header :data="registrationInfo"></tabel-header>
-    <el-table :data="registrationData" border style="width: 100%">
-        <el-table-column label="文档名称" prop="name">
-        </el-table-column>
-        <el-table-column label="上传人" prop="user">
-        </el-table-column>
-        <el-table-column label="上传日期" prop="date">
-        </el-table-column>
-        <el-table-column label="操作">
-            <template scope="scope">
-                    <el-button type="text" size="small">下载</el-button>
-                    <el-button type="text" size="small" class="btn_border">预览</el-button>
-                    <el-button type="text" size="small">删除</el-button>
-                  </template>
-        </el-table-column>
-    </el-table>
+    <el-row class="file_wrapper">
+        <el-col :span="24">
+            <div class="listHeader">
+                <div class="list" v-for="(list, index) of listHeader">{{list}}</div>
+            </div>
+        </el-col>
+        <el-col :span="24" v-for="(file, index) of fileListData" :key="index">
+            <div class="title">
+                <div class="left">{{file.title}}</div>
+                <div class="right"></div>
+            </div>
+            <el-table :data="file.dataDocumentResult" border :show-header="false" style="width: 100%">
+                <el-table-column label="基金阶段" prop="allocationDocumentName">
+                </el-table-column>
+                <el-table-column label="文档名称" prop="documentName">
+                </el-table-column>
+                <el-table-column label="上传人" prop="uploadUser">
+                </el-table-column>
+                <el-table-column label="上传日期" prop="createDate">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template scope="scope">
+                            <el-button type="text"
+                                    size="small"
+                                    class="scopeBtn"
+                                    v-show="!scope.row.id">上传</el-button>
+                            <el-button type="text"
+                                       size="small"
+                                       v-show="scope.row.id"
+                                       class="scopeBtn">下载</el-button>
+                            <el-button type="text"
+                                       size="small"
+                                       class="btn_border scopeBtn">预览</el-button>
+                            <el-button type="text"
+                                       size="small"
+                                       class="scopeBtn">删除</el-button>
+                          </template>
+                </el-table-column>
+            </el-table>
+        </el-col>
+    </el-row>
     <!-- 上传基金设立报表-->
     <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false">
         <el-form :model="reportForm">
@@ -62,19 +71,22 @@
 </template>
 
 <script type="text/ecmascript-6">
-import tabelHeader from 'components/tabelHeader'
 export default {
+    props: {
+        fileListData: {
+            type: Array,
+            default: []
+        }
+    },
     data() {
         return {
+            listHeader: ['基金阶段', '文档名称', '用户', '上传日期', '操作'],
             headerInfo: {
                 desc: '基金设立报告',
-                icon_a: 'upload',
-                explain_a: '上传'
-            },
-            registrationInfo: {
-                desc: '基金注册文件',
-                icon_a: 'upload',
-                explain_a: '上传'
+                btnGroup: [{
+                    icon: 'upload',
+                    explain: '上传'
+                }]
             },
             modalAdd: false,
             formLabelWidth: '80px',
@@ -137,22 +149,56 @@ export default {
             }, 1500);
         }
     },
-    components: {
-        tabelHeader
-    }
+    // created() {
+    //     this.fileListData.map((x, index) => {
+    //         this.headerInfo.desc = x[index].title
+    //     })
+    // },
 }
 </script>
 
 <style lang="less" scoped>
+@import "../../common/styles/variable.less";
 .file {
     width: 100%;
     height: 100%;
+    .listHeader{
+        width: 100%;
+        height: 42px;
+        display: flex;
+        .list{
+            flex: 1;
+            color: @color-base;
+            font-size: 16px;
+            text-align: center;
+            line-height: 42px;
+            background: @color-theme;
+        }
+    }
     .el-table {
-        .btn_border {
-            border-right: 1px solid #ddd;
-            border-left: 1px solid #ddd;
-            border-radius: 0;
+        .border-right,
+        .scopeBtn{
             padding: 0 12px;
+            margin-left: 0;
+            border-radius: 0;
+        }
+        .btn_border{
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+    }
+    .title{
+        width: 100%;
+        height: 42px;
+        padding-right: 24px;
+        padding-left: 24px;
+        background-color: #eef1f6;
+        .left,
+        .right {
+            flex: 1;
+            color: #1f2d3d;
+            font-weight: blod;
+            line-height: 42px;
         }
     }
 }

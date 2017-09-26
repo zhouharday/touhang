@@ -26,13 +26,6 @@
             </TabPane>
             <TabPane label="资金明细" name="funddet" class="tab_list">
                 <investment :investorData="investorData"></investment>
-                <!-- <Tabs>
-                    <TabPane label="出资">
-                        <fundDetails :investorData="investorData"></fundDetails>
-                    </TabPane>
-                    <TabPane label="退出">标签二的内容</TabPane>
-                    <Button type="ghost" @click="handleTabsAdd" slot="extra">添加</Button>
-                </Tabs> -->
             </TabPane>
             <TabPane label="拜访记录" name="visiting">
                 <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>

@@ -114,8 +114,8 @@
                             <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="jumpPool">确 定</el-button>
+                                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="danger" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -123,6 +123,10 @@
                 </el-table>
             </el-col>
         </el-row>
+        <div class="page">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            </el-pagination>
+       </div>
     </section>
 </template>
 
@@ -132,7 +136,8 @@
 <style lang="less" scoped>
 .assistantContent {
     width: 100%;
-    height: 650px;
+    min-height: 100%;
+    position: relative;
     font-size: 14px;
     background: #fff;
 }
@@ -166,7 +171,6 @@
     overflow: hidden;
     position: relative;
 }
-
 
 .collapse-btn {
     position: absolute;
@@ -227,7 +231,7 @@
 }
 
 .common p {
-    font: 20px;
+    font-size: 20px;
     font-weight: bold;
     padding-bottom: 5px;
     border-bottom: 1px solid #F05E5E;
@@ -249,6 +253,14 @@
 .back {
     background: #fff;
 }
+.page {
+   width: 100%;
+   padding: 15px 30px;
+   text-align: right;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+ }
 </style>
 
 

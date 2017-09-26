@@ -18,8 +18,8 @@
                   </template>
         </el-table-column>
     </el-table>
-    <div class="pagination">
-        <el-pagination layout="prev, pager, next" :total="100">
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
         </el-pagination>
     </div>
     <el-dialog title="合作机构" :visible.sync="cooperativeOrg" :close-on-click-modal="false">
@@ -60,7 +60,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancelForm">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
+            <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
 </div>
@@ -216,10 +216,19 @@ export default {
 .cooperative {
     width: 100%;
     height: 100%;
+    position: relative;
     padding: 24px;
     background: #fff;
     .addPadding {
         padding-bottom: 12px;
+    }
+    .page {
+        width: 100%;
+        padding: 15px 30px;
+        text-align: right;
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
 }
 </style>
