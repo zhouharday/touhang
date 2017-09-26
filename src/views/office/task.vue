@@ -64,7 +64,7 @@
             </Modal>
             <!-- Modal3  -->
             <!-- 添加任务 btn -->
-            <el-button v-show="isAddTask" type="primary" @click="addTaskBtn">
+            <el-button v-show="isAddTask" type="danger" size="small" @click="addTaskBtn">
                 <span>添加任务</span>
             </el-button>
             <!-- 已办任务 diglog -->

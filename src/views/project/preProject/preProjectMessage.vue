@@ -50,8 +50,8 @@
                             {{item.info}}
                         </el-button>
                         <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                                                                                            {{item.info}}
-                                                                                                                                        </el-button> -->
+                                                                                                                                                    {{item.info}}
+                                                                                                                                                </el-button> -->
                     </div>
                 </div>
             </div>
@@ -59,29 +59,19 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form 
-                        :basicForm="basicForm" 
-                        :companyForm="companyForm" 
-                        :capitalForm="capitalForm">
+                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
                     <table-form></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table
-                        :proId="proId"
-                        :proUsers="proUsers"
-                        :proRoles="proRoles"></team-table>
+                    <team-table :proId="proId" :proUsers="proUsers" :proRoles="proRoles">
+                    </team-table>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                                                                                                                                                          <industry-form :industryForm="industryForm">
-                                                                                                                                                                          </industry-form>
-                                                                                                                                                                        </el-tab-pane> -->
-                  <industry-form :industryForm="industryForm">
-                  </industry-form>
+                    <industry-form :industryForm="industryForm"></industry-form>
                 </el-tab-pane> -->
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form
-                        :proId="proId"></record-form>
+                    <record-form :proId="proId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
                     <approve-table></approve-table>
@@ -90,13 +80,10 @@
                     <file-table></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table
-                        :proId="proId"
-                        :proUsers="proUsers"></risk-table>
+                    <risk-table :proId="proId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table
-                        :proId="proId"></manage-table>
+                    <manage-table :proId="proId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>

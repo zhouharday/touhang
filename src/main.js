@@ -50,6 +50,7 @@ Vue.prototype.api = 'http://18f46963j4.iok.la'; //外网请求时 URL
 
 
 var vm = new Vue({
+    router,
     store,
     render: h => h(App)
 }).$mount('#app');
