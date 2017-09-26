@@ -44,7 +44,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 添加融资信息 对话框-->
+            <!-- 添加项目成员 对话框-->
             <el-dialog title="添加项目成员" :visible.sync="modalAdd" :close-on-click-modal="false">
                 <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
                     <el-form-item label="姓名" prop="name">

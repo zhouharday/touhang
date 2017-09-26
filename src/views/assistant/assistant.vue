@@ -10,7 +10,7 @@
         </el-row>
         <!--行业ul-->
         <el-row class="common">
-              <el-col :span="1">
+            <el-col :span="1">
                 <div class="tag_s">行业：</div>
             </el-col>
             <el-col :span="23">
@@ -20,7 +20,7 @@
                             {{item.dicName}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
-                            <span :class="btnObject1"> {{collapseBtn1}}</span>
+                            <span :class="btnObject1"></span>
                             {{collapseBtn1}}
                         </button>
                     </ul>
@@ -29,7 +29,7 @@
         </el-row>
         <!--轮次ul -->
         <el-row class="common">
-              <el-col :span="1">
+            <el-col :span="1">
                 <div class="tag_s">轮次：</div>
             </el-col>
             <el-col :span="23">
@@ -43,24 +43,26 @@
             </el-col>
         </el-row>
         <!--所在地ul-->
-        <el-row class="common">
-              <el-col :span="1">
-                <div class="tag_s">所在地：</div>
-            </el-col>
-            <el-col :span="23">
-                <div class="location-ul">
-                    <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }" style="width:100%;">
-                        <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3}" @click="changeActive(index,3)">
-                            {{item.locations}}
-                        </li>
-                        <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
-                            <span :class="btnObject2"></span>
-                            {{collapseBtn2}}
-                        </button>
-                    </ul>
-                </div>
-            </el-col>
-        </el-row>
+        <div class="common">
+            <el-row>
+                <el-col :span="1">
+                    <div class="tag_s">所在地：</div>
+                </el-col>
+                <el-col :span="23">
+                    <div class="location-ul">
+                        <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }" style="width:100%;">
+                            <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3}" @click="changeActive(index,3)">
+                                {{item.locations}}
+                            </li>
+                            <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
+                                <span :class="btnObject2"></span>
+                                {{collapseBtn2}}
+                            </button>
+                        </ul>
+                    </div>
+                </el-col>
+            </el-row>
+        </div>
         <!--搜索结果-->
         <el-row class="common">
             <el-col :span="24">
@@ -123,10 +125,10 @@
                 </el-table>
             </el-col>
         </el-row>
-        <div class="page">
+        <div class="pagination">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
-       </div>
+        </div>
     </section>
 </template>
 

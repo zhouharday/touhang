@@ -55,7 +55,7 @@
                 </el-tab-pane>
             </el-tabs>
             <!-- 发布新公告 btn -->
-            <el-button v-show="isAddMsg" type="primary" @click="realseBtn" class="messageBtn">发布新公告</el-button>
+            <el-button v-show="isAddMsg" type="danger" size="small"  @click="realseBtn" class="messageBtn">发布新公告</el-button>
             <!-- 发布新公告 dialog -->
             <el-dialog style="width:1100px" title="发布新公告" :visible.sync="dialogFormVisible">
                 <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">

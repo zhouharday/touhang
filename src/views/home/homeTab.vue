@@ -21,7 +21,13 @@
     line-height: 35px;
     ul {
         overflow: hidden;
+        display: flex;
+        flex-wrap: nowrap;
+        flex-shrink: 1;
         li {
+            display: flex;
+            flex-wrap: nowrap;
+            flex-shrink: 1;
             padding-left: 20px;
             padding-right: 20px; // width: 80px;
             height: 35px;
@@ -31,6 +37,11 @@
             border-radius: 10px 11px 0 0;
             &.active {
                 background-color: #fff;
+                min-width:130px;
+                box-sizing: border-box;
+            }
+            .ivu-icon{
+                line-height: 35px;
             }
             .close {
                 margin-left: 6px;
