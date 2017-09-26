@@ -12,11 +12,11 @@
                 <el-col :span="9">
                     <div class="grid-content bg-purple-dark">
                         <div>
-                            <div class="Quarterly">
-                                <span> 01 </span>月
-                                <span> 01 </span>季度
-                                <span> 2017 </span>年
-                            </div>
+                            <!--<div class="Quarterly">-->
+                                <!--<span> 01 </span>月-->
+                                <!--<span> 01 </span>季度-->
+                                <!--<span> 2017 </span>年-->
+                            <!--</div>-->
                             <el-table class="invesTabData" :data="invesTabData" border style="width: 100%">
                                 <el-table-column prop="projectStep" label="项目阶段" align="center" width="">
                                 </el-table-column>

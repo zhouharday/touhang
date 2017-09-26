@@ -1,4 +1,13 @@
 <template>
+<div class="role">
+    <el-row :gutter="20">
+        <el-col :span="8">
+            <div class="roleBtn">
+                <el-button type="danger">添加</el-button>
+            </div>
+            <div class="roleContent"></div>
+        </el-col>
+    </el-row>
     <div class="role">
         <el-row :gutter="20">
             <el-col :span="8">
@@ -6,7 +15,6 @@
                     <el-button>添加</el-button>
                 </div>
                 <div class="roleContent">
-
                     <el-table :data="roleInfo" border style="width: 100%" >
                         <el-table-column label="角色名称" prop="roleName" width="160" >
 
@@ -41,6 +49,7 @@
             </el-col>
         </el-row>
     </div>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -126,5 +135,8 @@
         .right {
             text-align: right;
         }
+    }
+    th{
+        background-color: #2A3142;
     }
 </style>

@@ -6,8 +6,8 @@ const service = axios.create({
     timeout: 5000,
     // baseURL: 'http://192.168.0.88:9091',
     // baseURL: 'http://192.168.0.118:9091',
-    baseURL: 'http://192.168.0.198:9091',
-    // baseURL: 'http://18f46963j4.iok.la',
+    // baseURL: 'http://192.168.0.198:9091',
+    baseURL: 'http://18f46963j4.iok.la',
     headers: {
         'Content-Type': 'application/json'
     }

@@ -19,7 +19,6 @@ import store from './store';
 // import mainCss from "../static/css/main.css";
 
 
-
 Vue.use(iView);
 Vue.use(echarts);
 Vue.use(ElementUI);
@@ -30,26 +29,6 @@ Vue.prototype.api = '/api'; //公司IP请求时 URL
 // Vue.prototype.api = ''; //上线时 URL
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";
 // Vue.prototype.$http = axios.create();
-// Vue.prototype.$http.defaults.baseURL = 'http://192.168.0.198:9091';
-// Vue.prototype.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-// Vue.prototype.$http = axios.create({
-
-//     // baseURL: 'http://192.168.0.146:9091',
-//     headers: {
-//         'Content-Type': 'application/x-www-form-urlencoded',
-//         // "Access-Control-Allow-Headers": "X-Custom-Header",
-//         // "Access-Control-Allow-Methods": '"GET","POST"',
-//         // 'Access-Control-Allow-Origin' :  "*"
-//     },
-//     transformRequest: [function (data) {
-//         data = Qs.stringify(data);
-//         return data;
-//     }],
-//     // timeout: 1000,
-//     withCredentials: true
-// });
-
-
 
 var vm = new Vue({
     router,
