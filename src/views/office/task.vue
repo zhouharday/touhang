@@ -8,8 +8,8 @@
                     <!-- <Table border :columns="columns1" :data="data1" align="center"></Table> -->
                     <Table border :data="data1" :columns="columns1" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
-                        <div style="float: right;">
-                            <el-pagination @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="page3.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page3.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page3.total">
+                        <div class="pagination">
+                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page1.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
                             </el-pagination>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                 <Tab-pane :name="2" label="待办任务">
                     <Table border :data="data2" :columns="columns2" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
-                        <div style="float: right;">
+                        <div class="pagination">
                             <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
                             </el-pagination>
                         </div>
@@ -26,7 +26,7 @@
                 <Tab-pane :name="3" label="已办任务">
                     <Table border :data="data3" :columns="columns3" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
-                        <div style="float: right;">
+                        <div class="pagination">
                             <el-pagination @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="page3.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page3.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page3.total">
                             </el-pagination>
                         </div>
@@ -210,7 +210,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="tableCancle">取 消</el-button>
-                    <el-button type="primary" @click="saveTabValue(2)">提 交</el-button>
+                    <el-button type="danger" @click="saveTabValue(2)">提 交</el-button>
                 </div>
             </el-dialog>
             <!-- 指派任务 dialog-->

@@ -114,8 +114,8 @@
                             <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="primary" @click="jumpPool">确 定</el-button>
+                                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="danger" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -231,7 +231,7 @@
 }
 
 .common p {
-    font: 20px;
+    font-size: 20px;
     font-weight: bold;
     padding-bottom: 5px;
     border-bottom: 1px solid #F05E5E;

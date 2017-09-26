@@ -1,7 +1,7 @@
 <template>
 <div class="investor">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
-    <el-table :data="teamData" border style="width: 100%">
+    <el-table :data="investorData" border style="width: 100%">
         <el-table-column label="投资者" prop="investor">
         </el-table-column>
         <el-table-column label="协议名称" prop="protocol">
@@ -24,27 +24,16 @@
 import tabelHeader from 'components/tabelHeader'
 import {changeDate} from 'common/js/config'
 export default {
+    props: {
+        investorData: {
+            type: Array,
+            default: []
+        }
+    },
     data() {
         return {
             modalAdd: false,
             formLabelWidth: '80px',
-            teamData: [{
-                investor: '安红',
-                protocol: '安红、我想你',
-                sum: 10000000,
-                amount: 1111111,
-                percent: '23%',
-                return: 2000,
-                profit: 5000
-            }, {
-                investor: '安红',
-                protocol: '安红、我想你',
-                sum: 10000000,
-                amount: 1111111,
-                percent: '23%',
-                return: 2000,
-                profit: 5000
-            }],
             ruleValidate: {
                 name: [{
                     required: true,
