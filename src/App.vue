@@ -13,8 +13,5 @@
 
 </style>
 <script>
-<<<<<<< HEAD
-=======
 export default {}
->>>>>>> ed08e4c37c86ec125663e5251bb6e61d0437798c
 </script>
