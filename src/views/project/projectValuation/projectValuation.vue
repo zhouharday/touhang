@@ -89,24 +89,35 @@ import { getProjectValuation } from 'api/project';
 export default {
     data() {
         return {
-            total: 0,
-            page: 1,
-            pageSize: 5,
+            currentIndex: 0,
             projectName: '',
-            currentIndex: 1,
             stateList: [
                 { state: "全部" },
-                { state: "未估值" },
-                { state: "已估值" }
+                { state: "未提交" },
+                { state: "已提交" }
             ],
             tableData: [
                 {
                     project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
                     valuation: '0.00',
                     valuationDate: '',
                     valuationOfficer: '',
-                    state: ''
+                    state: '',
+                    editFlag: false
+                },
+                {
+                    project: 'AAAAAAAA',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.4',
+                    valuation: '0.00',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: '',
+                    editFlag: false
                 }
             ],
             form: {
@@ -219,61 +230,3 @@ export default {
     right: 0;
 }
 </style>
-
-
-<script>
-export default {
-    data() {
-        return {
-            input: '',
-            currentIndex: 1,
-            stateList: [
-                { state: "状态：" },
-                { state: "全部" },
-                { state: "未提交" },
-                { state: "已提交" }
-            ],
-            tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.3',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: '',
-                    editFlag: false
-                },
-                {
-                    project: 'AAAAAAAA',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.4',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: '',
-                    editFlag: false
-                }
-            ],
-            form: {
-                algorithmType: ''
-            }
-            // total: this.tableData.length
-        }
-    },
-    methods: {
-        checkEdit(index, row) { //编辑
-            // console.log(row)
-            row.editFlag = !row.editFlag;
-        },
-        handleIconClick(ev) {
-            console.log(ev);
-        },
-        changeActive(index) {
-            this.currentIndex = index;
-        }
-    }
-}
-</script>

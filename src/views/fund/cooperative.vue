@@ -1,85 +1,75 @@
 <template>
-<div class="cooperative">
-    <table-header :data="headerInfo" @add="alertModle" :theme="theme" class="addPadding">
-        <el-input placeholder="请输入搜索内容"
-                  icon="search"
-                  v-model="searchValue"
-                  :on-icon-click="handleIconClick"
-                  style="width: 320px;"
-                  @click="submitSearch"
-                  @blur="submitSearch"
-                  :autofocus="true">
-        </el-input>
-    </table-header>
-    <!-- table_content start-->
-    <div class="table_content">
-        <el-table :data="teamData" border style="width: 100%">
-            <el-table-column label="机构名称" prop="orgName">
-            </el-table-column>
-            <el-table-column label="机构类型" prop="orgType">
-            </el-table-column>
-            <el-table-column label="联系人" prop="orgLinkman">
-            </el-table-column>
-            <el-table-column label="操作">
-                <template scope="scope">
+    <div class="cooperative">
+        <table-header :data="headerInfo" @add="alertModle" :theme="theme" class="addPadding">
+            <el-input placeholder="请输入搜索内容" icon="search" v-model="searchValue" :on-icon-click="handleIconClick" style="width: 320px;" @click="submitSearch" @blur="submitSearch" :autofocus="true">
+            </el-input>
+        </table-header>
+        <!-- table_content start-->
+        <div class="table_content">
+            <el-table :data="teamData" border style="width: 100%">
+                <el-table-column label="机构名称" prop="orgName">
+                </el-table-column>
+                <el-table-column label="机构类型" prop="orgType">
+                </el-table-column>
+                <el-table-column label="联系人" prop="orgLinkman">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template scope="scope">
                         <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                      </template>
-            </el-table-column>
-        </el-table>
-    </div>
-    <!-- table_content end-->
-    <div class="page">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 50]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total=totalPage>
-        </el-pagination>
-    </div>
-    <el-dialog title="合作机构" :visible.sync="cooperativeOrg" :close-on-click-modal="false">
-        <el-form :model="cooperativeInfo" :rules="rules" ref="cooperativeInfo">
-            <el-row :gutter="10">
-                <el-col :span="12">
-                    <el-form-item label="机构名称" :label-width="formLabelWidth" prop="orgName" :autofocus="autofocus">
-                        <el-input v-model="cooperativeInfo.orgName" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="机构类型" :label-width="formLabelWidth" prop="orgType">
-                        <el-select v-model="cooperativeInfo.orgType" style="width:100%">
-                            <el-option v-for="(item, index) of setOrgType" :key="item.id" :label="item.orgName" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系人" :label-width="formLabelWidth" prop="orgLinkman">
-                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgLinkman">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="联系电话" :label-width="formLabelWidth" prop="orgnNumber">
-                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgnNumber">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="公司地址" :label-width="formLabelWidth">
-                        <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgAddress">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="cancelForm">取 消</el-button>
-            <el-button type="danger" @click="confirmIncome">确 定</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
         </div>
-    </el-dialog>
-    <delete-reminders :deleteReminders="deleteReminders"
-                      :modal_loading="modal_loading"
-                      @del="confirmDel"
-                      @cancel="confirmCancel">
-    </delete-reminders>
-</div>
+        <!-- table_content end-->
+        <div class="page">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 50]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="totalPage">
+            </el-pagination>
+        </div>
+        <el-dialog title="合作机构" :visible.sync="cooperativeOrg" :close-on-click-modal="false">
+            <el-form :model="cooperativeInfo" :rules="rules" ref="cooperativeInfo">
+                <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-form-item label="机构名称" :label-width="formLabelWidth" prop="orgName" :autofocus="autofocus">
+                            <el-input v-model="cooperativeInfo.orgName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="机构类型" :label-width="formLabelWidth" prop="orgType">
+                            <el-select v-model="cooperativeInfo.orgType" style="width:100%">
+                                <el-option v-for="(item, index) of setOrgType" :key="item.id" :label="item.orgName" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="联系人" :label-width="formLabelWidth" prop="orgLinkman">
+                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgLinkman">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="联系电话" :label-width="formLabelWidth" prop="orgnNumber">
+                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgnNumber">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="公司地址" :label-width="formLabelWidth">
+                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgAddress">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="cancelForm">取 消</el-button>
+                <el-button type="danger" @click="confirmIncome">确 定</el-button>
+            </div>
+        </el-dialog>
+        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @del="confirmDel" @cancel="confirmCancel">
+        </delete-reminders>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -221,7 +211,7 @@ export default {
         confirmDel() {
             this.modal_loading = true
             deleteOrg(this.id).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
                     this.modal_loading = false
                     this.deleteReminders = false
@@ -295,7 +285,7 @@ export default {
     .addPadding {
         padding-bottom: 12px;
     }
-    .table_content{
+    .table_content {
         width: 100%;
         padding-bottom: @height-large;
     }
