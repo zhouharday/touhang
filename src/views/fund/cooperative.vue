@@ -291,7 +291,6 @@
 
 <style lang="less" scoped>
     @import "../../common/styles/variable.less";
-
     .cooperative {
         width: 100%;
         min-height: 100%;
