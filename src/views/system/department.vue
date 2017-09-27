@@ -1,5 +1,6 @@
 <template>
 <div class="department">
+<<<<<<< HEAD
     <!--<div style="flex-direction: row;justify-content: space-between; display: flex">-->
         <!--<div class="title1">-->
             <!--{{companyName}}-->
@@ -11,6 +12,14 @@
             </el-button>
         </div>
     <!--</div>-->
+=======
+    <div class="title">
+        <el-button type="danger" @click="addDepartment" size="small">
+            <Icon type="plus-round"></Icon>
+            添加
+        </el-button>
+    </div>
+>>>>>>> 959750a4510c9da5ca42b0a256cbfac99f085975
     <!-- 折叠表单 -->
     <!-- 这部分内容需要询问产品 -->
     <!-- <el-collapse v-model="activeName" accordion>

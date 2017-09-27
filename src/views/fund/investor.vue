@@ -2,19 +2,19 @@
 <div class="investor">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
     <el-table :data="investorData" border style="width: 100%">
-        <el-table-column label="投资者" prop="investor">
+        <el-table-column label="投资者" prop="investorName">
         </el-table-column>
-        <el-table-column label="协议名称" prop="protocol">
+        <el-table-column label="协议名称" prop="agreementName">
         </el-table-column>
-        <el-table-column label="认缴金额（元）" prop="sum">
+        <el-table-column label="认缴金额（元）" prop="subscribeAmount">
         </el-table-column>
-        <el-table-column label="出资占比（%）" prop="percent">
+        <el-table-column label="出资占比（%）" prop="contributiveRatio">
         </el-table-column>
-        <el-table-column label="实缴金额（元）" prop="amount">
+        <el-table-column label="实缴金额（元）" prop="amountSum">
         </el-table-column>
-        <el-table-column label="返还金额" prop="return">
+        <el-table-column label="返还金额" prop="earningsSum">
         </el-table-column>
-        <el-table-column label="收益金额" prop="profit">
+        <el-table-column label="收益金额" prop="incomeAmount">
         </el-table-column>
     </el-table>
 </div>

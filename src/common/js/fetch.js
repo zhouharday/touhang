@@ -3,7 +3,7 @@ import axios from 'axios'
 import {Message} from 'iview'
 
 const service = axios.create({
-    timeout: 5000,
+    timeout: 8000,
     // baseURL: 'http://192.168.0.88:9091',
     // baseURL: 'http://192.168.0.118:9091',
     baseURL: 'http://192.168.0.198:9091',

@@ -32,7 +32,7 @@
             </template>
         </el-table-column>
     </el-table>
-    <div class="page">
+    <div class="pagination">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
         </el-pagination>
     </div>
@@ -72,10 +72,10 @@ import {
 export default {
     data() {
         return {
-            chooseInfo: [{
+            chooseInfo: {
                 title: '投资者类型：',
                 details: []
-            }],
+            },
             theme: '#fff',
             dataTitle: {
                 btnGroup: [{
@@ -190,7 +190,7 @@ export default {
         })
         getInvestorType().then((res) => {
             if (res.status == '200') {
-                this.chooseInfo[0].details = res.data.result
+                this.chooseInfo.details = res.data.result
             }
         }).catch(err => {
             this.$Message.error(err)

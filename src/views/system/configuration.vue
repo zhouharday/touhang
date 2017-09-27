@@ -3,12 +3,44 @@
         <el-row :gutter="30">
             <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
                 <!-- 项目阶段 配置-->
+<<<<<<< HEAD
                 <!--<div class="rightAdd_btn">-->
                     <!--<el-button type="danger" style="width:80px" @click="openProject">添加</el-button>-->
                 <!--</div>-->
                 <!--<b style="padding-left:15px;">项目阶段配置</b>-->
                 <div v-for="item in leftList">
                 <div class="project_config" >
+=======
+                <div class="rightAdd_btn">
+                    <el-button type="danger" style="width:80px" @click="openProject" size="small">添加</el-button>
+                </div>
+                <b style="padding-left:15px;">项目阶段配置</b>
+                <div class="project_config">
+                    <div class="menu_title">
+                        <div>项目配置</div>
+                    </div>
+                    <div class="menu_box">
+                        <p class="menu_list" v-for="item in projectMenu" :key="item.index">
+                            <span v-if="!item.editFlag">{{item.stageName}}</span>
+                            <span v-if="item.editFlag" class="cell-edit-input">
+                                <el-input v-model="item.stageName"></el-input>
+                            </span>
+                            <Icon type="arrow-up-c" class="mgr"></Icon>
+                            <Icon type="arrow-down-c"></Icon>
+                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
+                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存
+                            </el-button>
+                            <el-button type="text" @click="handleDelete(index,projectMenu)">删除</el-button>
+                        </p>
+                    </div>
+                </div>
+                <!-- 基金阶段 配置 -->
+                <div class="rightAdd_btn">
+                    <el-button type="danger" style="width:80px" @click="openFund" size="small">添加</el-button>
+                </div>
+                <b style="padding-left:15px;">基金阶段配置</b>
+                <div class="project_config">
+>>>>>>> 959750a4510c9da5ca42b0a256cbfac99f085975
                     <div class="menu_title">
                         <div style="justify-content: space-between;flex-direction: row;display: flex">
                             <div>{{item.title}}</div>
@@ -44,13 +76,38 @@
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
+=======
+                <!-- 投资阶段 配置 -->
+                <div class="rightAdd_btn">
+                    <el-button type="danger" style="width:80px" @click="openInvest" size="small">添加</el-button>
+                </div>
+                <b style="padding-left:15px;">投资阶段配置</b>
+                <div class="project_config">
+                    <div class="menu_title">
+                        <div>投资者配置</div>
+                    </div>
+                    <div class="menu_box">
+                        <p class="menu_list" v-for="item in investMenu" :key="item.index">
+                            <span v-if="!item.editFlag">{{item.investName}}</span>
+                            <span v-if="item.editFlag" class="cell-edit-input">
+                                <el-input v-model="item.investName"></el-input>
+                            </span>
+                            <Icon type="arrow-up-c" class="mgr"></Icon>
+                            <Icon type="arrow-down-c"></Icon>
+                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
+                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存</el-button>
+                            <el-button type="text" @click="handleDelete(index,investMenu)">删除</el-button>
+                        </p>
+                    </div>
+>>>>>>> 959750a4510c9da5ca42b0a256cbfac99f085975
                 </div>
             </el-col>
             <el-col :span="18">
                 <el-row>
                     <el-col>
                         <div class="leftAdd_btn">
-                            <el-button type="danger" style="width:80px" @click="openFile">添加</el-button>
+                            <el-button type="danger" style="width:80px" @click="openFile" size="small">添加</el-button>
                         </div>
                     </el-col>
                     <el-col>

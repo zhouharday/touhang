@@ -1,12 +1,21 @@
 import * as types from '../mutations-type'
-import {getManagementType, FundInvestment, managementCompany, OrganizationType, getMyFund, fundStage, fundStatus, getAllOrgList} from '../../api/fund'
+import {
+    getManagementType,
+    FundInvestment,
+    managementCompany,
+    OrganizationType,
+    getMyFund,
+    fundStage,
+    fundStatus,
+    getAllOrgList
+} from '../../api/fund'
 const state = {
     getManType: [],
     fundInvestment: [],
     managementCompany: [],
-    OrgType: [],
+    OrgType: {},
     myFundList: {},
-    myFundDetails: {},
+    // myFundDetails: {},
     fundStage: {},
     fundStatus: {},
     getOrgList: {}
@@ -18,7 +27,7 @@ const getters = {
     managementCompany: state => state.managementCompany,
     OrgType: state => state.OrgType,
     myFundList: state => state.myFundList,
-    myFundDetails: state => state.myFundDetails,
+    // myFundDetails: state => state.myFundDetails,
     fundStage: state => state.fundStage,
     fundStatus: state => state.fundStatus,
     getOrgList: state => state.getOrgList
@@ -40,9 +49,9 @@ const mutations = {
     [types.GET_MYFUNDLIDT](state, myFundList) {
         state.myFundList = myFundList
     },
-    [types.GET_MYFUNDDETAILS](state, myFundDetails) {
-        state.myFundDetails = myFundDetails
-    },
+    // [types.GET_MYFUNDDETAILS](state, myFundDetails) {
+    //     state.myFundDetails = myFundDetails
+    // },
     [types.GET_FUNDSTAGE](state, fundStage) {
         state.fundStage = fundStage
     },
@@ -92,7 +101,7 @@ const actions = {
     },
     getFundLists({commit, dispatch}) {
         return getMyFund().then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 commit(types.GET_MYFUNDLIDT, res.data.result)
             }
         }).catch(err => {
@@ -101,7 +110,7 @@ const actions = {
     },
     getFundStage({commit, dispatch}) {
         return fundStage().then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 commit(types.GET_FUNDSTAGE, res.data.result)
             }
         }).catch(err => {
@@ -110,7 +119,7 @@ const actions = {
     },
     getFundStatus({commit, dispatch}) {
         return fundStatus().then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 commit(types.GET_FUNDSTATUS, res.data.result)
             }
         }).catch(err => {
@@ -119,7 +128,7 @@ const actions = {
     },
     getAllOrg({commit, dispatch}) {
         return getAllOrgList().then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 commit(types.GET_ALLORGLIST, res.data.result)
             }
         }).catch(err => {

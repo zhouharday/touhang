@@ -1,6 +1,11 @@
 <template>
 <div class="fund">
-    <myFilter :chooseInfo="chooseInfo"></myFilter>
+    <!-- 组织类型 -->
+    <my-filter :chooseInfo="organizationType"></my-filter>
+    <!-- 管理类型 -->
+    <my-filter :chooseInfo="managementType"></my-filter>
+    <my-filter :chooseInfo="allFundStage"></my-filter>
+    <my-filter :chooseInfo="allFundStatus"></my-filter>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
             <el-input placeholder="请输入搜索内容"
@@ -51,8 +56,8 @@
         <el-pagination @size-change="handleSizeChange"
                        @current-change="handleCurrentChange"
                        :current-page="currentPage"
-                       :page-sizes="[10, 20, 30, 40]"
-                       :page-size="50"
+                       :page-sizes="[10, 20, 30, 50]"
+                       :page-size="10"
                        layout="total, sizes, prev, pager, next, jumper"
                        :total=pageTotal>
         </el-pagination>
@@ -70,7 +75,6 @@ import {
 } from 'vuex'
 import {
     getManagementType,
-    getMyFundDetails,
     getMyFund
 } from 'api/fund'
 const INDEX = 0;
@@ -87,19 +91,22 @@ export default {
                     explain: '基金'
                 }]
             },
-            chooseInfo: [{
+            organizationType: {
                 title: '组织类型：',
                 details: []
-            }, {
+            },
+            managementType: {
                 title: '管理类型：',
                 details: []
-            }, {
+            },
+            allFundStage: {
                 title: '基金阶段：',
                 details: []
-            }, {
+            },
+            allFundStatus: {
                 title: '基金状态：',
-                details: ['全部', '中止']
-            }],
+                details: []
+            },
             fundSearch: '',
             myFund: [],
             pageTotal: '',
@@ -122,25 +129,17 @@ export default {
             this.$router.push('/home/add')
         },
         handleRouter(index, row) {
-            getMyFundDetails(row.id).then((res) => {
-                if (res.data.status == '200') {
-                    this.GET_MYFUNDDETAILS(res.data.result)
-                    this.addTab({
-                        type: 'addTab',
-                        title: row.fundName + '详情',
-                        url: '/home/fundDetails/' + row.id,
-                        name: 'fundDetails/' + row.id
-                    });
-                    this.$router.push({
-                        name: 'fundDetails',
-                        params: {
-                            id: row.id
-                        }
-                    })
+            this.addTab({
+                type: 'addTab',
+                title: row.fundName + '详情',
+                url: '/home/fundDetails/' + row.id,
+                name: 'fundDetails/' + row.id
+            });
+            this.$router.push({
+                name: 'fundDetails',
+                params: {
+                    id: row.id
                 }
-            }).catch(err => {
-                this.$Message.error(err)
-                this.$router.push('/home/myfund')
             })
         },
         leadingIn(el) {
@@ -180,24 +179,22 @@ export default {
     created() {
         this.$store.dispatch('getFundLists').then(() => {
             this.myFund = this.myFundList.list
-        }),
+        })
         this.$store.dispatch('getManageType').then(() => {
-            this.chooseInfo[0].details = this.getManType
-        }),
+            this.managementType.details = this.getManType
+        })
         this.$store.dispatch('getOrganizationType').then(() =>{
-            this.chooseInfo[1].details = this.OrgType
-        }),
+            this.organizationType.details = this.OrgType
+        })
         this.$store.dispatch('getFundStage').then(() => {
-            this.chooseInfo[2].details = this.fundStage
-        }),
+            this.allFundStage.details = this.fundStage
+        })
         this.$store.dispatch('getFundStatus').then(() => {
-            this.chooseInfo[3].details = this.fundStatus
-        }),
+            this.allFundStatus.details = this.fundStatus
+        })
         getMyFund().then((res) => {
             if(res.status == '200') {
-                console.log(res)
                 this.pageTotal = res.data.result.total
-                console.log(this.pageTotal)
             }
         })
     },

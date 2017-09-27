@@ -54,7 +54,7 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="formAccountinfo">
+                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo">
                 </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
@@ -73,7 +73,7 @@
                 <my-file :fileListData="fileListData"></my-file>
             </el-tab-pane>
             <el-tab-pane label="运营管理" name="manage" class="tab_list">
-                <manage></manage>
+                <manage :costData="costData"></manage>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -90,11 +90,17 @@ import Projects from './projects'
 import File from './file'
 import Manage from './manage'
 import echarts from '../../components/echarts'
-import {
-    mapGetters
-} from 'vuex'
 
-import {getFundTeamList, getInvestorByFund, getProjectContractByFund, selectProjectOrFundDocument} from 'api/fund'
+
+import {
+    getMyFundDetails,
+    getFundTeamList,
+    getInvestorByFund,
+    getProjectContractByFund,
+    selectProjectOrFundDocument,
+    getFunAppraisement,
+    getFundFeeList
+} from 'api/fund'
 
 export default {
     data() {
@@ -150,67 +156,77 @@ export default {
                 name: '姓名'
             }],
             activeName: 'details',
-            formDetails: {},
-            // formMIS: {},
-            // formRegistration: {},
-            // formAccountinfo: {},
+            formDetails: {}, //详情 - 基本信息
+            formMIS: {}, //详情 - 管理信息
+            formRegistration: {
+                regDate: '',
+                regAddress: '',
+                recordStatus: '',
+                recordDate: '',
+                recordNo: ''
+            }, //详情 - 备案注册
+            formAccountInfo: [], //详情 - 账户信息
             teamData: [], //团队列表
             investorData: [], // 投资者列表
             fileListData: [], // 文档列表
-            projectsData: [] // 投资项目
+            projectsData: [], // 投资项目
+            costData: [] // 基金费用
         }
     },
     methods: {
         handleClick() {
-            if(this.activeName == 'team') {
+            if (this.activeName == 'team') {
                 getFundTeamList(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
-                        console.log('团队：' + res.data.result)
+                    if (res.status == '200') {
+                        // console.log(res.data.result)
                         this.teamData = res.data.result
                     }
                 })
             } else if (this.activeName == 'Investor') {
                 getInvestorByFund(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         console.log(res.data.result) // 投资者数据为空
                         this.investorData = res.data.result
                     }
                 })
             } else if (this.activeName == 'project') {
                 getProjectContractByFund(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         console.log(res) // 投资项目数据为空
                         this.projectsData = res.data.result
                     }
                 })
-            } else if(this.activeName == 'file') {
-                selectProjectOrFundDocument(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+            } else if (this.activeName == 'file') {
+                selectProjectOrFundDocument(this.$route.params.id, 2).then((res) => {
+                    if (res.status == '200') {
                         console.log(res.data.result)
                         this.fileListData = res.data.result
+                    }
+                })
+            } else if (this.activeName == 'manage') {
+                getFundFeeList(this.$route.params.id).then((res) => {
+                    if (res.status == '200') {
+                        console.log(res)
+                        this.costData = res.data.result
                     }
                 })
             }
         }
     },
-    computed: {
-        ...mapGetters([
-            'myFundDetails'
-        ])
-    },
     created() {
-        this.fundDetails = Object.assign({}, this.myFundDetails.fundBaseInfo, {
-            flag: 'false'
-        })
-        this.formMIS = Object.assign({}, this.myFundDetails.fundManageInfo, {
-            flag: 'false'
-        })
-        this.formAccountinfo = Object.assign({}, this.myFundDetails.fundAccinfo, {
-            flag: 'false'
-        })
-        this.formRegistration = Object.assign({}, this.myFundDetails.fundRegistration, {
-            flag: 'false',
-        })
+        getFunAppraisement(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    // console.log(res) 有问题待定！！！
+                }
+            }),
+            getMyFundDetails(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    this.formDetails = res.data.result.fundBaseInfo
+                    this.formMIS = res.data.result.fundManageInfo
+                    // this.formRegistration = res.data.result.fundRegistration
+                    this.formAccountInfo = res.data.result.fundAccinfo
+                }
+            })
     },
     components: {
         tableInfo,

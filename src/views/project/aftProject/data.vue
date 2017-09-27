@@ -22,7 +22,7 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="operatingModal2 =true">添加数据</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,operatingData)">删除</el-button>
+                        <el-button type="text" size="small" @click="operatingDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -47,12 +47,12 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报人">
-                                <el-input  placeholder="默认登录用户" v-model="operatingForm1.informant" auto-complete="off" disabled></el-input>
+                                <el-input placeholder="默认登录用户" v-model="operatingForm1.informant" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报日期">
-                                <el-input  placeholder="当前默认日期" v-model="operatingForm1.date" style="width:100%;" disabled>
+                                <el-input placeholder="当前默认日期" v-model="operatingForm1.date" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -175,6 +175,8 @@
                     <el-button type="primary" @click="confirmOperating">保存</el-button>
                 </div>
             </el-dialog>
+            <delete-reminders :deleteReminders="operatingDelete" :message="operatingMessage" :modal_loading="modal_loading" @del="operatingDelete=false" @cancel="operatingDelete=false">
+            </delete-reminders>
         </div>
 
         <div class="s_data" v-show="s_show">
@@ -190,7 +192,7 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="financialModal2 =true">添加数据</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,financialData)">删除</el-button>
+                        <el-button type="text" size="small" @click="financialDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -214,12 +216,12 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报人">
-                                <el-input  placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
+                                <el-input placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="填报日期">
-                                <el-input  placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
+                                <el-input placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -497,18 +499,25 @@
                     <el-button type="primary" @click="cashFlowAdd">保存</el-button>
                 </div>
             </el-dialog>
+            <delete-reminders :deleteReminders="financialDelete" :message="financialMessage" :modal_loading="modal_loading" @del="financialDelete=false" @cancel="financialDelete=false">
+            </delete-reminders>
         </div>
     </div>
 </template>
 
 
 <script type="text/ecmascript-6">
+import deleteReminders from 'components/deleteReminders'
 import { changeDate } from 'common/js/config'
 export default {
     data() {
         return {
             f_show: true,
             s_show: false,
+            operatingDelete: false,
+            financialDelete: false,
+            operatingMessage: '是否确认删除该条经营数据？',
+            financialMessage: '是否确认删除该条财务数据？',
             operatingModal1: false,
             operatingModal2: false,
             operatingModal3: false,
@@ -540,13 +549,13 @@ export default {
                 appendix: ''
             },
             sortOptions: [
-                 { //数据类型列表
+                { //数据类型列表
                     value: '选项1',
                     label: '年报'
                 }, {
                     value: '选项2',
                     label: '半年报'
-                }, { 
+                }, {
                     value: '选项1',
                     label: '季报'
                 }, {
@@ -735,7 +744,10 @@ export default {
                 this.loadingStatus = false;
                 this.$Message.success('上传成功')
             }, 1500);
-        }
+        },
+    },
+    components: {
+        deleteReminders
     }
 }
 </script>

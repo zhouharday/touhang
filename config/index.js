@@ -14,9 +14,7 @@ module.exports = {
         // Before setting to `true`, make sure to:
         // npm install --save-dev compression-webpack-plugin
         productionGzip: false,
-        productionGzipExtensions: [
-            'js', 'css'
-        ],
+        productionGzipExtensions: ['js', 'css'],
         // Run the build command with an extra argument to
         // View the bundle analyzer report after build finishes:
         // `npm run build --report`
@@ -25,23 +23,23 @@ module.exports = {
     },
     dev: {
         env: require('./dev.env'),
-        port: 8081,
+        port: 8888,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/api': {
-                // target:'http://192.168.0.88:9091',
-                target:'http://192.168.0.198:9091',
-                // target: 'http://18f46963j4.iok.la',
-                //  target:'http://192.168.0.118:9091',
-
-                // target:'http://192.168.0.117:9091',
+            '/api':{
+                // target:'http://192.168.0.191:9092',//平台
+                // target:'http://192.168.0.198:9092',//平台
+                target: 'http://18f46963j4.iok.la',
+                // target:'http://192.168.0.131:9092',// 文军凡IP
+                // target:'http://192.168.0.133:9092',// 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
-                changeOrigin: true,
+                // target:'http://zhqwjmw.eicp.net',
+                changeOrigin:true,
                 secure: false,
-                pathRewrite: {
-                    '^/api': ''
+                pathRewrite:{
+                    '^/api/':''
                 }
             }
         },
