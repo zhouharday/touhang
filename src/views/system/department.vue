@@ -1,7 +1,7 @@
 <template>
 <div class="department">
     <div class="title">
-        <el-button type="danger" @click="addDepartment">
+        <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
         </el-button>

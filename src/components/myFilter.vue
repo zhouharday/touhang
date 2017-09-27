@@ -67,7 +67,7 @@ export default {
         margin: 6px 0;
         display: flex;
         .title {
-            flex: 0 0 80px;
+            flex: 1 0 80px;
             height: 100%;
             line-height: 42px;
             font-size: 14px;
@@ -82,6 +82,11 @@ export default {
                     margin-right: 24px;
                     width:70px;
                     height:20px;
+
+                    display: inline-block;
+                    box-sizing: border-box;
+                    /*margin-right: 30px;*/
+                    margin-bottom: 5px;
                 }
                 .btn {
                     border: none;

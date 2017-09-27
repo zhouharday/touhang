@@ -4,7 +4,7 @@
             <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
                 <!-- 项目阶段 配置-->
                 <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px" @click="openProject">添加</el-button>
+                    <el-button type="danger" style="width:80px" @click="openProject" size="small">添加</el-button>
                 </div>
                 <b style="padding-left:15px;">项目阶段配置</b>
                 <div class="project_config">
@@ -28,7 +28,7 @@
                 </div>
                 <!-- 基金阶段 配置 -->
                 <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px" @click="openFund">添加</el-button>
+                    <el-button type="danger" style="width:80px" @click="openFund" size="small">添加</el-button>
                 </div>
                 <b style="padding-left:15px;">基金阶段配置</b>
                 <div class="project_config">
@@ -51,7 +51,7 @@
                 </div>
                 <!-- 投资阶段 配置 -->
                 <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px" @click="openInvest">添加</el-button>
+                    <el-button type="danger" style="width:80px" @click="openInvest" size="small">添加</el-button>
                 </div>
                 <b style="padding-left:15px;">投资阶段配置</b>
                 <div class="project_config">
@@ -77,7 +77,7 @@
                 <el-row>
                     <el-col>
                         <div class="leftAdd_btn">
-                            <el-button type="danger" style="width:80px" @click="openFile">添加</el-button>
+                            <el-button type="danger" style="width:80px" @click="openFile" size="small">添加</el-button>
                         </div>
                     </el-col>
                     <el-col>

@@ -127,8 +127,10 @@ export function getNodes(arrData,roleInfo) {
     var arr = arrData
     var i = 0;
     var j = 0;
-
+    // console.log("*******")
+// console.log(roleInfo)
     for (j in arr) {
+
         arr[j].choose = ''
         var idArr ;
         for (i in roleInfo)
@@ -144,23 +146,27 @@ export function getNodes(arrData,roleInfo) {
                 console.log(idArr)
                 var chooseId = 0;
                 var idArrL = 0;
-                // for (chooseId in arr)
+
                 arr.forEach(function (item , index) {
-                    for (idArrL in roleInfo)
+                    for (idArrL in idArr)
                     {
+
                         if (item.id == idArr[idArrL]){
                             item.choose = '1'
+                            // if (item.id == "95b67546c45549c59e4bb378658f9559")
+                            // {
+                            //     console.log("###########")
+                            //
+                            // }
                             console.log(item.id +'******' + item.choose)
                             console.log(item)
+
                         }
                     }
                 },this)
 
 
 
-
-                // arr[j].choose = '1'
-                // roleInfo[i].choose = '1'
 
             }
         }
@@ -177,7 +183,7 @@ export function getNodes(arrData,roleInfo) {
 
     })
 
-    console.log(nodes)
+    // console.log(nodes)
 
     return nodes
 }

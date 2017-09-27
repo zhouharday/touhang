@@ -3,7 +3,7 @@
     <el-row :gutter="20">
         <el-col :span="8">
             <div class="roleBtn">
-                <el-button type="danger">添加</el-button>
+                <el-button type="danger" size="small">添加</el-button>
             </div>
             <div class="roleContent"></div>
         </el-col>
@@ -12,24 +12,27 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <div class="roleBtn">
-                    <el-button>添加</el-button>
+                    <el-button size="small">添加</el-button>
                 </div>
                 <div class="roleContent">
                     <el-table :data="roleInfo" border style="width: 100%" >
                         <el-table-column label="角色名称" prop="roleName" width="160" >
 
                             <template scope="scope">
-                                <el-button size="small" type = "text" @click="handleRole(scope.$index, scope.row)">
+                                <!--<el-button size="small" type = "text" @click="handleRole(scope.$index, scope.row)">-->
+                                    <!--{{scope.row.roleName}}-->
+                                <!--</el-button>-->
+                                <span @click="handleRole(scope.$index, scope.row)">
                                     {{scope.row.roleName}}
-                                </el-button>
+                                </span>
                             </template>
                         </el-table-column>
                         <el-table-column label="操作">
                             <template scope="scope">
-                                <el-button size="small" @click="handleEdit(scope.$index, scope.row)">
+                                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
                                     编辑
                                 </el-button>
-                                <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">
+                                <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">
                                     删除
                                 </el-button>
                             </template>
@@ -76,10 +79,12 @@
         },
         methods: {
             handleRole(index,row){
-
+//                console.log("*******")
+//                console.log(row.id)
 //                获取角色权限
                 getUserRole(row.id).then((res)=>{
                     var arr = res.data.result
+//                    console.log(arr)
 //                    获取所有权限
                     getUserAllRole().then((res)=>{
                         this.treeData = getNodes(res.data.result,arr)

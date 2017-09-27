@@ -1,21 +1,22 @@
 <template>
-<div class="deleteReminders">
-    <Modal v-model="deleteReminders" width="360">
-        <p slot="header">
-            <span>确认删除</span>
-        </p>
-        <div style="text-align:center">
-            <p>是否确认删除该条记录？</p>
-        </div>
-        <div slot="footer" class="bottom">
-            <Button type="ghost" @click="cancelHandler($event)">取消</Button>
-            <Button type="error" :loading="modal_loading" @click="delHandler($event)">删除</Button>
-        </div>
-    </Modal>
-</div>
+    <div class="deleteReminders">
+        <Modal v-model="deleteReminders" width="360">
+            <p slot="header">
+                <span>{{message_title}}</span>
+            </p>
+            <div style="text-align:center">
+                <p>{{message}}</p>
+            </div>
+            <div slot="footer" class="bottom">
+                <Button type="ghost" @click="cancelHandler($event)">取消</Button>
+                <Button type="error" :loading="modal_loading" @click="delHandler($event)">{{btnText}}</Button>
+            </div>
+        </Modal>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
+import deleteReminders from 'components/deleteReminders'
 export default {
     props: {
         deleteReminders: {
@@ -25,6 +26,18 @@ export default {
         modal_loading: {
             type: Boolean,
             default: false
+        },
+        message_title: {
+            type: String,
+            default: '确认删除'
+        },
+        message: {
+            type: String,
+            default: '是否确认删除该条记录？'
+        },
+        btnText: {
+            type: String,
+            default: '删除'
         }
     },
     methods: {
@@ -43,9 +56,9 @@ export default {
 .deleteReminders {
     width: 360px;
     border-radius: 10px;
-    .ivu-modal-footer{
+    .ivu-modal-footer {
         border: none;
-        .bottom{
+        .bottom {
             text-align: center
         }
     }
