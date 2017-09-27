@@ -19,7 +19,7 @@
                 <baseInfo></baseInfo>
             </TabPane>
             <TabPane label="投资者文档" name="invDoc">
-                <investorDoc></investorDoc>
+                <investorDoc :investmentData="investmentData"></investorDoc>
             </TabPane>
             <TabPane label="投资协议" name="agree">
                 <agreement :agreementData="agreementData"></agreement>
@@ -50,6 +50,7 @@ import {
     getVisitingRecordList,
     getAgreementAmountList
 } from 'api/investor'
+import {selectProjectOrFundDocument} from 'api/fund'
 export default {
     data() {
         return {
@@ -66,6 +67,7 @@ export default {
             agreementData: [],
             visitingRecord: [],
             investorData: [],
+            investmentData: [], // 投资者文档
             detailsName: 'info',
             paramsId: ''
         }
@@ -102,6 +104,12 @@ export default {
                 }).catch(err => {
                     let response = err.data
                     this.$Message.error(response.message || '获取资金明细失败！')
+                })
+            } else if (name == 'invDoc') {
+                selectProjectOrFundDocument(this.$route.params.userId, 3).then((res) => {
+                    if (res.status == '200') {
+                        this.investmentData = res.data.result
+                    }
                 })
             }
         }

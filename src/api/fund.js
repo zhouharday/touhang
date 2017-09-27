@@ -54,6 +54,13 @@ export function managementCompany() {
     }
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
+// 获取所有的基金管理公司（添加基金时候下拉列表）/fund/selectAllManageCompany
+export function selectAllManageCompany() {
+    const data = {
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id//商户id
+    }
+    return service({url: '/fund/selectAllManageCompany', method: 'post', data})
+}
 // 基金阶段
 export function fundStage() {
     const data = {
@@ -61,6 +68,7 @@ export function fundStage() {
     }
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
+// 获取基金详情信息 /fund/getFundDetails
 export function getMyFundDetails(detailsID) {
     const data = {
         id: detailsID
@@ -153,11 +161,11 @@ export function getProjectContractByFund(id) {
     return service({url: '/fund/getProjectContractByFund', method: 'post', data})
 }
 // 项目或基金阶段下面的文档或者基金下面的文档 /dictionaryController/selectProjectOrFundDocument
-export function selectProjectOrFundDocument(fundId) {
+export function selectProjectOrFundDocument(fundId, typeNum) {
     const data = {
         merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id所有字段都是必传字段
         typeId: fundId, //项目或者基金id
-        type: 2 //标识1：项目 2：基金 3：投资者
+        type: typeNum //标识1：项目 2：基金 3：投资者
     }
     return service({url: '/dictionaryController/selectProjectOrFundDocument', method: 'post', data})
 }
@@ -168,6 +176,37 @@ export function getFunAppraisement(id) {
     }
     return service({
         url: '/fund/getFunAppraisement',
+        method: 'post',
+        data
+    })
+}
+// 获取基金分配列表 /fund/getFundAllocationList
+export function getFundAllocationList(id) {
+    const data = {
+        fundId: id
+    }
+    return service({
+        url: '/fund/getFundAllocationList',
+        method: 'post',
+        data
+    })
+}
+// 获取一个基金的费用列表 /fund/getFundFeeList
+export function getFundFeeList(id) {
+    const data = {
+        fundId: id
+    }
+    return service({
+        url: '/fund/getFundFeeList',
+        method: 'post',
+        data
+    })
+}
+// 修改某一个费用 /fund/updateFundFee
+export function updateFundFee(fundData) {
+    const data = fundData
+    return service({
+        url: '/fund/updateFundFee',
         method: 'post',
         data
     })
