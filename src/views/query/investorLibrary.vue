@@ -55,10 +55,10 @@ import {getSelectIndex} from 'api/search'
 export default {
     data() {
         return {
-            filterInfo: [{
+            filterInfo: {
                 title: '投资者类型：',
                 details: [{"dicName":'全部'}, '机构', '个人', '政府']
-            }],
+            },
             theme: '#fff',
             investorData: [],
             input2:'',
@@ -97,7 +97,7 @@ console.log(this.input2)
         getSelectIndex('70').then((res)=>{
             console.log(999)
             console.log(res.data)
-            this.filterInfo[0].details = res.data.result
+            this.filterInfo.details = res.data.result
 
         })
 
