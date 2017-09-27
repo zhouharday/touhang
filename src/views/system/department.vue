@@ -237,7 +237,7 @@ export default {
 .department {
     .base-style();
     .title {
-        width: 50%;
+        width: 100%;
         height: 42px;
         line-height: 42px;
         flex: 1;
