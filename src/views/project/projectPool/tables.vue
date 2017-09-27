@@ -52,8 +52,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd1 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd1('memberForm')">确 定</el-button>
+                    <el-button type="default" @click="modalAdd1 = false">取 消</el-button>
+                    <el-button type="danger" @click="confirmAdd1('memberForm')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -247,7 +247,7 @@ export default {
         }
     },
     created() {
-        
+
     },
     methods: {
         init() {
@@ -293,7 +293,7 @@ export default {
                     }).then(resp => {
                         console.log('add ower resp: ', resp);
                         this.memberData.push(memberForm);
-                        
+
                         this.modalAdd1 = !this.modalAdd1;
                     }).catch(e => {
                         console.log('addOwer exists error: ', e);

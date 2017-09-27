@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="projecInfor">
         <!-- 这是项目信息统计表 -->
         <div>
             <el-row class="customerMang">
@@ -15,7 +15,7 @@
                 <el-col :span="8" class="searchIpt">
                     <div class="grid-content bg-purple-dark">
                         <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
-                            <el-button class="searchIpt" type="primary">
+                            <el-button class="searchIpt" type="danger" size="small">
                                 导出统计表
                             </el-button>
                         </a>
@@ -46,17 +46,23 @@
                 <el-table-column prop="shareholdingRatio" fixed="right" label="股权占比" width="150" align="center">
                 </el-table-column>
             </el-table>
-            <el-row class="articlesNumber">
-                <el-col :span="24">
-                    <div class="grid-content bg-purple-dark">
-                        显示
-                        <span> {{from}} </span>到
-                        <span> {{to}} </span>条, 共
-                        <span> {{altogether}} </span>条记录, 每页显示
-                        <span> {{every}} </span>条
-                    </div>
-                </el-col>
-            </el-row>
+            <!--<el-row class="articlesNumber">-->
+                <!--<el-col :span="24">-->
+                    <!--<div class="grid-content bg-purple-dark">-->
+                        <!--显示-->
+                        <!--<span> {{from}} </span>到-->
+                        <!--<span> {{to}} </span>条, 共-->
+                        <!--<span> {{altogether}} </span>条记录, 每页显示-->
+                        <!--<span> {{every}} </span>条-->
+                    <!--</div>-->
+                <!--</el-col>-->
+            <!--</el-row>-->
+            <div class="pagination">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+                               :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100"
+                               layout="total, sizes, prev, pager, next, jumper" :total="400">
+                </el-pagination>
+            </div>
         </div>
     </section>
 </template>

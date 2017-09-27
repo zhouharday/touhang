@@ -6,7 +6,7 @@ const state = {
     managementCompany: [],
     OrgType: [],
     myFundList: {},
-    myFundDetails: {},
+    // myFundDetails: {},
     fundStage: {},
     fundStatus: {},
     getOrgList: {}
@@ -18,7 +18,7 @@ const getters = {
     managementCompany: state => state.managementCompany,
     OrgType: state => state.OrgType,
     myFundList: state => state.myFundList,
-    myFundDetails: state => state.myFundDetails,
+    // myFundDetails: state => state.myFundDetails,
     fundStage: state => state.fundStage,
     fundStatus: state => state.fundStatus,
     getOrgList: state => state.getOrgList
@@ -40,9 +40,9 @@ const mutations = {
     [types.GET_MYFUNDLIDT](state, myFundList) {
         state.myFundList = myFundList
     },
-    [types.GET_MYFUNDDETAILS](state, myFundDetails) {
-        state.myFundDetails = myFundDetails
-    },
+    // [types.GET_MYFUNDDETAILS](state, myFundDetails) {
+    //     state.myFundDetails = myFundDetails
+    // },
     [types.GET_FUNDSTAGE](state, fundStage) {
         state.fundStage = fundStage
     },

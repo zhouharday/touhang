@@ -17,7 +17,7 @@
                 <div class="industry-ul">
                     <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
                         <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
-                            {{item.details}}
+                            {{item.dicName}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
                             <span :class="btnObject1"></span>
@@ -125,150 +125,15 @@
                 </el-table>
             </el-col>
         </el-row>
-        <div class="page">
+        <div class="pagination">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
         </div>
     </section>
 </template>
 
-
-
-
-<style lang="less" scoped>
-.assistantContent {
-    width: 100%;
-    min-height: 100%;
-    position: relative;
-    font-size: 14px;
-    background: #fff;
-}
-
-.search-box {
-    padding: 30px 30px 30px 0;
-    .search {
-        float: right;
-    }
-}
-
-.common {
-    padding: 0 30px 20px 30px;
-
-    ul {
-        float: left; //  width: 100%;
-        // height: 50px;
-        li {
-            //  width: 70px;
-            // height: 20px;
-            display: inline-block;
-            box-sizing: border-box;
-            margin-right: 30px;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-    }
-}
-
-.changeList {
-    height: 20px;
-    overflow: hidden;
-    position: relative;
-}
-
-.collapseBtn {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-.changeListk {
-    position: relative;
-}
-
-.collapseBtnk {
-    position: absolute;
-    bottom: 5px;
-}
-
-.tag_s {
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.active {
-    width: 70px;
-    height: 20px;
-    color: white;
-    text-align: center;
-    border-radius: 15px;
-    background: #F05E5E;
-}
-
-.collapse-btn {
-    width: 50px;
-    color: #F05E5E;
-    border: none;
-    outline: none;
-    background: #fff;
-}
-
-.uptriangle {
-    display: inline-block;
-    position: relative;
-    bottom: 2px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-bottom: 6px solid red;
-}
-
-.downtriangle {
-    display: inline-block;
-    position: relative;
-    top: 3px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-top: 6px solid red;
-}
-
-.common p {
-    font-size: 20px;
-    font-weight: bold;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #F05E5E;
-    span {
-        color: #F05E5E;
-    }
-}
-
-.theme {
-    font-size: 16px;
-    color: #F05E5E;
-    border-bottom: 1px solid #F05E5E;
-}
-
-.fow {
-    font-weight: bold;
-}
-
-.back {
-    background: #fff;
-}
-
-.page {
-    width: 100%;
-    padding: 15px 30px;
-    text-align: right;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-</style>
-
-
 <script>
+import {selectMenu} from 'api/cloudProject'
 export default {
     mounted() {
         this.$nextTick(function() {
@@ -278,6 +143,7 @@ export default {
     },
     data() {
         return {
+            num: 1, // 数据字典传值
             confirm: false,
             dialogVisible: false,
             search: '',
@@ -294,31 +160,7 @@ export default {
                 uptriangle: false,
                 downtriangle: true
             },
-            industryList: [
-                { details: "全部" },
-                { details: "电商" },
-                { details: "社交" },
-                { details: "硬件" },
-                { details: "文娱传媒" },
-                { details: "信息传输" },
-                { details: "软件信息" },
-                { details: "金融" },
-                { details: "医疗健康" },
-                { details: "科技推广" },
-                { details: "生活消费" },
-                { details: "企业服务" },
-                { details: "旅游" },
-                { details: "地产" },
-                { details: "教育" },
-                { details: "公共交通" },
-                { details: "物流" },
-                { details: "人工智能" },
-                { details: "VR/AR" },
-                { details: "体育" },
-                { details: "农业" },
-                { details: "共享经济" },
-                // { details: "游戏" }
-            ],
+            industryList: [],
             roundList: [
                 { rounds: "全部" },
                 { rounds: "种子轮" },
@@ -475,7 +317,143 @@ export default {
                 this.currentIndex3 = index;
             }
         }
+    },
+    created() {
+        selectMenu(this.num).then((res) => {
+            if(res.status == '200') {
+                this.industryList = res.data.result
+            }
+        })
     }
 }
 </script>
 
+<style lang="less" scoped>
+.assistantContent {
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    font-size: 14px;
+    background: #fff;
+}
+
+.search-box {
+    padding: 30px 30px 30px 0;
+    .search {
+        float: right;
+    }
+}
+
+.common {
+    padding: 0 30px 20px 30px;
+
+    ul {
+        float: left;
+         //  width: 100%;
+        // height: 50px;
+        li {
+            display: inline-block;
+            box-sizing: border-box;
+            margin-right: 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+    }
+}
+
+.changeList {
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.collapse-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.changeListk {
+    position: relative;
+}
+
+.collapseBtnk {
+    position: absolute;
+    bottom: 5px;
+}
+
+.tag_s {
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.active {
+    width: 70px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 15px;
+    background: #F05E5E;
+}
+
+.collapse-btn {
+    width: 50px;
+    color: #F05E5E;
+    border: none;
+    outline: none;
+    background: #fff;
+}
+
+.uptriangle {
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-bottom: 6px solid red;
+}
+
+.downtriangle {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-top: 6px solid red;
+}
+
+.common p {
+    font-size: 20px;
+    font-weight: bold;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #F05E5E;
+    span {
+        color: #F05E5E;
+    }
+}
+
+.theme {
+    font-size: 16px;
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
+}
+
+.fow {
+    font-weight: bold;
+}
+
+.back {
+    background: #fff;
+}
+.page {
+   width: 100%;
+   padding: 15px 30px;
+   text-align: right;
+   position: absolute;
+   bottom: 0;
+   right: 0;
+ }
+</style>

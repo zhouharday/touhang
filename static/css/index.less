@@ -1,287 +1,550 @@
 /************************************/
 
 // elements的 分页组件颜色样式 全局
-//.el-pagination__sizes .el-input .el-input__inner{
-//    border-color:#F05E5E;
-//}
+
+//拖拽
+.ivu-upload-drag:hover {
+    border: 1px dashed #F05E5E;
+}
+
+.ivu-icon-ios-cloud-upload {
+    color: #F05E5E;
+}
+
+//全局footer
+.dialog-footer {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
 .pagination { //分页样式
     margin-top: 20px;
     float: right;
 }
-.el-pagination__sizes .el-input .el-input__inner:hover{
-    //border-color: #F05E5E;
-}
-.el-pagination__editor:focus{
+
+.el-pagination__editor:focus {
     border-color: #F05E5E;
 }
+
 .el-pager li:hover {
     color: #F05E5E;
 }
-    /*******************************/
-    // elements的 分页组件颜色样式
-    .el-pagination__sizes .el-input .el-input__inner {
-        //border-color: #F05E5E;
+
+/*******************************/
+// elements的 分页组件颜色样式
+.el-pagination__sizes .el-input .el-input__inner {
+    //border-color: #F05E5E;
+}
+
+.el-pagination__sizes:hover {
+    border-color: #F05E5E;
+}
+
+.el-pagination__sizes:focus {
+    border-color: #F05E5E
+}
+
+.el-pager li.active {
+    border-color: #F05E5E;
+    background-color: #F05E5E;
+    color: #fff;
+}
+
+.el-pagination button:hover {
+    color: #F05E5E;
+}
+
+.el-select-dropdown__item.selected,
+.el-select-dropdown__item.selected.hover {
+    background-color: #F05E5E;
+}
+
+.el-pagination__sizes .el-input .el-input__inner:focus {
+    border-color: #F05E5E;
+}
+
+.el-pagination .el-select .el-input input:focus {
+    border-color: #F05E5E;
+}
+
+.el-pagination__sizes .el-input .el-input__inner:hover {
+    border-color: #D1DBE5;
+}
+
+// el-tabs 页样式
+.el-tabs__active-bar {
+    background-color: red;
+}
+
+.el-tabs__item.is-active {
+    color: #F05E5E;
+}
+
+// el-radio 单选框的样式
+.el-radio__inner {
+    border-color: #f05e5e;
+}
+
+.el-radio__inner:hover {
+    border-color: #f05e5e;
+}
+
+.el-radio__input.is-focus .el-radio__inner {
+    border-color: #f05e5e;
+}
+
+.el-radio__input.is-checked .el-radio__inner {
+    background-color: #f05e5e;
+    border-color: #f05e5e;
+}
+
+// el-checkbox 多选框的样式
+.el-checkbox__inner {
+    border-color: #f05e5e;
+}
+
+.el-checkbox__inner:hover {
+    border-color: #f05e5e;
+}
+
+.el-checkbox__input.is-focus .el-checkbox__inner {
+    border-color: #f05e5e;
+}
+
+.el-checkbox__input.is-checked .el-checkbox__inner {
+    background-color: #f05e5e;
+    border-color: #f05e5e;
+}
+
+.el-checkbox__label {
+    font-weight: bold;
+    padding-left: 20px;
+}
+
+// ivu 分页组件 的颜色样式
+.ivu-page-prev:hover,
+.ivu-page-item:hover,
+.ivu-page-item-jump-prev:hover,
+.ivu-page-item-jump-next:hover,
+.ivu-page-next:hover {
+    // color: #666;
+    border-color: #F05E5E;
+}
+
+.ivu-page-item-active {
+    background-color: #F05E5E;
+    border-color: #F05E5E;
+}
+
+/************************************/
+//系统管理
+//用户管理
+.subscriber {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
     }
-    .el-pagination__sizes:hover {
-        border-color: #F05E5E;
-    }
-    .el-pagination__sizes:focus {
-        border-color: #F05E5E
-    }
-    .el-pager li.active {
-        border-color: #F05E5E;
+    .el-button--danger {
         background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
         color: #fff;
     }
-    .el-pagination button:hover {
-        color: #F05E5E;
+    .el-table th {
+        background-color: #2A3142;
     }
-    .el-select-dropdown__item.selected,
-    .el-select-dropdown__item.selected.hover {
-        background-color: #F05E5E;
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
-    .el-pagination__sizes .el-input .el-input__inner:hover {
-        border-color:  none;
+    .el-input__inner:focus, .el-input__inner:hover {
+        border-color: #F05E5E;
     }
-.el-pagination__sizes .el-input .el-input__inner:focus {
-    border-color:  #F05E5E;
 }
-    .el-pagination .el-select .el-input input:focus {
+
+.configuratin {
+    .el-input__inner:focus {
         border-color: #F05E5E;
     }
-
-    // el-tabs 页样式
-    .el-tabs__active-bar {
-        background-color: red;
-    }
-    .el-tabs__item.is-active {
+    .el-button--default {
+        border: 1px solid #F05E5E;
         color: #F05E5E;
     }
-    // el-radio 单选框的样式
-    .el-radio__inner {
-        border-color: #f05e5e;
-    }
-    .el-radio__inner:hover {
-        border-color: #f05e5e;
-    }
-    .el-radio__input.is-focus .el-radio__inner {
-        border-color: #f05e5e;
-    }
-    .el-radio__input.is-checked .el-radio__inner {
-        background-color: #f05e5e;
-        border-color: #f05e5e;
-    }
-    // el-checkbox 多选框的样式
-    .el-checkbox__inner {
-        border-color: #f05e5e;
-    }
-    .el-checkbox__inner:hover {
-        border-color: #f05e5e;
-    }
-    .el-checkbox__input.is-focus .el-checkbox__inner {
-        border-color: #f05e5e;
-    }
-    .el-checkbox__input.is-checked .el-checkbox__inner {
-        background-color: #f05e5e;
-        border-color: #f05e5e;
-    }
-    .el-checkbox__label {
-        font-weight: bold;
-        padding-left: 20px;
-    }
-    // ivu 分页组件 的颜色样式
-    .ivu-page-prev:hover,
-    .ivu-page-item:hover,
-    .ivu-page-item-jump-prev:hover,
-    .ivu-page-item-jump-next:hover,
-    .ivu-page-next:hover {
-        // color: #666;
-        border-color: #F05E5E;
-    }
-    .ivu-page-item-active {
+    .el-button--danger {
         background-color: #F05E5E;
         border-color: #F05E5E;
     }
-    /************************************/
-    //系统管理
-    //用户管理
-    .subscriber {
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        .el-button--danger {
-            background-color: #F05E5E;
+}
+
+.companyInfo {
+    .ivu-upload-drag:hover {
+        border: 1px dashed #F05E5E;
+    }
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
+//企业权限
+.role {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    .el-button--text {
+        color: #F05E5E;
+    }
+}
+
+//项目权限
+.projectLimits {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    .cell > .el-button > span {
+        color: #F05E5E;
+    }
+    .el-input__inner:focus {
+        border-color: #F05E5E;
+    }
+}
+
+//基金权限
+.fundLimits {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    .cell > .el-button > span {
+        color: #F05E5E;
+    }
+    .el-input__inner:focus {
+        border-color: #F05E5E;
+    }
+}
+
+//基金管理
+//我的基金
+.fund {
+    .addPadding {
+        .el-input__inner:hover, .el-input__inner:focus {
             border-color: #F05E5E;
         }
     }
-    //企业权限
-    .role {
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
-    }
-    //项目权限
-    .projectLimits {
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
-        .cell > .el-button > span {
-            color: #F05E5E;
-        }
-        .el-input__inner:focus {
-            border-color: #F05E5E;
-        }
-    }
-    //基金权限
-    .fundLimits {
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
-        .cell > .el-button > span {
-            color: #F05E5E;
-        }
-        .el-input__inner:focus {
-            border-color: #F05E5E;
-        }
+    .cell > .el-button > span {
+        color: #F05E5E;
     }
 
-    //基金管理
-    //我的基金
-    .fund {
-        //.el-input__inner:hover,
-        //.el-input__inner:focus {
-        //    border-color: #F05E5E;
-        //}
-        //.el-input__icon + .el-input__inner{
-        //    border-color: #F05E5E;
-        //}
-        .el-button:focus, .el-button:hover {
-            color: #F05E5E;
-        }
-        .cell > .el-button > span {
-            color: #F05E5E;
+    .el-icon-search .el-input__inner:hover {
+        border-color: #ddd;
+    }
+    .el-icon-search .el-input__inner:focus {
+        outline: 0;
+        border-color: #F05E5E;
+    }
+}
+
+.myFilter {
+    .el-button:focus, .el-button:hover {
+        color: #F05E5E;
+    }
+}
+
+//合作机构
+.cooperative {
+    .el-button--danger {
+        color: #fff;
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    .el-button--danger:hover {
+        color: #fff;
+    }
+    .el-button--default {
+        color: #F05E5E;
+        background-color: #fff;
+        border-color: #F05E5E;
+    }
+    .cell > .el-button > span {
+        color: #F05E5E;
+    }
+    .addPadding {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
         }
     }
-    //合作机构
-    .cooperative {
+}
+
+//综合查询
+//项目库
+.proLibrary {
+    .addPadding {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
+        }
+    }
+    // row-table的css style
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
+}
+
+//基金库
+.fundLibrary {
+    .addPadding {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
+        }
+    }
+    td > .cell > .el-button--text {
+        color: #F05E5E;
+    }
+
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+}
+
+//投资者库
+.investorLibrary {
+    .addPadding {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
+        }
+    }
+    // row-table的css style
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
+}
+
+//项目文档
+.projectsDoc {
+    .search {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
+        }
+    }
+    td > .cell > .el-button--text {
+        color: #F05E5E;
+    }
+}
+
+//基金文档
+.fundDoc {
+    .search {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
+        }
+    }
+    td > .cell > .el-button--text {
+        color: #F05E5E;
+    }
+}
+
+//统计分析
+//出资统计表
+.customerMang {
+    .grid-content {
+        .el-input__inner:focus, .el-input__inner:hover {
+            border-color: #F05E5E;
+        }
         .el-button--danger {
             color: #fff;
             background-color: #F05E5E;
             border-color: #F05E5E;
         }
-        .el-button--danger:hover {
+    }
+    // row-table的css style
+}
+
+.projecInfor {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+
+}
+
+.fundedForm {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+}
+
+.fundInFormation {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+}
+
+//系统管理
+.department {
+    .title {
+        .el-button--danger:focus, .el-button--danger:hover {
+            background: #F05E5E;
+            border-color: #F05E5E;
             color: #fff;
         }
-        .el-button--default {
-            color: #F05E5E;
-            background-color: #fff;
-            border-color: #F05E5E;
-        }
-        .cell > .el-button > span {
-            color: #F05E5E;
-        }
     }
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+}
 
-    //投资者管理
-    //我的投资者
-    //拜访记录
-    .visitingRecord {
-        .el-button > span {
-            color: #F05E5E;
-        }
+.dictionary {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
-    .investmentDetails {
-        .ivu-tabs-nav .ivu-tabs-tab-active {
-            color: #F05E5E;
-        }
-        .ivu-tabs-ink-bar {
-            background-color: #F05E5E;
-        }
+    .el-table th {
+        background-color: #2A3142;
     }
-    .fundDetails {
-        .cell {
-            .el-button--default {
-                border: 1px solid #F05E5E;
-                color: #F05E5E;
-            }
-            .el-button--danger {
-                background-color: #F05E5E;
-                border-color: #F05E5E;
-            }
-        }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
+}
 
-    .investor {
-        .el-button--default {
-            border-color: #F05E5E;
-            color: #F05E5E;
-        }
-        .el-input input:focus,
-        .el-input input:hover {
-            border-color: #F05E5E;
-        }
-
+.role {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
-
-    //项目管理下
-    //项目池
-    .poolContent {
-        .el-input input:focus,
-        .el-input input:hover {
-            border-color: #F05E5E;
-        }
-
-        .el-input i:hover {
-            border-color: #F05E5E;
-        }
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        //.el-dialog .dialog-footer
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
-
+    .el-table th {
+        background-color: #2A3142;
     }
-    //项目池详情
-    .zpoolMessage {
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
-    //投资项目
-    .preContent {
-        // 搜索框的颜色样式
-        .el-input input:focus,
-        .el-input input:hover {
-            border-color: #F05E5E;
-        }
+}
+
+.projectLimits {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
-    //投后项目
-    .aftProject {
-        .el-input input:focus,
-        .el-input input:hover {
-            border-color: #F05E5E;
-        }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+}
+
+.process {
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+}
+
+//投资者管理
+//我的投资者
+//拜访记录
+.visitingRecord {
+    .el-button > span {
+        color: #F05E5E;
+    }
+}
+
+.investmentDetails {
+    .ivu-tabs-nav .ivu-tabs-tab-active {
+        color: #F05E5E;
+    }
+    .ivu-tabs-ink-bar {
+        background-color: #F05E5E;
+    }
+}
+
+.fundDetails {
+    .cell {
         .el-button--default {
             border: 1px solid #F05E5E;
             color: #F05E5E;
@@ -291,7 +554,74 @@
             border-color: #F05E5E;
         }
     }
-    .aftProjectMessage {
+}
+
+.investor {
+    .el-button--default {
+        border-color: #F05E5E;
+        color: #F05E5E;
+    }
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+
+}
+
+//项目管理下
+//项目池
+.poolContent {
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+
+    .el-input i:hover {
+        border-color: #F05E5E;
+    }
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+
+}
+
+//项目池详情
+.zpoolMessage {
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
+.tables {
+    .el-table__body .el-button > span {
+        color: #F05E5E;
+    }
+}
+
+.table {
+    .el-table__body .el-button > span {
+        color: #F05E5E;
+    }
+}
+
+.fileTable {
+    .el-table__body .el-button > span {
+        color: #F05E5E;
+    }
+    .cell a {
+        color: #F05E5E;
+    }
+}
+
+.addProject {
+    .formBtn {
         .el-button--default {
             border: 1px solid #F05E5E;
             color: #F05E5E;
@@ -301,82 +631,100 @@
             border-color: #F05E5E;
         }
     }
-    //项目估值
-    .projectValue {
-        .el-input input:focus,
-        .el-input input:hover {
-            border-color: #F05E5E;
-        }
+}
+
+//投资项目
+.preContent {
+    // 搜索框的颜色样式
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
     }
-    //估值查看
-    .valueView {
-        .el-input input:focus,
-        .el-input input:hover {
-            border-color: #F05E5E;
-        }
+}
+
+//投后项目
+.aftProject {
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
+.aftProjectMessage {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
+//项目估值
+.projectValue {
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+}
+
+//估值查看
+.valueView {
+    .el-input input:focus,
+    .el-input input:hover {
+        border-color: #F05E5E;
+    }
+}
+
+//云项目
+.assistantContent {
+    input.el-input__inner:focus,
+    input.el-input__inner:hover {
+        border-color: #F05E5E;
+    }
+    .el-input__icon:hover {
+        border-color: #F05E5E;
+    }
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
     }
 
-    //云项目
-    .assistantContent {
-        input.el-input__inner:focus,
-        input.el-input__inner:hover {
-            border-color: #F05E5E;
-        }
-        .el-input__icon:hover {
-            border-color: #F05E5E;
-        }
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
+}
 
+//首页
+.homeContent {
+    // ivu的简单分页组件 颜色样式
+    .ivu-page-simple .ivu-page-simple-pager input:hover {
+        border-color: #f05e5e;
     }
-
-    //首页
-    .homeContent {
-        // ivu的简单分页组件 颜色样式
-        .ivu-page-simple .ivu-page-simple-pager input:hover {
-            border-color: #f05e5e;
-        }
-        //  添加日程 模态框的样式
-        .scheduleBox {
-            .el-dialog--small {
-                width: 350px;
-                border-radius: 8px;
-            }
-            .el-dialog__header {
-                padding: 10px 20px 10px;
-                background: #a0a3aa;
-                border-radius: 8px 8px 0 0;
-            }
-            .el-dialog__title {
-                line-height: 1;
-                font-size: 16px;
-                color: #fff;
-            }
-
-        }
-    }
-
-    /*******日常办公********/
-    //任务
-    .Task {
+    //  添加日程 模态框的样式
+    .scheduleBox {
         .el-dialog--small {
-            width: 880px;
+            width: 350px;
+            border-radius: 8px;
         }
-        .el-date-editor.el-input {
-            width: 100%;
+        .el-dialog__header {
+            padding: 10px 20px 10px;
+            background: #a0a3aa;
+            border-radius: 8px 8px 0 0;
         }
-        .el-input__inner {
-            border-radius: 15px;
-        }
-
-        .ivu-table th {
-            background-color: #2a3142;
+        .el-dialog__title {
+            line-height: 1;
+            font-size: 16px;
             color: #fff;
         }
         //.el-dialog .dialog-footer
@@ -417,203 +765,257 @@
             border-color: #F05E5E;
         }
     }
+}
 
-    .contacts_list {
-        .el-button--default {
-            border: 1px solid #F05E5E;
-            color: #F05E5E;
-        }
-        //.el-dialog .dialog-footer
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
-        }
+/*******日常办公********/
+//任务
+.Task {
+    .el-dialog--small {
+        width: 880px;
     }
-
-    .cursor {
-        cursor: pointer;
-    }
-
-    .fl {
-        float: left;
-    }
-
-    .fr {
-        float: right;
-    }
-
-    @color: #f05e5e;
-    @c1: #515511;
-    @c2: #888888;
-    @c3: #acacac;
-    //日期选择
-    #month {
+    .el-date-editor.el-input {
         width: 100%;
-        height: auto;
-        margin: 0 auto;
+    }
+    .el-input__inner {
+        border-radius: 15px;
+    }
+
+    .ivu-table th {
+        background-color: #2a3142;
+        color: #fff;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    // ivu的 tabs页样式
+    .ivu-table-tbody .ivu-table-cell button span {
+        color: #F05E5E;
+    }
+    .ivu-table-row-hover {
+        border-color: #F05E5E;
+    }
+    .ivu-tabs-tab:hover {
+        color: #ED898E;
+    }
+    .ivu-tabs-tab-active {
+        color: #F05E5E;
+    }
+    .ivu-tabs-ink-bar {
+        background-color: #F05E5E;
+    }
+}
+
+//通讯录
+//消息公告
+.messageShow {
+    .el-table__row .el-button > span {
+        color: #F05E5E;
+    }
+}
+
+.contacts_list {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    //.el-dialog .dialog-footer
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+@color: #f05e5e;
+@c1: #515511;
+@c2: #888888;
+@c3: #acacac;
+//日期选择
+#month {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    padding-top: 20px;
+    .title {
+        width: 100%;
+        background-color: #fff;
+        position: relative;
+        z-index: 1;
+        border-radius: 5px;
+        overflow: hidden;
         margin-bottom: 10px;
-        padding-top: 20px;
-        .title {
-            width: 100%;
-            background-color: #fff;
-            position: relative;
-            z-index: 1;
-            border-radius: 5px;
+        div {
             overflow: hidden;
-            margin-bottom: 10px;
-            div {
-                overflow: hidden;
-                &.date {
-                    width: 100%;
-                    background-color: #fff;
-                    position: relative;
-                    box-sizing: border-box;
-                    padding: 0 5px;
-                    margin-bottom: 5px;
-                    > span {
-                        display: block;
-                        float: left;
-                        width: 100px;
-                        height: 30px;
-                        text-align: center;
-                        font-size: 16px;
-                        color: @c2;
-                        line-height: 30px;
-                    }
-                    > i {
-                        display: block;
-                        width: 20px;
-                        height: 30px;
-                        line-height: 30px;
-                        text-align: center;
-                        color: #99a9bf;
-                        font-size: 14px;
-                        float: left;
-                        cursor: pointer;
-                        font-weight: normal;
-                        &.i1 {
-                            margin-right: 10px;
-                        }
-                        &.i2 {
-                            margin-right: 20px;
-                        }
-                        &.i3 {
-                            margin-left: 20px;
-                            margin-right: 10px;
-                        }
-                        // &.i4 {}
-                    }
-                }
-                &.week_title {
-                    color: @c3;
-                    > span {
-                        border-top: none;
-                        &.actives {
-                            color: @color;
-                        }
-                    }
-                }
+            &.date {
+                width: 100%;
+                background-color: #fff;
+                position: relative;
+                box-sizing: border-box;
+                padding: 0 5px;
+                margin-bottom: 5px;
                 > span {
                     display: block;
+                    float: left;
+                    width: 100px;
                     height: 30px;
-                    width: 14%;
+                    text-align: center;
+                    font-size: 16px;
+                    color: @c2;
+                    line-height: 30px;
+                }
+                > i {
+                    display: block;
+                    width: 20px;
+                    height: 30px;
                     line-height: 30px;
                     text-align: center;
+                    color: #99a9bf;
                     font-size: 14px;
                     float: left;
-                    position: relative;
-                    margin-bottom: 10px;
-                    > span {
-                        display: block;
-                        width: 30px;
-                        height: 30px;
-                        line-height: 30px;
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        color: @c1;
-                        margin: 0 auto;
-                        border-radius: 50%;
-                        cursor: pointer;
-                        &.actives {
-                            color: @color;
-                        }
-                        &.active {
-                            color: @color;
-                            font-weight: bold;
-                            &:after {
-                                content: "";
-                                display: block;
-                                width: 6px;
-                                height: 6px;
-                                border-radius: 100%;
-                                background-color: @color;
-                                position: absolute;
-                                top: 0;
-                                right: 0;
-                            }
-                        }
-                        &.click {
-                            background-color: @color;
-                            color: #fff;
-                            font-weight: normal;
-                            &:after {
-                                content: "";
-                                display: none;
-                            }
-                        }
+                    cursor: pointer;
+                    font-weight: normal;
+                    &.i1 {
+                        margin-right: 10px;
                     }
+                    &.i2 {
+                        margin-right: 20px;
+                    }
+                    &.i3 {
+                        margin-left: 20px;
+                        margin-right: 10px;
+                    }
+                    // &.i4 {}
                 }
             }
-        }
-    }
-
-    .el-input__inner {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        background-color: #fff;
-        background-image: none;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        box-sizing: border-box;
-        color: rgb(31, 61, 52);
-        display: block;
-        font-size: inherit;
-        height: 36px;
-        line-height: 1;
-        outline: 0;
-        padding: 3px 10px;
-        transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-        width: 100%;
-    }
-
-    .myFilter {
-        .choose {
-            .ul_list {
-                .listWrapper {
-                    .list {
-                        button {
-                            &:active {
-                                // background: red;
-                                color: #fff;
-                            }
-                            // color: #fff;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    #zTree {
-        li {
-            > a {
+            &.week_title {
+                color: @c3;
                 > span {
-                    color: #ffffff;
-                    font-size: 15px;
+                    border-top: none;
+                    &.actives {
+                        color: @color;
+                    }
+                }
+            }
+            > span {
+                display: block;
+                height: 30px;
+                width: 14%;
+                line-height: 30px;
+                text-align: center;
+                font-size: 14px;
+                float: left;
+                position: relative;
+                margin-bottom: 10px;
+                > span {
+                    display: block;
+                    width: 30px;
+                    height: 30px;
+                    line-height: 30px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    color: @c1;
+                    margin: 0 auto;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    &.actives {
+                        color: @color;
+                    }
+                    &.active {
+                        color: @color;
+                        font-weight: bold;
+                        &:after {
+                            content: "";
+                            display: block;
+                            width: 6px;
+                            height: 6px;
+                            border-radius: 100%;
+                            background-color: @color;
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                        }
+                    }
+                    &.click {
+                        background-color: @color;
+                        color: #fff;
+                        font-weight: normal;
+                        &:after {
+                            content: "";
+                            display: none;
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+.el-input__inner {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    color: rgb(31, 61, 52);
+    display: block;
+    font-size: inherit;
+    height: 36px;
+    line-height: 1;
+    outline: 0;
+    padding: 3px 10px;
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    width: 100%;
+}
+
+.myFilter {
+    .choose {
+        .ul_list {
+            .listWrapper {
+                .list {
+                    button {
+                        &:active {
+                            // background: red;
+                            color: #fff;
+                        }
+                        // color: #fff;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#zTree {
+    li {
+        > a {
+            > span {
+                color: #ffffff;
+                font-size: 15px;
+            }
+        }
+    }
+}
 

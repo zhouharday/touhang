@@ -70,7 +70,6 @@ import {
 } from 'vuex'
 import {
     getManagementType,
-    getMyFundDetails,
     getMyFund
 } from 'api/fund'
 const INDEX = 0;
@@ -122,25 +121,17 @@ export default {
             this.$router.push('/home/add')
         },
         handleRouter(index, row) {
-            getMyFundDetails(row.id).then((res) => {
-                if (res.data.status == '200') {
-                    this.GET_MYFUNDDETAILS(res.data.result)
-                    this.addTab({
-                        type: 'addTab',
-                        title: row.fundName + '详情',
-                        url: '/home/fundDetails/' + row.id,
-                        name: 'fundDetails/' + row.id
-                    });
-                    this.$router.push({
-                        name: 'fundDetails',
-                        params: {
-                            id: row.id
-                        }
-                    })
+            this.addTab({
+                type: 'addTab',
+                title: row.fundName + '详情',
+                url: '/home/fundDetails/' + row.id,
+                name: 'fundDetails/' + row.id
+            });
+            this.$router.push({
+                name: 'fundDetails',
+                params: {
+                    id: row.id
                 }
-            }).catch(err => {
-                this.$Message.error(err)
-                this.$router.push('/home/myfund')
             })
         },
         leadingIn(el) {
@@ -195,9 +186,7 @@ export default {
         }),
         getMyFund().then((res) => {
             if(res.status == '200') {
-                console.log(res)
                 this.pageTotal = res.data.result.total
-                console.log(this.pageTotal)
             }
         })
     },

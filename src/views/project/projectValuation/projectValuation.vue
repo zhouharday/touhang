@@ -121,7 +121,7 @@ export default {
                 }
             ],
             form: {
-                algorithmType: ''
+               algorithmType: ''
             }
         }
     },
@@ -134,13 +134,11 @@ export default {
         },
         getDatas() {
             let appraisementStatus = this.appraisementStatus;
-
             let params = {
                 projectName: this.projectName,
                 page: this.page,
                 pageSize: this.pageSize
             };
-
             getProjectValuation(params).then(resp => {
                 let result = resp.data.result;
                 this.tableData = result.data || [];
