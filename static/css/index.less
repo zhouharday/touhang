@@ -143,7 +143,18 @@
 }
 
 /************************************/
-//系统管理
+//个人中心
+.personal{
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+    //系统管理
 //用户管理
 .subscriber {
     .el-button--default {
@@ -170,6 +181,7 @@
     }
 }
 
+// 业务配置
 .configuratin {
     .el-input__inner:focus {
         border-color: #F05E5E;
@@ -184,6 +196,7 @@
     }
 }
 
+// 
 .companyInfo {
     .ivu-upload-drag:hover {
         border: 1px dashed #F05E5E;
@@ -215,6 +228,15 @@
 
 //项目权限
 .projectLimits {
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
     .el-button--default {
         border: 1px solid #F05E5E;
         color: #F05E5E;
@@ -233,6 +255,15 @@
 
 //基金权限
 .fundLimits {
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    }
     .el-button--default {
         border: 1px solid #F05E5E;
         color: #F05E5E;
@@ -497,19 +528,6 @@
     }
 }
 
-.projectLimits {
-    .el-table__fixed-header-wrapper thead div {
-        background-color: #2A3142;
-        color: #fff;
-    }
-    .el-table th {
-        background-color: #2A3142;
-    }
-    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
-        background-color: #2A3142;
-        color: #fff;
-    }
-}
 
 .process {
     .el-table__fixed-header-wrapper thead div {
@@ -564,6 +582,9 @@
     .el-input input:focus,
     .el-input input:hover {
         border-color: #F05E5E;
+    }
+    .cell>.el-button>span{
+        color:#F05E5E;
     }
 
 }
@@ -641,17 +662,56 @@
         border-color: #F05E5E;
     }
 }
-
+.recordBox{
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+    .recordText button{
+        color: #F05E5E;
+    }
+    .ivu-timeline-item-head-blue {
+        border-color: #F05E5E;
+    }
+}
+.riskTable{
+    .el-button--text {
+        color:#F05E5E;
+    }
+}
+.outing {
+    .el-button--text{
+        color: #F05E5E;
+    }
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+.manage{
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
 //投后项目
 .aftProject {
     .el-input input:focus,
     .el-input input:hover {
         border-color: #F05E5E;
     }
-    .el-button--default {
-        border: 1px solid #F05E5E;
-        color: #F05E5E;
-    }
+    // .el-button--default {
+    //     border: 1px solid #F05E5E;
+    //     color: #F05E5E;
+    // }
     .el-button--danger {
         background-color: #F05E5E;
         border-color: #F05E5E;

@@ -19,7 +19,7 @@
                         <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
                             {{item.dicName}}
                         </li>
-                        <button :class="{ collapseBtn: !btnObject1.uptriangle }" class="collapse-btn" @click="changeList(1)">
+                        <button class="collapse-btn" :class="{ collapseBtn: !btnObject1.uptriangle }" @click="changeList(1)">
                             <span :class="btnObject1"></span>
                             {{collapseBtn1}}
                         </button>
@@ -116,8 +116,8 @@
                             <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="danger" @click="jumpPool">确 定</el-button>
+                                    <el-button type="default" size="small" @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="danger" size="small" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -125,7 +125,7 @@
                 </el-table>
             </el-col>
         </el-row>
-        <div class="pagination">
+        <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
         </div>
@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import {selectMenu} from 'api/cloudProject'
+import { selectMenu } from 'api/cloudProject'
 export default {
     mounted() {
         this.$nextTick(function() {
@@ -320,7 +320,7 @@ export default {
     },
     created() {
         selectMenu(this.num).then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 this.industryList = res.data.result
             }
         })
@@ -349,9 +349,9 @@ export default {
 
     ul {
         float: left;
-         //  width: 100%;
-        // height: 50px;
         li {
+            width: 70px;
+            height: 20px;
             display: inline-block;
             box-sizing: border-box;
             margin-right: 30px;
@@ -362,12 +362,12 @@ export default {
 }
 
 .changeList {
+    position: relative;
     height: 20px;
     overflow: hidden;
-    position: relative;
 }
 
-.collapse-btn {
+.collapseBtn {
     position: absolute;
     right: 0;
     top: 0;
@@ -403,6 +403,9 @@ export default {
     border: none;
     outline: none;
     background: #fff;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .uptriangle {
@@ -448,12 +451,13 @@ export default {
 .back {
     background: #fff;
 }
+
 .page {
-   width: 100%;
-   padding: 15px 30px;
-   text-align: right;
-   position: absolute;
-   bottom: 0;
-   right: 0;
- }
+    width: 100%;
+    padding: 15px 30px;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 </style>

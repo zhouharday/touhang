@@ -77,7 +77,6 @@ export default {
                     margin-right: 24px;
                     width:70px;
                     height:20px;
-
                     display: inline-block;
                     box-sizing: border-box;
                     /*margin-right: 30px;*/
@@ -85,6 +84,9 @@ export default {
                 }
                 .btn {
                     border: none;
+                    &:hover {
+                       color:#495060;
+                    }
                     &.active {
                         background: @color-theme-red;
                         color:@color-base;
@@ -93,8 +95,8 @@ export default {
                         text-align: center;
                         border-radius: 15px;
                         padding: 0;
-
                     }
+                    
                 }
             }
         }

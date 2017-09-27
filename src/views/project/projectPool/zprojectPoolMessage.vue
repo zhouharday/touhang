@@ -15,29 +15,8 @@
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
                 <span>确认将该项目转投资？</span>
                 <span slot="footer" class="dialog-footer">
-<<<<<<< HEAD
                     <el-button type="default" @click="dialogVisible=false">取 消</el-button>
                     <el-button type="danger" @click="jumpPre">确 定</el-button>
-=======
-                    <el-button type="default" @click="investDialog=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpPre">确 定</el-button>
-                </span>
-            </el-dialog>
-            <!-- 确认转观察 dialog -->
-            <el-dialog title="转观察" :visible.sync="observeDialog" size="tiny">
-                <span>确认将该项目转观察？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="observeDialog=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpObserve">确 定</el-button>
-                </span>
-            </el-dialog>
-            <!-- 确认转淘汰 dialog -->
-            <el-dialog title="转淘汰" :visible.sync="eliminateDialog" size="tiny">
-                <span>确认将该项目转淘汰？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpEliminate">确 定</el-button>
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                 </span>
             </el-dialog>
         </div>
@@ -49,8 +28,8 @@
                     <table-form :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                <industry-form :industryForm="industryForm"></industry-form>
-                            </el-tab-pane> -->
+                                    <industry-form :industryForm="industryForm"></industry-form>
+                                </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
                     <capital-table :projectData="projectData"></capital-table>
                 </el-tab-pane>
@@ -167,15 +146,15 @@ export default {
             this.eliminateDialog = !this.eliminateDialog;
             this.show_f = false;
             this.show_t = false,
-            this.isShow = true;
+                this.isShow = true;
             this.state = "淘汰";
         },
         changeNormal() {
-          this.isShow = false;
-          this.show_f = true;
-          this.show_s = true;
-          this.show_t = true;
-          this.state = "正常";
+            this.isShow = false;
+            this.show_f = true;
+            this.show_s = true;
+            this.show_t = true;
+            this.state = "正常";
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });

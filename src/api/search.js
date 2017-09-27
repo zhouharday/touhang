@@ -45,6 +45,16 @@ export  function getFundLibrary(searchText) {
      }
     return service({url: '/fund/getFundListByIndex', method: 'post', data})
 }
+//基金阶段
+export function getjieduan() {
+
+    const  data={
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "type":'2'
+    }
+    return service({url: '/dictionaryController/slectAllStageIndex', method: 'post', data})
+
+}
 
 
 /*******************************项目文档******************************************/
