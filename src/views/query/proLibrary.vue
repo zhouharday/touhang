@@ -9,6 +9,9 @@
     </div>
     <el-table :data="proLibrary" border style="width: 100%">
         <el-table-column prop="projectName" label="项目名称" align="center">
+            <template scope = "scope">
+                <a @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
+            </template>
         </el-table-column>
         <el-table-column prop="createUserName" label="项目创建人" align="center">
         </el-table-column>
@@ -42,10 +45,10 @@ export default {
             titleInfo: {
 
             },
-            chooseInfo: [{
+            chooseInfo: {
                 title: '项目类型:',
                 details: ['全部', 'PE', 'VC', '定增']
-            }],
+            },
             proLibrary: [],
             type:'',
             seartext:'',
@@ -58,8 +61,18 @@ export default {
         myFilter
     },
     methods:{
-        aaa(){
-            alert(1)
+        JumpOther(row){
+            console.log(row)
+            this.addTab(row.projectName,'路由','name')
+            this.$router.push({name:'路由名',params:{参数}})
+        },
+        addTab(th, url, name) {
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
+            });
         },
         handleIconClick(){
             this.seartext = this.input
@@ -88,7 +101,7 @@ export default {
         })
         getSelectIndex('202').then((res)=>{
             console.log(res.data)
-            this.chooseInfo[0].details = res.data.result
+            this.chooseInfo.details = res.data.result
         })
     }
 
