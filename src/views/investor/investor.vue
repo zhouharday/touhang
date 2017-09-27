@@ -72,10 +72,10 @@ import {
 export default {
     data() {
         return {
-            chooseInfo: [{
+            chooseInfo: {
                 title: '投资者类型：',
                 details: []
-            }],
+            },
             theme: '#fff',
             dataTitle: {
                 btnGroup: [{
@@ -190,7 +190,7 @@ export default {
         })
         getInvestorType().then((res) => {
             if (res.status == '200') {
-                this.chooseInfo[0].details = res.data.result
+                this.chooseInfo.details = res.data.result
             }
         }).catch(err => {
             this.$Message.error(err)

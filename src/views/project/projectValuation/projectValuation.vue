@@ -85,195 +85,146 @@
 </template>
 
 <script>
-    import { getProjectValuation } from 'api/project';
-    export default {
-        data() {
-            return {
-                total: 0,
-                page: 1,
-                pageSize: 5,
-                projectName: '',
-                currentIndex: 1,
-                stateList: [
-                    { state: "全部" },
-                    { state: "未估值" },
-                    { state: "已估值" }
-                ],
-                tableData: [
-                    {
-                        project: 'AAAAAAAA',
-                        valuationParameter: '市净率1000*20*5%',
-                        valuation: '0.00',
-                        valuationDate: '',
-                        valuationOfficer: '',
-                        state: ''
-                    }
-                ],
-                form: {
-                    algorithmType: ''
+import { getProjectValuation } from 'api/project';
+export default {
+    data() {
+        return {
+            currentIndex: 0,
+            projectName: '',
+            stateList: [
+                { state: "全部" },
+                { state: "未提交" },
+                { state: "已提交" }
+            ],
+            tableData: [
+                {
+                    project: 'AAAAAAAA',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
+                    valuation: '0.00',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: '',
+                    editFlag: false
+                },
+                {
+                    project: 'AAAAAAAA',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.4',
+                    valuation: '0.00',
+                    valuationDate: '',
+                    valuationOfficer: '',
+                    state: '',
+                    editFlag: false
                 }
-            }
-        },
-        created() {
-            this.init();
-        },
-        methods: {
-            init() {
-                this.getDatas();
-            },
-            getDatas() {
-                let appraisementStatus = this.appraisementStatus;
-
-                let params = {
-                    projectName: this.projectName,
-                    page: this.page,
-                    pageSize: this.pageSize
-                };
-
-                getProjectValuation(params).then(resp => {
-                    let result = resp.data.result;
-                    this.tableData = result.data || [];
-                    this.total = result.total || 0;
-                }).catch(e => {
-                    console.log('getProjectValuation() exists error: ', e);
-                });
-            },
-            pageChanged(page) {
-                this.page = page;
-                this.getDatas();
-            },
-            pageSizeChanged(pageSize) {
-                console.log('pageSize: ', pageSize);
-            },
-            checkEdit(index, row) { //编辑
-                // console.log(row)
-                row.editFlag = !row.editFlag;
-            },
-            handleIconClick(ev) {
-                // console.log(ev);
-                this.getDatas();
-            },
-            changeActive(index, item) {
-                this.currentIndex = index;
-                console.log(item);
+            ],
+            form: {
+               algorithmType: ''
             }
         }
+    },
+    created() {
+        this.init();
+    },
+    methods: {
+        init() {
+            this.getDatas();
+        },
+        getDatas() {
+            let appraisementStatus = this.appraisementStatus;
+            let params = {
+                projectName: this.projectName,
+                page: this.page,
+                pageSize: this.pageSize
+            };
+            getProjectValuation(params).then(resp => {
+                let result = resp.data.result;
+                this.tableData = result.data || [];
+                this.total = result.total || 0;
+            }).catch(e => {
+                console.log('getProjectValuation() exists error: ', e);
+            });
+        },
+        pageChanged(page) {
+            this.page = page;
+            this.getDatas();
+        },
+        pageSizeChanged(pageSize) {
+            console.log('pageSize: ', pageSize);
+        },
+        checkEdit(index, row) { //编辑
+            // console.log(row)
+            row.editFlag = !row.editFlag;
+        },
+        handleIconClick(ev) {
+            // console.log(ev);
+            this.getDatas();
+        },
+        changeActive(index, item) {
+            this.currentIndex = index;
+            console.log(item);
+        }
     }
+}
 </script>
 
 
 <style lang="less" scoped>
-    .projectValue {
-        width: 100%;
-        min-height: 100%;
-        position: relative;
-        font-size: 14px;
-        background: #fff;
-    }
+.projectValue {
+    width: 100%;
+    min-height: 100%;
+    position: relative;
+    font-size: 14px;
+    background: #fff;
+}
 
-    .common {
-        padding: 0 30px 20px 30px;
-        ul {
-            float: left;
-            li {
-                display: inline-block;
-                box-sizing: border-box;
-                margin-right: 30px;
-                margin-bottom: 5px;
-                cursor: pointer;
-            }
+.common {
+    padding: 0 30px 20px 30px;
+    ul {
+        float: left;
+        li {
+            display: inline-block;
+            box-sizing: border-box;
+            margin-right: 30px;
+            margin-bottom: 5px;
+            cursor: pointer;
         }
     }
+}
 
-    .tag {
-        margin-top: 20px;
-        margin-bottom: 5px;
-        font-size: 14px;
-        font-weight: bold;
-    }
+.tag {
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
 
-    .active {
-        width: 70px;
-        height: 20px;
-        color: white;
-        text-align: center;
-        border-radius: 15px;
-        background: #F05E5E;
-    }
+.active {
+    width: 70px;
+    height: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 15px;
+    background: #F05E5E;
+}
 
-    .search-box {
-        margin: 0 30px 20px 30px;
-    }
+.search-box {
+    margin: 0 30px 20px 30px;
+}
 
-    .project {
-        color: #F05E5E;
-        border-bottom: 1px solid #F05E5E;
-    }
+.project {
+    color: #F05E5E;
+    border-bottom: 1px solid #F05E5E;
+}
 
-    .page {
-        width: 100%;
-        padding: 15px 30px;
-        text-align: right;
-        position: absolute;
-        bottom: 0;
-        right: 0;
-    }
+.page {
+    width: 100%;
+    padding: 15px 30px;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 </style>
-
-
-<script>
-    export default {
-        data() {
-            return {
-                input: '',
-                currentIndex: 1,
-                stateList: [
-                    { state: "状态：" },
-                    { state: "全部" },
-                    { state: "未提交" },
-                    { state: "已提交" }
-                ],
-                tableData: [
-                    {
-                        project: 'AAAAAAAA',
-                        parameter1: '400',
-                        parameter2: '500',
-                        parameter3: '0.3',
-                        valuation: '',
-                        valuationDate: '',
-                        valuationOfficer: '',
-                        state: '',
-                        editFlag: false
-                    },
-                    {
-                        project: 'AAAAAAAA',
-                        parameter1: '400',
-                        parameter2: '500',
-                        parameter3: '0.4',
-                        valuation: '',
-                        valuationDate: '',
-                        valuationOfficer: '',
-                        state: '',
-                        editFlag: false
-                    }
-                ],
-                form: {
-                    algorithmType: ''
-                }
-                // total: this.tableData.length
-            }
-        },
-        methods: {
-            checkEdit(index, row) { //编辑
-                // console.log(row)
-                row.editFlag = !row.editFlag;
-            },
-            handleIconClick(ev) {
-                console.log(ev);
-            },
-            changeActive(index) {
-                this.currentIndex = index;
-            }
-        }
-    }
-</script>

@@ -54,7 +54,8 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <my-details :myFundDetails="myFundDetails"></my-details>
+                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo">
+                </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
                 <team :teamData="teamData"></team>
@@ -91,7 +92,15 @@ import Manage from './manage'
 import echarts from '../../components/echarts'
 
 
-import {getMyFundDetails, getFundTeamList, getInvestorByFund, getProjectContractByFund, selectProjectOrFundDocument, getFunAppraisement, getFundFeeList} from 'api/fund'
+import {
+    getMyFundDetails,
+    getFundTeamList,
+    getInvestorByFund,
+    getProjectContractByFund,
+    selectProjectOrFundDocument,
+    getFunAppraisement,
+    getFundFeeList
+} from 'api/fund'
 
 export default {
     data() {
@@ -147,7 +156,16 @@ export default {
                 name: '姓名'
             }],
             activeName: 'details',
-            myFundDetails: {}, //详情
+            formDetails: {}, //详情 - 基本信息
+            formMIS: {}, //详情 - 管理信息
+            formRegistration: {
+                regDate: '',
+                regAddress: '',
+                recordStatus: '',
+                recordDate: '',
+                recordNo: ''
+            }, //详情 - 备案注册
+            formAccountInfo: [], //详情 - 账户信息
             teamData: [], //团队列表
             investorData: [], // 投资者列表
             fileListData: [], // 文档列表
@@ -157,37 +175,37 @@ export default {
     },
     methods: {
         handleClick() {
-            if(this.activeName == 'team') {
+            if (this.activeName == 'team') {
                 getFundTeamList(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         // console.log(res.data.result)
                         this.teamData = res.data.result
                     }
                 })
             } else if (this.activeName == 'Investor') {
                 getInvestorByFund(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         console.log(res.data.result) // 投资者数据为空
                         this.investorData = res.data.result
                     }
                 })
             } else if (this.activeName == 'project') {
                 getProjectContractByFund(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         console.log(res) // 投资项目数据为空
                         this.projectsData = res.data.result
                     }
                 })
-            } else if(this.activeName == 'file') {
+            } else if (this.activeName == 'file') {
                 selectProjectOrFundDocument(this.$route.params.id, 2).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         console.log(res.data.result)
                         this.fileListData = res.data.result
                     }
                 })
-            } else if(this.activeName == 'manage') {
+            } else if (this.activeName == 'manage') {
                 getFundFeeList(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         console.log(res)
                         this.costData = res.data.result
                     }
@@ -197,16 +215,18 @@ export default {
     },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
-            if(res.status == '200') {
-                // console.log(res) 有问题待定！！！
-            }
-        }),
-        getMyFundDetails(this.$route.params.id).then((res) =>{
-            if(res.status == '200') {
-                // console.log(res)
-                // this.myFundDetails = res.data.result
-            }
-        })
+                if (res.status == '200') {
+                    // console.log(res) 有问题待定！！！
+                }
+            }),
+            getMyFundDetails(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    this.formDetails = res.data.result.fundBaseInfo
+                    this.formMIS = res.data.result.fundManageInfo
+                    // this.formRegistration = res.data.result.fundRegistration
+                    this.formAccountInfo = res.data.result.fundAccinfo
+                }
+            })
     },
     components: {
         tableInfo,
