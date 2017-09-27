@@ -1,6 +1,11 @@
 <template>
 <div class="fund">
-    <myFilter :chooseInfo="chooseInfo"></myFilter>
+    <!-- 组织类型 -->
+    <my-filter :chooseInfo="organizationType"></my-filter>
+    <!-- 管理类型 -->
+    <my-filter :chooseInfo="managementType"></my-filter>
+    <my-filter :chooseInfo="allFundStage"></my-filter>
+    <my-filter :chooseInfo="allFundStatus"></my-filter>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
             <el-input placeholder="请输入搜索内容"
@@ -86,19 +91,22 @@ export default {
                     explain: '基金'
                 }]
             },
-            chooseInfo: [{
+            organizationType: {
                 title: '组织类型：',
                 details: []
-            }, {
+            },
+            managementType: {
                 title: '管理类型：',
                 details: []
-            }, {
+            },
+            allFundStage: {
                 title: '基金阶段：',
                 details: []
-            }, {
+            },
+            allFundStatus: {
                 title: '基金状态：',
-                details: ['全部', '中止']
-            }],
+                details: []
+            },
             fundSearch: '',
             myFund: [],
             pageTotal: '',
@@ -171,19 +179,19 @@ export default {
     created() {
         this.$store.dispatch('getFundLists').then(() => {
             this.myFund = this.myFundList.list
-        }),
+        })
         this.$store.dispatch('getManageType').then(() => {
-            this.chooseInfo[0].details = this.getManType
-        }),
+            this.managementType.details = this.getManType
+        })
         this.$store.dispatch('getOrganizationType').then(() =>{
-            this.chooseInfo[1].details = this.OrgType
-        }),
+            this.organizationType.details = this.OrgType
+        })
         this.$store.dispatch('getFundStage').then(() => {
-            this.chooseInfo[2].details = this.fundStage
-        }),
+            this.allFundStage.details = this.fundStage
+        })
         this.$store.dispatch('getFundStatus').then(() => {
-            this.chooseInfo[3].details = this.fundStatus
-        }),
+            this.allFundStatus.details = this.fundStatus
+        })
         getMyFund().then((res) => {
             if(res.status == '200') {
                 this.pageTotal = res.data.result.total

@@ -116,7 +116,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金监理人">
-                        <el-select v-model="formMIS.fundSupervisorId" style="width:100%">
+                        <el-select v-model="formMIS.fundSuperintId" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -124,7 +124,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金监管人">
-                        <el-select v-model="formMIS.fundSuperintId" style="width:100%">
+                        <el-select v-model="formMIS.fundSupervisorId" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -223,22 +223,22 @@ import {
 } from 'api/fund'
 export default {
     props: {
-        // formDetails: {
-        //     type: Object,
-        //     default: {}
-        // },
-        // formMIS: {
-        //     type: Object,
-        //     default: {}
-        // },
-        // formRegistration: {
-        //     type: Object,
-        //     default: {}
-        // },
-        // formAccountinfo: {
-        //     type: Object,
-        //     default: {}
-        // }
+        formDetails: {
+            type: Object,
+            default: {}
+        },
+        formMIS: {
+            type: Object,
+            default: {}
+        },
+        formRegistration: {
+            type: Object,
+            default: {}
+        },
+        formAccountInfo: {
+            type: Array,
+            default: []
+        }
     },
     data() {
         return {
@@ -247,9 +247,6 @@ export default {
                 btnGroup: [{
                     icon: 'edit',
                     explain: '编辑'
-                }, {
-                    icon: 'upload',
-                    explain: '提交'
                 }]
             },
             headerInfo_MIS: {
@@ -257,9 +254,6 @@ export default {
                 btnGroup: [{
                     icon: 'edit',
                     explain: '编辑'
-                }, {
-                    icon: 'upload',
-                    explain: '提交'
                 }]
             },
             headerInfo_Registration: {
@@ -267,9 +261,6 @@ export default {
                 btnGroup: [{
                     icon: 'edit',
                     explain: '编辑'
-                }, {
-                    icon: 'upload',
-                    explain: '提交'
                 }]
             },
             headerInfo_Accountinfo: {
@@ -277,9 +268,6 @@ export default {
                 btnGroup: [{
                     icon: 'edit',
                     explain: '编辑'
-                }, {
-                    icon: 'upload',
-                    explain: '提交'
                 }]
             },
             formDetails: {
@@ -306,12 +294,12 @@ export default {
                 fundRemarks: ''
             },
             formMIS: {
-                fundStratorId: '',
-                fundCustodianId: '',
-                fundSupervisorId: '',
-                fundSuperintId: '',
-                fundAdvisorId: '',
-                fundOrganizationId: ''
+                fundStratorId: '', //基金管理人
+                fundCustodianId: '', //基金托管人
+                fundSupervisorId: '', // 基金监管人
+                fundSuperintId: '', // 基金监理人
+                fundAdvisorId: '', // 基金投资顾问
+                fundOrganizationId: '' // 第三方合作机构
             },
             formRegistration: {
                 regDate: '',
@@ -321,44 +309,32 @@ export default {
                 recordNo: ''
             },
             formAccountInfo: [{
-                username: '基本户户名',
-                openingBank: '基本户开户行',
-                accountNumber: '123456789',
+                username: '',
+                openingBank: '',
+                accountNumber: '',
                 accountType: 1,
                 accountTypeName: '基本户'
             }, {
-                username: "托管户户名",
-                openingBank: "托管户开户行",
-                accountNumber: "123456789",
+                username: "",
+                openingBank: "",
+                accountNumber: "",
                 accountType: 2,
                 accountTypeName: "托管户"
             }, {
-                username: "募集结算账户户名",
-                openingBank: "募集结算账户开户行",
-                accountNumber: "123457",
+                username: '',
+                openingBank: '',
+                accountNumber: '',
                 accountType: 3,
                 accountTypeName: "募集结算账户"
             }],
             managementCompany: [],
-            Accountinfo: {
-                title: ['账户类型', '户名', '开户行', '账号'],
-                formlist: [{
-                    username: '基本户户名',
-                    openingBank: '',
-                    accountNumber: '',
-                    accountType: ''
-                }, {
-                    username: '托管户户名',
-                    openingBank: '',
-                    accountNumber: '',
-                    accountType: ''
-                }, {
-                    username: '募集结算账户户名',
-                    openingBank: '',
-                    accountNumber: '',
-                    accountType: ''
-                }]
-            }
+            options: [{
+                id: 0,
+                label: '已备案'
+            }, {
+                id: 1,
+                label: '未备案'
+            }]
         }
     },
     methods: {
@@ -374,7 +350,6 @@ export default {
         ...mapGetters([
             'getManType',
             'OrgType',
-            // 'managementCompany',
             'fundInvestment',
             'getOrgList'
         ])
@@ -421,7 +396,7 @@ export default {
         font-size: inherit;
         height: 36px;
         outline: 0;
-        padding: 3px 10px;
+        padding: 3px 0px;
         width: 100%;
     }
 }

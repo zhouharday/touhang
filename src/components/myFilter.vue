@@ -1,14 +1,14 @@
 <template>
     <div class="myFilter">
         <ul class="choose">
-            <li v-for="(item, index) of chooseInfo" class="lists" :key="item">
-                <div class="title" v-show="item.title">
-                    {{item.title}}
+            <li class="lists">
+                <div class="title" v-show="chooseInfo.title">
+                    {{chooseInfo.title}}
                 </div>
                 <div class="ul_list">
                     <ul class="listWrapper">
-                        <li class="list" v-for="(list, nowIndex) of item.details" :key="list">
-                            <el-button @click="changeList(index, nowIndex,item.details)" :class="{active: nowIndex==currentIndex && index==parentIndex}" class="btn">
+                        <li class="list" v-for="(list, index) of chooseInfo.details" :key="list">
+                            <el-button @click="changeList(index)" class="btn" :class="{active: index == currentIndex}">
                                 {{list.dicName}}
                             </el-button>
                         </li>
@@ -29,28 +29,18 @@ export default {
    */
     props: {
         chooseInfo: {
-            type: Array,
-            default: []
+            type: Object,
+            default: {}
         }
     },
     data() {
         return {
-            currentIndex: 0,
-            parentIndex: 0,
-            changed: false
+            currentIndex: 0
         }
     },
     methods: {
-        changeList(index, val,content) {
-//            console.log(index)
-//            console.log(val)
-            this.parentIndex = index
-            this.currentIndex = val
-//            console.log(content[val].id)
-            if(content[val].id == 0){
-                content[val].id = '';
-            }
-            this.$emit('postID',content[val].id)
+        changeList(index) {
+            this.currentIndex = index
         },
     }
 }
@@ -67,7 +57,7 @@ export default {
         margin: 6px 0;
         display: flex;
         .title {
-            flex: 1 0 80px;
+            flex: 0 0 80px;
             height: 100%;
             line-height: 42px;
             font-size: 14px;
