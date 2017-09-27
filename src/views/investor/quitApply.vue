@@ -4,7 +4,9 @@
         <el-row :gutter="10">
             <el-col :span="24">
                 <el-form-item label="协议名称">
-                    <el-select v-model="quitApplyInfo.agreementName" style="width:100%">
+                    <el-select v-model="quitApplyInfo.agreementName"
+                               @change="getItemData"
+                               style="width:100%">
                         <el-option v-for="(item, index) of agreementData" :key="item.id" :label="item.agreementName" :value="item.id">
                         </el-option>
                     </el-select>
@@ -12,16 +14,16 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="投资者">
-                    <el-select v-model="quitApplyInfo.investorName" style="width:100%">
-                        <el-option v-for="(item, index) of investor" :key="item.inverstorId" :label="item.investorName" :value="item.inverstorId">
+                    <el-select v-model="quitApplyInfo.investorName" disabled style="width:100%">
+                        <el-option v-for="(investor, index) of agreementData" :key="investor.id" :label="investor.investorName" :value="investor.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item label="基金名称">
-                    <el-select v-model="quitApplyInfo.fundName" style="width:100%">
-                        <el-option v-for="(item, index) of agreementData" :key="item.fundId" :label="item.fundName" :value="item.fundId">
+                    <el-select v-model="quitApplyInfo.fundName" disabled style="width:100%">
+                        <el-option v-for="(list, index) of agreementData" :key="list.id" :label="list.fundName" :value="list.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -67,7 +69,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {getAgreementAmountList} from 'api/investor'
+import {GetProtocolsList} from 'api/investor'
 export default {
     props: {
         quitApplyInfo: {
@@ -79,23 +81,33 @@ export default {
         return {
             allAgreement: [],
             agreementData: [],
+            getAgreementValue: '',
             investmentManager: [{
                 dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 managerId: JSON.parse(sessionStorage.getItem('userInfor')).id
             }],
-            investor: [{
-                investorName: this.$store.state.investor.investorName,
-                inverstorId: this.$route.params.userId
-            }]
+            // investor: [{
+            //     investorName: this.$store.state.investor.investorName,
+            //     inverstorId: this.$route.params.userId
+            // }],
+            size: 1000
+        }
+    },
+    methods: {
+        getItemData(value) {
+            this.getAgreementValue = value
+            this.quitApplyInfo.investorName = value
+            this.quitApplyInfo.fundName = value
         }
     },
     created() {
-        getAgreementAmountList(this.$route.params.userId, JSON.parse(sessionStorage.getItem('merchants'))[0].id).then((res) => {
+        GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
             if(res.status == '200') {
                 this.agreementData = res.data.result.list
             }
         })
-        this.quitApplyInfo.investorName = this.$store.state.investor.investorName
+
+        // this.quitApplyInfo.investorName = this.$store.state.investor.investorName
     }
 }
 </script>

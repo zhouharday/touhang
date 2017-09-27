@@ -4,6 +4,7 @@ import axios from 'axios'
 import login from './modules/login'
 import register from './modules/register'
 import fund from './modules/fund'
+import query from './modules/query'
 import investor from './modules/investor'
 import system from './modules/system'
 import project from './modules/project'
@@ -18,6 +19,7 @@ export default new Vuex.Store({
         system,
         investor,
         fund,
+        query,
         register,
         project
     },

@@ -1,11 +1,13 @@
 <template>
 <div class="fund">
     <!-- 组织类型 -->
-    <my-filter :chooseInfo="organizationType"></my-filter>
+    <my-filter :chooseInfo="organizationType" @getIdInfo="clickOrgType"></my-filter>
     <!-- 管理类型 -->
-    <my-filter :chooseInfo="managementType"></my-filter>
-    <my-filter :chooseInfo="allFundStage"></my-filter>
-    <my-filter :chooseInfo="allFundStatus"></my-filter>
+    <my-filter :chooseInfo="managementType" @getIdInfo="clickmanType"></my-filter>
+    <!-- 基金阶段 -->
+    <my-filter :chooseInfo="allFundStage" @getIdInfo="clickStage"></my-filter>
+    <!-- 基金状态 -->
+    <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
             <el-input placeholder="请输入搜索内容"
@@ -28,9 +30,9 @@
             </el-table-column>
             <el-table-column prop="fundNo" label="基金编号" width="200">
             </el-table-column>
-            <el-table-column prop="orgTypeId" label="组织类型" width="200">
+            <el-table-column prop="orgType" label="组织类型" width="200">
             </el-table-column>
-            <el-table-column prop="manageTypeId" label="管理类型" width="200">
+            <el-table-column prop="manageType" label="管理类型" width="200">
             </el-table-column>
             <el-table-column prop="fundScale" label="基金规模（元）" width="200">
             </el-table-column>
@@ -42,7 +44,7 @@
             </el-table-column>
             <el-table-column prop="createDate" label="成立日期" width="200">
             </el-table-column>
-            <el-table-column prop="fundStageId" label="状态" width="200">
+            <el-table-column prop="fundStage" label="状态" width="200">
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
                 <template scope="scope">
@@ -57,7 +59,7 @@
                        @current-change="handleCurrentChange"
                        :current-page="currentPage"
                        :page-sizes="[10, 20, 30, 50]"
-                       :page-size="10"
+                       :page-size=pageSize
                        layout="total, sizes, prev, pager, next, jumper"
                        :total=pageTotal>
         </el-pagination>
@@ -91,21 +93,34 @@ export default {
                     explain: '基金'
                 }]
             },
+            organizationId: '', //组织类型id
             organizationType: {
                 title: '组织类型：',
                 details: []
             },
+            managementId: '', //管理类型id
             managementType: {
                 title: '管理类型：',
                 details: []
             },
+            stageId: '', //基金阶段id
             allFundStage: {
                 title: '基金阶段：',
                 details: []
             },
+            statusId: '', //基金状态id
             allFundStatus: {
                 title: '基金状态：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }, {
+                    id: 1,
+                    dicName: '正常'
+                }, {
+                    id: 2,
+                    dicName: '终止'
+                }]
             },
             fundSearch: '',
             myFund: [],
@@ -142,12 +157,6 @@ export default {
                 }
             })
         },
-        leadingIn(el) {
-            console.log(this.$store)
-        },
-        downloadTem(el) {
-            alert(2)
-        },
         handleSizeChange(val) {
             this.pageSize = val
             getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
@@ -168,6 +177,56 @@ export default {
             getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
                 if(res.status == '200') {
                     this.myFund = res.data.result.list
+                    this.pageTotal = res.data.result.total
+                }
+            })
+        },
+        // (num, size, value, orgId, manageId, stageId, statusId)
+        clickOrgType(index, id) {
+            if(index == 0) {
+                this.organizationId = ''
+            } else {
+                this.organizationId = id
+            }
+            getMyFund(this.page, this.pageSize, '', this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                    this.pageTotal = res.data.result.total
+                }
+            })
+        },
+        clickmanType(index, id) {
+            if(index == 0) {
+                this.managementId = ''
+            } else {
+                this.managementId = id
+            }
+            getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                    this.pageTotal = res.data.result.total
+                }
+            })
+        },
+        clickStage(index, id) {
+            if(index == 0) {
+                this.stageId = ''
+            } else {
+                this.stageId = id
+            }
+            getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                    this.pageTotal = res.data.result.total
+                }
+            })
+        },
+        clickStatus(index, id) {
+            this.statusId = id
+            getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
+                if(res.status == '200') {
+                    this.myFund = res.data.result.list
+                    this.pageTotal = res.data.result.total
                 }
             })
         },
@@ -177,6 +236,7 @@ export default {
         ])
     },
     created() {
+        console.log(this.myFundList)
         this.$store.dispatch('getFundLists').then(() => {
             this.myFund = this.myFundList.list
         })
@@ -189,9 +249,9 @@ export default {
         this.$store.dispatch('getFundStage').then(() => {
             this.allFundStage.details = this.fundStage
         })
-        this.$store.dispatch('getFundStatus').then(() => {
-            this.allFundStatus.details = this.fundStatus
-        })
+        // this.$store.dispatch('getFundStatus').then(() => {
+        //     this.allFundStatus.details = this.fundStatus
+        // })
         getMyFund().then((res) => {
             if(res.status == '200') {
                 this.pageTotal = res.data.result.total
@@ -203,8 +263,7 @@ export default {
             'myFundList',
             'getManType',
             'OrgType',
-            'fundStage',
-            'fundStatus'
+            'fundStage'
         ])
     },
     components: {

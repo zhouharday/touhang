@@ -55,10 +55,18 @@ import {getSelectIndex} from 'api/search'
 export default {
     data() {
         return {
-            filterInfo: [{
+            filterInfo: {
                 title: '投资者类型：',
-                details: [{"dicName":'全部'}, '机构', '个人', '政府']
-            }],
+                details: [{
+                    dicName: '全部'
+                }, {
+                    dicName: '机构'
+                }, {
+                    dicName: '个人'
+                }, {
+                    dicName: '政府'
+                }]
+            },
             theme: '#fff',
             investorData: [],
             input2:'',
