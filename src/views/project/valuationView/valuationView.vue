@@ -45,7 +45,6 @@
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
        </div>
-<<<<<<< HEAD
         <!--<el-row type="flex" align="bottom" class="foot">-->
             <!--<el-col :span="8">-->
                 <!--<span>总记录：{{total}} 条</span>-->
@@ -58,8 +57,6 @@
                     <!--@on-page-size-change="pageSizeChanged"></Page>-->
             <!--</el-col>-->
         <!--</el-row>-->
-=======
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
     </div>
 </template>
 
