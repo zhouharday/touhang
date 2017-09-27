@@ -1,5 +1,10 @@
 <template>
     <div class="fundLibrary">
+        <my-filter :chooseInfo="organizationType"></my-filter>
+        <!-- 管理类型 -->
+        <my-filter :chooseInfo="managementType"></my-filter>
+        <my-filter :chooseInfo="allFundStage"></my-filter>
+
         <div class="title">
             <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
                 <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick"
@@ -45,6 +50,8 @@
 <script type="text/ecmascript-6">
     import {getFundLibrary} from 'api/search'
     import tableHeader from 'components/tabelHeader'
+    import myFilter from 'components/myFilter'
+    import {mapGetters} from 'vuex'
 
     export default {
         data() {
@@ -52,6 +59,18 @@
                 theme: '#fff',
                 myFund: [],
                 input: '',
+                organizationType: {
+                    title: '组织形式：',
+                    details: []
+                },
+                managementType: {
+                    title: '管理类型：',
+                    details: []
+                },
+                allFundStage: {
+                    title: '基金阶段：',
+                    details: []
+                }
             }
         },
         methods: {
@@ -63,14 +82,32 @@
             }
         },
         components: {
-            tableHeader
+            tableHeader,
+            myFilter
         },
         created() {
             getFundLibrary().then((res) => {
                 console.log(res.data)
                 this.myFund = res.data.result.list
+            });
+            this.$store.dispatch('getManageType').then(() => {
+                this.managementType.details = this.getManType
+            });
+            this.$store.dispatch('getOrganizationType').then(() =>{
+                this.organizationType.details = this.OrgType
+            });
+            this.$store.dispatch('getFundStage').then(() => {
+                this.allFundStage.details = this.fundStage
             })
+        },
+        computed: {
+            ...mapGetters([
+                'getManType',
+                'OrgType',
+                'fundStage'
+            ])
         }
+
     }
 </script>
 

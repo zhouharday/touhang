@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="manage">
         <el-collapse v-model="activeNames" @change="handleChange">
             <el-collapse-item title="项目费用" name="1">
                 <div class="fileTable">
@@ -30,8 +30,8 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="costAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmCostAdd1">确 定</el-button>
+                            <el-button type="default" size="small" @click="costAdd1 = false">取 消</el-button>
+                            <el-button type="danger" size="small" @click="confirmCostAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目费用 对话框-->
@@ -48,8 +48,8 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="costAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmCostAdd2()">确 定</el-button>
+                            <el-button type="default" size="small" @click="costAdd2 = false">取 消</el-button>
+                            <el-button type="danger" size="small" @click="confirmCostAdd2()">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -423,8 +423,8 @@
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="paidAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmPaidAdd1">确 定</el-button>
+                            <el-button type="default" size="small" @click="paidAdd1 = false">取 消</el-button>
+                            <el-button type="danger" size="small" @click="confirmPaidAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑投资支付 对话框-->
@@ -514,8 +514,8 @@
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="paidAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmPaidAdd2">确 定</el-button>
+                            <el-button type="default" size="small" @click="paidAdd2 = false">取 消</el-button>
+                            <el-button type="danger" size="small" @click="confirmPaidAdd2">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -682,8 +682,8 @@
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="sharingAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmSharingAdd2">确 定</el-button>
+                            <el-button type="default" size="small" @click="sharingAdd2 = false">取 消</el-button>
+                            <el-button type="danger" size="small" @click="confirmSharingAdd2">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>

@@ -116,8 +116,8 @@
                             <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="danger" @click="jumpPool">确 定</el-button>
+                                    <el-button type="default" size="small" @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="danger" size="small" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -125,7 +125,7 @@
                 </el-table>
             </el-col>
         </el-row>
-        <div class="pagination">
+        <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
         </div>
@@ -367,12 +367,6 @@ export default {
     position: relative;
 }
 
-.collapse-btn {
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
 .changeListk {
     position: relative;
 }
@@ -403,6 +397,9 @@ export default {
     border: none;
     outline: none;
     background: #fff;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 .uptriangle {

@@ -75,9 +75,9 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button v-show="cancles" @click="cancle">取 消</el-button>
-                    <el-button v-show="saves" type="info" @click="saveORrealse(1)">保 存</el-button>
-                    <el-button v-show="realses" type="success" @click="saveORrealse(2)">发 布</el-button>
+                    <el-button v-show="cancles" type="default" size="small" @click="cancle">取 消</el-button>
+                    <el-button v-show="saves" type="danger" size="small" @click="saveORrealse(1)">保 存</el-button>
+                    <el-button v-show="realses" type="success" size="small" @click="saveORrealse(2)">发 布</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -181,10 +181,10 @@ export default {
                             }
                         }, this);
                         this.tableData1 = res.data.result.list;
-                        this.page1.pageNum = res.data.result.pageNum; //当前页码 
-                        this.page1.total = res.data.result.total; //数据总数 
-                        this.page1.pageSize = res.data.result.pageSize; //每页条数 
-                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度 
+                        this.page1.pageNum = res.data.result.pageNum; //当前页码
+                        this.page1.total = res.data.result.total; //数据总数
+                        this.page1.pageSize = res.data.result.pageSize; //每页条数
+                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
                         if (res.data.status == '49999') { //数据为空
                             console.log('没有新数据');
                         }

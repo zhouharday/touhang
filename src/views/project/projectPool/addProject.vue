@@ -136,8 +136,8 @@
                     <div class="formBtn">
                         <el-row>
                             <el-col style="display:flex;justify-content:flex-end;">
-                                <el-button type="danger" @click="submitForm('basicForm')">保存</el-button>
-                                <el-button type="default" @click="cancleForm">取消</el-button>
+                                <el-button type="danger" size="small" @click="submitForm('basicForm')">保存</el-button>
+                                <el-button type="default" size="small" @click="cancleForm">取消</el-button>
                             </el-col>
                         </el-row>
                     </div>

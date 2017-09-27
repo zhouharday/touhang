@@ -109,14 +109,18 @@
                 </el-table>
             </el-col>
         </el-row>
-        <el-row>
-            <el-col>
-                <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
-                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-                    </el-pagination>
-                </div>
-            </el-col>
-        </el-row>
+        <!--<el-row>-->
+            <!--<el-col>-->
+                <!--<div style="float:right;margin:10px;padding-right:30px;overflow:hidden">-->
+                    <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
+                    <!--</el-pagination>-->
+                <!--</div>-->
+            <!--</el-col>-->
+        <!--</el-row>-->
+        <div class="page">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -128,7 +132,7 @@ export default {
         return {
             total: 0,    // 总数
             page: 1,     // 当前页数
-            pageSize: 5, // 一页数量 
+            pageSize: 5, // 一页数量
             input: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
@@ -463,5 +467,14 @@ export default {
         color: #F05E5E;
         border-bottom: 1px solid #F05E5E;
     }
+}
+
+.page {
+    width: 100%;
+    padding: 15px 30px;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 </style>
