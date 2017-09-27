@@ -16,9 +16,3 @@ export default {}
     @import "../static/css/office.less";
     @import "../static/css/zTreeStyle/zTreeStyle.css";
 </style>
-<<<<<<< HEAD
-<script>
-export default {}
-</script>
-=======
->>>>>>> 603e60cd469272cecd79a9e72febd61eefb41d63
