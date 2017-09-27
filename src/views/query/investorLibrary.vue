@@ -95,7 +95,8 @@ console.log(this.input2)
                 this.investorData = res.data.result.list
         })
         getSelectIndex('70').then((res)=>{
-            console.log(res.data.result)
+            console.log(999)
+            console.log(res.data)
             this.filterInfo[0].details = res.data.result
 
         })

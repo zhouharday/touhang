@@ -8,7 +8,10 @@
         </tableHeader>
     </div>
     <el-table :data="proLibrary" border style="width: 100%">
-        <el-table-column prop="projectName" label="项目名称" >
+        <el-table-column prop="projectName" label="项目名称">
+            <template scope = "scope">
+                <a @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
+            </template>
         </el-table-column>
         <el-table-column prop="createUserName" label="项目创建人">
         </el-table-column>
@@ -58,8 +61,18 @@ export default {
         myFilter
     },
     methods:{
-        aaa(){
-            alert(1)
+        JumpOther(row){
+            console.log(row)
+            this.addTab(row.projectName,'路由','name')
+            this.$router.push({name:'路由名',params:{参数}})
+        },
+        addTab(th, url, name) {
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
+            });
         },
         handleIconClick(){
             this.seartext = this.input

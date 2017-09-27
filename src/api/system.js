@@ -53,17 +53,30 @@ export function addEdit(arr) {
 /*******************************用户管理******************************************/
 //部门列表同上公用
 //查询部门人员
-export function getUserlist(id,lockValue) {
+export function getUserlist(id,lockValue,userName) {
     const data = {
         "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
         "dept_id":id,
         "lockValue":lockValue,
-
+        "userName":userName
     }
-    console.log (lockValue)
+
     return service({url: '/user/queryUserList', method: 'post', data})
 
 }
+//客户锁定启用
+export function openOrClose(id,disables) {
+    const data = {
+        "dept_id":id,
+        "disables":0 //0:禁用,1正常 必须
+    }
+
+    return service({url: '/merchant/enableOrLock', method: 'post', data})
+
+}
+
+
+
 
 /*******************************数据字典******************************************/
 //获取数据字典
@@ -84,6 +97,103 @@ export  function getSelectIndex(id,type) {
     }
     return service({url: 'appDictionary/selectIndex', method: 'post', data})
 }
+
+/*******************************业务配置******************************************/
+//左侧列表
+export  function getConfigLeftList() {
+    const data = {
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    return service({url: '/dictionaryController/slectAllStage', method: 'post', data})
+}
+
+//数据更改
+export function reloadData(arr) {
+    arr.forEach(function (item,index) {
+        var NewArr = item.data
+        item.showOne = false
+        NewArr.forEach(function (NewItem) {
+            NewItem.editFlag = false
+        })
+    })
+    return arr
+}
+//修改配置
+export function SetConfig(arr,deleteArr) {
+
+    const data = {
+        // "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "stage":arr,
+        "deleteStage":deleteArr
+    }
+    if (arr[0].stageType == 3){
+        return service({url: '/dictionaryController/addInvestorDocumentCatalog', method: 'post', data})
+    }else
+        return service({url: '/dictionaryController/addStageAllocation', method: 'post', data})
+}
+
+
+//刷新右侧文档列表
+export function GetrightList(id) {
+
+    const data = {
+        // "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "id":id
+    }
+    return service({url: '/dictionaryController/selectStageDocument', method: 'post', data})
+}
+//右侧文档列表数据更改
+export function RightListData(arr) {
+    arr.forEach(function (NewItem) {
+        NewItem.editFlag = false
+    })
+    return arr
+}
+//右侧列表数据更改
+export function changeRightList(id,row) {
+
+    if (row.id){
+        const data = {
+            // "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+            "allocationId":id,
+            "documentName":row.documentName,
+            "needUpload":row.needUpload,
+            "id":row.id
+        }
+        console.log(data)
+        return service({url: '/dictionaryController/addStageDocument', method: 'post', data})
+    }else {
+        const data = {
+            // "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+            "allocationId":id,
+            "documentName":row.documentName,
+            "needUpload":row.needUpload
+
+        }
+        console.log(data)
+        return service({url: '/dictionaryController/addStageDocument', method: 'post', data})
+    }
+
+
+}
+//右侧列表数据删除
+export function DeleteRightList(row) {
+    const data = {
+        "id":row.id,
+        "allocationId":row.allocationId
+    }
+    console.log(data)
+    return service({url: '/dictionaryController/deleteStageDocument', method: 'post', data})
+}
+
+
+
+
+
+
+
+
+
 
 /*******************************企业权限******************************************/
 //角色列表
@@ -127,8 +237,6 @@ export function getNodes(arrData,roleInfo) {
     var arr = arrData
     var i = 0;
     var j = 0;
-    // console.log("*******")
-// console.log(roleInfo)
     for (j in arr) {
 
         arr[j].choose = ''
