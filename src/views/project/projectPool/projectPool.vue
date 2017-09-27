@@ -364,6 +364,8 @@ export default {
         ul {
             float: left;
             li {
+                width: 70px;
+                height: 20px;
                 display: inline-block;
                 box-sizing: border-box;
                 margin-right: 30px;

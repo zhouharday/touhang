@@ -8,27 +8,27 @@
             </tableHeader>
         </div>
         <el-table :data="myFund" border style="width: 100%">
-            <el-table-column fixed prop="fundName" label="基金名称" width="150">
+            <el-table-column fixed prop="fundName" label="基金名称" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="fundNo" label="基金编号" width="300">
+            <el-table-column prop="fundNo" label="基金编号" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="orgTypeId" label="组织类型" width="300">
+            <el-table-column prop="orgTypeId" label="组织类型" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="manageTypeId" label="管理类型" width="300">
+            <el-table-column prop="manageTypeId" label="管理类型" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="fundScale" label="基金规模（元）" width="300">
+            <el-table-column prop="fundScale" label="基金规模（元）" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="placementSum" label="募集总额（元）" width="300">
+            <el-table-column prop="placementSum" label="募集总额（元）" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="investSum" label="投资总额（元）" width="300">
+            <el-table-column prop="investSum" label="投资总额（元）" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="surplusLimit" label="剩余额度（元）" width="300">
+            <el-table-column prop="surplusLimit" label="剩余额度（元）" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="createDate" label="成立日期" width="300">
+            <el-table-column prop="createDate" label="成立日期" width="300" align="center">
             </el-table-column>
-            <el-table-column prop="fundStageId" label="状态" width="300">
+            <el-table-column prop="fundStageId" label="状态" width="300" align="center">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column fixed="right" label="操作" width="200" align="center">
                 <template scope="scope">
                     <el-button @click="handleClick" type="text" size="small">查看</el-button>
                     <!--<el-button type="text" size="small">编辑</el-button>-->

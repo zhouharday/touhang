@@ -46,6 +46,10 @@
                         </el-col>
                     </el-row>
                 </el-form>
+                <div style="margin-left:23%">
+                    <el-button>取消</el-button>
+                    <el-button type="danger">确认</el-button>
+                </div>
             </el-tab-pane>
             <el-tab-pane label="修改密码" name="second">
                 <el-form :model="form2" ref="form2" label-width="120px">
@@ -80,7 +84,7 @@
                         </el-col>
                     </el-row>
                 </el-form>
-                <el-button type="primary" style="width: 150px;margin-left:250px;" @click="submitForm" :class="{ active:valueData }">完成</el-button>
+                <el-button type="danger" style="width:100px;margin-left:23%;" @click="submitForm" :class="{ active:valueData }">完成</el-button>
             </el-tab-pane>
         </el-tabs>
     </section>
@@ -177,9 +181,9 @@ export default {
             //     data: { contactPhone: this.form2.Phone }
             // })
 
-                this.$http.post(this.api + '/merchant/validationCode', {
-                    contactPhone: this.phonecontactPhone
-                })
+            this.$http.post(this.api + '/merchant/validationCode', {
+                contactPhone: this.phonecontactPhone
+            })
                 .then(res => {
                     if (res.data.status == '200') {
                         // this.provinces = res.data.result;

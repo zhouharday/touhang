@@ -10,13 +10,13 @@
         </tableHeader>
     </div>
     <el-table :data="investorData" border style="width: 100%">
-        <el-table-column prop="investorName" label="投资者名称">
+        <el-table-column prop="investorName" label="投资者名称" align="center">
         </el-table-column>
-        <el-table-column prop="investorType" label="类型">
+        <el-table-column prop="investorType" label="类型" align="center">
         </el-table-column>
-        <el-table-column prop="investmentManagerName" label="投资经理">
+        <el-table-column prop="investmentManagerName" label="投资经理" align="center">
         </el-table-column>
-        <el-table-column prop="sumPaidAmount" label="累计投资额">
+        <el-table-column prop="sumPaidAmount" label="累计投资额" align="center">
         </el-table-column>
         <!--<el-table-column label="操作">-->
             <!--<template scope="scope">-->

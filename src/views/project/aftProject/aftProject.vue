@@ -1,75 +1,67 @@
 <template>
-    <div class="aftProject">
+    <section class="aftProject">
         <!-- 类型ul -->
-        <el-row class="common">
-            <el-col :span="2">
-                <div class="tag">项目类型：</div>
-            </el-col>
-            <el-col :span="22" style="margin-top:20px">
-                <div class="sort-ul">
-                    <ul ref="sort">
-                        <li v-for="(item,index) in sortList" :key="item.index" :class="{active: index==currentIndex}" @click="changeActive(index, item)">
-                            {{item.sorts}}
-                        </li>
-                    </ul>
-                </div>
-            </el-col>
-        </el-row>
+        <my-filter :chooseInfo="sortList"></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
-            <el-col :span="5">
+            <el-col :span="6">
                 <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
         </el-row>
         <!--项目table -->
-        <el-row class="common">
-            <el-col :span="24">
-                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
-                    <el-table-column label="项目名称" align="center">
-                        <template scope="scope">
-                            <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.projectName }}</a>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="mananger" label="项目创建人" align="center">
-                    </el-table-column>
-                    <el-table-column prop="industryId" label="所属行业" align="center">
-                    </el-table-column>
-                    <el-table-column prop="projectTypeId" label="项目类型" align="center">
-                    </el-table-column>
-                    <el-table-column prop="payDate" label="投资日期" align="center">
-                    </el-table-column>
-                    <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
-                    </el-table-column>
-                    <el-table-column prop="warnStatus" label="状态" align="center">
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>
+        <div class="tableBox">
+            <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
+                <el-table-column label="项目名称" align="center">
+                    <template scope="scope">
+                        <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.projectName }}</a>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column prop="mananger" label="项目创建人" align="center">
+                </el-table-column> -->
+                <el-table-column prop="industryId" label="所属行业" align="center">
+                </el-table-column>
+                <el-table-column prop="projectTypeId" label="项目类型" align="center">
+                </el-table-column>
+                <el-table-column prop="payDate" label="投资日期" align="center">
+                </el-table-column>
+                <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
+                </el-table-column>
+                <el-table-column prop="warnStatus" label="状态" align="center">
+                </el-table-column>
+            </el-table>
+        </div>
         <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
-       </div>
-    </div>
+        </div>
+    </section>
 </template>
 <script>
+import myFilter from 'components/myFilter'
 import { getAfters } from 'api/projectAfter';
 export default {
     data() {
         return {
-            input: '',
             total: 0,
             page: 1,
             pageSize: 5,
             projectName: '',
             currentIndex: 0,
-            sortList: [
-                { sorts: "全部" },
-                { sorts: "天使" },
-                { sorts: "并购重组" },
-                { sorts: "PE" },
-                { sorts: "VC" }
-            ],
+            sortList: { //筛选选项
+                title: '类型：',
+                details: [{
+                    dicName: '全部'
+                }, {
+                    dicName: '天使'
+                }, {
+                    dicName: '并购重组'
+                }, {
+                    dicName: 'PE'
+                }, {
+                    dicName: 'VC'
+                }]
+            },
             tableData: [{
                 project: '京东',
                 mananger: '刘经理',
@@ -151,51 +143,25 @@ export default {
             this.projectTypeId = item.sorts;
             this.getDatas();
         }
+    },
+    components: {
+        myFilter
     }
 }
-
 </script>
+
+
 <style lang="less" scoped>
 .aftProject {
     width: 100%;
     min-height: 100%;
     position: relative;
     font-size: 14px;
+    padding: 20px 30px;
     background: #fff;
 }
-
-.common {
-    padding: 0 30px 20px 30px;
-    ul {
-        float: left;
-        li {
-            display: inline-block;
-            box-sizing: border-box;
-            margin-right: 30px;
-            margin-bottom: 5px;
-            cursor: pointer;
-        }
-    }
-}
-
-.tag {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.active {
-    width: 70px;
-    height: 20px;
-    color: white;
-    text-align: center;
-    border-radius: 15px;
-    background: #F05E5E;
-}
-
 .search-box {
-    margin: 0 30px 20px 30px;
+    margin: 20px 0;
 }
 
 .project {
@@ -203,11 +169,11 @@ export default {
     border-bottom: 1px solid #F05E5E;
 }
 .page {
-   width: 100%;
-   padding: 15px 30px;
-   text-align: right;
-   position: absolute;
-   bottom: 0;
-   right: 0;
- }
+    width: 100%;
+    padding: 15px 30px;
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
 </style>

@@ -22,17 +22,26 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目类型" prop="projectSort">
-                                        <el-input v-model="basicForm.projectSort"></el-input>
+                                        <el-select v-model="basicForm.projectSort" filterable placeholder="请选择项目类型"  style="width:100%">
+                                            <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="所属行业" prop="industry">
-                                        <el-input v-model="basicForm.industry"></el-input>
+                                        <el-select v-model="basicForm.industry" filterable placeholder="请选择所属行业"  style="width:100%">
+                                            <el-option v-for="item in industryOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目来源" prop="origin">
-                                        <el-input v-model="basicForm.origin"></el-input>
+                                         <el-select v-model="basicForm.origin" filterable placeholder="请选择项目来源"  style="width:100%">
+                                            <el-option v-for="item in originOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -40,9 +49,12 @@
                                         <el-input v-model="basicForm.location"></el-input>
                                     </el-form-item>
                                 </el-col>
-                                <el-col>
+                                <el-col :span="12">
                                     <el-form-item label="业务部门" prop="department">
-                                        <el-input v-model="basicForm.department"></el-input>
+                                         <el-select v-model="basicForm.department" filterable placeholder="请选择业务部门"  style="width:100%">
+                                            <el-option v-for="item in departmentOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <!-- 上传 企业LOGO -->
@@ -180,6 +192,22 @@ export default {
                 service: '',
                 remark: ''
             },
+            sortOptions: [{
+                value: '选项1',
+                label: '类型一'
+            }],
+            industryOptions: [{
+                value: '选项1',
+                label: '行业一'
+            }],
+            originOptions: [{
+                value: '选项1',
+                label: '来源一'
+            }],
+            departmentOptions: [{
+                value: '选项1',
+                label: '部门一'
+            }],
             // 基本信息 form验证
             rules1: {
                 projectName: [

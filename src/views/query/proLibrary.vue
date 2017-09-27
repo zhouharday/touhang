@@ -8,19 +8,19 @@
         </tableHeader>
     </div>
     <el-table :data="proLibrary" border style="width: 100%">
-        <el-table-column prop="projectName" label="项目名称" >
+        <el-table-column prop="projectName" label="项目名称" align="center">
         </el-table-column>
-        <el-table-column prop="createUserName" label="项目创建人">
+        <el-table-column prop="createUserName" label="项目创建人" align="center">
         </el-table-column>
-        <el-table-column prop="industryId" label="所属行业">
+        <el-table-column prop="industryId" label="所属行业" align="center">
         </el-table-column>
-        <el-table-column prop="projectTypeId" label="项目类型">
+        <el-table-column prop="projectTypeId" label="项目类型" align="center">
         </el-table-column>
-        <el-table-column prop="projectStageId" label="项目阶段">
+        <el-table-column prop="projectStageId" label="项目阶段" align="center">
         </el-table-column>
-        <el-table-column prop="payDate" label="投资日期">
+        <el-table-column prop="payDate" label="投资日期" align="center">
         </el-table-column>
-        <el-table-column prop="paySumAmount" label="投资金额（元）">
+        <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
         </el-table-column>
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
