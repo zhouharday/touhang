@@ -47,7 +47,7 @@
                 </el-table-column>
                 <el-table-column prop="role" label="所属角色" width="180">
                 </el-table-column>
-                <el-table-column prop="disables" label="状态" width="180">
+                <el-table-column prop="umdisables" label="状态" width="180">
                 </el-table-column>
                 <el-table-column label="操作">
                     <template scope="scope">
@@ -61,17 +61,10 @@
                           @click.native.prevent="deleteRow(scope.$index, scope.row)"
                           type="text"
                           size="small">
-                          锁定/启用
+
+                            <div v-if="scope.row.umdisables == 1">锁定</div>
+                            <div v-if="scope.row.umdisables == 0">启用</div>
                         </el-button>
-<<<<<<< HEAD
-                        <!--<el-button-->
-                          <!--@click.native.prevent="deleteRow(scope.$index, scope.row)"-->
-                          <!--type="text"-->
-                          <!--size="small">-->
-                          <!--密码初始化-->
-                        <!--</el-button>-->
-=======
->>>>>>> 4d920d3e87855b106133033b62489796c5c3f592
                     </template>
                 </el-table-column>
             </el-table>
@@ -133,13 +126,13 @@
             </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-<<<<<<< HEAD
-            <el-button type="default" @click="modalIncome = false">取 消</el-button>
+
+            <el-button type="default" @click="modalIncome">取 消</el-button>
             <el-button type="danger" @click="confirmIncome">确 定</el-button>
-=======
-            <el-button @click="modalIncome">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
->>>>>>> 4d920d3e87855b106133033b62489796c5c3f592
+<!--=======-->
+            <!--<el-button @click="modalIncome">取 消</el-button>-->
+            <!--<el-button type="primary" @click="confirmIncome">确 定</el-button>-->
+<!--&gt;>>>>>> 4d920d3e87855b106133033b62489796c5c3f592-->
         </div>
     </el-dialog>
 </div>
@@ -150,6 +143,7 @@
     import {getNodes} from 'common/js/config'
     import {getDepartmentList} from 'api/system'
     import {getUserlist} from 'api/system'
+    import {openOrClose} from 'api/system'
 export default {
     data() {
         return {
@@ -186,6 +180,18 @@ export default {
         }
     },
     methods: {
+        deleteRow(index,row){
+            console.log(row)
+            var disables = row.disables ? 0 : 1;
+            console.log(row.id,disables)
+            openOrClose(row.id,disables).then((res)=> {
+                getUserlist(this.addId).then((res)=>{
+
+                    this.subscriberData = res.data.result
+                    console.log(this.subscriberData)
+                })
+            })
+        },
         showSubscriber() {
             this.modelSubscriber = true
         },
@@ -196,10 +202,10 @@ export default {
 
         handleNodeClick(data) {
             this.addId = data.id;
-
             getUserlist(data.id).then((res)=>{
-                console.log(res);
+
                 this.subscriberData = res.data.result
+                console.log(this.subscriberData)
             })
         },
         confirmIncome(){
@@ -209,21 +215,18 @@ export default {
             this.modelSubscriber = false
         },
         handleIconClick(){
-        alert(this.value2)
+//        alert(this.value2)
             var LockStatus //锁定状态
-            this.options.forEach(function (item , index) {
-                if (item.value == this.value2)
-                {
-                    LockStatus = item.label
-                }
-            })
+//            this.options.forEach(function (item , index) {
+//                if (item.value == this.value2)
+//                {
+//                    LockStatus = item.label
+//                }
+//            })
 
 
-            getDepartmentList('',LockStatus).then((res)=>{
-                var dataList = res.data.result
-                this.allDepartmentList = dataList
-                var treeList = getNodes(dataList)
-                this.structure = treeList
+            getUserlist('',LockStatus,this.input2).then((res)=>{
+                this.subscriberData = res.data.result
             })
         }
 

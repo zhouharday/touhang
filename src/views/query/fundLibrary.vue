@@ -1,6 +1,8 @@
 <template>
 <div class="fundLibrary">
+
     <div class="title">
+        <myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>
         <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
             </el-input>
@@ -8,6 +10,9 @@
     </div>
     <el-table :data="myFund" border style="width: 100%">
         <el-table-column fixed prop="fundName" label="基金名称" width="150">
+            <template scope = "scope">
+                <a @click="JumpOther(scope.row)">{{scope.row.fundName}}</a>
+            </template>
         </el-table-column>
         <el-table-column prop="fundNo" label="基金编号" width="300">
         </el-table-column>
@@ -41,13 +46,35 @@
 
 <script type="text/ecmascript-6">
     import {getFundLibrary} from 'api/search'
-import tableHeader from 'components/tabelHeader'
+    import {getSelectIndex} from 'api/search'
+    import {getjieduan} from 'api/search'
+    import myFilter from 'components/myFilter'
+    import tableHeader from 'components/tabelHeader'
 export default {
     data() {
         return {
             theme: '#fff',
             myFund: [],
             input:'',
+            chooseInfo: [{
+                title: '组织类型：',
+                details: [{
+                    "dicName": '2'
+                }]
+            },
+                {
+                    title: '管理类型：',
+                    details: [{
+                        "dicName": '2'
+                    }]
+                },
+                {
+                    title: '基金阶段：',
+                    details: [{
+                        "dicName": '2'
+                    }]
+                }
+            ]
         }
     },
     methods: {
@@ -59,10 +86,23 @@ export default {
         }
     },
     components: {
-        tableHeader
+        tableHeader,
+        myFilter
     },
     created(){
-        getFundLibrary().then((res)=>{
+        getSelectIndex('303').then((res)=>{
+            this.chooseInfo[0].details = res.data.result
+        })
+        getSelectIndex('302').then((res)=>{
+            this.chooseInfo[1].details = res.data.result
+        })
+        getjieduan().then((res)=>{
+            this.chooseInfo[2].details = res.data.result
+        })
+
+
+
+            getFundLibrary().then((res)=>{
             console.log(res.data)
             this.myFund = res.data.result.list
         })
