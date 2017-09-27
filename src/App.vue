@@ -13,6 +13,5 @@ export default {}
     @import '../static/css/iview.css';
     @import "../static/css/index.less";
     @import "../static/css/main.less";
-    @import "../static/css/office.less";
-    @import "../static/css/zTreeStyle/zTreeStyle.css";
+    // @import "../static/css/zTreeStyle/zTreeStyle.css";
 </style>
