@@ -3,6 +3,7 @@
         <el-row :gutter="30">
             <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
                 <!-- 项目阶段 配置-->
+<<<<<<< HEAD
                 <!--<div class="rightAdd_btn">-->
                 <!--<el-button type="danger" style="width:80px" @click="openProject">添加</el-button>-->
                 <!--</div>-->
@@ -33,6 +34,19 @@
                                     </el-button>
                                     <el-button type="text" @click="handleDelete(index,projectMenu)">删除</el-button>
                                 </p>
+=======
+                <div v-for="item in leftList">
+                <div class="project_config" >
+                    <div class="menu_title">
+                        <div style="justify-content: space-between;flex-direction: row;display: flex">
+                            <div>{{item.title}}</div>
+                            <div v-if="!item.showOne" style="color: red; padding-right: 20px">
+                                <el-button  type="text" class="leftBtn" @click="changeSomeThing(item)">操作</el-button>
+                            </div>
+                            <div v-if="item.showOne" style="color: red; padding-right: 20px">
+                                <el-button  type="text" class="leftBtn" @click="openProject">添加</el-button>
+                                <el-button  type="text" class="leftBtn" @click="changeSomeThing(item)">完成</el-button>
+>>>>>>> e94f4e43d76760e576a8e896d2069618f5e318aa
                             </div>
                         </div>
                         <!-- 基金阶段 配置 -->
@@ -84,6 +98,7 @@
                                 </div>
                             </div>
                         </div>
+<<<<<<< HEAD
                         <!-- 投资阶段 配置 -->
                         <div class="rightAdd_btn">
                             <el-button type="danger" style="width:80px" @click="openInvest" size="small">添加</el-button>
@@ -112,6 +127,10 @@
                             </div>
                         </div>
                     </div>
+=======
+                    </div>
+                </div>
+>>>>>>> e94f4e43d76760e576a8e896d2069618f5e318aa
                 </div>
             </el-col>
             <el-col :span="18">
@@ -287,6 +306,7 @@
                 investForm: {
                     investName: '',
                     editFlag: false
+<<<<<<< HEAD
                 },
                 investMenu: [
                     {
@@ -313,6 +333,23 @@
                 })
             },
             changeSomeThing(item) {
+=======
+                }
+            ],
+            changeList:[],
+            nowId:'',
+        }
+    },
+    methods: {
+        refreshList(item){
+            this.nowId = item.id
+            GetrightList(item.id).then((res) => {
+                this.fileData =  RightListData(res.data.result)
+                console.log(this.fileData)
+            })
+        },
+        changeSomeThing(item){
+>>>>>>> e94f4e43d76760e576a8e896d2069618f5e318aa
 
                 item.showOne = !item.showOne
                 if (!item.showOne) {

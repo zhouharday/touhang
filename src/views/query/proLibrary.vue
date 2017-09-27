@@ -45,10 +45,10 @@ export default {
             titleInfo: {
 
             },
-            chooseInfo: [{
+            chooseInfo: {
                 title: '项目类型:',
                 details: ['全部', 'PE', 'VC', '定增']
-            }],
+            },
             proLibrary: [],
             type:'',
             seartext:'',
@@ -101,7 +101,7 @@ export default {
         })
         getSelectIndex('202').then((res)=>{
             console.log(res.data)
-            this.chooseInfo[0].details = res.data.result
+            this.chooseInfo.details = res.data.result
         })
     }
 
