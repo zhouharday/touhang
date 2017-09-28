@@ -30,7 +30,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="所在地" prop="ddress">
+                        <el-form-item label="所在地" prop="address">
                             <el-input v-model="basicForm.address" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>

@@ -128,21 +128,25 @@ export default {
             let projectPoolId = this.projectPoolId;
             console.log('id: ', projectPoolId);
             getProDetail(projectPoolId).then(resp => {
-                // console.log('projectPoolId resp: ', resp);
                 let data = resp.data.result;
-                let { projectInfo, projectInvestmentInfo } = data;
-                this.projectData = data;
-                // this.setProjectData(data);
-                // console.log('pool detail data: ', JSON.stringify(data));
+                //console.log('result: ', JSON.stringify(data));
+                let { projectInfo, projectInvestmentInfo,enterpriseInfo,listOwnershipStructure } = data;
+                this.setProjectData(data);
                 if (projectInfo) {
-                    //Object.keys(projectInfo).forEach(key => {
-                    //    this.basicForm[key] = projectInfo[key];
-                    //})
                     this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }
-                if (projectInvestmentInfo) {
-                    this.companyForm = Object.assign({}, this.companyForm, projectInvestmentInfo);
+                if (enterpriseInfo) {
+                    this.companyForm = Object.assign({}, this.companyForm, enterpriseInfo);
                 }
+                if(listOwnershipStructure){
+                    this.structureForm = Object.assign({}, this.structureForm, listOwnershipStructure);
+                }
+                // if (projectInvestmentInfo) {
+                //     this.companyForm = Object.assign({}, this.companyForm, projectInvestmentInfo);
+                // }
+                // if (listBoardMember) {
+                //     this.companyForm = Object.assign({}, this.companyForm, listBoardMember);
+                // }
             }).catch(e => {
                 console.log('getProDetail exists error: ', e);
             })
