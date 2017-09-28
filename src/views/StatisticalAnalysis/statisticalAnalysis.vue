@@ -150,7 +150,7 @@ export default {
                 legend: {
                     orient: 'vertical',
                     left: 'left',
-                    data: ['考察储备', '立项会', '尽职调查', '投决会', '管理', '退出']
+                    data: ['全部', '委托管理', '自我管理', '顾问管理']
                 },
                 series: [
                     {
@@ -159,12 +159,12 @@ export default {
                         radius: '55%',
                         center: ['50%', '50%'],
                         data: [
-                            { value: 335, name: '考察储备' },
-                            { value: 310, name: '立项会' },
-                            { value: 234, name: '尽职调查' },
-                            { value: 135, name: '投决会' },
-                            { value: 135, name: '管理' },
-                            { value: 135, name: '退出' },
+                            { value: 335, name: '全部' },
+                            { value: 310, name: '委托管理' },
+                            { value: 234, name: '自我管理' },
+                            { value: 200, name: '顾问管理' },
+                            // { value: 135, name: '管理' },
+                            // { value: 135, name: '退出' },
                         ],
                         itemStyle: {
                             emphasis: {
@@ -189,7 +189,7 @@ export default {
                 legend: {
                     orient: 'vertical',
                     left: 'left',
-                    data: ['考察储备', '立项会', '尽职调查', '投决会', '管理', '退出']
+                    data: ['天使', 'PE', 'VC', '并购重组']
                 },
                 series: [
                     {
@@ -198,12 +198,12 @@ export default {
                         radius: '55%',
                         center: ['50%', '50%'],
                         data: [
-                            { value: 335, name: '考察储备' },
-                            { value: 310, name: '立项会' },
-                            { value: 234, name: '尽职调查' },
-                            { value: 135, name: '投决会' },
-                            { value: 135, name: '管理' },
-                            { value: 135, name: '退出' },
+                            { value: 335, name: '天使' },
+                            { value: 400, name: 'PE' },
+                            { value: 234, name: 'VC' },
+                            { value: 135, name: '并购重组' },
+                            // { value: 135, name: '管理' },
+                            // { value: 135, name: '退出' },
                         ],
                         itemStyle: {
                             emphasis: {
@@ -228,7 +228,7 @@ export default {
                 legend: {
                     orient: 'vertical',
                     left: 'left',
-                    data: ['考察储备', '立项会', '尽职调查', '投决会', '管理', '退出']
+                    data: ['机构', '个人', '政府']
                 },
                 series: [
                     {
@@ -237,12 +237,12 @@ export default {
                         radius: '55%',
                         center: ['50%', '50%'],
                         data: [
-                            { value: 335, name: '考察储备' },
-                            { value: 310, name: '立项会' },
-                            { value: 234, name: '尽职调查' },
-                            { value: 135, name: '投决会' },
-                            { value: 135, name: '管理' },
-                            { value: 135, name: '退出' },
+                            { value: 335, name: '机构' },
+                            { value: 310, name: '个人' },
+                            { value: 460, name: '政府' },
+                            // { value: 135, name: '投决会' },
+                            // { value: 135, name: '管理' },
+                            // { value: 135, name: '退出' },
                         ],
                         itemStyle: {
                             emphasis: {

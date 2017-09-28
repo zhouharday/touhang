@@ -5,7 +5,7 @@ import {Message} from 'iview'
 const service = axios.create({
     timeout: 8000,
     // baseURL: 'http://192.168.0.88:9091',
-    // baseURL: 'http://192.168.0.118:9091',
+    // baseURL:'http://192.168.0.147:9091',
     baseURL: 'http://192.168.0.198:9091',
     // baseURL: 'http://18f46963j4.iok.la',
     headers: {

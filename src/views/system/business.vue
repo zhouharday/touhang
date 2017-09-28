@@ -20,7 +20,7 @@
                             </el-button>
                             <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
                             </el-button>
-                            <el-button type="text" size="small" @click="handleDelete(scope.$index,roleData)">删除</el-button>
+                            <el-button type="text" size="small" @click="deleteReminders=true">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -143,14 +143,21 @@
                 <el-button type="danger" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
+        <!-- 删除确认弹框 -->
+        <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="confirmDel" @cancel="deleteReminders=false">
+        </delete-reminders>
     </section>
 </template>
 
 <script type="text/ecmascript-6">
+import deleteReminders from 'components/deleteReminders'
 export default {
     data() {
         return {
             roleDialog: false,
+            deleteReminders: false,
+            modal_loading: false,
+            message: '是否确认删除该角色？',
             roleData: [
                 {
                     role: '项目负责人',
@@ -182,19 +189,24 @@ export default {
         // 添加角色 的方法
         addRole() {
             this.roleData.push(this.roleForm);
-            this.roleForm={};
-            this.roleDialog=false;
+            this.roleForm = {};
+            this.roleDialog = false;
         },
         checkEdit(index, row) { //编辑
             // console.log(row)
             row.editFlag = !row.editFlag;
         },
-
+        confirmDel() {
+            this.deleteReminders = !this.deleteReminders;
+        },
         //删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
         }
-    }
+    },
+    components: {
+        deleteReminders
+    },
 }
 </script>
 

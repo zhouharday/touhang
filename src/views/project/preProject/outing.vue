@@ -25,7 +25,7 @@
                         <!-- action 上传的地址，必填 -->
                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="outingForm.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
                         </Upload>
@@ -68,8 +68,8 @@
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button v-show="isShow" @click="confirmSave">保存</el-button>
-                <el-button v-show="isShow">取消</el-button>
+                <el-button type="default"  v-show="isShow">取 消</el-button>
+                <el-button type="danger"  v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
     </section>

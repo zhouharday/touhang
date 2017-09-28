@@ -1,7 +1,7 @@
 import service from 'common/js/fetch'
 
 // 获取我的基金列表
-export function getMyFund(num, size, value) {
+export function getMyFund(num, size, value, orgId, manageId, stageId, statusId) {
     const data = {
         createUserId: JSON.parse(sessionStorage.getItem('userInfor')).id, //当前登录用户id
         merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id必传"
@@ -14,6 +14,10 @@ export function getMyFund(num, size, value) {
          fundStageId: "1", //阶段类型1.基金设立2.运营管理3.基金退出
          fundStatusId: "正常/启动", //状态（1：正常，2：终止）
          */
+         orgTypeId: orgId,
+         manageTypeId: manageId,
+         fundStageId: stageId,
+         fundStatusId: statusId,
          fundName: value,
          page: num,
          pageSize: size
@@ -61,12 +65,13 @@ export function selectAllManageCompany() {
     }
     return service({url: '/fund/selectAllManageCompany', method: 'post', data})
 }
-// 基金阶段
-export function fundStage() {
+// 基金阶段、项目阶段
+export function fundStage(typeNum) {
     const data = {
-        "dicParent": "305"
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        type: typeNum //1:项目 2：基金
     }
-    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+    return service({url: '/dictionaryController/slectAllStageIndex', method: 'post', data})
 }
 // 获取基金详情信息 /fund/getFundDetails
 export function getMyFundDetails(detailsID) {
@@ -76,12 +81,12 @@ export function getMyFundDetails(detailsID) {
     return service({url: '/fund/getFundDetails', method: 'post', data})
 }
 // 基金状态
-export function fundStatus() {
-    const data = {
-        "dicParent": "201"
-    }
-    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
-}
+// export function fundStatus() {
+//     const data = {
+//         "dicParent": "201"
+//     }
+//     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+// }
 // 获取所有的合作机构
 export function getOrgList(name, num, lists) {
     const data = {

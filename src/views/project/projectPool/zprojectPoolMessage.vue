@@ -15,6 +15,7 @@
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
                 <span>确认将该项目转投资？</span>
                 <span slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                     <el-button type="default" @click="investDialog=false">取 消</el-button>
                     <el-button type="danger" @click="jumpPre">确 定</el-button>
                 </span>
@@ -33,6 +34,10 @@
                 <span slot="footer" class="dialog-footer">
                     <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
                     <el-button type="danger" @click="jumpEliminate">确 定</el-button>
+=======
+                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpPre">确 定</el-button>
+>>>>>>> fe720cec7c22ee7be2c3ec5857a40d2876a2320d
                 </span>
             </el-dialog>
         </div>
@@ -44,8 +49,8 @@
                     <table-form :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                <industry-form :industryForm="industryForm"></industry-form>
-                            </el-tab-pane> -->
+                                    <industry-form :industryForm="industryForm"></industry-form>
+                                </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
                     <capital-table :projectData="projectData"></capital-table>
                 </el-tab-pane>
@@ -185,6 +190,7 @@ export default {
             
         },
         jumpEliminate() {
+<<<<<<< HEAD
             console.log('转淘汰');
             setProjectStatus(this.projectPoolId, '4').then(resp =>{
                 this.eliminateDialog = !this.eliminateDialog;
@@ -208,6 +214,20 @@ export default {
             }).catch(e => {
                 console.log('changeNormal error: ', e);
             });
+=======
+            this.eliminateDialog = !this.eliminateDialog;
+            this.show_f = false;
+            this.show_t = false,
+                this.isShow = true;
+            this.state = "淘汰";
+        },
+        changeNormal() {
+            this.isShow = false;
+            this.show_f = true;
+            this.show_s = true;
+            this.show_t = true;
+            this.state = "正常";
+>>>>>>> fe720cec7c22ee7be2c3ec5857a40d2876a2320d
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });

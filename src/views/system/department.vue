@@ -17,12 +17,12 @@
     <div class="table_wrapper">
         <el-table :data="currentData" style="width: 100%">
             <el-table-column type="expand">
+
                 <template scope="props">
                     <el-row>
                         <el-col v-for="(item, index) of props.row.children">
                             <el-row :gutter="20">
                                 <el-col :span="12" class="item" >
-
                                     <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>
                                     <span class="add_margin" v-if="item.editFlag">
                                         <el-input v-model="item.deptName" ></el-input>
@@ -111,6 +111,7 @@ export default {
         Input},
     data() {
         return {
+            companyName:'',
             currentData: [{
                 id: 'a1',
                 name: '投资一部',
@@ -213,11 +214,12 @@ export default {
         }
     },
     created() {
-
+        this.companyName = JSON.parse(sessionStorage.getItem('merchants'))[0].merchant_name,
         getDepartmentList().then((res)=>{
 
             var dataList = addEdit(res.data.result)
             var treeList = getNodes(dataList)
+            console.log(res.data.result)
             this.currentData = treeList
             this._getDepartmentName(this.currentData)
         })
@@ -232,10 +234,18 @@ export default {
 .department {
     .base-style();
     .title {
-        width: 100%;
+        width: 50%;
         height: 42px;
         line-height: 42px;
+        flex: 1;
         text-align: right;
+    }
+    .title1 {
+        width: 40%;
+        height: 42px;
+        line-height: 42px;
+        flex: 1;
+        text-align: left;
     }
     .table_wrapper {
         padding: 12px 0;

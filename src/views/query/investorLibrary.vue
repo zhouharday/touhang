@@ -10,13 +10,13 @@
         </tableHeader>
     </div>
     <el-table :data="investorData" border style="width: 100%">
-        <el-table-column prop="investorName" label="投资者名称">
+        <el-table-column prop="investorName" label="投资者名称" align="center">
         </el-table-column>
-        <el-table-column prop="investorType" label="类型">
+        <el-table-column prop="investorType" label="类型" align="center">
         </el-table-column>
-        <el-table-column prop="investmentManagerName" label="投资经理">
+        <el-table-column prop="investmentManagerName" label="投资经理" align="center">
         </el-table-column>
-        <el-table-column prop="sumPaidAmount" label="累计投资额">
+        <el-table-column prop="sumPaidAmount" label="累计投资额" align="center">
         </el-table-column>
         <!--<el-table-column label="操作">-->
             <!--<template scope="scope">-->
@@ -55,10 +55,18 @@ import {getSelectIndex} from 'api/search'
 export default {
     data() {
         return {
-            filterInfo: [{
+            filterInfo: {
                 title: '投资者类型：',
-                details: [{"dicName":'全部'}, '机构', '个人', '政府']
-            }],
+                details: [{
+                    dicName: '全部'
+                }, {
+                    dicName: '机构'
+                }, {
+                    dicName: '个人'
+                }, {
+                    dicName: '政府'
+                }]
+            },
             theme: '#fff',
             investorData: [],
             input2:'',
@@ -95,8 +103,9 @@ console.log(this.input2)
                 this.investorData = res.data.result.list
         })
         getSelectIndex('70').then((res)=>{
-            console.log(res.data.result)
-            this.filterInfo[0].details = res.data.result
+            console.log(999)
+            console.log(res.data)
+            this.filterInfo.details = res.data.result
 
         })
 

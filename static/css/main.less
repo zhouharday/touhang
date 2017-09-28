@@ -166,6 +166,18 @@ ul li {
     margin-top: 20px;
 }
 
+/*日常办公下的个人中心personal*/
+.personal {
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+}
+
 /*消息公告messageShow*/
 .messageShow {
      // row-table的css style
@@ -304,7 +316,7 @@ ul li {
     .el-button--danger {
         background-color: #F05E5E;
         border-color: #F05E5E;
-    }  
+    }
 }
 
 /*添加项目页addProjectContent*/
@@ -337,14 +349,18 @@ ul li {
         .el-button {
             width: 130px;
             border-radius: 10px;
+            //background-color: #F05E5E;
+            //border: none;
+            //&:hover {
+            //    background: #803f3f;
+            //}
+            //&:active {
+            //    background: #f05e5e;
+            //}
+        }
+        .el-button--danger {
             background-color: #F05E5E;
-            border: none;
-            &:hover {
-                background: #803f3f;
-            }
-            &:active {
-                background: #f05e5e;
-            }
+            border-color: #F05E5E;
         }
     }
 }
@@ -408,19 +424,10 @@ ul li {
         background: #EEF0F4;
     }
     .el-button--text {
-        color: #F05E5E;
+            color: #F05E5E;
     }
-    // 弹框按钮 样式
-    .el-button--default {
-        border: 1px solid #F05E5E;
-        color: #F05E5E;
-    }
-    .el-button--danger {
-        background-color: #F05E5E;
-        border-color: #F05E5E;
-    }
+    // 弹框 样式
     .teamBox {
-        //弹框 样式
         .el-dialog--tiny {
             width: 450px;
         }
@@ -428,7 +435,15 @@ ul li {
             border: 1px solid #ddd;
             border-radius: 10px;
         }
-     }
+        .el-button--default {
+            border: 1px solid #F05E5E;
+            color: #F05E5E;
+        }
+        .el-button--danger {
+            background-color: #F05E5E;
+            border-color: #F05E5E;
+        }
+    }
 }
 
 
@@ -540,24 +555,12 @@ ul li {
     .el-table .positive-row {
         background: #EEF0F4;
     }
-    .el-button {
-        border: none;
-        color: #F05E5E;
+    .tableBox {
+        .el-button {
+            border: none;
+            color: #F05E5E;
+        }
     }
-    //  // ivu 分页组件 的颜色样式
-    //  .ivu-page-prev:hover,
-    //  .ivu-page-item:hover,
-    //  .ivu-page-item-jump-prev:hover,
-    //  .ivu-page-item-jump-next:hover,
-    //  .ivu-page-next:hover {
-    //      // color: #666;
-    //      border-color: #F05E5E;
-    //  }
-    //  .ivu-page-item-active {
-    //      background-color: #F05E5E;
-    //      border-color: #F05E5E;
-    //  }
-
 }
 
 
@@ -725,6 +728,70 @@ ul li {
             border-bottom: 1px solid #F05E5E;
             color: #F05E5E;
         }
+    }
+}
+
+
+/*投资者管理模块 我的投资者页*/
+.investor {
+     // row-table的css style
+     .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    } 
+    .tableBox {
+        .el-button--text {
+            color: #F05E5E;
+        }
+    }
+}
+
+/*基金管理模块 管理公司页*/
+.manageCompany {
+    // row-table的css style
+      .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    } 
+}
+
+/*基金管理模块 合作机构页*/
+.cooperative {
+     // row-table的css style
+     .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div,
+    .el-table__header-wrapper thead div {
+        color: #fff;
+        font-weight: normal;
+        background-color: #2A3142;
+    } 
+}
+
+/*基金管理模块 我的基金页*/
+.fund {
+    // row-table的css style
+    .el-table__fixed-header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
+    }
+    .el-table th {
+        background-color: #2A3142;
+    }
+    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+        background-color: #2A3142;
+        color: #fff;
     }
 }
 

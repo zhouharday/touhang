@@ -8,8 +8,8 @@
                 <div class="ul_list">
                     <ul class="listWrapper">
                         <li class="list" v-for="(list, index) of chooseInfo.details" :key="list">
-                            <el-button @click="changeList(index)" class="btn" :class="{active: index == currentIndex}">
-                                {{list.dicName}}
+                            <el-button @click="changeList(index, list.id)" class="btn" :class="{active: index == currentIndex}">
+                                {{list.dicName || list.stageName}}
                             </el-button>
                         </li>
                     </ul>
@@ -22,10 +22,14 @@
 <script type="text/ecmascript-6">
 export default {
     /* 默认数据结构
-      chooseInfo: [{
+      chooseInfo: {
          title: '组织类型',
-         details: ['全部', '公司型']
-      }]
+         details: [{
+             dicName: '全部'
+         }, {
+           dicName: 'xxx'
+       }]
+      }
    */
     props: {
         chooseInfo: {
@@ -39,9 +43,10 @@ export default {
         }
     },
     methods: {
-        changeList(index) {
+        changeList(index, id) {
             this.currentIndex = index
-        },
+            this.$emit('getIdInfo', index, id)
+        }
     }
 }
 </script>
@@ -57,7 +62,7 @@ export default {
         margin: 6px 0;
         display: flex;
         .title {
-            flex: 0 0 80px;
+            flex: 0 0 100px;
             height: 100%;
             line-height: 42px;
             font-size: 14px;
@@ -72,7 +77,6 @@ export default {
                     margin-right: 24px;
                     width:70px;
                     height:20px;
-
                     display: inline-block;
                     box-sizing: border-box;
                     /*margin-right: 30px;*/
@@ -80,6 +84,9 @@ export default {
                 }
                 .btn {
                     border: none;
+                    &:hover {
+                       color:#495060;
+                    }
                     &.active {
                         background: @color-theme-red;
                         color:@color-base;
@@ -88,8 +95,8 @@ export default {
                         text-align: center;
                         border-radius: 15px;
                         padding: 0;
-
                     }
+                    
                 }
             }
         }

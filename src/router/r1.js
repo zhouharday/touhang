@@ -73,6 +73,10 @@ const r1 = [
         path: 'configuration', //home/系统管理下的业务配置
         name: 'configuration',
         component: resolve => require(['../views/system/configuration.vue'], resolve)
+    },{
+        path: 'manageCompany', //home/基金管理下的管理公司
+        name: 'manageCompany',
+        component: resolve => require(['../views/fund/manageCompany.vue'], resolve)
     }
 ]
 export default r1

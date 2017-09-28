@@ -29,6 +29,7 @@ import {
     addAgreementAmount,
     addEarningsAmount
 } from 'api/investor'
+import {changeDate} from 'common/js/config'
 export default {
     props: {
         investorData: {

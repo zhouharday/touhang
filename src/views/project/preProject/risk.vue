@@ -69,7 +69,7 @@
                                 <!-- action 上传的地址，必填 -->
                                 <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                        <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
                                     </div>
                                 </Upload>
@@ -79,7 +79,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd">保存</el-button>
+                    <el-button type="danger" @click="confirmAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 查看风险详情 对话框 -->
@@ -144,9 +144,9 @@
                 <el-form :model="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.result" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions" 
-                                :key="item.value" 
-                                :label="item.label" 
+                            <el-option v-for="item in resultOptions"
+                                :key="item.value"
+                                :label="item.label"
                                 :value="item.value">
                             </el-option>
                         </el-select>
@@ -159,15 +159,15 @@
                         <!-- action 上传的地址，必填 -->
                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
                         </Upload>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalTracking= false">取 消</el-button>
-                    <el-button type="primary" @click="confirmTracking">保存</el-button>
+                    <el-button  @click="modalTracking= false">取 消</el-button>
+                    <el-button type="danger" @click="confirmTracking">保 存</el-button>
                 </div>
             </el-dialog>
         </section>
@@ -278,7 +278,7 @@ export default {
         },
         initInfo() {
             let proUsers = this.proUsers;
-            
+
             this.handleToOptions(proUsers);
 
             this.recipientOptions = proUsers;
@@ -287,8 +287,8 @@ export default {
             datas.forEach(item => {
                 item.value = item.id;
                 item.label = item.name;
-            })   
-            return datas;         
+            })
+            return datas;
         },
         getDatas() {
             dangers(this.proId).then(resp => {
@@ -320,9 +320,9 @@ export default {
                 projectId: this.proId
                 /*
                 riskTheme:
-                seedUserId: 
-                receivedUserId: 
-                riskDescribe: */ 
+                seedUserId:
+                receivedUserId:
+                riskDescribe: */
             };
             params = Object.assign({}, params, this.AddForm);
             console.log('params: ', params);
