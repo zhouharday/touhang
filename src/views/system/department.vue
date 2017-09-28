@@ -125,37 +125,7 @@ export default {
             message: '是否确认删除该部门？',
             btnText: '删除',
             companyName:'',
-            currentData: [{
-                id: 'a1',
-                name: '投资一部',
-                childrenData: [{
-                    title: '一部第一小组',
-                    desc: '描述信息a'
-                }, {
-                    title: '一部第二小组',
-                    desc: '描述信息b'
-                }]
-            }, {
-                id: 'a2',
-                name: '投资二部',
-                childrenData: [{
-                    title: '二部第一小组',
-                    desc: '描述信息as'
-                }, {
-                    title: '二部第二小组',
-                    desc: '描述信息aaaa'
-                }]
-            }, {
-                id: 'a3',
-                name: '投资三部',
-                childrenData: [{
-                    title: '三部第一小组',
-                    desc: '描述信息'
-                }, {
-                    title: '三部第二小组',
-                    desc: '描述信息'
-                }]
-            }],
+            currentData: [],
             department: false,
             formLabelWidth: '120px',
             departmentData: {
