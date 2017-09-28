@@ -56,13 +56,13 @@
                             <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="mananger" label="项目创建人" align="center">
+                    <el-table-column prop="createUserName" label="项目创建人" align="center">
                     </el-table-column>
                     <el-table-column prop="industry" label="所属行业" align="center">
                     </el-table-column>
-                    <el-table-column prop="sort" label="项目类型" align="center">
+                    <el-table-column prop="projectType" label="项目类型" align="center">
                     </el-table-column>
-                    <el-table-column prop="stage" label="项目阶段" align="center">
+                    <el-table-column prop="projectState" label="项目阶段" align="center">
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
                         <template scope="scope">
