@@ -15,10 +15,6 @@
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
                 <span>确认将该项目转投资？</span>
                 <span slot="footer" class="dialog-footer">
-<<<<<<< HEAD
-                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpPre">确 定</el-button>
-=======
                     <el-button type="default" @click="investDialog=false">取 消</el-button>
                     <el-button type="danger" @click="jumpPre">确 定</el-button>
                 </span>
@@ -37,7 +33,6 @@
                 <span slot="footer" class="dialog-footer">
                     <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
                     <el-button type="danger" @click="jumpEliminate">确 定</el-button>
->>>>>>> 6386457b897c9c398bc09f01b3a068d7930649a5
                 </span>
             </el-dialog>
         </div>
