@@ -1,5 +1,5 @@
 <template>
-<div class="investor">
+<div class="investorTable">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
     <el-table :data="investorData" border style="width: 100%">
         <el-table-column label="投资者" prop="investorName">
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.investor {
+.investorTable {
     width: 100%;
     height: 100%;
 }

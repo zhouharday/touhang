@@ -14,26 +14,26 @@
     </tableHeader>
     <div class="tables">
         <el-table :data="investorData" border style="width: 100%;">
-            <el-table-column label="投资者名称">
+            <el-table-column label="投资者名称" align="center">
                 <template scope="scope">
                   <div class="name" @click="handleRouter(scope.$index, scope.row)">
                       <span class="investorName">{{ scope.row.investorName }}</span>
                   </div>
                 </template>
             </el-table-column>
-            <el-table-column label="类型" prop="investorTypeId">
+            <el-table-column label="类型" prop="investorTypeId" align="center">
             </el-table-column>
-            <el-table-column label="投资经理" prop="investmentManagerName">
+            <el-table-column label="投资经理" prop="investmentManagerName" align="center">
             </el-table-column>
-            <el-table-column label="累计投资额" prop="sumPaidAmount">
+            <el-table-column label="累计投资额" prop="sumPaidAmount" align="center">
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" align="center">
                 <template scope="scope">
-                  <el-button size="small"
+                  <el-button type="text"
                           @click="handleEdit(scope.$index, scope.row)">
                           签约
                   </el-button>
-                  <el-button size="small" type="danger"
+                  <el-button  type="text"
                           @click="handleDelete(scope.$index, scope.row)">
                           删除
                   </el-button>
@@ -42,7 +42,7 @@
         </el-table>
     </div>
     <div class="page">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size=pageSize layout="total, sizes, prev, pager, next, jumper" :total=pageTotal>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
         </el-pagination>
     </div>
     <!-- 添加投资者 -->
