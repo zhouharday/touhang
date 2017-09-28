@@ -68,8 +68,8 @@
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button type="danger" size="small" v-show="isShow" @click="confirmSave">保存</el-button>
-                <el-button type="default" size="small" v-show="isShow">取消</el-button>
+                <el-button type="default"  v-show="isShow">取 消</el-button>
+                <el-button type="danger"  v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
     </section>

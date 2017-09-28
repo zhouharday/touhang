@@ -38,7 +38,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button tyepe="default" @click="modalAdd = false">取 消</el-button>
+                    <el-button @click="modalAdd = false">取 消</el-button>
                     <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
                 </div>
             </el-dialog>

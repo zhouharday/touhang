@@ -52,7 +52,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="modalAdd1 = false">取 消</el-button>
+                    <el-button  @click="modalAdd1 = false">取 消</el-button>
                     <el-button type="danger" @click="confirmAdd1('memberForm')">确 定</el-button>
                 </div>
             </el-dialog>
@@ -132,7 +132,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd2 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd2('structureForm')">确 定</el-button>
+                    <el-button type="danger" @click="confirmAdd2('structureForm')">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
