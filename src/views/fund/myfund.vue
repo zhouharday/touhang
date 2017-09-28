@@ -59,7 +59,7 @@
                        :page-sizes="[10, 20, 30, 50]"
                        :page-size="10"
                        layout="total, sizes, prev, pager, next, jumper"
-                       :total=pageTotal>
+                       :total="pageTotal">
         </el-pagination>
     </div>
 </div>

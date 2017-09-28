@@ -65,8 +65,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd('teamForm')">保 存</el-button>
+                    <el-button type="default" size="small" @click="modalAdd = false">取 消</el-button>
+                    <el-button type="danger" size="small" @click="confirmAdd('teamForm')">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -149,7 +149,7 @@ export default {
         }
     },
     created() {
-        this.init(); 
+        this.init();
     },
     methods: {
         init () {
@@ -158,7 +158,7 @@ export default {
         initInfo() {
             let proUsers = this.proUsers;
             let proRoles = this.proRoles;
-            
+
             this.handleToOptions(proUsers);
             this.handleToOptions(proRoles);
 
@@ -169,8 +169,8 @@ export default {
             datas.forEach(item => {
                 item.value = item.id;
                 item.label = item.name;
-            })   
-            return datas;         
+            })
+            return datas;
         },
         // 项目成员列表
         getDatas() {
@@ -178,7 +178,7 @@ export default {
                 // console.log('getTeams resp', resp);
                 let data = resp.data;
                 let result = data.result;
-                this.teamData = result;               
+                this.teamData = result;
             }).catch(e => {
                 console.log('getDatas() exists error: ', e);
             })

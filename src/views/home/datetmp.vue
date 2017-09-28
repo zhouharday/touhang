@@ -28,14 +28,51 @@
                 </div>
             </div>
         </div>
+        <!-- 添加日程模态框 -->
+        <div class="scheduleBox">
+            <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
+                <el-form :model="scheduleForm" label-position="top">
+                    <el-row>
+                        <el-col>
+                            <el-form-item label="主题：" prop="theme">
+                                <el-input placeholder="请输入日程主题" v-model="scheduleForm.theme"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="时间：" prop="time">
+                                <el-time-select v-model="scheduleForm.time" :picker-options="{
+                                                                                start: '08:30',
+                                                                                step: '00:15',
+                                                                                end: '18:30'
+                                                                                }" placeholder="选择时间" style="width:100%">
+                                </el-time-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="danger" @click="scheduleDialog = false">保存</el-button>
+                    <el-button type="default" @click="scheduleDialog = false">取消</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 <script>
 module.exports = {
-    props: ["title","monthDate"],
-    data: function () {
+    props: ["title", "monthDate"],
+    data: function() {
         return {
-
+            scheduleDialog: false,
+            checkTime: '添加日程',
+            scheduleForm: {
+                theme: '',
+                time: ''
+            },
             //左边日期
             date: {
                 year: new Date().getFullYear(),
@@ -49,7 +86,7 @@ module.exports = {
     },
     methods: {
         //上一年
-        backyear: function () {
+        backyear: function() {
             var self = this;
             self.date.year--;
             self.creattimetmp(+new Date(self.date.year, self.date.month, 1));
@@ -58,7 +95,7 @@ module.exports = {
             this.$emit("changetime", self.changeDate)
         },
         //下一年
-        nextyear: function () {
+        nextyear: function() {
             var self = this;
             self.date.year++;
             self.creattimetmp(+new Date(self.date.year, self.date.month, 1));
@@ -67,7 +104,7 @@ module.exports = {
             this.$emit("changetime", self.changeDate)
         },
         //上一个月
-        backmounth: function () {
+        backmounth: function() {
             var self = this;
             self.date.month--;
             if (self.date.month < 0) {
@@ -80,7 +117,7 @@ module.exports = {
             this.$emit("changetime", self.changeDate)
         },
         //下一个月
-        nextmounth: function () {
+        nextmounth: function() {
             var self = this;
             self.date.month++;
             if (self.date.month > 11) {
@@ -92,7 +129,7 @@ module.exports = {
             this.clickN = null;
             this.$emit("changetime", self.changeDate)
         },
-        creattimetmp: function (datas) {
+        creattimetmp: function(datas) {
 
             datas = datas ? datas : new Date();
             var date = new Date(datas)
@@ -147,7 +184,7 @@ module.exports = {
                     obj.month = month;
                     obj.year = year;
                     obj.item = {};
-                    obj.week = new Date(year,month-1,x).getDay();
+                    obj.week = new Date(year, month - 1, x).getDay();
                     obj.empt = true;
                     obj.yd = false;
                     obj.wd = false;
@@ -160,17 +197,19 @@ module.exports = {
             this.$emit("readyfun", arr, this.date);
         },
         //点击日期
-        clickDate: function (index, n) {
+        clickDate: function(index, n) {
             if (!n) {
                 return;
             }
             var self = this;
             this.clickN = index;
             this.changeDate = this.date.year + "-" + (this.date.month + 1) + "-" + n;
-            this.$emit("changetime", self.changeDate)
+            this.$emit("changetime", self.changeDate);
+            this.scheduleDialog = !this.scheduleDialog;
+            this.checkTime =  this.changeDate;
         },
     },
-    created: function () {
+    created: function() {
         this.creattimetmp(new Date());
     }
 }

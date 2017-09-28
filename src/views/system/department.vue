@@ -96,6 +96,9 @@
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
+    <!-- 删除确认弹框 -->
+    <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="confirmDel" @cancel="deleteReminders=false">
+    </delete-reminders>
 </div>
 </template>
 
@@ -108,12 +111,19 @@
     import {deletDepartment} from 'api/system'
     import Input from "../../../node_modules/iview/src/components/input/input.vue";
     import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+    import deleteReminders from 'components/deleteReminders'
 export default {
     components: {
         ElInput,
-        Input},
+        Input,
+        deleteReminders
+    },
     data() {
         return {
+            deleteReminders: false,
+            message_title: '确认删除',
+            message: '是否确认删除该部门？',
+            btnText: '删除',
             companyName:'',
             currentData: [{
                 id: 'a1',
@@ -153,7 +163,7 @@ export default {
                 department: 'aaa'
             },
             options: [],
-
+            deleteId:'',
         }
     },
     methods: {
@@ -205,9 +215,14 @@ export default {
         },
         deleteClick(item) {
 //            console.log(item)
-            var id = item.id;
-            deletDepartment(item.id).then((res) => {
+            this.deleteReminders = !this.deleteReminders;
+            this.deleteId = item.id;
+        },
+        confirmDel(){
+
+            deletDepartment(this.deleteId).then((res) => {
                 getDepartmentList().then((res)=>{
+                    this.deleteReminders = !this.deleteReminders;
                     var dataList = addEdit(res.data.result)
                     var treeList = getNodes(dataList)
                     this.currentData = treeList

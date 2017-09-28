@@ -27,7 +27,7 @@
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
-                                                                                                            margin-right: 7px;" src="/static/img/office.png" />
+                                                                                                                margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
@@ -63,6 +63,7 @@
                     </template>
                     <el-menu-item index="myfund" @click="addTab(title11,'/home/myfund','myfund')">{{title11}}</el-menu-item>
                     <el-menu-item index="cooperative" @click="addTab(title12,'/home/cooperative','cooperative')">{{title12}}</el-menu-item>
+                    <el-menu-item index="manageCompany" @click="addTab(title37,'/home/manageCompany','manageCompany')">{{title37}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="5">
                     <template slot="title">
@@ -137,10 +138,10 @@
                 </el-submenu>
             </el-menu>
             <!-- <el-row>
-                                                                                                    <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
-                                                                                                        <my-tree :model="menuItem"></my-tree>
-                                                                                                    </el-col>
-                                                                                                </el-row> -->
+                                                                                                        <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
+                                                                                                            <my-tree :model="menuItem"></my-tree>
+                                                                                                        </el-col>
+                                                                                                    </el-row> -->
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
@@ -367,6 +368,7 @@ export default {
             title_04: '基金管理',
             title11: '我的基金',
             title12: '合作机构',
+            title37: '管理公司',
             title_05: '投资者管理',
             title13: '我的投资者',
             title_06: '综合查询',
@@ -401,7 +403,6 @@ export default {
             title32: '客户权限',
             title33: '领头助手',
             title34: '会员管理',
-
         }
     },
     methods: {

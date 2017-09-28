@@ -141,7 +141,7 @@
                             <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix"
                                     action="//jsonplaceholder.typicode.com/posts/">
                                 <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                    <Icon type="ios-cloud-upload" size="52"></Icon>
                                     <p>点击或将文件拖拽到这里上传</p>
                                 </div>
                             </Upload>
@@ -159,7 +159,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer" style="text-align:left">
-                <el-button @click="applyModal= false">提交</el-button>
+                <el-button type="danger" size="small" @click="applyModal= false">提交</el-button>
             </div>
         </el-dialog>
         <!-- 查看进度 对话框 -->

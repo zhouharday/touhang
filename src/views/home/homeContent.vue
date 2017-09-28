@@ -36,18 +36,7 @@
                                         <span>{{item.noticeMessage}}</span>
                                     </li>
                                 </ul>
-                                <!-- <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page> -->
-                                <div class="pagination">
-                                     <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
-    </el-pagination>
-                                </div>
+                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -122,38 +111,6 @@
                 </div>
             </el-col>
         </el-row>
-        <!-- 添加日程模态框 -->
-        <div class="scheduleBox">
-            <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
-                <el-form :model="scheduleForm" label-position="top">
-                    <el-row>
-                        <el-col>
-                            <el-form-item label="主题：" prop="theme">
-                                <el-input placeholder="请输入日程主题" v-model="scheduleForm.theme"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="时间：" prop="time">
-                                <el-time-select v-model="scheduleForm.time" :picker-options="{
-                                                                    start: '08:30',
-                                                                    step: '00:15',
-                                                                    end: '18:30'
-                                                                    }" placeholder="选择时间" style="width:100%">
-                                </el-time-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
-                <div slot="footer" class="dialog-footer">
-                    <el-button class="dialogBtn_active" @click="scheduleDialog = false">保存</el-button>
-                    <el-button class="dialogBtn" @click="scheduleDialog = false">取消</el-button>
-                </div>
-            </el-dialog>
-        </div>
         <!-- 发起申请 对话框-->
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
@@ -208,26 +165,6 @@
 </template>
 
 <style lang="less" scoped>
-.homeContent {
-    .dialog-footer {
-        text-align: center; // margin-top: 15px;
-        .dialogBtn_active {
-            padding: 5px 15px;
-            color: #fff;
-            border-radius: 5px;
-            border-color: #f05e5e;
-            background-color: #f05e5e;
-        }
-        .dialogBtn {
-            padding: 5px 15px;
-            color: #f05e5e;
-            border-radius: 5px;
-            border-color: #f05e5e;
-            background-color: #fff;
-        }
-    }
-}
-
 .homeContent_top_L {
     overflow: hidden;
     margin-right: 24px;
@@ -414,12 +351,9 @@ import datatime from './datetmp.vue';
 export default {
     components: { datatime },
     created() {
-
     },
     data() {
         return {
-            scheduleDialog: false,
-            checkTime: '添加日程',
             activeName: 'first',
             applyModal: false,
             loading: false,
@@ -429,10 +363,6 @@ export default {
             sysPrompt: "系统提示",
             sysMessage: true,
             sysMessageTitle: "暂时没有系统提示哦~",
-            scheduleForm: {
-                theme: '',
-                time: ''
-            },
             projectList: [
                 {
                     craetProject: "立项",
@@ -531,8 +461,6 @@ export default {
         },
         changetime(data) {
             // console.log(data)
-            this.scheduleDialog = !this.scheduleDialog;
-            this.checkTime = data;
         },
         readyfun(arr, data) {
             var arr = arr;

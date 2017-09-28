@@ -10,13 +10,16 @@
         </tableHeader>
     </div>
     <el-table :data="investorData" border style="width: 100%">
-        <el-table-column prop="investorName" label="投资者名称">
+        <el-table-column prop="investorName" label="投资者名称" align="center">
+            <template scope = "scope">
+                <a @click="JumpOther(scope.row)">{{scope.row.investorName}}</a>
+            </template>
         </el-table-column>
-        <el-table-column prop="investorType" label="类型">
+        <el-table-column prop="investorType" label="类型" align="center">
         </el-table-column>
-        <el-table-column prop="investmentManagerName" label="投资经理">
+        <el-table-column prop="investmentManagerName" label="投资经理" align="center">
         </el-table-column>
-        <el-table-column prop="sumPaidAmount" label="累计投资额">
+        <el-table-column prop="sumPaidAmount" label="累计投资额" align="center">
         </el-table-column>
         <!--<el-table-column label="操作">-->
             <!--<template scope="scope">-->
@@ -52,6 +55,7 @@ import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
 import {getInvestorList} from 'api/search'
 import {getSelectIndex} from 'api/search'
+import {mapMutations} from 'vuex'
 export default {
     data() {
         return {
@@ -71,6 +75,17 @@ export default {
 
     },
     methods: {
+        JumpOther(row){
+            console.log(row)
+            this.addTab({
+                type: 'addTab',
+                title: row.investorName +'详情',
+                url: '/home/investorDetails/:' + row.id,
+                name: 'investorDetails/' + row.id
+            })
+
+            this.$router.push('/home/investorDetails/:' + row.id)
+        },
         handleIconClick(){
 console.log(this.input2)
             getInvestorList(this.input2,this.type).then((res)=>{
@@ -87,14 +102,17 @@ console.log(this.input2)
 //            console.log(res.data)
                 this.investorData = res.data.result.list
             })
-        }
+        },
+        ...mapMutations([
+            'addTab'
+        ])
     },
     created(){
         getInvestorList().then((res)=>{
 //            console.log(res.data)
                 this.investorData = res.data.result.list
         })
-        getSelectIndex('70').then((res)=>{
+        getSelectIndex('402').then((res)=>{
             console.log(999)
             console.log(res.data)
             this.filterInfo.details = res.data.result

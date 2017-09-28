@@ -7,26 +7,39 @@
                     <!-- {{model}} -->
                     <el-col :span="spanCount">
                         <div class="title" @click="toggle($event, model, currentIndex)">
-                            <Icon v-if="!isFolder && model.children" :type="[open ? 'chevron-right': 'chevron-down']">
+                            <Icon v-if="!isFolder && model.children" :type="[open ? 'chevron-down': 'chevron-right']">
                             </Icon>
                             <span class="info">{{ model.menuName }}</span>
-                            <span v-if="model.menuContent"><el-checkbox v-model="checked"></el-checkbox></span>
+                            <!--<span v-if="model.menuContent"><el-checkbox v-model="checked"></el-checkbox></span>-->
                         </div>
                     </el-col>
                     <el-col :span="18" class="add_border_left" v-if="model.menuContent">
-                        <div class="dataDetails" v-for="(text, index) of model.menuContent" :key="text">
-                            <div class="btn_group" v-if="text.label === 'button'">
-                                <div class="btn" v-for="(btn, btnIndex) of text.details" :key="btn">
-                                    <el-button size="small" class="btnStyle">{{btn}}</el-button>
-                                </div>
-                            </div>
-                            <div class="checkbox" v-else = "text.label === 'checkbox'">
-                                <el-checkbox-group v-model="text.checkedList">
-                                    <span class="detailsTitle">{{text.detailsTitle}}</span>
-                                    <el-checkbox v-for="(checkbox, checkedIndex) in text.details"  :label="checkbox" :key="checkedIndex">{{checkbox}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </div>
+                        <!--menuContent循环-->
+                        <el-checkbox-group v-model="model.menuContentClick" @change="handleCheckedCitiesChange">
+                            <!--<div class="dataDetails" >-->
+
+                            <!--<div class="btn_group" v-if="text.label === 'button'">-->
+                            <!--<div class="btn" v-for="(btn, btnIndex) of text.details" :key="btn">-->
+                            <!--<el-button size="small" class="btnStyle">{{btn}}</el-button>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="checkbox" v-else = "text.label === 'checkbox'">-->
+                            <!--<el-checkbox-group v-model="text.checkedList">-->
+                            <!--<span class="detailsTitle">{{text.detailsTitle}}</span>-->
+                            <!--<el-checkbox v-for="(checkbox, checkedIndex) in text.details"  :label="checkbox" :key="checkedIndex">{{checkbox}}</el-checkbox>-->
+                            <!--</el-checkbox-group>-->
+                            <!--</div>-->
+                            <el-checkbox v-for="(text, index) of model.menuContent"   :label="text.path" >{{text.menuName}}</el-checkbox>
+
+
+
+
+                            <!--</div>-->
+                        </el-checkbox-group>
+
+
+
+
                     </el-col>
                 </el-row>
             </el-col>
@@ -74,6 +87,7 @@
             }
         },
         methods: {
+
             toggle(event, model, index) {
                 // console.log(index)
                 // console.log(model.pId)

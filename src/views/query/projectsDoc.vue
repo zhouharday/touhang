@@ -16,7 +16,10 @@
             <div>
 
                 <div class="fileTable" v-show="isShow">
-                    <!-- <tabel-header :data="headerInfo_file"></tabel-header> -->
+                     <!--<tableHeader :data="headerInfo_file"></tableHeader>-->
+
+                    <myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>
+
                     <div class="title_f" style="background:#2a3142;color:#fff">
                         <div class="desc">
                             <span>项目阶段</span>
@@ -88,6 +91,14 @@ export default {
             loadingStatus: false,
             formLabelWidth: '80px',
             inputSearch:'',
+            headerInfo_file: {
+                desc:'aaa',
+                btnGroup: [{
+                    icon: 'plus-round',
+                    explain: '基金'
+                }]
+            },
+            chooseInfo:[],
         }
 
     },
@@ -155,10 +166,10 @@ export default {
 //                this.projectMenu = res.data.result
         })
         //暂时不用选项卡
-//        getSelectIndex('203').then((res)=>{
-//            console.log(res.data)
-//            this.chooseInfo[0].details = res.data.result
-//        })
+        getSelectIndex('203').then((res)=>{
+            console.log(res.data)
+            this.chooseInfo.details = res.data.result
+        })
 
 
     }
