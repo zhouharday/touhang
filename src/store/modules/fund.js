@@ -6,18 +6,36 @@ import {
     OrganizationType,
     getMyFund,
     fundStage,
-    fundStatus,
+    // fundStatus,
     getAllOrgList
 } from '../../api/fund'
 const state = {
-    getManType: [],
+    getManType: [{
+        dicName: '全部'
+    }, {
+        dicName: '受托管理'
+    }, {
+        dicName: '自我管理'
+    }, {
+        dicName: '顾问管理'
+    }], // 管理类型
     fundInvestment: [],
     managementCompany: [],
-    OrgType: {},
+    OrgType: [{
+        dicName: '全部'
+    }, {
+        dicName: '契约型'
+    }, {
+        dicName: '合伙型'
+    }, {
+        dicName: '公司型'
+    }], // 组织类型
     myFundList: {},
     // myFundDetails: {},
-    fundStage: {},
-    fundStatus: {},
+    fundStage: [{
+        dicName: '全部'
+    }], // 基金阶段
+    // fundStatus: {},
     getOrgList: {}
 }
 
@@ -29,7 +47,7 @@ const getters = {
     myFundList: state => state.myFundList,
     // myFundDetails: state => state.myFundDetails,
     fundStage: state => state.fundStage,
-    fundStatus: state => state.fundStatus,
+    // fundStatus: state => state.fundStatus,
     getOrgList: state => state.getOrgList
 }
 
@@ -55,9 +73,9 @@ const mutations = {
     [types.GET_FUNDSTAGE](state, fundStage) {
         state.fundStage = fundStage
     },
-    [types.GET_FUNDSTATUS](state, fundStatus) {
-        state.fundStatus = fundStatus
-    },
+    // [types.GET_FUNDSTATUS](state, fundStatus) {
+    //     state.fundStatus = fundStatus
+    // },
     [types.GET_ALLORGLIST](state, getOrgList) {
         state.getOrgList = getOrgList
     }
@@ -109,7 +127,7 @@ const actions = {
         })
     },
     getFundStage({commit, dispatch}) {
-        return fundStage().then((res) => {
+        return fundStage(2).then((res) => {
             if (res.status == '200') {
                 commit(types.GET_FUNDSTAGE, res.data.result)
             }
@@ -117,15 +135,15 @@ const actions = {
             console.log(err)
         })
     },
-    getFundStatus({commit, dispatch}) {
-        return fundStatus().then((res) => {
-            if (res.status == '200') {
-                commit(types.GET_FUNDSTATUS, res.data.result)
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-    },
+    // getFundStatus({commit, dispatch}) {
+    //     return fundStatus().then((res) => {
+    //         if (res.status == '200') {
+    //             commit(types.GET_FUNDSTATUS, res.data.result)
+    //         }
+    //     }).catch(err => {
+    //         console.log(err)
+    //     })
+    // },
     getAllOrg({commit, dispatch}) {
         return getAllOrgList().then((res) => {
             if (res.status == '200') {

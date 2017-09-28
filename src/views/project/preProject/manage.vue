@@ -11,8 +11,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" size="small" @click="costAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
+                                <el-button type="text" @click="costAdd2=true">编辑</el-button>
+                                <el-button type="text"  @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -30,8 +30,13 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                             <el-button type="default" size="small" @click="costAdd1 = false">取 消</el-button>
                             <el-button type="danger" size="small" @click="confirmCostAdd1">确 定</el-button>
+=======
+                            <el-button type="default"  @click="costAdd1 = false">取 消</el-button>
+                            <el-button type="danger"  @click="confirmCostAdd1">确 定</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                         </div>
                     </el-dialog>
                     <!-- 编辑项目费用 对话框-->
@@ -48,8 +53,13 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                             <el-button type="default" size="small" @click="costAdd2 = false">取 消</el-button>
                             <el-button type="danger" size="small" @click="confirmCostAdd2()">确 定</el-button>
+=======
+                            <el-button type="default"  @click="costAdd2 = false">取 消</el-button>
+                            <el-button type="danger" @click="confirmCostAdd2()">确 定</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                         </div>
                     </el-dialog>
                 </div>
@@ -71,8 +81,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" size="small" @click="contractAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
+                                <el-button type="text" @click="contractAdd2=true">编辑</el-button>
+                                <el-button type="text"  @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -117,7 +127,7 @@
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="contractForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                             <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
@@ -171,7 +181,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="contractAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmContractAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmContractAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 添加 出资主体dialog -->
@@ -192,7 +202,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="fundAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmFundAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmFundAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目合同 对话框-->
@@ -236,7 +246,7 @@
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="contractForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                             <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
@@ -290,7 +300,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="contractAdd2 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmContractAdd2">确 定</el-button>
+                            <el-button type="danger" @click="confirmContractAdd2">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 添加 出资主体dialog -->
@@ -311,7 +321,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="fundAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmFundAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmFundAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -331,8 +341,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" size="small" @click="paidAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
+                                <el-button type="text" @click="paidAdd2=true">编辑</el-button>
+                                <el-button type="text" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -384,7 +394,7 @@
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
                                             <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
@@ -423,8 +433,13 @@
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                             <el-button type="default" size="small" @click="paidAdd1 = false">取 消</el-button>
                             <el-button type="danger" size="small" @click="confirmPaidAdd1">确 定</el-button>
+=======
+                            <el-button type="default"  @click="paidAdd1 = false">取 消</el-button>
+                            <el-button type="danger" @click="confirmPaidAdd1">确 定</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                         </div>
                     </el-dialog>
                     <!-- 编辑投资支付 对话框-->
@@ -475,7 +490,7 @@
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
                                             <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                                 <p>点击或将文件拖拽到这里上传</p>
                                             </div>
                                         </Upload>
@@ -514,8 +529,13 @@
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                             <el-button type="default" size="small" @click="paidAdd2 = false">取 消</el-button>
                             <el-button type="danger" size="small" @click="confirmPaidAdd2">确 定</el-button>
+=======
+                            <el-button type="default"  @click="paidAdd2 = false">取 消</el-button>
+                            <el-button type="danger" @click="confirmPaidAdd2">确 定</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                         </div>
                     </el-dialog>
                 </div>
@@ -610,7 +630,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="sharingAdd1 = false">取 消</el-button>
-                            <el-button type="primary" @click="confirmSharingAdd1">确 定</el-button>
+                            <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目分红 对话框-->
@@ -682,8 +702,13 @@
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                             <el-button type="default" size="small" @click="sharingAdd2 = false">取 消</el-button>
                             <el-button type="danger" size="small" @click="confirmSharingAdd2">确 定</el-button>
+=======
+                            <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
+                            <el-button type="danger"  @click="confirmSharingAdd2">确 定</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                         </div>
                     </el-dialog>
                 </div>

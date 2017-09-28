@@ -80,8 +80,13 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                     <el-button type="default" size="small" @click="modalAdd2 = false">取 消</el-button>
                     <el-button type="danger" size="small" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+=======
+                    <el-button type="default" @click="modalAdd2 = false">取 消</el-button>
+                    <el-button type="danger"  @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 </div>
             </el-dialog>
         </div>
@@ -127,8 +132,13 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                     <el-button type="default" size="small" @click="modalAdd3 = false">取 消</el-button>
                     <el-button type="danger" size="small" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+=======
+                    <el-button type="default"  @click="modalAdd3 = false">取 消</el-button>
+                    <el-button type="danger"  @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 </div>
             </el-dialog>
         </div>

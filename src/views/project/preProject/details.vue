@@ -1,6 +1,6 @@
 <template>
     <div class="form">
-        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -15,7 +15,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目类型" prop="projectSort">
+                        <el-form-item label="项目类型" prop="projectType">
                             <el-input v-model="basicForm.projectSort" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
@@ -25,7 +25,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目来源" prop="origin">
+                        <el-form-item label="项目来源" prop="projectFrom">
                             <el-input v-model="basicForm.origin" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
@@ -47,7 +47,7 @@
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>

@@ -58,7 +58,7 @@ export function getProDetail(id) {
 
 // 添加项目池
 export function addPro(params = {}) {
-	let { projectInfo, enterpriseInfo, merchantId } = params;
+	let { projectId, enterpriseInfo, merchantId } = params;
 	/*
 	let { 
 		projectName, //项目名: "2",
@@ -88,7 +88,7 @@ export function addPro(params = {}) {
 	*/
 	const data = {
 		merchantId,
-		projectInfo,
+		projectId,
 		enterpriseInfo
 	}
 	return service({url: '/projectPool/addProjectPool', method: 'post', data})
@@ -104,14 +104,29 @@ export function delPro(id, projectType) {
 }
 
 // 转投资
-export function transPro(params = {}) {
-	let { projectId, addProjectUserId } = params;
+export function transPro(projectId) {
+	let addProjectUserId = JSON.parse(sessionStorage.getItem('userInfor')).id;	//当前登录用户id
+    let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id;	//商户id必传"
 	const data = {
+		merchantId,
 		projectId,
 		addProjectUserId
-	}
-	// return service({url: '/investProject/addInvestProject', method: 'post', data});
-	return service({url: '/productClieController/insertProjectPool', method: 'post', data});
+	};
+	return service({url: '/investProject/addInvestProject', method: 'post', data});
+	//return service({url: '/productClieController/insertProjectPool', method: 'post', data});
+}
+
+//修改项目状态
+//项目id 必传
+//1：正常 2：观察 3中止 4：淘汰
+export function setProjectStatus(projectId, projectType){
+	console.log("projectType :"+projectType);
+	let id = projectId;
+	const data = {
+		id,
+		projectType
+	};
+	return service({url: '/projectPool/setProjectStatus', method: 'post', data});
 }
 
 // 提交企业信息

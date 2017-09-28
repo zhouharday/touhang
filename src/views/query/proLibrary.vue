@@ -1,6 +1,7 @@
 <template>
 <div class="proLibrary">
-    <myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>
+    <myFilter :chooseInfo="chooseType" @postID="changelist"></myFilter>
+    <myFilter :chooseInfo="proLibraryInfo" @postID="changelist"></myFilter>
     <div class="title">
         <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
@@ -37,7 +38,11 @@ import myFilter from 'components/myFilter'
 import {getProjectList} from 'api/search'
 import {getSelectIndex} from 'api/search'
 import Button from "../../../node_modules/iview/src/components/button/button.vue";
+<<<<<<< HEAD
 import {mapMutations} from 'vuex'
+=======
+import {mapGetters} from 'vuex'
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
 export default {
     data() {
         return {
@@ -45,9 +50,13 @@ export default {
             titleInfo: {
 
             },
-            chooseInfo: {
+            chooseType: {
                 title: '项目类型:',
-                details: ['全部', 'PE', 'VC', '定增']
+                details: []
+            },
+            proLibraryInfo: {
+                title: '项目阶段:',
+                details: []
             },
             proLibrary: [],
             type:'',
@@ -88,23 +97,33 @@ export default {
                 console.log(res.data)
                 this.proLibrary = res.data.result.list
             })
+<<<<<<< HEAD
         },
         ...mapMutations([
             'addTab'
         ])
 
 
+=======
+        }
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
     },
     created(){
 
         getProjectList('',this.type,this.seartext).then((res)=>{
-            console.log(res.data)
             this.proLibrary = res.data.result.list
         })
         getSelectIndex('202').then((res)=>{
-            console.log(res.data)
-            this.chooseInfo.details = res.data.result
+            this.chooseType.details = res.data.result
         })
+        this.$store.dispatch('getStatus').then(() => {
+            this.proLibraryInfo.details = this.getProStatus
+        })
+    },
+    computed: {
+        ...mapGetters([
+            'getProStatus'
+        ])
     }
 
 }

@@ -814,15 +814,32 @@
             background-color: #F05E5E;
         }
     }
-    //通讯录
-    //消息公告
-    .messageShow {
-        .el-table__row .el-button > span {
-            color: #F05E5E;
+    // 查看进度对话框内 的table样式
+    .progressBox {
+        .el-dialog--small {
+            width: 1300px;
         }
-        .el-button--danger {
-            background-color: #F05E5E;
-            border-color: #F05E5E;
+        .el-dialog__body {
+            padding: 10px 20px 30px ;
+            color: #48576a;
+            font-size: 14px;
+        }
+       // row-table的css style
+        .el-table th {
+            background-color: #2A3142;
+        }
+        .el-table__footer-wrapper thead div,
+        .el-table__header-wrapper thead div {
+            color: #fff;
+            font-weight: normal;
+            background-color: #2A3142;
+        }
+        // 隔行变色样式
+        .el-table .info-row {
+            background: #fff;
+        }
+        .el-table .positive-row {
+            background: #EEF0F4;
         }
     }
 }
@@ -877,6 +894,10 @@
 .messageShow {
     .el-table__row .el-button > span {
         color: #F05E5E;
+    }
+    .el-button--danger {
+         background-color: #F05E5E;
+         border-color: #F05E5E;
     }
 }
 

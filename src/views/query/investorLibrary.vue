@@ -11,9 +11,12 @@
     </div>
     <el-table :data="investorData" border style="width: 100%">
         <el-table-column prop="investorName" label="投资者名称" align="center">
+<<<<<<< HEAD
             <template scope = "scope">
                 <a @click="JumpOther(scope.row)">{{scope.row.investorName}}</a>
             </template>
+=======
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         </el-table-column>
         <el-table-column prop="investorType" label="类型" align="center">
         </el-table-column>
@@ -61,7 +64,15 @@ export default {
         return {
             filterInfo: {
                 title: '投资者类型：',
-                details: [{"dicName":'全部'}, '机构', '个人', '政府']
+                details: [{
+                    dicName: '全部'
+                }, {
+                    dicName: '机构'
+                }, {
+                    dicName: '个人'
+                }, {
+                    dicName: '政府'
+                }]
             },
             theme: '#fff',
             investorData: [],

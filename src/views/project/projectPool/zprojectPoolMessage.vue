@@ -15,8 +15,29 @@
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
                 <span>确认将该项目转投资？</span>
                 <span slot="footer" class="dialog-footer">
+<<<<<<< HEAD
                     <el-button type="default" @click="dialogVisible=false">取 消</el-button>
                     <el-button type="danger" @click="jumpPre">确 定</el-button>
+=======
+                    <el-button type="default" @click="investDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpPre">确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 确认转观察 dialog -->
+            <el-dialog title="转观察" :visible.sync="observeDialog" size="tiny">
+                <span>确认将该项目转观察？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="observeDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpObserve">确 定</el-button>
+                </span>
+            </el-dialog>
+            <!-- 确认转淘汰 dialog -->
+            <el-dialog title="转淘汰" :visible.sync="eliminateDialog" size="tiny">
+                <span>确认将该项目转淘汰？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpEliminate">确 定</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 </span>
             </el-dialog>
         </div>
@@ -54,18 +75,19 @@ import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
 
-import { getProDetail } from 'api/project'
+import { getProDetail,transPro,setProjectStatus } from 'api/project'
+
 
 export default {
     name: 'zprojectPoolMessage',
     data() {
         return {
             title: '双子金服投资项目',
-            state: '正常',
+            //state: '正常',
             invest: '投资',
             observe: '观察',
             eliminate: '淘汰',
-            isShow: false,
+            isShow: true,
             show_f: true,
             show_s: true,
             show_t: true,
@@ -110,39 +132,65 @@ export default {
          */
         getPoolDetail() {
             let projectPoolId = this.projectPoolId;
-            console.log('id: ', projectPoolId);
             getProDetail(projectPoolId).then(resp => {
-                // console.log('projectPoolId resp: ', resp);
                 let data = resp.data.result;
-                let { projectInfo, projectInvestmentInfo } = data;
-                this.projectData = data;
-                // this.setProjectData(data);
-                // console.log('pool detail data: ', JSON.stringify(data));
+                let { projectInfo, projectInvestmentInfo,enterpriseInfo,listOwnershipStructure } = data;
+                this.setProjectData(data);
                 if (projectInfo) {
-                    //Object.keys(projectInfo).forEach(key => {
-                    //    this.basicForm[key] = projectInfo[key];
-                    //})
                     this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }
-                if (projectInvestmentInfo) {
-                    this.companyForm = Object.assign({}, this.companyForm, projectInvestmentInfo);
+                if (enterpriseInfo) {
+                    this.companyForm = Object.assign({}, this.companyForm, enterpriseInfo);
+                }
+                if(listOwnershipStructure){
+                    this.structureForm = Object.assign({}, this.structureForm, listOwnershipStructure);
+                }
+
+                if(projectInfo.projectType === '4'){
+                    this.show_t = false;
+                    this.state = "淘汰";
+                }else if(projectInfo.projectType === '3'){
+                    // this.show_s = false;
+                    // this.state = "终止";
+                }else if(projectInfo.projectType === '2'){
+                    this.show_s = false;
+                    this.state = "观察";
+                }else {
+                    this.isShow = false;
+                    this.state = "正常";
                 }
             }).catch(e => {
-                console.log('getProDetail exists error: ', e);
+                console.log('getPoolDetail error: ', e);
             })
         },
         jumpPre() {
-            this.addTab('投前项目', '/home/preProject', 'preProject');
-            this.$router.push({ name: 'preProject' });
+            console.log('转投资');
+            let projectId = this.projectPoolId;
+            transPro(projectId).then(resp => {
+                this.addTab('投前项目', '/home/preProject', 'preProject');
+                this.$router.push({ name: 'preProject' });
+                this.investDialog=false;
+            }).catch(e => {
+                console.log('jumpPre error: ', e);
+                this.investDialog=false;
+            });
         },
         jumpObserve() {
-            this.observeDialog = !this.observeDialog;
-            this.show_f = false;
-            this.show_s = false;
-            this.isShow = true;
-            this.state = "观察";
+            console.log('转观察');
+            setProjectStatus(this.projectPoolId, '2').then(resp =>{
+                this.observeDialog = !this.observeDialog;
+                this.show_f = false;
+                this.show_s = false;
+                this.isShow = true;
+                this.state = "观察";
+            }).catch(e => {
+                console.log('jumpObserve error: ', e);
+                this.observeDialog=false;
+            });
+            
         },
         jumpEliminate() {
+<<<<<<< HEAD
             this.eliminateDialog = !this.eliminateDialog;
             this.show_f = false;
             this.show_t = false,
@@ -155,6 +203,31 @@ export default {
             this.show_s = true;
             this.show_t = true;
             this.state = "正常";
+=======
+            console.log('转淘汰');
+            setProjectStatus(this.projectPoolId, '4').then(resp =>{
+                this.eliminateDialog = !this.eliminateDialog;
+                this.show_f = false;
+                this.show_t = false,
+                this.isShow = true;
+                this.state = "淘汰";
+            }).catch(e => {
+                console.log('jumpEliminate error: ', e);
+                this.eliminateDialog=false;
+            });
+        },
+        changeNormal() {
+            console.log('转正常');
+            setProjectStatus(this.projectPoolId, '1').then(resp =>{
+                this.isShow = false;
+                this.show_f = true;
+                this.show_s = true;
+                this.show_t = true;
+                this.state = "正常";
+            }).catch(e => {
+                console.log('changeNormal error: ', e);
+            });
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });

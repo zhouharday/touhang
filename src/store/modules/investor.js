@@ -28,6 +28,7 @@ const actions = {
     getInvestor({commit, dispatch}) {
         return getInvestorList().then((response) => {
             if (response.status == '200') {
+                console.log(response.data.result)
                 commit(types.GET_INVESTORLIST, response.data.result)
             }
         }).catch(err => {

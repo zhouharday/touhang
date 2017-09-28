@@ -1,13 +1,19 @@
 <template>
 <div class="department">
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
     <div class="title">
         <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
         </el-button>
     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
     <!-- 折叠表单 -->
     <!-- 这部分内容需要询问产品 -->
     <!-- <el-collapse v-model="activeName" accordion>
@@ -25,7 +31,6 @@
                         <el-col v-for="(item, index) of props.row.children">
                             <el-row :gutter="20">
                                 <el-col :span="12" class="item" >
-
                                     <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>
                                     <span class="add_margin" v-if="item.editFlag">
                                         <el-input v-model="item.deptName" ></el-input>

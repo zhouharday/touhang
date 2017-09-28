@@ -37,6 +37,7 @@
         </div>
     </section>
 </template>
+
 <script>
 import myFilter from 'components/myFilter'
 import { getAfters } from 'api/projectAfter';

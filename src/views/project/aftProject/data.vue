@@ -6,7 +6,7 @@
                 <el-button @click="changeData2" :class="{active:s_show}">财务数据</el-button>
             </div>
             <div class="rightBtn">
-                <el-button @click="addData">添加</el-button>
+                <el-button type="danger" size="small" @click="addData">添加</el-button>
             </div>
         </div>
         <div class="f_data" v-show="f_show">
@@ -21,8 +21,8 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="operatingModal2 =true">添加数据</el-button>
-                        <el-button type="text" size="small" @click="operatingDelete=true">删除</el-button>
+                        <el-button type="text" @click="operatingModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="operatingDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -66,7 +66,7 @@
                             <el-form-item label="经营情况附件">
                                 <Upload multiple type="drag" v-model="operatingForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                        <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
                                     </div>
                                 </Upload>
@@ -76,7 +76,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal1 = false">取 消</el-button>
-                    <el-button type="primary" @click="operatingAdd">保存</el-button>
+                    <el-button type="danger" @click="operatingAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 添加经营数据明细 对话框 -->
@@ -136,7 +136,7 @@
                 </el-table>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal2 = false">取 消</el-button>
-                    <el-button type="primary" @click="operatingEdit">保存</el-button>
+                    <el-button type="danger" @click="operatingEdit">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加经营数据项目 对话框-->
@@ -172,7 +172,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal3 = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmOperating">保存</el-button>
+                    <el-button type="danger" @click="confirmOperating">保 存</el-button>
                 </div>
             </el-dialog>
             <delete-reminders :deleteReminders="operatingDelete" :message="operatingMessage" :modal_loading="modal_loading" @del="operatingDelete=false" @cancel="operatingDelete=false">
@@ -191,13 +191,13 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="financialModal2 =true">添加数据</el-button>
-                        <el-button type="text" size="small" @click="financialDelete=true">删除</el-button>
+                        <el-button type="text" @click="financialModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="financialDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!--  添加财务数据表头  对话框-->
-            <el-dialog title="添加财务数据" :visible.sync="financialModal1" :close-on-click-modal="false">
+            <el-dialog title="添加财务数据表头" :visible.sync="financialModal1" :close-on-click-modal="false">
                 <el-form :model="financialForm1" :label-width="formLabelWidth">
                     <el-row>
                         <el-col :span="12">
@@ -235,7 +235,7 @@
                             <el-form-item label="财务情况附件">
                                 <Upload multiple type="drag" v-model="financialForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                        <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
                                     </div>
                                 </Upload>
@@ -245,16 +245,16 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal1 = false">取 消</el-button>
-                    <el-button type="primary" @click="financialAdd">保存</el-button>
+                    <el-button type="danger" @click="financialAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加财务数据明细 对话框-->
-            <el-dialog title="编辑财务数据" :visible.sync="financialModal2" :close-on-click-modal="false">
+            <el-dialog title="添加财务数据明细" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal">
                     <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
                         <el-button type="text">导入</el-button>
                     </el-upload>
-                    <el-button style="height:41px;">
+                    <el-button class="downBtn">
                         <a href="/static/img/sheet.txt" download="资产负债表">模板下载</a>
                     </el-button>
                 </div>
@@ -403,7 +403,7 @@
                 </el-tabs>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal2 = false">取 消</el-button>
-                    <el-button type="primary" @click="financialEdit">保存</el-button>
+                    <el-button type="danger" @click="financialEdit">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加资产负债表数据 对话框-->
@@ -444,7 +444,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="balanceModal = false">取 消</el-button>
-                    <el-button type="primary" @click="balanceAdd">保存</el-button>
+                    <el-button type="danger" @click="balanceAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加利润表数据 对话框-->
@@ -470,7 +470,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="incomeModal = false">取 消</el-button>
-                    <el-button type="primary" @click="incomeAdd">保存</el-button>
+                    <el-button type="danger" @click="incomeAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加现金流量表数据 对话框-->
@@ -496,7 +496,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="cashFlowModal = false">取 消</el-button>
-                    <el-button type="primary" @click="cashFlowAdd">保存</el-button>
+                    <el-button type="danger" @click="cashFlowAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <delete-reminders :deleteReminders="financialDelete" :message="financialMessage" :modal_loading="modal_loading" @del="financialDelete=false" @cancel="financialDelete=false">
@@ -776,6 +776,13 @@ export default {
         justify-content: flex-end;
         .upload-demo {
             margin-right: 10px;
+        }
+        .downBtn {
+            height: 41px;
+            border-color: #bbbec4;
+            &:hover {
+                border-color: #20a0ff;
+            }
         }
     }
 }

@@ -28,6 +28,7 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
+<<<<<<< HEAD
             '/api':{
                 // target:'http://192.168.0.191:9092',//平台
                 target:'http://192.168.0.198:9091',
@@ -37,6 +38,13 @@ module.exports = {
                 // target:'http://100.64.33.181:9091',
                 // target:'http://zhqwjmw.eicp.net',
                 changeOrigin:true,
+=======
+            '/api': {
+                target:'http://192.168.0.198:9091',
+                // target:'http://192.168.0.147:9091',
+                // target: 'http://18f46963j4.iok.la',
+                changeOrigin: true,
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 secure: false,
                 pathRewrite:{
                     '^/api/':''

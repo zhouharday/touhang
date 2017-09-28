@@ -1,10 +1,18 @@
 <template>
 <div class="investor">
-    <myFilter :chooseInfo="chooseInfo"></myFilter>
+    <myFilter :chooseInfo="chooseInfo" @getIdInfo="investorFilter"></myFilter>
     <tableHeader :data="dataTitle" :theme="theme" class="addPadding" @add="showModel">
-        <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
+        <el-input placeholder="请输入搜索内容"
+                  icon="search"
+                  v-model="investorName"
+                  :on-icon-click="handleIconClick"
+                  :autofocus="true"
+                  style="width: 320px;"
+                  @click="investorSearch"
+                  @blur="investorSearch">
         </el-input>
     </tableHeader>
+<<<<<<< HEAD
     <div class="tableBox"> 
     <el-table :data="investorData" border style="width: 100%;">
         <el-table-column label="投资者名称" align="center">
@@ -36,6 +44,39 @@
     </div>
     <div class="pagination">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+=======
+    <div class="tables">
+        <el-table :data="investorData" border style="width: 100%;">
+            <el-table-column label="投资者名称" align="center">
+                <template scope="scope">
+                  <div class="name" @click="handleRouter(scope.$index, scope.row)">
+                      <span class="investorName">{{ scope.row.investorName }}</span>
+                  </div>
+                </template>
+            </el-table-column>
+            <el-table-column label="类型" prop="investorTypeId" align="center">
+            </el-table-column>
+            <el-table-column label="投资经理" prop="investmentManagerName" align="center">
+            </el-table-column>
+            <el-table-column label="累计投资额" prop="sumPaidAmount" align="center">
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template scope="scope">
+                  <el-button type="text"
+                          @click="handleEdit(scope.$index, scope.row)">
+                          签约
+                  </el-button>
+                  <el-button  type="text"
+                          @click="handleDelete(scope.$index, scope.row)">
+                          删除
+                  </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         </el-pagination>
     </div>
     <!-- 添加投资者 -->
@@ -69,7 +110,8 @@ import {
     addInvestor,
     getInvestorType,
     deleteInvestor,
-    addAgreement
+    addAgreement,
+    getInvestorList
 } from 'api/investor'
 export default {
     data() {
@@ -118,7 +160,12 @@ export default {
                 merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
                 address: '',
                 remark: ''
-            }
+            },
+            investorId: '', // 用于模糊查询 投资者类型ID
+            investorName: '', // input 输入框值
+            pageTotal: '',
+            page: 1,
+            pageSize: 10,
         }
     },
     methods: {
@@ -161,7 +208,7 @@ export default {
         },
         comfirmDel() {
             deleteInvestor(this.id).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除投资者成功！')
                     this.deleteReminders = false
                 }
@@ -169,7 +216,7 @@ export default {
         },
         confirmSign() {
             addAgreement(this.signInfo).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '签约成功！')
                     this.modelSign = false
                 }
@@ -181,6 +228,46 @@ export default {
         comfirmCancel() {
             this.deleteReminders = false
         },
+        handleSizeChange(val) {
+            // console.log(`每页 ${val} 条`);
+            this.pageSize = val
+            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
+                if(res.status == '200') {
+                    this.investorData = res.data.result.list
+                }
+            })
+        },
+        handleCurrentChange(val) {
+            // console.log(`当前页: ${val}`);
+            this.page = val
+            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
+                if(res.status == '200') {
+                    this.investorData = res.data.result.list
+                }
+            })
+        },
+        investorSearch() {
+            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
+                if(res.status == '200') {
+                    this.investorData = res.data.result.list
+                    this.pageTotal = res.data.result.total
+                    this.investorName = ''
+                }
+            })
+        },
+        investorFilter(index, id) {
+            if(index == 0) {
+                this.investorId = ''
+            } else {
+                this.investorId = id
+            }
+            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
+                if(res.status == '200') {
+                    this.investorData = res.data.result.list
+                    this.pageTotal = res.data.result.total
+                }
+            })
+        },
         ...mapMutations([
             'addTab', // 映射 this.addTab() 为 this.$store.commit
             'GET_INVESTORNAME'
@@ -189,6 +276,7 @@ export default {
     created() {
         this.$store.dispatch('getInvestor').then(() => {
             this.investorData = this.investorList.list
+            this.pageTotal = this.investorList.total
         })
         getInvestorType().then((res) => {
             if (res.status == '200') {
@@ -218,15 +306,17 @@ export default {
 @import '../../common/styles/mixin.less';
 .investor {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     padding: 24px;
     background: @color-base;
     position: relative;
-    .table-router();
+    /*.table-router();*/
     .addPadding {
         padding-bottom: 12px;
     }
-
+    .tables{
+        padding-bottom: @height-large;
+    }
     .page {
         width: 100%;
         height: 60px;
@@ -235,7 +325,7 @@ export default {
         bottom: 0;
         right: 0;
     }
-    span.investorName{
+    span.investorName {
         cursor: pointer;
     }
 }
