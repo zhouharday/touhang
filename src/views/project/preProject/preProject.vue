@@ -21,7 +21,6 @@
                                         </div> -->
             </el-col>
         </el-row>
-        <!--项目table -->
         <div class="tableBox">
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
