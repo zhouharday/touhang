@@ -21,46 +21,6 @@
                                         </div> -->
             </el-col>
         </el-row>
-        <!--项目table -->
-<<<<<<< HEAD
-        <el-row class="common">
-            <el-col :span="24">
-                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
-                    <el-table-column label="项目名称" align="center">
-                        <template scope="scope">
-                            <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="createUserName" label="项目创建人" align="center">
-                    </el-table-column>
-                    <el-table-column prop="industry" label="所属行业" align="center">
-                    </el-table-column>
-                    <el-table-column prop="projectType" label="项目类型" align="center">
-                    </el-table-column>
-                    <el-table-column prop="projectState" label="项目阶段" align="center">
-                    </el-table-column>
-                    <el-table-column label="操作" min-width="100" align="center">
-                        <template scope="scope">
-                            <el-button type="text" size="small" @click="modalAdd=true">
-                                项目团队
-                            </el-button>
-                            <el-button type="text" size="small" @click="deleteReminders=true">
-                                删除
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col>
-                <div style="float:right;margin:10px;padding-right:30px;overflow:hidden">
-                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-                    </el-pagination>
-                </div>
-            </el-col>
-        </el-row>
-=======
         <div class="tableBox">
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
@@ -93,7 +53,6 @@
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
         </div>
->>>>>>> fe720cec7c22ee7be2c3ec5857a40d2876a2320d
         <!-- 添加项目成员 对话框-->
         <div class="teamBox">
             <el-dialog title="添加项目成员" :visible.sync="modalAdd" size="tiny" :close-on-click-modal="false">
