@@ -4,7 +4,9 @@
         <el-row :gutter="10">
             <el-col :span="24">
                 <el-form-item label="协议名称">
-                    <el-select v-model="fundsInfo.agreementName" style="width:100%">
+                    <el-select v-model="fundsInfo.agreementName"
+                               @change="getItemData"
+                               style="width:100%">
                         <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.agreementName" :value="item.id">
                         </el-option>
                     </el-select>
@@ -12,20 +14,26 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="投资者">
-                    <el-input v-model="fundsInfo.investorName" auto-complete="off"></el-input>
+                    <el-select v-model="fundsInfo.investorName" disabled style="width:100%">
+                        <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.investorName" :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item label="基金名称">
-                    <el-select v-model="fundsInfo.fundName" style="width:100%">
+                    <el-select v-model="fundsInfo.fundName" disabled style="width:100%">
                         <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.fundName" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="认缴金额（元）" width="100">
-                    <el-input v-model="fundsInfo.subscribeAmount" auto-complete="off"></el-input>
+                <el-form-item label="认缴金额（元）">
+                    <el-select v-model="fundsInfo.subscribeAmount" disabled style="width:100%">
+                        <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.subscribeAmount" :value="item.id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -74,7 +82,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {getAgreementAmountList} from 'api/investor'
+import {GetProtocolsList} from 'api/investor'
 export default {
     props: {
         fundsInfo: {
@@ -88,11 +96,21 @@ export default {
             investmentManager: [{
                 dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 managerId: JSON.parse(sessionStorage.getItem('userInfor')).id
-            }]
+            }],
+            agreementList: '',
+            size: 1000
+        }
+    },
+    methods: {
+        getItemData(val) {
+            this.agreementList = val
+            this.fundsInfo.investorName = val
+            this.fundsInfo.fundName = val
+            this.fundsInfo.subscribeAmount = val
         }
     },
     created() {
-        getAgreementAmountList(this.$route.params.userId, JSON.parse(sessionStorage.getItem('merchants'))[0].id).then((res) => {
+        GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
             if (res.status == '200') {
                 this.allAgreement = res.data.result.list
             }

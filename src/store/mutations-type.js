@@ -6,7 +6,7 @@ export const GET_ORGTYPE = 'GET_ORGTYPE' // 组织类型
 export const GET_MYFUNDLIDT = 'GET_MYFUNDLIDT' // 获取我的基金
 export const GET_MYFUNDDETAILS = 'GET_MYFUNDDETAILS' // 获取我的基金详情
 export const GET_FUNDSTAGE = 'GET_FUNDSTAGE' // 基金阶段
-export const GET_FUNDSTATUS = 'GET_FUNDSTATUS' // 基金状态
+// export const GET_FUNDSTATUS = 'GET_FUNDSTATUS' // 基金状态
 export const GET_ALLORGLIST = 'GET_ALLORGLIST' // 下拉获取所有的合作机构
 
 //投资者管理
@@ -14,5 +14,7 @@ export const GET_INVESTORLIST = 'GET_INVESTORLIST' // 获取投资者列表
 export const GET_PROJECTTYPE = 'GET_PROJECTTYPE' // 项目类型
 export const GET_INVESTOR = 'GET_INVESTOR' // 获取当前点击投资者
 export const GET_INVESTORNAME = 'GET_INVESTORNAME' // 获取当前投资者名称
+// 综合查询
+export const GET_PROJECTSTATUS = 'GET_PROJECTSTATUS' // 获取项目阶段
 // 项目管理
 export const SET_PROJECT_DATA = 'SET_PROJECT_DATA' // 项目详情
