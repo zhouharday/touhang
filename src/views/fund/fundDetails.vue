@@ -1,55 +1,86 @@
 <template>
-<div class="fund">
-    <div class="title">
-        <div class="left">
-            <span class="desc">{{title}}</span>
-            <span class="icon">
-                <Icon type="pause"></Icon>
-            </span>
+    <div class="fund">
+        <div class="title">
+            <div class="left">
+                <span class="desc">{{title}}</span>
+                <!-- <span class="icon">
+                             <Icon type="pause"></Icon>
+                        </span> -->
+            </div>
+            <div class="right">
+                <el-button type="danger" @click="changeStep">下一阶段</el-button>
+                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
+                </el-button>
+                <!-- <span class="restart">
+                             <Icon type="ios-play"></Icon>
+                        </span> -->
+            </div>
         </div>
-        <div class="right">
-            <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-            <el-button type="danger">下一步</el-button>
-            <span class="restart">
-                <Icon type="ios-play"></Icon>
-            </span>
-        </div>
-    </div>
-    <el-row class="step">
-        <el-col :span="8" class="step_one step_span">
-            <span>{{step_one}}</span>
-        </el-col>
-        <el-col :span="8" class="step_second step_span">
-            <span>{{step_second}}</span>
-        </el-col>
-        <el-col :span="8" class="step_third step_span">
-            <span>{{step_third}}</span>
-        </el-col>
-    </el-row>
-    <div class="picture">
-        <div class="img_wrapper">
-            <img src="../../../static/img/double.png" alt="">
-        </div>
-        <div class="prompt_message">
-            <span class="prompt">{{prompt}}</span>
-            <div class="item_wrapper">
-                <div v-for="(item, index) in module" class="item">
-                    <span class="count">{{item.count}}</span>
-                    <p class="desc">{{item.desc}}</p>
-                    <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+        <el-row class="step">
+            <el-col :span="8" class="step_one step_span" :class="{'step_span_change step_one_change':!first_step}">
+                <span>{{step_one}}</span>
+            </el-col>
+            <el-col :span="8" class="step_second step_span" :class="{'step_span_change step_second_change':second_step}">
+                <span>{{step_second}}</span>
+            </el-col>
+            <el-col :span="8" class="step_third step_span" :class="{'step_span_change step_third_change':third_step}">
+                <span>{{step_third}}</span>
+            </el-col>
+        </el-row>
+        <div class="picture">
+            <div class="img_wrapper">
+                <img src="../../../static/img/double.png" alt="">
+            </div>
+            <div class="prompt_message">
+                <span class="prompt">{{prompt}}</span>
+                <div class="item_wrapper">
+                    <div v-for="(item, index) in module" class="item" :key="item.index">
+                        <span class="count">{{item.count}}</span>
+                        <p class="desc">{{item.desc}}</p>
+                        <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="chart">
-        <el-row :gutter="10">
-            <el-col :span="12">
-                <tableInfo :data="tableData"></tableInfo>
-            </el-col>
-            <el-col :span="12">
-                <echarts></echarts>
-            </el-col>
-        </el-row>
+        <div class="chart">
+            <el-row :gutter="10">
+                <el-col :span="12">
+                    <tableInfo :data="tableData"></tableInfo>
+                </el-col>
+                <el-col :span="12">
+                    <echarts></echarts>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="tabs">
+            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                <el-tab-pane label="详情" name="details" class="tab_list">
+                    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo">
+                    </my-details>
+                </el-tab-pane>
+                <el-tab-pane label="团队" name="team" class="tab_list">
+                    <team :teamData="teamData"></team>
+                </el-tab-pane>
+                <el-tab-pane label="审批" name="examine" class="tab_list">
+                    <examine></examine>
+                </el-tab-pane>
+                <el-tab-pane label="投资者" name="Investor" class="tab_list">
+                    <investor :investorData="investorData"></investor>
+                </el-tab-pane>
+                <el-tab-pane label="投资项目" name="project" class="tab_list">
+                    <projects :projectsData="projectsData"></projects>
+                </el-tab-pane>
+                <el-tab-pane label="文档" name="file" class="tab_list">
+                    <my-file :fileListData="fileListData"></my-file>
+                </el-tab-pane>
+                <el-tab-pane label="运营管理" name="manage" class="tab_list">
+                    <manage :costData="costData"></manage>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
+        <!-- 中止确认弹框 -->
+        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="deleteReminders=false" @cancel="deleteReminders=false">
+        </delete-reminders>
     </div>
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
@@ -90,6 +121,7 @@ import Projects from './projects'
 import File from './file'
 import Manage from './manage'
 import echarts from '../../components/echarts'
+import deleteReminders from 'components/deleteReminders'
 
 
 import {
@@ -109,6 +141,15 @@ export default {
             step_one: '基金设立',
             step_second: '运营管理',
             step_third: '基金退出',
+            first_step: true,
+            second_step: false,
+            third_step: false,
+            suspend: false,
+            deleteReminders: false,
+            message_title: '确认中止',
+            message: '是否确认中止该项目？',
+            btnText: '中止',
+            modal_loading: false,
             prompt: '任务助手小双温馨提示:',
             module: [{
                 count: 1,
@@ -226,7 +267,18 @@ export default {
                     }
                 })
             }
-        }
+        },
+        // 转至下一阶段 的方法
+        changeStep() {
+            if (this.first_step) {
+                this.first_step = !this.first_step;
+                this.second_step = !this.second_step;
+                this.suspend = true;
+            } else if (this.second_step) {
+                this.second_step = !this.second_step;
+                this.third_step = !this.third_step;
+            }
+        },
     },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
@@ -253,7 +305,8 @@ export default {
         Investor,
         Projects,
         myFile: File,
-        Manage
+        Manage,
+        deleteReminders
     }
 }
 </script>
@@ -297,21 +350,25 @@ export default {
             float: right;
             margin-right: 24px;
             .el-button {
-                border-radius: 24px;
                 padding: 5px 15px;
             }
-            .restart {
-                width: 24px;
-                height: 24px;
-                padding: 6px;
-                color: @color-theme-red;
-                font-size: 20px;
-                font-weight: 600;
-                margin-left: 24px;
-                vertical-align: middle;
-            }
+        }
+        .bgc {
+            background: #a0a3aa;
+            border: 1px solid #a0a3aa;
+        }
+        .restart {
+            width: 24px;
+            height: 24px;
+            padding: 6px;
+            color: @color-theme-red;
+            font-size: 20px;
+            font-weight: 600;
+            margin-left: 24px;
+            vertical-align: middle;
         }
     }
+
     .step {
         width: 100%;
         height: 52px;
@@ -324,6 +381,9 @@ export default {
             float: left;
             border: 1px solid #000;
             position: relative;
+        }
+        .step_span_change {
+            border: 1px solid #f05e5e;
         }
         .step_one {
             border: 1px solid red;
@@ -339,6 +399,13 @@ export default {
                 border-color: red red transparent transparent;
                 transform: rotate(45deg);
                 z-index: 1;
+            }
+        }
+        .step_one_change {
+            color: #000;
+            border: 1px solid #000;
+            &::after {
+                border-color: black black transparent transparent;
             }
         }
         .step_second {
@@ -369,6 +436,15 @@ export default {
                 transform: rotate(45deg);
             }
         }
+        .step_second_change {
+            color: #f05e5e;
+            &::after {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+            &::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+        }
         .step_third {
             &::before {
                 content: '';
@@ -383,7 +459,14 @@ export default {
                 transform: rotate(45deg);
             }
         }
+        .step_third_change {
+            color: #f05e5e;
+            &::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+        }
     }
+
     .picture {
         width: 100%;
         text-align: center;
@@ -450,10 +533,12 @@ export default {
             }
         }
     }
+
     .chart {
         width: 100%;
         padding-bottom: 52px;
     }
+
     .tabs {
         width: 100%;
         padding-bottom: 54px;
@@ -463,7 +548,6 @@ export default {
                 width: 12.5%!important;
             }
         }
-
     }
 }
 </style>

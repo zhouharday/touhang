@@ -21,7 +21,8 @@ export function getPreDetail(projectId = undefined) {
 	const data = {
 		projectId
 	}
-	return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
+	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
+	//return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
 }
 
 // TODO: 投前项目详情修改

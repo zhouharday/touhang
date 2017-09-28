@@ -1,25 +1,11 @@
 <template>
 <div class="department">
-<<<<<<< HEAD
-    <!--<div style="flex-direction: row;justify-content: space-between; display: flex">-->
-        <!--<div class="title1">-->
-            <!--{{companyName}}-->
-        <!--</div>-->
-        <div class="title">
-            <el-button type="danger" @click="addDepartment">
-                <Icon type="plus-round"></Icon>
-                添加
-            </el-button>
-        </div>
-    <!--</div>-->
-=======
     <div class="title">
         <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
         </el-button>
     </div>
->>>>>>> 959750a4510c9da5ca42b0a256cbfac99f085975
     <!-- 折叠表单 -->
     <!-- 这部分内容需要询问产品 -->
     <!-- <el-collapse v-model="activeName" accordion>
@@ -37,7 +23,6 @@
                         <el-col v-for="(item, index) of props.row.children">
                             <el-row :gutter="20">
                                 <el-col :span="12" class="item" >
-
                                     <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>
                                     <span class="add_margin" v-if="item.editFlag">
                                         <el-input v-model="item.deptName" ></el-input>

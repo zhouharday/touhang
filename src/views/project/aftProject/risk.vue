@@ -6,7 +6,7 @@
                 <el-button @click="changeRisk2" :class="{active:s_show}">风险预警</el-button>
             </div>
             <div class="rightBtn">
-                <el-button @click="modalAdd=true" v-if="addBtn">添加</el-button>
+                <el-button type="danger" size="small" @click="modalAdd=true" v-if="addBtn">添加</el-button>
             </div>
         </div>
         <div class="f_risk" v-show="f_show">
@@ -25,9 +25,9 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="modalRiskView=true">查看详情</el-button>
-                        <el-button type="text" size="small" @click="modalTracking=true">跟踪</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,riskData)">删除</el-button>
+                        <el-button type="text"  @click="modalRiskView=true">查看详情</el-button>
+                        <el-button type="text"  @click="modalTracking=true">跟踪</el-button>
+                        <el-button type="text" @click="handleDelete(scope.$index,riskData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -76,7 +76,7 @@
                                 <!-- action 上传的地址，必填 -->
                                 <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                        <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
                                     </div>
                                 </Upload>
@@ -86,7 +86,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAdd">保存</el-button>
+                    <el-button type="danger" @click="confirmAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 查看风险详情 对话框 -->
@@ -163,7 +163,7 @@
                         <!-- action 上传的地址，必填 -->
                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
                         </Upload>
@@ -171,7 +171,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalTracking= false">取 消</el-button>
-                    <el-button type="primary" @click="confirmTracking">保存</el-button>
+                    <el-button type="danger" @click="confirmTracking">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -190,8 +190,8 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="modalAlarmView=true">查看详情</el-button>
-                        <el-button type="text" size="small" @click="modalAlarm=true">立即处理</el-button>
+                        <el-button type="text"  @click="modalAlarmView=true">查看详情</el-button>
+                        <el-button type="text"  @click="modalAlarm=true">立即处理</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -270,7 +270,7 @@
                         <!-- action 上传的地址，必填 -->
                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="alarmForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
                         </Upload>
@@ -278,7 +278,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAlarm = false">取 消</el-button>
-                    <el-button type="primary" @click="confirmAlarm">保存</el-button>
+                    <el-button type="danger" @click="confirmAlarm">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -477,7 +477,6 @@ export default {
         .leftBtn {
             margin-right: 15px;
         }
-        .rightBtn {}
     }
 }
 

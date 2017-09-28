@@ -10,10 +10,10 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                    <el-button type="text" size="small" @click="editMonitor(scope.row)">编辑</el-button>
-                    <el-button type="text" size="small" @click="handleDelete(scope.$index,monitorData)">删除</el-button>
-                    <el-button type="text" size="small">关闭</el-button>
-                    <el-button type="text" size="small">开启</el-button>
+                    <el-button type="text"  @click="editMonitor(scope.row)">编辑</el-button>
+                    <el-button type="text"  @click="handleDelete(scope.$index,monitorData)">删除</el-button>
+                    <el-button type="text">关闭</el-button>
+                    <el-button type="text">开启</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -84,7 +84,7 @@
             </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="monitorSetting = false">取 消</el-button>
-                <el-button type="primary" @click="monitorSettingAdd">确 定</el-button>
+                <el-button type="danger" @click="monitorSettingAdd">确 定</el-button>
             </div>
         </el-dialog>
         <!--编辑监控设置 对话框 -->
@@ -157,7 +157,7 @@
             </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="editCancle">取 消</el-button>
-                <el-button type="primary" @click="editConfirm">确 定</el-button>
+                <el-button type="danger" @click="editConfirm">确 定</el-button>
             </div>
         </el-dialog>
     </div>
