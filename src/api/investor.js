@@ -37,7 +37,7 @@ export function getInvestorList(id, name, num, total) {
     // 投资者类型
     export function getInvestorType() {
         const data = {
-            dicParent: "70"
+            dicParent: "402"
         }
         return service({url: '/dictionaryController/select2Menu', method: 'post', data})
     }

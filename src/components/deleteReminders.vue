@@ -16,7 +16,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-import deleteReminders from 'components/deleteReminders'
 export default {
     props: {
         deleteReminders: {

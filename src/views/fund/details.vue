@@ -46,7 +46,37 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金结构">
-                        <el-input v-model="formDetails.fundOrg"></el-input>
+                        <el-row>
+                            <el-col :span="6">
+                                <el-select v-model="formDetails.fundOrg" @change="selectStructure" style="width: 100%">
+                                    <el-option v-for="(item, index) of fundStructure" :key="item.id" :label="item.dicName" :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-col>
+                            <el-col :span="18" v-show="structure == 2 || formDetails.fundOrg == 2">
+                                <el-form :model="formDetails.fundOrgValue">
+                                    <el-row>
+                                        <el-col :span="7" :offset="1">
+                                            <el-form-item class="itemStyle">
+                                                <el-input v-model="priority"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="1" class="colon">:</el-col>
+                                        <el-col :span="7">
+                                            <el-form-item class="itemStyle">
+                                                <el-input v-model="intermediateStage"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="1" class="colon">:</el-col>
+                                        <el-col :span="7">
+                                            <el-form-item class="itemStyle">
+                                                <el-input v-model="generalLevel"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </el-form>
+                            </el-col>
+                        </el-row>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -68,12 +98,18 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="业务部门">
-                        <el-input v-model="formDetails.businessDeptId"></el-input>
+                        <el-select v-model="formDetails.businessDeptId" style="width:100%">
+                            <el-option v-for="(item, index) of businessDepartment" :key="item.id" :label="item.deptName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="年天数">
-                        <el-input v-model="formDetails.yearsDaynum"></el-input>
+                        <el-select v-model="formDetails.yearsDaynum" style="width:100%">
+                            <el-option v-for="(item, index) of days" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -149,9 +185,9 @@
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_Registration" @method="disable(formRegistration)" class="add_padding">
+    <tabel-header :data="headerInfo_Registration" @method="disable(formRegistration)" class="add_padding" v-show="showOrhiddren">
     </tabel-header>
-    <div class="formRegistration">
+    <div class="formRegistration" v-show="showOrhiddren">
         <el-form ref="formRegistration" :model="formRegistration" label-width="120px">
             <el-row>
                 <el-col :span="12">
@@ -210,6 +246,10 @@
             </template>
         </el-table-column>
     </el-table>
+    <div class="btnList">
+        <el-button type="success" class="btn" @click="preservation">保存</el-button>
+        <el-button type="danger" class="btn" @click="cancel">取消</el-button>
+    </div>
 </div>
 </template>
 
@@ -219,7 +259,8 @@ import {
     mapGetters
 } from 'vuex'
 import {
-    selectAllManageCompany
+    selectAllManageCompany,
+    sectorList
 } from 'api/fund'
 export default {
     props: {
@@ -238,7 +279,8 @@ export default {
         formAccountInfo: {
             type: Array,
             default: []
-        }
+        },
+        showOrhiddren: false
     },
     data() {
         return {
@@ -270,63 +312,6 @@ export default {
                     explain: '编辑'
                 }]
             },
-            formDetails: {
-                fundName: '',
-                fundNo: '',
-                fundScale: '',
-                createUserId: '',
-                manageTypeId: '',
-                orgTypeId: '',
-                fundInvestId: '',
-                fundOrg: '',
-                fundOrgValue: '', //基金结构选2的时候的比例值
-                fundTerm: '',
-                startDate: '',
-                endDate: '',
-                businessDeptId: '',
-                yearsDaynum: '',
-                merchantId: '',
-                versionRecord: '',
-                fundStatus: '',
-                fundType: '',
-                mainInvestField: '',
-                incomeDis: '',
-                fundRemarks: ''
-            },
-            formMIS: {
-                fundStratorId: '', //基金管理人
-                fundCustodianId: '', //基金托管人
-                fundSupervisorId: '', // 基金监管人
-                fundSuperintId: '', // 基金监理人
-                fundAdvisorId: '', // 基金投资顾问
-                fundOrganizationId: '' // 第三方合作机构
-            },
-            formRegistration: {
-                regDate: '',
-                regAddress: '',
-                recordStatus: '',
-                recordDate: '',
-                recordNo: ''
-            },
-            formAccountInfo: [{
-                username: '',
-                openingBank: '',
-                accountNumber: '',
-                accountType: 1,
-                accountTypeName: '基本户'
-            }, {
-                username: "",
-                openingBank: "",
-                accountNumber: "",
-                accountType: 2,
-                accountTypeName: "托管户"
-            }, {
-                username: '',
-                openingBank: '',
-                accountNumber: '',
-                accountType: 3,
-                accountTypeName: "募集结算账户"
-            }],
             managementCompany: [],
             options: [{
                 id: 0,
@@ -334,7 +319,26 @@ export default {
             }, {
                 id: 1,
                 label: '未备案'
-            }]
+            }],
+            days: [{
+                id: 360,
+                dicName: '360天'
+            }, {
+                id: 365,
+                dicName: '365天'
+            }],
+            structure: '',
+            fundStructure: [{
+                id: 1,
+                dicName: '平级'
+            }, {
+                id: 2,
+                dicName: '结构化'
+            }],
+            businessDepartment: [],
+            priority: this.formDetails.fundOrgValue.split(':')[0],
+            intermediateStage: this.formDetails.fundOrgValue.split(':')[1],
+            generalLevel: this.formDetails.fundOrgValue.split(':')[2]
         }
     },
     methods: {
@@ -344,6 +348,15 @@ export default {
             } else {
                 return name.flag = false
             }
+        },
+        selectStructure(value) {
+            this.structure = value
+        },
+        preservation() {
+            this.$emit('confirmSubmission') // 确认保存
+        },
+        cancel() {
+            this.$emit('confirmCancel') // 确认取消
         }
     },
     computed: {
@@ -364,6 +377,12 @@ export default {
                 this.managementCompany = res.data.result
             }
         })
+        sectorList().then((res) => {
+            if(res.status == '200') {
+                this.businessDepartment = res.data.result
+            }
+        })
+        this.formDetails.fundOrgValue = this.priority + ':' + this.intermediateStage + ':'+ this.generalLevel
     },
     components: {
         tabelHeader
@@ -388,6 +407,13 @@ export default {
             background: #eef1f6;
         }
     }
+    .itemStyle {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    .colon {
+        text-align: center;
+    }
     input {
         background-color: #fff;
         box-sizing: border-box;
@@ -396,8 +422,17 @@ export default {
         font-size: inherit;
         height: 36px;
         outline: 0;
-        padding: 3px 0px;
+        padding: 3px 0;
         width: 100%;
+    }
+    .btnList{
+        width: 100%;
+        padding-top: 24px;
+        padding-bottom: 48px;
+        text-align: center;
+        .btn {
+            width: 150px;
+        }
     }
 }
 </style>

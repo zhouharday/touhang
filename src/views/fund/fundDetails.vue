@@ -54,7 +54,7 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo">
+                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :showOrhiddren="showOrhiddren">
                 </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
@@ -121,43 +121,40 @@ export default {
                 state: false,
                 info: '提交申请'
             }],
-            tableData: [{
-                date1: '2016-05-02',
-                name: '日期',
-                updown: '0.3'
-            }, {
-                name1: '王小虎',
-                name: '姓名',
-                updown: '-0.3'
-            }, {
-                address: 'ssssss',
-                name: '地址'
-            }, {
-                xxxx: 'aaaa',
-                name: '哈哈'
-            }, {
-                date1: '2016-05-02',
-                name: '日期'
-            }, {
-                name1: '王小虎',
-                name: '姓名'
-            }, {
-                address: 'ssssss',
-                name: '地址'
-            }, {
-                xxxx: 'aaaa',
-                name: '哈哈',
-                updown: '3'
-            }, {
-                date1: '2016-05-02',
-                name: '日期'
-            }, {
-                name1: '王小虎',
-                name: '姓名'
-            }],
+            tableData: {},
             activeName: 'details',
-            formDetails: {}, //详情 - 基本信息
-            formMIS: {}, //详情 - 管理信息
+            showOrhiddren: true,
+            formDetails: {
+                fundName: '',
+                fundNo: '',
+                fundScale: '',
+                createUserId: '',
+                manageTypeId: '',
+                orgTypeId: '',
+                fundInvestId: '',
+                fundOrg: '',
+                fundOrgValue: '', //基金结构选2的时候的比例值
+                fundTerm: '',
+                startDate: '',
+                endDate: '',
+                businessDeptId: '',
+                yearsDaynum: '',
+                merchantId: '',
+                versionRecord: '',
+                fundStatus: '',
+                fundType: '',
+                mainInvestField: '',
+                incomeDis: '',
+                fundRemarks: ''
+            }, //详情 - 基本信息
+            formMIS: {
+                fundStratorId: '', //基金管理人
+                fundCustodianId: '', //基金托管人
+                fundSupervisorId: '', // 基金监管人
+                fundSuperintId: '', // 基金监理人
+                fundAdvisorId: '', // 基金投资顾问
+                fundOrganizationId: '' // 第三方合作机构
+            }, //详情 - 管理信息
             formRegistration: {
                 regDate: '',
                 regAddress: '',
@@ -165,7 +162,25 @@ export default {
                 recordDate: '',
                 recordNo: ''
             }, //详情 - 备案注册
-            formAccountInfo: [], //详情 - 账户信息
+            formAccountInfo: [{
+                username: '',
+                openingBank: '',
+                accountNumber: '',
+                accountType: 1,
+                accountTypeName: '基本户'
+            }, {
+                username: "",
+                openingBank: "",
+                accountNumber: "",
+                accountType: 2,
+                accountTypeName: "托管户"
+            }, {
+                username: '',
+                openingBank: '',
+                accountNumber: '',
+                accountType: 3,
+                accountTypeName: "募集结算账户"
+            }], //详情 - 账户信息
             teamData: [], //团队列表
             investorData: [], // 投资者列表
             fileListData: [], // 文档列表
@@ -215,18 +230,19 @@ export default {
     },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
-                if (res.status == '200') {
-                    // console.log(res) 有问题待定！！！
-                }
-            }),
-            getMyFundDetails(this.$route.params.id).then((res) => {
-                if (res.status == '200') {
-                    this.formDetails = res.data.result.fundBaseInfo
-                    this.formMIS = res.data.result.fundManageInfo
-                    // this.formRegistration = res.data.result.fundRegistration
-                    this.formAccountInfo = res.data.result.fundAccinfo
-                }
-            })
+            if (res.status == '200') {
+                this.tableData = res.data.result
+            }
+        })
+        getMyFundDetails(this.$route.params.id).then((res) => {
+            if (res.status == '200') {
+                this.formDetails = res.data.result.fundBaseInfo
+                this.formMIS = res.data.result.fundManageInfo
+                this.formRegistration = res.data.result.fundRegistration
+                this.formAccountInfo = res.data.result.fundAccinfo
+                console.log(this.formDetails)
+            }
+        })
     },
     components: {
         tableInfo,

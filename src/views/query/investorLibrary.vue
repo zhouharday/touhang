@@ -80,7 +80,7 @@ export default {
     },
     methods: {
         handleIconClick(){
-console.log(this.input2)
+            console.log(this.input2)
             getInvestorList(this.input2,this.type).then((res)=>{
                 this.investorData = res.data.result.list
             })

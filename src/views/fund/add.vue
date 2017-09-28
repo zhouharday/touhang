@@ -1,66 +1,88 @@
 <template>
 <div class="add">
-    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountinfo="fundAccinfo">
+    <my-details :formDetails="formDetails"
+                :formMIS="formMIS"
+                :formRegistration="formRegistration"
+                :formAccountInfo="formAccountInfo"
+                :showOrhiddren="showOrhiddren"
+                @confirmSubmission="confirmSubmission"
+                @confirmCancel="confirmCancel">
     </my-details>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Details from './details'
+import {addFund} from 'api/fund'
 export default {
     data() {
         return {
+            showOrhiddren: false,
             formDetails: {
                 fundName: '',
                 fundNo: '',
-                fundScale: '', //基金规模
+                fundScale: '',
+                createUserId: '',
                 manageTypeId: '',
                 orgTypeId: '',
                 fundInvestId: '',
                 fundOrg: '',
+                fundOrgValue: '', //基金结构选2的时候的比例值
                 fundTerm: '',
                 startDate: '',
                 endDate: '',
-                fundUserId: '',
                 businessDeptId: '',
-                yearsDaynum: '', //年天数
-                merchantId: '', //商户ID
-                mainInvestField: '', //主要投资领域
-                incomeDis: '', //收益分配
-                fundRemarks: '' //备注
-            },
+                yearsDaynum: '',
+                versionRecord: '',
+                fundStatus: '',
+                fundType: '',
+                mainInvestField: '',
+                incomeDis: '',
+                fundRemarks: '',
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+            }, //详情 - 基本信息
             formMIS: {
-                fundStratorId: '',
-                fundCustodianId: '',
-                fundSupervisorId: '',
-                fundSuperintId: '',
-                fundAdvisorId: '',
-                fundOrganizationId: ''
-            },
-            formRegistration: {
-                fundId: '', //必传
-                regDate: '', //注册日期
-                regAddress: '', //注册地址
-                recordStatus: '', //1：未备案 2：已经备案
-                recordDate: '', //备案日期
-                recordNo: '' //备案号
-            },
-            fundAccinfo: [{
-                username: "基本户户名",
-                openingBank: "基本户开户行",
-                accountNumber: "123456789",
-                accountType: 1
+                fundStratorId: '', //基金管理人
+                fundCustodianId: '', //基金托管人
+                fundSupervisorId: '', // 基金监管人
+                fundSuperintId: '', // 基金监理人
+                fundAdvisorId: '', // 基金投资顾问
+                fundOrganizationId: '' // 第三方合作机构
+            }, //详情 - 管理信息
+            formAccountInfo: [{
+                username: '',
+                openingBank: '',
+                accountNumber: '',
+                accountType: 1,
+                accountTypeName: '基本户'
             }, {
-                username: "托管户户名",
-                openingBank: "托管户开户行",
-                accountNumber: "123456789",
-                accountType: 2
+                username: "",
+                openingBank: "",
+                accountNumber: "",
+                accountType: 2,
+                accountTypeName: "托管户"
             }, {
-                username: "募集结算账户户名",
-                openingBank: "募集结算账户开户行",
-                accountNumber: "123457",
-                accountType: 3
-            }]
+                username: '',
+                openingBank: '',
+                accountNumber: '',
+                accountType: 3,
+                accountTypeName: "募集结算账户"
+            }],
+            formData: {}
+        }
+    },
+    methods: {
+        confirmSubmission() {
+            this.formData = {
+                fundBaseInfo: this.formDetails,
+                fundManageInfo: this.formMIS,
+                fundAccinfo: this.formAccountInfo
+            }
+            addFund(this.formData).then((res) => {
+                if(res.status == '200') {
+                    this.$Message.success(res.data.message || '添加成功！')
+                }
+            })
         }
     },
     components: {
