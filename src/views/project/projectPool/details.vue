@@ -25,8 +25,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目来源" prop="projectFromId">
-                            <el-input v-model="basicForm.projectFromId" :disabled="basicForm.flag"></el-input>
+                        <el-form-item label="项目来源" prop="projectFrom">
+                            <el-input v-model="basicForm.projectFrom" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -35,8 +35,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col>
-                        <el-form-item label="业务部门" prop="departmentId">
-                            <el-input v-model="basicForm.departmentId" :disabled="basicForm.flag"></el-input>
+                        <el-form-item label="业务部门" prop="department">
+                            <el-input v-model="basicForm.department" :disabled="basicForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
