@@ -350,6 +350,7 @@ export default {
             }
         },
         selectStructure(value) {
+            alert(2)
             this.structure = value
         },
         preservation() {
