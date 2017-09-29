@@ -16,27 +16,42 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目类型" prop="projectType">
-                            <el-input v-model="basicForm.projectType" :disabled="basicForm.flag"></el-input>
+                            <el-select v-model="basicForm.projectType" filterable placeholder="请选择项目类型" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属行业" prop="industry">
-                            <el-input v-model="basicForm.industry" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.industry" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in industryOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目来源" prop="projectFrom">
-                            <el-input v-model="basicForm.projectFrom" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.projectFrom" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in fromOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地" prop="address">
-                            <el-input v-model="basicForm.address" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.address" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in addressOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col>
+                    <el-col  :span="12">
                         <el-form-item label="业务部门" prop="department">
-                            <el-input v-model="basicForm.department" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.department" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in departmentOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -94,7 +109,7 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="备注" prop="remark">
-                            <el-input v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
+                            <el-input  type="textarea" v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -161,11 +176,31 @@ export default {
                     icon: 'upload',
                     explain: '提交'
                 }]
-            }
+            },
+            typeOptions: [{  //项目类型下拉列表
+                value: '选项1',
+                label: '类型一'
+            }],
+           fromOptions: [{  //项目来源下拉列表
+                value: '选项1',
+                label: '来源一'
+            }],
+            industryOptions: [{  //所属行业下拉列表
+                value: '选项1',
+                label: '行业一'
+            }],
+            addressOptions: [{  //所在地下拉列表
+                value: '选项1',
+                label: '地区一'
+            }],
+            departmentOptions: [{  //部门下拉列表
+                value: '选项1',
+                label: '部门一'
+            }]
         }
     },
     created() {
-        
+
     },
     methods: {
         init() {
@@ -173,7 +208,7 @@ export default {
         },
         disableForm() {
             this.disable(this.basicForm);
-            this.disable(this.companyForm); 
+            this.disable(this.companyForm);
         },
         disable(name) {
             if (name.flag === false) {
@@ -216,7 +251,8 @@ export default {
     width: 100%;
     height: 100%;
 }
+
 .title {
-   margin-bottom: 12px;
+    margin-bottom: 12px;
 }
 </style>
