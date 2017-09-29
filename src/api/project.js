@@ -113,7 +113,6 @@ export function transPro(projectId) {
 		addProjectUserId
 	};
 	return service({url: '/investProject/addInvestProject', method: 'post', data});
-	//return service({url: '/productClieController/insertProjectPool', method: 'post', data});
 }
 
 //修改项目状态
