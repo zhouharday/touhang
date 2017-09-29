@@ -3,11 +3,11 @@
         <div class="btn_wrapper">
             <el-button type="danger" size="small" @click="openDialog">添加用户</el-button>
         </div>
-        <el-table :data="roleUser" border style="width: 100%">
+        <el-table :data="roleUserList" border style="width: 100%">
             <el-table-column label="名称" prop="name"></el-table-column>
             <el-table-column label="操作">
                 <template scope="props">
-                    <el-button size="small" @click="removeEdit(scope.$index, scope.row)">
+                    <el-button size="small" @click="removeEdit(props.$index, props.row)">
                         删除
                     </el-button>
                 </template>
@@ -23,8 +23,8 @@
                     <el-col :span="14">
                         <el-form-item label="部门：" prop="department">
                             <el-select v-model="teamForm.department" placeholder="请选择部门" style="width:100%" auto-complete="off">
-                                <el-option label="财务部" value="财务部"></el-option>
-                                <el-option label="运营部" value="运营部"></el-option>
+                                <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value">
+                                </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -34,17 +34,15 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8" style="text-align:right">
-                        <el-button type="danger" style=" width:100px;font-size:16px;border-radius:5px;">查找</el-button>
+                        <el-button type="danger" style=" width:100px;font-size:16px;border-radius:5px;" @click="chazhao">查找</el-button>
                     </el-col>
                     <el-col>
                         <i style="border-bottom: 1px solid #c4c4c4;"></i>
                     </el-col>
                     <el-col>
                         <el-form-item prop="checkedUser" v-for="item in teamForm.selectUser" :key="item.index">
-                            <el-checkbox v-model="teamForm.checkedUser" :label="item.name">
-                            </el-checkbox>
+                            <el-checkbox  v-model="teamForm.checkedUser" :label="item.umId" >{{item.name}}</el-checkbox>
                             <span>{{item.phone}}</span>
-                            <span>{{item.branch}}</span>
                         </el-form-item>
                     </el-col>
                     <el-col>
@@ -52,7 +50,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn_active" @click="addUser('teamForm')">确定</el-button>
+                <el-button class="dialogBtn_active" @click="addUser(teamForm)">确定</el-button>
                 <el-button class="dialogBtn" @click="userDialog = false">取消</el-button>
             </div>
         </el-dialog>
@@ -60,17 +58,32 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import {deleteUserRole} from 'api/system'
+    import {getDepartmentList} from 'api/system'
+    import {getNodes} from 'common/js/config'
+    import {addEdit} from 'api/system'
+    import {queryNotUserByRole} from 'api/system'
+    import {roleJoinUser} from 'api/system'
+
 export default {
+
+    props: {
+        roleUserList:{
+            type : Array,
+            default : []
+        },
+        nowId:{
+            type : String,
+            default:[]
+        }
+
+    },
     data() {
         return {
+//            checkList:[],
+            options:[],
+            userList:{},
             userDialog: false,
-            roleUser: [{
-                name: '张三'
-            }, {
-                name: '李四'
-            }, {
-                name: '安红'
-            }],
             teamForm: {
                 department: '',
                 name: '',
@@ -102,37 +115,75 @@ export default {
         }
     },
     methods: {
+
+
+
+        //删除用户
+        removeEdit(index,row){
+            deleteUserRole(this.nowId,row.umId).then((res)=>{
+                this.$emit("refreshRoleUserList")
+            })
+        },
+
+        //查找
+        chazhao(){
+            queryNotUserByRole(this.nowId,this.teamForm.department,this.teamForm.name).then((res)=>{
+                console.log(res.data)
+                this.teamForm.selectUser = []
+                this.teamForm.selectUser  = this.teamForm.selectUser.concat(res.data.result)
+
+            })
+        },
+
+
         openDialog() {
+            //获取部门列表
+            this.chazhao()
+            getDepartmentList().then((res)=>{
+
+                var dataList = addEdit(res.data.result)
+                var treeList = getNodes(dataList)
+                console.log(res.data.result)
+                this._getDepartmentName(treeList)
+            })
+
+
+
             let new_teamForm = {
                 department: '',
                 name: '',
                 checkedUser: [],
-                selectUser: [
-                    {
-                        name: '张韶涵1',
-                        phone: '15268792134',
-                        branch: '项目部'
-                    },
-                    {
-                        name: '张韶涵2',
-                        phone: '15268792134',
-                        branch: '项目部'
-                    }
-                ]
+                selectUser: []
             };
             this.teamForm = new_teamForm;
             this.userDialog = !this.userDialog;
         },
         addUser(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.userDialog = !this.userDialog;
-                } else {
-                    return false;
-                    this.$refs[formName].resetFields();
-                }
-            });
-        }
+            console.log(formName)
+
+            var arr =  formName.checkedUser;
+            var b;
+            b = arr.join(",");
+
+            roleJoinUser(this.nowId,b).then((res)=>{
+                this.$emit("refreshRoleUserList")
+                this.userDialog = !this.userDialog;
+            })
+
+        },
+        //部门列表转格式
+        _getDepartmentName(arr) {
+            let result = []
+            arr.map((x) => {
+                result.push({
+                    label: x.deptName,
+
+                    value: x.id
+                })
+            })
+
+            return this.options = result
+        },
     }
 }
 </script>

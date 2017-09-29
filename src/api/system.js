@@ -211,8 +211,29 @@ export function deleteUser(id) {
     }
     return service({url:'/role/deleteRole', method: 'post', data})
 }
-// 角色权限查询
+//角色修改
+export function updataRole(row) {
+    const data = {
 
+        "roleName": row.roleName,
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "id": row.id
+
+    }
+    return service({url:'/role/updateRole', method: 'post', data})
+}
+// 添加角色
+export function saveRole(roleName) {
+    const data = {
+
+        "roleName": roleName,
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+
+    }
+    return service({url:'/role/saveRole', method: 'post', data})
+}
+
+// 角色权限查询
 export function getUserRole(id) {
     //
     const data = {
@@ -221,8 +242,51 @@ export function getUserRole(id) {
     return service({url:'role/findResourceByRid', method: 'post', data})
 }
 
-//企业所有权限
+//角色对应的所有用户
+export  function getRightUserList(id) {
+    const data = {
+        "roleId": id,
+    }
+    return service({url:'/user/queryUserByRole', method: 'post', data})
+}
 
+//角色绑定用户 ----删除
+export  function deleteUserRole(roleId,userxxId) {
+
+    const data = {
+        "userMerchantId":userxxId,
+        "roleId": roleId,
+    }
+    return service({url:'/role/deleteUserRole', method: 'post', data})
+
+}
+
+//查询不在本角色内的人员列表
+export function queryNotUserByRole(roleId,deptId,userName) {
+
+    const data = {
+        "roleId":roleId,   //角色id
+        "mid":JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "userName":userName, //用户名或者账号
+        "deptId":deptId //部门id
+    }
+    console.log(data)
+    return service({url:'/user/queryNotUserByRole', method: 'post', data})
+}
+
+//批量添加用户给角色
+export function roleJoinUser(roleId,umIds) {
+
+    const data = {
+        "roleId":roleId,   //角色id
+        "umIds":umIds
+    }
+    console.log(data)
+    return service({url:'/role/roleJoinUser', method: 'post', data})
+}
+
+
+//企业所有权限
 export function getUserAllRole(id) {
 
     const data = {
@@ -237,48 +301,29 @@ export function getNodes(arrData,roleInfo) {
     var arr = arrData
     var i = 0;
     var j = 0;
-    for (j in arr) {
+    var x = 0;
+    var idArr ;
+    for ( x in arr){
+        arr[x].choose = '0'
+    }
 
-        arr[j].choose = ''
-        var idArr ;
+    for (j in arr) {
         for (i in roleInfo)
         {
-            // console.log(898989)
-            // console.log( roleInfo[i])
             if (roleInfo[i].parentId == arr[j].id)
             {
-
-
-
                 idArr=roleInfo[i].path.split("|");
-                console.log(idArr)
-                var chooseId = 0;
                 var idArrL = 0;
-
                 arr.forEach(function (item , index) {
                     for (idArrL in idArr)
                     {
-
-                        if (item.id == idArr[idArrL]){
+                        if (item.id == idArr[idArrL]) {
                             item.choose = '1'
-                            // if (item.id == "95b67546c45549c59e4bb378658f9559")
-                            // {
-                            //     console.log("###########")
-                            //
-                            // }
-                            console.log(item.id +'******' + item.choose)
-                            console.log(item)
-
                         }
                     }
                 },this)
-
-
-
-
             }
         }
-
     }
 
     arr.map(function (node) {
@@ -301,14 +346,31 @@ function pushNode(node, pNodes) {
     pNodes.map(function (pNode) {
         if (pNode.id == node.parentId) {
             if (!pNode.children) {
+
                 if(node.type == 1)
                 {
-                    if (!pNode.menuContent)
-                    {
-                        pNode.menuContent = []
+                    if (!pNode.menuContentClick) {
+                        pNode.menuContentClick = []
                     }
-                    pNode.menuContent.push ( node);
+                    if (node.choose == 1) {
+
+                        pNode.menuContentClick.push(node.path);
+                    }
+                    if (!pNode.menuContent) {
+                        pNode.menuContent = []
+                        pNode.menuContentName = []
+                    }
+                    pNode.menuContent.push(node);
+                    pNode.menuContentName.push(node.path);
                 }else{
+                    // if (pNode.choose == 1) {
+                    //     if (!pNode.menuContentClick) {
+                    //         pNode.menuContentClick = []
+                    //     }
+                    //     pNode.menuContentClick.push(node.menuName);
+                        // console.log(pNode.menuContentClick)
+                    // }
+
                     pNode.children = [node];
                 }
             } else {
@@ -324,7 +386,63 @@ function pushNode(node, pNodes) {
     })
 }
 
+export function getUpdata(arr) {
+    var updata = [];
+    arr.forEach(function (item) {
+        // console.log(item.children)
+        if (item.children){
+            item.children.forEach(function (target) {
+                if (target.menuContentClick){
+                target.menuContentClick.forEach(function (data) {
+                    var ss = data.split("|");
+                    updata = updata.concat(ss)
+                })
+                }
+            })
+        }
+    })
+    //祛空
+    for(var i = 0;i<updata.length;i++){
+        if(updata[i]==''||updata[i]==null||typeof(updata[i])==undefined){
+            updata.splice(i,1);
+            i=i-1;
+        }
+    }
+    updata = unique(updata)
+    updata.shift()
 
+    var updataString
+    updataString = updata.join(',')
+    return updataString
+}
+
+//去除重复元素
+function unique(arr){
+// 遍历arr，把元素分别放入tmp数组(不存在才放)
+    var tmp = new Array();
+    for(var i in arr){
+//该元素在tmp内部不存在才允许追加
+        if(tmp.indexOf(arr[i])==-1){
+            tmp.push(arr[i]);
+        }
+    }
+    return tmp;
+}
+
+
+//权限更改
+
+export function authorization(roleId,menuIds) {
+
+    const data = {
+        "roleId": roleId,
+        "menuIds":menuIds,
+        "mid": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    console.log(data)
+    return service({url:'role/authorization', method: 'post', data})
+
+}
 
 
 /*******************************项目权限******************************************/

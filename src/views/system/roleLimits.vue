@@ -1,11 +1,11 @@
 <template>
     <div class="roleLimits">
         <div class="btn_wrapper">
-            <el-button type="danger" size="small">修改权限</el-button>
+            <el-button type="danger" size="small" @click="Setting">保存修改</el-button>
         </div>
         <div class="textWrapper">
             <el-row>
-                <el-col :span="24" v-for="menuItem in theModel">
+                <el-col :span="24" v-for="menuItem in treeData">
                     <my-tree :model="menuItem"></my-tree>
                 </el-col>
             </el-row>
@@ -14,8 +14,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-import myTree from "components/treeMenu"
+import myTree from "components/treeMenuu"
 import {myData} from "common/js/myData"
+import {getUpdata} from "api/system"
+import {authorization} from "api/system"
 export default {
     data() {
         return {
@@ -23,11 +25,35 @@ export default {
             treeData:"",
         }
     },
+    methods: {
+        Setting(){
+//            console.log(this.treeData)
+
+            var newData =  getUpdata(this.treeData)
+            console.log(newData);
+
+            authorization(this.nowId,newData).then((res)=>{
+                alert(1)
+            })
+
+
+        }
+    },
     components: {
 
         myTree
     },
-    props:this.treeData,
+    props: {
+        treeData: {
+            type: Array,
+            default: []
+        },
+
+        nowId:{
+            type : String,
+            default:[]
+        }
+    },
     created() {
 
     }

@@ -55,8 +55,13 @@
                 </el-form>
                 <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
                 <div slot="footer" class="dialog-footer">
+<<<<<<< HEAD
+                    <el-button type="danger" @click="scheduleDialog = false">保存</el-button>
+                    <el-button type="default" @click="scheduleDialog = false">取消</el-button>
+=======
                     <el-button type="default" @click="scheduleDialog = false">取消</el-button>
                     <el-button type="danger" @click="scheduleDialog = false">保存</el-button>
+>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 </div>
             </el-dialog>
         </div>

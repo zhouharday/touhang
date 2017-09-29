@@ -12,6 +12,39 @@
                   @blur="investorSearch">
         </el-input>
     </tableHeader>
+<!--&lt;!&ndash;<<<<<<< HEAD&ndash;&gt;-->
+    <!--<div class="tableBox">-->
+    <!--<el-table :data="investorData" border style="width: 100%;">-->
+        <!--<el-table-column label="投资者名称" align="center">-->
+            <!--<template scope="scope">-->
+              <!--<div class="name" @click="handleRouter(scope.$index, scope.row)">-->
+                  <!--<span class="investorName">{{ scope.row.investorName }}</span>-->
+              <!--</div>-->
+            <!--</template>-->
+        <!--</el-table-column>-->
+        <!--<el-table-column label="类型" prop="investorTypeId"  align="center">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column label="投资经理" prop="investmentManagerName"  align="center">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column label="累计投资额" prop="sumPaidAmount"  align="center">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column label="操作"  align="center">-->
+            <!--<template scope="scope">-->
+              <!--<el-button size="small" type="text"-->
+                      <!--@click="handleEdit(scope.$index, scope.row)">-->
+                      <!--签约-->
+              <!--</el-button>-->
+              <!--<el-button size="small" type="text"-->
+                      <!--@click="handleDelete(scope.$index, scope.row)">-->
+                      <!--删除-->
+              <!--</el-button>-->
+            <!--</template>-->
+        <!--</el-table-column>-->
+    <!--</el-table>-->
+    <!--</div>-->
+    <!--<div class="pagination">-->
+        <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
+<!--&lt;!&ndash;=======&ndash;&gt;-->
     <div class="tables">
         <el-table :data="investorData" border style="width: 100%;">
             <el-table-column label="投资者名称" align="center">
@@ -43,6 +76,7 @@
     </div>
     <div class="page">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
+<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
         </el-pagination>
     </div>
     <!-- 添加投资者 -->
