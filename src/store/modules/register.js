@@ -13,6 +13,7 @@ const state = {
         "contactUser": "", //联系人姓名
         "contactPhone": "" //联系电话 必须
     },
+    no: '', //云项目添加到项目池所用 NO 字段
     // isVshowYe: true, //是否显示首页
 }
 

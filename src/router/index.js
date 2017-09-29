@@ -12,9 +12,12 @@ let arr = [];
 arr = arr.concat(r1, r2, r3, r4)
 
 const router = new Router({
-    mode: 'history',
+    mode: 'hash',
     routes: [
-        { path: '*', component: resolve => require(['../views/Login.vue'], resolve)},
+        {
+            path: '*',
+            component: resolve => require(['../views/Login.vue'], resolve)
+        },
         {
             path: '/',
             redirect: '/login'
@@ -24,6 +27,18 @@ const router = new Router({
             name: 'home',
             component: resolve => require(['../components/Home.vue'], resolve),
             children: arr
+            // children: 
+            // [{
+            //         path: 'task', //home/任务页
+            //         name: 'task',
+            //         component: resolve => require(['../views/office/task.vue'], resolve)
+            //     },
+            //     {
+            //         path: 'contacts', //home/通讯录页
+            //         name: 'contacts',
+            //         component: resolve => require(['../views/office/Contacts.vue'], resolve)
+            //     },
+            // ]
         },
         {
             path: '/login',
@@ -44,24 +59,20 @@ const router = new Router({
 })
 
 
-router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录 
-    // console.log(to, from ,next);
-    try {
-        let loginInfo = JSON.parse(sessionStorage.getItem('saveApprovalStatus') || '{}');
-        let isLogin = loginInfo.isLogged;
-        store.state.login.approvelType = loginInfo;
-        
-        if (loginInfo) {
-            next();
-        } else {
-            if(to.path == '/login'){//如果是登录页面路径，就直接next()
-              next();
-            }else{//不然就跳转到登录；
-              next('/login');
-            }
-        }
-    } catch (e) {
-        console.log('beforeEach exists error: ', e);
+router.beforeEach((to, from, next) => { //在所有导航完成之前先判断是否已经登录
+    store.state.login.approvelType = JSON.parse(sessionStorage.getItem('saveApprovalStatus')) || {};
+    var isLogin = store.state.login.approvelType.isLogged;
+    if (to.path == '/login' || to.path == '/registerphone' || to.path == '/register') {
+        next();
+        return;
+    };
+    // console.log(isLogin);
+    if (isLogin) {
+        next() // 进行下一个钩子函数  
+    } else {
+        next({
+            path: '/login'
+        }) //  跳转到login页面  
     }
 })
 
