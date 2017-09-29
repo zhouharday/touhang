@@ -185,10 +185,8 @@ export default {
         changeProjectInfo() {
             let basicForm = this.basicForm;
             basicForm.projectId = this.projectId;
-            console.log(JSON.stringify(basicForm));
             changeProjectInfo(basicForm).then(resp => {
                 this.disable(basicForm);
-                console.log('changeProjectInfo resp: ', resp);
             }).catch(e => {
                 console.log('changeProjectInfo exists error: ', e);
             })
@@ -196,7 +194,6 @@ export default {
         changeEnterpriseInfo() {
             let companyForm = this.companyForm;
             companyForm.projectId = this.projectId;
-            console.log(JSON.stringify(companyForm));
             changeEnterpriseInfo(companyForm).then(resp => {
                 this.disable(companyForm);
                 console.log('changeEnterpriseInfo resp: ', resp);

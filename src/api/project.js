@@ -120,7 +120,6 @@ export function transPro(projectId) {
 //项目id 必传
 //1：正常 2：观察 3中止 4：淘汰
 export function setProjectStatus(projectId, projectType){
-	console.log("projectType :"+projectType);
 	let id = projectId;
 	const data = {
 		id,
