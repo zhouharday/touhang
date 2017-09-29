@@ -100,62 +100,6 @@
         <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
         </delete-reminders>
         <!-- 发起申请 对话框-->
-<<<<<<< HEAD
-        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-            <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                <el-row>
-                    <el-col>
-                        <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off"
-                                      disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off"
-                                      disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off"
-                                      disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="备注" prop="notes">
-                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="考察报告" prop="appendix">
-                            <!-- action 上传的地址，必填 -->
-                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix"
-                                    action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="选择审批人" prop="date">
-                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label"
-                                           :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer" style="text-align:left">
-                <el-button type="danger" size="small" @click="applyModal= false">提交</el-button>
-            </div>
-        </el-dialog>
-=======
         <!-- <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms> -->
         <div class="applyBox">
             <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
@@ -208,7 +152,6 @@
                 </div>
             </el-dialog>
         </div>
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         <!-- 查看进度 对话框 -->
         <div class="progressBox">
             <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
