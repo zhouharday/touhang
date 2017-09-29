@@ -1,3 +1,4 @@
+import service from './fetch'
 export const dictionaryList = [
     {
         id: 0,
@@ -124,3 +125,12 @@ export const dictionaryList = [
         }]
     }
 ]
+
+// 获取数据字典一级子项 By CJ 2017-9-29 10:42:50
+export function getDicChildren(Pid) {
+    console.log("查询父ID为：" + Pid + " 的数据字典项");
+    const data = {
+        dicParent: Pid
+    }
+    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+}

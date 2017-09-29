@@ -16,27 +16,42 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目类型" prop="projectType">
-                            <el-input v-model="basicForm.projectType" :disabled="basicForm.flag"></el-input>
+                            <el-select v-model="basicForm.projectTypeId" filterable placeholder="请选择项目类型" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in typeOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属行业" prop="industry">
-                            <el-input v-model="basicForm.industry" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in industryOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目来源" prop="projectFrom">
-                            <el-input v-model="basicForm.projectFrom" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in fromOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地" prop="address">
-                            <el-input v-model="basicForm.address" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in addressOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col>
+                    <el-col :span="12">
                         <el-form-item label="业务部门" prop="department">
-                            <el-input v-model="basicForm.department" :disabled="basicForm.flag"></el-input>
+                             <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in departmentOptions" :key="item.id" :label="item.deptName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -94,7 +109,7 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="备注" prop="remark">
-                            <el-input v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
+                            <el-input  type="textarea" v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -105,9 +120,19 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
-import { changeEnterpriseInfo, changeProjectInfo } from 'api/project';
+import { getDicChildren } from 'common/js/dictionary'
+import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
 export default {
+    computed: mapGetters({
+        projectData:'getProjectData',   // 获取项目详情数据
+        typeOptions:'getTypeOptions',   // 获取项目类型
+        industryOptions:'getIndustryOptions',   // 获取项目所属行业
+        fromOptions:'getFromOptions',   // 获取项目来源
+        addressOptions:'getAddressOptions',   // 获取项目所在地
+        departmentOptions:'getDepartmentOptions',   // 获取业务部门
+    }),
     props: {
         basicForm: {
             type: Object,
@@ -124,7 +149,8 @@ export default {
         projectId: {
             type: String,
             default: ''
-        }
+        },
+        typeOptions:[]
     },
     watch: {
         projectData(val, oldVal) {
@@ -161,11 +187,20 @@ export default {
                     icon: 'upload',
                     explain: '提交'
                 }]
-            }
+            },
+            typeOptions: [],
+            fromOptions: [],
+            industryOptions: [],
+            addressOptions: [],
+            departmentOptions: []
         }
     },
     created() {
-        
+        this.$store.dispatch('getTypeOptions')
+        this.$store.dispatch('getIndustryOptions')
+        this.$store.dispatch('getFromOptions')
+        this.$store.dispatch('getAddressOptions')
+        this.$store.dispatch('getDepartmentOptions')
     },
     methods: {
         init() {
@@ -173,7 +208,7 @@ export default {
         },
         disableForm() {
             this.disable(this.basicForm);
-            this.disable(this.companyForm); 
+            this.disable(this.companyForm);
         },
         disable(name) {
             if (name.flag === false) {
@@ -213,7 +248,8 @@ export default {
     width: 100%;
     height: 100%;
 }
+
 .title {
-   margin-bottom: 12px;
+    margin-bottom: 12px;
 }
 </style>
