@@ -124,3 +124,11 @@ export const dictionaryList = [
         }]
     }
 ]
+
+// 获取数据字典一级子项 By CJ 2017-9-29 10:42:50
+export function getDicChildren(Pid) {
+    const data = {
+        dicParent: Pid
+    }
+    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+}
