@@ -454,8 +454,8 @@ export default {
 
 .page {
     width: 100%;
-    padding: 15px 30px;
     text-align: right;
+    padding: 15px 30px;
     position: absolute;
     bottom: 0;
     right: 0;

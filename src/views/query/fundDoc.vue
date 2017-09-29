@@ -10,13 +10,14 @@
                     </div>
                 </el-col>
                 <!--<el-col :span="20">-->
-                    <!--<myFilter :chooseInfo="chooseInfo"></myFilter>-->
+
                 <!--</el-col>-->
                 <el-col :span="20" class="addPadding">
                     <div>
 
                         <div class="fileTable" v-show="isShow">
                             <!-- <tabel-header :data="headerInfo_file"></tabel-header> -->
+                            <myFilter :chooseInfo="chooseInfo"></myFilter>
                             <div class="title_f" style="background:#2a3142;color:#fff">
                                 <div class="desc">
                                     <span>项目阶段</span>
@@ -183,6 +184,7 @@ import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
 import {getFundLeftList} from 'api/search'
 import {getFundRightList} from 'api/search'
+import {getSelectIndex} from 'api/search'
 export default {
     data() {
         return {
@@ -204,6 +206,7 @@ export default {
             file: null,
             loadingStatus: false,
             formLabelWidth: '80px',
+            chooseInfo:[],
         }
     },
     components: {
@@ -266,6 +269,10 @@ export default {
         getFundRightList().then((res) => {
             console.log(res.data.result)
             this.dataArr = res.data.result
+        })
+        getSelectIndex('203').then((res)=>{
+            console.log(res.data)
+            this.chooseInfo.details = res.data.result
         })
     }
 }

@@ -16,43 +16,46 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目简称" prop="shortName">
-                                        <el-input v-model="basicForm.shortName"></el-input>
+                                    <el-form-item label="项目简称" prop="projectShortName">
+                                        <el-input v-model="basicForm.projectShortName"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目类型" prop="projectSort">
-                                        <el-select v-model="basicForm.projectSort" filterable placeholder="请选择项目类型"  style="width:100%">
-                                            <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    <el-form-item label="项目类型" prop="projectType">
+                                        <el-select v-model="basicForm.projectTypeId" filterable placeholder="请选择项目类型"  style="width:100%">
+                                            <el-option v-for="item in $store.state.project.typeOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="所属行业" prop="industry">
-                                        <el-select v-model="basicForm.industry" filterable placeholder="请选择所属行业"  style="width:100%">
-                                            <el-option v-for="item in industryOptions" :key="item.value" :label="item.label" :value="item.value">
+                                        <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业"  style="width:100%">
+                                            <el-option v-for="item in $store.state.project.industryOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目来源" prop="origin">
-                                         <el-select v-model="basicForm.origin" filterable placeholder="请选择项目来源"  style="width:100%">
-                                            <el-option v-for="item in originOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    <el-form-item label="项目来源" prop="projectFrom">
+                                         <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源"  style="width:100%">
+                                            <el-option v-for="item in $store.state.project.fromOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="所在地" prop="location">
-                                        <el-input v-model="basicForm.location"></el-input>
+                                    <el-form-item label="所在地" prop="address">
+                                        <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
+                                            <el-option v-for="item in $store.state.project.addressOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                            </el-option>
+                                        </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="业务部门" prop="department">
-                                         <el-select v-model="basicForm.department" filterable placeholder="请选择业务部门"  style="width:100%">
-                                            <el-option v-for="item in departmentOptions" :key="item.value" :label="item.label" :value="item.value">
+                                         <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门"  style="width:100%">
+                                            <el-option v-for="item in $store.state.project.departmentOptions" :key="item.id" :label="item.deptName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -92,28 +95,28 @@
                                     <div>企业信息</div>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="企业名称" prop="companyName">
-                                        <el-input v-model="companyForm.companyName"></el-input>
+                                    <el-form-item label="企业名称" prop="enterpriseName">
+                                        <el-input v-model="companyForm.enterpriseName"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="法人代表" prop="delegate">
-                                        <el-input v-model="companyForm.delegate"></el-input>
+                                    <el-form-item label="法人代表" prop="legalPerson">
+                                        <el-input v-model="companyForm.legalPerson"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="注册资本（元）" prop="regCapital">
-                                        <el-input v-model="companyForm.regCapital"></el-input>
+                                    <el-form-item label="注册资本（元）" prop="registeredCapital">
+                                        <el-input v-model="companyForm.registeredCapital"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="实收资本（元）" prop="paidCapital">
-                                        <el-input v-model="companyForm.paidCapital"></el-input>
+                                    <el-form-item label="实收资本（元）" prop="paiclCapital">
+                                        <el-input v-model="companyForm.paiclCapital"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="注册登记日期" prop="regDatetime">
-                                        <el-date-picker type="date" v-model="companyForm.regDatetime" style="width:100%">
+                                    <el-form-item label="注册登记日期" prop="registerDate">
+                                        <el-date-picker type="date" v-model="companyForm.registerDate" style="width:100%">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -123,18 +126,18 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="注册地址" prop="regAddress">
-                                        <el-input v-model="companyForm.regAddress"></el-input>
+                                    <el-form-item label="注册地址" prop="registerAddress">
+                                        <el-input v-model="companyForm.registerAddress"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="办公地址" prop="workingSite">
-                                        <el-input v-model="companyForm.workingSite"></el-input>
+                                    <el-form-item label="办公地址" prop="workAddress">
+                                        <el-input v-model="companyForm.workAddress"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col>
-                                    <el-form-item label="主营业务" prop="service">
-                                        <el-input v-model="companyForm.service"></el-input>
+                                    <el-form-item label="主营业务" prop="mainBusiness">
+                                        <el-input v-model="companyForm.mainBusiness"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col>
@@ -148,8 +151,9 @@
                     <div class="formBtn">
                         <el-row>
                             <el-col style="display:flex;justify-content:flex-end;">
-                                <el-button  @click="cancleForm">取消</el-button>
-                                <el-button type="danger"  @click="submitForm('basicForm')">保存</el-button>
+
+                                <el-button type="danger" size="small" @click="submitForm('basicForm')">保存</el-button>
+                                <el-button type="default" size="small" @click="cancleForm">取消</el-button>
                             </el-col>
                         </el-row>
                     </div>
@@ -161,74 +165,70 @@
 
 
 <script>
-import { addPro } from 'api/project';
+import { mapGetters, mapActions } from 'vuex'
+import { addPro, getDeptListByMid } from 'api/project';
+import { getDicChildren } from 'common/js/dictionary'
 const store = {
     isSubmit: false
 }
 export default {
     name: 'addProject',
+    computed: mapGetters({
+        typeOptions:'getTypeOptions',   // 获取项目类型
+        industryOptions:'getIndustryOptions',   // 获取项目所属行业
+        fromOptions:'getFromOptions',   // 获取项目来源
+        addressOptions:'getAddressOptions',   // 获取项目所在地
+        departmentOptions:'getDepartmentOptions',   // 获取业务部门
+    }),
+    watch: {
+    },
     data() {
         return {
             dataNum: 3,
             basicForm: {
                 projectName: '',
-                shortName: '',
-                projectSort: '',
-                industry: '',
-                origin: '',
-                location: '',
-                department: '',
-                logo: ''
+                projectShortName: '',
+                projectTypeId: '',
+                industryId: '',
+                projectFromId: '',
+                addressId: '',
+                departmentId: '',
+                projectLogo: ''
             },
             companyForm: {
-                companyName: '',
-                delegate: '',
-                regCapital: '',
-                paidCapital: '',
-                regDatetime: '',
+                enterpriseName: '',
+                legalPerson: '',
+                registeredCapital: '',
+                paiclCapital: '',
+                registerDate: '',
                 creditCode: '',
-                regAddress: '',
-                workingSite: '',
-                service: '',
+                registerAddress: '',
+                workAddress: '',
+                mainBusiness: '',
                 remark: ''
             },
-            sortOptions: [{
-                value: '选项1',
-                label: '类型一'
-            }],
-            industryOptions: [{
-                value: '选项1',
-                label: '行业一'
-            }],
-            originOptions: [{
-                value: '选项1',
-                label: '来源一'
-            }],
-            departmentOptions: [{
-                value: '选项1',
-                label: '部门一'
-            }],
+            addressOptions: [],
+            typeOptions: [],
+            industryOptions: [],
+            fromOptions: [],
+            departmentOptions: [],
             // 基本信息 form验证
             rules1: {
                 projectName: [
                     { required: true, message: '请输入项目名称', trigger: 'blur' }
                 ],
-                shortName: [
+                projectShortName: [
                     { required: true, message: '请输入项目简称', trigger: 'blur' }
                 ],
-                projectSort: [
+                projectTypeId: [
                     { required: true, message: '请输入项目类型', trigger: 'blur' }
                 ],
-                industry: [
+                industryId: [
                     { required: true, message: '请输入所属行业', trigger: 'blur' }
                 ]
             },
             // 上传 企业LOGO
             defaultList: [
-                {
-                    'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                    'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                },
                 {
                     'name': 'bc7521e033abdd1e92222d733590f104',
                     'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
@@ -244,9 +244,21 @@ export default {
         this.uploadList = this.$refs.upload.fileList;
     },
     created() {
+        this.$store.dispatch('getTypeOptions')
+        this.$store.dispatch('getIndustryOptions')
+        this.$store.dispatch('getFromOptions')
+        this.$store.dispatch('getAddressOptions')
+        this.$store.dispatch('getDepartmentOptions')
         this.init();
     },
     methods: {
+        ...mapActions([
+            "getTypeOptions",
+            "getIndustryOptions",
+            "getFromOptions",
+            "getAddressOptions",
+            "getDepartmentOptions"
+         ]),
         init() {
             this.initInfo();
         },
@@ -259,17 +271,15 @@ export default {
         submitForm(formName) {
             let basicForm = this.basicForm;
             let companyForm = this.companyForm;
-            basicForm = this.changeBasicForm(basicForm);
-            companyForm = this.changeCompanyForm(companyForm);
-            // console.log('basicForm: ', basicForm, companyForm);
+            // basicForm = this.changeBasicForm(basicForm);
+            // companyForm = this.changeCompanyForm(companyForm);
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     if (store.isSubmit) return;
                     store.isSubmit = true;
                     addPro({
-                        merchantId: this.merchantId,
-                        projectInfo: basicForm,
-                        enterpriseInfo: companyForm
+                        basicForm: basicForm,
+                        companyForm: basicForm
                     }).then(resp => {
                         store.isSubmit = false;
                         console.log('resp: ', resp);
@@ -284,18 +294,18 @@ export default {
                 }
             });
             // this.addTab('项目池', '/home/projectPool', 'projectPool');
-            // this.$router.push({ name: 'projectPool' });
+            this.$router.push({ name: 'projectPool' });
         },
         changeBasicForm(basicForm) {
             let obj = {
                 projectName: basicForm.projectName,
-                projectShortName: basicForm.shortName,
-                addressId: basicForm.location,
-                createPersonId: basicForm.manager, // TODO: 此处应为项目负责人，而非创建者
-                projectTypeId: basicForm.projectSort,
-                industryId: basicForm.industry,
-                projectFromId: basicForm.origin,
-                departmentId: basicForm.department,
+                projectShortName: basicForm.projectShortName,
+                addressId: basicForm.addressId,
+                createPersonId: basicForm.createPersonId, // TODO: 此处应为项目负责人，而非创建者
+                projectTypeId: basicForm.projectTypeId,
+                industryId: basicForm.industryId,
+                projectFromId: basicForm.projectFromId,
+                departmentId: basicForm.departmentId,
                 merchantId: this.merchantId
             }
             return obj;
@@ -305,17 +315,16 @@ export default {
                 page: 1,
                 pageSize: 10,
                 projectId: '',
-                enterpriseName: companyForm.companyName,
-                legalPerson: companyForm.delegate,
-                registeredCapital: companyForm.regCapital,
-                paiclCapital: companyForm.paidCapital,
-                registerDate: companyForm.regDatetime,
+                enterpriseName: companyForm.enterpriseName,
+                legalPerson: companyForm.legalPerson,
+                registeredCapital: companyForm.registeredCapital,
+                paiclCapital: companyForm.paiclCapital,
+                registerDate: companyForm.registerDate,
                 creditCode: companyForm.creditCode,
-                registerAddress: companyForm.regAddress,
-                workAddress: companyForm.workingSite,
-                mainBusiness: companyForm.service,
-                remark: companyForm.remark,
-                logo: companyForm.logo
+                registerAddress: companyForm.registerAddress,
+                workAddress: companyForm.workAddress,
+                mainBusiness: companyForm.mainBusiness,
+                remark: companyForm.remark
             }
             return obj;
         },

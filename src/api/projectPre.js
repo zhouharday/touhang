@@ -42,10 +42,12 @@ export function owers(enterpriseId = undefined) {
 	return service({url: '/boardMember/selectBoardMember', method: 'post', data});
 }
 
-// 添加董事会成员
+// 添加董事会成员 2017-9-28 20:25:26
 export function addOwer(params = {}) {
-	let { name, enterpriseId, nature, educationalBg } = params;
+	let { id, projectId, name, enterpriseId, nature, educationalBg } = params;
 	const data = {
+		id,
+		projectId,
 		enterpriseId,
 		name,
 		nature,
@@ -68,12 +70,12 @@ export function updateOwer(params = {}) {
 	return service({url: '/projectPool/updateProjectPoolBoardMember', method: 'post', data});
 }
 
-// 删除董事会成员
+// 删除董事会成员 2017-9-28 21:05:03
 export function delOwer(id = undefined) {
 	const data = {
 		id
-	}
-	return service({url: '/projectPool/deleteBoardMember', method: 'post', data});
+	} 
+	return service({url: '/boardMember/deleteBoardMember', method: 'post', data});
 }
 
 ////// 项目团队 ////////////////
@@ -113,20 +115,22 @@ export function gus(enterpriseId) {
 	return service({url: '/OwnershipStructure/selectOwnershipStructure', method: 'post', data});
 }
 
-// 股权添加
+// 股权添加 2017-9-28 20:25:17
 export function addGu(params) {
-	let { stockholderNature, stockholderName, investmentAmount, stockCount, stockRatio } = params;
+	let { id, projectId, stockholderNature, stockholderName, investmentAmount, stockCount, stockRatio } = params;
 	const data = {
+		id,
+		projectId,
 		stockholderName, //股东姓名: null
 		stockholderNature,//股东性质: null
 		investmentAmount,//投资金额: null
 		stockCount, //持股数量: null
 		stockRatio //股权占比: null
 	}
-	return service({url: '/projectPool/insertOwnershipStructure', method: 'post', data});
+	return service({url: '/projectPool/updateOwnershipStructure', method: 'post', data});
 }
 
-// 股权删除
+// 股权删除 2017-9-28 21:05:09
 export function delGu(id = undefined) {
 	const data = {
 		id

@@ -1,11 +1,19 @@
 <template>
 <div class="department">
+<!--<<<<<<< HEAD-->
+
+<!--=======-->
+<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
     <div class="title">
         <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
         </el-button>
     </div>
+<!--<<<<<<< HEAD-->
+
+<!--=======-->
+<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
     <!-- 折叠表单 -->
     <!-- 这部分内容需要询问产品 -->
     <!-- <el-collapse v-model="activeName" accordion>
@@ -93,6 +101,9 @@
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
+    <!-- 删除确认弹框 -->
+    <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="confirmDel" @cancel="deleteReminders=false">
+    </delete-reminders>
 </div>
 </template>
 
@@ -105,44 +116,21 @@
     import {deletDepartment} from 'api/system'
     import Input from "../../../node_modules/iview/src/components/input/input.vue";
     import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
+    import deleteReminders from 'components/deleteReminders'
 export default {
     components: {
         ElInput,
-        Input},
+        Input,
+        deleteReminders
+    },
     data() {
         return {
+            deleteReminders: false,
+            message_title: '确认删除',
+            message: '是否确认删除该部门？',
+            btnText: '删除',
             companyName:'',
-            currentData: [{
-                id: 'a1',
-                name: '投资一部',
-                childrenData: [{
-                    title: '一部第一小组',
-                    desc: '描述信息a'
-                }, {
-                    title: '一部第二小组',
-                    desc: '描述信息b'
-                }]
-            }, {
-                id: 'a2',
-                name: '投资二部',
-                childrenData: [{
-                    title: '二部第一小组',
-                    desc: '描述信息as'
-                }, {
-                    title: '二部第二小组',
-                    desc: '描述信息aaaa'
-                }]
-            }, {
-                id: 'a3',
-                name: '投资三部',
-                childrenData: [{
-                    title: '三部第一小组',
-                    desc: '描述信息'
-                }, {
-                    title: '三部第二小组',
-                    desc: '描述信息'
-                }]
-            }],
+            currentData: [],
             department: false,
             formLabelWidth: '120px',
             departmentData: {
@@ -150,7 +138,7 @@ export default {
                 department: 'aaa'
             },
             options: [],
-
+            deleteId:'',
         }
     },
     methods: {
@@ -202,9 +190,14 @@ export default {
         },
         deleteClick(item) {
 //            console.log(item)
-            var id = item.id;
-            deletDepartment(item.id).then((res) => {
+            this.deleteReminders = !this.deleteReminders;
+            this.deleteId = item.id;
+        },
+        confirmDel(){
+
+            deletDepartment(this.deleteId).then((res) => {
                 getDepartmentList().then((res)=>{
+                    this.deleteReminders = !this.deleteReminders;
                     var dataList = addEdit(res.data.result)
                     var treeList = getNodes(dataList)
                     this.currentData = treeList
@@ -234,7 +227,7 @@ export default {
 .department {
     .base-style();
     .title {
-        width: 50%;
+        width: 100%;
         height: 42px;
         line-height: 42px;
         flex: 1;

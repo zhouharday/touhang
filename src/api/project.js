@@ -56,11 +56,39 @@ export function getProDetail(id) {
 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
 }
 
-// 添加项目池
+// 项目池添加项目
 export function addPro(params = {}) {
-	let { projectId, enterpriseInfo, merchantId } = params;
-	/*
-	let { 
+	let { basicForm, companyForm } = params;
+
+    console.log("basicForm-------->" + JSON.stringify(basicForm));
+    console.log("companyForm-------->" + JSON.stringify(companyForm));
+
+
+	let addProjectUserId = JSON.parse(sessionStorage.getItem('userInfor')).id;	//当前登录用户id
+    let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id;	//商户id必传"
+	let projectName = basicForm.projectName; //项目名
+    let projectShortName = basicForm.projectShortName; //项目简称
+    let addressId = basicForm.addressId; //项目所在地
+    let createPersonId = addProjectUserId; //项目创建人
+    let projectTypeId = basicForm.projectTypeId; //项目类型ID
+    let industryId = basicForm.industryId; //行业ID
+    let projectFromId = basicForm.projectFromId; //项目来源
+    let departmentId = basicForm.departmentId; //业务部门ID
+    let projectLogo = basicForm.projectLogo
+
+    let	enterpriseName = companyForm.enterpriseName;		//企业名称
+    let	legalPerson = companyForm.enterpriseName;			//法人
+    let	registeredCapital = companyForm.registeredCapital;	//注册资本
+    let	paiclCapital = companyForm.paiclCapital;			//实收资本
+    let	registerDate = companyForm.registerDate;			//注册登记时间
+    let	creditCode = companyForm.creditCode;				//统一信用代码
+    let	registerAddress = companyForm.registerAddress;		//注册地址
+    let	workAddress = companyForm.workAddress;				//办公地址
+    let	mainBusiness = companyForm.mainBusiness;			//主营业务
+    let	remark = companyForm.remark;						//备注
+
+	let projectInfo = { 
+		merchantId,
 		projectName, //项目名: "2",
         projectShortName, //项目简称: "3",
         addressId, //项目所在地: "321",
@@ -68,27 +96,27 @@ export function addPro(params = {}) {
         projectTypeId, //项目类型ID: null,
         industryId, //行业ID: null,
         projectFromId, //项目来源: null,
-        departmentId //业务部门ID: null
-    } = ( projectInfo || {} )
-    let {
-    	"page": 1,
-        "pageSize": 10,
-        "projectId"//基本信息ID: "1",
-        "enterpriseName"//企业名称: "5555",
-        "legalPerson"//法人: "CESHI",
-        "registeredCapital"注册资本: null,
-        "paiclCapital"//实收资本: null,
-        "registerDate"//注册登记时间 : null,
-        "creditCode"//统一信用代码: null,
-        "registerAddress"//注册地址: null,
-        "workAddress"//办公地址: null,
-        "mainBusiness"//主营业务: null,
-        "remark"//备注: null
-    } = ( enterpriseInfo || {} )
-	*/
+        departmentId, //业务部门ID: null
+        projectLogo
+    } 
+    console.log("projectInfo-------->" + JSON.stringify(projectInfo));
+
+    let enterpriseInfo = {
+        enterpriseName,		//企业名称
+        legalPerson,			//法人
+        registeredCapital,	//注册资本
+        paiclCapital,			//实收资本
+        registerDate,			//注册登记时间
+        creditCode,				//统一信用代码
+        registerAddress,		//注册地址
+        workAddress,				//办公地址
+        mainBusiness,			//主营业务
+        remark						//备注
+    }
+    console.log("enterpriseInfo-------->" + JSON.stringify(enterpriseInfo));
+	
 	const data = {
-		merchantId,
-		projectId,
+		projectInfo,
 		enterpriseInfo
 	}
 	return service({url: '/projectPool/addProjectPool', method: 'post', data})
@@ -113,14 +141,12 @@ export function transPro(projectId) {
 		addProjectUserId
 	};
 	return service({url: '/investProject/addInvestProject', method: 'post', data});
-	//return service({url: '/productClieController/insertProjectPool', method: 'post', data});
 }
 
 //修改项目状态
 //项目id 必传
 //1：正常 2：观察 3中止 4：淘汰
 export function setProjectStatus(projectId, projectType){
-	console.log("projectType :"+projectType);
 	let id = projectId;
 	const data = {
 		id,
@@ -200,4 +226,13 @@ export function delRecord(id = undefined, recordStatus = undefined) {
 		recordStatus,  // 记录状态：1：正常 2：删除
 	}
 	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
+}
+
+//根据商户ID获取部门列表
+export function getDeptListByMid() {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	const data = {
+		merchantId   //商户ID
+	}
+	return service({url: '/sysDept/queryList', method: 'post', data});
 }

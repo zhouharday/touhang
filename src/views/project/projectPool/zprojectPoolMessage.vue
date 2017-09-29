@@ -78,7 +78,6 @@ export default {
     data() {
         return {
             title: '双子金服投资项目',
-            //state: '正常',
             invest: '投资',
             observe: '观察',
             eliminate: '淘汰',
@@ -110,7 +109,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'setProjectData'
+            'getProjectData'
         ]),
         init() {
             this.initParams();
@@ -130,7 +129,7 @@ export default {
             getProDetail(projectPoolId).then(resp => {
                 let data = resp.data.result;
                 let { projectInfo, projectInvestmentInfo,enterpriseInfo,listOwnershipStructure } = data;
-                this.setProjectData(data);
+                this.getProjectData(data);
                 if (projectInfo) {
                     this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }
@@ -140,13 +139,12 @@ export default {
                 if(listOwnershipStructure){
                     this.structureForm = Object.assign({}, this.structureForm, listOwnershipStructure);
                 }
-
                 if(projectInfo.projectType === '4'){
                     this.show_t = false;
                     this.state = "淘汰";
                 }else if(projectInfo.projectType === '3'){
                     // this.show_s = false;
-                    // this.state = "终止";
+                    this.state = "终止";
                 }else if(projectInfo.projectType === '2'){
                     this.show_s = false;
                     this.state = "观察";
@@ -159,7 +157,6 @@ export default {
             })
         },
         jumpPre() {
-            console.log('转投资');
             let projectId = this.projectPoolId;
             transPro(projectId).then(resp => {
                 this.addTab('投前项目', '/home/preProject', 'preProject');
@@ -171,7 +168,6 @@ export default {
             });
         },
         jumpObserve() {
-            console.log('转观察');
             setProjectStatus(this.projectPoolId, '2').then(resp =>{
                 this.observeDialog = !this.observeDialog;
                 this.show_f = false;
@@ -182,10 +178,9 @@ export default {
                 console.log('jumpObserve error: ', e);
                 this.observeDialog=false;
             });
-            
+
         },
         jumpEliminate() {
-            console.log('转淘汰');
             setProjectStatus(this.projectPoolId, '4').then(resp =>{
                 this.eliminateDialog = !this.eliminateDialog;
                 this.show_f = false;
@@ -198,7 +193,6 @@ export default {
             });
         },
         changeNormal() {
-            console.log('转正常');
             setProjectStatus(this.projectPoolId, '1').then(resp =>{
                 this.isShow = false;
                 this.show_f = true;

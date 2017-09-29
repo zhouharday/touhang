@@ -17,4 +17,10 @@ export const GET_INVESTORNAME = 'GET_INVESTORNAME' // 获取当前投资者名�
 // 综合查询
 export const GET_PROJECTSTATUS = 'GET_PROJECTSTATUS' // 获取项目阶段
 // 项目管理
-export const SET_PROJECT_DATA = 'SET_PROJECT_DATA' // 项目详情
+export const GET_PROJECT_DATA = 'GET_PROJECT_DATA' // 项目详情
+export const GET_PROJECTTURNTYPE = 'GET_PROJECTTURNTYPE' // 融资轮次
+export const GET_TYPEOPTIONS = 'GET_TYPEOPTIONS' // 项目类型
+export const GET_INDUSTRYOPTIONS = 'GET_INDUSTRYOPTIONS' // 项目所属行业
+export const GET_FROMOPTIONS = 'GET_FROMOPTIONS' // 项目来源
+export const GET_ADDRESSOPTIONS = 'GET_ADDRESSOPTIONS' // 项目所在地
+export const GET_DEPARTMENTOPTIONS = 'GET_DEPARTMENTOPTIONS' // 业务部门

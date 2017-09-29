@@ -12,13 +12,13 @@
             </el-col>
             <el-col :span="19" class="imdo">
                 <!-- 后期所做导入和下载模板功能 -->
-                <!-- <div class="importProject">
-                                               <el-upload class="upload-demo" ref="upload"
-                                                 action="" :auto-upload="false">
-                                                <el-button type="text">导入</el-button>
-                                                </el-upload>
-                                                <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-                                        </div> -->
+                 <div class="importProject">
+                       <el-upload class="upload-demo" ref="upload"
+                         action="" :auto-upload="false">
+                        <el-button type="text">导入</el-button>
+                        </el-upload>
+                        <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
+                </div>
             </el-col>
         </el-row>
         <div class="tableBox">
@@ -41,9 +41,9 @@
                         <el-button type="text" size="small" @click="modalAdd=true">
                             项目团队
                         </el-button>
-                        <!-- <el-button type="text" size="small" @click="deleteReminders=true">
+                        <el-button type="text" size="small" @click="deleteReminders=true">
                             删除
-                        </el-button> -->
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -59,13 +59,15 @@
                 <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
                     <el-form-item label="姓名" prop="name">
                         <el-select v-model="teamForm.name" placeholder="请选择姓名" style="width:100%">
-                            <el-option v-for="item in nameOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <el-option v-for="item in nameOptions" :key="item.value" :label="item.label"
+                                       :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="角色" prop="role">
                         <el-select v-model="teamForm.role" placeholder="请选择角色" style="width:100%">
-                            <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <el-option v-for="item in roleOptions" :key="item.value" :label="item.label"
+                                       :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -81,7 +83,8 @@
             </el-dialog>
         </div>
         <!-- 删除弹出框 -->
-        <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="deleteReminders=false" @cancel="deleteReminders=false">
+        <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading"
+                          @del="deleteReminders=false" @cancel="deleteReminders=false">
         </delete-reminders>
     </section>
 </template>
@@ -171,119 +174,131 @@ export default {
             this.initInfo();
             this.getDatas();
         },
-        initInfo() {
-            let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
-            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
-            this.merchantId = merchants[0].id;
-            this.addProjectUserId = info.id;
+        components: {
+            deleteReminders
         },
-        getDatas() {
-            let projectType = this.projectType;
-            let projectName = this.projectName;
-            let stageId = this.stageId;
+        created() {
+            this.init();
+        },
+        methods: {
+            init() {
+                this.initInfo();
+                this.getDatas();
+            },
+            initInfo() {
+                let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
+                let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
+                this.merchantId = merchants[0].id;
+                this.addProjectUserId = info.id;
+            },
+            getDatas() {
+                let projectType = this.projectType;
+                let projectName = this.projectName;
+                let stageId = this.stageId;
 
-            if (projectType == '全部') projectType = '';
-            if (stageId == '全部') stageId = '';
+                if (projectType == '全部') projectType = '';
+                if (stageId == '全部') stageId = '';
 
-            let params = {
-                merchantId: this.merchantId,
-                userId: this.addProjectUserId,
-                projectStageId: stageId,
-                projectTypeId: projectType,
-                projectName: projectName,
-                page: this.page,
-                pageSize: this.pageSize
-            };
+                let params = {
+                    merchantId: this.merchantId,
+                    userId: this.addProjectUserId,
+                    projectStageId: stageId,
+                    projectTypeId: projectType,
+                    projectName: projectName,
+                    page: this.page,
+                    pageSize: this.pageSize
+                };
 
-            getPres(params).then(resp => {
-                let data = resp.data;
-                let result = data.result;
-                let list = result.list;
-                list = this.handleDatas(list);
-                this.tableData = list || [];
-                this.total = result.total || 0;
-                console.log(result);
-            }).catch(e => {
-                // console.log('getPres exists error: ', e);
+                getPres(params).then(resp => {
+                    let data = resp.data;
+                    let result = data.result;
+                    let list = result.list;
+                    list = this.handleDatas(list);
+                    this.tableData = list || [];
+                    this.total = result.total || 0;
+                    console.log(result);
+                }).catch(e => {
+                    // console.log('getPres exists error: ', e);
 
-            });
-        },
-        pageChanged(page) {
-            this.page = page;
-            this.getDatas();
-        },
-        pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
-        },
-        /**
-         * [handleDatas 处理项目列表数据]
-         * @param  {[type]} data [description]
-         * @return {[type]}      [description]
-         */
-        handleDatas(data = []) {
-            data.forEach(item => {
-                item.project = item.projectName;
-                item.mananger = item.createUserId;
-                item.industry = item.industryId;
-                item.sort = item.projectTypeId;
-                item.stage = item.projectStageId;
-            });
-            return data;
-        },
-        /**
-         * [handleIconClick 列表模糊查询]
-         * @param  {[type]} ev [description]
-         * @return {[type]}    [description]
-         */
-        handleIconClick(ev) {
-            this.getDatas();
-        },
-        // 设置table间隔行的background-color
-        tableRowClassName(row, index) {
-            if ((index % 2) == 0) {
-                return 'info-row';
-            } else {
-                return 'positive-row';
+                });
+            },
+            pageChanged(page) {
+                this.page = page;
+                this.getDatas();
+            },
+            pageSizeChanged(pageSize) {
+                console.log('pageSize: ', pageSize);
+            },
+            /**
+             * [handleDatas 处理项目列表数据]
+             * @param  {[type]} data [description]
+             * @return {[type]}      [description]
+             */
+            handleDatas(data = []) {
+                data.forEach(item => {
+                    item.project = item.projectName;
+                    item.mananger = item.createUserId;
+                    item.industry = item.industryId;
+                    item.sort = item.projectTypeId;
+                    item.stage = item.projectStageId;
+                });
+                return data;
+            },
+            /**
+             * [handleIconClick 列表模糊查询]
+             * @param  {[type]} ev [description]
+             * @return {[type]}    [description]
+             */
+            handleIconClick(ev) {
+                this.getDatas();
+            },
+            // 设置table间隔行的background-color
+            tableRowClassName(row, index) {
+                if ((index % 2) == 0) {
+                    return 'info-row';
+                } else {
+                    return 'positive-row';
+                }
+                return '';
+            },
+            ShowPreMessage(title, ind) {
+                this.index = ind;
+                this.addTab('投前' + title.project + '详情页', '/home/preProjectMessage/' + ind, 'preProjectMessage/' + ind);
+                this.$router.push({name: 'preProjectMessage', params: {userId: title.id}});
+            },
+            addTab(th, url, name) {
+                this.$store.commit({type: 'addTab', title: th, url: url, name: name});
+            },
+            deleteRow(index = 0, rows = []) {
+                let row = rows[index];
+                console.log('row: ', JSON.stringify(row));
+                // rows.splice(index, 1);
+            },
+            /**
+             * [changeActive 搜索查询]
+             * @param  {[type]} index [description]
+             * @param  {[type]} ind   [description]
+             * @return {[type]}       [description]
+             */
+            changeActive(index, ind) {
+                let data = [];
+                let currentData;
+                let object;
+                if (ind == 1) { // 项目阶段
+                    data = this.stageList;
+                    currentData = data[index];
+                    object = currentData.stages;
+                    this.stageId = object;
+                    this.currentIndex1 = index;
+                } else {        // 项目类型
+                    data = this.sortList;
+                    currentData = data[index];
+                    object = currentData.sorts;
+                    this.projectType = object;
+                    this.currentIndex2 = index;
+                }
+                this.getDatas();
             }
-            return '';
-        },
-        ShowPreMessage(title, ind) {
-            this.index = ind;
-            this.addTab('投前' + title.project + '详情页', '/home/preProjectMessage/' + ind, 'preProjectMessage/' + ind);
-            this.$router.push({ name: 'preProjectMessage', params: { userId: title.id } });
-        },
-        addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
-        },
-        deleteRow(index = 0, rows = []) {
-            let row = rows[index];
-            console.log('row: ', JSON.stringify(row));
-            // rows.splice(index, 1);
-        },
-        /**
-         * [changeActive 搜索查询]
-         * @param  {[type]} index [description]
-         * @param  {[type]} ind   [description]
-         * @return {[type]}       [description]
-         */
-        changeActive(index, ind) {
-            let data = [];
-            let currentData;
-            let object;
-            if (ind == 1) { // 项目阶段
-                data = this.stageList;
-                currentData = data[index];
-                object = currentData.stages;
-                this.stageId = object;
-                this.currentIndex1 = index;
-            } else {        // 项目类型
-                data = this.sortList;
-                currentData = data[index];
-                object = currentData.sorts;
-                this.projectType = object;
-                this.currentIndex2 = index;
-            }
-            this.getDatas();
         }
     },
     components: {
