@@ -1,21 +1,10 @@
 <template>
     <div class="fundLibrary">
 
-<!--<<<<<<< HEAD-->
-    <!--<div class="fundLibrary">-->
-
-        <!--<div class="title">-->
-            <!--<myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>-->
-            <!--<myFilter :chooseInfo="chooseInfo2" @postID="changelist"></myFilter>-->
-            <!--<myFilter :chooseInfo="chooseInfo3" @postID="changelist"></myFilter>-->
-
-<!--=======-->
         <div class="title">
-            <myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>
-            <myFilter :chooseInfo="chooseInfo2" @postID="changelist"></myFilter>
-            <myFilter :chooseInfo="chooseInfo3" @postID="changelist"></myFilter>
-
-<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
+            <myFilter :chooseInfo="chooseInfo" @getIdInfo="changeList"></myFilter>
+            <myFilter :chooseInfo="chooseInfo2" @getIdInfo="changeList2"></myFilter>
+            <myFilter :chooseInfo="chooseInfo3" @getIdInfo="changeList3"></myFilter>
             <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
                 <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
                 </el-input>
@@ -23,7 +12,6 @@
         </div>
         <el-table :data="myFund" border style="width: 100%">
             <el-table-column fixed prop="fundName" label="基金名称" width="150" align="center">
-<!--<<<<<<< HEAD-->
                 <template scope = "scope">
                     <a @click="JumpOther(scope.row)">{{scope.row.fundName}}</a>
                 </template>
@@ -63,13 +51,16 @@
     import {getjieduan} from 'api/search'
     import myFilter from 'components/myFilter'
     import tableHeader from 'components/tabelHeader'
-    import {mapMutations} from 'vuex'
+    import {mapMutations, mapGetters} from 'vuex'
     export default {
         data() {
             return {
                 theme: '#fff',
                 myFund: [],
                 input: '',
+                chooseId:null,
+                chooseId2:null,
+                chooseId3:null,
                 chooseInfo: {
                     title: '组织类型：',
                     details: [{
@@ -92,70 +83,11 @@
         },
         methods: {
             handleIconClick() {
-                getFundLibrary(this.input).then((res) => {
-                    console.log(res.data)
-                    this.myFund = res.data.result.list
-                })
-
-//<!--=======-->
-//                <!--<template scope="scope">-->
-//                    <!--<a @click="JumpOther(scope.row)">{{scope.row.fundName}}</a>-->
-//                <!--</template>-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="fundNo" label="基金编号" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="orgTypeId" label="组织类型" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="manageTypeId" label="管理类型" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="fundScale" label="基金规模（元）" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="placementSum" label="募集总额（元）" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="investSum" label="投资总额（元）" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="surplusLimit" label="剩余额度（元）" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="createDate" label="成立日期" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column prop="fundStageId" label="状态" width="300" align="center">-->
-//            <!--</el-table-column>-->
-//            <!--<el-table-column fixed="right" label="操作" width="200" align="center">-->
-//                <!--<template scope="scope">-->
-//                    <!--<el-button @click="handleClick" type="text" size="small">查看</el-button>-->
-//                    <!--&lt;!&ndash;<el-button type="text" size="small">编辑</el-button>&ndash;&gt;-->
-//                <!--</template>-->
-//            <!--</el-table-column>-->
-//        <!--</el-table>-->
-//        <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">-->
-//        <!--</el-pagination>-->
-//    <!--</div>-->
-//<!--</template>-->
-//
-//<!--<script type="text/ecmascript-6">-->
-//<!--import { getFundLibrary } from 'api/search'-->
-//<!--import { getSelectIndex } from 'api/search'-->
-//<!--import { getjieduan } from 'api/search'-->
-//<!--import myFilter from 'components/myFilter'-->
-//<!--import tableHeader from 'components/tabelHeader'-->
-//<!--export default {-->
-//    <!--data() {-->
-//        <!--return {-->
-//            <!--theme: '#fff',-->
-//            <!--myFund: [],-->
-//            <!--input: '',-->
-//            <!--chooseInfo: {-->
-//                <!--title: '组织类型：',-->
-//                <!--details: [{-->
-//                    <!--"dicName": '2'-->
-//                <!--}]-->
-//            <!--},-->
-//            <!--chooseInfo2: {-->
-//                <!--title: '管理类型：',-->
-//                <!--details: [{-->
-//                    <!--"dicName": '2'-->
-//                <!--}]-->
-//<!--//>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
+//                getFundLibrary(this.input).then((res) => {
+//                    console.log(res.data)
+//                    this.myFund = res.data.result.list
+//                })
+                this.updataList()
             },
             JumpOther(row){
                 this.addTab({
@@ -166,6 +98,33 @@
                 })
 
                 this.$router.push('/home/fundDetails/:' + row.id)
+            },
+            changeList(index,id){
+                this.chooseId = id
+                if(id == 0){
+                    this.chooseId = null
+                }
+                this.updataList()
+            },
+            changeList2(index,id){
+                this.chooseId2 = id
+                if(id == 0){
+                    this.chooseId2 = null
+                }
+                this.updataList()
+            },
+            changeList3(index,id){
+                this.chooseId3 = id
+                if(id == 0){
+                    this.chooseId3 = null
+                }
+                this.updataList()
+            },
+            updataList(){
+                getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input).then((res) => {
+                    console.log(res.data)
+                    this.myFund = res.data.result.list
+                })
             },
             ...mapMutations([
                 'addTab'
@@ -187,10 +146,15 @@
                 this.chooseInfo3.details = res.data.result
             })
 
-            getFundLibrary().then((res) => {
+            getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input).then((res) => {
                 console.log(res.data)
                 this.myFund = res.data.result.list
             })
+        },
+        computed:{
+            ...mapGetters([
+                'getProStatus'
+            ])
         }
     }
 </script>

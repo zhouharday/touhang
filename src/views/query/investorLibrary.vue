@@ -1,7 +1,7 @@
 <template>
 <div class="investorLibrary">
     <div class="investorFilter">
-        <myFilter :chooseInfo="filterInfo" @postID="changelist"></myFilter>
+        <myFilter :chooseInfo="filterInfo" @getIdInfo="changeList"></myFilter>
     </div>
     <div class="header">
         <tableHeader :theme="theme" :data="titleHeader" class="addPadding">
@@ -21,29 +21,6 @@
         </el-table-column>
         <el-table-column prop="sumPaidAmount" label="累计投资额" align="center">
         </el-table-column>
-        <!--<el-table-column label="操作">-->
-            <!--<template scope="scope">-->
-                <!--<el-button-->
-                  <!--@click.native.prevent="deleteRow(scope.$index, investorData)"-->
-                  <!--type="text"-->
-                  <!--size="small">-->
-                  <!--签约-->
-                <!--</el-button>-->
-                <!--<el-button-->
-                    <!--@click="handleDelete(scope.$index, scope.row)"-->
-
-                  <!--type="text"-->
-                  <!--size="small">-->
-                  <!--删除-->
-                <!--</el-button>-->
-                <!--<el-button-->
-                  <!--@click.native.prevent="deleteRow(scope.$index, investorData)"-->
-                  <!--type="text"-->
-                  <!--size="small">-->
-                  <!--拜访-->
-                <!--</el-button>-->
-            <!--</template>-->
-        <!--</el-table-column>-->
     </el-table>
     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
     </el-pagination>
@@ -55,7 +32,7 @@ import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'
 import {getInvestorList} from 'api/search'
 import {getSelectIndex} from 'api/search'
-import {mapMutations} from 'vuex'
+import {mapMutations,mapGetters} from 'vuex'
 export default {
     data() {
         return {
@@ -74,6 +51,7 @@ export default {
             theme: '#fff',
             investorData: [],
             input2:'',
+            type:null
         }
     },
     components: {
@@ -104,8 +82,11 @@ export default {
             console.log(index, row);
         },
 
-        changelist(el){
-            this.type = el
+        changeList(index,id){
+            this.type = id
+            if(id == 0 ){
+                this.type = null;
+            }
             getInvestorList(this.input2,this.type).then((res)=>{
 //            console.log(res.data)
                 this.investorData = res.data.result.list
@@ -117,7 +98,6 @@ export default {
     },
     created(){
         getInvestorList().then((res)=>{
-//            console.log(res.data)
                 this.investorData = res.data.result.list
         })
         getSelectIndex('402').then((res)=>{
@@ -126,8 +106,11 @@ export default {
             this.filterInfo.details = res.data.result
 
         })
-
-
+    },
+    computed:{
+        ...mapGetters([
+            'getProStatus'
+        ])
     }
 }
 </script>

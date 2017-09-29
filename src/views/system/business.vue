@@ -3,14 +3,14 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button type="danger" size="small" @click="roleDialog=true">添加</el-button>
+                    <el-button size="small" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%">
-                    <el-table-column prop="role" label="角色名称" align="center">
+                    <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.role}}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.role" placeholder=""></el-input>
+                            <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">{{ scope.row.roleName}}</span>
+                            <span v-if="scope.row.editFlag">
+                                <el-input v-model="scope.row.roleName" placeholder=""></el-input>
                             </span>
                         </template>
                     </el-table-column>
@@ -20,7 +20,7 @@
                             </el-button>
                             <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
                             </el-button>
-                            <el-button type="text" size="small" @click="deleteReminders=true">删除</el-button>
+                            <!--<el-button type="text" size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>-->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -39,95 +39,39 @@
                     <el-col :span="18">
                         <div class="f_right">权限</div>
                     </el-col>
-                    <el-col :span="6">
-                        <div class="left">项目详情</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox>编辑</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left">项目文档</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="file in projectFiles" :label="file" :key="file">{{file}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="manage-rt">管理</div>
-                    </el-col>
-                    <el-col :span="18" class="manage-lt">
-                        <p v-for="item in manageList" :key="item.index" style="display:flex">
-                            <span style="margin: 0 15px 0 15px;font-size:14px">{{item}}</span>
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="risk in risks" :label="risk" :key="risk">{{risk}}</el-checkbox>
-                            </el-checkbox-group>
-                        </p>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left">风险管理</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="record in records" :label="record" :key="record">{{record}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left">记录</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="record in records" :label="record" :key="record">{{record}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left">重大事项</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="event in events" :label="event" :key="event">{{event}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left">数据填报</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="data in datas" :label="data" :key="data">{{data}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left" style="border-bottom:1px solid #dfe6ec;">监控设置</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right" style="border-bottom:1px solid #dfe6ec;">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="monitor in monitors" :label="monitor" :key="monitor">{{monitor}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
+
+                    <div v-for="item in allData">
+                        <el-col :span="6">
+                            <div class="left">{{item.permissionName}}</div>
+                        </el-col>
+                        <el-col :span="18">
+                            <div class="right">
+                                <div v-if="item.falseId == 4">
+                                    <div v-for="nextItem in item.children">
+                                        <div >{{nextItem.permissionName}}</div>
+                                        <div class="right">
+                                            <!--<el-checkbox-group v-model="nextItem.menuContentClick" @change="handleCheckedCitiesChange">-->
+                                            <!--<el-checkbox v-for="(text, index) of nextItem.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>-->
+                                            <!--</el-checkbox-group>-->
+                                            <el-checkbox-group v-model="checkList">
+                                                <el-checkbox label="复选框 A"></el-checkbox>
+                                                <el-checkbox label="复选框 B"></el-checkbox>
+                                                <el-checkbox label="复选框 C"></el-checkbox>
+                                                <el-checkbox label="禁用" disabled></el-checkbox>
+                                                <el-checkbox label="选中且禁用" disabled></el-checkbox>
+                                            </el-checkbox-group>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="item.falseId != 4">
+                                <el-checkbox-group v-model="item.menuContentClick" @change="handleCheckedCitiesChange">
+                                    <el-checkbox v-for="(text, index) of item.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                </el-checkbox-group>
+                                </div>
+
+                            </div>
+                        </el-col>
+                    </div>
                 </el-row>
             </el-col>
         </el-row>
@@ -135,7 +79,7 @@
         <el-dialog title="添加角色名称" :visible.sync="roleDialog">
             <el-form :model="roleForm">
                 <el-form-item label="角色名称" prop="role" label-width="80px">
-                    <el-input v-model="roleForm.role" auto-complete="off"></el-input>
+                    <el-input v-model="roleForm.roleName" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -151,6 +95,15 @@
 
 <script type="text/ecmascript-6">
 import deleteReminders from 'components/deleteReminders'
+import {queryList} from 'api/system'
+import {reloadQueryData} from 'api/system'
+import {projectRoleEdit} from 'api/system'
+import {projectRoleSave} from 'api/system'
+import {deleteUser} from 'api/system'
+import {permissionlistByRoleId} from 'api/system'
+import {permissionqueryList} from 'api/system'
+import {getNodesssss} from 'api/system'
+
 export default {
     data() {
         return {
@@ -173,37 +126,79 @@ export default {
                 }
             ],
             roleForm: {
-                role: '',
+                roleName: '',
                 editFlag: false
             },
-            manageList: ['项目费用', '投资支付', '项目分红', '项目退出'],
-            projectFiles: ['上传', '下载', '预览', '编辑', '删除'],
-            risks: ['添加', '编辑', '浏览', '删除'],
-            records: ['添加', '编辑', '浏览', '删除'],
-            events: ['添加', '编辑', '浏览', '删除'],
-            datas: ['添加', '编辑', '浏览', '删除', '上传', '模板下载'],
-            monitors: ['添加', '编辑', '浏览', '删除']
+            deletData:'',
+            allData:[],
         }
     },
     methods: {
         // 添加角色 的方法
         addRole() {
-            this.roleData.push(this.roleForm);
-            this.roleForm = {};
-            this.roleDialog = false;
+            projectRoleSave(0,this.roleForm.roleName).then((res)=>{
+                queryList(0).then((res)=>{
+                    this.roleData = reloadQueryData(res.data.result)
+                    this.roleDialog = false;
+                })
+            })
         },
-        checkEdit(index, row) { //编辑
-            // console.log(row)
+        //编辑
+        checkEdit(index, row) {
+            console.log(row)
             row.editFlag = !row.editFlag;
+            if (!row.editFlag) {
+                projectRoleEdit(row.id, row.roleName).then((res) => {
+                    queryList(0).then((res)=>{
+                        this.roleData = reloadQueryData(res.data.result)
+                    })
+                })
+            }
         },
+
+        /*
+        //删除当
+        handleDelete(index, rows) {
+            console.log(rows)
+            this.deleteData = ''
+            this.deleteData = rows
+            this.deleteReminders = !this.deleteReminders;
+
+        },
+        //确认删除
         confirmDel() {
             this.deleteReminders = !this.deleteReminders;
+//            console.log(this.deleteData.id)
+            deleteUser(this.deleteData.id).then((res)=>{
+//                console.log(res)
+                queryList(0).then((res)=>{
+                    this.roleData = reloadQueryData(res.data.result)
+                })
+            })
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        */
+
+
+        handleRole(index,row){
+            console.log(row.id)
+            permissionlistByRoleId(row.id).then((res)=>{
+                console.log(res.data)
+            })
         }
     },
+    created(){
+//        获取角色列表
+        queryList(0).then((res)=>{
+            this.roleData = reloadQueryData(res.data.result)
+        })
+        //获取所有权限
+        permissionqueryList(0).then((res)=>{
+
+//            console.log(getNodesssss(res.data.result))
+            this.allData = getNodesssss(res.data.result)
+        })
+    }
+    ,
     components: {
         deleteReminders
     },
@@ -229,6 +224,7 @@ export default {
         justify-content: flex-end;
     }
     .left {
+        /*min-height: ;*/
         height: 40px;
         line-height: 40px;
         border: 1px solid #dfe6ec;
@@ -247,7 +243,9 @@ export default {
     }
     .right {
         display: flex;
-        height: 40px;
+        /*height: 40px;*/
+        min-height: 40px;
+        /*padding: 5px 0;*/
         line-height: 40px;
         padding-left: 10px;
         border: 1px solid #dfe6ec;

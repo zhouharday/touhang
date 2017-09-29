@@ -44,6 +44,10 @@ export default {
     },
     methods: {
         changeList(index, id) {
+//            console.log(id)
+            if (id == 0){
+                id = null
+            }
             this.currentIndex = index
             this.$emit('getIdInfo', index, id)
         }
@@ -96,7 +100,7 @@ export default {
                         border-radius: 15px;
                         padding: 0;
                     }
-                    
+
                 }
             }
         }

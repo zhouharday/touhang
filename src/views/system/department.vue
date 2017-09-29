@@ -1,27 +1,11 @@
 <template>
 <div class="department">
-<!--<<<<<<< HEAD-->
-
-<!--=======-->
-<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
     <div class="title">
         <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
         </el-button>
     </div>
-<!--<<<<<<< HEAD-->
-
-<!--=======-->
-<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
-    <!-- 折叠表单 -->
-    <!-- 这部分内容需要询问产品 -->
-    <!-- <el-collapse v-model="activeName" accordion>
-        <el-collapse-item title="一致性 Consistency" name="1">
-            <div>与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；</div>
-            <div>在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。</div>
-        </el-collapse-item>
-    </el-collapse> -->
     <div class="table_wrapper">
         <el-table :data="currentData" style="width: 100%">
             <el-table-column type="expand">

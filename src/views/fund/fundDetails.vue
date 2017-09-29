@@ -95,8 +95,6 @@ import File from './file'
 import Manage from './manage'
 import echarts from '../../components/echarts'
 import deleteReminders from 'components/deleteReminders'
-
-
 import {
     getMyFundDetails,
     getFundTeamList,
@@ -104,7 +102,8 @@ import {
     getProjectContractByFund,
     selectProjectOrFundDocument,
     getFunAppraisement,
-    getFundFeeList
+    getFundFeeList,
+    getFundApprList
 } from 'api/fund'
 
 export default {
@@ -253,6 +252,15 @@ export default {
             }
         },
     },
+    mounted() {
+        this.$nextTick(() => {
+            getFundApprList(this.$route.params.id).then((res) => {
+                if(res.status == '200') {
+                    console.log(res)
+                }
+            })
+        })
+    },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
             if (res.status == '200') {
@@ -263,9 +271,12 @@ export default {
             if (res.status == '200') {
                 this.formDetails = res.data.result.fundBaseInfo
                 this.formMIS = res.data.result.fundManageInfo
-                this.formRegistration = res.data.result.fundRegistration
                 this.formAccountInfo = res.data.result.fundAccinfo
-                console.log(this.formDetails)
+                if (res.data.result.fundRegistration == null) {
+                    return
+                } else {
+                    this.formRegistration = res.data.result.fundRegistration
+                }
             }
         })
     },
@@ -506,14 +517,9 @@ export default {
             }
         }
     }
-
-    .chart {
-        width: 100%;
-        padding-bottom: 52px;
-    }
-
     .tabs {
         width: 100%;
+        padding-top: -50px;
         padding-bottom: 54px;
         .el-tabs__nav {
             width: 100%!important;
