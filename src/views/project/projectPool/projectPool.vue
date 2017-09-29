@@ -79,10 +79,10 @@
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                                <template scope="scope">
-                                    <div class="fow">{{ scope.row.manager }}</div>
-                                </template>
-                            </el-table-column> -->
+                                    <template scope="scope">
+                                        <div class="fow">{{ scope.row.manager }}</div>
+                                    </template>
+                                </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.datetime }}</div>
@@ -110,12 +110,12 @@
             </el-col>
         </el-row>
         <!--<el-row>-->
-            <!--<el-col>-->
-                <!--<div style="float:right;margin:10px;padding-right:30px;overflow:hidden">-->
-                    <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
-                    <!--</el-pagination>-->
-                <!--</div>-->
-            <!--</el-col>-->
+        <!--<el-col>-->
+        <!--<div style="float:right;margin:10px;padding-right:30px;overflow:hidden">-->
+        <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
+        <!--</el-pagination>-->
+        <!--</div>-->
+        <!--</el-col>-->
         <!--</el-row>-->
         <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
@@ -381,11 +381,11 @@ export default {
         position: relative;
     }
 
-    .collapseBtn {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
+    // .collapseBtn {
+    //     position: absolute;
+    //     right: 0;
+    //     top: 0;
+    // }
 
     .tag {
         margin-top: 20px;
@@ -415,6 +415,9 @@ export default {
         border: none;
         outline: none;
         background: #fff;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 
     .uptriangle {
