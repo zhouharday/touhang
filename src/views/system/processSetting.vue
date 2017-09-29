@@ -7,13 +7,13 @@
                         <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick"
                                   style="width:450px">
                         </el-input>
-                        <el-button type="text" class="commonBtn">+新建</el-button>
+                        <el-button type="text">+新建</el-button>
                     </div>
                     <div v-for="(item,index) in modelLists" :key="item.index">
                         <div class="modelBox">
                             <div class="model_top">
                                 <span>{{item.name}}</span>
-                                <el-button type="text" class="commonBtn">-删除</el-button>
+                                <el-button type="text">-删除</el-button>
                             </div>
                             <div>
                                 <p>Key：{{item.key}}</p>
@@ -45,7 +45,7 @@
                             </el-col>
                             <el-col :span="2" class="addProject">
                                 <div @click="addProject">
-                                    <el-button type="text" size="small"  @click="roleDialog=true">新建</el-button>
+                                    <el-button type="text" size="small" @click="roleDialog=true">新建</el-button>
                                 </div>
                             </el-col>
                         </el-row>
@@ -69,10 +69,16 @@
                                 </el-table-column>
                                 <el-table-column label="操作" min-width="100" align="center">
                                     <template scope="scope">
-                                            <el-button type="text" size="small" v-if="!scope.row.editFlag" @click="checkEdit(scope.$index,scope.row)">编辑</el-button>
-                                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存</el-button>
-                                            <el-button type="text" size="small">预览</el-button>
-                                            <el-button type="text" size="small"  @click="handleDelete(scope.$index,surfaceData)">删除</el-button>
+                                        <el-button type="text" size="small" v-if="!scope.row.editFlag"
+                                                   @click="checkEdit(scope.$index,scope.row)">编辑
+                                        </el-button>
+                                        <el-button v-if="scope.row.editFlag" type="text" size="small"
+                                                   @click="checkEdit(scope.$index,scope.row)">保存
+                                        </el-button>
+                                        <el-button type="text" size="small">预览</el-button>
+                                        <el-button type="text" size="small"
+                                                   @click="handleDelete(scope.$index,surfaceData)">删除
+                                        </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -106,7 +112,37 @@
             </el-tab-pane>
             <el-tab-pane label="阶段配置" name="third">
                 <div class="phaseConfigure">
-                    阶段配置
+                    <el-row :gutter="30">
+                        <el-col :span="6" style="border-right:1px solid #ddd;padding:0;">
+                            <div v-for="item in leftLists" :key="item.index">
+                                <div class="menu_title">
+                                    <div>{{item.title}}</div>
+                                </div>
+                                <div class="menu_box">
+                                    <div class="menu_list" v-for="(detailsitem,index) in item.data"
+                                         :key="detailsitem.index" @click="refreshList(item,detailsitem)">
+                                        {{detailsitem.stageName}}
+                                    </div>
+                                </div>
+                            </div>
+                        </el-col>
+                        <el-col :span="18">
+                            <tabel-header :data="headerInfo_process" @add="editProcess"></tabel-header>
+                            <div v-show="isShow" style="padding-left:30px;height:65px;line-height:65px;">
+                                <b>模型选择：</b>
+                                <el-select v-model="option" placeholder="请选择流程模型" style="width:60%">
+                                    <el-option v-for="item in processOptions" :key="item.value" :label="item.label"
+                                               :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </div>
+                            <div class="processItem" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}"
+                                 v-for="(item,index) in processLists" :key="item.index">
+                                <p>{{item.processName}}</p>
+                                <el-button type="text" v-show="isShow">删除</el-button>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="审批配置" name="fourth">
@@ -119,11 +155,15 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import tabelHeader from 'components/tabelHeader'
+    import deleteReminders from 'components/deleteReminders'
     export default {
         data() {
             return {
                 activeName: 'first',
                 input: '',
+                option: '',
+                isShow: false,
                 roleDialog: false,
                 modelLists: [
                     {
@@ -169,11 +209,60 @@
                         role: '基金成员',
                         editFlag: false
                     }
+                ],
+                leftLists: [
+                    {
+                        title: '项目阶段',
+                        data: [
+                            {stageName: '考察储备'},
+                            {stageName: '立项会'},
+                            {stageName: '尽职调查'},
+                            {stageName: '投决会'},
+                            {stageName: '管理'},
+                            {stageName: '项目退出'},
+                        ]
+                    },
+                    {
+                        title: '基金阶段',
+                        data: [
+                            {stageName: '基金设立'},
+                            {stageName: '运营管理'},
+                            {stageName: '基金退出'}
+                        ]
+                    }
+                ],
+                headerInfo_process: { //阶段表头
+                    desc: '基本信息',
+                    btnGroup: [{
+                        icon: 'edit',
+                        explain: '编辑'
+                    }],
+                },
+                processOptions: [ //流程选择下拉框
+                    {
+                        value: '选项一',
+                        label: 'XXXXX流程一'
+                    }, {
+                        value: '选项二',
+                        label: 'XXXXX流程二'
+                    }
+                ],
+                processLists: [ //流程选项列表
+                    {
+                        processName: 'XXXXX流程',
+                    },
+                    {
+                        processName: 'XXXXX流程',
+                    },
+                    {
+                        processName: 'XXXXX流程',
+                    }, {
+                        processName: 'XXXXX流程',
+                    }
                 ]
-
             }
         },
-        methods:{
+        methods: {
             // 新建 的方法
             addRole() {
                 this.roleData.push(this.roleForm);
@@ -188,38 +277,24 @@
             handleDelete(index, rows) {
                 rows.splice(index, 1);
             },
-//            open() {
-//                const h = this.$createElement;
-//                this.$msgbox({
-//                    title: '表格模型',
-//                    message: h('p', null, [
-//                        h('span', null, '内容可以是 '),
-//                        h('i', { style: 'color: teal' }, 'VNode')
-//                    ]),
-//                    showCancelButton: true,
-//                    confirmButtonText: '确定',
-//                    cancelButtonText: '取消',
-//                    beforeClose: (action, instance, done) => {
-//                        if (action === 'confirm') {
-//                            instance.confirmButtonLoading = true;
-//                            instance.confirmButtonText = '执行中...';
-//                            setTimeout(() => {
-//                                done();
-//                                setTimeout(() => {
-//                                    instance.confirmButtonLoading = false;
-//                                }, 300);
-//                            }, 3000);
-//                        } else {
-//                            done();
-//                        }
-//                    }
-//                }).then(action => {
-//                    this.$message({
-//                        type: 'info',
-//                        message: 'action: ' + action
-//                    });
-//                });
-//            }
+            refreshList(item, detailsitem) {
+                this.headerInfo_process.desc = item.title + '-' + detailsitem.stageName;
+            },
+            editProcess() { //表头编辑方法
+                if (this.isShow) {
+                    this.isShow = !this.isShow;
+                    this.headerInfo_process.btnGroup[0].icon = 'edit',
+                        this.headerInfo_process.btnGroup[0].explain = '编辑'
+                } else {
+                    this.isShow = !this.isShow;
+                    this.headerInfo_process.btnGroup[0].icon = 'checkmark',
+                        this.headerInfo_process.btnGroup[0].explain = '保存'
+                }
+            }
+        },
+        components: {
+            tabelHeader,
+            deleteReminders
         }
     }
 </script>
@@ -227,7 +302,6 @@
 <style lang="less" scoped>
     @import "../../common/styles/variable.less";
     @import '../../common/styles/mixin.less';
-
     .processSetting {
         width: 100%;
         min-height: 100%;
@@ -251,6 +325,7 @@
                     border-bottom: 1px solid #f05e5e;
                 }
             }
+        }
             .modelBox {
                 width: 100%;
                 font-weight: 700;
@@ -263,38 +338,108 @@
                 .model_top {
                     display: flex;
                     justify-content: space-between;
-                    align-items: center;
-                    border-bottom: 1px solid #fff;
-                    > span {
-                        font-size: 16px;
-                        cursor: pointer;
+                    padding: 20px 25px;
+                    margin-bottom: 25px;
+                    background: #eef0f4;
+                }
+                .commonBtn {
+                    color: #f05e5e;
+                    span {
+                        border-bottom: 1px solid #f05e5e;
                     }
                 }
-                .model_bottom {
-                    display: flex;
-                    > p {
-                        flex: 1;
+                .modelBox {
+                    width: 100%;
+                    font-weight: 700;
+                    padding: 15px 25px;
+                    margin-bottom: 30px;
+                    background: #eef0f4;
+                    > div {
+                        margin-bottom: 20px;
+                    }
+                    .model_top {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid #fff;
+                        > span {
+                            font-size: 16px;
+                            cursor: pointer;
+                        }
+                    }
+                    .model_bottom {
+                        display: flex;
+                        > p {
+                            flex: 1;
+                        }
                     }
                 }
+                // .page {
+                //     width: 100%;
+                //     padding: 15px 30px;
+                //     text-align: right;
+                // }
             }
-            // .page {
-            //     width: 100%;
-            //     padding: 15px 30px;
-            //     text-align: right;
-            // }
-        }
-        .formModel {
-            .searchHeader {
-                height: 30px;
-                margin-bottom: 20px;
-            }
-            .search-box {
-                height: 30px;
-            }
-            .addProject {
-                float: right;
+            .formModel {
+                .searchHeader {
+                    height: 30px;
+                    margin-bottom: 20px;
+                }
+                .search-box {
+                    height: 30px;
+                }
+                .addProject {
+                    float: right;
+                }
             }
         }
 
+
+    // 阶段配置
+    .phaseConfigure {
+        width: 100%;
+        .menu_title {
+            height: 40px;
+            line-height: 40px;
+            padding-left: 20px;
+            background: #2A3142;
+            > div {
+                padding-left: 10px;
+                font-size: 16px;
+                background: #dfe6ec;
+            }
+        }
+        .menu_box {
+            padding: 10px 10px 10px 25px;
+            font-size: 14px;
+            .menu_list {
+                height: 30px;
+                line-height: 30px;
+                margin-bottom: 5px;
+                &:hover {
+                    background: #dfe6ec;
+                }
+            }
+        }
+        .processItem {
+            height: 50px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .commonBtn {
+            color: #f05e5e;
+            span {
+                border-bottom: 1px solid #f05e5e;
+            }
+        }
+        .bgh {
+            background: #fff;
+        }
+
+        .bgl {
+            background: #EEF0F4;
+        }
     }
 </style>
