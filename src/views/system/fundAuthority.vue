@@ -73,23 +73,14 @@
                             </div>
                         </el-col>
                     </div>
-
-
-
-
                 </el-row>
             </el-col>
         </el-row>
         <!-- 添加  角色名称 对话框-->
         <el-dialog title="添加角色名称" :visible.sync="roleDialog">
             <el-form :model="roleForm">
-<<<<<<< HEAD
-                <el-form-item label="表格名称" prop="role" label-width="80px">
-                    <el-input v-model="roleForm.role" auto-complete="off"></el-input>
-=======
                 <el-form-item label="角色名称" prop="role" label-width="80px">
                     <el-input v-model="roleForm.roleName" auto-complete="off"></el-input>
->>>>>>> 00dd7a8b30d67df3058cdfda9993486f437a9abe
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
