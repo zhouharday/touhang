@@ -7,7 +7,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.name"></el-input>
+                            <el-input v-model="scope.row.name" ></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -15,7 +15,7 @@
                     <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.nature }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.nature"></el-input>
+                            <el-input v-model="scope.row.nature" ></el-input>
                         </span>
                     </template>
 
@@ -30,11 +30,11 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">保存
                         </el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,memberData)">删除</el-button>
+                        <el-button type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -63,7 +63,7 @@
             <el-table :data="structureData" border style="width: 100%">
                 <el-table-column label="股东姓名" prop="stockholderName" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.stockholderName }}</span>
+                        <span v-if="!scope.row.editFlag ">{{ scope.row.stockholderName }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-input v-model="scope.row.stockholderName"></el-input>
                         </span>
@@ -103,11 +103,11 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">保存
                         </el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,structureData)">删除</el-button>
+                        <el-button type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -142,7 +142,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
-import { addOwer, addGu, owers, gus } from 'api/projectPre';
+import { addOwer, delOwer, addGu, delGu, owers, gus } from 'api/projectPre';
 
 export default {
     computed: mapGetters({
@@ -234,34 +234,32 @@ export default {
     },
     methods: {
         init() {
-            console.log("init");
             this.initInfo();
             this.getMembers();
             this.getStructures();
         },
         initInfo() {
-            console.log("initInfo");
             let projectData = this.projectData;
-            console.log('tables projectData: ', JSON.stringify(this.projectData));
             this.enterpriseInfo = projectData.enterpriseInfo || {};
             this.memberData = projectData.listBoardMember || [];
             this.structureData = projectData.listOwnershipStructure || [];
         },
         changeOwer(ower) {
-
-            console.log("changeOwer");
         },
         // TODO: 获取董事会列表
         getMembers() {
             this.memberData = this.projectData.listBoardMember || [];
+            // this.memberData.forEach(function(item, index) {
+            //    item.editFlag = false;
+            // });
         },
         //添加 董事会成员的方法
         addMember() {
             let new_memberForm = {
                 name: '',
                 property: '',
-                edu: '',
-                editFlag: false
+                edu: ''
+                //,editFlag: false
             };
             this.memberForm = new_memberForm;
             this.modalAdd1 = !this.modalAdd1;
@@ -269,17 +267,19 @@ export default {
         confirmAdd1(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    // addOwer
                     let memberForm = this.memberForm;
+                    let projectId = this.projectData.projectInfo.id;
                     addOwer({
+                        id:'',
+                        projectId:projectId,
                         enterpriseId: this.enterpriseInfo.id,
                         name: memberForm.name,
                         nature: memberForm.property,
                         educationalBg: memberForm.edu
                     }).then(resp => {
-                        console.log('add ower resp: ', resp);
-                        this.memberData.push(memberForm);
-
+                        let result = resp.data.result;
+                        result.editFlag = false;
+                        this.memberData.push(result);
                         this.modalAdd1 = !this.modalAdd1;
                     }).catch(e => {
                         console.log('addOwer exists error: ', e);
@@ -290,9 +290,21 @@ export default {
 
             });
         },
+        //删除董事会成员
+        handleDeleteMember(index, rows) {
+            delOwer(rows[index].id).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    rows.splice(index, 1);
+                }
+            });
+        },
         // TODO: 获取股权列表
         getStructures() {
             this.structureData = this.projectData.listOwnershipStructure || [];
+            // this.structureData.forEach(function(item) {
+            //    item.editFlag = false;
+            // });
         },
         //添加 股权结构的方法
         addStructure() {
@@ -301,8 +313,8 @@ export default {
                 property: '',
                 capital: '',
                 num: '',
-                percent: '',
-                editFlag: false
+                percent: ''
+                //,editFlag: false
             };
             this.structureForm = new_structureForm;
             this.modalAdd2 = !this.modalAdd2;
@@ -311,15 +323,20 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let structureForm = this.structureForm;
+                    let projectId = this.projectData.projectInfo.id;
                     addGu({
+                        id:'',
+                        projectId:projectId,
                         stockholderName: structureForm.name, //股东姓名: null
                         stockholderNature: structureForm.property,//股东性质: null
                         investmentAmount: structureForm.capital,//投资金额: null
                         stockCount: structureForm.num, //持股数量: null
                         stockRatio: structureForm.percent
+                        
                     }).then(resp => {
-                        console.log('addGu resp: ', resp);
-                        this.structureData.push(this.structureForm);
+                        let result = resp.data.result;
+                        result.editFlag = false;
+                        this.structureData.push(result);
                         this.modalAdd2 = !this.modalAdd2;
                     }).catch(e => {
                         console.log('addGu exists error: ', e);
@@ -329,13 +346,19 @@ export default {
                 }
             });
         },
-        checkEdit(index, row) { //编辑
-            // console.log(row)
+        checkEdit(row) { //编辑
             row.editFlag = !row.editFlag;
+            this.memberData.push();
+            this.structureData.push();
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        //删除股权结构
+        handleDeleteOwner(index, rows) {
+            delGu(rows[index].id).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    rows.splice(index, 1);
+                }
+            });
         }
     },
     components: {
