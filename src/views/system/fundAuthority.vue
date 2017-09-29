@@ -79,7 +79,7 @@
         <!-- 添加  角色名称 对话框-->
         <el-dialog title="添加角色名称" :visible.sync="roleDialog">
             <el-form :model="roleForm">
-                <el-form-item label="角色名称" prop="role" label-width="80px">
+                <el-form-item label="表格名称" prop="role" label-width="80px">
                     <el-input v-model="roleForm.role" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
