@@ -54,14 +54,14 @@
                             <tabel-header :data="headerInfo_process" @add="editProcess"></tabel-header>
                             <div v-show="isShow" style="padding-left:30px;height:65px;line-height:65px;">
                                 <b>模型选择：</b>
-                                <el-select v-model="option" placeholder="请选择流程模型" style="width:60%">
+                                <el-select v-model="option" placeholder="请选择流程模型"  style="width:60%">
                                     <el-option v-for="item in processOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </div>
                             <div class="processItem" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in processLists" :key="item.index">
                                 <p>{{item.processName}}</p>
-                                <el-button type="text" v-show="isShow">删除</el-button>
+                                <el-button type="text" v-show="isShow" @click="deleteReminders=true">删除</el-button>
                             </div>
                         </el-col>
                     </el-row>
@@ -73,11 +73,15 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
+        <!-- 删除弹出框 -->
+        <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="deleteReminders=false" @cancel="deleteReminders=false">
+        </delete-reminders>
     </section>
 </template>
 
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
+import deleteReminders from 'components/deleteReminders'
 export default {
     data() {
         return {
@@ -85,6 +89,9 @@ export default {
             input: '',
             option: '',
             isShow: false,
+            deleteReminders: false,
+            modal_loading: false,
+            message: '是否确认删除该流程？',
             modelLists: [ //流程模型数组
                 {
                     name: 'xxxx流程模型',
@@ -172,7 +179,8 @@ export default {
         }
     },
     components: {
-        tabelHeader
+        tabelHeader,
+        deleteReminders
     }
 }
 </script>

@@ -61,13 +61,13 @@
                                 <div>【{{item.projectText1}}】</div>
                                 <div>
                                     <span>{{item.projectText2}}</span>
-                                    <span @click="applyModal=true">{{item.projectText3}}</span>
+                                    <span @click="approvalModal=true">{{item.projectText3}}</span>
                                     <span>{{item.time}}</span>
                                 </div>
                             </div>
                             <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
                                 <div>
-                                    <img src="/static/img/cr_prject.png">
+                                    <img src="/static/img/sysPrompt.png">
                                     <span>{{item.craetProject1}}</span>
                                 </div>
                                 <div>【{{item.projectText2}}】</div>
@@ -91,7 +91,7 @@
                 <div class="grid-content bg-purple">
                     <div class="homeContentBot_r">
                         <div>
-                            <img src="/static/img/sysPrompt.png">
+                            <img src="/static/img/cr_prject.png">
                             <span>{{sysPrompt}}</span>
                         </div>
                         <div class="grid-content bg-purple">
@@ -112,9 +112,8 @@
             </el-col>
         </el-row>
 
-        <!-- 发起申请 对话框-->
-        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-
+        <!-- 立即申请 对话框-->
+        <!-- <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
                 <el-row>
                     <el-col>
@@ -141,7 +140,7 @@
                     <el-col>
                         <el-form-item label="考察报告" prop="appendix">
                             <!-- action 上传的地址，必填 -->
-                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                            <!-- <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                 <div style="padding: 20px 0">
                                     <Icon type="ios-cloud-upload" size="52"></Icon>
                                     <p>点击或将文件拖拽到这里上传</p>
@@ -162,10 +161,10 @@
             <div slot="footer" class="dialog-footer" style="text-align:center">
                 <el-button type="danger" @click="applyModal= false">提 交</el-button>
             </div>
-        </el-dialog>
-        <!-- 查看进度 对话框 -->
+        </el-dialog> -->
+        <!-- 立即查看 对话框 -->
         <div class="progressBox">
-            <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
+            <el-dialog title="立即查看" :visible.sync="progressModal" :close-on-click-modal="false">
                 <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
                 <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
                     <el-table-column prop="node" label="节点" align="center">
@@ -237,6 +236,80 @@
                             <span>{{item.note}}</span>
                         </p>
                     </div>
+                </div>
+            </el-dialog>
+        </div>
+        <!-- 立即审批  对话框 -->
+        <div class="progressBox">
+            <el-dialog title="立即审批" :visible.sync="approvalModal" :close-on-click-modal="false">
+                <div>
+                    <div class="title_f" style="background:#2a3142;color:#fff">
+                        <div class="desc">
+                            <span>申请详情</span>
+                        </div>
+                    </div>
+                    <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
+                        <el-row>
+                            <el-col>
+                                <el-form-item label="标题" prop="name">
+                                    <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="申请人" prop="person">
+                                    <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="申请日期" prop="date">
+                                    <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col>
+                                <el-form-item label="备注" prop="notes">
+                                    <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
+                                    <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="1">
+                                <div style="text-align:center;line-height:35px;">
+                                    <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
+                                </div>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </div>
+                <div>
+                    <div class="title_f" style="background:#2a3142;color:#fff">
+                        <div class="desc">
+                            <span>意见汇总</span>
+                        </div>
+                    </div>
+                    <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
+                        <p class="comment_left">
+                            <span>{{item.comment}}</span>
+                        </p>
+                        <p class="comment_right">
+                            <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
+                            <span>{{item.note}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="title_f" style="background:#2a3142;color:#fff;margin-bottom:15px">
+                    <div class="desc">
+                        <span>发表意见</span>
+                    </div>
+                </div>
+                <el-input type="textarea" v-model="commentMessage" :rows="4"></el-input>
+                <div slot="footer" class="dialog-footer" style="text-align:center">
+                    <el-button type="danger" @click="approvalModal= false">同  意</el-button>
+                     <el-button   @click="approvalModal= false">不同意</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -477,21 +550,23 @@ export default {
     data() {
         return {
             activeName: 'first',
-            applyModal: false,
+            // applyModal: false,
             progressModal: false,
+            approvalModal: false,
+            commentMessage: '',
             loading: false,
             monthDate: [],
             RecentNotice: "系统消息 / 公司公告",
-            waitSth: "待办事项",
-            sysPrompt: "系统提示",
+            waitSth: "小双提醒",
+            sysPrompt: "待办任务",
             sysMessage: true,
             sysMessageTitle: "暂时没有系统提示哦~",
             projectList: [
                 {
                     craetProject: "立项",
                     projectText1: "京东",
-                    projectText2: "您需要进行立项申请",
-                    projectText3: "立即申请",
+                    projectText2: "您有一条立项申请需要审批",
+                    projectText3: "立即审批",
                     time: "2017-08-16"
                 }
             ],
@@ -499,10 +574,10 @@ export default {
                 {
                     craetProject1: "管理+2",
                     projectText2: "一号店",
-                    projectText3: "1.您的xxx正在审批中。",
+                    projectText3: "1.您的xxx申请已完成。",
                     projectText4: "立即查看",
                     projectText5: "2.您的c轮出资正在审批中。",
-                    projectText6: "立即查看",
+                    projectText6: "立即审批",
                     time: "2017-08-16"
                 },
                 {
@@ -511,7 +586,7 @@ export default {
                     projectText3: "1.您的xxx正在审批中。",
                     projectText4: "立即查看",
                     projectText5: "2.您的c轮出资正在审批中。",
-                    projectText6: "立即查看",
+                    projectText6: "立即审批",
                     time: "2017-08-16"
                 }
             ],

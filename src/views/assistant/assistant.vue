@@ -149,9 +149,9 @@ export default {
             search: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
-            currentIndex1: 0,
-            currentIndex2: 0,
-            currentIndex3: 0,
+            currentIndex1: '',
+            currentIndex2: '',
+            currentIndex3: '',
             btnObject1: {
                 uptriangle: true,
                 downtriangle: false
