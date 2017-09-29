@@ -13,27 +13,14 @@
             <el-col :span="19" class="imdo">
                 <!-- 后期所做导入和下载模板功能 -->
                  <div class="importProject">
-<!--<<<<<<< HEAD-->
-                                       <!--<el-upload class="upload-demo" ref="upload"-->
-                                         <!--action="" :auto-upload="false">-->
-                                        <!--<el-button type="text">导入</el-button>-->
-                                        <!--</el-upload>-->
-                                        <!--<a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>-->
-                                <!--</div> &ndash;&gt;-->
-            <!--</el-col>-->
-        <!--</el-row>-->
-        <!--项目table -->
-<!--=======-->
-                                               <el-upload class="upload-demo" ref="upload"
-                                                 action="" :auto-upload="false">
-                                                <el-button type="text">导入</el-button>
-                                                </el-upload>
-                                                <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-                                        </div>
-                <!--&ndash;&gt;-->
+                       <el-upload class="upload-demo" ref="upload"
+                         action="" :auto-upload="false">
+                        <el-button type="text">导入</el-button>
+                        </el-upload>
+                        <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
+                </div>
             </el-col>
         </el-row>
-<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
         <div class="tableBox">
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
@@ -317,11 +304,7 @@ export default {
     components: {
         deleteReminders,
         myFilter
-//<<<<<<< HEAD
-    },
-//=======
-//    }
-//>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+    }
 }
 </script>
 

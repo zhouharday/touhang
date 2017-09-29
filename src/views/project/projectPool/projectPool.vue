@@ -312,7 +312,7 @@ export default {
             });
         },
         addProject() {
-            this.addTab('添加项目1', '/home/addProject', 'addProject');
+            this.addTab('添加项目', '/home/addProject', 'addProject');
             this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {

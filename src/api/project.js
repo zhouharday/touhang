@@ -200,3 +200,12 @@ export function delRecord(id = undefined, recordStatus = undefined) {
 	}
 	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
 }
+
+//根据商户ID获取部门列表
+export function getDeptListByMid() {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	const data = {
+		merchantId   //商户ID
+	}
+	return service({url: '/sysDept/queryList', method: 'post', data});
+}
