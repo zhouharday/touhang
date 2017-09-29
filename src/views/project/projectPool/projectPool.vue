@@ -70,7 +70,7 @@
                     </el-table-column>
                     <el-table-column label="所在地" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.location }}</div>
+                            <div class="fow">{{ scope.row.address }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="项目状态" align="center">

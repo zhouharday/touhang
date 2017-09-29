@@ -139,7 +139,6 @@ export default {
                 if(listOwnershipStructure){
                     this.structureForm = Object.assign({}, this.structureForm, listOwnershipStructure);
                 }
-
                 if(projectInfo.projectType === '4'){
                     this.show_t = false;
                     this.state = "淘汰";
