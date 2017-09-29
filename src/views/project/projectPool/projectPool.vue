@@ -294,11 +294,8 @@ export default {
             let merchantId = this.merchantId;
             let projectId = _data.id;
             let addProjectUserId = this.addProjectUserId;
-            transPro({
-                merchantId,
-                projectId,
-                addProjectUserId
-            }).then(resp => {
+            transPro(projectId)
+            .then(resp => {
                 let data = resp.data;
                 if (!data.message) {
                     console.log(resp);
@@ -312,7 +309,7 @@ export default {
             });
         },
         addProject() {
-            this.addTab('添加项目1', '/home/addProject', 'addProject');
+            this.addTab('添加项目', '/home/addProject', 'addProject');
             this.$router.push({ name: 'addProject' });
         },
         addTab(th, url, name) {

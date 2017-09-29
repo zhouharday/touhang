@@ -15,8 +15,6 @@
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
                 <span>确认将该项目转投资？</span>
                 <span slot="footer" class="dialog-footer">
-                    <!--<el-button type="default" @click="dialogVisible=false">取 消</el-button>-->
-                    <!--<el-button type="danger" @click="jumpPre">确 定</el-button>-->
                     <el-button type="default" @click="investDialog=false">取 消</el-button>
                     <el-button type="danger" @click="jumpPre">确 定</el-button>
                 </span>
@@ -80,7 +78,6 @@ export default {
     data() {
         return {
             title: '双子金服投资项目',
-            //state: '正常',
             invest: '投资',
             observe: '观察',
             eliminate: '淘汰',
@@ -112,7 +109,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'setProjectData'
+            'getProjectData'
         ]),
         init() {
             this.initParams();
@@ -132,7 +129,7 @@ export default {
             getProDetail(projectPoolId).then(resp => {
                 let data = resp.data.result;
                 let { projectInfo, projectInvestmentInfo,enterpriseInfo,listOwnershipStructure } = data;
-                this.setProjectData(data);
+                this.getProjectData(data);
                 if (projectInfo) {
                     this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }
@@ -148,7 +145,7 @@ export default {
                     this.state = "淘汰";
                 }else if(projectInfo.projectType === '3'){
                     // this.show_s = false;
-                    // this.state = "终止";
+                    this.state = "终止";
                 }else if(projectInfo.projectType === '2'){
                     this.show_s = false;
                     this.state = "观察";
@@ -161,7 +158,6 @@ export default {
             })
         },
         jumpPre() {
-            console.log('转投资');
             let projectId = this.projectPoolId;
             transPro(projectId).then(resp => {
                 this.addTab('投前项目', '/home/preProject', 'preProject');
@@ -173,7 +169,6 @@ export default {
             });
         },
         jumpObserve() {
-            console.log('转观察');
             setProjectStatus(this.projectPoolId, '2').then(resp =>{
                 this.observeDialog = !this.observeDialog;
                 this.show_f = false;
@@ -187,21 +182,6 @@ export default {
 
         },
         jumpEliminate() {
-//<<<<<<< HEAD
-//            this.eliminateDialog = !this.eliminateDialog;
-//            this.show_f = false;
-//            this.show_t = false,
-//                this.isShow = true;
-//            this.state = "淘汰";
-//        },
-//        changeNormal() {
-//            this.isShow = false;
-//            this.show_f = true;
-//            this.show_s = true;
-//            this.show_t = true;
-//            this.state = "正常";
-//=======
-            console.log('转淘汰');
             setProjectStatus(this.projectPoolId, '4').then(resp =>{
                 this.eliminateDialog = !this.eliminateDialog;
                 this.show_f = false;
@@ -214,7 +194,6 @@ export default {
             });
         },
         changeNormal() {
-            console.log('转正常');
             setProjectStatus(this.projectPoolId, '1').then(resp =>{
                 this.isShow = false;
                 this.show_f = true;
@@ -224,7 +203,6 @@ export default {
             }).catch(e => {
                 console.log('changeNormal error: ', e);
             });
-//>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });

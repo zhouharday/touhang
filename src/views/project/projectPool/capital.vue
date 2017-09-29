@@ -3,38 +3,38 @@
         <div class="capitalTable">
             <tabel-header :data="headerInfo_capital" @add="addCapital"></tabel-header>
             <el-table :data="capitalData" border style="width: 100%">
-                <el-table-column label="融资轮次" prop="round" align="center">
+                <el-table-column label="融资轮次" prop="projectTurn" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.round }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.projectTurn }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-select v-model="scope.row.round" placeholder="请选择融资轮次" style="width:100%">
-                                <el-option v-for="item in  roundOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <el-select v-model="scope.row.projectTurnId" placeholder="请选择融资轮次" style="width:100%">
+                                <el-option v-for="item in projectTurnType" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="融资方式" prop="way" align="center">
+                <el-table-column label="融资方式" prop="financingWay" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.way }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.financingWay}}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.way"></el-input>
+                            <el-input v-model="scope.row.financingWay"></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="本轮融资金额（元）" prop="capital" align="center">
+                <el-table-column label="本轮融资金额（元）" prop="financingMoney" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.capital }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.financingMoney }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.capital"></el-input>
+                            <el-input v-model="scope.row.financingMoney"></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="融资日期" prop="date" align="center">
+                <el-table-column label="融资日期" prop="financingDate" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.date }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.financingDate }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-date-picker type="date" placeholder="选择融资日期" v-model="scope.row.date" style="width: 100%;">
+                            <el-date-picker type="date" placeholder="选择融资日期" v-model="scope.row.financingDate" style="width: 100%;">
                             </el-date-picker>
                         </span>
                     </template>
@@ -52,20 +52,20 @@
             <!-- 添加融资信息 对话框-->
             <el-dialog title="添加融资信息" :visible.sync="modalAdd" :close-on-click-modal="false">
                 <el-form :model="capitalForm" :rules="rules" ref="capitalForm" label-width="140px">
-                    <el-form-item label="融资轮次" prop="round">
-                        <el-select v-model="capitalForm.round" placeholder="请选择融资轮次" style="width:100%">
-                            <el-option v-for="item in roundOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-form-item label="融资轮次" prop="projectTurnId">
+                        <el-select v-model="capitalForm.projectTurnId" placeholder="请选择融资轮次" style="width:100%">
+                            <el-option v-for="item in projectTurnType" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="融资方式" prop="way">
-                        <el-input v-model="capitalForm.way" auto-complete="off"></el-input>
+                    <el-form-item label="融资方式" prop="financingWay">
+                        <el-input v-model="capitalForm.financingWay" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="本轮融资金额（元）" prop="capital">
-                        <el-input v-model="capitalForm.capital" auto-complete="off"></el-input>
+                    <el-form-item label="本轮融资金额（元）" prop="financingMoney">
+                        <el-input v-model="capitalForm.financingMoney" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="融资日期" prop="date">
-                        <el-date-picker type="date" placeholder="融资日期" v-model="capitalForm.date" style="width: 100%;">
+                    <el-form-item label="融资日期" prop="financingDate">
+                        <el-date-picker type="date" placeholder="融资日期" v-model="capitalForm.financingDate" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-form>
@@ -83,18 +83,19 @@ import { Message } from 'iview'
 
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
+import { getDicChildren } from 'common/js/dictionary'
 import { getFinances, addFinance, editFinance, delFinance } from 'api/finance'
 export default {
-    /*
     computed: mapGetters({
-        projectData: 'getProjectData'    // 获取项目详情数据
+        projectData: 'getProjectData',    // 获取项目详情数据
+        projectTurnType:'getProjectTurnType',
     }),
-    */
     props: {
         projectData: {
             type: Object,
             default: {}
-        }
+        },
+        projectTurnType:[]
     },
     watch: {
         projectData(val, oldVal) {
@@ -105,17 +106,17 @@ export default {
         return {
             modalAdd: false,
             capitalData: [{
-                round: '天使轮',
-                way: '',
-                capital: '',
-                date: '',
+                projectTurnId: '天使轮',
+                financingWay: '',
+                financingMoney: '',
+                financingDate: '',
                 editFlag: false
             }],
             capitalForm: {
-                round: '',
-                way: '',
-                capital: '',
-                date: '',
+                projectTurnId: '',
+                financingWay: '',
+                financingMoney: '',
+                financingDate: '',
                 editFlag: false
             },
             roundOptions: [{ //融资轮次列表
@@ -126,16 +127,16 @@ export default {
                 label: 'A轮'
             }],
             rules: {
-                round: [
-                    { required: true, message: '请输入融资轮次', trigger: 'blur' }
+                projectTurnId: [
+                    { required: true, message: '请选择融资轮次', trigger: 'blur' }
                 ],
-                way: [
+                financingWay: [
                     { required: true, message: '请输入融资方式', trigger: 'blur' }
                 ],
-                capital: [
+                financingMoney: [
                     { required: true, message: '请输入融资金额', trigger: 'blur' }
                 ],
-                date: [
+                financingDate: [
                     { type: 'date', required: true, message: '请选择日期', trigger: 'blur' }
                 ]
             },
@@ -149,7 +150,7 @@ export default {
         }
     },
     created() {
-
+        this.$store.dispatch('getProjectTurnType')
     },
     methods: {
         init() {
@@ -167,16 +168,15 @@ export default {
             // console.log('projectData: ', this.projectData);
         },
         getData() {
-            getFinances(this.enterpriseInfo.id)
+            getFinances(this.projectData.projectInfo.id)
                 .then(resp => {
-                    console.log('resp: ', resp);
                     let data = resp.data;
                     let message = data.message;
                     if (!message) {
 
                     } else {
-                        this.capitalData = [];
-                        Message.info(message);
+                        this.capitalData = data.result || [];
+                        //Message.info(message);
                     }
                 }).catch(e => {
                     console.log('getFinances exists error: ', e);
@@ -185,10 +185,10 @@ export default {
         //添加 融资信息的方法
         addCapital() {
             let new_capitalForm = {
-                round: '',
-                way: '',
-                capital: '',
-                date: '',
+                projectTurnId: '',
+                financingWay: '',
+                financingMoney: '',
+                financingDate: '',
                 editFlag: false
             };
             this.capitalForm = new_capitalForm;
@@ -198,18 +198,17 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let capitalForm = this.capitalForm;
-                    capitalForm.date = changeDate(capitalForm.date);
+                    capitalForm.date = changeDate(capitalForm.financingDate);
                     addFinance({
-                        enterpriseId: this.enterpriseInfo.id,
-                        projectTurnId: capitalForm.round,
-                        financingWayId: capitalForm.way,
-                        financingMoney: capitalForm.capital,
-                        financingDate: capitalForm.date,
-                        versionRecord: new Date().getTime(),
+                        projectId: this.projectData.projectInfo.id,
+                        projectTurnId: capitalForm.projectTurnId,
+                        financingWay: capitalForm.financingWay,
+                        financingMoney: capitalForm.financingMoney,
+                        financingDate: capitalForm.financingDate,
                         merchantId: this.merchantId
                     }).then(resp => {
-                        this.capitalData.push(capitalForm);
                         this.modalAdd = !this.modalAdd;
+                        this.getData()
                     }).catch(e => {
                         console.log('addFinance exists error: ', e);
                     })
@@ -221,33 +220,27 @@ export default {
         checkEdit(index, row, type) { 
             row.editFlag = !row.editFlag;
             if (type === 'save') { // 编辑
-                console.log(index, row);
                 let projectData = this.projectData;
-                let projectInfo = projectData.projectInfo || {};
-                let enterpriseInfo = projectInfo.enterpriseInfo || {};
                 editFinance({
                     id: row.id,
-                    enterpriseId: enterpriseInfo.id,
-                    projectTurnId: row.round,
-                    financingWayId: row.way,
-                    financingMoney: row.capital,
-                    financingDate: row.date
+                    projectTurnId: row.projectTurnId,
+                    financingWay: row.financingWay,
+                    financingMoney: row.financingMoney,
+                    financingDate: row.financingDate
                 }).then(resp => {
-                    console.log('edit resp: ', resp);
 
                 }).catch(e => {
                     console.log('checkEdit exists error: ', e);
                 })
             }
+            this.capitalData.push();
         },
         // 删除当前行
         handleDelete(index, rows = []) {
             let row = rows[index] || {};
-            console.log('row: ', row);
-            delFinance({
-                id: row.id
-            }).then(resp => {
-                console.log('del resp: ', resp);
+            delFinance(row.id)
+            .then(resp => {
+                console.log('del resp: ', resp.data.message);
                 rows.splice(index, 1);
             }).catch(e => {
                 console.log('delFinance exists error: ', e);

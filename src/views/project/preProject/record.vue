@@ -71,7 +71,6 @@ export default {
         getDatas() {
             // TODO: 1是否是对的
             getRecords(this.projectId, STATUS_NORMAL).then(resp => {
-                console.log('getDatas resp: ', resp);
                 let data = resp.data.result;
                 this.recordList = this.handleDatas(data);
             }).catch(e => {

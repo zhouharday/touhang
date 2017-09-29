@@ -16,40 +16,40 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目类型" prop="projectType">
-                            <el-select v-model="basicForm.projectType" filterable placeholder="请选择项目类型" style="width:100%" :disabled="basicForm.flag">
-                                <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <el-select v-model="basicForm.projectTypeId" filterable placeholder="请选择项目类型" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in typeOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属行业" prop="industry">
-                             <el-select v-model="basicForm.industry" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
-                                <el-option v-for="item in industryOptions" :key="item.value" :label="item.label" :value="item.value">
+                             <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in industryOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目来源" prop="projectFrom">
-                             <el-select v-model="basicForm.projectFrom" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
-                                <el-option v-for="item in fromOptions" :key="item.value" :label="item.label" :value="item.value">
+                             <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in fromOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地" prop="address">
-                             <el-select v-model="basicForm.address" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
-                                <el-option v-for="item in addressOptions" :key="item.value" :label="item.label" :value="item.value">
+                             <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in addressOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col  :span="12">
+                    <el-col :span="12">
                         <el-form-item label="业务部门" prop="department">
-                             <el-select v-model="basicForm.department" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
-                                <el-option v-for="item in departmentOptions" :key="item.value" :label="item.label" :value="item.value">
+                             <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
+                                <el-option v-for="item in departmentOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -120,9 +120,19 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
-import { changeEnterpriseInfo, changeProjectInfo } from 'api/project';
+import { getDicChildren } from 'common/js/dictionary'
+import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
 export default {
+    computed: mapGetters({
+        projectData:'getProjectData',   // 获取项目详情数据
+        typeOptions:'getTypeOptions',   // 获取项目类型
+        industryOptions:'getIndustryOptions',   // 获取项目所属行业
+        fromOptions:'getFromOptions',   // 获取项目来源
+        addressOptions:'getAddressOptions',   // 获取项目所在地
+        departmentOptions:'getDepartmentOptions',   // 获取业务部门
+    }),
     props: {
         basicForm: {
             type: Object,
@@ -139,7 +149,8 @@ export default {
         projectId: {
             type: String,
             default: ''
-        }
+        },
+        typeOptions:[]
     },
     watch: {
         projectData(val, oldVal) {
@@ -177,30 +188,19 @@ export default {
                     explain: '提交'
                 }]
             },
-            typeOptions: [{  //项目类型下拉列表
-                value: '选项1',
-                label: '类型一'
-            }],
-           fromOptions: [{  //项目来源下拉列表
-                value: '选项1',
-                label: '来源一'
-            }],
-            industryOptions: [{  //所属行业下拉列表
-                value: '选项1',
-                label: '行业一'
-            }],
-            addressOptions: [{  //所在地下拉列表
-                value: '选项1',
-                label: '地区一'
-            }],
-            departmentOptions: [{  //部门下拉列表
-                value: '选项1',
-                label: '部门一'
-            }]
+            typeOptions: [],
+           fromOptions: [],
+            industryOptions: [],
+            addressOptions: [],
+            departmentOptions: []
         }
     },
     created() {
-
+        this.$store.dispatch('getTypeOptions')
+        this.$store.dispatch('getIndustryOptions')
+        this.$store.dispatch('getFromOptions')
+        this.$store.dispatch('getAddressOptions')
+        this.$store.dispatch('getDepartmentOptions')
     },
     methods: {
         init() {

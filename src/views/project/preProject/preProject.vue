@@ -10,16 +10,17 @@
                 <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
-            <el-col :span="19" class="imdo">
-                <!-- 后期所做导入和下载模板功能 -->
-                <!-- <div class="importProject">
-                                <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
-                                    <el-button type="text">导入</el-button>
-                                </el-upload>
-                                <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-                            </div> -->
-            </el-col>
+            <!-- 后期所做导入和下载模板功能 -->
+            <!-- <el-col :span="19" class="imdo">
+                <div class="importProject">
+                    <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
+                        <el-button type="text">导入</el-button>
+                    </el-upload>
+                    <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
+                </div>
+            </el-col> -->
         </el-row>
+
         <!--项目table -->
         <div class="tableBox">
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
@@ -289,7 +290,6 @@ export default {
     components: {
         deleteReminders,
         myFilter
-
     },
 }
 </script>

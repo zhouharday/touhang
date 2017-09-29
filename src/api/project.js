@@ -113,7 +113,6 @@ export function transPro(projectId) {
 		addProjectUserId
 	};
 	return service({url: '/investProject/addInvestProject', method: 'post', data});
-	//return service({url: '/productClieController/insertProjectPool', method: 'post', data});
 }
 
 //修改项目状态
@@ -199,4 +198,13 @@ export function delRecord(id = undefined, recordStatus = undefined) {
 		recordStatus,  // 记录状态：1：正常 2：删除
 	}
 	return service({url: '/operatingRecord/deleteOperatingRecord', method: 'post', data});
+}
+
+//根据商户ID获取部门列表
+export function getDeptListByMid() {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	const data = {
+		merchantId   //商户ID
+	}
+	return service({url: '/sysDept/queryList', method: 'post', data});
 }
