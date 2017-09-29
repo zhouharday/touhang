@@ -11,12 +11,9 @@
     </div>
     <el-table :data="investorData" border style="width: 100%">
         <el-table-column prop="investorName" label="投资者名称" align="center">
-<<<<<<< HEAD
             <template scope = "scope">
                 <a @click="JumpOther(scope.row)">{{scope.row.investorName}}</a>
             </template>
-=======
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         </el-table-column>
         <el-table-column prop="investorType" label="类型" align="center">
         </el-table-column>
@@ -98,7 +95,7 @@ export default {
             this.$router.push('/home/investorDetails/:' + row.id)
         },
         handleIconClick(){
-console.log(this.input2)
+            console.log(this.input2)
             getInvestorList(this.input2,this.type).then((res)=>{
                 this.investorData = res.data.result.list
             })

@@ -48,8 +48,8 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
                 <template scope="scope">
-                    <el-button type="text" size="small">基金团队</el-button>
-                   <el-button type="text" size="small">删除</el-button>
+                   <el-button type="text" size="small" @click="addTeamlist(scope.$index, scope.row)">基金团队</el-button>
+                   <el-button type="text" size="small" @click="deleteFundlist(scope.$index, scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -64,28 +64,24 @@
                        :total="pageTotal">
         </el-pagination>
     </div>
+    <delete-reminders :deleteReminders="deleteReminders"
+                      :modal_loading="modal_loading"
+                      @cancel="cancelDel"
+                      @del="delFundList">
+    </delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
+import deleteReminders from 'components/deleteReminders'
 import Service from 'common/js/fetch'
-import {
-    mapMutations,
-    mapGetters
-} from 'vuex'
-import {
-    getManagementType,
-    getMyFund
-} from 'api/fund'
-const INDEX = 0;
-const NOW = 0;
+import {mapMutations, mapGetters} from 'vuex'
+import {getManagementType, getMyFund, deleteFundInfo} from 'api/fund'
 export default {
     data() {
         return {
-            currentIndex: INDEX,
-            clickIndex: NOW,
             theme: '#fff',
             tableInfo: {
                 btnGroup: [{
@@ -122,6 +118,9 @@ export default {
                     dicName: '终止'
                 }]
             },
+            deleteReminders: false,
+            modal_loading: false,
+            fundListId: '', //当前选中的基金id
             fundSearch: '',
             myFund: [],
             pageTotal: '',
@@ -230,13 +229,27 @@ export default {
                 }
             })
         },
+        deleteFundlist(index, row) {
+            this.deleteReminders = true
+            this.fundListId = row.id
+        },
+        cancelDel() {
+            this.deleteReminders = false
+        },
+        delFundList() {
+            deleteFundInfo(this.fundListId).then((res) => {
+                if(res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！')
+                    this.deleteReminders = false
+                }
+            })
+        },
         ...mapMutations([
             'addTab', // 映射 this.addTab() 为 this.$store.commit
             'GET_MYFUNDDETAILS'
         ])
     },
     created() {
-        console.log(this.myFundList)
         this.$store.dispatch('getFundLists').then(() => {
             this.myFund = this.myFundList.list
         })
@@ -268,7 +281,8 @@ export default {
     },
     components: {
         tableHeader,
-        myFilter
+        myFilter,
+        deleteReminders
     }
 }
 </script>

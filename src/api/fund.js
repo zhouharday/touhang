@@ -14,21 +14,28 @@ export function getMyFund(num, size, value, orgId, manageId, stageId, statusId) 
          fundStageId: "1", //阶段类型1.基金设立2.运营管理3.基金退出
          fundStatusId: "正常/启动", //状态（1：正常，2：终止）
          */
-         orgTypeId: orgId,
-         manageTypeId: manageId,
-         fundStageId: stageId,
-         fundStatusId: statusId,
-         fundName: value,
-         page: num,
-         pageSize: size
+        orgTypeId: orgId,
+        manageTypeId: manageId,
+        fundStageId: stageId,
+        fundStatusId: statusId,
+        fundName: value,
+        page: num,
+        pageSize: size
 
     }
     return service({url: '/fund/selectMineAllFundList', method: 'post', data})
 }
-
-export function addFund() {
-    const data = {}
+// 添加基金 /fund/addFundInfo
+export function addFund(fund) {
+    const data = fund
     return service({url: '/fund/addFundInfo', method: 'post', data})
+}
+// 删除基金 /fund/deleteFundInfo
+export function deleteFundInfo(deleteId) {
+    const data = {
+        id: deleteId
+    }
+    return service({url: '/fund/deleteFundInfo', method: 'post', data})
 }
 // 管理类型
 export function getManagementType() {
@@ -61,7 +68,7 @@ export function managementCompany() {
 // 获取所有的基金管理公司（添加基金时候下拉列表）/fund/selectAllManageCompany
 export function selectAllManageCompany() {
     const data = {
-        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id//商户id
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id //商户id
     }
     return service({url: '/fund/selectAllManageCompany', method: 'post', data})
 }
@@ -179,39 +186,64 @@ export function getFunAppraisement(id) {
     const data = {
         fundId: id
     }
-    return service({
-        url: '/fund/getFunAppraisement',
-        method: 'post',
-        data
-    })
+    return service({url: '/fund/getFunAppraisement', method: 'post', data})
 }
 // 获取基金分配列表 /fund/getFundAllocationList
 export function getFundAllocationList(id) {
     const data = {
         fundId: id
     }
-    return service({
-        url: '/fund/getFundAllocationList',
-        method: 'post',
-        data
-    })
+    return service({url: '/fund/getFundAllocationList', method: 'post', data})
 }
 // 获取一个基金的费用列表 /fund/getFundFeeList
 export function getFundFeeList(id) {
     const data = {
         fundId: id
     }
-    return service({
-        url: '/fund/getFundFeeList',
-        method: 'post',
-        data
-    })
+    return service({url: '/fund/getFundFeeList', method: 'post', data})
 }
 // 修改某一个费用 /fund/updateFundFee
 export function updateFundFee(fundData) {
     const data = fundData
+    return service({url: '/fund/updateFundFee', method: 'post', data})
+}
+// 获取公司的所有的管理公司（分页） /fundId/selectManageCompany
+export function selectManageCompany(num, size) {
+    const data = {
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //商户id必传
+        page: num,
+        pageSize: size
+    }
+    return service({url: '/fund/selectManageCompany', method: 'post', data})
+}
+// 添加或修改基金管理公司 /fundId/addOrUpdateManagerCompany
+export function addOrUpdateManagerCompany(managerId, name, describe) {
+    const data = {
+        id: managerId,
+        companyName: name,
+        companyDescribe: describe,
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+    }
+    return service({url: '/fund/addOrUpdateManagerCompany', method: 'post', data})
+}
+// 删除一个管理公司 /fund/deleteManagerCompany
+export function deleteManagerCompany(deleteId) {
+    const data = {
+        id: deleteId
+    }
     return service({
-        url: '/fund/updateFundFee',
+        url: '/fund/deleteManagerCompany',
+        method: 'post',
+        data
+    })
+}
+// 查询部门列表 /sysDept/queryList
+export function sectorList() {
+    const data = {
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+    }
+    return service({
+        url: '/sysDept/queryList',
         method: 'post',
         data
     })

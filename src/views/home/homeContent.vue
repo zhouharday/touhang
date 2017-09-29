@@ -111,13 +111,10 @@
                 </div>
             </el-col>
         </el-row>
-<<<<<<< HEAD
+
         <!-- 发起申请 对话框-->
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-=======
-        <!-- 立即申请 对话框-->
-        <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
                 <el-row>
                     <el-col>

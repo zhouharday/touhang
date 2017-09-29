@@ -29,6 +29,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
 <<<<<<< HEAD
+<<<<<<< HEAD
             '/api':{
                 // target:'http://192.168.0.191:9092',//平台
                 target:'http://192.168.0.198:9091',
@@ -45,6 +46,17 @@ module.exports = {
                 // target: 'http://18f46963j4.iok.la',
                 changeOrigin: true,
 >>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+=======
+            '/api':{
+                target:'http://192.168.0.191:9091',//平台
+                // target:'http://192.168.0.198:9092',//平台
+                // target: 'http://18f46963j4.iok.la',
+                // target:'http://192.168.0.131:9092',// 文军凡IP
+                // target:'http://192.168.0.133:9092',// 蔡永亮 IP
+                // target:'http://100.64.33.181:9091',
+                // target:'http://zhqwjmw.eicp.net',
+                changeOrigin:true,
+>>>>>>> 0dabc773e3f961daffb052a33a3c47adb1c410b2
                 secure: false,
                 pathRewrite:{
                     '^/api/':''

@@ -3,7 +3,6 @@
         <el-row :gutter="30">
             <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
                 <!-- 项目阶段 配置-->
-<<<<<<< HEAD
                 <!--<div class="rightAdd_btn">-->
                 <!--<el-button type="danger" style="width:80px" @click="openProject">添加</el-button>-->
                 <!--</div>-->
@@ -46,77 +45,6 @@
                         </div>
                     </div>
                 </div>
-=======
-                <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px" @click="openProject" size="small">添加</el-button>
-                </div>
-                <b style="padding-left:15px;">项目阶段配置</b>
-                <div class="project_config">
-                    <div class="menu_title">
-                        <div>项目配置</div>
-                    </div>
-                    <div class="menu_box">
-                        <p class="menu_list" v-for="item in projectMenu" :key="item.index">
-                            <span v-if="!item.editFlag">{{item.stageName}}</span>
-                            <span v-if="item.editFlag" class="cell-edit-input">
-                                <el-input v-model="item.stageName"></el-input>
-                            </span>
-                            <Icon type="arrow-up-c" class="mgr"></Icon>
-                            <Icon type="arrow-down-c"></Icon>
-                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
-                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存
-                            </el-button>
-                            <el-button type="text" @click="handleDelete(index,projectMenu)">删除</el-button>
-                        </p>
-                    </div>
-                </div>
-                <!-- 基金阶段 配置 -->
-                <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px" @click="openFund" size="small">添加</el-button>
-                </div>
-                <b style="padding-left:15px;">基金阶段配置</b>
-                <div class="project_config">
-                    <div class="menu_title">
-                        <div>基金配置</div>
-                    </div>
-                    <div class="menu_box">
-                        <p class="menu_list" v-for="item in fundMenu" :key="item.index">
-                            <span v-if="!item.editFlag">{{item.fundName}}</span>
-                            <span v-if="item.editFlag" class="cell-edit-input">
-                                <el-input v-model="item.fundName"></el-input>
-                            </span>
-                            <Icon type="arrow-up-c" class="mgr"></Icon>
-                            <Icon type="arrow-down-c"></Icon>
-                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
-                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存</el-button>
-                            <el-button type="text" @click="handleDelete(index,fundMenu)">删除</el-button>
-                        </p>
-                    </div>
-                </div>
-                <!-- 投资阶段 配置 -->
-                <div class="rightAdd_btn">
-                    <el-button type="danger" style="width:80px" @click="openInvest" size="small">添加</el-button>
-                </div>
-                <b style="padding-left:15px;">投资阶段配置</b>
-                <div class="project_config">
-                    <div class="menu_title">
-                        <div>投资者配置</div>
-                    </div>
-                    <div class="menu_box">
-                        <p class="menu_list" v-for="item in investMenu" :key="item.index">
-                            <span v-if="!item.editFlag">{{item.investName}}</span>
-                            <span v-if="item.editFlag" class="cell-edit-input">
-                                <el-input v-model="item.investName"></el-input>
-                            </span>
-                            <Icon type="arrow-up-c" class="mgr"></Icon>
-                            <Icon type="arrow-down-c"></Icon>
-                            <el-button v-if="!item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">编辑</el-button>
-                            <el-button v-if="item.editFlag" type="text" class="leftBtn" @click="edit(index,item)">保存</el-button>
-                            <el-button type="text" @click="handleDelete(index,investMenu)">删除</el-button>
-                        </p>
-                    </div>
-                </div>
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
             </el-col>
             <el-col :span="18">
                 <el-row>
@@ -127,19 +55,19 @@
                     </el-col>
                     <el-col>
                         <el-table :data="fileData" style="width: 100%">
-                            <el-table-column label="文档名称" prop="fileName" align="center">
+                            <el-table-column label="文档名称" prop="documentName" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.fileName }}</span>
+                                    <span v-if="!scope.row.editFlag">{{ scope.row.documentName }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.fileName"></el-input>
+                                        <el-input v-model="scope.row.documentName"></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="是否必传" prop="enable" align="center">
+                            <el-table-column label="是否必传" prop="needUpload" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.enable }}</span>
+                                    <span v-if="!scope.row.editFlag">{{ scope.row.needUpload }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.enable"></el-input>
+                                        <el-input v-model="scope.row.needUpload"></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -156,9 +84,10 @@
                     </el-col>
                 </el-row>
             </el-col>
+
         </el-row>
         <!-- 添加 项目阶段 对话框-->
-        <el-dialog title="阶段名称" :visible.sync="projectDialog" class="fileDialog">
+        <el-dialog title="项目阶段名称" :visible.sync="projectDialog" class="fileDialog">
             <el-form :model="projectForm">
                 <el-row>
                     <el-col>
@@ -223,7 +152,10 @@
                     </el-col>
                     <el-col :span="16">
                         <el-form-item label="文档名称：" prop="fileName" label-width="100px">
-                            <el-input v-model="fileForm.fileName" auto-complete="off"></el-input>
+                            <el-input v-model="fileForm.documentName" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="是否必传：" prop="fileName" label-width="100px">
+                            <el-input v-model="fileForm.needUpload" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -237,7 +169,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-<<<<<<< HEAD
     import {getConfigLeftList} from 'api/system'
     import {reloadData} from 'api/system'
     import {SetConfig} from 'api/system'
@@ -246,8 +177,6 @@
     import {DeleteRightList} from 'api/system'
     import {changeRightList} from 'api/system'
 
-=======
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
     export default {
         data() {
             return {
@@ -255,7 +184,6 @@
                 fundDialog: false,
                 investDialog: false,
                 fileDialog: false,
-<<<<<<< HEAD
 //            showOne:false,
                 deleteList:[],
                 leftList:[],
@@ -264,22 +192,6 @@
                 fileForm: {
                     documentName: '',
                     needUpload:'',
-=======
-                fileData: [
-                    {
-                        fileName: '基金负责人',
-                        enable: '是',
-                        editFlag: false
-                    },
-                    {
-                        fileName: '考察报告',
-                        enable: '否',
-                        editFlag: false
-                    }
-                ],
-                fileForm: {
-                    fileName: '',
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                     editFlag: false
                 },
                 projectForm: {
@@ -287,18 +199,7 @@
                     editFlag: false
                 },
                 projectMenu: [
-<<<<<<< HEAD
 
-=======
-                    {
-                        stageName: '考察储备',
-                        editFlag: false
-                    },
-                    {
-                        stageName: '立项会',
-                        editFlag: false
-                    }
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 ],
                 fundForm: {
                     fundName: '',
@@ -326,7 +227,6 @@
                     {
                         investName: '资质文件',
                         editFlag: false
-<<<<<<< HEAD
                     }
                 ],
                 changeList:[],
@@ -397,25 +297,6 @@
 //            newList.
 //            this.projectMenu.push(this.projectForm);
 //            this.projectForm = {};
-=======
-                    }
-                ]
-            }
-        },
-        methods: {
-            // 添加 项目配置 的方法
-            openProject() {
-                let new_projectForm = {
-                    stageName: '',
-                    editFlag: false
-                };
-                this.projectForm = new_projectForm;
-                this.projectDialog = !this.projectDialog;
-            },
-            addProject() {
-                this.projectMenu.push(this.projectForm);
-                this.projectForm = {};
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 this.projectDialog = !this.projectDialog;
             },
             // 添加 基金配置 的方法
@@ -448,22 +329,16 @@
             },
             // 添加 文档 的方法
             openFile() {
-<<<<<<< HEAD
 //            alert(this.nowId)
                 let new_fileForm = {
                     fileName: '',
                     needUpload:'',
-=======
-                let new_fileForm = {
-                    fileName: '',
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                     editFlag: false
                 };
                 this.fileForm = new_fileForm;
                 this.fileDialog = !this.fileDialog;
             },
             addFile() {
-<<<<<<< HEAD
 
 //            console.log(this.nowId)
 //            console.log(this.fileForm)
@@ -479,11 +354,6 @@
                         })
                     }
                 })
-=======
-                this.fileData.push(this.fileForm);
-                this.fileForm = {};
-                this.fileDialog = !this.fileDialog;
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
             },
             //
             edit(index, item) {
@@ -491,7 +361,6 @@
                 // console.log(item.fundName);
             },
             checkEdit(index, row) { //编辑
-<<<<<<< HEAD
 
                 row.editFlag = !row.editFlag;
 
@@ -541,15 +410,6 @@
             getConfigLeftList().then((res)=>{
                 this.leftList = reloadData( res.data.result)
             })
-=======
-                // console.log(row)
-                row.editFlag = !row.editFlag;
-            },
-            //删除当前行
-            handleDelete(index, rows) {
-                rows.splice(index, 1);
-            }
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         }
     }
 </script>
@@ -581,10 +441,7 @@
             line-height: 40px;
             padding-left: 5px;
         ;
-<<<<<<< HEAD
             flex-direction: row;
-=======
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
             background: #2A3142;
             >div {
                 padding-left: 10px;
@@ -592,21 +449,13 @@
             }
         }
         .menu_box {
-<<<<<<< HEAD
             padding: 10px 10px 10px 10px;
-=======
-            padding: 10px 30px 10px 15px;
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
             font-size: 14px;
             .menu_list {
                 display: flex;
                 align-items: center;
-<<<<<<< HEAD
                 justify-content: space-between;
                 /*justify-content: flex-end;*/
-=======
-                justify-content: flex-end;
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 margin-bottom: 5px;
                 &:hover {
                     background: #dfe6ec;
@@ -616,17 +465,10 @@
                 ;
                 }
                 .mgr {
-<<<<<<< HEAD
                     margin-right: 10px;
                 }
                 .leftBtn {
                     /*margin-left: 45px;*/
-=======
-                    margin-right: 15px;
-                }
-                .leftBtn {
-                    margin-left: 45px;
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 }
             }
         } // 添加文档 对话框

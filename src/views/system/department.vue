@@ -1,19 +1,19 @@
 <template>
 <div class="department">
-<<<<<<< HEAD
+<!--<<<<<<< HEAD-->
 
-=======
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+<!--=======-->
+<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
     <div class="title">
         <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
         </el-button>
     </div>
-<<<<<<< HEAD
+<!--<<<<<<< HEAD-->
 
-=======
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+<!--=======-->
+<!--&gt;>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1-->
     <!-- 折叠表单 -->
     <!-- 这部分内容需要询问产品 -->
     <!-- <el-collapse v-model="activeName" accordion>
