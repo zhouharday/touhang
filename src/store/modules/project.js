@@ -71,7 +71,7 @@ const actions = {
         })
     },
     getIndustryOptions({commit, dispatch}) {
-        return getDicChildren('208').
+        return getDicChildren('1').
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_INDUSTRYOPTIONS, res.data.result)
