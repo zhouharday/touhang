@@ -23,7 +23,7 @@
             <el-col :span="23">
                 <div class="industry-ul" :class="{ changeList: !btnObject.uptriangle }">
                     <ul ref="industry">
-                        <li v-for="(item,index) in $store.state.project.industryOptions" :key="item.id" :class="{active: item.id==currentIndex2}" @click="changeIndustry(item.id)">
+                        <li v-for="(item,index) in $store.state.project.industryOptionsII" :key="item.id" :class="{active: item.id==currentIndex2}" @click="changeIndustry(item.id)">
                             {{item.dicName}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject.uptriangle }" class="collapse-btn" @click="changeList">
@@ -107,35 +107,26 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                    </el-pagination>
+                </div>
             </el-col>
         </el-row>
-        <!--<el-row>-->
-        <!--<el-col>-->
-        <!--<div style="float:right;margin:10px;padding-right:30px;overflow:hidden">-->
-        <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
-        <!--</el-pagination>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <div class="page">
-            <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-        </div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getDicChildren } from 'common/js/dictionary'
+import { getDicChildrenII } from 'common/js/dictionary'
 import { getPros, transPro, delPro } from 'api/project';
 export default {
     name: 'projectPool',
     computed: mapGetters({
-        industryOptions:'getIndustryOptions',   // 获取项目所属行业
+        industryOptionsII:'getindustryOptionsII',   // 获取项目所属行业
     }),
     data() {
         return {
-            selectedProjectName:'',
             total: 0,    // 总数
             page: 1,     // 当前页数
             pageSize: 5, // 一页数量
@@ -156,14 +147,13 @@ export default {
                 { states: "中止" , value: '3'},
                 { states: "淘汰" , value: '4'}
             ],
-            industryList: [],
             tableData: [],
-            industryOptions: []
+            industryOptionsII: []
         }
     },
     created() {
         this.init();
-        this.$store.dispatch('getIndustryOptions')
+        this.$store.dispatch('getIndustryOptionsII')
     },
     methods: {
         init() {
@@ -187,7 +177,8 @@ export default {
             let params = {
                 merchantId: this.merchantId,
                 pageSize: this.pageSize,
-                page: this.page
+                page: this.page,
+                identification:'12'
             };
 
             if (projectName) params.projectName = projectName;
@@ -270,7 +261,6 @@ export default {
         goJumpPref(index, data) {
             this.dialogVisible = true;
             this.jumpData = data[index] || {};
-            this.selectedProjectName = jumpData.project_name;
         },
         jumpPre() {
             let _data = this.jumpData;

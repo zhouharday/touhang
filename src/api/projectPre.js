@@ -12,7 +12,7 @@ export function getPres(params = {}) {
 		page,//分页 
     	pageSize
 	}
-
+	console.log("getPres condition*/*/*/*" + JSON.stringify(data));
 	return service({url: '/investProject/getInvestProjectList', method: 'post', data})
 }
 
