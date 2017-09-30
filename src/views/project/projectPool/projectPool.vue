@@ -281,7 +281,7 @@ export default {
         },
         ShowPoolMessage(title, ind) {
             this.index = ind;
-            this.addTab(title.project + '详情页', '/home/zprojectPoolMessage/' + ind, "zprojectPoolMessage" + ind);
+            this.addTab(title.project + '详情页', '/home/zprojectPoolMessage/' + title.id, "zprojectPoolMessage/" + title.id);
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: title.id } });
         },
         goJumpPref(index, data) {

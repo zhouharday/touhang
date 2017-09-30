@@ -114,7 +114,6 @@
 
         <!-- 发起申请 对话框-->
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
                 <el-row>
                     <el-col>

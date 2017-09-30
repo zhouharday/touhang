@@ -69,10 +69,6 @@
                             </div>
                         </el-col>
                     </div>
-
-
-
-
                 </el-row>
             </el-col>
         </el-row>

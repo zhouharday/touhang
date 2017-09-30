@@ -44,7 +44,7 @@
                 </div>
                 <el-submenu index="3">
                     <template slot="title">
-                        <!-- <i class="el-icon-date"></i>项目管理</template> -->
+                        <!-- <i class="el-icon-date"></i> -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
                         <span>{{title_03}}</span>
                     </template>
@@ -440,7 +440,10 @@ export default {
         addTab(th, url, name) {
             this.$router.push({
                 name: name
-            })
+            });
+            // this.$router.push({
+            //     path: url
+            // });
             this.$store.commit({
                 type: 'addTab',
                 title: th,
