@@ -56,16 +56,16 @@
                                       :row-class-name="tableRowClassName">
                                 <el-table-column prop="num" label="序号" min-width="100" align="center">
                                     <template scope="scope">
-                                        <div class="name" @click="handleRouter(scope.$index, scope.row)">
+                                        <div class="name">
                                             <span class="investorName">{{ scope.row.num }}</span>
                                         </div>
                                     </template>
                                 </el-table-column>
                                 <el-table-column label="表单模型" align="center">
-                                    <template scope="scope">
-                                        <span v-if="!scope.row.editFlag">{{ scope.row.modal }}</span>
+                                    <template scope="scope" class="model">
+                                        <span v-if="!scope.row.editFlag" @click="handleRouter(scope.row,scope.$index)">{{ scope.row.model }}</span>
                                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                            <el-input v-model="scope.row.modal"></el-input>
+                                            <el-input v-model="scope.row.model"></el-input>
                                         </span>
                                     </template>
                                 </el-table-column>
@@ -214,13 +214,13 @@
                 ],
                 surfaceData: [
                     {
-                        id: '1',
-                        modal: 'xx审批表',
+                        num: '1',
+                        model: 'xx审批表',
                         date: '2017/09/29 13:49:01',
                         editFlag: false
                     }, {
-                        id: '2',
-                        modal: 'xx导入表',
+                        num: '2',
+                        model: 'xx导入表',
                         date: '2017/09/29 13:49:02',
                         editFlag: false
                     }
@@ -272,10 +272,11 @@
             handleDelete(index, rows) {
                 rows.splice(index, 1);
             },
-            handleRouter(title, ind) {
+            handleRouter(row, ind) {
                 this.index = ind;
-                this.addTab(title.theme + '详情页', '/home/createForm/', 'createForm/');
-                this.$router.push({name: 'createForm'});
+                console.log(row.model);
+                this.addTab(row.model + '详情页', '/home/createForm/'+row.num, 'createForm/'+ row.num);
+                this.$router.push({name: 'createForm',params: { userId: row.num }});
             },
             addTab(th, url, name) {
                 this.$store.commit({type: 'addTab', title: th, url: url, name: name});
@@ -351,6 +352,18 @@
             //     padding: 15px 30px;
             //     text-align: right;
             // }
+        }
+        .formModel {
+            .searchHeader {
+                height: 30px;
+                margin-bottom: 20px;
+            }
+            .search-box {
+                height: 30px;
+            }
+            .addProject {
+                float: right;
+            }
         }
     }
 </style>

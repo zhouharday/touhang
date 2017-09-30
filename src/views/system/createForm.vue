@@ -1,41 +1,43 @@
 <template>
     <section class="createForm">
-        <div class="button">
-            <el-button type="danger" size="small">保存</el-button>
-            <el-button type="danger" size="small">预览</el-button>
-            <el-button type="danger" size="small">取消</el-button>
+        <div style="background-color: #F2F4F8">
+            <div class="button" >
+                <el-button type="danger" size="small">保存</el-button>
+                <el-button type="danger" size="small">预览</el-button>
+                <el-button type="danger" size="small">取消</el-button>
+            </div>
+            <div class="clear"></div>
+            <el-row>
+                <el-col :span="5" style="background-color: #fff">
+                    <div class="form-components">
+                        <span>表单组件</span>
+                        <ul>
+                            <li v-for="list in btnLists">
+                                <el-button>{{list.data}}</el-button>
+                            </li>
+                        </ul>
+                    </div>
+                </el-col>
+                <el-col :span="14" style="background-color: #fff;height: 100%">
+                    <div class="form-components">中间</div>
+                </el-col>
+                <el-col :span="5" style="background-color: #fff">
+                    <div class="form-components">
+                        <span>组件设置</span>
+                        <ul>
+                            <li prop="标题">
+                                标题
+                                <el-input></el-input>
+                            </li>
+                            <li prop="必填项目">
+                                <el-checkbox>这个是必填项</el-checkbox>
+                            </li>
+                        </ul>
+
+                    </div>
+                </el-col>
+            </el-row>
         </div>
-        <el-row>
-            <el-col :span="5">
-                <div class="form-components">
-                    <span>表单组件</span>
-                    <ul>
-                        <li v-for="list in btnLists">
-                            <el-button>{{list.data}}</el-button>
-                        </li>
-                    </ul>
-                </div>
-
-            </el-col>
-            <el-col :span="14">
-                中间
-            </el-col>
-            <el-col :span="5">
-                <div class="Plugins">
-                    <span>组件设置</span>
-                    <ul>
-                        <li prop="标题">
-                            标题
-                            <el-input></el-input>
-                        </li>
-                        <li prop="必填项目">
-                            <el-checkbox>这个是必填项</el-checkbox>
-                        </li>
-                    </ul>
-
-                </div>
-            </el-col>
-        </el-row>
     </section>
 </template>
 
@@ -50,14 +52,19 @@
         padding: 24px;
         background: #fff;
         .button{
-            float:right;
-            margin-bottom: 10px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 5px;
+            /*padding-bottom: 5px;*/
+            text-align:right;
         }
-        .form-components span {
-            margin-left: 20px;
+        .form-components {
+            text-align: center;
+            padding-top: 10px;
         }
         ul{
             margin-top: 10px;
+            text-align: center;
         }
         ul>li{
             margin-bottom: 10px;

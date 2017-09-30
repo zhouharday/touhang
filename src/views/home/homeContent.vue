@@ -112,7 +112,6 @@
             </el-col>
         </el-row>
 
-<<<<<<< HEAD
         <!-- 立即申请 对话框-->
         <!-- <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
                                                 <el-form :model="applyForm" ref="applyForm" label-width="100px">
@@ -164,7 +163,6 @@
                                                 </div>
                                             </el-dialog> -->
         <!-- 立即查看 对话框 -->
-=======
         <!-- 发起申请 对话框-->
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
@@ -662,7 +660,7 @@
     }
 }
 
-// 待办任务 
+// 待办任务
 .taskBox {
     padding: 25px 0; // border-bottom: 1px solid #c4c4c4;
     >p {
@@ -778,14 +776,14 @@ export default {
                     taskTime: '2017年7月8日   08:08:09'
                 }
             ],
-            // applyForm: { // 立即申请表单
-            //     title: '',
-            //     person: '',
-            //     date: '',
-            //     notes: '',
-            //     appendix: '',
-            //     auditor: ''
-            // },
+             applyForm: { // 立即申请表单
+                 title: '',
+                 person: '',
+                 date: '',
+                 notes: '',
+                 appendix: '',
+                 auditor: ''
+             },
             progressTable: [//查看进度表单 节点table
                 {
                     node: '发起申请',
