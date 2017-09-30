@@ -203,7 +203,7 @@
         <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading"
                           @del="deleteReminders=false" @cancel="deleteReminders=false">
         </delete-reminders>
-    </section>   
+    </section>
 </template>
 
 
@@ -462,6 +462,19 @@
             //     text-align: right;
             // }
         }
+        .formModel {
+            .searchHeader {
+                height: 30px;
+                margin-bottom: 20px;
+            }
+            .search-box {
+                height: 30px;
+            }
+            .addProject {
+                float: right;
+            }
+        }
+
         // 阶段配置
         .phaseConfigure {
             width: 100%;
@@ -502,18 +515,7 @@
             .bgl {
                 background: #EEF0F4;
             }
-            .formModel {
-                .searchHeader {
-                    height: 30px;
-                    margin-bottom: 20px;
-                }
-                .search-box {
-                    height: 30px;
-                }
-                .addProject {
-                    float: right;
-                }
-            }
+
         }
     }
 </style>
