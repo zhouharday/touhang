@@ -203,8 +203,9 @@
         <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading"
                           @del="deleteReminders=false" @cancel="deleteReminders=false">
         </delete-reminders>
-    </section>
+    </section>   
 </template>
+
 
 <script type="text/ecmascript-6">
     import tabelHeader from 'components/tabelHeader'
