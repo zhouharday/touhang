@@ -620,61 +620,6 @@ export function getUpdataFund(arr,RoleArr) {
         updata = updata.concat(ss)
     })
 
-<<<<<<< HEAD
-// 权限树转换
-export function getNodesssss(arrData, roleInfo) {
-    var nodes = [];
-    var arr = [];
-
-    // arr = arr.concat(arrData)
-    // var arr =
-    var i = 0;
-    var j = 0;
-    var x = 0;
-    var idArr;
-    console.log(arrData)
-    for (x in arrData) {
-        var dic = {};
-        dic.id = arrData[x].id
-        dic.falseId = arrData[x].falseId
-        dic.parentId = arrData[x].parentId
-        dic.path = arrData[x].path
-        dic.permissionName = arrData[x].permissionName
-        dic.type = arrData[x].type
-        // arr[x].id = arrData[x].id
-        arr.push(dic)
-    }
-    console.log(arr)
-
-
-    // for (j in arr) {
-    //     for (i in roleInfo)
-    //     {
-    //         if (roleInfo[i].parentId == arr[j].falseId)
-    //         {
-    //             idArr=roleInfo[i].path.split("|");
-    //             var idArrL = 0;
-    //             arr.forEach(function (item , index) {
-    //                 for (idArrL in idArr)
-    //                 {
-    //                     if (item.id == idArr[idArrL]) {
-    //                         item.choose = '1'
-    //                     }
-    //                 }
-    //             },this)
-    //         }
-    //     }
-    // }
-
-
-    arr.map(function (node) {
-        if (node.parentId === '0') {
-            nodes.push(node)
-            console.log(99999)
-        } else {
-            pushNodeeeee(node, nodes)
-=======
->>>>>>> 2eff73b8a511c0c0786ead4b87064500d90c0f03
 
     //祛空
     for(var i = 0;i<updata.length;i++){
@@ -700,31 +645,8 @@ export function getNodesssss(arrData, roleInfo) {
     })
 
 
-<<<<<<< HEAD
-            if (!pNode.children) {
-                if (node.type == 1) {
-                    if (!pNode.menuContentClick) {
-                        pNode.menuContentClick = []
-                    }
-                    if (node.choose == 1) {
-
-                        pNode.menuContentClick.push(node.path);
-                    }
-                    if (!pNode.menuContent) {
-                        pNode.menuContent = []
-                        pNode.menuContentName = []
-                    }
-                    pNode.menuContent.push(node);
-                    pNode.menuContentName.push(node.path);
-                } else {
-                    pNode.children = [node];
-                }
-            } else {
-                pNode.children.push(node);
-=======
     var updataString
     updataString = Arr.join(',')
->>>>>>> 2eff73b8a511c0c0786ead4b87064500d90c0f03
 
     return updataString
 }
