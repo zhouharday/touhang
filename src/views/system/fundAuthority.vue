@@ -47,24 +47,20 @@
                         </el-col>
                         <el-col :span="18">
                             <div class="right">
-                                <div v-if="item.falseId == 502">
+                                <div v-if="item.children">
                                     <div v-for="nextItem in item.children">
+                                        <div style="flex-direction: row; display: flex">
                                         <div >{{nextItem.permissionName}}</div>
-                                        <div class="right">
-                                            <!--<el-checkbox-group v-model="nextItem.menuContentClick" @change="handleCheckedCitiesChange">-->
-                                            <!--<el-checkbox v-for="(text, index) of nextItem.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>-->
-                                            <!--</el-checkbox-group>-->
-                                            <el-checkbox-group v-model="checkList">
-                                                <el-checkbox label="复选框 A"></el-checkbox>
-                                                <el-checkbox label="复选框 B"></el-checkbox>
-                                                <el-checkbox label="复选框 C"></el-checkbox>
-                                                <el-checkbox label="禁用" disabled></el-checkbox>
-                                                <el-checkbox label="选中且禁用" disabled></el-checkbox>
+                                        <div style=" margin-left: 20px">
+                                            <el-checkbox-group v-model="nextItem.menuContentClick" @change="handleCheckedCitiesChange">
+                                            <el-checkbox v-for="(text, index) of nextItem.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
+
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="item.falseId != 502">
+                                <div v-if="item.menuContent ">
                                     <el-checkbox-group v-model="item.menuContentClick" @change="handleCheckedCitiesChange">
                                         <el-checkbox v-for="(text, index) of item.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
@@ -190,22 +186,20 @@ export default {
             permissionlistByRoleId(row.id).then((res)=>{
                 console.log(res.data)
             })
+
         }
     },
     created(){
 //        获取角色列表
         queryList(1).then((res)=>{
+
             this.roleData = reloadQueryData(res.data.result)
         })
         //获取所有权限
         permissionqueryList(1).then((res)=>{
-//            console.log(res)
-//            console.log(res.data.result)
-            var ARR = res.data.result
-//            console.log(ARR)
-            this.allData = getNodesssss(ARR)
-//
-//            console.log(this.allData)
+
+            this.allData = getNodesssss(res.data.result)
+            console.log(this.allData)
         })
     }
     ,
