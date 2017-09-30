@@ -20,23 +20,23 @@
                         <el-tabs v-model="activeName" @tab-click="handleClick">
                             <el-tab-pane label="系统消息" name="first">
                                 <ul class="notice_ul">
-                                    <li v-for="( item,index ) in messageShow" :key="item.index">
-                                        <div>{{item.noRead}}</div>
-                                        <div>{{item.data}}</div>
-                                        <span>{{item.noticeMessage}}</span>
+                                    <li v-for="( item,index ) in sysMessage" :key="item.id">
+                                        <div>{{noRead}}</div>
+                                        <div>{{item.msgContent}}</div>
+                                        <span>{{item.createDate}}</span>
                                     </li>
                                 </ul>
-                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                                <Page class="page" :current="1" :total="sysMessage.length" simple @on-change="changePages"></Page>
                             </el-tab-pane>
                             <el-tab-pane label="公司公告" name="second">
                                 <ul class="notice_ul">
-                                    <li v-for="( item,index ) in noticeShow" :key="item.index">
-                                        <div>{{item.noRead}}</div>
-                                        <div>{{item.data}}</div>
-                                        <span>{{item.noticeMessage}}</span>
+                                    <li v-for="( item,index ) in assistNotice.list" :key="item.id">
+                                        <div>{{noRead}}</div>
+                                        <div>{{item.assistNotice.createDate}}</div>
+                                        <span>{{item.assistNotice.noticeContent}}</span>
                                     </li>
                                 </ul>
-                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                                <Page class="page" show-total='true' :current="1" :total=assistNotice.total simple @on-change="assistNoticePages"></Page>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -94,21 +94,21 @@
                             <img src="/static/img/wait_sth.png">
                             <span>{{sysPrompt}}</span>
                         </div>
-                        <div class="taskBox" :class="{ border_b:(index%2 == 0)}" v-for="(item,index) in taskLists" :key="item.index">
+                        <div class="taskBox" :class="{ border_b:(index%2 == 0)}" v-for="(item,index) in taskLists.list" :key="item.index">
                             <p>
                                 <span>任务名称：</span>
                                 <span>{{item.taskName}}</span>
                             </p>
                             <p>
                                 <span>指派人：</span>
-                                <span>{{item.taskAppoint}}</span>
+                                <span>{{item.seedUserName}}</span>
                             </p>
                             <p style="margin:0">
                                 <span>指派时间：</span>
-                                <span>{{item.taskTime}}</span>
+                                <span>{{item.createDate}}</span>
                             </p>
                         </div>
-                        <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
+                        <Page class="page" :current="1" :total="taskLists.total" simple @on-change="taskListsPage"></Page>
                         <!-- <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div> -->
                     </div>
                 </div>
@@ -117,131 +117,131 @@
 
         <!-- 立即申请 对话框-->
         <!-- <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
-                                                                                                    <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                                                                                                        <el-row>
-                                                                                                            <el-col>
-                                                                                                                <el-form-item label="标题" prop="name">
-                                                                                                                    <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
-                                                                                                                </el-form-item>
-                                                                                                            </el-col>
-                                                                                                            <el-col :span="12">
-                                                                                                                <el-form-item label="申请人" prop="person">
-                                                                                                                    <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
-                                                                                                                </el-form-item>
-                                                                                                            </el-col>
-                                                                                                            <el-col :span="12">
-                                                                                                                <el-form-item label="申请日期" prop="date">
-                                                                                                                    <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
-                                                                                                                </el-form-item>
-                                                                                                            </el-col>
-                                                                                                            <el-col>
-                                                                                                                <el-form-item label="备注" prop="notes">
-                                                                                                                    <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                                                                                                                    </el-input>
-                                                                                                                </el-form-item>
-                                                                                                            </el-col>
-                                                                                                            <el-col>
-                                                                                                                <el-form-item label="考察报告" prop="appendix">
-                                                                                                                    <!-- action 上传的地址，必填 -->
+                                                                                                                                        <el-form :model="applyForm" ref="applyForm" label-width="100px">
+                                                                                                                                            <el-row>
+                                                                                                                                                <el-col>
+                                                                                                                                                    <el-form-item label="标题" prop="name">
+                                                                                                                                                        <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                                                                                                                                                    </el-form-item>
+                                                                                                                                                </el-col>
+                                                                                                                                                <el-col :span="12">
+                                                                                                                                                    <el-form-item label="申请人" prop="person">
+                                                                                                                                                        <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                                                                                                                                                    </el-form-item>
+                                                                                                                                                </el-col>
+                                                                                                                                                <el-col :span="12">
+                                                                                                                                                    <el-form-item label="申请日期" prop="date">
+                                                                                                                                                        <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
+                                                                                                                                                    </el-form-item>
+                                                                                                                                                </el-col>
+                                                                                                                                                <el-col>
+                                                                                                                                                    <el-form-item label="备注" prop="notes">
+                                                                                                                                                        <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                                                                                                                                                        </el-input>
+                                                                                                                                                    </el-form-item>
+                                                                                                                                                </el-col>
+                                                                                                                                                <el-col>
+                                                                                                                                                    <el-form-item label="考察报告" prop="appendix">
+                                                                                                                                                        <!-- action 上传的地址，必填 -->
         <!-- <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                                                                                                        <div style="padding: 20px 0">
-                                                                                                                            <Icon type="ios-cloud-upload" size="52"></Icon>
-                                                                                                                            <p>点击或将文件拖拽到这里上传</p>
-                                                                                                                        </div>
-                                                                                                                    </Upload>
-                                                                                                                </el-form-item>
-                                                                                                            </el-col>
-                                                                                                            <el-col>
-                                                                                                                <el-form-item label="选择审批人" prop="date">
-                                                                                                                    <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                                                                                                        <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                                                                                                        </el-option>
-                                                                                                                    </el-select>
-                                                                                                                </el-form-item>
-                                                                                                            </el-col>
-                                                                                                        </el-row>
-                                                                                                    </el-form>
-                                                                                                    <div slot="footer" class="dialog-footer" style="text-align:center">
-                                                                                                        <el-button type="danger" @click="applyModal= false">提 交</el-button>
-                                                                                                    </div>
-                                                                                                </el-dialog> -->
+                                                                                                                                                            <div style="padding: 20px 0">
+                                                                                                                                                                <Icon type="ios-cloud-upload" size="52"></Icon>
+                                                                                                                                                                <p>点击或将文件拖拽到这里上传</p>
+                                                                                                                                                            </div>
+                                                                                                                                                        </Upload>
+                                                                                                                                                    </el-form-item>
+                                                                                                                                                </el-col>
+                                                                                                                                                <el-col>
+                                                                                                                                                    <el-form-item label="选择审批人" prop="date">
+                                                                                                                                                        <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                                                                                                                                                            <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                                                                                                                                                            </el-option>
+                                                                                                                                                        </el-select>
+                                                                                                                                                    </el-form-item>
+                                                                                                                                                </el-col>
+                                                                                                                                            </el-row>
+                                                                                                                                        </el-form>
+                                                                                                                                        <div slot="footer" class="dialog-footer" style="text-align:center">
+                                                                                                                                            <el-button type="danger" @click="applyModal= false">提 交</el-button>
+                                                                                                                                        </div>
+                                                                                                                                    </el-dialog> -->
         <!-- 立即查看 对话框 -->
         <!-- <div class="progressBox">
-                                                    <el-dialog title="立即查看" :visible.sync="progressModal" :close-on-click-modal="false">
-                                                        <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
-                                                        <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
-                                                            <el-table-column prop="node" label="节点" align="center">
-                                                            </el-table-column>
-                                                            <el-table-column prop="operator" label="处理人" align="center">
-                                                            </el-table-column>
-                                                            <el-table-column prop="conclusion" label="结论" align="center">
-                                                            </el-table-column>
-                                                            <el-table-column prop="startingTime" label="开始日期" align="center">
-                                                            </el-table-column>
-                                                            <el-table-column prop="time" label="用时" align="center">
-                                                            </el-table-column>
-                                                        </el-table>
-                                                        <div>
-                                                            <div class="title_f" style="background:#2a3142;color:#fff">
-                                                                <div class="desc">
-                                                                    <span>申请详情</span>
-                                                                </div>
-                                                            </div>
-                                                            <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
-                                                                <el-row>
-                                                                    <el-col>
-                                                                        <el-form-item label="标题" prop="name">
-                                                                            <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                                                        </el-form-item>
-                                                                    </el-col>
-                                                                    <el-col :span="12">
-                                                                        <el-form-item label="申请人" prop="person">
-                                                                            <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                                                        </el-form-item>
-                                                                    </el-col>
-                                                                    <el-col :span="12">
-                                                                        <el-form-item label="申请日期" prop="date">
-                                                                            <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                                                        </el-form-item>
-                                                                    </el-col>
-                                                                    <el-col>
-                                                                        <el-form-item label="备注" prop="notes">
-                                                                            <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
-                                                                            </el-input>
-                                                                        </el-form-item>
-                                                                    </el-col>
-                                                                    <el-col :span="8">
-                                                                        <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
-                                                                            <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
-                                                                            </el-input>
-                                                                        </el-form-item>
-                                                                    </el-col>
-                                                                    <el-col :span="1">
-                                                                        <div style="text-align:center;line-height:35px;">
-                                                                            <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
-                                                                        </div>
-                                                                    </el-col>
-                                                                </el-row>
-                                                            </el-form>
-                                                        </div>
-                                                        <div>
-                                                            <div class="title_f" style="background:#2a3142;color:#fff">
-                                                                <div class="desc">
-                                                                    <span>意见汇总</span>
-                                                                </div>
-                                                            </div>
-                                                            <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
-                                                                <p class="comment_left">
-                                                                    <span>{{item.comment}}</span>
-                                                                </p>
-                                                                <p class="comment_right">
-                                                                    <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
-                                                                    <span>{{item.note}}</span>
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </el-dialog>
-                                                </div> -->
+                                                                                        <el-dialog title="立即查看" :visible.sync="progressModal" :close-on-click-modal="false">
+                                                                                            <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
+                                                                                            <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
+                                                                                                <el-table-column prop="node" label="节点" align="center">
+                                                                                                </el-table-column>
+                                                                                                <el-table-column prop="operator" label="处理人" align="center">
+                                                                                                </el-table-column>
+                                                                                                <el-table-column prop="conclusion" label="结论" align="center">
+                                                                                                </el-table-column>
+                                                                                                <el-table-column prop="startingTime" label="开始日期" align="center">
+                                                                                                </el-table-column>
+                                                                                                <el-table-column prop="time" label="用时" align="center">
+                                                                                                </el-table-column>
+                                                                                            </el-table>
+                                                                                            <div>
+                                                                                                <div class="title_f" style="background:#2a3142;color:#fff">
+                                                                                                    <div class="desc">
+                                                                                                        <span>申请详情</span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
+                                                                                                    <el-row>
+                                                                                                        <el-col>
+                                                                                                            <el-form-item label="标题" prop="name">
+                                                                                                                <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                                                                                            </el-form-item>
+                                                                                                        </el-col>
+                                                                                                        <el-col :span="12">
+                                                                                                            <el-form-item label="申请人" prop="person">
+                                                                                                                <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                                                                                            </el-form-item>
+                                                                                                        </el-col>
+                                                                                                        <el-col :span="12">
+                                                                                                            <el-form-item label="申请日期" prop="date">
+                                                                                                                <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                                                                                            </el-form-item>
+                                                                                                        </el-col>
+                                                                                                        <el-col>
+                                                                                                            <el-form-item label="备注" prop="notes">
+                                                                                                                <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
+                                                                                                                </el-input>
+                                                                                                            </el-form-item>
+                                                                                                        </el-col>
+                                                                                                        <el-col :span="8">
+                                                                                                            <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
+                                                                                                                <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
+                                                                                                                </el-input>
+                                                                                                            </el-form-item>
+                                                                                                        </el-col>
+                                                                                                        <el-col :span="1">
+                                                                                                            <div style="text-align:center;line-height:35px;">
+                                                                                                                <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
+                                                                                                            </div>
+                                                                                                        </el-col>
+                                                                                                    </el-row>
+                                                                                                </el-form>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <div class="title_f" style="background:#2a3142;color:#fff">
+                                                                                                    <div class="desc">
+                                                                                                        <span>意见汇总</span>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
+                                                                                                    <p class="comment_left">
+                                                                                                        <span>{{item.comment}}</span>
+                                                                                                    </p>
+                                                                                                    <p class="comment_right">
+                                                                                                        <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
+                                                                                                        <span>{{item.note}}</span>
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </el-dialog>
+                                                                                    </div> -->
         <!-- 立即审批  对话框 -->
         <div class="progressBox">
             <el-dialog title="立即审批" :visible.sync="approvalModal" :close-on-click-modal="false">
@@ -416,7 +416,7 @@
             >div:nth-child(2) {
                 position: absolute;
                 top: 26px; // left: 3px;
-                width: 52px;
+                // width: 52px;
                 height: 24px;
                 line-height: 24px;
                 text-align: center;
@@ -647,11 +647,12 @@ export default {
         }
     },
     created() {
-        this.getScheduleList();
+        this.getNoticeUserList(1);
+        this.selectSysMessageList(1);
+        this.getTaskList(1);
     },
     data() {
         return {
-            ScheduleList: [], //日程列表数据
             activeName: 'first',
             // applyModal: false,
             progressModal: false,
@@ -694,62 +695,12 @@ export default {
                     time: "2017-08-16"
                 }
             ],
-            messageShow: [
-                {
-                    noRead: "未读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "未读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "未读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "未读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                }
-            ],
-            noticeShow: [
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                }
-            ],
-            taskLists: [
-                {
-                    taskName: '进行项目调研',
-                    taskAppoint: '小明',
-                    taskTime: '2017年7月8日   08:08:09'
-                },
-                {
-                    taskName: '进行项目调研',
-                    taskAppoint: '小明',
-                    taskTime: '2017年7月8日   08:08:09'
-                }
-            ],
+
+            noRead: "未读",
+            Readed: "已读",
+            assistNotice: [], //公司公告列表数据
+            sysMessage: [], //系统消息
+            taskLists: [], //代办任务列表数据
             // applyForm: { // 立即申请表单
             //     title: '',
             //     person: '',
@@ -834,17 +785,11 @@ export default {
         }
     },
     methods: {
-        changePages(pageIndex) {
-            this.$http.post('/url', { //此处ajax
-                pageIndex: pageIndex
-            })
-                .then(function(response) {
-
-                })
-                .catch(function(error) {
-
-                });
-
+        assistNoticePages(pageNum) {
+            this.getNoticeUserList(pageNum);
+        },
+        taskListsPage(pageNum) {
+            this.getTaskList(pageNum);
         },
         changetime(data) {
             // alert(888);
@@ -867,29 +812,77 @@ export default {
             this.userModal = !this.userModal;
             this.approvalModal = !this.approvalModal;
         },
-        getScheduleList() { //获取日程列表 api
-        // alert(555);
-        this.$http.post(this.api + '/work/getScheduleList', {
-            "userId": this.user.userInfor.id,
-            "merchantId": this.user.merchants[0].id
-        })
-            .then(res => {
-                if (res.status == '200') {
-                    if (res.data.status == '200') {
-                        console.log(res.data);
-                        this.ScheduleList = res.data.result;
-                        this.$Message.success(res.data.message);
-                    } else if (res.data.status == '403') {
-                        this.$Message.error(res.data.message);
-                    } else if (res.data.status == '49999') {
-                        this.$Message.error(res.data.message);
+        selectSysMessageList(pageNum) { //获取系统消息列表数据 api
+            this.$http.post(this.api + '/sysManage/selectSysMessageList', {
+                "userId": this.user.userInfor.id,
+                "page": pageNum,
+                "pageSize": 4,
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.sysMessage = res.data.result;
+                            console.log(this.sysMessage.total);
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
                     }
-                }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
+        getNoticeUserList(pageNum) { //获取公司公告列表数据 api
+            this.$http.post(this.api + '/work/getNoticeUserList', {
+                "userId": this.user.userInfor.id,
+                "page": pageNum,
+                "pageSize": 4,
             })
-            .catch(error => {
-                this.$Message.error("请求超时");
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.assistNotice = res.data.result;
+                            console.log(this.assistNotice.total);
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
+        getTaskList(page) { //获取代办任务列表数据 api
+            this.$http.post(this.api + '/work/getTaskList', {
+                "userId": this.user.userInfor.id,
+                "merchantId": this.user.merchants[0].id,
+                "type": 2,
+                "page": page,
+                "pageSize": 2,
             })
-    },
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res);
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.taskLists = res.data.result;
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
     }
 }
 
