@@ -26,7 +26,7 @@
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
                     <template scope="scope">
-                        <a class="project" @click="ShowPreMessage(scope.row.projectName,scope.$index)">{{ scope.row.projectName }}</a>
+                        <a class="project" @click="ShowPreMessage(scope.row.projectId, scope.row.projectName, scope.$index)">{{ scope.row.projectName }}</a>
                     </template>
                 </el-table-column>
                 <el-table-column prop="mananger" label="项目创建人" align="center">
@@ -229,13 +229,17 @@ export default {
             }
             return '';
         },
-        ShowPreMessage(title, ind) {
-            this.index = ind;
-            this.addTab('投资项目-' + title + '详情页', '/home/preProjectMessage/' + ind, 'preProjectMessage/' + ind);
-            this.$router.push({ name: 'preProjectMessage', params: { userId: title.id } });
+        ShowPreMessage(projectId, title, idx) {
+            this.addTab('投资项目-' + title + '详情页', '/home/preProjectMessage/' + idx, 'preProjectMessage/' + idx);
+            this.$router.push({ name: 'preProjectMessage', params: { userId: projectId } });
         },
         addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
+            });
         },
         deleteRow(index = 0, rows = []) {
             let row = rows[index];

@@ -19,8 +19,11 @@ export function getPres(params = {}) {
 // 投前项目详情
 export function getPreDetail(projectId = undefined) {
 	const data = {
-		projectId
+		id:projectId
 	}
+
+	console.log("getPreDetail condition*/*/*/*" + JSON.stringify(data));
+
 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
 	//return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
 }
