@@ -39,8 +39,7 @@
                     <div class="searchHeader">
                         <el-row class="search-box">
                             <el-col :span="5">
-                                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick"
-                                          placeholder="表单名称">
+                                <el-input icon="search" v-model="input" placeholder="表单名称">
                                 </el-input>
                             </el-col>
                             <el-col :span="2" class="addProject">
@@ -56,6 +55,11 @@
                             <el-table :data="surfaceData" style="width:100%" max-height="700" class="table-item"
                                       :row-class-name="tableRowClassName">
                                 <el-table-column prop="num" label="序号" min-width="100" align="center">
+                                    <template scope="scope">
+                                        <div class="name" @click="handleRouter(scope.$index, scope.row)">
+                                            <span class="investorName">{{ scope.row.num }}</span>
+                                        </div>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column label="表单模型" align="center">
                                     <template scope="scope">
@@ -276,6 +280,14 @@
             //删除当前行
             handleDelete(index, rows) {
                 rows.splice(index, 1);
+            },
+            handleRouter(title, ind) {
+                this.index = ind;
+                this.addTab(title.theme + '详情页', '/home/createForm/', 'createForm/');
+                this.$router.push({ name: 'createForm'});
+            },
+            addTab(th, url, name) {
+                this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
             },
             refreshList(item, detailsitem) {
                 this.headerInfo_process.desc = item.title + '-' + detailsitem.stageName;
