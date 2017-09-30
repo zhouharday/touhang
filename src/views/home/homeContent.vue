@@ -50,7 +50,7 @@
                     <div class="homeContent_botm">
                         <div>
                             <div>
-                                <img src="/static/img/wait_sth.png" />
+                                <img src="/static/img/sysPrompt.png">
                                 <span>{{waitSth}}</span>
                             </div>
                             <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.index">
@@ -91,21 +91,21 @@
                 <div class="grid-content bg-purple">
                     <div class="homeContentBot_r">
                         <div>
-                            <img src="/static/img/cr_prject.png">
+                            <img src="/static/img/wait_sth.png">
                             <span>{{sysPrompt}}</span>
                         </div>
-                        <div class="grid-content bg-purple">
-                            <div style="padding: 0px 0px;">
-                                <ul class="notice_ul">
-                                    <li v-for="( item,index ) in messageShow" :key="item.index">
-                                        <div>{{item.noRead}}</div>
-                                        <div>{{item.data}}</div>
-                                        <span>{{item.noticeMessage}}</span>
-                                    </li>
-                                </ul>
-                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
-                            </div>
+                        <div class="taskBox" v-for="(item,index) in taskLists" :key="item.index">
+                            <p>任务名称：
+                                <span>{{item.taskName}}</span>
+                            </p>
+                            <p>指派人：
+                                <span>{{item.taskAppoint}}</span>
+                            </p>
+                            <p>直排时间：
+                                <span>{{item.taskTime}}</span>
+                            </p>
                         </div>
+                        <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
                         <!-- <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div> -->
                     </div>
                 </div>
@@ -114,54 +114,54 @@
 
         <!-- 立即申请 对话框-->
         <!-- <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
-            <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                <el-row>
-                    <el-col>
-                        <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="备注" prop="notes">
-                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="考察报告" prop="appendix">
-                            <!-- action 上传的地址，必填 -->
-                            <!-- <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="选择审批人" prop="date">
-                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer" style="text-align:center">
-                <el-button type="danger" @click="applyModal= false">提 交</el-button>
-            </div>
-        </el-dialog> -->
+                                                <el-form :model="applyForm" ref="applyForm" label-width="100px">
+                                                    <el-row>
+                                                        <el-col>
+                                                            <el-form-item label="标题" prop="name">
+                                                                <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                                                            </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="12">
+                                                            <el-form-item label="申请人" prop="person">
+                                                                <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                                                            </el-form-item>
+                                                        </el-col>
+                                                        <el-col :span="12">
+                                                            <el-form-item label="申请日期" prop="date">
+                                                                <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
+                                                            </el-form-item>
+                                                        </el-col>
+                                                        <el-col>
+                                                            <el-form-item label="备注" prop="notes">
+                                                                <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                                                                </el-input>
+                                                            </el-form-item>
+                                                        </el-col>
+                                                        <el-col>
+                                                            <el-form-item label="考察报告" prop="appendix">
+                                                                <!-- action 上传的地址，必填 -->
+        <!-- <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                                                    <div style="padding: 20px 0">
+                                                                        <Icon type="ios-cloud-upload" size="52"></Icon>
+                                                                        <p>点击或将文件拖拽到这里上传</p>
+                                                                    </div>
+                                                                </Upload>
+                                                            </el-form-item>
+                                                        </el-col>
+                                                        <el-col>
+                                                            <el-form-item label="选择审批人" prop="date">
+                                                                <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                                                                    <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                                                                    </el-option>
+                                                                </el-select>
+                                                            </el-form-item>
+                                                        </el-col>
+                                                    </el-row>
+                                                </el-form>
+                                                <div slot="footer" class="dialog-footer" style="text-align:center">
+                                                    <el-button type="danger" @click="applyModal= false">提 交</el-button>
+                                                </div>
+                                            </el-dialog> -->
         <!-- 立即查看 对话框 -->
         <div class="progressBox">
             <el-dialog title="立即查看" :visible.sync="progressModal" :close-on-click-modal="false">
@@ -308,8 +308,50 @@
                 </div>
                 <el-input type="textarea" v-model="commentMessage" :rows="4"></el-input>
                 <div slot="footer" class="dialog-footer" style="text-align:center">
-                    <el-button type="danger" @click="approvalModal= false">同  意</el-button>
-                     <el-button   @click="approvalModal= false">不同意</el-button>
+                    <el-button type="danger" @click="userModal = true">同 意</el-button>
+                    <el-button @click="userModal= true">不同意</el-button>
+                </div>
+            </el-dialog>
+        </div>
+        <!-- 添加用户 对话框-->
+        <div class="addUser">
+            <el-dialog title="选择用户" :visible.sync="userModal">
+                <el-form :model="roleForm" :rules="rules1" ref="roleForm" label-width="80px">
+                    <el-row :gutter="40">
+                        <el-col>
+                            <i style="border-bottom:1px solid #f05e5e"></i>
+                        </el-col>
+                        <el-col :span="14">
+                            <el-form-item label="部门：" prop="department">
+                                <el-select v-model="roleForm.department" placeholder="请选择部门" style="width:100%" auto-complete="off">
+                                    <el-option v-for="item in departmentOptions" :key="item.label" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="14">
+                            <el-form-item prop="name">
+                                <el-input v-model="roleForm.name" placeholder="请输入姓名或账号" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8" style="text-align:right">
+                            <el-button type="danger" style=" width:100px;font-size:16px;border-radius:5px;">查找</el-button>
+                        </el-col>
+                        <el-col>
+                            <i style="border-bottom: 1px solid #c4c4c4;"></i>
+                        </el-col>
+                        <el-col>
+                            <el-form-item prop="checkedUser" v-for="item in roleForm.selectUser" :key="item.index">
+                                <el-checkbox v-model="roleForm.checkedUser" :label="item.name">{{item.name}}</el-checkbox>
+                                <span>{{item.phone}}</span>
+                                <span>{{item.branch}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <div style="text-align:center">
+                    <el-button type="danger" class="dialogBtn_active" @click="submit">确定</el-button>
+                    <el-button class="dialogBtn" @click="cancle">取消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -498,7 +540,7 @@
     }
 }
 
-//查看进度对话框中的样式
+//立即对话框中的样式
 .title_f {
     margin-top: 30px;
     width: 100%;
@@ -538,6 +580,41 @@
 .bgl {
     background: #EEF0F4;
 }
+
+// 选择用户 弹出框
+.addUser {
+    i {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    span {
+        margin-left: 23%;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .dialogBtn_active {
+        width: 150px;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+    .dialogBtn {
+        width: 150px;
+        font-size: 16px;
+        color: #f05e5e;
+        border-radius: 5px;
+        border-color: #f05e5e;
+        background-color: #fff;
+    }
+}
+
+// 待办任务 
+.taskBox {
+    padding: 25px 0; // border-bottom: 1px solid #c4c4c4;
+    >p {
+        margin-bottom: 15px;
+    }
+}
 </style>
 
 
@@ -553,6 +630,7 @@ export default {
             // applyModal: false,
             progressModal: false,
             approvalModal: false,
+            userModal: false,
             commentMessage: '',
             loading: false,
             monthDate: [],
@@ -612,14 +690,48 @@ export default {
                     noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
                 }
             ],
-            applyForm: { // 立即申请表单
-                title: '',
-                person: '',
-                date: '',
-                notes: '',
-                appendix: '',
-                auditor: ''
-            },
+            noticeShow: [
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                }
+            ],
+            taskLists: [
+                {
+                    taskName: '进行项目调研',
+                    taskAppoint: '小明',
+                    taskTime: '2017年7月8日   08:08:09'
+                },
+                {
+                    taskName: '进行项目调研',
+                    taskAppoint: '小明',
+                    taskTime: '2017年7月8日   08:08:09'
+                }
+            ],
+            // applyForm: { // 立即申请表单
+            //     title: '',
+            //     person: '',
+            //     date: '',
+            //     notes: '',
+            //     appendix: '',
+            //     auditor: ''
+            // },
             progressTable: [//查看进度表单 节点table
                 {
                     node: '发起申请',
@@ -660,28 +772,39 @@ export default {
                     note: '【管理员】2017/08/15'
                 }
             ],
-            noticeShow: [
+            roleForm: { //选择用户表单
+                department: '',
+                name: '',
+                checkedUser: [],
+                selectUser: [
+                    {
+                        name: '张韶涵1',
+                        phone: '15268792134',
+                        branch: '项目部'
+                    },
+                    {
+                        name: '张韶涵2',
+                        phone: '15268792134',
+                        branch: '项目部'
+                    },
+                    {
+                        name: '张韶涵3',
+                        phone: '15268792134',
+                        branch: '项目部'
+                    }
+                ]
+            },
+            departmentOptions: [
                 {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                    value: '选项一',
+                    label: '部门一'
                 }
             ],
+            rules1: {
+                checkedUser: [
+                    { type: 'array', required: true, message: '请选择用户', trigger: 'blur' }
+                ]
+            },
         }
     },
     methods: {
@@ -708,6 +831,14 @@ export default {
                 return item.yd = item.day && item.day % 3 == 1 ? true : false;
             });
             this.monthDate = arr;
+        },
+        submit() { //选择用户 确定按钮方法
+            this.userModal = !this.userModal;
+            this.approvalModal = !this.approvalModal;
+        },
+        cancle() { //选择用户 取消按钮方法
+            this.userModal = !this.userModal;
+            this.approvalModal = !this.approvalModal;
         }
     }
 }

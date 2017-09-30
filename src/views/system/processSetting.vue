@@ -6,7 +6,7 @@
                     <div class="searchBox">
                         <el-input placeholder="请输入查找内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width:450px">
                         </el-input>
-                        <el-button type="text">+新建</el-button>
+                        <el-button type="text" @click="">+新建</el-button>
                     </div>
                     <div v-for="(item,index) in modelLists" :key="item.index">
                         <div class="modelBox">
