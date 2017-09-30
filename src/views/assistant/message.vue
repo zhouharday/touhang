@@ -6,34 +6,34 @@
                 <el-row class="message_top">
                     <el-col :span="4" style="margin-right:40px;">
                         <div class="messageBrand">
-                            <img src="/static/img/luzhan.png">
+                            <img :src="productInfo.logo">
                         </div>
                     </el-col>
                     <el-col :span="18">
                         <div class="messageIntro">
                             <div class="introText">
-                                <p>{{dataList.projectName}}</p>
+                                <p>{{company.name}} &nbsp;&nbsp;&nbsp;({{productInfo.brief}})</p>
                                 <div>
                                     <p>行业：
-                                        <span>{{dataList.industry}}</span>
+                                        <span>{{company.industryName}}</span>
                                     </p>
                                     <p>所在地：
-                                        <span>{{dataList.location}}</span>
+                                        <span>{{company.citystr}}</span>
                                     </p>
                                     <p>成立时间：
-                                        <span>{{dataList.datetime}}</span>
+                                        <span>{{company.foundingTime}}</span>
                                     </p>
                                 </div>
                                 <p>公司全称：
-                                    <span>{{dataList.companyName}}</span>
+                                    <span>{{productInfo.fullname}}</span>
                                 </p>
                             </div>
                             <div class="introTable">
                                 <p class="table-top">上轮获投</p>
                                 <div class="table-bottom">
-                                    <p class="table-col">{{financeList[0].round}}</p>
+                                    <p class="table-col">{{company.phaseName}}</p>
                                     <p>&yen;：
-                                        <span>{{financeList[0].money}}</span>
+                                        <span>{{company.lastCast}}</span>
                                     </p>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                     </el-col>
                     <el-col :span="2">
                         <div class="messageBtn">
-                            <el-button type="danger" @click="dialogVisible=true">
+                            <el-button type="danger" @click="dialogVisible = true">
                                 +项目池
                             </el-button>
                             <!-- 转项目池 dialog -->
@@ -63,22 +63,25 @@
                                 <el-tab-pane label="项目介绍" name="first">
                                     <div class="project">
                                         <b>概述</b>
-                                        <p>{{dataList.summary}}</p>
+                                        <p>{{productInfo.brief}}</p>
                                         <b>详细介绍</b>
+                                        <p>{{productInfo.intro}}</p>
                                         <p>产品服务</p>
-                                        <p>{{dataList.service}}</p>
+                                        <p>{{productInfo.productservice}}</p>
                                         <p>用户市场</p>
-                                        <p>{{dataList.market}}</p>
+                                        <p>{{productInfo.usermarket}}</p>
                                         <p>商业模式</p>
-                                        <p>{{dataList.businessModel}}</p>
+                                        <p>{{productInfo.businessModel}}</p>
                                         <p>运营数据</p>
-                                        <p>{{dataList.operationData}}</p>
+                                        <p>{{productInfo.operationData}}</p>
                                         <b>商业计划书</b>
-                                        <div v-for="(item,index) in proposalList" :key="item.index">
+                                        <!-- <div v-for="(item,index) in proposalList" :key="item.index"> -->
+                                        <div>
                                             <p>
-                                                <span>{{item.plan}}</span>
-                                                <span class="preview" @click="viewFile">预览</span>
-                                                <a href="/static/img/plan.txt" download="xxxxx计划书" class="preview">下载</a>
+                                                <span>{{productInfo.fileName}}</span>
+                                                <!-- <span class="preview" @click="viewFile">预览</span> -->
+                                                <a class="preview" :href="productInfo.businessPlan">预览</a>
+                                                <a :href="productInfo.businessPlan" :download="productInfo.fileName" class="preview">下载</a>
                                             </p>
                                         </div>
                                     </div>
@@ -86,15 +89,15 @@
                                 <el-tab-pane label="融资经历" name="second">
                                     <div class="financing">
                                         <b>融资经历</b>
-                                        <div v-for="(item,index) in  financeList" :key="item.index">
+                                        <div v-for="(item,index) in finance" :key="item.index">
                                             <p>
-                                                <span class="mgr">{{item.time}}</span>
-                                                <span class="mgr">{{item.round}}</span>
-                                                <span class="mgr">融资金额：
-                                                    <span>{{item.money}}</span>
+                                                <span class="mgr">{{item.financedate}}</span>
+                                                <span class="mgr">{{item.phaseName}}</span>
+                                                <span class="mgr">融资金额 :
+                                                    <span>{{item.financeamount}}</span>
                                                 </span>
-                                                <span class="mgr">投资方：
-                                                    <span>{{item.investor}}</span>
+                                                <span class="mgr">投资方 :
+                                                    <span>{{item.participantvos}}</span>
                                                 </span>
                                             </p>
                                         </div>
@@ -105,58 +108,60 @@
                                         <b>项目团队</b>
                                         <p>
                                             团队优势
-                                            <span class="mgls">{{dataList.teamAdvantage}}</span>
+                                            <span class="mgls">{{story}}</span>
                                         </p>
-                                        <p>
-                                            团队成员
-                                            <span class="mgls">姓名：
-                                                <span>{{dataList.teamMember}}</span>
-                                            </span>
-                                        </p>
-                                        <p class="mgl">职位：
-                                            <span>{{dataList.teamPosition}}</span>
-                                        </p>
-                                        <p class="mgl">介绍：
-                                            <span>{{dataList.teamIntro}}</span>
-                                        </p>
+                                        <p>团队成员</p>
+                                        <div v-for="(item,index) in member" :key="item">
+                                            <p>
+                                                <span class="mgls">姓名 : &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <span>{{item.name}}</span>
+                                                </span>
+                                            </p>
+                                            <p class="mgl">职位 : 
+                                                <span>{{item.jobtitle}}</span>
+                                            </p>
+                                            <p class="mgl">介绍 : 
+                                                <span>{{item.intro}}</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </el-tab-pane>
                                 <el-tab-pane label="查看工商信息" name="fourth">
                                     <div class="registration">
                                         <b>工商信息</b>
                                         <p>公司名称：
-                                            <span>{{dataList.companyName}}</span>
+                                            <span>{{basicInfo.name}}</span>
                                         </p>
                                         <p>公司类型：
-                                            <span>{{dataList.companySort}}</span>
+                                            <span>{{basicInfo.conpanyType}}</span>
                                         </p>
                                         <p>成立日期：
-                                            <span>{{dataList.date}}</span>
+                                            <span>{{basicInfo.startdate}}</span>
                                         </p>
                                         <p>注册资本：
-                                            <span>{{dataList.capital}}</span>
+                                            <span>{{basicInfo.registcapi}}</span>
                                         </p>
                                         <p>法人代表：
-                                            <span>{{dataList.delegate}}</span>
+                                            <span>{{basicInfo.opername}}</span>
                                         </p>
                                         <p>经营状态：
-                                            <span>{{dataList.operationState}}</span>
+                                            <span>{{basicInfo.managementForms}}</span>
                                         </p>
                                         <p>登记机关：
-                                            <span>{{dataList.authority}}</span>
+                                            <span>{{basicInfo.registrationAuthority}}</span>
                                         </p>
                                         <p>注册地址：
-                                            <span>{{dataList.address}}</span>
+                                            <span>{{basicInfo.registAddress}}</span>
                                         </p>
-                                        <p>统一社会信用代码：
-                                            <span>{{dataList.creditCode}}</span>
-                                        </p>
-                                        <p>工商注册号：
-                                            <span>{{dataList.registeredNum}}</span>
+                                        <!-- <p>统一社会信用代码：
+                                            <span>{{finance.creditCode}}</span>
+                                        </p> -->
+                                        <!-- <p>工商注册号：
+                                            <span>{{finance.registeredNum}}</span>
                                         </p>
                                         <p>组织机构代码：
-                                            <span>{{dataList.institutionCode}}</span>
-                                        </p>
+                                            <span>{{finance.institutionCode}}</span>
+                                        </p> -->
                                     </div>
                                 </el-tab-pane>
                             </el-tabs>
@@ -176,10 +181,6 @@
         </section>
     </div>
 </template>
-
-
-
-
 
 <style lang="less" scoped>
 .container {
@@ -202,7 +203,7 @@
                     height: 100px;
                 }
                 .messageIntro {
-                    width: 450px;
+                    // width: 450px;
                     .introText {
                         >p {
                             margin-bottom: 3px;
@@ -305,7 +306,33 @@
 
 
 <script>
+import { getDate } from 'common/js/config'
 export default {
+    watch: {
+        "$route": function(to, from) {
+            // 对路由变化作出响应...
+            this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
+            this.messageList(this.$route.params.userId);
+        }
+    },
+    created: function() {
+        this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
+        this.messageList(this.$route.params.userId);
+    },
+    computed: {
+        user() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return {
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor,
+                no: this.$store.state.register.no
+            }
+        },
+        textData() {
+            return this.$store.state.textData;
+        }
+    },
     data() {
         return {
             confirm: false,
@@ -313,7 +340,7 @@ export default {
             isShow: true,
             isHide: false,
             activeName: 'first',
-            dataList: {
+            dataList: { //项目介绍
                 projectName: "鹿战（体育赛事即时竞猜平台）",
                 industry: "体育",
                 location: "深圳",
@@ -356,24 +383,22 @@ export default {
                     money: "数百万人民币",
                     investor: "吴静钰"
                 }
-            ]
-        }
-    },
-    watch: {
-        $route: function() {
-            this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
+            ],
+            productInfo: { //项目描述
+            },
+            basicInfo: [], //工商信息
+            company: {}, //公司基本信息
+            finance: [], //融资信息
+            member: [], //董事会
+            product: [], //
+            story: '', //团队优势
 
         }
     },
     methods: {
         handleClick(tab, event) {
-            console.log(tab, event);
+            // console.log(tab, event);
             window.sessionStorage.setItem("tab" + this.$route.params.userId, this.activeName);
-        },
-        jumpPool() {
-            this.dialogVisible = true;
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
@@ -386,27 +411,67 @@ export default {
             this.isShow = true;
             this.isHide = false;
         },
-        messageList() {
-            this.$http.post(this.api + 'url' + this.$route.params.userId)
-                .then(response => {
-
+        jumpPool() {
+            this.dialogVisible = false;
+            console.log(this.user.no);
+            this.insertProjectPool(this.user.no);
+        },
+        insertProjectPool(no) { //添加到项目池 api
+            this.$http.post(this.api + '/productClieController/insertProjectPool', {
+                "no": no,//列表时候对象返回的字段
+                "userId": this.user.userInfor.id,//当前登录用户uerid
+                "merchantId": this.user.merchants[0].id//商户id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.addTab('项目池', '/home/projectPool', 'projectPool');
+                            this.$router.push({ name: 'projectPool' });
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        } else if (res.data.status == '9050') {
+                            this.$Message.error(res.data.message);
+                            return;
+                        }
+                    }
                 })
                 .catch(error => {
+                    this.$Message.error('请求超时');
+                })
+        },
+        messageList(id) { //获取项目详情
+            this.$http.post(this.api + '/productClieController/selectMessage', {
+                // id: id
+                id: '10'
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            // console.log(res.data.result);
+                            this.productInfo = res.data.result.productInfo;
+                            this.basicInfo = res.data.result.basicInfo;
+                            this.company = res.data.result.company;
+                            this.finance = res.data.result.finance;
+                            this.member = res.data.result.member;
+                            this.product = res.data.result.product;
+                            this.story = res.data.result.story;
 
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error('请求超时');
                 })
         },
         stateData() { //调用 actions 方法
             this.$store.dispatch({ type: 'increment' });
         }
     },
-    created: function() {
-        this.activeName = window.sessionStorage.getItem("tab" + this.$route.params.userId) ? window.sessionStorage.getItem("tab" + this.$route.params.userId) : "first";
-    },
-    computed: {
-        textData() {
-            return this.$store.state.textData;
-        }
-    }
 };
 
 </script>

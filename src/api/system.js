@@ -491,19 +491,28 @@ export function permissionqueryList(type) {
 // 权限树转换
 export function getNodesssss(arrData,roleInfo) {
     var nodes = [];
-    var arr = arrData
+    var  arr = [];
+
+    // arr = arr.concat(arrData)
+    // var arr =
     var i = 0;
     var j = 0;
     var x = 0;
     var idArr ;
 console.log(arrData)
-//     for ( x in arr){
-//         if (arr[x].falseId == 11){
-//             alert(arr[x].id)
-//         }
-//         arr[x].id = arr[x].falseId
-//     }
-//     console.log( arr)
+    for ( x in arrData){
+        var dic = {};
+        dic.id = arrData[x].id
+        dic.falseId = arrData[x].falseId
+        dic.parentId = arrData[x].parentId
+        dic.path = arrData[x].path
+        dic.permissionName = arrData[x].permissionName
+        dic.type = arrData[x].type
+        // arr[x].id = arrData[x].id
+        arr.push(dic)
+    }
+    console.log( arr)
+
 
     // for (j in arr) {
     //     for (i in roleInfo)
@@ -527,9 +536,8 @@ console.log(arrData)
 
     arr.map(function (node) {
         if (node.parentId === '0') {
-            node.label = node.deptName
             nodes.push(node)
-            // console.log(nodes)
+            console.log(99999)
         } else {
             pushNodeeeee(node,nodes)
 
@@ -537,22 +545,15 @@ console.log(arrData)
 
     })
 
-    // console.log(nodes)
-
     return nodes
 }
 
 function pushNodeeeee(node, pNodes) {
-    let charlds = [];
     pNodes.map(function (pNode) {
-        // if(pNode.falseId == 501){
-        //     console.log(node.permissionName +'****'+ node.path)
-        // }
 
-        if (pNode.id == node.parentId) {
+        if (pNode.falseId == node.parentId) {
 
             if (!pNode.children) {
-
                 if(node.type == 1)
                 {
                     if (!pNode.menuContentClick) {
@@ -577,11 +578,9 @@ function pushNodeeeee(node, pNodes) {
             }
         } else {
             if (pNode.children) {
-                node.label = node.deptName
                 pushNodeeeee(node, pNode.children)
             }
         }
-        node.label = node.deptName
     })
 }
 

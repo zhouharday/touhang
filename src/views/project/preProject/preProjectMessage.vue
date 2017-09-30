@@ -100,7 +100,7 @@
         <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
         </delete-reminders>
         <!-- 发起申请 对话框-->
-<<<<<<< HEAD
+<!-- <<<<<<< HEAD
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
             <el-form :model="applyForm" ref="applyForm" label-width="100px">
                 <el-row>
@@ -155,7 +155,7 @@
                 <el-button type="danger" size="small" @click="applyModal= false">提交</el-button>
             </div>
         </el-dialog>
-=======
+<!-- ======= -->
         <!-- <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms> -->
         <div class="applyBox">
             <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
@@ -208,7 +208,7 @@
                 </div>
             </el-dialog>
         </div>
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+<!-- >>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1 -->
         <!-- 查看进度 对话框 -->
         <div class="progressBox">
             <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">

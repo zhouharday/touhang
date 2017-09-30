@@ -196,6 +196,7 @@ export default {
 
 //            console.log(getNodesssss(res.data.result))
             this.allData = getNodesssss(res.data.result)
+            console.log(this.allData)
         })
     }
     ,

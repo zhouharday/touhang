@@ -5,9 +5,9 @@
     <div class="content">
         <v-Tab></v-Tab>
         <transition name="bounce">
-            <keep-alive>
+            <!-- <keep-alive> -->
                 <router-view></router-view>
-            </keep-alive>
+            <!-- </keep-alive> -->
         </transition>
     </div>
 </div>

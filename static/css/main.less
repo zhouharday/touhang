@@ -357,13 +357,10 @@ ul li {
             //&:active {
             //    background: #f05e5e;
             //}
-//<<<<<<< HEAD
-//=======
         }
         .el-button--danger {
             background-color: #F05E5E;
             border-color: #F05E5E;
-//>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
         }
     }
 }
@@ -801,30 +798,47 @@ ul li {
 }
 
 /*基金管理模块 我的基金页*/
-//<<<<<<< HEAD
-//.fund {
-//    // row-table的css style
-//    .el-table__fixed-header-wrapper thead div {
-//        background-color: #2A3142;
-//        color: #fff;
-//    }
-//    .el-table th {
-//        background-color: #2A3142;
-//    }
-//    .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
-//        background-color: #2A3142;
-//        color: #fff;
-//=======
+.fund {
+   // row-table的css style
+   .el-table__fixed-header-wrapper thead div {
+       background-color: #2A3142;
+       color: #fff;
+   }
+   .el-table th {
+       background-color: #2A3142;
+   }
+   .el-table__footer-wrapper thead div, .el-table__header-wrapper thead div {
+       background-color: #2A3142;
+       color: #fff;
+   }
+}
+
 
 
 /*系统管理模块 流程设置页*/
 .processSetting {
-    .el-input__inner {
-        border-radius: 15px;
+    // 流程模型
+    .processModel {
+        .el-input__inner {
+            border-radius: 15px;
+        }
+        .el-button {
+            color: #f05e5e;
+            span {
+                border-bottom: 1px solid #f05e5e;
+            }
+        }
     }
-    .el-button > span {
-        border-bottom: 1px solid #f05e5e;
-//>>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
+    // 阶段配置
+    .phaseConfigure {
+        .processItem {
+            .el-button {
+                color: #f05e5e;
+                span {
+                    border-bottom: 1px solid #f05e5e;
+                }
+            }
+        }
     }
 }
 

@@ -10,6 +10,12 @@ export function changeDate(value) {
     }
     return [year, month, day].join('-')
 }
+
+export function getDate(value) { //时间戳转换标准时间
+    var tt = new Date(value).toLocaleString().replace(/\//g, "-");
+    return tt;
+}
+
 // 待测试
 export function clearValue(obj) {
     Object.keys(obj).forEach((val, array) => {

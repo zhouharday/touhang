@@ -91,7 +91,7 @@ export default {
         },
         submitForm() {
             if (this.valueData) {
-                this.$store.state.login.loading = true
+                this.$store.state.login.loading = true;
                 sessionStorage.clear();
                 // this.$router.push({ name: 'homeContent' });
                 let number = this.userName;
