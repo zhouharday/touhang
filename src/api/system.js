@@ -385,6 +385,7 @@ export function getUpdata(arr) {
             })
         }
     })
+
     //祛空
     for(var i = 0;i<updata.length;i++){
         if(updata[i]==''||updata[i]==null||typeof(updata[i])==undefined){
@@ -477,6 +478,8 @@ export function permissionlistByRoleId(id) {
 
 }
 
+
+/*************************************************************************************}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}*/
 // 查询项目、基金所有权限
 export function permissionqueryList(type) {
     const data = {
@@ -487,103 +490,54 @@ export function permissionqueryList(type) {
     return service({url:'/permission/queryList', method: 'post', data})
 
 }
+//解析元素
+export function getUpdataFund(arr,RoleArr) {
+    var updata = [];
+    arr.forEach(function (data) {
+        var ss = data.split("|");
+        updata = updata.concat(ss)
+    })
 
-// 权限树转换
-export function getNodesssss(arrData,roleInfo) {
-    var nodes = [];
-    var  arr = [];
 
-    // arr = arr.concat(arrData)
-    // var arr =
-    var i = 0;
-    var j = 0;
-    var x = 0;
-    var idArr ;
-console.log(arrData)
-    for ( x in arrData){
-        var dic = {};
-        dic.id = arrData[x].id
-        dic.falseId = arrData[x].falseId
-        dic.parentId = arrData[x].parentId
-        dic.path = arrData[x].path
-        dic.permissionName = arrData[x].permissionName
-        dic.type = arrData[x].type
-        // arr[x].id = arrData[x].id
-        arr.push(dic)
+    //祛空
+    for(var i = 0;i<updata.length;i++){
+        if(updata[i]==''||updata[i]==null||typeof(updata[i])==undefined){
+            updata.splice(i,1);
+            i=i-1;
+        }
     }
-    console.log( arr)
+    updata = unique(updata)
+    updata.shift()
+    var Arr = []
+    var x;
+    console.log(RoleArr)
+    RoleArr.forEach(function (item) {
 
-
-    // for (j in arr) {
-    //     for (i in roleInfo)
-    //     {
-    //         if (roleInfo[i].parentId == arr[j].falseId)
-    //         {
-    //             idArr=roleInfo[i].path.split("|");
-    //             var idArrL = 0;
-    //             arr.forEach(function (item , index) {
-    //                 for (idArrL in idArr)
-    //                 {
-    //                     if (item.id == idArr[idArrL]) {
-    //                         item.choose = '1'
-    //                     }
-    //                 }
-    //             },this)
-    //         }
-    //     }
-    // }
-
-
-    arr.map(function (node) {
-        if (node.parentId === '0') {
-            nodes.push(node)
-            console.log(99999)
-        } else {
-            pushNodeeeee(node,nodes)
-
-        }
-
-    })
-
-    return nodes
-}
-
-function pushNodeeeee(node, pNodes) {
-    pNodes.map(function (pNode) {
-
-        if (pNode.falseId == node.parentId) {
-
-            if (!pNode.children) {
-                if(node.type == 1)
-                {
-                    if (!pNode.menuContentClick) {
-                        pNode.menuContentClick = []
-                    }
-                    if (node.choose == 1) {
-
-                        pNode.menuContentClick.push(node.path);
-                    }
-                    if (!pNode.menuContent) {
-                        pNode.menuContent = []
-                        pNode.menuContentName = []
-                    }
-                    pNode.menuContent.push(node);
-                    pNode.menuContentName.push(node.path);
-                }else{
-                    pNode.children = [node];
-                }
-            } else {
-                pNode.children.push(node);
-
-            }
-        } else {
-            if (pNode.children) {
-                pushNodeeeee(node, pNode.children)
+        for ( x in updata){
+            console.log(item.falseId +'***'+updata[x])
+            if (updata[x] == item.falseId){
+                Arr.push(item.id)
+                console.log(1)
             }
         }
     })
+
+
+    var updataString
+    updataString = Arr.join(',')
+
+    return updataString
 }
 
+//角色绑定权限
+export function roleBindPermission(roleId,permissionIds) {
+    const data = {
+        "roleId":roleId, //角色id 必须
+        "permissionIds":permissionIds
+    }
+    console.log(data)
+    return service({url:'/projectRole/roleBindPermission', method: 'post', data})
+}
 
 
 /*******************************基金权限******************************************/

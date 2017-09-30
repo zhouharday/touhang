@@ -40,6 +40,9 @@
             </div>
             <el-table :data="subscriberData" border style="width: 100%">
                 <el-table-column prop="name" label="姓名" width="180">
+                    <template scope="scope">
+                        {{scope.row.name}}
+                    </template>
                 </el-table-column>
                 <el-table-column prop="number" label="账号" width="180">
                 </el-table-column>
@@ -48,15 +51,19 @@
                 <el-table-column prop="role" label="所属角色" width="180">
                 </el-table-column>
                 <el-table-column prop="umdisables" label="状态" width="180">
+                    <template scope="scope">
+                        <div v-if="scope.row.umdisables == 1">启用</div>
+                        <div v-if="scope.row.umdisables == 0">锁定</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作">
                     <template scope="scope">
-                        <el-button
-                          @click.native.prevent="editRow(scope.$index, scope.row)"
-                          type="text"
-                          size="small">
-                          编辑
-                        </el-button>
+                        <!--<el-button-->
+                          <!--@click.native.prevent="editRow(scope.$index, scope.row)"-->
+                          <!--type="text"-->
+                          <!--size="small">-->
+                          <!--编辑-->
+                        <!--</el-button>-->
                         <el-button
                           @click.native.prevent="deleteRow(scope.$index, scope.row)"
                           type="text"

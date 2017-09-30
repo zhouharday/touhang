@@ -45,7 +45,7 @@
                 </el-tabs>
             </el-col>
         </el-row>
-        
+
     </div>
     <!--//添加弹窗-->
     <el-dialog title="角色名称" :visible.sync="fundDialog" class="fileDialog">
