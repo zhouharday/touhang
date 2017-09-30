@@ -28,7 +28,7 @@ service.interceptors.response.use(response => {
     Message.success(response.data.message || '数据请求成功')
     return response
 }, error => {
-    console.log(error)
+    // console.log(error)
     let response = error.response
     let status = response.status
     if (Object.is(status, 401)) {

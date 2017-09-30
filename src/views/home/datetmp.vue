@@ -41,10 +41,10 @@
                         <el-col>
                             <el-form-item label="时间：" prop="time">
                                 <el-time-select v-model="scheduleForm.time" :picker-options="{
-                                                                                start: '08:30',
-                                                                                step: '00:15',
-                                                                                end: '18:30'
-                                                                                }" placeholder="选择时间" style="width:100%">
+                                                                                    start: '08:30',
+                                                                                    step: '00:15',
+                                                                                    end: '18:30'
+                                                                                    }" placeholder="选择时间" style="width:100%">
                                 </el-time-select>
                             </el-form-item>
                         </el-col>
@@ -153,7 +153,7 @@ module.exports = {
 
 
             var x = 1;//日历
-            var arr = [];//存放当月每天，及每天的课程
+            var arr = [];//
 
             var len = 35;//根据当月起始星期 以及天数判断多少容器
             if (week > 5 && endDay > 30) {
@@ -206,7 +206,7 @@ module.exports = {
             this.changeDate = this.date.year + "-" + (this.date.month + 1) + "-" + n;
             this.$emit("changetime", self.changeDate);
             this.scheduleDialog = !this.scheduleDialog;
-            this.checkTime =  this.changeDate;
+            this.checkTime = this.changeDate;
         },
     },
     created: function() {

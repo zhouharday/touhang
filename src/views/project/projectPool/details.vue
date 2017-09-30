@@ -49,7 +49,7 @@
                     <el-col :span="12">
                         <el-form-item label="业务部门" prop="department">
                              <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
-                                <el-option v-for="item in departmentOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                <el-option v-for="item in departmentOptions" :key="item.id" :label="item.deptName" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -189,7 +189,7 @@ export default {
                 }]
             },
             typeOptions: [],
-           fromOptions: [],
+            fromOptions: [],
             industryOptions: [],
             addressOptions: [],
             departmentOptions: []

@@ -43,7 +43,6 @@ const mutations = {
                 return;
             }
         }
-
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },
@@ -171,6 +170,12 @@ const actions = {
                         // console.log(state.logoSrc);
                     } else if (state.merchants.length > '1') { //有多个组织列表
                         state.CardBox = loginBox;
+                    } else if (state.merchants.length == '0') { //有多个组织列表
+                        commit('Notification', {
+                            title: '',
+                            message: '无组织',
+                            type: 'error'
+                        });
                     }
                     // console.log(state.merchants.length);
 

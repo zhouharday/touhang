@@ -187,14 +187,6 @@ export function DeleteRightList(row) {
 }
 
 
-
-
-
-
-
-
-
-
 /*******************************企业权限******************************************/
 //角色列表
 export  function getRoleList() {
@@ -363,14 +355,6 @@ function pushNode(node, pNodes) {
                     pNode.menuContent.push(node);
                     pNode.menuContentName.push(node.path);
                 }else{
-                    // if (pNode.choose == 1) {
-                    //     if (!pNode.menuContentClick) {
-                    //         pNode.menuContentClick = []
-                    //     }
-                    //     pNode.menuContentClick.push(node.menuName);
-                        // console.log(pNode.menuContentClick)
-                    // }
-
                     pNode.children = [node];
                 }
             } else {
@@ -433,7 +417,6 @@ function unique(arr){
 //权限更改
 
 export function authorization(roleId,menuIds) {
-
     const data = {
         "roleId": roleId,
         "menuIds":menuIds,
@@ -446,7 +429,160 @@ export function authorization(roleId,menuIds) {
 
 
 /*******************************项目权限******************************************/
+// 查询项目、基金角色
+export function queryList(type) {
+    const data = {
+        "roleType":type,
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    return service({url:'/projectRole/queryList', method: 'post', data})
+}
 
+//增加参数editFlag
+export function reloadQueryData(arr) {
+    arr.forEach(function (item)  {
+        item.editFlag = false
+    })
+    return arr
+}
+
+//编辑项目、基金角色
+export function projectRoleEdit(id,roleName) {
+    const data = {
+        "id":id, //角色id  必须
+        "roleName":roleName
+    }
+    console.log(data)
+    return service({url:'/projectRole/edit', method: 'post', data})
+}
+
+// 新增项目、基金角色
+export function projectRoleSave(type,roleName) {
+    const data = {
+        "roleName":roleName, // 角色名称 必须
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "roleType":type  //角色类型（0:项目;1:基金） 必须
+    }
+    console.log(data)
+    return service({url:'projectRole/save', method: 'post', data})
+}
+
+//基金、项目角色对应权限
+export function permissionlistByRoleId(id) {
+
+    const data = {
+        "roleId":id
+    }
+    return service({url:'/permission/listByRoleId', method: 'post', data})
+
+}
+
+// 查询项目、基金所有权限
+export function permissionqueryList(type) {
+    const data = {
+        // "merchantId":JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        "merchantId":"68cb50ae78af4821bcccacfa94c8bf0e",
+        "permissionType":type
+    }
+    return service({url:'/permission/queryList', method: 'post', data})
+
+}
+
+// 权限树转换
+export function getNodesssss(arrData,roleInfo) {
+    var nodes = [];
+    var  arr = [];
+
+    // arr = arr.concat(arrData)
+    // var arr =
+    var i = 0;
+    var j = 0;
+    var x = 0;
+    var idArr ;
+console.log(arrData)
+    for ( x in arrData){
+        var dic = {};
+        dic.id = arrData[x].id
+        dic.falseId = arrData[x].falseId
+        dic.parentId = arrData[x].parentId
+        dic.path = arrData[x].path
+        dic.permissionName = arrData[x].permissionName
+        dic.type = arrData[x].type
+        // arr[x].id = arrData[x].id
+        arr.push(dic)
+    }
+    console.log( arr)
+
+
+    // for (j in arr) {
+    //     for (i in roleInfo)
+    //     {
+    //         if (roleInfo[i].parentId == arr[j].falseId)
+    //         {
+    //             idArr=roleInfo[i].path.split("|");
+    //             var idArrL = 0;
+    //             arr.forEach(function (item , index) {
+    //                 for (idArrL in idArr)
+    //                 {
+    //                     if (item.id == idArr[idArrL]) {
+    //                         item.choose = '1'
+    //                     }
+    //                 }
+    //             },this)
+    //         }
+    //     }
+    // }
+
+
+    arr.map(function (node) {
+        if (node.parentId === '0') {
+            nodes.push(node)
+            console.log(99999)
+        } else {
+            pushNodeeeee(node,nodes)
+
+        }
+
+    })
+
+    return nodes
+}
+
+function pushNodeeeee(node, pNodes) {
+    pNodes.map(function (pNode) {
+
+        if (pNode.falseId == node.parentId) {
+
+            if (!pNode.children) {
+                if(node.type == 1)
+                {
+                    if (!pNode.menuContentClick) {
+                        pNode.menuContentClick = []
+                    }
+                    if (node.choose == 1) {
+
+                        pNode.menuContentClick.push(node.path);
+                    }
+                    if (!pNode.menuContent) {
+                        pNode.menuContent = []
+                        pNode.menuContentName = []
+                    }
+                    pNode.menuContent.push(node);
+                    pNode.menuContentName.push(node.path);
+                }else{
+                    pNode.children = [node];
+                }
+            } else {
+                pNode.children.push(node);
+
+            }
+        } else {
+            if (pNode.children) {
+                pushNodeeeee(node, pNode.children)
+            }
+        }
+    })
+}
 
 
 

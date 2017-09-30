@@ -336,7 +336,12 @@ export default {
         }
     }
     .page {
-        .gloablepage()
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        text-align: right;
+        padding: @font-size-large-x 0;
     }
     span.investorName{
         cursor: pointer;

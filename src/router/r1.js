@@ -1,5 +1,4 @@
-const r1 = [
-    {
+const r1 = [{
         path: '/homeContent', //home/首页
         name: 'homeContent',
         component: resolve => require(['../views/home/homeContent.vue'], resolve)
@@ -10,6 +9,16 @@ const r1 = [
         component: resolve => require(['../views/office/task.vue'], resolve)
     },
     {
+        path: 'contacts', //home/通讯录页
+        name: 'contacts',
+        component: resolve => require(['../views/office/Contacts.vue'], resolve)
+    },
+    {
+        path: 'messageShow', //home/消息公告页
+        name: 'messageShow',
+        component: resolve => require(['../views/office/messageShow.vue'], resolve)
+    },
+    {
         path: 'assistant', //home/领投助手页
         name: 'assistant',
         component: resolve => require(['../views/assistant/assistant.vue'], resolve)
@@ -17,7 +26,7 @@ const r1 = [
     {
         path: 'message/:userId', //home/领投助手的项目详情页
         name: 'message',
-        component: resolve => require(['../views/assistant/message.vue'], resolve)
+        component: resolve => require(['../views/assistant/message.vue'], resolve),
     },
     {
         path: 'projectPool', //home/项目池页
@@ -65,22 +74,18 @@ const r1 = [
         path: 'valuationView', //home/估值查看页
         name: 'valuationView',
         component: resolve => require(['../views/project/valuationView/valuationView.vue'], resolve)
-    } ,{
+    }, {
         path: 'personal', //home/日常办公模块下的个人中心
         name: 'personal',
         component: resolve => require(['../views/office/personal.vue'], resolve)
-    } ,{
+    }, {
         path: 'configuration', //home/系统管理下的业务配置
         name: 'configuration',
         component: resolve => require(['../views/system/configuration.vue'], resolve)
-    },{
+    }, {
         path: 'manageCompany', //home/基金管理下的管理公司
         name: 'manageCompany',
         component: resolve => require(['../views/fund/manageCompany.vue'], resolve)
-     },{
-        path: 'createForm', //home/系统管理下的新建表单
-        name: 'createForm',
-        component: resolve => require(['../views/system/createForm.vue'], resolve)
     }
 ]
 export default r1

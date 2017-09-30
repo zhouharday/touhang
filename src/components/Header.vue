@@ -40,8 +40,12 @@ export default {
             if (command == 'loginout') {
                 localStorage.removeItem('ms_username');
                 sessionStorage.clear();
-                // this.delCook();
-                window.location.href = 'http://localhost:8081/login';
+                localStorage.clear();
+                this.delCook();
+                let href = location.href;
+                let index = href.indexOf('#');
+                let url = href.substr(0,index);
+                window.location.href = url + '#/login';
                 // this.$router.push('/login');
             }
         },

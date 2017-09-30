@@ -38,13 +38,16 @@ export function updateValuation(params = {}) {
 
 // 项目池列表
 export function getPros(params = {}) {
-	let { projectName, projectType, industryId, merchantId } = params;
+	let { projectName, projectType, industryId, merchantId, page, pageSize } = params;
 	const data = {
 		projectName, // 项目名关键字:"讲",
 		projectType, // 状态ID(1：正常 2：观察 3中止 4：淘汰)"1",
 		industryId,  // 数据字典中行业ID:"14","
-		merchantId   // 商业ID（必传）:"123456"
+		merchantId,   // 商业ID（必传）:"123456"
+		page,
+		pageSize
 	}
+	console.log("projectList condition:" + JSON.stringify(data));
 	return service({url: '/projectPool/searchProject', method: 'post', data})
 }
 
@@ -56,11 +59,35 @@ export function getProDetail(id) {
 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
 }
 
-// 添加项目池
+// 项目池添加项目
 export function addPro(params = {}) {
-	let { projectId, enterpriseInfo, merchantId } = params;
-	/*
-	let { 
+	let { basicForm, companyForm } = params;
+
+	let addProjectUserId = JSON.parse(sessionStorage.getItem('userInfor')).id;	//当前登录用户id
+    let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id;	//商户id必传"
+	let projectName = basicForm.projectName; //项目名
+    let projectShortName = basicForm.projectShortName; //项目简称
+    let addressId = basicForm.addressId; //项目所在地
+    let createPersonId = addProjectUserId; //项目创建人
+    let projectTypeId = basicForm.projectTypeId; //项目类型ID
+    let industryId = basicForm.industryId; //行业ID
+    let projectFromId = basicForm.projectFromId; //项目来源
+    let departmentId = basicForm.departmentId; //业务部门ID
+    let projectLogo = basicForm.projectLogo
+
+    let	enterpriseName = companyForm.enterpriseName;		//企业名称
+    let	legalPerson = companyForm.enterpriseName;			//法人
+    let	registeredCapital = companyForm.registeredCapital;	//注册资本
+    let	paiclCapital = companyForm.paiclCapital;			//实收资本
+    let	registerDate = companyForm.registerDate;			//注册登记时间
+    let	creditCode = companyForm.creditCode;				//统一信用代码
+    let	registerAddress = companyForm.registerAddress;		//注册地址
+    let	workAddress = companyForm.workAddress;				//办公地址
+    let	mainBusiness = companyForm.mainBusiness;			//主营业务
+    let	remark = companyForm.remark;						//备注
+
+	let projectInfo = { 
+		merchantId,
 		projectName, //项目名: "2",
         projectShortName, //项目简称: "3",
         addressId, //项目所在地: "321",
@@ -68,27 +95,27 @@ export function addPro(params = {}) {
         projectTypeId, //项目类型ID: null,
         industryId, //行业ID: null,
         projectFromId, //项目来源: null,
-        departmentId //业务部门ID: null
-    } = ( projectInfo || {} )
-    let {
-    	"page": 1,
-        "pageSize": 10,
-        "projectId"//基本信息ID: "1",
-        "enterpriseName"//企业名称: "5555",
-        "legalPerson"//法人: "CESHI",
-        "registeredCapital"注册资本: null,
-        "paiclCapital"//实收资本: null,
-        "registerDate"//注册登记时间 : null,
-        "creditCode"//统一信用代码: null,
-        "registerAddress"//注册地址: null,
-        "workAddress"//办公地址: null,
-        "mainBusiness"//主营业务: null,
-        "remark"//备注: null
-    } = ( enterpriseInfo || {} )
-	*/
+        departmentId, //业务部门ID: null
+        projectLogo
+    } 
+    console.log("projectInfo-------->" + JSON.stringify(projectInfo));
+
+    let enterpriseInfo = {
+        enterpriseName,		//企业名称
+        legalPerson,			//法人
+        registeredCapital,	//注册资本
+        paiclCapital,			//实收资本
+        registerDate,			//注册登记时间
+        creditCode,				//统一信用代码
+        registerAddress,		//注册地址
+        workAddress,				//办公地址
+        mainBusiness,			//主营业务
+        remark						//备注
+    }
+    console.log("enterpriseInfo-------->" + JSON.stringify(enterpriseInfo));
+	
 	const data = {
-		merchantId,
-		projectId,
+		projectInfo,
 		enterpriseInfo
 	}
 	return service({url: '/projectPool/addProjectPool', method: 'post', data})
