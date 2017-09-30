@@ -9,6 +9,7 @@
                 <div class="roleContent">
                     <el-table :data="roleInfo" border style="width: 100%" >
                         <el-table-column label="角色名称" prop="roleName" width="160" >
+
                             <template scope="scope">
                                 <span  v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">
                                     {{scope.row.roleName}}
