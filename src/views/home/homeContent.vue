@@ -651,7 +651,7 @@ export default {
     },
     data() {
         return {
-            ScheduleList: [],
+            ScheduleList: [], //日程列表数据
             activeName: 'first',
             // applyModal: false,
             progressModal: false,
@@ -877,6 +877,7 @@ export default {
                 if (res.status == '200') {
                     if (res.data.status == '200') {
                         console.log(res.data);
+                        this.ScheduleList = res.data.result;
                         this.$Message.success(res.data.message);
                     } else if (res.data.status == '403') {
                         this.$Message.error(res.data.message);
