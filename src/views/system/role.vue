@@ -1,110 +1,62 @@
 <template>
-<div class="role">
-    <div class="role">
-        <el-row :gutter="20">
-            <el-col :span="8">
-                <div class="roleBtn">
-                    <el-button size="small" @click="tianjuese">添加</el-button>
-                </div>
-                <div class="roleContent">
-                    <el-table :data="roleInfo" border style="width: 100%" >
-                        <el-table-column label="角色名称" prop="roleName" width="160" >
+<div  class="role">
+        <div  class="role">
+                <el-row  :gutter="20">
+                        <el-col  :span="8">
+                                <div  class="roleBtn">
+                                        <el-button  size="small"  @click="tianjuese">添加</el-button>
+                                </div>
+                                <div  class="roleContent">
+                                        <el-table  :data="roleInfo"  border  style="width:  100%"  >
+                                                <el-table-column  label="角色名称"  prop="roleName"  width="160"  >
+                                                        <template  scope="scope">
+                                                                <span    v-if="!scope.row.editFlag"  @click="handleRole(scope.$index,  scope.row)">
+                                                                        {{scope.row.roleName}}
+                                                                </span>
+                                                                <span    v-if="scope.row.editFlag"  @click="handleRole(scope.$index,  scope.row)">
+                                                                        <el-input  v-model="scope.row.roleName"  :placeholder  =  "scope.row.roleName"></el-input>
+                                                                </span>
+                                                        </template>
+                                                </el-table-column>
+                                                <el-table-column  label="操作">
+                                                        <template  scope="scope">
+                                                                <el-button  size="mini"  @click="handleEdit(scope.$index,  scope.row)"v-if="!scope.row.editFlag">
+                                                                        编辑
+                                                                </el-button>
+                                                                <el-button    size="mini"  @click="handleEdit(scope.$index,  scope.row)"v-if="scope.row.editFlag">
+                                                                        保存
+                                                                </el-button>
+                                                                <el-button  size="mini"  type="text"  @click="handleDelete(scope.$index,  scope.row)">
+                                                                        删除
+                                                                </el-button>
+                                                        </template>
+                                                </el-table-column>
+                                        </el-table>
+                                </div>
+                        </el-col>
+                        <el-col  :span="16">
+                                <el-tabs  v-model="activeName"  type="card"  @tab-click="handleClick">
+                                        <el-tab-pane  label="角色权限"  name="first">
+                                                <role-limits  :treeData="treeData"  :nowId  =  "nowId"></role-limits>
+                                        </el-tab-pane>
+                                        <el-tab-pane  label="角色用户"  name="second">
+                                                <role-user  :roleUserList  =  "roleUserList"  :nowId  =  "nowId"  @refreshRoleUserList  =  "refreshRoleUserList"></role-user>
+                                        </el-tab-pane>
+                                </el-tabs>
+                        </el-col>
+                </el-row>
 
-                            <template scope="scope">
-                                <span  v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">
-                                    {{scope.row.roleName}}
-                                </span>
-                                <span  v-if="scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">
-                                    <el-input v-model="scope.row.roleName" :placeholder = "scope.row.roleName"></el-input>
-                                </span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作">
-                            <template scope="scope">
-                                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"v-if="!scope.row.editFlag">
-                                    编辑
-                                </el-button>
-                                <el-button  size="mini" @click="handleEdit(scope.$index, scope.row)"v-if="scope.row.editFlag">
-                                    保存
-                                </el-button>
-                                <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">
-                                    删除
-                                </el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-            </el-col>
-            <el-col :span="16">
-                <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                    <el-tab-pane label="角色权限" name="first">
-                        <role-limits :treeData="treeData" :nowId = "nowId"></role-limits>
-                    </el-tab-pane>
-                    <el-tab-pane label="角色用户" name="second">
-                        <role-user :roleUserList = "roleUserList" :nowId = "nowId" @refreshRoleUserList = "refreshRoleUserList"></role-user>
-                    </el-tab-pane>
-                </el-tabs>
-            </el-col>
-        </el-row>
-        <div class="role">
-            <el-row :gutter="20">
-                <el-col :span="8">
-                    <div class="roleBtn">
-                        <el-button size="small">添加</el-button>
-                    </div>
-                    <div class="roleContent">
-                        <el-table :data="roleInfo" border style="width: 100%">
-                            <el-table-column label="角色名称" prop="roleName" width="160">
-
-                                <template scope="scope">
-                                    <!--<el-button size="small" type = "text" @click="handleRole(scope.$index, scope.row)">-->
-                                    <!--{{scope.row.roleName}}-->
-                                    <!--</el-button>-->
-                                    <span @click="handleRole(scope.$index, scope.row)">
-                                        {{scope.row.roleName}}
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作">
-                                <template scope="scope">
-                                    <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">
-                                        编辑
-                                    </el-button>
-                                    <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </el-col>
-                <el-col :span="16">
-                    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                        <el-tab-pane label="角色权限" name="first">
-                            <role-limits :data="treeData"></role-limits>
-                        </el-tab-pane>
-                        <el-tab-pane label="角色用户" name="second">
-                            <role-user></role-user>
-                        </el-tab-pane>
-                    </el-tabs>
-                </el-col>
-            </el-row>
         </div>
-    </div>
-<<<<<<< HEAD
-    // 添加弹窗
-=======
-    <!--//添加弹窗-->
->>>>>>> 1aa0770dab7aff87f07516c04a420793ffc8f88c
-    <el-dialog title="角色名称" :visible.sync="fundDialog" class="fileDialog">
-        <el-form :model="fundForm">
-            <el-row>
-                <el-col>
-                    <i class="bottomLine"></i>
-                </el-col>
-                <el-col :span="16">
-                    <el-form-item label="角色名称：" prop="fundName" label-width="100px">
-                        <el-input v-model="fundForm.fundName" auto-complete="off"></el-input>
+        <!--//添加弹窗-->
+        <el-dialog  title="角色名称"  :visible.sync="fundDialog"  class="fileDialog">
+                <el-form  :model="fundForm">
+                        <el-row>
+                                <el-col>
+                                        <i  class="bottomLine"></i>
+                                </el-col>
+                                <el-col  :span="16">
+                                        <el-form-item  label="角色名称："  prop="fundName"  label-width="100px">
+                                                <el-input  v-model="fundForm .fundName" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
