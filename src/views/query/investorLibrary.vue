@@ -22,8 +22,11 @@
         <el-table-column prop="sumPaidAmount" label="累计投资额" align="center">
         </el-table-column>
     </el-table>
-    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
-    </el-pagination>
+
+    <div class="pagination">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
+        </el-pagination>
+    </div>
 </div>
 </template>
 
@@ -51,7 +54,14 @@ export default {
             theme: '#fff',
             investorData: [],
             input2:'',
-            type:null
+            type:null,
+            page: {
+                pageNum: '1', //当前页码
+                total: '', //数据总数
+                pageSize: '10', //每页条数
+                navigatepageNums: '', //页数
+                current: '', //当前页码
+            },
         }
     },
     components: {
@@ -61,6 +71,20 @@ export default {
 
     },
     methods: {
+        handleSizeChange(x){
+            this.page.pageSize = x
+            getInvestorList(this.input2,this.type,this.page).then((res)=>{
+//            console.log(res.data)
+                this.investorData = res.data.result.list
+            })
+        },
+        handleCurrentChange(x){
+            this.page.pageNum =  x
+            getInvestorList(this.input2,this.type,this.page).then((res)=>{
+//            console.log(res.data)
+                this.investorData = res.data.result.list
+            })
+        },
         JumpOther(row){
             console.log(row)
             this.addTab({
@@ -74,7 +98,7 @@ export default {
         },
         handleIconClick(){
             console.log(this.input2)
-            getInvestorList(this.input2,this.type).then((res)=>{
+            getInvestorList(this.input2,this.type,this.page).then((res)=>{
                 this.investorData = res.data.result.list
             })
         },
@@ -87,7 +111,7 @@ export default {
             if(id == 0 ){
                 this.type = null;
             }
-            getInvestorList(this.input2,this.type).then((res)=>{
+            getInvestorList(this.input2,this.type,this.page).then((res)=>{
 //            console.log(res.data)
                 this.investorData = res.data.result.list
             })
@@ -97,7 +121,7 @@ export default {
         ])
     },
     created(){
-        getInvestorList().then((res)=>{
+        getInvestorList(this.input2,this.type,this.page).then((res)=>{
                 this.investorData = res.data.result.list
         })
         getSelectIndex('402').then((res)=>{

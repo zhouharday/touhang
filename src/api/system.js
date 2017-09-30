@@ -481,6 +481,7 @@ export function getUpdata(arr) {
             })
         }
     })
+
     //祛空
     for (var i = 0; i < updata.length; i++) {
         if (updata[i] == '' || updata[i] == null || typeof (updata[i]) == undefined) {
@@ -593,6 +594,8 @@ export function permissionlistByRoleId(id) {
 
 }
 
+
+/*************************************************************************************}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}*/
 // 查询项目、基金所有权限
 export function permissionqueryList(type) {
     const data = {
@@ -609,7 +612,15 @@ export function permissionqueryList(type) {
     )
 
 }
+//解析元素
+export function getUpdataFund(arr,RoleArr) {
+    var updata = [];
+    arr.forEach(function (data) {
+        var ss = data.split("|");
+        updata = updata.concat(ss)
+    })
 
+<<<<<<< HEAD
 // 权限树转换
 export function getNodesssss(arrData, roleInfo) {
     var nodes = [];
@@ -662,19 +673,34 @@ export function getNodesssss(arrData, roleInfo) {
             console.log(99999)
         } else {
             pushNodeeeee(node, nodes)
+=======
+>>>>>>> 2eff73b8a511c0c0786ead4b87064500d90c0f03
 
+    //祛空
+    for(var i = 0;i<updata.length;i++){
+        if(updata[i]==''||updata[i]==null||typeof(updata[i])==undefined){
+            updata.splice(i,1);
+            i=i-1;
         }
+    }
+    updata = unique(updata)
+    updata.shift()
+    var Arr = []
+    var x;
+    console.log(RoleArr)
+    RoleArr.forEach(function (item) {
 
+        for ( x in updata){
+            console.log(item.falseId +'***'+updata[x])
+            if (updata[x] == item.falseId){
+                Arr.push(item.id)
+                console.log(1)
+            }
+        }
     })
 
-    return nodes
-}
 
-function pushNodeeeee(node, pNodes) {
-    pNodes.map(function (pNode) {
-
-        if (pNode.falseId == node.parentId) {
-
+<<<<<<< HEAD
             if (!pNode.children) {
                 if (node.type == 1) {
                     if (!pNode.menuContentClick) {
@@ -695,16 +721,23 @@ function pushNodeeeee(node, pNodes) {
                 }
             } else {
                 pNode.children.push(node);
+=======
+    var updataString
+    updataString = Arr.join(',')
+>>>>>>> 2eff73b8a511c0c0786ead4b87064500d90c0f03
 
-            }
-        } else {
-            if (pNode.children) {
-                pushNodeeeee(node, pNode.children)
-            }
-        }
-    })
+    return updataString
 }
 
+//角色绑定权限
+export function roleBindPermission(roleId,permissionIds) {
+    const data = {
+        "roleId":roleId, //角色id 必须
+        "permissionIds":permissionIds
+    }
+    console.log(data)
+    return service({url:'/projectRole/roleBindPermission', method: 'post', data})
+}
 
 
 /*******************************基金权限******************************************/

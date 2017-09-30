@@ -2,28 +2,29 @@ import service from 'common/js/fetch'
 
 /*******************************项目库******************************************/
 // 项目库列表
-export function getProjectList(projectStageId,projectTypeId,projectName) {
+export function getProjectList(projectStageId,projectTypeId,projectName,page) {
     const data = {
         "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
         "projectStageId": projectStageId,
         "projectTypeId": projectTypeId,
         "projectName": projectName,
-        "page": 1,
-        "pageSize": 10
+        "page": page.pageNum,
+        "pageSize": page.pageSize
     }
+    console.log(data)
     return service({url: '/investProject/getProjectList', method: 'post', data})
 }
 
 
 /*******************************投资人******************************************/
 // 投资人列表
-export function getInvestorList(investorName,investorTypeId) {
+export function getInvestorList(investorName,investorTypeId,page) {
     const data = {
         "investorName": investorName,//投资者名称 模糊查询（非必传）
         "investorTypeId": investorTypeId,// 项目类型ID，（全部时不传此参数）
         "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,//商户ID必传
-        "page": 1,//分页
-        "pageSize": 10
+        "page": page.pageNum,//分页
+        "pageSize": page.pageSize
     }
     console.log(data)
     return service({url: '/investor/getInvestorList', method: 'post', data})
@@ -31,7 +32,7 @@ export function getInvestorList(investorName,investorTypeId) {
 
 /*******************************基金库******************************************/
 // 基金库列表
-export  function getFundLibrary(orgTypeId,manageTypeId,fundStageId,searchText) {
+export  function getFundLibrary(orgTypeId,manageTypeId,fundStageId,searchText,page) {
      const data ={    //以下字段传空值或者不传 则是全部
         "orgTypeId": orgTypeId,//组织类型ID
         "manageTypeId": manageTypeId,//管理类型ID
@@ -40,7 +41,8 @@ export  function getFundLibrary(orgTypeId,manageTypeId,fundStageId,searchText) {
         "fundStatusId":"",//状态
         "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,//商户id必传 "page": 1,//分页
         //  "merchantId": "123456",
-        "pageSize": 10
+        "pageSize": page.pageSize,
+         "page":page.pageNum,
      }
      console.log(data)
     return service({url: '/fund/getFundListByIndex', method: 'post', data})

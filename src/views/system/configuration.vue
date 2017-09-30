@@ -50,7 +50,7 @@
                 <el-row>
                     <el-col>
                         <div class="leftAdd_btn">
-                            <el-button type="danger" style="width:80px" @click="openFile">添加</el-button>
+                            <el-button type="danger" style="width:80px" @click="openFile" v-if="this.nowId">添加</el-button>
                         </div>
                     </el-col>
                     <el-col>
@@ -65,7 +65,10 @@
                             </el-table-column>
                             <el-table-column label="是否必传" prop="needUpload" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.needUpload }}</span>
+                                    <span v-if="!scope.row.editFlag">
+                                        <div v-if="scope.row.needUpload == 2">是</div>
+                                        <div v-if="scope.row.needUpload == 1">否</div>
+                                    </span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
                                         <el-input v-model="scope.row.needUpload"></el-input>
                                     </span>
@@ -155,7 +158,11 @@
                             <el-input v-model="fileForm.documentName" auto-complete="off"></el-input>
                         </el-form-item>
                         <el-form-item label="是否必传：" prop="fileName" label-width="100px">
-                            <el-input v-model="fileForm.needUpload" auto-complete="off"></el-input>
+                            <!--<el-input v-model="fileForm.needUpload" auto-complete="off"></el-input>-->
+                            <el-select v-model="value2" placeholder="请选择">
+                                <el-option v-for="item in options" :key="item.lable" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -187,6 +194,7 @@ export default {
             //            showOne:false,
             deleteList: [],
             leftList: [],
+            value2:'',
             fileData: [
             ],
             fileForm: {
@@ -231,6 +239,15 @@ export default {
             ],
             changeList: [],
             nowId: '',
+            options: [
+                {
+                    lable:'1',
+                    value:'是'
+                },{
+                    lable:'2',
+                    value:'否'
+                }
+            ],
         }
     },
     methods: {
@@ -343,6 +360,12 @@ export default {
             //            console.log(this.nowId)
             //            console.log(this.fileForm)
             //            alert(this.nowId + '****')
+
+            if(this.value2 == '是'){
+                this.fileForm.needUpload = '2';
+            }else
+                this.fileForm.needUpload = '1';
+
             changeRightList(this.nowId, this.fileForm).then((res) => {
                 if (res.data.status == '9024') {
                     alert(res.data.message)

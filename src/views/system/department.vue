@@ -14,7 +14,7 @@
                     <el-row>
                         <el-col v-for="(item, index) of props.row.children">
                             <el-row :gutter="20">
-                                <el-col :span="12" class="item" >
+                                <el-col :span="13" class="item" >
                                     <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>
                                     <span class="add_margin" v-if="item.editFlag">
                                         <el-input v-model="item.deptName" ></el-input>
@@ -22,10 +22,13 @@
                                     </span>
 
                                 </el-col>
-                                <el-col :span="12" class="item">
+                                <el-col :span="11" class="item">
                                     <!--<span class="add_margin">{{item.desc}}</span>-->
+
                                     <el-button size="small">
                                         <Icon type="ios-arrow-thin-up"></Icon>
+                                    </el-button>
+                                    <el-button size="small">
                                         <Icon type="ios-arrow-thin-down"></Icon>
                                     </el-button>
                                     <el-button size="small" @click="editClick(item)" v-if="!item.editFlag">
@@ -44,19 +47,31 @@
                 </template>
             </el-table-column>
             <el-table-column label="名称" prop="deptName">
+                <template scope="scope" >
+                    <span class="add_margin" v-if="!scope.row.editFlag">{{scope.row.deptName}}</span>
+                    <span class="add_margin" v-if="scope.row.editFlag">
+                        <el-input v-model="scope.row.deptName" ></el-input>
+                    </span>
+                </template>
             </el-table-column>
-            <el-table-column label="操作">
-                <template scope="props">
-                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
-                        <!--<Icon type="ios-arrow-thin-up"></Icon>-->
-                        <!--<Icon type="ios-arrow-thin-down"></Icon>-->
-                    <!--</el-button>-->
-                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
-                        <!--编辑-->
-                    <!--</el-button>-->
-                    <!--<el-button size="small" @click="handleEdit(scope.$index, scope.row)">-->
-                        <!--删除-->
-                    <!--</el-button>-->
+            <el-table-column label="操作" >
+                <template scope="scope" >
+
+                    <el-button size="small" >
+                        <Icon type="ios-arrow-thin-up"></Icon>
+                    </el-button>
+                    <el-button size="small" >
+                        <Icon type="ios-arrow-thin-down"></Icon>
+                    </el-button>
+                    <el-button size="small" @click="editClick(scope.row)" v-if="!scope.row.editFlag">
+                        编辑
+                    </el-button>
+                    <el-button size="small" @click="editClick(scope.row)" v-if="scope.row.editFlag">
+                        保存
+                    </el-button>
+                    <el-button size="small" @click="deleteClick(scope.row)">
+                        删除
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -119,7 +134,7 @@ export default {
             formLabelWidth: '120px',
             departmentData: {
                 superior: '',
-                department: 'aaa'
+                department: ''
             },
             options: [],
             deleteId:'',
@@ -147,7 +162,7 @@ export default {
             })
         },
         editClick(item) {
-//            console.log(item);
+            console.log(item);
 
             if(item.editFlag == true){
 
@@ -172,13 +187,14 @@ export default {
 
             return this.options = result
         },
+
         deleteClick(item) {
-//            console.log(item)
+            console.log(item)
             this.deleteReminders = !this.deleteReminders;
             this.deleteId = item.id;
         },
+        //确认删除
         confirmDel(){
-
             deletDepartment(this.deleteId).then((res) => {
                 getDepartmentList().then((res)=>{
                     this.deleteReminders = !this.deleteReminders;
