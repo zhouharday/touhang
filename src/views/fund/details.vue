@@ -54,23 +54,23 @@
                                 </el-select>
                             </el-col>
                             <el-col :span="18" v-show="structure == 2 || formDetails.fundOrg == 2">
-                                <el-form :model="formDetails.fundOrgValue">
+                                <el-form :model="fundLevel">
                                     <el-row>
                                         <el-col :span="7" :offset="1">
                                             <el-form-item class="itemStyle">
-                                                <el-input v-model="priority"></el-input>
+                                                <el-input v-model="fundLevel.priority"></el-input>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="1" class="colon">:</el-col>
                                         <el-col :span="7">
                                             <el-form-item class="itemStyle">
-                                                <el-input v-model="intermediateStage"></el-input>
+                                                <el-input v-model="fundLevel.intermediateStage"></el-input>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="1" class="colon">:</el-col>
                                         <el-col :span="7">
                                             <el-form-item class="itemStyle">
-                                                <el-input v-model="generalLevel"></el-input>
+                                                <el-input v-model="fundLevel.generalLevel"></el-input>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -81,7 +81,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金期限">
-                        <el-input v-model="formDetails.term"></el-input>
+                        <el-input v-model="formDetails.fundTerm"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -280,6 +280,10 @@ export default {
             type: Array,
             default: []
         },
+        fundLevel: {
+            type: Object,
+            default: {}
+        },
         showOrhiddren: false
     },
     data() {
@@ -335,10 +339,7 @@ export default {
                 id: 2,
                 dicName: '结构化'
             }],
-            businessDepartment: [],
-            priority: this.formDetails.fundOrgValue.split(':')[0],
-            intermediateStage: this.formDetails.fundOrgValue.split(':')[1],
-            generalLevel: this.formDetails.fundOrgValue.split(':')[2]
+            businessDepartment: []
         }
     },
     methods: {
@@ -378,11 +379,11 @@ export default {
             }
         })
         sectorList().then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 this.businessDepartment = res.data.result
             }
         })
-        this.formDetails.fundOrgValue = this.priority + ':' + this.intermediateStage + ':'+ this.generalLevel
+        // this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
     },
     components: {
         tabelHeader
@@ -408,8 +409,8 @@ export default {
         }
     }
     .itemStyle {
-        margin-left: 0px;
-        margin-right: 0px;
+        margin-left: 0;
+        margin-right: 0;
     }
     .colon {
         text-align: center;
@@ -425,7 +426,7 @@ export default {
         padding: 3px 0;
         width: 100%;
     }
-    .btnList{
+    .btnList {
         width: 100%;
         padding-top: 24px;
         padding-bottom: 48px;
