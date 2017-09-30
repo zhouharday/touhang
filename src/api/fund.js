@@ -231,20 +231,19 @@ export function deleteManagerCompany(deleteId) {
     const data = {
         id: deleteId
     }
-    return service({
-        url: '/fund/deleteManagerCompany',
-        method: 'post',
-        data
-    })
+    return service({url: '/fund/deleteManagerCompany', method: 'post', data})
 }
 // 查询部门列表 /sysDept/queryList
 export function sectorList() {
     const data = {
         merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
     }
-    return service({
-        url: '/sysDept/queryList',
-        method: 'post',
-        data
-    })
+    return service({url: '/sysDept/queryList', method: 'post', data})
+}
+// 获取基金估值图表数据 /appFund/getFundApprList
+export function getFundApprList(listId) {
+    const data = {
+        fundId: listId
+    }
+    return service({url: '/fund/getFundApprList', method: 'post', data})
 }

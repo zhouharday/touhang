@@ -10,6 +10,12 @@ export function changeDate(value) {
     }
     return [year, month, day].join('-')
 }
+
+export function getDate(value) { //时间戳转换标准时间
+    var tt = new Date(value).toLocaleString().replace(/\//g, "-");
+    return tt;
+}
+
 // 待测试
 export function clearValue(obj) {
     Object.keys(obj).forEach((val, array) => {
@@ -20,12 +26,12 @@ export function clearValue(obj) {
 export function getNodes(arr) {
     // console.log(arr);
     var nodes = [];
-    arr.map(function (node) {
+    arr.map(function(node) {
         if (node.parentId === '0') {
             node.label = node.deptName
             nodes.push(node)
         } else {
-            pushNode(node,nodes)
+            pushNode(node, nodes)
         }
 
     })
@@ -33,9 +39,9 @@ export function getNodes(arr) {
     return nodes
 }
 
- function pushNode(node, pNodes) {
-     let charlds = [];
-    pNodes.map(function (pNode) {
+function pushNode(node, pNodes) {
+    let charlds = [];
+    pNodes.map(function(pNode) {
         if (pNode.id == node.parentId) {
 
             if (!pNode.children) {
@@ -54,4 +60,18 @@ export function getNodes(arr) {
         }
         node.label = node.deptName
     })
+}
+// 根据键值排序  arr.sort(compare('appraisementDate'))
+export function compare(prop) {
+    return function(obj1, obj2) {
+        var val1 = obj1[prop]
+        var val2 = obj2[prop]
+        if (val1 < val2) {
+            return -1
+        } else if (val1 > val2) {
+            return 1
+        } else {
+            return 0
+        }
+    }
 }

@@ -3,14 +3,15 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button type="danger" size="small" @click="roleDialog=true">添加</el-button>
+                    <el-button size="small" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%">
-                    <el-table-column prop="role" label="角色名称" align="center">
+                    <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.role}}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.role" placeholder=""></el-input>
+
+                            <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">{{ scope.row.roleName}}</span>
+                            <span v-if="scope.row.editFlag">
+                                <el-input v-model="scope.row.roleName" placeholder=""></el-input>
                             </span>
                         </template>
                     </el-table-column>
@@ -20,7 +21,7 @@
                             </el-button>
                             <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
                             </el-button>
-                            <el-button type="text" size="small" @click="deleteReminders=true">删除</el-button>
+                            <!--<el-button type="text" size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>-->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -39,40 +40,35 @@
                     <el-col :span="18">
                         <div class="f_right">权限</div>
                     </el-col>
-                    <el-col :span="6">
-                        <div class="left">基金详情</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox>编辑</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left">基金文档</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="right">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="file in fundFiles" :label="file" :key="file">{{file}}</el-checkbox>
-                            </el-checkbox-group>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="manage-rt">运营管理</div>
-                    </el-col>
-                    <el-col :span="18" class="manage-lt">
-                        <p v-for="item in manageList" :key="item.index" style="display:flex">
-                            <span style="margin: 0 15px 0 15px;font-size:14px">{{item}}</span>
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="mgr">全选</el-checkbox>
-                            <el-checkbox-group @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="manage in manages" :label="manage" :key="manage">{{manage}}</el-checkbox>
-                            </el-checkbox-group>
-                        </p>
-                    </el-col>
+
+                    <div v-for="item in allData">
+                        <el-col :span="6">
+                            <div class="left">{{item.permissionName}}</div>
+                        </el-col>
+                        <el-col :span="18">
+                            <div class="right">
+                                <div v-if="item.children">
+                                    <div v-for="nextItem in item.children">
+                                        <div style="flex-direction: row; display: flex">
+                                        <div >{{nextItem.permissionName}}</div>
+                                        <div style=" margin-left: 20px">
+                                            <el-checkbox-group v-model="nextItem.menuContentClick" @change="handleCheckedCitiesChange">
+                                            <el-checkbox v-for="(text, index) of nextItem.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                            </el-checkbox-group>
+
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="item.menuContent ">
+                                    <el-checkbox-group v-model="item.menuContentClick" @change="handleCheckedCitiesChange">
+                                        <el-checkbox v-for="(text, index) of item.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </div>
+
+                            </div>
+                        </el-col>
+                    </div>
                 </el-row>
             </el-col>
         </el-row>
@@ -80,7 +76,7 @@
         <el-dialog title="添加角色名称" :visible.sync="roleDialog">
             <el-form :model="roleForm">
                 <el-form-item label="角色名称" prop="role" label-width="80px">
-                    <el-input v-model="roleForm.role" auto-complete="off"></el-input>
+                    <el-input v-model="roleForm.roleName" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -95,7 +91,17 @@
 </template>
 
 <script type="text/ecmascript-6">
-import deleteReminders from 'components/deleteReminders'
+    import deleteReminders from 'components/deleteReminders'
+    import {queryList} from 'api/system'
+    import {reloadQueryData} from 'api/system'
+    import {projectRoleEdit} from 'api/system'
+    import {projectRoleSave} from 'api/system'
+    import {deleteUser} from 'api/system'
+    import {permissionlistByRoleId} from 'api/system'
+    import {permissionqueryList} from 'api/system'
+    import {getNodesssss} from 'api/system'
+    import {getNodes} from 'api/system'
+
 export default {
     data() {
         return {
@@ -105,42 +111,94 @@ export default {
             message: '是否确认删除该角色？',
             roleData: [
                 {
-                    role: '基金负责人',
+                    role: '项目负责人',
                     editFlag: false
                 },
                 {
-                    role: '基金成员',
+                    role: '项目成员',
+                    editFlag: false
+                },
+                {
+                    role: '投后人员',
                     editFlag: false
                 }
             ],
             roleForm: {
-                role: '',
+                roleName: '',
                 editFlag: false
             },
-            manageList: ['基金费用', '收益分配'],
-            fundFiles: ['上传', '下载', '预览', '编辑', '删除'],
-            manages: ['添加', '编辑', '浏览', '删除']
+            deletData:'',
+            allData:[],
         }
     },
     methods: {
         // 添加角色 的方法
         addRole() {
-            this.roleData.push(this.roleForm);
-            this.roleForm = {};
-            this.roleDialog = false;
+            projectRoleSave(1,this.roleForm.roleName).then((res)=>{
+                queryList(1).then((res)=>{
+                    this.roleData = reloadQueryData(res.data.result)
+                    this.roleDialog = false;
+                })
+            })
         },
-        checkEdit(index, row) { //编辑
-            // console.log(row)
+        //编辑
+        checkEdit(index, row) {
+            console.log(row)
             row.editFlag = !row.editFlag;
+            if (!row.editFlag) {
+                projectRoleEdit(row.id, row.roleName).then((res) => {
+                    queryList(1).then((res)=>{
+                        this.roleData = reloadQueryData(res.data.result)
+                    })
+                })
+            }
         },
+
+        /*
+        //删除当
+        handleDelete(index, rows) {
+            console.log(rows)
+            this.deleteData = ''
+            this.deleteData = rows
+            this.deleteReminders = !this.deleteReminders;
+
+        },
+        //确认删除
         confirmDel() {
             this.deleteReminders = !this.deleteReminders;
+//            console.log(this.deleteData.id)
+            deleteUser(this.deleteData.id).then((res)=>{
+//                console.log(res)
+                queryList(0).then((res)=>{
+                    this.roleData = reloadQueryData(res.data.result)
+                })
+            })
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        */
+
+
+        handleRole(index,row){
+            console.log(row.id)
+            permissionlistByRoleId(row.id).then((res)=>{
+                console.log(res.data)
+            })
+
         }
     },
+    created(){
+//        获取角色列表
+        queryList(1).then((res)=>{
+
+            this.roleData = reloadQueryData(res.data.result)
+        })
+        //获取所有权限
+        permissionqueryList(1).then((res)=>{
+
+            this.allData = getNodesssss(res.data.result)
+            console.log(this.allData)
+        })
+    }
+    ,
     components: {
         deleteReminders
     },
@@ -184,7 +242,8 @@ export default {
     }
     .right {
         display: flex;
-        height: 40px;
+        /*height: 40px;*/
+        min-height: 40px;
         line-height: 40px;
         padding-left: 10px;
         border: 1px solid #dfe6ec;

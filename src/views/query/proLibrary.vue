@@ -1,7 +1,8 @@
 <template>
     <div class="proLibrary">
-        <myFilter :chooseInfo="chooseInfo" @postID="changelist"></myFilter>
+        <myFilter :chooseInfo="chooseInfo" @getIdInfo = "changeList"></myFilter>
         <div class="title">
+
             <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
                 <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
                 </el-input>
@@ -36,7 +37,7 @@
     import myFilter from 'components/myFilter'
     import {getProjectList} from 'api/search'
     import {getSelectIndex} from 'api/search'
-    import Button from "../../../node_modules/iview/src/components/button/button.vue";
+    import {mapMutations, mapGetters} from 'vuex'
 
     export default {
         data() {
@@ -45,10 +46,10 @@
                 titleInfo: {
 
                 },
-                chooseInfo: [{
+                chooseInfo: {
                     title: '项目类型:',
                     details: ['全部', 'PE', 'VC', '定增']
-                }],
+                },
                 proLibrary: [],
                 type:'',
                 seartext:'',
@@ -56,42 +57,40 @@
             }
         },
         components: {
-            Button,
             tableHeader,
             myFilter
         },
         methods:{
             JumpOther(row){
-                console.log(row)
-                this.addTab(row.projectName,'路由','name')
-                this.$router.push({name:'路由名',params:{参数}})
-            },
-            addTab(th, url, name) {
-                this.$store.commit({
+                this.addTab({
                     type: 'addTab',
-                    title: th,
-                    url: url,
-                    name: name
-                });
+                    title: row.projectName +'详情',
+                    url: '/home/aftProjectMessage/:' + row.id,
+                    name: 'aftProjectMessage/' + row.id
+                })
+                this.$router.push('/home/aftProjectMessage/:' + row.id)
             },
+
             handleIconClick(){
                 this.seartext = this.input
-                alert(this.seartext)
                 getProjectList('',this.type,this.seartext).then((res)=>{
-                    console.log(res.data)
                     this.proLibrary = res.data.result.list
                 })
             },
 
-            changelist(el){
-                this.type = el
+            changeList(index,id){
+                this.type = id
+                if(id == 0 ){
+                    this.type = null;
+                }
                 getProjectList('',this.type,this.seartext).then((res)=>{
-                    console.log(res.data)
                     this.proLibrary = res.data.result.list
                 })
-            }
+            },
 
-
+            ...mapMutations([
+                'addTab'
+            ]),
         },
         created(){
 
@@ -101,8 +100,14 @@
             })
             getSelectIndex('202').then((res)=>{
                 console.log(res.data)
-                this.chooseInfo[0].details = res.data.result
+                this.chooseInfo.details = res.data.result
             })
+
+        },
+        computed:{
+            ...mapGetters([
+                'getProStatus'
+            ])
         }
 
     }

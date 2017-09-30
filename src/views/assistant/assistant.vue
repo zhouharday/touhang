@@ -4,7 +4,7 @@
         <!--搜索框-->
         <el-row class="search-box">
             <el-col :span="10" class="search">
-                <el-input placeholder="请输入查找内容" icon="search" v-model="search" :on-icon-click="handleIconClick">
+                <el-input placeholder="请按项目名称进行查询" icon="search" v-model="search" :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
         </el-row>
@@ -16,7 +16,7 @@
             <el-col :span="23">
                 <div class="industry-ul">
                     <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
-                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
+                        <li v-for="(item,index) in industryList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex1}" @click="changeActive(index,1,item)">
                             {{item.dicName}}
                         </li>
                         <button class="collapse-btn" :class="{ collapseBtn: !btnObject1.uptriangle }" @click="changeList(1)">
@@ -35,8 +35,8 @@
             <el-col :span="23">
                 <div class="round-ul">
                     <ul ref="round">
-                        <li v-for="(item,index) in roundList" :key="item.index" :class="{active: index==currentIndex2}" @click="changeActive(index,2)">
-                            {{item.rounds}}
+                        <li v-for="(item,index) in roundList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex2}" @click="changeActive(index,2,item)">
+                            {{item.dicName}}
                         </li>
                     </ul>
                 </div>
@@ -50,9 +50,9 @@
                 </el-col>
                 <el-col :span="23">
                     <div class="location-ul">
-                        <ul ref="location" :class="{ changeListk: !btnObject2.downtriangle }" style="width:100%;">
-                            <li v-for="(item,index) in locationList" :key="item.index" :class="{active: index==currentIndex3}" @click="changeActive(index,3)">
-                                {{item.locations}}
+                        <ul ref="location" :class="{ changeList: !btnObject2.downtriangle }" style="width:100%;">
+                            <li v-for="(item,index) in locationList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex3}" @click="changeActive(index,3,item)">
+                                {{item.dicName}}
                             </li>
                             <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
                                 <span :class="btnObject2"></span>
@@ -77,39 +77,39 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
-                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
+                <el-table border :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
-                            <a @click="ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.theme }}</a>
-                            <div>{{ scope.row.project }}</div>
+                            <a @click="ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.name }}</a>
+                            <div>{{ scope.row.brief }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="行业" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.industry }}</div>
+                            <div class="fow">{{ scope.row.industryName }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="轮次" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.round }}</div>
+                            <div class="fow">{{ scope.row.phaseName }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="所在地" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.location }}</div>
+                            <div class="fow">{{ scope.row.cityStr }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.datetime }}</div>
+                            <div class="fow">{{ scope.row.foundingTime }}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
-                            <el-button type="text" size="small" @click="dialogVisible= true">
+                            <el-button type="danger" size="small" @click="insertProjectBtn(scope.$index,scope.row)">
                                 +项目池
                             </el-button>
-                            <el-button type="text" size="small" style="display:none">
+                            <el-button type="danger" size="small" style="display:none">
                                 分享
                             </el-button>
                             <!-- 确认转项目池 dialog -->
@@ -123,18 +123,39 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
+                    </el-pagination>
+                </div>
             </el-col>
         </el-row>
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-            </el-pagination>
-        </div>
     </section>
 </template>
 
 <script>
 import { selectMenu } from 'api/cloudProject'
 export default {
+    computed: {
+        user() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return {
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor
+            }
+        }
+    },
+    created() {
+        selectMenu(this.num).then((res) => {
+            if (res.status == '200') {
+                this.industryList = res.data.result;
+                console.log(res.data.result);
+            }
+        });
+        this.selectCompany();
+        this.location();
+        this.rounds();
+    },
     mounted() {
         this.$nextTick(function() {
             //dom已更新
@@ -143,6 +164,8 @@ export default {
     },
     data() {
         return {
+            row: '',
+            no: '',
             num: 1, // 数据字典传值
             confirm: false,
             dialogVisible: false,
@@ -152,6 +175,13 @@ export default {
             currentIndex1: '',
             currentIndex2: '',
             currentIndex3: '',
+            page: {
+                pageNum: '', //当前页码
+                total: '', //数据总数
+                pageSize: '', //每页条数
+                navigatepageNums: '', //页数
+                current: '', //当前页码
+            },
             btnObject1: {
                 uptriangle: true,
                 downtriangle: false
@@ -160,93 +190,17 @@ export default {
                 uptriangle: false,
                 downtriangle: true
             },
-            industryList: [],
-            roundList: [
-                { rounds: "全部" },
-                { rounds: "种子轮" },
-                { rounds: "天使轮" },
-                { rounds: "Pre-A轮" },
-                { rounds: "A轮" },
-                { rounds: "A+轮" },
-                { rounds: "Pre-B轮" },
-                { rounds: "B轮" },
-                { rounds: "B+轮" },
-                { rounds: "Pre-C轮" },
-                { rounds: "C轮" },
-                { rounds: "C+轮" },
-                { rounds: "E轮及以后" }
-            ],
-            locationList: [
-                { locations: "全部" },
-                { locations: "北京市" },
-                { locations: "上海市" },
-                { locations: "深圳市" },
-                { locations: "广州市" },
-                { locations: "杭州市" },
-                { locations: "成都市" },
-                { locations: "重庆市" },
-                { locations: "安徽省" },
-                { locations: "甘肃省" },
-                { locations: "广东省" },
-                { locations: "广西省" },
-                { locations: "贵州省" },
-                { locations: "海南省" },
-            ],
-            tableData: [
-                {
-                    theme: '鹿战',
-                    project: '体育赛事即时竞猜平台',
-                    industry: '体育',
-                    round: 'Pre-A轮',
-                    location: '广东省',
-                    datetime: '2015/01/16',
-                    id: 0
-                },
-                {
-                    theme: 'Digital Asset',
-                    project: '美国结算和分类式账本服务商',
-                    industry: '金融',
-                    round: 'B+轮',
-                    location: '海外',
-                    datetime: '2016/04/21',
-                    id: 1
-                },
-                {
-                    theme: '小六汤包',
-                    project: '中式餐应连锁品牌',
-                    industry: '生活消费',
-                    round: 'Pre-A轮',
-                    location: '陕西省',
-                    datetime: '2017/02/13',
-                    id: 2
-                },
-                {
-                    theme: '智慧熊',
-                    project: '双语学前教育连锁机构',
-                    industry: '教育',
-                    round: 'A轮',
-                    location: '山东省',
-                    datetime: '2014/06/26',
-                    id: 3
-                }
-            ]
+            industryList: [], //行业数据
+            roundList: [], //轮次数据
+            locationList: [], //所在地数据
+            tableData: [], //云项目列表数据
         }
     },
     methods: {
-        handleIconClick() {
-            // console.log(ev);
-            // console.log(this.search);
-            var newTable = [];
-            // var that=this;
-            if (this.search) {
-                for (let i = 0; i < this.tableData.length; i++) {
-                    if (this.search == this.tableData[i].theme) {
-                        newTable.push(this.tableData[i]);
-                    }
-                    this.tableData = newTable;
-                    console.log(this.tableData)
-                }
-            }
+        handleIconClick() { //搜索
+            // alert(11);
+            this.selectCompany(this.search);
+            this.search = '';
         },
         // 点击折叠按钮，控制列表项的下拉与收起
         changeList(btn) {
@@ -261,6 +215,7 @@ export default {
                     this.btnObject1.downtriangle = !(this.btnObject1.downtriangle);
                 }
             } else {
+                // alert(555);
                 if (this.collapseBtn2 == "下拉") {
                     this.collapseBtn2 = "收起";
                     this.btnObject2.uptriangle = !(this.btnObject2.uptriangle);
@@ -272,58 +227,151 @@ export default {
                 }
             }
         },
-        // 设置table间隔行的background-color
-        tableRowClassName(row, index) {
-            if ((index % 2) == 0) {
-                return 'info-row';
-            } else {
-                return 'positive-row';
-            }
-            return '';
-        },
-        ShowMessagwe(title, ind) {
-            // alert(1);
-            // console.log(ind);
-            console.log(title);
+        ShowMessagwe(row, ind) { //项目详情Tab
+            console.log(row);
             this.index = ind;
-            this.addTab(title.theme + '详情页', '/home/message/' + ind, 'message/' + ind);
-            this.$router.push({ name: 'message', params: { userId: ind } });
-            // this.$http.post('${base}./url',{ ind }) //请求详情页list 数据
-            // .then( response => {
-
-            // })
-            // .catch(function( error ){
-
-            // });
-            // this.isShow = false;
-            // this.isHide = true;
-        },
-        jumpPool() {
-            this.dialogVisible = false;
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
+            this.$store.state.register.no = row.no;
+            this.addTab(row.name + '详情页', '/home/message/' + row.id, 'message/' + row.id);
+            this.$router.push({ name: 'message', params: { userId: row.id } });
         },
         addTab(th, url, name) {
-            // this.$router.push({ name: 'assistant' });
-            // this.$router.push({ name: name });
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        changeActive(index, ind) {
-            if (ind == 1) {
+        changeActive(index, ind, item) { //按条件查询
+            if (ind == 1) { //行业
+                this.selectCompany('', item.id, '', '');
+                console.log(item);
                 this.currentIndex1 = index;
-            } else if (ind == 2) {
+                this.currentIndex2 = '';
+                this.currentIndex3 = '';
+                return;
+            } else if (ind == 2) { //轮次
+                this.selectCompany('', '', item.id, '', '');
+                console.log(item);
                 this.currentIndex2 = index;
-            } else {
+                this.currentIndex1 = '';
+                this.currentIndex3 = '';
+                return;
+            } else if (ind == '3') { //所在地
+                this.selectCompany('', '', '', item.id);
+                console.log(item);
                 this.currentIndex3 = index;
+                this.currentIndex1 = '';
+                this.currentIndex2 = '';
+                return;
             }
-        }
-    },
-    created() {
-        selectMenu(this.num).then((res) => {
-            if (res.status == '200') {
-                this.industryList = res.data.result
-            }
-        })
+        },
+        insertProjectBtn(index, row) {
+            console.log(row);
+            this.row = row;
+            this.no = row.no;
+            this.dialogVisible = true;
+        },
+        jumpPool() {
+            this.insertProjectPool();
+            this.dialogVisible = false;
+        },
+        insertProjectPool() { //添加到项目池 api
+            this.$http.post(this.api + '/productClieController/insertProjectPool', {
+                no: this.no,
+                userId: this.user.userInfor.id,
+                merchantId: this.user.merchants[0].id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res);
+                        if (res.data.status == '200') {
+                            console.log(res.data.result);
+                            this.addTab('项目池', '/home/projectPool', 'projectPool');
+                            this.$router.push({ name: 'projectPool' });
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                            return;
+                        } else if (res.data.status == '9050') {
+                            this.$Message.error(res.data.message);
+                            return;
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error('请求超时');
+                    return;
+                })
+        },
+        selectCompany(name, industry, phase, citystr, pages, pageSize) { //查询云项目列表数据 api
+            this.$http.post(this.api + '/CompanyClieController/selectCompany', {
+                "name": name, //根据项目名模糊查询
+                "industry": industry,  //按照行业查询
+                "phase": phase,  //按照轮次查询
+                "citystr": citystr,  //按照项目所在地查询
+                "page": pages,  //当前页数
+                "pageSize": pageSize  //每页显示条数
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.tableData = res.data.result.list;
+                            this.page.pageNum = res.data.result.pageNum; //当前页码
+                            this.page.total = res.data.result.total; //数据总数
+                            this.page.pageSize = res.data.result.pageSize; //每页条数
+                            this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+                            this.$Message.success(res.data.message);
+                            return;
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                })
+        },
+        handleSizeChange(pageSize) {
+            this.selectCompany(pageSize);
+        },
+        handleCurrentChange(pages) { //获取tabList 分页数据
+            // console.log(pages);
+            this.selectCompany(pages);
+        },
+        location() { //查询省份数据
+            this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>省份
+                "dicParent": 501
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data.result);
+                            this.locationList = res.data.result;
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error('访问超时');
+                });
+        },
+        rounds() { //查询轮次数据
+            this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>省份
+                "dicParent": 2
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            this.roundList = res.data.result;
+                            console.log(res.data.result);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error('访问超时');
+                });
+        },
     }
 }
 </script>
@@ -350,7 +398,6 @@ export default {
     ul {
         float: left;
         li {
-            width: 70px;
             height: 20px;
             display: inline-block;
             box-sizing: border-box;
@@ -389,12 +436,12 @@ export default {
 }
 
 .active {
-    width: 70px;
     height: 20px;
     color: white;
     text-align: center;
     border-radius: 15px;
     background: #F05E5E;
+    padding: 0 5px;
 }
 
 .collapse-btn {

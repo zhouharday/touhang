@@ -25,24 +25,24 @@ export function getInvestorList(investorName,investorTypeId) {
         "page": 1,//分页
         "pageSize": 10
     }
-    // console.log(investorName)
-    // console.log(investorTypeId)
+    console.log(data)
     return service({url: '/investor/getInvestorList', method: 'post', data})
 }
 
 /*******************************基金库******************************************/
 // 基金库列表
-export  function getFundLibrary(searchText) {
+export  function getFundLibrary(orgTypeId,manageTypeId,fundStageId,searchText) {
      const data ={    //以下字段传空值或者不传 则是全部
-        "orgTypeId": null,//组织类型ID
-        "manageTypeId": null,//管理类型ID
-        "fundStageId": "",//阶段类型
+        "orgTypeId": orgTypeId,//组织类型ID
+        "manageTypeId": manageTypeId,//管理类型ID
+        "fundStageId": fundStageId,//阶段类型
         "fundName":searchText,//模糊查询
         "fundStatusId":"",//状态
         "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,//商户id必传 "page": 1,//分页
         //  "merchantId": "123456",
         "pageSize": 10
      }
+     console.log(data)
     return service({url: '/fund/getFundListByIndex', method: 'post', data})
 }
 //基金阶段

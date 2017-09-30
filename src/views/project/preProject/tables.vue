@@ -142,164 +142,164 @@
 
 
 <script style="text/ecmascript-6">
-import tabelHeader from 'components/tabelHeader'
-export default {
+    import tabelHeader from 'components/tabelHeader'
+    export default {
     data() {
-        return {
-            modalAdd1: false,
-            modalAdd2: false,
-            //董事会成员
-            memberData: [
-                {
-                    name: '张飞',
-                    property: '合伙人',
-                    edu: '北大金融系研究院博士后',
-                    editFlag: false
-                }, {
-                    name: '李四',
-                    property: '创建人',
-                    edu: '中国人民大学金融系博士',
-                    editFlag: false
-                }
-            ],
-            memberForm: {
-                name: '',
-                property: '',
-                edu: '',
-                editFlag: false
-            },
-            //添加董事会成员 表单验证规则
-            rules1: {
-                name: [
-                    { required: true, message: '请输入成员姓名', trigger: 'blur' }
-                ],
-                property: [
-                    { required: true, message: '请输入成员性质', trigger: 'blur' }
-                ],
-                edu: [
-                    { required: true, message: '请输入教育背景', trigger: 'blur' }
-                ]
-            },
-            //股权结构
-            structureData: [
-                {
-                    name: '张飞',
-                    property: '合伙人',
-                    capital: '10,000,000,000',
-                    num: '20',
-                    percent: '12%',
-                    editFlag: false
-                },
-                {
-                    name: '李四',
-                    property: '创建人',
-                    capital: '10,000,000,000',
-                    num: '15',
-                    percent: '10%',
-                    editFlag: false
-                }
-            ],
-            structureForm: {
-                name: '',
-                property: '',
-                capital: '',
-                num: '',
-                percent: '',
-                editFlag: false
-            },
-            //添加股权结构 表单验证规则
-            rules2: {
-                name: [
-                    { required: true, message: '请输入股东姓名', trigger: 'blur' }
-                ],
-                property: [
-                    { required: true, message: '请输入股东性质', trigger: 'blur' }
-                ],
-                capital: [
-                    { required: true, message: '请输入投资金额', trigger: 'blur' }
-                ],
-                num: [
-                    { required: true, message: '请输入持股数量', trigger: 'blur' }
-                ],
-                percent: [
-                    { required: true, message: '请输入股权占比', trigger: 'blur' }
-                ]
-            },
-            headerInfo_member: {
-                desc: '董事会成员',
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '添加'
-                }]
-            },
-            headerInfo_structure: {
-                desc: '股权结构',
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '添加'
-                }]
-            }
-        }
+    return {
+    modalAdd1: false,
+    modalAdd2: false,
+    //董事会成员
+    memberData: [
+    {
+    name: '张飞',
+    property: '合伙人',
+    edu: '北大金融系研究院博士后',
+    editFlag: false
+    }, {
+    name: '李四',
+    property: '创建人',
+    edu: '中国人民大学金融系博士',
+    editFlag: false
+    }
+    ],
+    memberForm: {
+    name: '',
+    property: '',
+    edu: '',
+    editFlag: false
+    },
+    //添加董事会成员 表单验证规则
+    rules1: {
+    name: [
+    { required: true, message: '请输入成员姓名', trigger: 'blur' }
+    ],
+    property: [
+    { required: true, message: '请输入成员性质', trigger: 'blur' }
+    ],
+    edu: [
+    { required: true, message: '请输入教育背景', trigger: 'blur' }
+    ]
+    },
+    //股权结构
+    structureData: [
+    {
+    name: '张飞',
+    property: '合伙人',
+    capital: '10,000,000,000',
+    num: '20',
+    percent: '12%',
+    editFlag: false
+    },
+    {
+    name: '李四',
+    property: '创建人',
+    capital: '10,000,000,000',
+    num: '15',
+    percent: '10%',
+    editFlag: false
+    }
+    ],
+    structureForm: {
+    name: '',
+    property: '',
+    capital: '',
+    num: '',
+    percent: '',
+    editFlag: false
+    },
+    //添加股权结构 表单验证规则
+    rules2: {
+    name: [
+    { required: true, message: '请输入股东姓名', trigger: 'blur' }
+    ],
+    property: [
+    { required: true, message: '请输入股东性质', trigger: 'blur' }
+    ],
+    capital: [
+    { required: true, message: '请输入投资金额', trigger: 'blur' }
+    ],
+    num: [
+    { required: true, message: '请输入持股数量', trigger: 'blur' }
+    ],
+    percent: [
+    { required: true, message: '请输入股权占比', trigger: 'blur' }
+    ]
+    },
+    headerInfo_member: {
+    desc: '董事会成员',
+    btnGroup: [{
+    icon: 'plus-round',
+    explain: '添加'
+    }]
+    },
+    headerInfo_structure: {
+    desc: '股权结构',
+    btnGroup: [{
+    icon: 'plus-round',
+    explain: '添加'
+    }]
+    }
+    }
     },
     methods: {
-        //添加 董事会成员的方法
-        addMember() {
-            let new_memberForm = {
-                name: '',
-                property: '',
-                edu: '',
-                editFlag: false
-            };
-            this.memberForm = new_memberForm;
-            this.modalAdd1 = !this.modalAdd1;
-        },
-        confirmAdd1(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.memberData.push(this.memberForm);
-                    this.modalAdd1 = !this.modalAdd1;
-                } else {
-                    return false;
-                }
+    //添加 董事会成员的方法
+    addMember() {
+    let new_memberForm = {
+    name: '',
+    property: '',
+    edu: '',
+    editFlag: false
+    };
+    this.memberForm = new_memberForm;
+    this.modalAdd1 = !this.modalAdd1;
+    },
+    confirmAdd1(formName) {
+    this.$refs[formName].validate((valid) => {
+    if (valid) {
+    this.memberData.push(this.memberForm);
+    this.modalAdd1 = !this.modalAdd1;
+    } else {
+    return false;
+    }
 
-            });
-        },
-        //添加 股权结构的方法
-        addStructure() {
-            let new_structureForm = {
-                name: '',
-                property: '',
-                capital: '',
-                num: '',
-                percent: '',
-                editFlag: false
-            };
-            this.structureForm = new_structureForm;
-            this.modalAdd2 = !this.modalAdd2;
-        },
-        confirmAdd2(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.structureData.push(this.structureForm);
-                    this.modalAdd2 = !this.modalAdd2;
-                } else {
-                    return false;
-                }
-            });
-        },
-        checkEdit(index, row) { //编辑
-            // console.log(row)
-            row.editFlag = !row.editFlag;
-        },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
-        }
+    });
+    },
+    //添加 股权结构的方法
+    addStructure() {
+    let new_structureForm = {
+    name: '',
+    property: '',
+    capital: '',
+    num: '',
+    percent: '',
+    editFlag: false
+    };
+    this.structureForm = new_structureForm;
+    this.modalAdd2 = !this.modalAdd2;
+    },
+    confirmAdd2(formName) {
+    this.$refs[formName].validate((valid) => {
+    if (valid) {
+    this.structureData.push(this.structureForm);
+    this.modalAdd2 = !this.modalAdd2;
+    } else {
+    return false;
+    }
+    });
+    },
+    checkEdit(index, row) { //编辑
+    // console.log(row)
+    row.editFlag = !row.editFlag;
+    },
+    //删除当前行
+    handleDelete(index, rows) {
+    rows.splice(index, 1);
+    }
     },
     components: {
-        tabelHeader
+    tabelHeader
     }
-}
+    }
 </script>
 
 
@@ -308,11 +308,11 @@ export default {
 .tables {
     width: 100%;
     height: 100%;
-    .memberTable,
-    .structureTable {
+.memberTable,
+.structureTable {
         width: 100%;
         height: 100%;
-        .structureHeader {
+    .structureHeader {
             margin-top: 22px;
         }
     }
