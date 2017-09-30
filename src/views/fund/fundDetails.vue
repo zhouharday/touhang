@@ -55,7 +55,7 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :showOrhiddren="showOrhiddren">
+                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
                 </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
@@ -194,6 +194,11 @@ export default {
                 accountType: 3,
                 accountTypeName: "募集结算账户"
             }], //详情 - 账户信息
+            fundLevel: {
+                priority: '',
+                intermediateStage: '',
+                generalLevel: ''
+            },
             teamData: [], //团队列表
             investorData: [], // 投资者列表
             fileListData: [], // 文档列表
@@ -272,6 +277,15 @@ export default {
                 this.formDetails = res.data.result.fundBaseInfo
                 this.formMIS = res.data.result.fundManageInfo
                 this.formAccountInfo = res.data.result.fundAccinfo
+                if (res.data.result.fundBaseInfo.fundOrgValue) {
+                    this.fundLevel.priority = res.data.result.fundBaseInfo.fundOrgValue.split(':')[0]
+                    this.fundLevel.intermediateStage = res.data.result.fundBaseInfo.fundOrgValue.split(':')[1]
+                    this.fundLevel.generalLevel = res.data.result.fundBaseInfo.fundOrgValue.split(':')[2]
+                } else {
+                    this.fundLevel.priority = ''
+                    this.fundLevel.intermediateStage = '',
+                    this.fundLevel.generalLevel = ''
+                }
                 if (res.data.result.fundRegistration == null) {
                     return
                 } else {

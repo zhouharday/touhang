@@ -303,13 +303,13 @@ export default {
             roleDialog: false,
             surfaceData: [
                 {
-                    num: '1',
-                    model: 'xx审批表',
+                    id: '1',
+                    modal: 'xx审批表',
                     date: '2017/09/29 13:49:01',
                     editFlag: false
                 }, {
-                    num: '2',
-                    model: 'xx导入表',
+                    id: '2',
+                    modal: 'xx导入表',
                     date: '2017/09/29 13:49:02',
                     editFlag: false
                 }
@@ -398,6 +398,12 @@ export default {
             padding: 20px 25px;
             margin-bottom: 25px;
             background: #eef0f4;
+        }
+        .commonBtn {
+            color: #f05e5e;
+            span {
+                border-bottom: 1px solid #f05e5e;
+            }
         }
         .modelBox {
             width: 100%;

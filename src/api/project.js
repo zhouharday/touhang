@@ -38,13 +38,16 @@ export function updateValuation(params = {}) {
 
 // 项目池列表
 export function getPros(params = {}) {
-	let { projectName, projectType, industryId, merchantId } = params;
+	let { projectName, projectType, industryId, merchantId, page, pageSize } = params;
 	const data = {
 		projectName, // 项目名关键字:"讲",
 		projectType, // 状态ID(1：正常 2：观察 3中止 4：淘汰)"1",
 		industryId,  // 数据字典中行业ID:"14","
-		merchantId   // 商业ID（必传）:"123456"
+		merchantId,   // 商业ID（必传）:"123456"
+		page,
+		pageSize
 	}
+	console.log("projectList condition:" + JSON.stringify(data));
 	return service({url: '/projectPool/searchProject', method: 'post', data})
 }
 
@@ -59,10 +62,6 @@ export function getProDetail(id) {
 // 项目池添加项目
 export function addPro(params = {}) {
 	let { basicForm, companyForm } = params;
-
-    console.log("basicForm-------->" + JSON.stringify(basicForm));
-    console.log("companyForm-------->" + JSON.stringify(companyForm));
-
 
 	let addProjectUserId = JSON.parse(sessionStorage.getItem('userInfor')).id;	//当前登录用户id
     let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id;	//商户id必传"

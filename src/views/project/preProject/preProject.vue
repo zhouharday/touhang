@@ -1,9 +1,9 @@
 <template>
     <section class="preContent">
         <!-- 阶段ul -->
-        <my-filter :chooseInfo="stageList"></my-filter>
+        <my-filter :chooseInfo="projectStage" @getIdInfo="clickStage"></my-filter>
         <!-- 类型ul -->
-        <my-filter :chooseInfo="sortList"></my-filter>
+        <my-filter :chooseInfo="projectType" @getIdInfo="clickType"></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
@@ -26,16 +26,28 @@
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
                     <template scope="scope">
-                        <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.project }}</a>
+                        <a class="project" @click="ShowPreMessage(scope.row.projectName,scope.$index)">{{ scope.row.projectName }}</a>
                     </template>
                 </el-table-column>
                 <el-table-column prop="mananger" label="项目创建人" align="center">
+                    <template scope="scope">
+                        <div class="fow">{{ scope.row.createUserName}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="industry" label="所属行业" align="center">
+                    <template scope="scope">
+                        <div class="fow">{{ scope.row.industry}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="sort" label="项目类型" align="center">
+                    <template scope="scope">
+                        <div class="fow">{{ scope.row.projectType}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="stage" label="项目阶段" align="center">
+                    <template scope="scope">
+                        <div class="fow">{{ scope.row.projectState}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" min-width="100" align="center">
                     <template scope="scope">
@@ -50,8 +62,8 @@
             </el-table>
         </div>
         <!-- 分页 -->
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+        <div class="pagination">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
         <!-- 添加项目成员 对话框-->
@@ -88,14 +100,23 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { getDicChildrenII } from 'common/js/dictionary'
+import myFilter from 'components/myFilter'
 import { getPres } from 'api/projectPre';
 import { getProjectUsers, getProjectRoles } from 'api/projectSys';
 import deleteReminders from 'components/deleteReminders'
-import myFilter from 'components/myFilter'
 export default {
     name: 'preProject',
+    computed: mapGetters({
+        typeOptionsII:'getTypeOptionsII',       // 获取项目类型
+        stageOptionsII:'getStageOptionsII'      // 获取项目阶段
+    }),
     data() {
         return {
+            total: 0,    // 总数
+            page: 1,     // 当前页数
+            pageSize: 10, // 一页数量
             // 项目成员
             modalAdd: false,
             // 删除按钮组件
@@ -103,47 +124,17 @@ export default {
             modal_loading: false,
             message: '是否确认从投资项目中删除该项目？',
             projectName: '',
-            projectType: '',
-            stageList: { //筛选选项一
-                title: '项目阶段：',
-                details: [{
-                    dicName: '全部'
-                }, {
-                    dicName: '考察储备'
-                }, {
-                    dicName: '立项会'
-                }, {
-                    dicName: '尽职调查'
-                }, {
-                    dicName: '投决会'
-                }, {
-                    dicName: '管理'
-                }, {
-                    dicName: '项目退出'
-                }]
-            },
-            sortList: { //筛选选项二
+            projectTypeId: '',
+            projectType:{
                 title: '项目类型：',
-                details: [{
-                    dicName: '全部'
-                }, {
-                    dicName: '天使'
-                }, {
-                    dicName: '并购重组'
-                }, {
-                    dicName: 'PE'
-                }, {
-                    dicName: 'VC'
-                }]
+                details: []
             },
-            tableData: [{
-                project: '京东',
-                mananger: '刘经理',
-                industry: '房地产',
-                sort: 'PE',
-                stage: '立项会',
-                id: 0
-            }],
+            projectStageId: '',
+            projectStage:{
+                title: '项目阶段：',
+                details: []
+            },
+            tableData: [],
             teamForm: { //项目团队表单
                 name: '',
                 role: '',
@@ -165,6 +156,12 @@ export default {
         }
     },
     created() {
+        this.$store.dispatch('getStageOptionsII').then(() => {
+            this.projectStage.details = this.stageOptionsII
+        });
+        this.$store.dispatch('getTypeOptionsII').then(() => {
+            this.projectType.details = this.typeOptionsII
+        });
         this.init();
     },
     methods: {
@@ -179,57 +176,33 @@ export default {
             this.addProjectUserId = info.id;
         },
         getDatas() {
-            let projectType = this.projectType;
-            let projectName = this.projectName;
-            let stageId = this.stageId;
-
-            if (projectType == '全部') projectType = '';
-            if (stageId == '全部') stageId = '';
-
             let params = {
                 merchantId: this.merchantId,
                 userId: this.addProjectUserId,
-                projectStageId: stageId,
-                projectTypeId: projectType,
-                projectName: projectName,
+                projectStageId: this.projectStageId,
+                projectTypeId: this.projectTypeId,
+                projectName: this.projectName,
                 page: this.page,
                 pageSize: this.pageSize
             };
-
             getPres(params).then(resp => {
                 let data = resp.data;
                 let result = data.result;
                 let list = result.list;
-                list = this.handleDatas(list);
                 this.tableData = list || [];
                 this.total = result.total || 0;
-                console.log(result);
             }).catch(e => {
                 // console.log('getPres exists error: ', e);
 
             });
         },
-        pageChanged(page) {
-            this.page = page;
+        handleSizeChange(pageSize) {
+            this.pageSize = pageSize;
             this.getDatas();
         },
-        pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
-        },
-        /**
-         * [handleDatas 处理项目列表数据]
-         * @param  {[type]} data [description]
-         * @return {[type]}      [description]
-         */
-        handleDatas(data = []) {
-            data.forEach(item => {
-                item.project = item.projectName;
-                item.mananger = item.createUserId;
-                item.industry = item.industryId;
-                item.sort = item.projectTypeId;
-                item.stage = item.projectStageId;
-            });
-            return data;
+        handleCurrentChange(page) {
+            this.page = page;
+            this.getDatas();
         },
         /**
          * [handleIconClick 列表模糊查询]
@@ -237,6 +210,14 @@ export default {
          * @return {[type]}    [description]
          */
         handleIconClick(ev) {
+            this.getDatas();
+        },
+        clickType(index, id) {
+            this.projectTypeId = index == 0 ? '' : id;
+            this.getDatas();
+        },
+        clickStage(index, id) {
+            this.projectStageId = index == 0 ? '' : id;
             this.getDatas();
         },
         // 设置table间隔行的background-color
@@ -250,7 +231,7 @@ export default {
         },
         ShowPreMessage(title, ind) {
             this.index = ind;
-            this.addTab('投前' + title.project + '详情页', '/home/preProjectMessage/' + ind, 'preProjectMessage/' + ind);
+            this.addTab('投资项目-' + title + '详情页', '/home/preProjectMessage/' + ind, 'preProjectMessage/' + ind);
             this.$router.push({ name: 'preProjectMessage', params: { userId: title.id } });
         },
         addTab(th, url, name) {
@@ -260,32 +241,33 @@ export default {
             let row = rows[index];
             console.log('row: ', JSON.stringify(row));
             // rows.splice(index, 1);
-        },
-        /**
-         * [changeActive 搜索查询]
-         * @param  {[type]} index [description]
-         * @param  {[type]} ind   [description]
-         * @return {[type]}       [description]
-         */
-        changeActive(index, ind) {
-            let data = [];
-            let currentData;
-            let object;
-            if (ind == 1) { // 项目阶段
-                data = this.stageList;
-                currentData = data[index];
-                object = currentData.stages;
-                this.stageId = object;
-                this.currentIndex1 = index;
-            } else {        // 项目类型
-                data = this.sortList;
-                currentData = data[index];
-                object = currentData.sorts;
-                this.projectType = object;
-                this.currentIndex2 = index;
-            }
-            this.getDatas();
         }
+        // ,
+        // /**
+        //  * [changeActive 搜索查询]
+        //  * @param  {[type]} index [description]
+        //  * @param  {[type]} ind   [description]
+        //  * @return {[type]}       [description]
+        //  */
+        // changeActive(index, ind) {
+        //     let data = [];
+        //     let currentData;
+        //     let object;
+        //     if (ind == 1) { // 项目阶段
+        //         data = this.stageList;
+        //         currentData = data[index];
+        //         object = currentData.stages;
+        //         this.stageId = object;
+        //         this.currentIndex1 = index;
+        //     } else {        // 项目类型
+        //         data = this.sortList;
+        //         currentData = data[index];
+        //         object = currentData.sorts;
+        //         this.projectType = object;
+        //         this.currentIndex2 = index;
+        //     }
+        //     this.getDatas();
+        // }
     },
     components: {
         deleteReminders,
