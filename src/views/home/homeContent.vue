@@ -50,7 +50,7 @@
                     <div class="homeContent_botm">
                         <div>
                             <div>
-                                <img src="/static/img/wait_sth.png" />
+                                <img src="/static/img/sysPrompt.png">
                                 <span>{{waitSth}}</span>
                             </div>
                             <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.index">
@@ -61,19 +61,19 @@
                                 <div>【{{item.projectText1}}】</div>
                                 <div>
                                     <span>{{item.projectText2}}</span>
-                                    <span @click="applyModal=true">{{item.projectText3}}</span>
+                                    <span @click="approvalModal=true">{{item.projectText3}}</span>
                                     <span>{{item.time}}</span>
                                 </div>
                             </div>
                             <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
                                 <div>
-                                    <img src="/static/img/cr_prject.png">
+                                    <img src="/static/img/sysPrompt.png">
                                     <span>{{item.craetProject1}}</span>
                                 </div>
                                 <div>【{{item.projectText2}}】</div>
                                 <div>
                                     <span>{{item.projectText3}}</span>
-                                    <span @click="progressModal=true">{{item.projectText4}}</span>
+                                    <span>{{item.projectText6}}</span>
                                     <span>{{item.time}}</span>
                                 </div>
                                 <div>
@@ -91,93 +91,160 @@
                 <div class="grid-content bg-purple">
                     <div class="homeContentBot_r">
                         <div>
-                            <img src="/static/img/sysPrompt.png">
+                            <img src="/static/img/wait_sth.png">
                             <span>{{sysPrompt}}</span>
                         </div>
-                        <div class="grid-content bg-purple">
-                            <div style="padding: 0px 0px;">
-                                <ul class="notice_ul">
-                                    <li v-for="( item,index ) in messageShow" :key="item.index">
-                                        <div>{{item.noRead}}</div>
-                                        <div>{{item.data}}</div>
-                                        <span>{{item.noticeMessage}}</span>
-                                    </li>
-                                </ul>
-                                <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
-                            </div>
+                        <div class="taskBox" :class="{ border_b:(index%2 == 0)}" v-for="(item,index) in taskLists" :key="item.index">
+                            <p>
+                                <span>任务名称：</span>
+                                <span>{{item.taskName}}</span>
+                            </p>
+                            <p>
+                                <span>指派人：</span>
+                                <span>{{item.taskAppoint}}</span>
+                            </p>
+                            <p style="margin:0">
+                                <span>指派时间：</span>
+                                <span>{{item.taskTime}}</span>
+                            </p>
                         </div>
+                        <Page class="page" :current="1" :total="50" simple @on-change="changePages"></Page>
                         <!-- <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div> -->
                     </div>
                 </div>
             </el-col>
         </el-row>
 
-        <!-- 发起申请 对话框-->
-        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-            <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                <el-row>
-                    <el-col>
-                        <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="备注" prop="notes">
-                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="考察报告" prop="appendix">
-                            <!-- action 上传的地址，必填 -->
-                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="选择审批人" prop="date">
-                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer" style="text-align:center">
-                <el-button type="danger" @click="applyModal= false">提 交</el-button>
-            </div>
-        </el-dialog>
-        <!-- 查看进度 对话框 -->
+        <!-- 立即申请 对话框-->
+        <!-- <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
+                                                                                                    <el-form :model="applyForm" ref="applyForm" label-width="100px">
+                                                                                                        <el-row>
+                                                                                                            <el-col>
+                                                                                                                <el-form-item label="标题" prop="name">
+                                                                                                                    <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                                                                                                                </el-form-item>
+                                                                                                            </el-col>
+                                                                                                            <el-col :span="12">
+                                                                                                                <el-form-item label="申请人" prop="person">
+                                                                                                                    <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                                                                                                                </el-form-item>
+                                                                                                            </el-col>
+                                                                                                            <el-col :span="12">
+                                                                                                                <el-form-item label="申请日期" prop="date">
+                                                                                                                    <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
+                                                                                                                </el-form-item>
+                                                                                                            </el-col>
+                                                                                                            <el-col>
+                                                                                                                <el-form-item label="备注" prop="notes">
+                                                                                                                    <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                                                                                                                    </el-input>
+                                                                                                                </el-form-item>
+                                                                                                            </el-col>
+                                                                                                            <el-col>
+                                                                                                                <el-form-item label="考察报告" prop="appendix">
+                                                                                                                    <!-- action 上传的地址，必填 -->
+        <!-- <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                                                                                                        <div style="padding: 20px 0">
+                                                                                                                            <Icon type="ios-cloud-upload" size="52"></Icon>
+                                                                                                                            <p>点击或将文件拖拽到这里上传</p>
+                                                                                                                        </div>
+                                                                                                                    </Upload>
+                                                                                                                </el-form-item>
+                                                                                                            </el-col>
+                                                                                                            <el-col>
+                                                                                                                <el-form-item label="选择审批人" prop="date">
+                                                                                                                    <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                                                                                                                        <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                                                                                                                        </el-option>
+                                                                                                                    </el-select>
+                                                                                                                </el-form-item>
+                                                                                                            </el-col>
+                                                                                                        </el-row>
+                                                                                                    </el-form>
+                                                                                                    <div slot="footer" class="dialog-footer" style="text-align:center">
+                                                                                                        <el-button type="danger" @click="applyModal= false">提 交</el-button>
+                                                                                                    </div>
+                                                                                                </el-dialog> -->
+        <!-- 立即查看 对话框 -->
+        <!-- <div class="progressBox">
+                                                    <el-dialog title="立即查看" :visible.sync="progressModal" :close-on-click-modal="false">
+                                                        <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
+                                                        <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
+                                                            <el-table-column prop="node" label="节点" align="center">
+                                                            </el-table-column>
+                                                            <el-table-column prop="operator" label="处理人" align="center">
+                                                            </el-table-column>
+                                                            <el-table-column prop="conclusion" label="结论" align="center">
+                                                            </el-table-column>
+                                                            <el-table-column prop="startingTime" label="开始日期" align="center">
+                                                            </el-table-column>
+                                                            <el-table-column prop="time" label="用时" align="center">
+                                                            </el-table-column>
+                                                        </el-table>
+                                                        <div>
+                                                            <div class="title_f" style="background:#2a3142;color:#fff">
+                                                                <div class="desc">
+                                                                    <span>申请详情</span>
+                                                                </div>
+                                                            </div>
+                                                            <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
+                                                                <el-row>
+                                                                    <el-col>
+                                                                        <el-form-item label="标题" prop="name">
+                                                                            <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col :span="12">
+                                                                        <el-form-item label="申请人" prop="person">
+                                                                            <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col :span="12">
+                                                                        <el-form-item label="申请日期" prop="date">
+                                                                            <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col>
+                                                                        <el-form-item label="备注" prop="notes">
+                                                                            <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
+                                                                            </el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col :span="8">
+                                                                        <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
+                                                                            <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
+                                                                            </el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col :span="1">
+                                                                        <div style="text-align:center;line-height:35px;">
+                                                                            <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
+                                                                        </div>
+                                                                    </el-col>
+                                                                </el-row>
+                                                            </el-form>
+                                                        </div>
+                                                        <div>
+                                                            <div class="title_f" style="background:#2a3142;color:#fff">
+                                                                <div class="desc">
+                                                                    <span>意见汇总</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
+                                                                <p class="comment_left">
+                                                                    <span>{{item.comment}}</span>
+                                                                </p>
+                                                                <p class="comment_right">
+                                                                    <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
+                                                                    <span>{{item.note}}</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </el-dialog>
+                                                </div> -->
+        <!-- 立即审批  对话框 -->
         <div class="progressBox">
-            <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
-                <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
-                <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
-                    <el-table-column prop="node" label="节点" align="center">
-                    </el-table-column>
-                    <el-table-column prop="operator" label="处理人" align="center">
-                    </el-table-column>
-                    <el-table-column prop="conclusion" label="结论" align="center">
-                    </el-table-column>
-                    <el-table-column prop="startingTime" label="开始日期" align="center">
-                    </el-table-column>
-                    <el-table-column prop="time" label="用时" align="center">
-                    </el-table-column>
-                </el-table>
+            <el-dialog title="立即审批" :visible.sync="approvalModal" :close-on-click-modal="false">
                 <div>
                     <div class="title_f" style="background:#2a3142;color:#fff">
                         <div class="desc">
@@ -236,6 +303,58 @@
                             <span>{{item.note}}</span>
                         </p>
                     </div>
+                </div>
+                <div class="title_f" style="background:#2a3142;color:#fff;margin-bottom:15px">
+                    <div class="desc">
+                        <span>发表意见</span>
+                    </div>
+                </div>
+                <el-input type="textarea" v-model="commentMessage" :rows="4"></el-input>
+                <div slot="footer" class="dialog-footer" style="text-align:center">
+                    <el-button type="danger" @click="userModal = true">同 意</el-button>
+                    <el-button @click="userModal= true">不同意</el-button>
+                </div>
+            </el-dialog>
+        </div>
+        <!-- 添加用户 对话框-->
+        <div class="addUser">
+            <el-dialog title="选择用户" :visible.sync="userModal">
+                <el-form :model="roleForm" :rules="rules1" ref="roleForm" label-width="80px">
+                    <el-row :gutter="40">
+                        <el-col>
+                            <i style="border-bottom:1px solid #f05e5e"></i>
+                        </el-col>
+                        <el-col :span="14">
+                            <el-form-item label="部门：" prop="department">
+                                <el-select v-model="roleForm.department" placeholder="请选择部门" style="width:100%" auto-complete="off">
+                                    <el-option v-for="item in departmentOptions" :key="item.label" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="14">
+                            <el-form-item prop="name">
+                                <el-input v-model="roleForm.name" placeholder="请输入姓名或账号" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8" style="text-align:right">
+                            <el-button type="danger" style=" width:100px;font-size:16px;border-radius:5px;">查找</el-button>
+                        </el-col>
+                        <el-col>
+                            <i style="border-bottom: 1px solid #c4c4c4;"></i>
+                        </el-col>
+                        <el-col>
+                            <el-form-item prop="checkedUser" v-for="item in roleForm.selectUser" :key="item.index">
+                                <el-checkbox v-model="roleForm.checkedUser" :label="item.name">{{item.name}}</el-checkbox>
+                                <span>{{item.phone}}</span>
+                                <span>{{item.branch}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <div style="text-align:center">
+                    <el-button type="danger" class="dialogBtn_active" @click="submit">确定</el-button>
+                    <el-button class="dialogBtn" @click="cancle">取消</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -424,7 +543,7 @@
     }
 }
 
-//查看进度对话框中的样式
+//立即对话框中的样式
 .title_f {
     margin-top: 30px;
     width: 100%;
@@ -464,33 +583,94 @@
 .bgl {
     background: #EEF0F4;
 }
-</style>
 
+// 选择用户 弹出框
+.addUser {
+    i {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    span {
+        margin-left: 23%;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .dialogBtn_active {
+        width: 150px;
+        font-size: 16px;
+        border-radius: 5px;
+    }
+    .dialogBtn {
+        width: 150px;
+        font-size: 16px;
+        color: #f05e5e;
+        border-radius: 5px;
+        border-color: #f05e5e;
+        background-color: #fff;
+    }
+}
+
+// 待办任务 
+.taskBox {
+    padding: 30px 0;
+    font-size: 14px;
+    >p {
+        padding-left: 15px;
+        margin-bottom: 20px;
+    }
+    >p:nth-child(1) {
+        border-left: 2px solid #f05e5e;
+    }
+    span:nth-child(1) {
+        font-weight: bold;
+    }
+}
+
+.border_b {
+    border-bottom: 2px solid #f2f4f8;
+}
+</style>
 
 <script>
 import datatime from './datetmp.vue';
 export default {
     components: { datatime },
+    computed: {
+        user() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return {
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor
+            }
+        }
+    },
     created() {
+        this.getScheduleList();
     },
     data() {
         return {
+            ScheduleList: [], //日程列表数据
             activeName: 'first',
-            applyModal: false,
+            // applyModal: false,
             progressModal: false,
+            approvalModal: false,
+            userModal: false,
+            commentMessage: '',
             loading: false,
             monthDate: [],
             RecentNotice: "系统消息 / 公司公告",
-            waitSth: "待办事项",
-            sysPrompt: "系统提示",
+            waitSth: "小双提醒",
+            sysPrompt: "待办任务",
             sysMessage: true,
             sysMessageTitle: "暂时没有系统提示哦~",
             projectList: [
                 {
                     craetProject: "立项",
                     projectText1: "京东",
-                    projectText2: "您需要进行立项申请",
-                    projectText3: "立即申请",
+                    projectText2: "您有一条立项申请需要审批",
+                    projectText3: "立即审批",
                     time: "2017-08-16"
                 }
             ],
@@ -498,19 +678,19 @@ export default {
                 {
                     craetProject1: "管理+2",
                     projectText2: "一号店",
-                    projectText3: "1.您的xxx正在审批中。",
+                    projectText3: "1.您有一条xxxx申请需要审批。",
                     projectText4: "立即查看",
-                    projectText5: "2.您的c轮出资正在审批中。",
-                    projectText6: "立即查看",
+                    projectText5: "2.您有一条c轮出资申请需要审批。",
+                    projectText6: "立即审批",
                     time: "2017-08-16"
                 },
                 {
                     craetProject1: "管理+2",
                     projectText2: "六号店",
-                    projectText3: "1.您的xxx正在审批中。",
+                    projectText3: "1.您有一条xxxx申请需要审批。",
                     projectText4: "立即查看",
-                    projectText5: "2.您的c轮出资正在审批中。",
-                    projectText6: "立即查看",
+                    projectText5: "2.您有一条c轮出资申请需要审批。",
+                    projectText6: "立即审批",
                     time: "2017-08-16"
                 }
             ],
@@ -536,14 +716,48 @@ export default {
                     noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
                 }
             ],
-            applyForm: { // 立即申请表单
-                title: '',
-                person: '',
-                date: '',
-                notes: '',
-                appendix: '',
-                auditor: ''
-            },
+            noticeShow: [
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                },
+                {
+                    noRead: "已读",
+                    data: "08-23",
+                    noticeMessage: "由于公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                }
+            ],
+            taskLists: [
+                {
+                    taskName: '进行项目调研',
+                    taskAppoint: '小明',
+                    taskTime: '2017年7月8日   08:08:09'
+                },
+                {
+                    taskName: '进行项目调研',
+                    taskAppoint: '小明',
+                    taskTime: '2017年7月8日   08:08:09'
+                }
+            ],
+            // applyForm: { // 立即申请表单
+            //     title: '',
+            //     person: '',
+            //     date: '',
+            //     notes: '',
+            //     appendix: '',
+            //     auditor: ''
+            // },
             progressTable: [//查看进度表单 节点table
                 {
                     node: '发起申请',
@@ -584,28 +798,39 @@ export default {
                     note: '【管理员】2017/08/15'
                 }
             ],
-            noticeShow: [
+            roleForm: { //选择用户表单
+                department: '',
+                name: '',
+                checkedUser: [],
+                selectUser: [
+                    {
+                        name: '张韶涵1',
+                        phone: '15268792134',
+                        branch: '项目部'
+                    },
+                    {
+                        name: '张韶涵2',
+                        phone: '15268792134',
+                        branch: '项目部'
+                    },
+                    {
+                        name: '张韶涵3',
+                        phone: '15268792134',
+                        branch: '项目部'
+                    }
+                ]
+            },
+            departmentOptions: [
                 {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
-                },
-                {
-                    noRead: "已读",
-                    data: "08-23",
-                    noticeMessage: "因为公司大楼机电维修停电一天，公司与 2017-08-24~2017-08-25放假两天，2017-08-28正常上班。"
+                    value: '选项一',
+                    label: '部门一'
                 }
             ],
+            rules1: {
+                checkedUser: [
+                    { type: 'array', required: true, message: '请选择用户', trigger: 'blur' }
+                ]
+            },
         }
     },
     methods: {
@@ -622,6 +847,7 @@ export default {
 
         },
         changetime(data) {
+            // alert(888);
             // console.log(data)
         },
         readyfun(arr, data) {
@@ -632,7 +858,38 @@ export default {
                 return item.yd = item.day && item.day % 3 == 1 ? true : false;
             });
             this.monthDate = arr;
-        }
+        },
+        submit() { //选择用户 确定按钮方法
+            this.userModal = !this.userModal;
+            this.approvalModal = !this.approvalModal;
+        },
+        cancle() { //选择用户 取消按钮方法
+            this.userModal = !this.userModal;
+            this.approvalModal = !this.approvalModal;
+        },
+        getScheduleList() { //获取日程列表 api
+        // alert(555);
+        this.$http.post(this.api + '/work/getScheduleList', {
+            "userId": this.user.userInfor.id,
+            "merchantId": this.user.merchants[0].id
+        })
+            .then(res => {
+                if (res.status == '200') {
+                    if (res.data.status == '200') {
+                        console.log(res.data);
+                        this.ScheduleList = res.data.result;
+                        this.$Message.success(res.data.message);
+                    } else if (res.data.status == '403') {
+                        this.$Message.error(res.data.message);
+                    } else if (res.data.status == '49999') {
+                        this.$Message.error(res.data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                this.$Message.error("请求超时");
+            })
+    },
     }
 }
 

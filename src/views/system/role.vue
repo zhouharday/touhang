@@ -9,6 +9,7 @@
                 <div class="roleContent">
                     <el-table :data="roleInfo" border style="width: 100%" >
                         <el-table-column label="角色名称" prop="roleName" width="160" >
+
                             <template scope="scope">
                                 <span  v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">
                                     {{scope.row.roleName}}
@@ -47,7 +48,11 @@
         </el-row>
 
     </div>
+<<<<<<< HEAD
+    // 添加弹窗
+=======
     <!--//添加弹窗-->
+>>>>>>> 1aa0770dab7aff87f07516c04a420793ffc8f88c
     <el-dialog title="角色名称" :visible.sync="fundDialog" class="fileDialog">
         <el-form :model="fundForm">
             <el-row>

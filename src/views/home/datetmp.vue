@@ -41,10 +41,10 @@
                         <el-col>
                             <el-form-item label="时间：" prop="time">
                                 <el-time-select v-model="scheduleForm.time" :picker-options="{
-                                                                                    start: '08:30',
-                                                                                    step: '00:15',
-                                                                                    end: '18:30'
-                                                                                    }" placeholder="选择时间" style="width:100%">
+                                                                                                start: '08:30',
+                                                                                                step: '00:15',
+                                                                                                end: '18:30'
+                                                                                                }" placeholder="选择时间" style="width:100%">
                                 </el-time-select>
                             </el-form-item>
                         </el-col>
@@ -65,6 +65,20 @@
 <script>
 module.exports = {
     props: ["title", "monthDate"],
+    computed: {
+        user() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return {
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor
+            }
+        }
+    },
+    created: function() {
+        this.creattimetmp(new Date());
+        // this.getScheduleList();
+    },
     data: function() {
         return {
             scheduleDialog: false,
@@ -209,8 +223,49 @@ module.exports = {
             this.checkTime = this.changeDate;
         },
     },
-    created: function() {
-        this.creattimetmp(new Date());
-    }
+    // getScheduleList() { //获取日程列表 api
+    //     alert(555);
+    //     this.$http.post(this.api + '/work/getScheduleList', {
+    //         "userId": this.user.userInfor.id,
+    //         "merchantId": this.user.merchants[0].id
+    //     })
+    //         .then(res => {
+    //             if (res.status == '200') {
+    //                 if (res.data.status == '200') {
+    //                     console.log(res.data);
+    //                     this.$Message.success(res.data.message);
+    //                 } else if (res.data.status == '403') {
+    //                     this.$Message.error(res.data.message);
+    //                 } else if (res.data.status == '49999') {
+    //                     this.$Message.error(res.data.message);
+    //                 }
+    //             }
+    //         })
+    //         .catch(error => {
+    //             this.$Message.error("请求超时");
+    //         })
+    // },
+    addSchedule(title, time) { //添加日程 api
+        this.$http.post(this.api + '/work/addSchedule', {
+            "userId": this.user.userInfor.id,
+            "scheduleTitle": title,
+            "startTime": time
+        })
+            .then(res => {
+                if (res.status == '200') {
+                    console.log(res);
+                    if (res.data.status == '200') {
+                        console.log(res.data);
+                        this.$Message.success(res.data.message);
+                    } else if (res.data.status == '403') {
+                        this.$Message.error(res.data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                this.$Message.error("请求超时");
+                console.log('请求超时');
+            })
+    },
 }
 </script>

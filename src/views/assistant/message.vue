@@ -78,7 +78,7 @@
                                         <!-- <div v-for="(item,index) in proposalList" :key="item.index"> -->
                                         <div>
                                             <p>
-                                                <span>{{productInfo.fileName}}</span>
+                                                <span>{{productInfo.businessName}}</span>
                                                 <!-- <span class="preview" @click="viewFile">预览</span> -->
                                                 <a class="preview" :href="productInfo.businessPlan">预览</a>
                                                 <a :href="productInfo.businessPlan" :download="productInfo.fileName" class="preview">下载</a>
@@ -91,13 +91,13 @@
                                         <b>融资经历</b>
                                         <div v-for="(item,index) in finance" :key="item.index">
                                             <p>
-                                                <span class="mgr">{{item.financedate}}</span>
-                                                <span class="mgr">{{item.phaseName}}</span>
+                                                <span class="mgr">{{item.financedateStr}}</span>
+                                                <span class="mgr">{{item.phase}}</span>
                                                 <span class="mgr">融资金额 :
                                                     <span>{{item.financeamount}}</span>
                                                 </span>
                                                 <span class="mgr">投资方 :
-                                                    <span>{{item.participantvos}}</span>
+                                                    <span>{{item.investment}}</span>
                                                 </span>
                                             </p>
                                         </div>
@@ -434,6 +434,9 @@ export default {
                         } else if (res.data.status == '9050') {
                             this.$Message.error(res.data.message);
                             return;
+                        } else if (res.data.status == '9010') {
+                            this.$Message.error(res.data.message);
+                            return;
                         }
                     }
                 })
@@ -449,7 +452,7 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
-                            // console.log(res.data.result);
+                            console.log(res.data.result);
                             this.productInfo = res.data.result.productInfo;
                             this.basicInfo = res.data.result.basicInfo;
                             this.company = res.data.result.company;
