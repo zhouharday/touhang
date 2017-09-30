@@ -46,6 +46,9 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
+        <!-- 删除弹出框 -->
+        <delete-reminders :deleteReminders="deleteReminders" :message="message" :modal_loading="modal_loading" @del="deleteReminders=false" @cancel="deleteReminders=false">
+        </delete-reminders>
     </section>
 </template>
 
