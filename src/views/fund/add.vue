@@ -4,6 +4,7 @@
                 :formMIS="formMIS"
                 :formRegistration="formRegistration"
                 :formAccountInfo="formAccountInfo"
+                :fundLevel="fundLevel"
                 :showOrhiddren="showOrhiddren"
                 @confirmSubmission="confirmSubmission"
                 @confirmCancel="confirmCancel">
@@ -22,12 +23,10 @@ export default {
                 fundName: '',
                 fundNo: '',
                 fundScale: '',
-                createUserId: '',
                 manageTypeId: '',
                 orgTypeId: '',
                 fundInvestId: '',
                 fundOrg: '',
-                fundOrgValue: '', //基金结构选2的时候的比例值
                 fundTerm: '',
                 startDate: '',
                 endDate: '',
@@ -39,6 +38,7 @@ export default {
                 mainInvestField: '',
                 incomeDis: '',
                 fundRemarks: '',
+                createUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
                 merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
             }, //详情 - 基本信息
             formMIS: {
@@ -68,6 +68,11 @@ export default {
                 accountType: 3,
                 accountTypeName: "募集结算账户"
             }],
+            fundLevel: {
+                priority: '',
+                intermediateStage: '',
+                generalLevel: ''
+            },
             formData: {}
         }
     },
@@ -78,11 +83,13 @@ export default {
                 fundManageInfo: this.formMIS,
                 fundAccinfo: this.formAccountInfo
             }
+            this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
             addFund(this.formData).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '添加成功！')
                 }
             })
+            console.log(this.fundLevel)
         }
     },
     components: {
