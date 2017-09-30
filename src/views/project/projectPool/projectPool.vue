@@ -8,7 +8,7 @@
             <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" :key="item.index" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
+                        <li v-for="(item,index) in stateList" :key="item.value" :class="{active: item.value==currentIndex1}" @click="changeActive(index)">
                             {{item.states}}
                         </li>
                     </ul>
@@ -23,8 +23,8 @@
             <el-col :span="23">
                 <div class="industry-ul" :class="{ changeList: !btnObject.uptriangle }">
                     <ul ref="industry">
-                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex2}" @click="changeActive(index,2)">
-                            {{item.details}}
+                        <li v-for="(item,index) in $store.state.project.industryOptionsII" :key="item.id" :class="{active: item.id==currentIndex2}" @click="changeIndustry(item.id)">
+                            {{item.dicName}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject.uptriangle }" class="collapse-btn" @click="changeList">
                             <span :class="btnObject"></span>
@@ -37,7 +37,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="input" :on-icon-click="handleIconClick" placeholder="查询关键字：项目名称">
+                <el-input icon="search" v-model="pName" :on-icon-click="handleIconClick" placeholder="查询关键字：项目名称">
                 </el-input>
             </el-col>
             <el-col :span="4" class="addProject">
@@ -54,38 +54,38 @@
                     <el-table-column label="项目" min-width="100">
                         <template scope="scope">
                             <a @click="ShowPoolMessage(scope.row,scope.$index)" class="theme">
-                                <div>{{ scope.row.project }}</div>
+                                <div>{{ scope.row.project_name}}</div>
                             </a>
                         </template>
                     </el-table-column>
                     <el-table-column label="行业" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.industry }}</div>
+                            <div class="fow">{{ scope.row.industry}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="轮次" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.round }}</div>
+                            <div class="fow">{{ scope.row.projectTurn}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="所在地" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.address }}</div>
+                            <div class="fow">{{ scope.row.address}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="项目状态" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.state }}</div>
+                            <div class="fow">{{ scope.row.project_type}}</div>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                                    <template scope="scope">
-                                        <div class="fow">{{ scope.row.manager }}</div>
-                                    </template>
-                                </el-table-column> -->
+                                        <template scope="scope">
+                                            <div class="fow">{{ scope.row.manager }}</div>
+                                        </template>
+                                    </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.datetime }}</div>
+                            <div class="fow">{{ scope.row.create_date}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
@@ -107,33 +107,30 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                    </el-pagination>
+                </div>
             </el-col>
         </el-row>
-        <!--<el-row>-->
-        <!--<el-col>-->
-        <!--<div style="float:right;margin:10px;padding-right:30px;overflow:hidden">-->
-        <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
-        <!--</el-pagination>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-            </el-pagination>
-        </div>
     </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { getDicChildrenII } from 'common/js/dictionary'
 import { getPros, transPro, delPro } from 'api/project';
 export default {
     name: 'projectPool',
+    computed: mapGetters({
+        industryOptionsII:'getindustryOptionsII',   // 获取项目所属行业
+    }),
     data() {
         return {
             total: 0,    // 总数
             page: 1,     // 当前页数
             pageSize: 5, // 一页数量
-            input: '',
+            pName: '',
             collapseBtn1: '收起',
             collapseBtn2: '下拉',
             currentIndex1: 0,
@@ -144,54 +141,19 @@ export default {
                 downtriangle: false
             },
             stateList: [
-                { states: "全部" },
-                { states: "正常" },
-                { states: "观察" },
-                { states: "中止" },
-                { states: "淘汰" }
+                { states: "全部" , value: ''},
+                { states: "正常" , value: '1'},
+                { states: "观察" , value: '2'},
+                { states: "中止" , value: '3'},
+                { states: "淘汰" , value: '4'}
             ],
-            industryList: [
-                { details: "全部" },
-                { details: "电商" },
-                { details: "社交" },
-                { details: "硬件" },
-                { details: "文娱传媒" },
-                { details: "信息传输" },
-                { details: "软件信息" },
-                { details: "金融" },
-                { details: "医疗健康" },
-                { details: "科技推广" },
-                { details: "生活消费" },
-                { details: "企业服务" },
-                { details: "旅游" },
-                { details: "地产" },
-                { details: "教育" },
-                { details: "公共交通" },
-                { details: "物流" },
-                { details: "人工智能" },
-                { details: "VR/AR" },
-                { details: "体育" },
-                { details: "农业" },
-                { details: "共享经济" },
-                { details: "游戏" }
-            ],
-            tableData: [
-                {
-                    theme: '鹿战',
-                    project: '体育赛事即时竞猜平台',
-                    industry: '体育',
-                    round: 'Pre-A轮',
-                    location: '广东省',
-                    state: '正常',
-                    // manager: '刘经理',
-                    datetime: '2015/01/16',
-                    id: 0
-                }
-            ]
+            tableData: [],
+            industryOptionsII: []
         }
     },
     created() {
         this.init();
+        this.$store.dispatch('getIndustryOptionsII')
     },
     methods: {
         init() {
@@ -205,15 +167,18 @@ export default {
             this.addProjectUserId = info.id;
         },
         getDatas() {
-            let projectName = this.input;
+            let projectName = this.pName;
             let projectType = this.state;
             let industryId = this.industry;
 
-            if (projectType == '全部') projectName = '';
-            if (industryId == '全部') industryId = '';
+            if (projectType == '全部') projectType = '';
+            if (industryId == '0') industryId = '';
 
             let params = {
-                merchantId: this.merchantId
+                merchantId: this.merchantId,
+                pageSize: this.pageSize,
+                page: this.page,
+                identification:'12'
             };
 
             if (projectName) params.projectName = projectName;
@@ -223,17 +188,20 @@ export default {
             getPros(params).then(resp => {
                 let info = resp.data.listMapProjectInfo;
                 let data = info.list;
-                data = this.handleDatas(data);
-                this.tableData = data;
+                this.tableData = this.handleDatas(data);
                 this.total = info.total || 0;
+                console.log("condition ******projectName****" + JSON.stringify(projectName));
+                console.log("condition*****projectType*****" + JSON.stringify(projectType));
+                console.log("condition******industryId****" + JSON.stringify(industryId));
             })
         },
-        pageChanged(page) {
+        handleCurrentChange(page) {
             this.page = page;
             this.getDatas();
         },
         pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
+            this.pageSize = pageSize;
+            this.getDatas();
         },
         /**
          * [handleDatas 处理项目列表数据]
@@ -242,16 +210,22 @@ export default {
          */
         handleDatas(data = []) {
             data.forEach(item => {
-                item.project = item.project_name;
-                item.manager = item.createPerson;
-                item.industry = item.industry_id;
-                item.sort = item.project_type;
-                item.round = item.project_turn_id;
-                item.state = item.project_status;
-                item.datetime = item.create_date;
-                item.location = item.address_id;
-                item.theme = 'e';
                 item.isCanDelete = item.project_type === '4';
+                item.project_name = item.project_name;
+                item.createPerson = item.createPerson;
+                item.industry = item.industry;
+                item.projectTurn = item.projectTurn;
+                if (item.project_type === '1'){
+                    item.project_type = '正常'
+                }else if(item.project_type === '2'){
+                    item.project_type = '观察'
+                }else if(item.project_type === '3'){
+                    item.project_type = '中止'
+                }else if(item.project_type === '4'){
+                    item.project_type = '淘汰'
+                }
+                item.create_date = item.create_date;
+                item.address = item.address;
             });
             return data;
         },
@@ -281,11 +255,10 @@ export default {
         },
         ShowPoolMessage(title, ind) {
             this.index = ind;
-            this.addTab(title.project + '详情页', '/home/zprojectPoolMessage/' + title.id, "zprojectPoolMessage/" + title.id);
+            this.addTab(title.project_name + '详情页', '/home/zprojectPoolMessage/' + title.id, "zprojectPoolMessage/" + title.id);
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: title.id } });
         },
         goJumpPref(index, data) {
-            console.log('index: ', index);
             this.dialogVisible = true;
             this.jumpData = data[index] || {};
         },
@@ -298,7 +271,6 @@ export default {
             .then(resp => {
                 let data = resp.data;
                 if (!data.message) {
-                    console.log(resp);
                     this.addTab('投前项目', '/home/preProject', 'preProject');
                     this.$router.push({ name: 'preProject' });
                 } else {
@@ -333,20 +305,20 @@ export default {
                 console.log('deleteRow exists error: ', e);
             });
         },
-        changeActive(index, ind) {
-            if (ind == 1) { // 状态
-                let stateList = this.stateList;
-                let state = stateList[index].states;
-                this.state = state;
-                this.currentIndex1 = index;
-                this.getDatas();
-            } else {        // 行业
-                let industryList = this.industryList;
-                let industry = this.industryList[index].details;
-                this.industry = industry;
-                this.currentIndex2 = index;
-                this.getDatas();
-            }
+        changeActive(index) {
+            // 状态
+            let stateList = this.stateList;
+            let state = stateList[index].value;
+            this.state = state;
+            this.currentIndex1 = index;
+            this.getDatas();
+        },
+        changeIndustry(id) {
+            // 行业
+            this.industry = id;
+            this.currentIndex2 = id;
+            this.getDatas();
+            
         }
     }
 }
@@ -379,14 +351,11 @@ export default {
         height: 20px;
         overflow: hidden;
         position: relative;
-    }
-
-    // .collapseBtn {
+    } // .collapseBtn {
     //     position: absolute;
     //     right: 0;
     //     top: 0;
     // }
-
     .tag {
         margin-top: 20px;
         margin-bottom: 5px;

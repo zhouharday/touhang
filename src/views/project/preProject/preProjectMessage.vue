@@ -52,7 +52,7 @@
                         </el-button>
                         <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
                                                                                                                                                                         {{item.info}}
-                                                                                                                                                                    </el-button> -->
+                                                                                                                                                                       </el-button> -->
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                     <table-form></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table :proId="proId" :proUsers="proUsers" :proRoles="proRoles">
+                    <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
                     </team-table>
                 </el-tab-pane>
 
@@ -77,7 +77,7 @@
                 <!--</el-tab-pane>-->
 
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form :proId="proId"></record-form>
+                    <record-form :proId="projectId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
                     <approve-table></approve-table>
@@ -86,10 +86,10 @@
                     <file-table></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table :proId="proId" :proUsers="proUsers"></risk-table>
+                    <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table :proId="proId"></manage-table>
+                    <manage-table :proId="projectId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>
@@ -100,63 +100,8 @@
         <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
         </delete-reminders>
         <!-- 发起申请 对话框-->
-<!-- <<<<<<< HEAD
-        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-            <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                <el-row>
-                    <el-col>
-                        <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off"
-                                      disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off"
-                                      disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off"
-                                      disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="备注" prop="notes">
-                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="考察报告" prop="appendix">
-                            <!-- action 上传的地址，必填 -->
-                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix"
-                                    action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="选择审批人" prop="date">
-                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label"
-                                           :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer" style="text-align:left">
-                <el-button type="danger" size="small" @click="applyModal= false">提交</el-button>
-            </div>
-        </el-dialog>
-<!-- ======= -->
-        <!-- <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms> -->
+
+        <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms>
         <div class="applyBox">
             <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
                 <el-form :model="applyForm" ref="applyForm" label-width="100px">
@@ -208,7 +153,6 @@
                 </div>
             </el-dialog>
         </div>
-<!-- >>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1 -->
         <!-- 查看进度 对话框 -->
         <div class="progressBox">
             <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
@@ -310,6 +254,7 @@ const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基
 export default {
     data() {
         return {
+            projectId: '',
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
@@ -440,8 +385,7 @@ export default {
         },
         initInfo() {
             let href = window.location.href;
-            this.proId = href.substr(href.lastIndexOf('/') + 1, href.length);
-
+            this.projectId = href.substr(href.lastIndexOf('/') + 1, href.length);
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
@@ -461,8 +405,8 @@ export default {
          * @return {[type]} [description]
          */
         getPreProDetail() {
-            getPreDetail(this.proId).then(resp => {
-                console.log('prodetail: ', resp);
+            getPreDetail(this.projectId).then(resp => {
+                console.log('getPreProDetail: ', resp.data.result);
             }).catch(e => {
                 console.log('getProDetail() exists error: ', e);
             });

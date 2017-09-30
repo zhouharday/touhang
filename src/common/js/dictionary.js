@@ -134,3 +134,12 @@ export function getDicChildren(Pid) {
     }
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
+// 获取数据字典一级子项 By CJ 2017-9-30 14:47:26
+export function getDicChildrenII(Pid) {
+    console.log("查询父ID为：" + Pid + " 的数据字典项 **含全部");
+    const data = {
+        dicParent: Pid,
+        identification: 'identification'
+    }
+    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+}

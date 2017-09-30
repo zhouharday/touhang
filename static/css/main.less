@@ -822,7 +822,7 @@ ul li {
         .el-input__inner {
             border-radius: 15px;
         }
-        .el-button {
+        .el-button--text {
             color: #f05e5e;
             span {
                 border-bottom: 1px solid #f05e5e;
@@ -832,11 +832,30 @@ ul li {
     // 阶段配置
     .phaseConfigure {
         .processItem {
-            .el-button {
+            .el-button--text {
                 color: #f05e5e;
                 span {
                     border-bottom: 1px solid #f05e5e;
                 }
+            }
+        }
+    }
+    // 审批配置
+    .approvalConfigure {
+        // row-table的css style
+        .el-table th {
+            background-color: #2A3142;
+        }
+        .el-table__footer-wrapper thead div,
+        .el-table__header-wrapper thead div {
+                color: #fff;
+                font-weight: normal;
+                background-color: #2A3142;
+        }
+        .el-button--text {
+            color: #f05e5e;
+            span {
+                border-bottom: 1px solid #f05e5e;
             }
         }
     }
