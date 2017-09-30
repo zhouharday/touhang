@@ -79,10 +79,10 @@
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                                    <template scope="scope">
-                                        <div class="fow">{{ scope.row.manager }}</div>
-                                    </template>
-                                </el-table-column> -->
+                                        <template scope="scope">
+                                            <div class="fow">{{ scope.row.manager }}</div>
+                                        </template>
+                                    </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.datetime }}</div>
@@ -107,6 +107,10 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="400">
+                    </el-pagination>
+                </div>
             </el-col>
         </el-row>
         <!--<el-row>-->
@@ -117,10 +121,6 @@
         <!--</div>-->
         <!--</el-col>-->
         <!--</el-row>-->
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-            </el-pagination>
-        </div>
     </div>
 </template>
 
@@ -295,18 +295,18 @@ export default {
             let projectId = _data.id;
             let addProjectUserId = this.addProjectUserId;
             transPro(projectId)
-            .then(resp => {
-                let data = resp.data;
-                if (!data.message) {
-                    console.log(resp);
-                    this.addTab('投前项目', '/home/preProject', 'preProject');
-                    this.$router.push({ name: 'preProject' });
-                } else {
-                    this.dialogVisible = false; // 隐藏弹框
-                }
-            }).catch(e => {
-                console.log('jumpPre exists error: ', e);
-            });
+                .then(resp => {
+                    let data = resp.data;
+                    if (!data.message) {
+                        console.log(resp);
+                        this.addTab('投前项目', '/home/preProject', 'preProject');
+                        this.$router.push({ name: 'preProject' });
+                    } else {
+                        this.dialogVisible = false; // 隐藏弹框
+                    }
+                }).catch(e => {
+                    console.log('jumpPre exists error: ', e);
+                });
         },
         addProject() {
             this.addTab('添加项目', '/home/addProject', 'addProject');
@@ -379,14 +379,11 @@ export default {
         height: 20px;
         overflow: hidden;
         position: relative;
-    }
-
-    // .collapseBtn {
+    } // .collapseBtn {
     //     position: absolute;
     //     right: 0;
     //     top: 0;
     // }
-
     .tag {
         margin-top: 20px;
         margin-bottom: 5px;

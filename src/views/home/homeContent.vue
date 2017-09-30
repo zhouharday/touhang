@@ -73,7 +73,7 @@
                                 <div>【{{item.projectText2}}】</div>
                                 <div>
                                     <span>{{item.projectText3}}</span>
-                                    <span @click="progressModal=true">{{item.projectText4}}</span>
+                                    <span>{{item.projectText6}}</span>
                                     <span>{{item.time}}</span>
                                 </div>
                                 <div>
@@ -94,14 +94,17 @@
                             <img src="/static/img/wait_sth.png">
                             <span>{{sysPrompt}}</span>
                         </div>
-                        <div class="taskBox" v-for="(item,index) in taskLists" :key="item.index">
-                            <p>任务名称：
+                        <div class="taskBox" :class="{ border_b:(index%2 == 0)}" v-for="(item,index) in taskLists" :key="item.index">
+                            <p>
+                                <span>任务名称：</span>
                                 <span>{{item.taskName}}</span>
                             </p>
-                            <p>指派人：
+                            <p>
+                                <span>指派人：</span>
                                 <span>{{item.taskAppoint}}</span>
                             </p>
-                            <p>直排时间：
+                            <p style="margin:0">
+                                <span>指派时间：</span>
                                 <span>{{item.taskTime}}</span>
                             </p>
                         </div>
@@ -112,112 +115,58 @@
             </el-col>
         </el-row>
 
-<<<<<<< HEAD
         <!-- 立即申请 对话框-->
         <!-- <el-dialog title="立即申请" :visible.sync="applyModal" :close-on-click-modal="false">
-                                                <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                                                    <el-row>
-                                                        <el-col>
-                                                            <el-form-item label="标题" prop="name">
-                                                                <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
-                                                            </el-form-item>
-                                                        </el-col>
-                                                        <el-col :span="12">
-                                                            <el-form-item label="申请人" prop="person">
-                                                                <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
-                                                            </el-form-item>
-                                                        </el-col>
-                                                        <el-col :span="12">
-                                                            <el-form-item label="申请日期" prop="date">
-                                                                <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
-                                                            </el-form-item>
-                                                        </el-col>
-                                                        <el-col>
-                                                            <el-form-item label="备注" prop="notes">
-                                                                <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                                                                </el-input>
-                                                            </el-form-item>
-                                                        </el-col>
-                                                        <el-col>
-                                                            <el-form-item label="考察报告" prop="appendix">
-                                                                <!-- action 上传的地址，必填 -->
+                                                            <el-form :model="applyForm" ref="applyForm" label-width="100px">
+                                                                <el-row>
+                                                                    <el-col>
+                                                                        <el-form-item label="标题" prop="name">
+                                                                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col :span="12">
+                                                                        <el-form-item label="申请人" prop="person">
+                                                                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col :span="12">
+                                                                        <el-form-item label="申请日期" prop="date">
+                                                                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col>
+                                                                        <el-form-item label="备注" prop="notes">
+                                                                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                                                                            </el-input>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col>
+                                                                        <el-form-item label="考察报告" prop="appendix">
+                                                                            <!-- action 上传的地址，必填 -->
         <!-- <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                                                    <div style="padding: 20px 0">
-                                                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                                                        <p>点击或将文件拖拽到这里上传</p>
-                                                                    </div>
-                                                                </Upload>
-                                                            </el-form-item>
-                                                        </el-col>
-                                                        <el-col>
-                                                            <el-form-item label="选择审批人" prop="date">
-                                                                <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                                                    <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                                                    </el-option>
-                                                                </el-select>
-                                                            </el-form-item>
-                                                        </el-col>
-                                                    </el-row>
-                                                </el-form>
-                                                <div slot="footer" class="dialog-footer" style="text-align:center">
-                                                    <el-button type="danger" @click="applyModal= false">提 交</el-button>
-                                                </div>
-                                            </el-dialog> -->
+                                                                                <div style="padding: 20px 0">
+                                                                                    <Icon type="ios-cloud-upload" size="52"></Icon>
+                                                                                    <p>点击或将文件拖拽到这里上传</p>
+                                                                                </div>
+                                                                            </Upload>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                    <el-col>
+                                                                        <el-form-item label="选择审批人" prop="date">
+                                                                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                                                                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                                                                                </el-option>
+                                                                            </el-select>
+                                                                        </el-form-item>
+                                                                    </el-col>
+                                                                </el-row>
+                                                            </el-form>
+                                                            <div slot="footer" class="dialog-footer" style="text-align:center">
+                                                                <el-button type="danger" @click="applyModal= false">提 交</el-button>
+                                                            </div>
+                                                        </el-dialog> -->
         <!-- 立即查看 对话框 -->
-=======
-        <!-- 发起申请 对话框-->
-        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-            <el-form :model="applyForm" ref="applyForm" label-width="100px">
-                <el-row>
-                    <el-col>
-                        <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请人" prop="person">
-                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="申请日期" prop="date">
-                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="备注" prop="notes">
-                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="考察报告" prop="appendix">
-                            <!-- action 上传的地址，必填 -->
-                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="选择审批人" prop="date">
-                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div slot="footer" class="dialog-footer" style="text-align:center">
-                <el-button type="danger" @click="applyModal= false">提 交</el-button>
-            </div>
-        </el-dialog>
-        <!-- 查看进度 对话框 -->
->>>>>>> 1aa0770dab7aff87f07516c04a420793ffc8f88c
-        <div class="progressBox">
+        <!-- <div class="progressBox">
             <el-dialog title="立即查看" :visible.sync="progressModal" :close-on-click-modal="false">
                 <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
                 <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
@@ -292,7 +241,7 @@
                     </div>
                 </div>
             </el-dialog>
-        </div>
+        </div> -->
         <!-- 立即审批  对话框 -->
         <div class="progressBox">
             <el-dialog title="立即审批" :visible.sync="approvalModal" :close-on-click-modal="false">
@@ -664,10 +613,21 @@
 
 // 待办任务 
 .taskBox {
-    padding: 25px 0; // border-bottom: 1px solid #c4c4c4;
+    padding: 30px 0;
+    font-size: 14px;
     >p {
-        margin-bottom: 15px;
+        padding-left: 15px;
+        margin-bottom: 20px;
     }
+    >p:nth-child(1) {
+        border-left: 2px solid #f05e5e;
+    }
+    span:nth-child(1) {
+        font-weight: bold;
+    }
+}
+.border_b {
+    border-bottom: 2px solid #f2f4f8;
 }
 </style>
 
@@ -706,18 +666,18 @@ export default {
                 {
                     craetProject1: "管理+2",
                     projectText2: "一号店",
-                    projectText3: "1.您的xxx申请已完成。",
+                    projectText3: "1.您有一条xxxx申请需要审批。",
                     projectText4: "立即查看",
-                    projectText5: "2.您的c轮出资正在审批中。",
+                    projectText5: "2.您有一条c轮出资申请需要审批。",
                     projectText6: "立即审批",
                     time: "2017-08-16"
                 },
                 {
                     craetProject1: "管理+2",
                     projectText2: "六号店",
-                    projectText3: "1.您的xxx正在审批中。",
+                    projectText3: "1.您有一条xxxx申请需要审批。",
                     projectText4: "立即查看",
-                    projectText5: "2.您的c轮出资正在审批中。",
+                    projectText5: "2.您有一条c轮出资申请需要审批。",
                     projectText6: "立即审批",
                     time: "2017-08-16"
                 }
