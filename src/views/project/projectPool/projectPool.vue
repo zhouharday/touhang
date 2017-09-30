@@ -79,10 +79,10 @@
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                                    <template scope="scope">
-                                        <div class="fow">{{ scope.row.manager }}</div>
-                                    </template>
-                                </el-table-column> -->
+                                        <template scope="scope">
+                                            <div class="fow">{{ scope.row.manager }}</div>
+                                        </template>
+                                    </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.create_date}}</div>
@@ -351,14 +351,11 @@ export default {
         height: 20px;
         overflow: hidden;
         position: relative;
-    }
-
-    // .collapseBtn {
+    } // .collapseBtn {
     //     position: absolute;
     //     right: 0;
     //     top: 0;
     // }
-
     .tag {
         margin-top: 20px;
         margin-bottom: 5px;
