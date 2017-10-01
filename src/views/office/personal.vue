@@ -2,11 +2,11 @@
     <section class="personal">
         <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="编辑资料" name="first">
-                <el-form :model="form1" :rules="rules1" ref="form1" label-width="90px">
+                <el-form label-position="left" :model="form1" :rules="rules1" ref="form1" label-width="90px">
                     <el-row :gutter="40">
                         <el-col :span="7">
-                            <el-form-item label="用户ID：" prop="userID">
-                                <el-input v-model="form1.userID" auto-complete="off" disabled></el-input>
+                            <el-form-item label="用户ID：" prop="phone">
+                                <el-input v-model="form1.phone" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="7">
@@ -20,13 +20,16 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="14">
-                            <el-form-item label="部门：" prop="department">
-                                <el-input v-model="form1.department" auto-complete="off"></el-input>
+                            <el-form-item label="部门：" prop="dept">
+                                <el-select v-model="form1.dept" placeholder="请选择" size="120%">
+                                    <el-option v-for="item in department" :key="item.id" :label="item.deptName" :value="item.id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="14" style="margin-bottom:50px">
-                            <el-form-item label="姓名：" prop="userName">
-                                <el-input v-model="form1.userName" auto-complete="off"></el-input>
+                            <el-form-item label="姓名：" prop="name">
+                                <el-input v-model="form1.name" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="14">
@@ -35,13 +38,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="14">
-                            <el-form-item label="办公电话：" prop="callPhone">
-                                <el-input v-model="form1.callPhone" auto-complete="off"></el-input>
+                            <el-form-item label="办公电话：" prop="telephone">
+                                <el-input v-model="form1.telephone" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="14">
-                            <el-form-item label="邮箱：" prop="email">
-                                <el-input v-model="form1.email" auto-complete="off"></el-input>
+                            <el-form-item label="邮箱：" prop="emil">
+                                <el-input v-model="form1.emil" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
 
@@ -49,11 +52,11 @@
                 </el-form>
                 <div style="margin-left:23%">
                     <el-button>取消</el-button>
-                    <el-button type="danger">确认</el-button>
+                    <el-button type="danger" @click="dangerBtn">确认</el-button>
                 </div>
             </el-tab-pane>
             <el-tab-pane label="修改密码" name="second">
-                <el-form :model="form2" ref="form2" label-width="120px">
+                <el-form label-position="left" :model="form2" ref="form2" label-width="120px">
                     <el-row :gutter="40">
                         <el-col :span="13">
                             <el-form-item label="请输入当前密码" prop="currentPwd">
@@ -76,8 +79,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="4">
-                            <el-button :class="{'active-code':isSendCode}" @click="sendVerificationCode"
-                                       class="code-btn" :disabled="!isSendCode" type="danger">{{ btnText}}
+                            <el-button :class="{'active-code':isSendCode}" @click="sendVerificationCode" class="code-btn" :disabled="!isSendCode" type="danger">{{ btnText}}
                             </el-button>
                         </el-col>
                         <el-col :span="13">
@@ -87,7 +89,7 @@
                         </el-col>
                     </el-row>
                 </el-form>
-                <el-button type="danger" style="width:100px;margin-left:23%;" @click="submitForm" :class="{ active:valueData }">完成</el-button>
+                <el-button type="danger" style="width:100px;margin-left:23%;" @click="submitForm" :disabled="!valueData" :class="{ active:valueData }">完成</el-button>
             </el-tab-pane>
         </el-tabs>
     </section>
@@ -95,150 +97,266 @@
 
 
 <script>
-    export default {
-        data() {
+export default {
+    computed: {
+        user() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
             return {
-                activeName: 'first',
-                isSendCode: false, //是否可以发送验证码
-                valueData: false, //所有输入的值是否通过验证
-                btnText: '获取验证码',
-                form1: {
-                    userID: '',
-                    userRole: '',
-                    companyName: '',
-                    department: '',
-                    userName: '',
-                    phone: '',
-                    callPhone: '',
-                    email: ''
-                },
-                form2: {
-                    currentPwd: '',
-                    newPwd: '',
-                    newPwd2: '',
-                    phone: '',
-                    code: ''
-                }
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor
+            }
+        }
+    },
+    created() {
+        this.selectpersonalInfo();
+        this.queryList();
+    },
+    data() {
+        return {
+            activeName: 'first',
+            isSendCode: false, //是否可以发送验证码
+            valueData: false, //所有输入的值是否通过验证
+            btnText: '获取验证码',
+            form1: { //用户信息
+                userID: '',
+                userRole: '',
+                companyName: '',
+                dept: '', //部门
+                name: '', //姓名
+                phone: '', //手机
+                telephone: '', //办公电话
+                emil: '' //邮箱
+            },
+            form2: { //修改密码
+                currentPwd: '',
+                newPwd: '',
+                newPwd2: '',
+                phone: '',
+                code: ''
+            },
+            pwd: false,
+            department: [], //部门列表数据
+        };
+    },
+    methods: {
+        /*******************验证 修改密码表单开始 *************************/
+        checkVata() {
+            let isPhone = this.checkPhone(this.form2.phone);
+
+            if (isPhone) {
+                this.isSendCode = true;
+                this.valueData = false;
+            } else {
+                this.isSendCode = false;
+                this.valueData = false;
             };
+            if (this.form2.currentPwd &&
+                isPhone &&
+                this.form2.newPwd &&
+                this.form2.newPwd2 &&
+                this.form2.code
+            ) {
+                this.isSendCode = true;
+                this.valueData = true;
+
+            } else {
+                // this.isSendCode = false;
+                this.valueData = false;
+            }
+
+
         },
-        methods: {
-            /*******************验证 修改密码表单开始 *************************/
-            checkVata() {
-                if (this.form2.currentPwd && (this.form2.newPwd == this.form2.newPwd2) && this.checkPhone(this.form2.phone) && this.form2.code) {
-                    this.valueData = true;
-                    this.isSendCode = true;
-                }
-                else if (this.form2.currentPwd && (this.form2.newPwd == this.form2.newPwd2) && this.checkPhone(this.form2.phone)) {
-                    this.valueData = false;
-                    this.isSendCode = true;
+        /***********************验证表单结束***************************************/
+
+        /***********************手机号码验证开始************************************************/
+        checkPhone(phone) {
+            var pattern = /^1[34578][0-9]{9}$/;
+            if (phone != '') {
+                if (pattern.test(phone)) {
+                    return true;
                 } else {
-                    this.isSendCode = false;
-                    this.valueData = false;
-                }
-            },
-            /***********************验证表单结束***************************************/
-
-            /***********************手机号码验证开始************************************************/
-            checkPhone(phone) {
-                var pattern = /^1[34578][0-9]{9}$/;
-                if (phone != '') {
-                    if (pattern.test(phone)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            },
-            /************************手机号码验证结束*************************************/
-
-            /************************验证码倒计时开始************************************/
-            time() {
-                if (this.isSendCode) {
-                    this.isSendCode = !this.isSendCode;
-                    this.valueData = false;
-                    var self = this;
-                    var sec = 10;
-                    var timer1 = setInterval(
-                        function () {
-                            // self.isSendCode = true;
-                            self.btnText = sec + 's';
-                            if (sec < 0) {
-                                // self.isSendCode = false;
-                                clearInterval(timer1);
-                                self.isSendCode = !self.isSendCode;
-                                self.btnText = '获取验证码';
-                            }
-                            sec--;
-                        }
-                        , 1000);
-                }
-            },
-            /************************验证码倒计时结束*********************/
-            sendVerificationCode() { //发送验证码 Ajax
-                this.time();
-                // return service({
-                //     url: 'api/merchant/validationCode',
-                //     method: 'post',
-                //     data: { contactPhone: this.form2.Phone }
-                // })
-
-                this.$http.post(this.api + '/merchant/validationCode', {
-                    contactPhone: this.phonecontactPhone
-                })
-                    .then(res => {
-                        if (res.data.status == '200') {
-                            // this.provinces = res.data.result;
-                            // this.time();
-                            // this.isValidationCode = 1;
-                            console.log(res.data);
-                        } else if (res.data.status == '1008') { //手机号不合法
-                            // console.log(res.data);
-                            // this.isSendCode = 1;
-                            alert(res.data.message);
-                        } else if (res.data.status == '403') { //服务器异常
-                            // console.log(res.data);
-                            // this.isSendCode = 1;
-                            alert(res.data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            },
-            /************************验证码倒计时结束*********************/
-
-            /***********************提交表单开始*************************/
-            submitForm() {
-                if (this.isSendCode && this.code) {
-
-                    this.$store.state.register.register.contactPhone = this.phonecontactPhone;
-                    this.$store.state.register.register.validationCode = this.validationCode;
-                    console.log(this.$store.state.register.register);
+                    return false;
                 }
             }
-            /************************提交表单结束********************************/
-        }
-    };
+        },
+        /************************手机号码验证结束*************************************/
+
+        /************************验证码倒计时开始************************************/
+        time() {
+            if (this.isSendCode) {
+                this.isSendCode = !this.isSendCode;
+                // this.valueData = false;
+                var self = this;
+                var sec = 10;
+                var timer1 = setInterval(
+                    function() {
+                        // self.isSendCode = true;
+                        self.btnText = sec + 's';
+                        if (sec < 0) {
+                            // self.isSendCode = false;
+                            clearInterval(timer1);
+                            self.isSendCode = !self.isSendCode;
+                            self.btnText = '获取验证码';
+                        }
+                        sec--;
+                    }
+                    , 1000);
+            }
+        },
+        /************************验证码倒计时结束*********************/
+        sendVerificationCode() { //发送验证码 Ajax
+            this.$http.post(this.api + '/merchant/validationCode', {
+                contactPhone: this.form2.phone
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            this.time();
+                            this.$Message.success(res.data.message);
+                            console.log(res.data);
+                        } else if (res.data.status == '1006') { //手机号不合法
+                            this.$Message.error(res.data.message);
+                        } else if (res.data.status == '1008') { //手机号不合法
+                            this.$Message.error(res.data.message);
+                        } else if (res.data.status == '403') { //服务器异常
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        /************************验证码倒计时结束*********************/
+
+        /***********************提交表单开始*************************/
+        submitForm() {
+            if (this.form2.newPwd !== this.form2.newPwd2) {
+                this.$Message.error('新密码与确认密码不一致，请重新输入');
+                return;
+            };
+            if (this.valueData) {
+                this.updatePass();
+                console.log(this.form2);
+            }
+        },
+        dangerBtn() { //编辑用户信息确认 Btn
+            console.log(this.form1);
+            //    this.updatePersonalData();
+        },
+        /************************提交表单结束********************************/
+        selectpersonalInfo() { //个人中心个人详细信息展示 api
+            this.$http.post(this.api + '/personalCenter/selectpersonalInfo', {
+                id: this.user.userInfor.id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.form1 = res.data.result;
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
+        updatePersonalData() { //个人中心个人详细信息更改 api
+            this.$http.post(this.api + '/personalCenter/updatePersonalData', {
+                id: this.user.userInfor.id
+
+
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.selectpersonalInfo();
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
+        queryList() { //查询部门列表 api
+            this.$http.post(this.api + '/sysDept/queryList', {
+                merchantId: this.user.merchants[0].id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.department = res.data.result;
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+
+        },
+        updatePass() { //个人中心密码更改 api
+            this.$http.post(this.api + '/personalCenter/updatePass', {
+                "id": this.user.userInfor.id, //用户ID
+                "mobileCode": this.form2.code, //用户输入的验证码
+                "phone": this.form2.phone, //用户手机号码
+                "newPwd": this.form2.newPwd2, //新的密码
+                "pass": this.form2.currentPwd //当前密码
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res);
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '1014') {
+                            this.$Message.error(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
+    }
+};
 </script>
 
 
 <style lang="less" scoped>
-    .personal {
-        background: #ffffff;
-        padding: 24px;
-        .code-btn {
-            font-size: 14px;
-            color: #fff;
-            outline: none;
-            background: gray;
-        }
-
-        .active-code {
-            background: orange;
-        }
-
-        .active {
-            background: blue;
-        }
+.personal {
+    background: #ffffff;
+    padding: 24px;
+    .code-btn {
+        font-size: 14px;
+        color: #fff;
+        outline: none;
+        background: gray;
     }
+
+    .active-code {
+        background: orange;
+    }
+
+    .active {
+        background: blue;
+    }
+}
 </style>

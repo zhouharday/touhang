@@ -31,9 +31,10 @@
                             <el-tab-pane label="公司公告" name="second">
                                 <ul class="notice_ul">
                                     <li v-for="( item,index ) in assistNotice.list" :key="item.id">
-                                        <div>{{noRead}}</div>
+                                        <div class="read" v-if="!item.readStatus">{{noRead}}</div>
+                                        <div class="read" v-if="item.readStatus">{{readed}}</div>
                                         <div>{{item.assistNotice.createDate}}</div>
-                                        <span>{{item.assistNotice.noticeContent}}</span>
+                                        <span class="cursor" @click="openMsg(item,index)">{{item.assistNotice.noticeContent}}</span>
                                     </li>
                                 </ul>
                                 <Page class="page" show-total='true' :current="1" :total=assistNotice.total simple @on-change="assistNoticePages"></Page>
@@ -402,7 +403,7 @@
             margin-top: 16px;
             height: 50px;
             position: relative;
-            >div:nth-child(1) {
+            .read {
                 width: 52px;
                 height: 24px;
                 border-radius: 10px;
@@ -697,7 +698,7 @@ export default {
             ],
 
             noRead: "未读",
-            Readed: "已读",
+            readed: "已读",
             assistNotice: [], //公司公告列表数据
             sysMessage: [], //系统消息
             taskLists: [], //代办任务列表数据
@@ -794,6 +795,14 @@ export default {
         changetime(data) {
             // alert(888);
             // console.log(data)
+        },
+        openMsg(item,index){
+            console.log(item);
+            console.log(index);
+            this.$msgbox({
+                title: item.assistNotice.noticeTitle,
+                message: item.assistNotice.noticeContent
+            });
         },
         readyfun(arr, data) {
             var arr = arr;
