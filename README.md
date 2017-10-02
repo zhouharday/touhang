@@ -38,7 +38,7 @@ npm run dev //运行项目
             |-- index.html                        // 视口文件  
             |-- package.json                      // 项目配置文件  
             |-- README.md                         // 项目的说明文档  
-            |-- server.js                         // 启动本地代理服务文件
+            |-- server.js                         // 启动本地代理服务文件
 
         
 5.项目功能模块
