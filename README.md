@@ -15,11 +15,10 @@ npm run dev //运行项目
 
 4.项目目录
 
-        |-- build                                // 项目构建及打包配置文件 
-        |-- config                               // axios本地代理服务配置文件
-        
+        |-- build                                // 项目构建及打包配置文件
+        |-- config                               // axios本地代理服务配置文件
         |-- node_modules                         // 项目依赖所需文件 
-        |-- src                                  // 源代码目录 
+        |-- src                                  // 源代码目录
             |   |-- api                          // 后台接口公共方法文件
             |   |-- common                       // 项目公共方法定义文件
             |   |-- commponents                  // 公共组件文件
@@ -28,7 +27,7 @@ npm run dev //运行项目
             |   |-- views                        // 项目所有模块组件文件
             |   |-- App.vue                      // 项目根组件
             |   |-- main.js                      // 项目入口文件
-        |-- static                               // web静态资源加载文件  
+        |-- static                               // web静态资源加载文件
             |   |-- css
             |   |-- image   
             |   |-- img
