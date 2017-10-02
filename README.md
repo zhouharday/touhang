@@ -28,17 +28,17 @@ npm run dev //运行项目
         |   |-- App.vue                           // 项目根组件  
         |   |-- main.js                           // 项目入口文件  
         |-- static                                // web静态资源加载文件
-            |   |-- css
-            |   |-- image   
-            |   |-- img
-            |   |-- js 
-            |   |-- source 
-            |   |-- .gitkeep 
-            |   |-- data.json  
-            |-- index.html                        // 视口文件  
-            |-- package.json                      // 项目配置文件  
-            |-- README.md                         // 项目的说明文档  
-            |-- server.js                         // 启动本地代理服务文件
+        |   |-- css
+        |   |-- image   
+        |   |-- img
+        |   |-- js 
+        |   |-- source 
+        |   |-- .gitkeep 
+        |   |-- data.json  
+        |-- index.html                            // 视口文件  
+        |-- package.json                          // 项目配置文件  
+        |-- README.md                             // 项目的说明文档  
+        |-- server.js                             // 启动本地代理服务文件
 
         
 5.项目功能模块
