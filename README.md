@@ -17,9 +17,7 @@ npm run dev //运行项目
 
         |-- build                                // 项目构建及打包配置文件
         |-- config                               // axios本地代理服务配置文件
-
         |-- node_modules                         // 项目依赖所需文件
- 
         |-- src                                  // 源代码目录
             |   |-- api                          // 后台接口公共方法文件
             |   |-- common                       // 项目公共方法定义文件
