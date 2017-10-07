@@ -279,7 +279,6 @@ export default {
             })
                 .then(res => {
                     if (res.status == '200') {
-                        console.log(res);
                         if (res.data.status == '200') {
                             console.log(res.data.result);
                             this.addTab('项目池', '/home/projectPool', 'projectPool');
@@ -289,6 +288,9 @@ export default {
                             this.$Message.error(res.data.message);
                             return;
                         } else if (res.data.status == '9050') {
+                            this.$Message.error(res.data.message);
+                            return;
+                        } else if (res.data.status == '9010') {
                             this.$Message.error(res.data.message);
                             return;
                         }

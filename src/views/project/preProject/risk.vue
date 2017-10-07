@@ -78,13 +78,8 @@
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-<<<<<<< HEAD
-                    <el-button type="default" size="small" @click="modalAdd = false">取 消</el-button>
-                    <el-button type="danger" size="small" @click="confirmAdd">保存</el-button>
-=======
                     <el-button @click="modalAdd = false">取 消</el-button>
                     <el-button type="danger" @click="confirmAdd">保 存</el-button>
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 </div>
             </el-dialog>
             <!-- 查看风险详情 对话框 -->
@@ -171,13 +166,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-<<<<<<< HEAD
-                    <el-button type="default" size="small" @click="modalTracking= false">取 消</el-button>
-                    <el-button type="danger" size="small" @click="confirmTracking">保存</el-button>
-=======
                     <el-button  @click="modalTracking= false">取 消</el-button>
                     <el-button type="danger" @click="confirmTracking">保 存</el-button>
->>>>>>> 8124bd4f94ded35fd1d506bee5293a60c0e96ad1
                 </div>
             </el-dialog>
         </section>

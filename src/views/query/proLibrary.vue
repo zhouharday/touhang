@@ -27,8 +27,11 @@
             <el-table-column prop="paySumAmount" label="投资金额（元）">
             </el-table-column>
         </el-table>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
+
+        <div class="pagination">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
         </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -53,7 +56,14 @@
                 proLibrary: [],
                 type:'',
                 seartext:'',
-                input:''
+                input:'',
+                page: {
+                    pageNum: '1', //当前页码
+                    total: '', //数据总数
+                    pageSize: '10', //每页条数
+                    navigatepageNums: '', //页数
+                    current: '', //当前页码
+                },
             }
         },
         components: {
@@ -73,7 +83,7 @@
 
             handleIconClick(){
                 this.seartext = this.input
-                getProjectList('',this.type,this.seartext).then((res)=>{
+                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
                     this.proLibrary = res.data.result.list
                 })
             },
@@ -83,7 +93,27 @@
                 if(id == 0 ){
                     this.type = null;
                 }
-                getProjectList('',this.type,this.seartext).then((res)=>{
+                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
+                    this.proLibrary = res.data.result.list
+                    this.page.pageNum = res.data.result.pageNum; //当前页码
+                    this.page.total = res.data.result.total; //数据总数
+                    this.page.pageSize = res.data.result.pageSize; //每页条数
+                    this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+
+                })
+            },
+            handleSizeChange(x){
+                this.page.pageSize = x
+
+                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
+                    console.log(res.data)
+                    this.proLibrary = res.data.result.list
+                })
+            },
+            handleCurrentChange(x){
+                this.page.pageNum =  x
+                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
+                    console.log(res.data)
                     this.proLibrary = res.data.result.list
                 })
             },
@@ -94,7 +124,7 @@
         },
         created(){
 
-            getProjectList('',this.type,this.seartext).then((res)=>{
+            getProjectList('',this.type,this.seartext,this.page).then((res)=>{
                 console.log(res.data)
                 this.proLibrary = res.data.result.list
             })

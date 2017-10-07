@@ -1,7 +1,7 @@
 <template>
     <div class="roleLimits">
-        <div class="btn_wrapper">
-            <el-button type="danger" size="small" @click="Setting">保存修改</el-button>
+        <div class="btn_wrapper" v-if="this.nowId">
+            <el-button type="danger" size="small"  @click="Setting">保存修改</el-button>
         </div>
         <div class="textWrapper">
             <el-row>
@@ -14,10 +14,12 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 import myTree from "components/treeMenuu"
 import {myData} from "common/js/myData"
 import {getUpdata} from "api/system"
 import {authorization} from "api/system"
+
 export default {
     data() {
         return {

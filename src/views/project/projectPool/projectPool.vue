@@ -8,7 +8,7 @@
             <el-col :span="23" style="margin-top:20px">
                 <div class="state-ul">
                     <ul ref="state">
-                        <li v-for="(item,index) in stateList" :key="item.value" :class="{active: index==currentIndex1}" @click="changeActive(index,1)">
+                        <li v-for="(item,index) in stateList" :key="item.value" :class="{active: item.value==currentIndex1}" @click="changeActive(index)">
                             {{item.states}}
                         </li>
                     </ul>
@@ -23,8 +23,8 @@
             <el-col :span="23">
                 <div class="industry-ul" :class="{ changeList: !btnObject.uptriangle }">
                     <ul ref="industry">
-                        <li v-for="(item,index) in industryList" :key="item.index" :class="{active: index==currentIndex2}" @click="changeActive(index,2)">
-                            {{item.details}}
+                        <li v-for="(item,index) in $store.state.project.industryOptionsII" :key="item.id" :class="{active: item.id==currentIndex2}" @click="changeIndustry(item.id)">
+                            {{item.dicName}}
                         </li>
                         <button :class="{ collapseBtn: !btnObject.uptriangle }" class="collapse-btn" @click="changeList">
                             <span :class="btnObject"></span>
@@ -79,10 +79,10 @@
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                                    <template scope="scope">
-                                        <div class="fow">{{ scope.row.manager }}</div>
-                                    </template>
-                                </el-table-column> -->
+                                        <template scope="scope">
+                                            <div class="fow">{{ scope.row.manager }}</div>
+                                        </template>
+                                    </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.create_date}}</div>
@@ -107,35 +107,26 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="pagination">
+                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                    </el-pagination>
+                </div>
             </el-col>
         </el-row>
-        <!--<el-row>-->
-        <!--<el-col>-->
-        <!--<div style="float:right;margin:10px;padding-right:30px;overflow:hidden">-->
-        <!--<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">-->
-        <!--</el-pagination>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[5, 10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-        </div>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { getDicChildren } from 'common/js/dictionary'
+import { getDicChildrenII } from 'common/js/dictionary'
 import { getPros, transPro, delPro } from 'api/project';
 export default {
     name: 'projectPool',
     computed: mapGetters({
-        industryOptions:'getIndustryOptions',   // 获取项目所属行业
+        industryOptionsII:'getindustryOptionsII',   // 获取项目所属行业
     }),
     data() {
         return {
-            selectedProjectName:'',
             total: 0,    // 总数
             page: 1,     // 当前页数
             pageSize: 5, // 一页数量
@@ -156,13 +147,13 @@ export default {
                 { states: "中止" , value: '3'},
                 { states: "淘汰" , value: '4'}
             ],
-            industryList: [],
             tableData: [],
-            industryOptions: []
+            industryOptionsII: []
         }
     },
     created() {
         this.init();
+        this.$store.dispatch('getIndustryOptionsII')
     },
     methods: {
         init() {
@@ -181,12 +172,13 @@ export default {
             let industryId = this.industry;
 
             if (projectType == '全部') projectType = '';
-            if (industryId == '全部') industryId = '';
+            if (industryId == '0') industryId = '';
 
             let params = {
                 merchantId: this.merchantId,
                 pageSize: this.pageSize,
-                page: this.page
+                page: this.page,
+                identification:'12'
             };
 
             if (projectName) params.projectName = projectName;
@@ -196,9 +188,11 @@ export default {
             getPros(params).then(resp => {
                 let info = resp.data.listMapProjectInfo;
                 let data = info.list;
-                data = this.handleDatas(data);
-                this.tableData = data;
+                this.tableData = this.handleDatas(data);
                 this.total = info.total || 0;
+                console.log("condition ******projectName****" + JSON.stringify(projectName));
+                console.log("condition*****projectType*****" + JSON.stringify(projectType));
+                console.log("condition******industryId****" + JSON.stringify(industryId));
             })
         },
         handleCurrentChange(page) {
@@ -206,7 +200,8 @@ export default {
             this.getDatas();
         },
         pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
+            this.pageSize = pageSize;
+            this.getDatas();
         },
         /**
          * [handleDatas 处理项目列表数据]
@@ -264,10 +259,8 @@ export default {
             this.$router.push({ name: 'zprojectPoolMessage', params: { userId: title.id } });
         },
         goJumpPref(index, data) {
-            console.log('index: ', index);
             this.dialogVisible = true;
             this.jumpData = data[index] || {};
-            this.selectedProjectName = jumpData.project_name;
         },
         jumpPre() {
             let _data = this.jumpData;
@@ -312,20 +305,20 @@ export default {
                 console.log('deleteRow exists error: ', e);
             });
         },
-        changeActive(index, ind) {
-            if (ind == 1) { // 状态
-                let stateList = this.stateList;
-                let state = stateList[index].value;
-                this.state = state;
-                this.currentIndex1 = index;
-                this.getDatas();
-            } else {        // 行业
-                let industryList = this.industryList;
-                let industry = this.industryList[index].details;
-                this.industry = industry;
-                this.currentIndex2 = index;
-                this.getDatas();
-            }
+        changeActive(index) {
+            // 状态
+            let stateList = this.stateList;
+            let state = stateList[index].value;
+            this.state = state;
+            this.currentIndex1 = index;
+            this.getDatas();
+        },
+        changeIndustry(id) {
+            // 行业
+            this.industry = id;
+            this.currentIndex2 = id;
+            this.getDatas();
+            
         }
     }
 }
@@ -358,14 +351,11 @@ export default {
         height: 20px;
         overflow: hidden;
         position: relative;
-    }
-
-    // .collapseBtn {
+    } // .collapseBtn {
     //     position: absolute;
     //     right: 0;
     //     top: 0;
     // }
-
     .tag {
         margin-top: 20px;
         margin-bottom: 5px;

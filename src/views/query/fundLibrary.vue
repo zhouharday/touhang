@@ -35,12 +35,12 @@
             <el-table-column prop="fundStageId" label="状态" width="200" align="center">
             </el-table-column>
 
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage"
-                           :page-sizes="[100, 200, 300, 400]" :page-size="100"
-                           layout="total, sizes, prev, pager, next, jumper" :total="400" class="page">
-            </el-pagination>
-
         </el-table>
+
+        <div class="pagination">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
+            </el-pagination>
+        </div>
     </div>
 
 </template>
@@ -79,9 +79,40 @@
                         "dicName": '2'
                     }]
                 },
+                page: {
+                    pageNum: '1', //当前页码
+                    total: '', //数据总数
+                    pageSize: '10', //每页条数
+                    navigatepageNums: '', //页数
+                    current: '', //当前页码
+                },
             }
         },
         methods: {
+            handleSizeChange(x){
+                this.page.pageSize = x
+                getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
+                    console.log(res.data)
+                    this.myFund = res.data.result.list
+                    this.page.pageNum = res.data.result.pageNum; //当前页码
+                    this.page.total = res.data.result.total; //数据总数
+                    this.page.pageSize = res.data.result.pageSize; //每页条数
+                    this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+
+                })
+            },
+            handleCurrentChange(x){
+                this.page.pageNum =  x
+                getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
+                    console.log(res.data)
+                    this.myFund = res.data.result.list
+                    this.page.pageNum = res.data.result.pageNum; //当前页码
+                    this.page.total = res.data.result.total; //数据总数
+                    this.page.pageSize = res.data.result.pageSize; //每页条数
+                    this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+
+                })
+            },
             handleIconClick() {
 //                getFundLibrary(this.input).then((res) => {
 //                    console.log(res.data)
@@ -121,7 +152,7 @@
                 this.updataList()
             },
             updataList(){
-                getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input).then((res) => {
+                getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
                     console.log(res.data)
                     this.myFund = res.data.result.list
                 })
@@ -146,9 +177,14 @@
                 this.chooseInfo3.details = res.data.result
             })
 
-            getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input).then((res) => {
+            getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
                 console.log(res.data)
                 this.myFund = res.data.result.list
+                this.page.pageNum = res.data.result.pageNum; //当前页码
+                this.page.total = res.data.result.total; //数据总数
+                this.page.pageSize = res.data.result.pageSize; //每页条数
+                this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+
             })
         },
         computed:{

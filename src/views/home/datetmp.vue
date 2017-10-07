@@ -35,16 +35,12 @@
                     <el-row>
                         <el-col>
                             <el-form-item label="主题：" prop="theme">
-                                <el-input placeholder="请输入日程主题" v-model="scheduleForm.theme"></el-input>
+                                <el-input placeholder="请输入日程主题" v-model="scheduleForm.title"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="时间：" prop="time">
-                                <el-time-select v-model="scheduleForm.time" :picker-options="{
-                                                                                    start: '08:30',
-                                                                                    step: '00:15',
-                                                                                    end: '18:30'
-                                                                                    }" placeholder="选择时间" style="width:100%">
+                                <el-time-select v-model="scheduleForm.time" :picker-options="{ start: '08:30',step: '00:15',end: '18:30'}" placeholder="选择时间" style="width:100%">
                                 </el-time-select>
                             </el-form-item>
                         </el-col>
@@ -56,21 +52,36 @@
                 <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="default" @click="scheduleDialog = false">取消</el-button>
-                    <el-button type="danger" @click="scheduleDialog = false">保存</el-button>
+                    <el-button type="danger" @click="getScheduleListBtn">保存</el-button>
                 </div>
             </el-dialog>
         </div>
     </div>
 </template>
 <script>
-module.exports = {
+export default {
     props: ["title", "monthDate"],
+    computed: {
+        user() {
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
+            return {
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor
+            }
+        }
+    },
+    created: function() {
+        this.creattimetmp(new Date());
+        this.getData();
+    },
     data: function() {
         return {
+            getScheduleList: {},
             scheduleDialog: false,
             checkTime: '添加日程',
             scheduleForm: {
-                theme: '',
+                title: '',
                 time: ''
             },
             //左边日期
@@ -130,7 +141,6 @@ module.exports = {
             this.$emit("changetime", self.changeDate)
         },
         creattimetmp: function(datas) {
-
             datas = datas ? datas : new Date();
             var date = new Date(datas)
 
@@ -198,6 +208,11 @@ module.exports = {
         },
         //点击日期
         clickDate: function(index, n) {
+            let new_scheduleForm = {
+                title: '',
+                time: ''
+            };
+            this.scheduleForm = new_scheduleForm;
             if (!n) {
                 return;
             }
@@ -208,9 +223,56 @@ module.exports = {
             this.scheduleDialog = !this.scheduleDialog;
             this.checkTime = this.changeDate;
         },
-    },
-    created: function() {
-        this.creattimetmp(new Date());
+        getData() { //获取日程列表 api
+            this.$http.post(this.api + '/work/getScheduleList', {
+                "userId": this.user.userInfor.id,
+                "merchantId": this.user.merchants[0].id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            this.getScheduleList = res.data;
+                            console.log(res);
+                            // this.scheduleList = res.data.result;
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        } else if (res.data.status == '49999') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                })
+        },
+        getScheduleListBtn() {
+            this.scheduleForm.time = this.checkTime + " " + this.scheduleForm.time;
+            this.addSchedule();
+            this.scheduleDialog = false;
+        },
+        addSchedule(title, time) { //添加日程 api
+            this.$http.post(this.api + '/work/addSchedule', {
+                "userId": this.user.userInfor.id,
+                "scheduleTitle": this.scheduleForm.theme,
+                "startTime": this.scheduleForm.time
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            this.getData();
+                            console.log(res.data);
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
     }
 }
 </script>
