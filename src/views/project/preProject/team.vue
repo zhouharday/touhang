@@ -1,10 +1,10 @@
 <template>
-    <div class="table">
-        <div class="teamTable">
-            <tabel-header :data="headerInfo_team" @add="addTeam"></tabel-header>
-            <el-table :data="teamData" border style="width: 100%">
-                <el-table-column label="姓名" prop="name" align="center">
-                    <template scope="scope">
+<div class="table">
+    <div class="teamTable">
+        <tabel-header :data="headerInfo_team" @add="addTeam"></tabel-header>
+        <el-table :data="teamData" border style="width: 100%">
+            <el-table-column label="姓名" prop="name" align="center">
+                <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-select v-model="scope.row.name" style="width:100%">
@@ -13,9 +13,9 @@
                             </el-select>
                         </span>
                     </template>
-                </el-table-column>
-                <el-table-column label="角色" prop="role" align="center">
-                    <template scope="scope">
+            </el-table-column>
+            <el-table-column label="角色" prop="role" align="center">
+                <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.role }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-select v-model="scope.row.role" style="width:100%">
@@ -24,59 +24,62 @@
                             </el-select>
                         </span>
                     </template>
-                </el-table-column>
-                <el-table-column label="添加日期" prop="date" align="center">
-                    <!-- <template scope="scope">
+            </el-table-column>
+            <el-table-column label="添加日期" prop="date" align="center">
+                <!-- <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.date }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.date" style="width: 100%;">
                             </el-date-picker>
                         </span>
                     </template> -->
-                </el-table-column>
-                <el-table-column label="操作" align="center">
-                    <template scope="scope">
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+                <template scope="scope">
                         <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
                         </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,teamData)">删除</el-button>
                     </template>
-                </el-table-column>
-            </el-table>
-            <!-- 添加项目成员 对话框-->
-            <el-dialog title="添加项目成员" :visible.sync="modalAdd" :close-on-click-modal="false">
-                <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
-                    <el-form-item label="姓名" prop="name">
-                        <el-select v-model="teamForm.name" placeholder="请选择姓名" style="width:100%">
-                            <el-option v-for="item in nameOptions" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="角色" prop="role">
-                        <el-select v-model="teamForm.role" placeholder="请选择角色" style="width:100%">
-                            <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="添加日期" prop="date">
-                        <el-input placeholder="默认当前日期" v-model="teamForm.date" style="width: 100%;">
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button  @click="modalAdd = false">取 消</el-button>
-                    <el-button type="danger"  @click="confirmAdd('teamForm')">保 存</el-button>
-                </div>
-            </el-dialog>
-        </div>
+            </el-table-column>
+        </el-table>
+        <!-- 添加项目成员 对话框-->
+        <el-dialog title="添加项目成员" :visible.sync="modalAdd" :close-on-click-modal="false">
+            <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
+                <el-form-item label="姓名" prop="userId">
+                    <el-select v-model="teamForm.userId" placeholder="请选择姓名" style="width:100%">
+                        <el-option v-for="item in nameOptions" :key="item.id" :label="item.label" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="角色" prop="roleId">
+                    <el-select v-model="teamForm.roleId" placeholder="请选择角色" style="width:100%">
+                        <el-option v-for="item in roleOptions" :key="item.id" :label="item.roleName" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="添加日期" prop="createDate">
+                    <el-date-picker v-model="teamForm.createDate"
+                                    type="date"
+                                    placeholder="选择日期"
+                                    style="width: 100%;">
+                    </el-date-picker>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="modalAdd = false">取 消</el-button>
+                <el-button type="danger" @click="confirmAdd('teamForm')">保 存</el-button>
+            </div>
+        </el-dialog>
     </div>
+</div>
 </template>
 
 <script>
 import tabelHeader from 'components/tabelHeader'
-import { changeDate } from 'common/js/config'
-import { getTeams } from 'api/projectPre';
+import {changeDate} from 'common/js/config'
+import {getTeams} from 'api/projectPre'
 
 export default {
     props: {
@@ -93,51 +96,40 @@ export default {
             default: []
         }
     },
-    watch: {
-        proUsers(val, oldVal) {
-            // console.log('team val, oldVal', val, oldVal);
-            this.initInfo();
-        }
-    },
+    // watch: {
+    //     proUsers(val, oldVal) {
+    //         // console.log('team val, oldVal', val, oldVal);
+    //         this.initInfo();
+    //     }
+    // },
     data() {
         return {
             modalAdd: false,
-            teamData: [
-                {
-                    name: '张三',
-                    role: '',
-                    date: '',
-                    editFlag: false
-                }
-            ],
+            teamData: [],
             teamForm: {
-                name: '',
-                role: '',
-                date: '',
+                userId: '',
+                roleId: '',
+                createDate: new Date(),
                 editFlag: false
             },
-            nameOptions: [
-                { //姓名列表
-                    value: '选项1',
-                    label: '王二'
-                }
-            ],
-            roleOptions: [
-                { //角色列表
-                    value: '选项1',
-                    label: '角色一'
-                }
-            ],
+            nameOptions: [],
+            roleOptions: [],
             rules: {
-                name: [
-                    { required: true, message: '请输入姓名', trigger: 'blur' }
-                ],
-                role: [
-                    { required: true, message: '请选择角色', trigger: 'blur' }
-                ],
-                date: [
-                    { required: true, message: '添加日期', trigger: 'blur' }
-                ]
+                name: [{
+                    required: true,
+                    message: '请输入姓名',
+                    trigger: 'blur'
+                }],
+                role: [{
+                    required: true,
+                    message: '请选择角色',
+                    trigger: 'blur'
+                }],
+                date: [{
+                    required: true,
+                    message: '添加日期',
+                    trigger: 'blur'
+                }]
             },
             headerInfo_team: {
                 desc: '当前项目成员',
@@ -152,58 +144,56 @@ export default {
         this.init();
     },
     methods: {
-        init () {
+        init() {
             this.getDatas();
         },
-        initInfo() {
-            let proUsers = this.proUsers;
-            let proRoles = this.proRoles;
-
-            this.handleToOptions(proUsers);
-            this.handleToOptions(proRoles);
-
-            this.nameOptions = proUsers;
-            this.roleOptions = proRoles;
-        },
-        handleToOptions(datas = []) {
-            datas.forEach(item => {
-                item.value = item.id;
-                item.label = item.name;
-            })
-            return datas;
-        },
+        // initInfo() {
+        //     let proUsers = this.proUsers;
+        //     let proRoles = this.proRoles;
+        //
+        //     this.handleToOptions(proUsers);
+        //     this.handleToOptions(proRoles);
+        //
+        //     this.nameOptions = proUsers;
+        //     this.roleOptions = proRoles;
+        // },
+        // handleToOptions(datas = []) {
+        //     datas.forEach(item => {
+        //         item.value = item.id;
+        //         item.label = item.name || item.roleName;
+        //     })
+        //     return datas;
+        // },
         // 项目成员列表
         getDatas() {
             getTeams(this.proId).then(resp => {
                 // console.log('getTeams resp', resp);
-                let data = resp.data;
-                let result = data.result;
-                this.teamData = result;
+                this.teamData = resp.data.result;
             }).catch(e => {
                 console.log('getDatas() exists error: ', e);
             })
         },
         // 添加 项目成员的方法
         addTeam() {
-            let new_teamForm = {
-                name: '',
-                role: '',
-                date: '',
-                editFlag: false
-            };
-            this.teamForm = new_teamForm;
+            // this.teamForm = {
+            //     userId: '',
+            //     roleId: '',
+            //     createDate: new Date(),
+            //     editFlag: false
+            // };
             this.modalAdd = !this.modalAdd;
         },
         confirmAdd(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.teamForm.date = changeDate(this.teamForm.date);
-                    this.teamData.push(this.teamForm);
-                    this.modalAdd = !this.modalAdd;
-                } else {
-                    return false;
-                }
-            });
+            this.teamForm.createDate= changeDate(this.teamForm.createDate)
+            // this.$refs[formName].validate((valid) => {
+            //     if (valid) {
+            //         this.teamForm.date = changeDate(this.teamForm.date);
+            //         this.teamData.push(this.teamForm);
+            //         this.modalAdd = !this.modalAdd;
+            //     } else {
+            //         return false;
+            //     }
+            // });
         },
         checkEdit(index, row) { //编辑
             // console.log(row)
@@ -213,6 +203,10 @@ export default {
         handleDelete(index, rows) {
             rows.splice(index, 1);
         }
+    },
+    created() {
+        this.nameOptions = this.proUsers
+        this.roleOptions = this.proRoles
     },
     components: {
         tabelHeader

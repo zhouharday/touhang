@@ -63,6 +63,7 @@
 import tabelHeader from 'components/tabelHeader'
 import deleteReminders from 'components/deleteReminders'
 import {queryUserList, queryList, addFundTeam, deleteTeamMembers} from 'api/fund'
+const FUND_ROLE = 1 // 基金角色
 export default {
     props: {
         teamData: {
@@ -151,7 +152,7 @@ export default {
                 this.userNameList = res.data.result
             }
         })
-        queryList().then((res) => {
+        queryList(FUND_ROLE).then((res) => {
             if(res.status == '200') {
                 // console.log(res.data.result)
                 this.roleList = res.data.result
