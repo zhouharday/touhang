@@ -190,9 +190,6 @@ export default {
                 let data = info.list;
                 this.tableData = this.handleDatas(data);
                 this.total = info.total || 0;
-                console.log("condition ******projectName****" + JSON.stringify(projectName));
-                console.log("condition*****projectType*****" + JSON.stringify(projectType));
-                console.log("condition******industryId****" + JSON.stringify(industryId));
             })
         },
         handleCurrentChange(page) {

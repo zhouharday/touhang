@@ -107,6 +107,11 @@ export default {
     created() {
         this.init();
     },
+    watch: {
+        '$route' (to, from) {
+            this.init()      //再次调起我要执行的函数
+         }
+    },
     methods: {
         ...mapActions([
             'getProjectData'

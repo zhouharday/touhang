@@ -12,7 +12,6 @@ export function getPres(params = {}) {
 		page,//分页
     	pageSize
 	}
-	console.log("getPres condition*/*/*/*" + JSON.stringify(data));
 	return service({url: '/investProject/getInvestProjectList', method: 'post', data})
 }
 
@@ -25,12 +24,64 @@ export function getPreDetail(projectId = undefined) {
 	//return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
 }
 
+//投前项目所有阶段
+export function slectAllStage() {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	const data = {
+		merchantId:merchantId,
+		type:1
+	}
+	return service({url: '/dictionaryController/slectStageAllocation', method: 'post', data});
+}
+// 项目详情阶段下面需要上传的文档列表和完成情况
+export function getStageUploadDocument(params = {}) {
+	let {typeId, investProjectId} = params;
+	const data = {
+		typeId,
+		investProjectId,
+		type: 1
+	}
+	return service({url: '/dictionaryController/selectStageUploadDocument', method: 'post', data});
+}
+
+//项目下一阶段
+export function nextStage(params = {}) {
+	let {typeId, investProjectId, stageId} = params;
+	const data = {
+		typeId,
+		investProjectId,
+		type: 1,
+		stageId
+	}
+	return service({url: '/dictionaryController/nextStage', method: 'post', data});
+}
+
+//项目中止
+export function suspendInvestProject(id = undefined) {
+	const data = {
+		id
+	}
+	return service({url: '/investProject/suspendInvestProject', method: 'post', data});
+}
+
 // TODO: 投前项目详情修改
 export function updatePreDetail(projectId = undefined) {
 	const data = {
 		projectId
 	}
 	return service({url: '/projectInvestInfo/insertAndUpdate', method: 'post', data});
+}
+
+//文档标签页
+export function getProjectDoc(projectId = undefined) {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	let typeId = projectId;
+	const data = {
+		merchantId,
+		typeId,
+		type: 1
+	}
+	return service({url: '/dictionaryController/selectProjectOrFundDocument', method: 'post', data});
 }
 
 /////// 董事会 ///////////////
