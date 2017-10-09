@@ -9,7 +9,7 @@ export function getPres(params = {}) {
 		projectStageId, //阶段不是必传，不传时候为全部
 		projectTypeId, //项目类型，同上
 		projectName,//模糊查询 非必传字段
-		page,//分页 
+		page,//分页
     	pageSize
 	}
 	console.log("getPres condition*/*/*/*" + JSON.stringify(data));
@@ -21,9 +21,6 @@ export function getPreDetail(projectId = undefined) {
 	const data = {
 		id:projectId
 	}
-
-	console.log("getPreDetail condition*/*/*/*" + JSON.stringify(data));
-
 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
 	//return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
 }
@@ -77,7 +74,7 @@ export function updateOwer(params = {}) {
 export function delOwer(id = undefined) {
 	const data = {
 		id
-	} 
+	}
 	return service({url: '/boardMember/deleteBoardMember', method: 'post', data});
 }
 
@@ -91,13 +88,8 @@ export function getTeams(investProjectId = undefined) {
 }
 
 // 添加项目团队
-export function addTeam(investProjectId = undefined) {
-	const data = {
-		investProjectId, //投资项目id: "CCCCCC",
-        userId, //成员ID: "1",
-        roleId, //角色ID: "1",
-        personType //1:团队成员2：创建者  : 1: 1
-	}
+export function addInsertProjectTeam(team) {
+	const data = team
 	return service({url: '/projectTeam/insertProjectTeam', method: 'post', data});
 }
 
@@ -244,13 +236,13 @@ export function delFee(id = undefined) {
 export function contracts(userid = undefined) {
 	const data = {
 		projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301"//合同id
-   		page, // ": 1,//分页 
+   		page, // ": 1,//分页
     	pageSize // ": 5
 	}
 	return service({url: '/projectContract/selectAllProjectContract', method: 'post', data});
 }
 
-// 添加项目合同 
+// 添加项目合同
 export function addContract(projectContract = {}, fundInfo = []) {
 	let { projectId, contractName, signDate, contractAmount, stockRatio, handlerUserId, handlerDate, documentInfo } = projectContract;
 	const data = {
@@ -270,7 +262,7 @@ export function addContract(projectContract = {}, fundInfo = []) {
 	        }] */
 	 	},
 	    fundInfo: fundInfo//基金列表
-	    /*[{ 
+	    /*[{
 	    	fundId, // ": "361e776103574723abab0a6df55b7eab",//基金id
 	        investAmount, // ": "25456",投资金额
 	        stockRatio // ": "0.45"//股权占比
@@ -300,7 +292,7 @@ export function editContract(projectContract = {}, fundInfo = []) {
 	        }] */
 	 	},
 	    fundInfo: fundInfo//基金列表
-	    /*[{ 
+	    /*[{
 	    	"id": "577c7528b96a406fa0ef5e32a44afc1f",//必传
             "contractId": "fff2ae16768b445f9c807a28804680d1", // 合同id
             "fundId": "e7f8e145920f4c91a7e559b61dee8ec7", // 基金id
@@ -309,7 +301,7 @@ export function editContract(projectContract = {}, fundInfo = []) {
 	    }
 	    ]*/
 	}
-	return service({url: '/projectContract/updateProjectContract', method: 'post', data});	
+	return service({url: '/projectContract/updateProjectContract', method: 'post', data});
 }
 
 // 删除合同
