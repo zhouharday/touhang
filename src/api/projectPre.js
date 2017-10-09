@@ -88,13 +88,8 @@ export function getTeams(investProjectId = undefined) {
 }
 
 // 添加项目团队
-export function addTeam(investProjectId = undefined) {
-	const data = {
-		investProjectId, //投资项目id: "CCCCCC",
-        userId, //成员ID: "1",
-        roleId, //角色ID: "1",
-        personType //1:团队成员2：创建者  : 1: 1
-	}
+export function addInsertProjectTeam(team) {
+	const data = team
 	return service({url: '/projectTeam/insertProjectTeam', method: 'post', data});
 }
 

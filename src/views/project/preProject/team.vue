@@ -3,36 +3,29 @@
     <div class="teamTable">
         <tabel-header :data="headerInfo_team" @add="addTeam"></tabel-header>
         <el-table :data="teamData" border style="width: 100%">
-            <el-table-column label="姓名" prop="name" align="center">
+            <el-table-column label="姓名" prop="userName" align="center">
                 <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.userName }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-select v-model="scope.row.name" style="width:100%">
+                            <el-select v-model="scope.row.userName" style="width:100%">
                                 <el-option v-for="item in  nameOptions" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </span>
                     </template>
             </el-table-column>
-            <el-table-column label="角色" prop="role" align="center">
+            <el-table-column label="角色" prop="roleName" align="center">
                 <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.role }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-select v-model="scope.row.role" style="width:100%">
+                            <el-select v-model="scope.row.roleName" style="width:100%">
                                 <el-option v-for="item in  roleOptions" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </span>
                     </template>
             </el-table-column>
-            <el-table-column label="添加日期" prop="date" align="center">
-                <!-- <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.date }}</span>
-                        <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-date-picker type="date" placeholder="选择日期" v-model="scope.row.date" style="width: 100%;">
-                            </el-date-picker>
-                        </span>
-                    </template> -->
+            <el-table-column label="添加日期" prop="createDate" align="center">
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
@@ -49,13 +42,13 @@
             <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
                 <el-form-item label="姓名" prop="userId">
                     <el-select v-model="teamForm.userId" placeholder="请选择姓名" style="width:100%">
-                        <el-option v-for="item in nameOptions" :key="item.id" :label="item.label" :value="item.id">
+                        <el-option v-for="item in proUsers" :key="item.id" :label="item.label" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="角色" prop="roleId">
                     <el-select v-model="teamForm.roleId" placeholder="请选择角色" style="width:100%">
-                        <el-option v-for="item in roleOptions" :key="item.id" :label="item.roleName" :value="item.id">
+                        <el-option v-for="item in proRoles" :key="item.id" :label="item.roleName" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -79,7 +72,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import {changeDate} from 'common/js/config'
-import {getTeams} from 'api/projectPre'
+import {getTeams, addInsertProjectTeam} from 'api/projectPre'
 
 export default {
     props: {
@@ -96,12 +89,6 @@ export default {
             default: []
         }
     },
-    // watch: {
-    //     proUsers(val, oldVal) {
-    //         // console.log('team val, oldVal', val, oldVal);
-    //         this.initInfo();
-    //     }
-    // },
     data() {
         return {
             modalAdd: false,
@@ -112,8 +99,6 @@ export default {
                 createDate: new Date(),
                 editFlag: false
             },
-            nameOptions: [],
-            roleOptions: [],
             rules: {
                 name: [{
                     required: true,
@@ -147,27 +132,9 @@ export default {
         init() {
             this.getDatas();
         },
-        // initInfo() {
-        //     let proUsers = this.proUsers;
-        //     let proRoles = this.proRoles;
-        //
-        //     this.handleToOptions(proUsers);
-        //     this.handleToOptions(proRoles);
-        //
-        //     this.nameOptions = proUsers;
-        //     this.roleOptions = proRoles;
-        // },
-        // handleToOptions(datas = []) {
-        //     datas.forEach(item => {
-        //         item.value = item.id;
-        //         item.label = item.name || item.roleName;
-        //     })
-        //     return datas;
-        // },
         // 项目成员列表
         getDatas() {
             getTeams(this.proId).then(resp => {
-                // console.log('getTeams resp', resp);
                 this.teamData = resp.data.result;
             }).catch(e => {
                 console.log('getDatas() exists error: ', e);
@@ -175,38 +142,41 @@ export default {
         },
         // 添加 项目成员的方法
         addTeam() {
-            // this.teamForm = {
-            //     userId: '',
-            //     roleId: '',
-            //     createDate: new Date(),
-            //     editFlag: false
-            // };
+            this.teamForm = {
+                userId: '',
+                roleId: '',
+                investProjectId: this.$route.params.userId,
+                createDate: new Date(),
+                editFlag: false
+            }
             this.modalAdd = !this.modalAdd;
         },
         confirmAdd(formName) {
             this.teamForm.createDate= changeDate(this.teamForm.createDate)
-            // this.$refs[formName].validate((valid) => {
-            //     if (valid) {
-            //         this.teamForm.date = changeDate(this.teamForm.date);
-            //         this.teamData.push(this.teamForm);
-            //         this.modalAdd = !this.modalAdd;
-            //     } else {
-            //         return false;
-            //     }
-            // });
+            this.teamForm.investProjectId = this.$route.params.userId
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    addInsertProjectTeam(this.teamForm).then((res) => {
+                        if(res.status == '200') {
+                            this.$Message.success(res.data.message || '添加成功！')
+                            this.modalAdd = !this.modalAdd;
+                        }
+                    }).catch(err => {
+                        this.$Message.error(err.data.message || '添加失败！')
+                    })
+                } else {
+                    return false
+                }
+            });
         },
         checkEdit(index, row) { //编辑
-            // console.log(row)
+            console.log(row)
             row.editFlag = !row.editFlag;
         },
         //删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
         }
-    },
-    created() {
-        this.nameOptions = this.proUsers
-        this.roleOptions = this.proRoles
     },
     components: {
         tabelHeader
