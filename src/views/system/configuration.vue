@@ -1,37 +1,37 @@
 <template>
     <section class="configuratin">
         <el-row :gutter="30">
-            <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
-                <!-- 项目阶段 配置-->
-                <!--<div class="rightAdd_btn">-->
-                <!--<el-button type="danger" style="width:80px" @click="openProject">添加</el-button>-->
+            <el-col :span="6" style="height:  650px;border-right:  1px  solid  #ddd;padding:  0">
+                <!--  项目阶段  配置-->
+                <!--<div  class="rightAdd_btn">-->
+                <!--<el-button  type="danger"  style="width:80px"  @click="openProject">添加</el-button>-->
                 <!--</div>-->
-                <!--<b style="padding-left:15px;">项目阶段配置</b>-->
-                <div v-for="item in leftList">
+                <!--<b  style="padding-left:15px;">项目阶段配置</b>-->
+                <div v-for="item  in  leftList">
                     <div class="project_config">
                         <div class="menu_title">
-                            <div style="justify-content: space-between;flex-direction: row;display: flex">
+                            <div style="justify-content:  space-between;flex-direction:  row;display:  flex">
                                 <div>{{item.title}}</div>
-                                <div v-if="!item.showOne" style="color: red; padding-right: 20px">
+                                <div v-if="!item.showOne" style="color:  red;  padding-right:  20px">
                                     <el-button type="text" class="leftBtn" @click="changeSomeThing(item)">操作</el-button>
                                 </div>
-                                <div v-if="item.showOne" style="color: red; padding-right: 20px">
-                                    <el-button type="text" class="leftBtn" @click="openProject">添加</el-button>
+                                <div v-if="item.showOne" style="color:  red;  padding-right:  20px">
+                                    <el-button type="text" class="leftBtn" @click="openProject(item)">添加</el-button>
                                     <el-button type="text" class="leftBtn" @click="changeSomeThing(item)">完成</el-button>
                                 </div>
                             </div>
 
                         </div>
                         <div class="menu_box">
-                            <div class="menu_list" v-for="(detailsitem,index) in item.data" :key="detailsitem.index" @click="refreshList(detailsitem)">
-                                <div style="height: 35px ;width: 100px;overflow: hidden">
-                                    <span v-if="!detailsitem.editFlag" style="line-height: 35px;width: 100px;width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{detailsitem.stageName}}</span>
+                            <div class="menu_list" v-for="(detailsitem,index)  in  item.data" :key="detailsitem.index" @click="refreshList(detailsitem)">
+                                <div style="height:  35px  ;width:  100px;overflow:  hidden">
+                                    <span v-if="!detailsitem.editFlag" style="line-height:  35px;width:  100px;width:  200px;overflow:  hidden;white-space:  nowrap;text-overflow:  ellipsis;">{{detailsitem.stageName}}</span>
                                     <span v-if="detailsitem.editFlag" class="cell-edit-input">
-                                        <el-input v-model="detailsitem.stageName" style="width: 100px"></el-input>
+                                        <el-input v-model="detailsitem.stageName" style="width:  100px"></el-input>
                                     </span>
                                 </div>
-                                <div v-if="detailsitem.stageStatus == 1">
-                                    <div v-if="item.showOne" style="justify-content: space-between">
+                                <div v-if="detailsitem.stageStatus  ==  1">
+                                    <div v-if="item.showOne" style="justify-content:  space-between">
                                         <Icon type="arrow-up-c" class="mgr"></Icon>
                                         <Icon type="arrow-down-c" class="mgr"></Icon>
                                         <el-button v-if="!detailsitem.editFlag" type="text" class="leftBtn" @click="edit(index,detailsitem)">编辑</el-button>
@@ -66,11 +66,15 @@
                             <el-table-column label="是否必传" prop="needUpload" align="center">
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">
-                                        <div v-if="scope.row.needUpload == 2">是</div>
-                                        <div v-if="scope.row.needUpload == 1">否</div>
+                                        <div v-if="scope.row.needUpload == 1">是</div>
+                                        <div v-if="scope.row.needUpload == 2">否</div>
                                     </span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.needUpload"></el-input>
+                                        <!--<el-input v-model="scope.row.needUpload"></el-input>-->
+                                        <el-select v-model="value3" placeholder="请选择">
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -87,7 +91,6 @@
                     </el-col>
                 </el-row>
             </el-col>
-
         </el-row>
         <!-- 添加 项目阶段 对话框-->
         <el-dialog title="项目阶段名称" :visible.sync="projectDialog" class="fileDialog">
@@ -194,7 +197,17 @@ export default {
             //            showOne:false,
             deleteList: [],
             leftList: [],
-            value2:'',
+            value2: '',
+            value3: '',
+            options: [
+                {
+                    lable: '2',
+                    value: '是'
+                }, {
+                    lable: '1',
+                    value: '否'
+                }
+            ],
             fileData: [
             ],
             fileForm: {
@@ -241,11 +254,11 @@ export default {
             nowId: '',
             options: [
                 {
-                    lable:'1',
-                    value:'是'
-                },{
-                    lable:'2',
-                    value:'否'
+                    lable: '1',
+                    value: '是'
+                }, {
+                    lable: '2',
+                    value: '否'
                 }
             ],
         }
@@ -286,7 +299,7 @@ export default {
             }
         },
         // 添加 项目配置 的方法
-        openProject() {
+        openProject(item) {
             let new_projectForm = {
                 stageName: '',
                 editFlag: false
@@ -295,10 +308,16 @@ export default {
             this.projectDialog = !this.projectDialog;
         },
         addProject() {
-            var a = [{ "stageName": this.projectForm.stageName, "stageType": this.changeList[0].stageType, "merchantId": this.changeList[0].merchantId }];
+            console.log(this.changeList)
+            var stageType;
+            if (!this.changeList[0]) {
+                stageType = '3';
+            } else
+                stageType = this.changeList[0].stageType
+            var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id }];
             var b = this.changeList;
             var newList = a.concat(b)
-            //            console.log(newList)
+            console.log(newList)
             SetConfig(newList, this.deleteList).then((res) => {
                 if (res.data.status == '9024') {
                     alert(res.data.message)
@@ -357,14 +376,10 @@ export default {
         },
         addFile() {
 
-            //            console.log(this.nowId)
-            //            console.log(this.fileForm)
-            //            alert(this.nowId + '****')
-
-            if(this.value2 == '是'){
-                this.fileForm.needUpload = '2';
-            }else
+            if (this.value2 == '是') {
                 this.fileForm.needUpload = '1';
+            } else
+                this.fileForm.needUpload = '2';
 
             changeRightList(this.nowId, this.fileForm).then((res) => {
                 if (res.data.status == '9024') {
@@ -386,8 +401,13 @@ export default {
         checkEdit(index, row) { //编辑
 
             row.editFlag = !row.editFlag;
-
             if (!row.editFlag) {
+
+                if (this.value3 == '是')
+                    row.needUpload = 1
+                else
+                    row.needUpload = 2
+
                 changeRightList(this.nowId, row).then((res) => {
                     if (res.data.status == '9024') {
                         alert(res.data.message)
@@ -432,6 +452,12 @@ export default {
     created() {
         getConfigLeftList().then((res) => {
             this.leftList = reloadData(res.data.result)
+            this.nowId = this.leftList[0].data[0].id
+            GetrightList(this.leftList[0].data[0].id).then((res) => {
+                this.fileData = RightListData(res.data.result)
+                console.log(this.fileData)
+            })
+            console.log(this.leftList)
         })
     }
 }

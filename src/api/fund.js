@@ -58,6 +58,13 @@ export function FundInvestment() {
     }
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
+// 合作机构类型
+export function cooperativeType() {
+    const data = {
+        dicParent: "308"
+    }
+    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+}
 // 管理公司
 export function managementCompany() {
     const data = {
@@ -151,10 +158,10 @@ export function queryUserList() {
     return service({url: '/user/queryUserList', method: 'post', data})
 }
 //下拉获取基金角色列表 (查询项目、基金角色) /projectRole/queryList
-export function queryList() {
+export function queryList(roleNum) {
     const data = {
         merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id, //客户id 必须
-        roleType: 1 // 角色类型（0:项目;1:基金） 必须
+        roleType: roleNum // 角色类型（0:项目;1:基金） 必须
     }
     return service({url: '/projectRole/queryList', method: 'post', data})
 }

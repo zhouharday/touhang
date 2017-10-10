@@ -11,11 +11,11 @@
             </div>
         </div>
         <div class="step">
-            <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.flag),
-                     'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.flag),
-                     'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.flag),
-                     'step_third':index==(stepLists.length-1)}">
-                <span>{{item.step}}</span>
+            <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
+                                         'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+                                         'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+                                         'step_third':index==(stepLists.length-1)}">
+                <span>{{item.stageName}}</span>
             </div>
         </div>
         <div class="picture">
@@ -27,19 +27,23 @@
                 <span class="prompt">{{prompt}}</span>
                 <div class="item_wrapper">
                     <div class="item" v-for="(item,index) in module" :key="item.index">
-                        <span class="count">{{item.count}}</span>
-                        <p class="desc">{{item.desc}}</p>
+                        <span class="count">{{index +1}}</span>
+                        <p class="desc" v-if="item.type == 1">{{item.title}}</p>
+                        <p class="desc" v-if="item.type == 2">{{item.title}}</p>
+                        <p class="desc" v-if="item.type == 3">{{item.title}}</p>
+                        <span v-if="item.status == 1" class="state">已完成</span>
                         <!-- 立即上传 -->
-                        <Upload v-show="index == 0" action="//jsonplaceholder.typicode.com/posts/">
-                            <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
-                        </Upload>
-                        <!-- 发起申请等 对话框 -->
-                        <el-button v-show="index != 0" type="text" class="state" @click="openDialog(index)">
-                            {{item.info}}
-                        </el-button>
-                        <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                                                                                                                                        {{item.info}}
-                                                                                                                                                                                       </el-button> -->
+                        <div v-if="item.type == 1 && item.status == 0" style="position:relative">
+                            <el-button type="text" style="color:#f05e5e">立即上传</el-button>
+                            <input type="file"  class="fileInput" @change="changeImage($event)" ref="avatarInput">
+                        </div>
+                        <!-- <Upload v-if="item.type == 1 && item.status == 0" action="http://192.168.0.198:9091/files/upload">
+                                        <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
+                                    </Upload> -->
+                        <!-- 发起申请对话框 -->
+                        <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
+                        <!-- 查看进度对话框 -->
+                        <el-button v-if="item.type == 3 && item.status == 0" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
                     </div>
                 </div>
             </div>
@@ -48,21 +52,17 @@
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
                     <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                        <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                        </detail-form>
                     </detail-form>
-                    <table-form></table-form>
+                    <table-form :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="团队" name="team" class="tab_list">
                     <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
                     </team-table>
                 </el-tab-pane>
-
                 <!--<el-tab-pane label="工商信息" name="industry" class="tab_list">-->
                 <!--<industry-form :industryForm="industryForm">-->
                 <!--</industry-form>-->
                 <!--</el-tab-pane>-->
-
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form :proId="projectId"></record-form>
                 </el-tab-pane>
@@ -70,15 +70,15 @@
                     <approve-table></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
+                    <file-table :proId="projectId"></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
                     <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
-                <el-tab-pane label="管理" name="manage" class="tab_list">
+                <el-tab-pane v-if="false" label="管理" name="manage" class="tab_list">
                     <manage-table :proId="projectId"></manage-table>
                 </el-tab-pane>
-                <el-tab-pane label="退出" name="outing" class="tab_list">
+                <el-tab-pane v-if="false" label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>
                 </el-tab-pane>
             </el-tabs>
@@ -233,15 +233,30 @@ import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
 import deleteReminders from 'components/deleteReminders'
-import { getPreDetail } from 'api/projectPre';
-import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+import {
+    getPreDetail,
+    slectAllStage,
+    getStageUploadDocument,
+    nextStage,
+    suspendInvestProject
+} from 'api/projectPre';
+import {
+    getProjectUsers
+} from 'api/projectSys';
+import {
+    queryList
+} from 'api/fund'
 
 const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 
 export default {
     data() {
         return {
+            file: '',
+            stepLists: [],
             projectId: '',
+            investProjectId: '',
+            stageId: '',
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
@@ -256,62 +271,38 @@ export default {
             suspend: false,
             applyModal: false,
             progressModal: false,
-            title: '双子金服投资项目',
-            stepLists: [
-                {
-                    step: '考察储备',
-                    flag: true
-                },
-                {
-                    step: '立项会',
-                    flag: false
-                },
-                {
-                    step: '尽职调查',
-                    flag: false
-                },
-                {
-                    step: '管理',
-                    flag: false
-                },
-                {
-                    step: '退出',
-                    flag: false
-                }
-            ],
-            jumpStep: true,
+            title: '',
+            step_first: '考察储备',
+            step_second: '立项会',
+            step_third: '尽职调查',
+            step_fourth: '投决会',
+            step_fiveth: '管理',
+            step_sixth: '退出',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
-            proUsers: [],   // 项目用户列表
-            proRoles: [],   // 项目角色列表
+            proUsers: [], // 项目用户列表
+            proRoles: [], // 项目角色列表
             module: [{
-                count: 1,
-                desc: '上传项目考察报告',
-                state: false,
-                info: '立即上传'
+                id: '11111',
+                title: '项目考察报告',
+                status: 0,
+                type: 1
             }, {
-                count: 2,
-                desc: '进行保密协议申请',
-                state: false,
-                info: '发起申请'
+                id: '22222',
+                title: '保密协议（一）',
+                status: 0,
+                type: 2
             }, {
-                count: 3,
-                desc: '您的保密协议正在申请中',
-                state: true,
-                info: '查看进度'
+                id: '3333',
+                title: '保密协议（二）',
+                status: 0,
+                type: 3
             }],
-            basicForm: {
-                baseInfo: '基本信息',
-                flag: true
-            },
-            companyForm: {
-                baseInfo: '企业信息',
-                flag: true
-            },
-            capitalForm: {
-                baseInfo: '投资信息',
-                flag: true
-            },
+            basicForm: {}, // 基本信息
+            companyForm: {}, // 企业信息
+            memberData: [], // 董事会成员
+            structureData: [], // 股权结构
+            capitalForm: {}, // 投资信息
             industryForm: {
                 baseInfo: '工商信息',
                 flag: true
@@ -324,7 +315,7 @@ export default {
                 appendix: '',
                 auditor: ''
             },
-            progressTable: [//查看进度表单 节点table
+            progressTable: [ //查看进度表单 节点table
                 {
                     node: '发起申请',
                     operator: '管理员 2017/8/15 16:25:14',
@@ -380,12 +371,21 @@ export default {
         outingForm
     },
     created() {
+        this.investProjectId = this.$route.params.investProjectId;
         this.init();
+    },
+    watch: {
+        '$route'(to, from) {
+            this.investProjectId = this.$route.params.investProjectId;
+            this.init()      //再次调起我要执行的函数
+        }
     },
     methods: {
         init() {
             this.initInfo();
             this.getPreProDetail();
+            this.getStageUploadDocument(); //获取当前阶段及任务小助
+            this.slectAllStage();
         },
         initInfo() {
             let href = window.location.href;
@@ -397,11 +397,18 @@ export default {
 
             // 项目用户和角色
             Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
-                // console.log('values: ', values);
+                console.log('values: ', values);
                 this.proUsers = values[0] || [];
                 this.proRoles = values[1] || [];
             }).catch(e => {
                 console.log('getProUsers() or getProRoles() exists error: ', e);
+            });
+        },
+        slectAllStage() {
+            slectAllStage().then(resp => {
+                this.stepLists = resp.data.result || [];
+            }).catch(e => {
+                console.log('getPreDetail() exists error: ', e);
             });
         },
         /**
@@ -410,9 +417,37 @@ export default {
          */
         getPreProDetail() {
             getPreDetail(this.projectId).then(resp => {
-                console.log('getPreProDetail: ', resp.data.result);
+                this.companyForm = Object.assign({}, {
+                    baseInfo: '企业信息',
+                    flag: true
+                }, resp.data.result.enterpriseInfo)
+                this.basicForm = Object.assign({}, {
+                    baseInfo: '基本信息',
+                    flag: true
+                }, resp.data.result.projectInfo)
+                this.capitalForm = Object.assign({}, {
+                    baseInfo: '投资信息',
+                    flag: true
+                }, resp.data.result.projectInvestmentInfo)
+                this.memberData = resp.data.result.listBoardMember
+                this.structureData = resp.data.result.listOwnershipStructure
+                this.title = resp.data.result.projectInfo.projectName
+
             }).catch(e => {
-                console.log('getProDetail() exists error: ', e);
+                console.log('getPreDetail() exists error: ', e);
+            });
+            // getStageUploadDocument()
+        },
+        getStageUploadDocument() {
+            let typeId = this.projectId;
+            let investProjectId = this.investProjectId;
+            let params = { typeId, investProjectId };
+            console.log("getStageUploadDocument****params****" + JSON.stringify(params));
+            getStageUploadDocument(params).then(resp => {
+                this.stageId = resp.data.stageId;
+                this.module = resp.data.result;
+            }).catch(e => {
+                console.log('getStageUploadDocument() exists error: ', e);
             });
         },
         /**
@@ -435,7 +470,9 @@ export default {
                             reject(data.message);
                         }
                         // console.log('users resp', resp);
-                    }).catch(reject);
+                    }).catch(e => {
+                        console.log('getProjectUsers() exists error: ', e);
+                    });
                 }
             });
         },
@@ -449,43 +486,60 @@ export default {
                 if (proRoles.length) {
                     resolve(proRoles);
                 } else {
-                    getProjectRoles({
-                        merchantId: this.merchantId,
-                        roleType: PROJECT_TYPE
-                    }).then(resp => {
+                    queryList(PROJECT_TYPE).then(resp => {
                         let data = resp.data;
-                        if (+data.status === 200) {
+                        if (data.status == '200') {
                             resolve(data.result);
                         } else {
                             reject(data.message);
                         }
                         // console.log('roles resp', resp);
-                    }).catch(reject);
+                    }).catch(e => {
+                        console.log('getProRoles() exists error: ', e);
+                    });
                 }
             });
         },
         // 转至下一阶段 的方法
         changeStep() {
-            if (this.first_step) {
-                this.first_step = !this.first_step;
-                this.second_step = !this.second_step;
-            } else if (this.second_step) {
-                this.second_step = !this.second_step;
-                this.third_step = !this.third_step;
-            } else if (this.third_step) {
-                this.third_step = !this.third_step;
-                this.fourth_step = !this.fourth_step;
-            } else if (this.fourth_step) {
-                this.fourth_step = !this.fourth_step;
-                this.fiveth_step = !this.fiveth_step;
-                this.suspend = true;
-            } else if (this.fiveth_step) {
-                this.fiveth_step = !this.fiveth_step;
-                this.sixth_step = !this.sixth_step;
-            }
+            let typeId = this.projectId, investProjectId = this.investProjectId, stageId = this.stageId;
+            let params = {
+                typeId,
+                investProjectId,
+                stageId
+            };
+            nextStage(params).then(resp => {
+                if (resp.data.status === "200") {
+                    if (this.first_step) {
+                        this.first_step = !this.first_step;
+                        this.second_step = !this.second_step;
+                    } else if (this.second_step) {
+                        this.second_step = !this.second_step;
+                        this.third_step = !this.third_step;
+                    } else if (this.third_step) {
+                        this.third_step = !this.third_step;
+                        this.fourth_step = !this.fourth_step;
+                    } else if (this.fourth_step) {
+                        this.fourth_step = !this.fourth_step;
+                        this.fiveth_step = !this.fiveth_step;
+                        this.suspend = true;
+                    } else if (this.fiveth_step) {
+                        this.fiveth_step = !this.fiveth_step;
+                        this.sixth_step = !this.sixth_step;
+                    }
+
+                    this.getStageUploadDocument();
+                } else {
+                    reject(data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
+
+
         },
         // 小双助手 打开不同的对话框
-        openDialog(index) {
+        openDialog(index, id) {
             if (index == 1) {
                 this.applyModal = true;
             } else if (index == 2) {
@@ -517,14 +571,33 @@ export default {
             }
             return '';
         },
+        //中止项目
         jumpPool() {
-            this.deleteReminders = !this.deleteReminders;
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
+            console.log("investProjectId" + this.investProjectId);
+            suspendInvestProject(this.investProjectId).then(resp => {
+                if (resp.data.status === "200") {
+                    this.deleteReminders = !this.deleteReminders;
+                    this.addTab('项目池', '/home/projectPool', 'projectPool');
+                    this.$router.push({ name: 'projectPool' });
+                } else {
+                    reject(data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
+
         },
         addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
-        }
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
+            });
+        },
+        changeImage(e) { //上传文件input
+            this.file = event.target.files[0];
+        },
     }
 }
 </script>
@@ -678,6 +751,15 @@ export default {
             display: inline-block;
             vertical-align: middle;
         }
+        .fileInput {
+            opacity:0;
+            position:absolute;
+            left:135px;
+            top:0;
+            width:80px;
+            height:25px;
+            line-height:25px;
+        }
         .prompt_message {
             width: 48%; // height: 140px;
             display: inline-block;
@@ -755,7 +837,7 @@ export default {
         .comment_left {
             width: 100px;
             margin-right: 150px;
-            text-align: center
+            text-align: center;
         }
         .comment_right {
             display: flex;
