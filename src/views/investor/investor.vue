@@ -146,6 +146,7 @@ export default {
                     userId: rowList.id
                 }
             })
+            sessionStorage.setItem('INVESTORNAME', rowList.investorName)
             // console.log(this.$store.state.investor.investorName)
         },
         showModel() {
@@ -167,6 +168,7 @@ export default {
             addInvestor(this.addInvestor).then((res) => {
                 if (res.data.status == '200') {
                     this.modelInvestor = false
+                    this.getInvList()
                 }
             })
         },
@@ -195,29 +197,15 @@ export default {
         handleSizeChange(val) {
             // console.log(`每页 ${val} 条`);
             this.pageSize = val
-            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
-                    this.investorData = res.data.result.list
-                }
-            })
+            this.getInvList()
         },
         handleCurrentChange(val) {
             // console.log(`当前页: ${val}`);
             this.page = val
-            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
-                    this.investorData = res.data.result.list
-                }
-            })
+            this.getInvList()
         },
         investorSearch() {
-            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
-                    this.investorData = res.data.result.list
-                    this.pageTotal = res.data.result.total
-                    this.investorName = ''
-                }
-            })
+            this.getInvList()
         },
         investorFilter(index, id) {
             if(index == 0) {
@@ -225,6 +213,9 @@ export default {
             } else {
                 this.investorId = id
             }
+            this.getInvList()
+        },
+        getInvList() {
             getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
                 if(res.status == '200') {
                     this.investorData = res.data.result.list

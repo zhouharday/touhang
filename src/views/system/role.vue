@@ -7,7 +7,7 @@
                         <el-button size="small" @click="tianjuese">添加</el-button>
                     </div>
                     <div class="roleContent">
-                        <el-table :data="roleInfo" border style="width:  100%">
+                        <el-table :data="roleInfo" border style="width:  100%" highlight-current-row @current-change="handleCurrentChange">
                             <el-table-column label="角色名称" prop="roleName" width="160">
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index,  scope.row)">
@@ -47,7 +47,6 @@
             </el-row>
 
         </div>
-        <!--//添加弹窗-->
         <el-dialog title="角色名称" :visible.sync="fundDialog" class="fileDialog">
             <el-form :model="fundForm">
                 <el-row>
@@ -56,7 +55,7 @@
                     </el-col>
                     <el-col :span="16">
                         <el-form-item label="角色名称：" prop="fundName" label-width="100px">
-                            <el-input v-model="fundForm .fundName" auto-complete="off"></el-input>
+                            <el-input v-model="fundForm.fundName" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -129,25 +128,7 @@ export default {
             })
         },
 
-        //右侧列表
-        handleRole(index, row) {
-            this.nowId = row.id
-            //                获取角色权限
-            getUserRole(row.id).then((res) => {
-                var arr = res.data.result
-                //                    获取所有权限
-                getUserAllRole().then((res) => {
-                    this.treeData = getNodes(res.data.result, arr)
-                    console.log(this.treeData)
-                })
-            }),
-                //                获取角色用户
-                getRightUserList(row.id).then((res) => {
-                    this.roleUserList = res.data.result
-                })
 
-
-        },
         //删除角色
         handleDelete(index, row) {
 
@@ -174,6 +155,25 @@ export default {
                     })
                 })
             }
+        },
+
+        //右侧列表
+        handleCurrentChange(val) {
+            //                this.currentRow = val;
+            this.nowId = val.id
+            //                获取角色权限
+            getUserRole(val.id).then((res) => {
+                var arr = res.data.result
+                //                    获取所有权限
+                getUserAllRole().then((res) => {
+                    this.treeData = getNodes(res.data.result, arr)
+                    console.log(this.treeData)
+                })
+            }),
+                //                获取角色用户
+                getRightUserList(val.id).then((res) => {
+                    this.roleUserList = res.data.result
+                })
         }
 
 

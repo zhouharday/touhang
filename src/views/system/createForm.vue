@@ -1,7 +1,7 @@
 <template>
     <section class="createForm" style="height: 100%">
         <el-row :gutter="20" style="margin:0;background-color: #F2F4F8;">
-            <div class="button" style="margin-bottom: 20px">
+            <div class="button" style="margin-bottom: 20px; padding-top: 20px;">
                 <el-button type="danger" size="small">保存</el-button>
                 <el-button type="danger" size="small">预览</el-button>
                 <el-button type="danger" size="small">取消</el-button>
@@ -13,8 +13,8 @@
                 <div class="form-components">
                     <span>表单组件</span>
                     <ul>
-                        <li v-for="list in btnLists">
-                            <el-button>{{list.data}}</el-button>
+                        <li v-for="list in btnLists" @drop='drop($event)' @dragover='allowDrop($event)'>
+                            <el-button id="button">{{list.data}}</el-button>
                         </li>
                     </ul>
                 </div>
@@ -50,7 +50,6 @@
         </el-row>
     </section>
 </template>
-
 
 <style lang="less" scoped>
     @import "../../common/styles/variable.less";
@@ -116,7 +115,16 @@
             }
         },
         methods: {
-            drap: {}
+            drag:function(event){
+                dom = event.currentTarget
+            },
+            drop:function(event){
+                e.preventDefault();
+                e.target.appendChild(dom);
+            },
+            allowDrop:function(e){
+                e.preventDefault();
+            }
         }
     }
 </script>

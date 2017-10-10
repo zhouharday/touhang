@@ -159,5 +159,9 @@
             padding: 24px 0;
             text-align: right;
         }
+        a{
+            color:@color-theme-red;
+            text-decoration: underline;
+        }
     }
 </style>

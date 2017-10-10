@@ -254,3 +254,28 @@ export function getFundApprList(listId) {
     }
     return service({url: '/fund/getFundApprList', method: 'post', data})
 }
+// 项目详情或者基金详情阶段下面需要上传的文档列表和完成情况 /dictionaryController/selectStageUploadDocument
+export function selectStageUploadDocument(fundId, num) {
+    const data = {
+        typeId: fundId,
+        type: num
+    }
+    return service({url: '/dictionaryController/selectStageUploadDocument', method: 'post', data})
+}
+// 获取配置项目或者基金的阶段 /dictionaryController/slectStageAllocation
+export function slectStageAllocation() {
+    const data = {
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        type: 2
+    }
+    return service({url: '/dictionaryController/slectStageAllocation', method: 'post', data})
+}
+// 下一阶段（项目或者基金）/dictionaryController/nextStage
+export function nextStage(fundId, num, currentStepId) {
+    const data = {
+        typeId: fundId,
+        type: num,
+        stageId: currentStepId
+    }
+    return service({url: '/dictionaryController/nextStage', method: 'post', data})
+}

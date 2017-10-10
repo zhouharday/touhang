@@ -60,7 +60,7 @@ export default {
                 id: '',
                 agreementName: '',
                 structuralLevelId: '',
-                investorName: this.$store.state.investor.investorName,
+                investorName: this.$store.state.investor.investorName || sessionStorage.getItem('INVESTORNAME'),
                 inverstorId: this.$route.params.userId,
                 fundId: '',
                 subscribeAmount: '',
@@ -79,6 +79,7 @@ export default {
         handleEdit(index, row) {
             this.modelAgreement = true
             this.addOrModify = false
+            this.deleteReminders = false
             this.AgreementInfo = row
             this.AgreementInfo.registerDate = row.register_date
         },

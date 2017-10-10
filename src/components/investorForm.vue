@@ -1,14 +1,14 @@
 <template>
 <div class="investorForm">
-    <el-form :model="investorForm" label-position="left">
+    <el-form :model="investorForm" :rules="rules" label-position="left">
         <el-row :gutter="10">
             <el-col :span="12">
-                <el-form-item label="投资者名称" :label-width="formLabelWidth">
+                <el-form-item label="投资者名称" :label-width="formLabelWidth" prop="investorName">
                     <el-input v-model="investorForm.investorName" :disabled="variable" auto-complete="off"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="投资者类型" :label-width="formLabelWidth" width="100">
+                <el-form-item label="投资者类型" :label-width="formLabelWidth" prop="investorTypeId" width="100">
                     <el-select v-model="investorForm.investorTypeId" :disabled="variable" style="width:100%">
                         <el-option v-for="(item, index) of typeInvestor" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
@@ -16,7 +16,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="证件类型" :label-width="formLabelWidth">
+                <el-form-item label="证件类型" :label-width="formLabelWidth" prop="certificateTypeId">
                     <el-select v-model="investorForm.certificateTypeId" :disabled="variable" style="width:100%">
                         <el-option v-for="(item, index) of typeId" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
@@ -24,7 +24,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="证件号码" :label-width="formLabelWidth">
+                <el-form-item label="证件号码" :label-width="formLabelWidth" prop="certificateNum">
                     <el-input v-model="investorForm.certificateNum" :disabled="variable"></el-input>
                 </el-form-item>
             </el-col>
@@ -48,7 +48,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="投资经理" :label-width="formLabelWidth">
+                <el-form-item label="投资经理" :label-width="formLabelWidth" prop="investmentManagerId">
                     <el-select v-model="investorForm.investmentManagerId" :disabled="variable" style="width:100%">
                         <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
@@ -103,7 +103,42 @@ export default {
             }], // 投资经理
             typeInvestor: [], // 投资者类型
             typeId: [], // 证件类型
-            area: [] // 所属区域
+            area: [], // 所属区域
+            rules: {
+                investorName: [{
+                        required: true,
+                        message: '请输入投资者名称',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 2,
+                        max: 20,
+                        message: '长度在 3 到 20 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+                investorTypeId: [{
+                    required: true,
+                    message: '请选择投资者类型',
+                    trigger: 'change'
+                }],
+                certificateTypeId: [{
+                    required: true,
+                    message: '请选择证件类型',
+                    trigger: 'change'
+                }],
+                certificateNum: [{
+                    type: 'string',
+                    required: true,
+                    message: '证件号不能为空',
+                    trigger: 'change'
+                }],
+                investmentManagerId: [{
+                    required: true,
+                    message: '请选择投资经理',
+                    trigger: 'change'
+                }]
+            }
         }
     },
     created() {

@@ -92,17 +92,26 @@ export default {
             organizationId: '', //组织类型id
             organizationType: {
                 title: '组织类型：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             managementId: '', //管理类型id
             managementType: {
                 title: '管理类型：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             stageId: '', //基金阶段id
             allFundStage: {
                 title: '基金阶段：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             statusId: '', //基金状态id
             allFundStatus: {
@@ -254,10 +263,10 @@ export default {
             this.myFund = this.myFundList.list
         })
         this.$store.dispatch('getManageType').then(() => {
-            this.managementType.details = this.getManType
+            this.managementType.details = this.managementType.details.concat(this.getManType)
         })
         this.$store.dispatch('getOrganizationType').then(() =>{
-            this.organizationType.details = this.OrgType
+            this.organizationType.details = this.organizationType.details.concat(this.OrgType)
         })
         this.$store.dispatch('getFundStage').then(() => {
             this.allFundStage.details = this.fundStage
