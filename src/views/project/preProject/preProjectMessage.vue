@@ -10,27 +10,14 @@
                 </el-button>
             </div>
         </div>
-        <el-row class="step">
-            <el-col :span="4" class="step_first step_span" :class="{'step_span_change step_first_change':!first_step}">
-                <span>{{step_first}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':second_step}">
-                <span>{{step_second}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':third_step}">
-                <span>{{step_third}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fourth_step}">
-                <span>{{step_fourth}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fiveth_step}">
-                <span>{{step_fiveth}}</span>
-            </el-col>
-
-            <el-col :span="4" class="step_third step_span" :class="{'step_span_change step_third_change':sixth_step}">
-                <span>{{step_sixth}}</span>
-            </el-col>
-        </el-row>
+        <div class="step">
+            <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.flag),
+                     'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.flag),
+                     'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.flag),
+                     'step_third':index==(stepLists.length-1)}">
+                <span>{{item.step}}</span>
+            </div>
+        </div>
         <div class="picture">
             <div class="img_wrapper">
                 <img src="/static/img/double.png">
@@ -51,8 +38,8 @@
                             {{item.info}}
                         </el-button>
                         <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                                                                                                                        {{item.info}}
-                                                                                                                                                                       </el-button> -->
+                                                                                                                                                                                        {{item.info}}
+                                                                                                                                                                                       </el-button> -->
                     </div>
                 </div>
             </div>
@@ -270,12 +257,29 @@ export default {
             applyModal: false,
             progressModal: false,
             title: '双子金服投资项目',
-            step_first: '考察储备',
-            step_second: '立项会',
-            step_third: '尽职调查',
-            step_fourth: '投决会',
-            step_fiveth: '管理',
-            step_sixth: '退出',
+            stepLists: [
+                {
+                    step: '考察储备',
+                    flag: true
+                },
+                {
+                    step: '立项会',
+                    flag: false
+                },
+                {
+                    step: '尽职调查',
+                    flag: false
+                },
+                {
+                    step: '管理',
+                    flag: false
+                },
+                {
+                    step: '退出',
+                    flag: false
+                }
+            ],
+            jumpStep: true,
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
             proUsers: [],   // 项目用户列表
@@ -565,6 +569,8 @@ export default {
     .step {
         width: 100%;
         height: 52px;
+        display: flex;
+        justify-content: space-between;
         margin-top: 24px;
         .step_span {
             line-height: 52px;
@@ -579,8 +585,8 @@ export default {
             border: 1px solid #f05e5e;
         }
         .step_first {
-            color: #F05E5E;
-            border: 1px solid #f05e5e;
+            color: #000;
+            border: 1px solid #000;
             &::after {
                 content: '';
                 width: 36px;
@@ -590,16 +596,16 @@ export default {
                 top: 7px;
                 right: -19px;
                 border: 1px solid;
-                border-color: #f05e5e #f05e5e transparent transparent;
+                border-color: #000 #000 transparent transparent;
                 transform: rotate(45deg);
                 z-index: 1;
             }
         }
         .step_first_change {
-            color: #000;
-            border: 1px solid #000;
+            color: #f05e5e;
+            border: 1px solid #f05e5e;
             &::after {
-                border-color: black black transparent transparent;
+                border-color: #f05e5e #f05e5e transparent transparent;
             }
         }
         .step_second {
