@@ -186,7 +186,15 @@ export function delGu(id = undefined) {
 
 ////////////////////  风险记录相关 ////////////////////
 // 风险列表
-export function dangers(id = undefined) {
+export function dangers(projectId = undefined) {
+	const data = {
+		projectId
+	}
+	return service({url: '/riskRegister/getRiskList', method: 'post', data});
+}
+
+// 查看风险
+export function selectRiskRegister(id = undefined) {
 	const data = {
 		id
 	}
@@ -195,13 +203,14 @@ export function dangers(id = undefined) {
 
 // 添加风险
 export function addDanger(params = {}) {
-	const { projectId, riskTheme, seedUserId, receivedUserId, riskDescribe } = params;
+	const { projectId, riskTheme, seedUserId, receivedUserId, riskDescribe, completeDate } = params;
 	const data = {
 		projectId, //项目ID: "123456",
         riskTheme, //风险主题: "1",
         seedUserId, //提交人ID: null,
         receivedUserId, //接收人ID: null,
-        riskDescribe //风险描述: null
+        riskDescribe, //风险描述: null
+        completeDate //完成时间: null
 	}
 	return service({url: '/riskRegister/insertRiskRegister', method: 'post', data});
 }
@@ -230,10 +239,8 @@ export function delDanger(id = undefined) {
 
 // 添加风险追踪
 export function danger(params = {}) {
-	let { page, pageSize, riskRegisterId, disposeResult, disposeUserId, recordDetails } = params;
+	let { riskRegisterId, disposeResult, disposeUserId, recordDetails } = params;
 	const data = {
-		page, // ": 1,
-        pageSize, // ": 10,
         riskRegisterId, //风险ID: "727339b17e6c4752a5eea2794e149dfd",
         disposeResult, //1:处理中 2：已完成: 1,
         disposeUserId, //创建人ID: "727339b17e6c4752a5eea2794e149dfd",
