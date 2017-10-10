@@ -33,9 +33,20 @@
                     <p class="desc" v-if="item.type == 3">{{item.title}}</p>
                     <span v-if="item.status == 1" class="state">已完成</span>
                     <!-- 立即上传 -->
-                    <Upload v-if="item.type == 1 && item.status == 0" action="http://192.168.0.198:9091/files/upload">
-                        <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
-                    </Upload>
+                    <div v-if="item.type == 1 && item.status == 0" style="position:relative">
+                        <el-button type="text" style="color:#f05e5e">立即上传</el-button>
+                        <input type="file" class="fileInput" @change="onSubmit($event, item.id)" ref="avatarInput">
+                    </div>
+
+
+<!--                     <div v-if="item.type == 1 && item.status == 0" >
+                        <form>
+                            <input type="file" style="display" @change="changeImage($event)" ref="avatarInput">
+                            <button @click="submitForm($event)" class="cursor">点击上传</button>
+                        </form>
+                    </div>
+                    <el-button v-if="item.type == 1 && item.status == 0" class="changeWidth" type="danger" @click="onSubmit($event, item.id)">上&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;传</el-button>
+ -->
                     <!-- 发起申请对话框 -->
                     <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
                     <!-- 查看进度对话框 -->
@@ -219,7 +230,7 @@
 </template>
 
 
-<script>
+<script type="text/javascript">
 import detailForm from './details'
 import tableForm from './tables'
 import teamTable from './team'
@@ -230,6 +241,7 @@ import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
+import Loading from 'element-ui'
 import deleteReminders from 'components/deleteReminders'
 import {
     getPreDetail,
@@ -248,21 +260,12 @@ import {
 const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 
 export default {
+    name: 'preProjectMessage',
     data() {
-        return {            
-            stepLists: [
-                // { step: '考察储备' ,
-                // flag: true
-                // },
-                // { step: '立项会' ,
-                // flag: false},
-                // { step: '尽职调查' ,
-                // flag: false},
-                // { step: '管理' ,
-                // flag: false},
-                // { step: '退出',
-                // flag: false }
-            ],
+        return {
+            userId:'',
+            file: '',
+            stepLists: [],
             projectId: '',
             investProjectId: '',
             stageId: '',
@@ -271,42 +274,15 @@ export default {
             message: '是否确认中止该项目？',
             btnText: '中止',
             modal_loading: false,
-            first_step: true,
-            second_step: false,
-            third_step: false,
-            fourth_step: false,
-            fiveth_step: false,
-            sixth_step: false,
             suspend: false,
             applyModal: false,
             progressModal: false,
             title: '',
-            step_first: '考察储备',
-            step_second: '立项会',
-            step_third: '尽职调查',
-            step_fourth: '投决会',
-            step_fiveth: '管理',
-            step_sixth: '退出',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
             proUsers: [], // 项目用户列表
             proRoles: [], // 项目角色列表
-            module: [{
-                id: '11111',
-                title: '项目考察报告',
-                status: 0,
-                type: 1
-            }, {
-                id: '22222',
-                title: '保密协议（一）',
-                status: 0,
-                type: 2
-            }, {
-                id: '3333',
-                title: '保密协议（二）',
-                status: 0,
-                type: 3
-            }],
+            module: [],     // 该项目当前阶段需要完成的任务
             basicForm: {}, // 基本信息
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
@@ -381,11 +357,13 @@ export default {
     },
     created() {
         this.investProjectId = this.$route.params.investProjectId;
+        this.projectId = this.$route.params.userId;
         this.init();
     },
     watch: {
         '$route' (to, from) {
             this.investProjectId = this.$route.params.investProjectId;
+            this.projectId = this.$route.params.userId;
             this.init()      //再次调起我要执行的函数
          }
     },
@@ -398,7 +376,9 @@ export default {
         },
         initInfo() {
             let href = window.location.href;
-            this.projectId = href.substr(href.lastIndexOf('/') + 1, href.length);
+            // this.investProjectId = href.substr(href.lastIndexOf('_') + 1, href.length);
+            // href = href.substr(0, href.lastIndexOf('_'));
+            // this.projectId = href.substr(href.lastIndexOf('/') + 1, href.length);
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
@@ -473,11 +453,11 @@ export default {
                         merchantId: this.merchantId
                     }).then(resp => {
                         let data = resp.data;
-                        if (+data.status === 200) {
-                            resolve(data.result);
-                        } else {
-                            reject(data.message);
-                        }
+                        // if (data.status === 200) {
+                        //     resolve(data.result);
+                        // } else {
+                        //     reject(data.message);
+                        // }
                         // console.log('users resp', resp);
                     }).catch(e => {
                         console.log('getProjectUsers() exists error: ', e);
@@ -539,7 +519,7 @@ export default {
 
                     this.getStageUploadDocument();
                 }else{
-                    reject(data.message);
+                    //reject(data.message);
                 }
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
@@ -603,6 +583,76 @@ export default {
                 url: url,
                 name: name
             });
+        },
+        onSubmit(event, fileId) { //上传文件input
+            this.file = event.target.files[0];
+
+            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('file', this.file);
+            formData.append('stageId', this.stageId);
+            formData.append('userId', userId);
+            formData.append('type', 3);
+            formData.append('uploadTypeId', this.projectId);
+            formData.append('fileId', fileId);
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+            console.log("*************"+this.api);
+            this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+            .then((res)=> {
+                console.log("上传文件结果:"+ JSON.stringify(res.data));
+                if (res.status == '200') {
+                    if (res.data.status == '200') {
+                        this.getStageUploadDocument();
+                    } else if (res.data.status == '403') {;
+                        this.$Message.error(res.data.message);
+                        //loadingInstance.close();
+                    }
+                }
+            })
+            .catch(e => {
+                this.$Message.error("上传错误");
+                console.log('上传错误: ', e);
+               // loadingInstance.close();
+            })
+        },
+        onSubmit(event, fileId) { //提交上传文件到服务器
+            // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+            // event.preventDefault();
+            // let formData = new FormData();
+            // formData.append('file', this.file);
+            // formData.append('stageId', this.stageId);
+            // formData.append('userId', userId);
+            // formData.append('type', 3);
+            // formData.append('uploadTypeId', this.projectId);
+            // formData.append('fileId', fileId);
+            // let config = {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // };
+            // console.log("*************"+this.api);
+            // this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+            // .then((res)=> {
+            //     console.log("上传文件结果:"+ JSON.stringify(res.data));
+            //     if (res.status == '200') {
+            //         if (res.data.status == '200') {
+            //             this.getStageUploadDocument();
+            //         } else if (res.data.status == '403') {;
+            //             this.$Message.error(res.data.message);
+            //             //loadingInstance.close();
+            //         }
+            //     }
+            // })
+            // .catch(e => {
+            //     this.$Message.error("上传错误");
+            //     console.log('上传错误: ', e);
+            //    // loadingInstance.close();
+            // })
         }
     }
 }
@@ -754,6 +804,15 @@ export default {
             margin-right: 34px;
             display: inline-block;
             vertical-align: middle;
+        }
+         .fileInput {
+            opacity:0;
+            position:absolute;
+            left:135px;
+            top:0;
+            width:80px;
+            height:25px;
+            line-height:25px;
         }
         .prompt_message {
             width: 48%; // height: 140px;

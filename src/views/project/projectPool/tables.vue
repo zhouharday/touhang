@@ -18,7 +18,6 @@
                             <el-input v-model="scope.row.nature" ></el-input>
                         </span>
                     </template>
-
                 </el-table-column>
                 <el-table-column label="教育背景" prop="educationalBg" align="center">
                     <template scope="scope">

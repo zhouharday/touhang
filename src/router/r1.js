@@ -49,7 +49,7 @@ const r1 = [{
         component: resolve => require(['../views/project/preProject/preProject.vue'], resolve)
     },
     {
-        path: 'preProjectMessage/:userId', //home/投前项目详情页
+        path: 'preProjectMessage/:userId/:investProjectId', //home/投前项目详情页
         name: 'preProjectMessage',
         component: resolve => require(['../views/project/preProject/preProjectMessage.vue'], resolve)
     }, {
