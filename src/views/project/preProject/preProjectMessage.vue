@@ -10,27 +10,14 @@
             </el-button>
         </div>
     </div>
-    <el-row class="step">
-        <el-col :span="4" class="step_first step_span" :class="{'step_span_change step_first_change':!first_step}">
-            <span>{{step_first}}</span>
-        </el-col>
-        <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':second_step}">
-            <span>{{step_second}}</span>
-        </el-col>
-        <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':third_step}">
-            <span>{{step_third}}</span>
-        </el-col>
-        <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fourth_step}">
-            <span>{{step_fourth}}</span>
-        </el-col>
-        <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fiveth_step}">
-            <span>{{step_fiveth}}</span>
-        </el-col>
-
-        <el-col :span="4" class="step_third step_span" :class="{'step_span_change step_third_change':sixth_step}">
-            <span>{{step_sixth}}</span>
-        </el-col>
-    </el-row>
+    <div class="step">
+        <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
+             'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+             'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+             'step_third':index==(stepLists.length-1)}">
+            <span>{{item.stageName}}</span>
+        </div>
+    </div>
     <div class="picture">
         <div class="img_wrapper">
             <img src="/static/img/double.png">
@@ -40,19 +27,19 @@
             <span class="prompt">{{prompt}}</span>
             <div class="item_wrapper">
                 <div class="item" v-for="(item,index) in module" :key="item.index">
-                    <span class="count">{{item.count}}</span>
-                    <p class="desc">{{item.desc}}</p>
+                    <span class="count">{{index +1}}</span>
+                    <p class="desc" v-if="item.type == 1">{{item.title}}</p>
+                    <p class="desc" v-if="item.type == 2">{{item.title}}</p>
+                    <p class="desc" v-if="item.type == 3">{{item.title}}</p>
+                    <span v-if="item.status == 1" class="state">已完成</span>
                     <!-- 立即上传 -->
-                    <Upload v-show="index == 0" action="//jsonplaceholder.typicode.com/posts/">
+                    <Upload v-if="item.type == 1 && item.status == 0" action="http://192.168.0.198:9091/files/upload">
                         <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
                     </Upload>
-                    <!-- 发起申请等 对话框 -->
-                    <el-button v-show="index != 0" type="text" class="state" @click="openDialog(index)">
-                        {{item.info}}
-                    </el-button>
-                    <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                                                                                                                        {{item.info}}
-                                                                                                                                                                       </el-button> -->
+                    <!-- 发起申请对话框 -->
+                    <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
+                    <!-- 查看进度对话框 -->
+                    <el-button v-if="item.type == 3 && item.status == 0" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
                 </div>
             </div>
         </div>
@@ -81,15 +68,15 @@
                 <approve-table></approve-table>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
-                <file-table></file-table>
+                <file-table :proId="projectId" ></file-table>
             </el-tab-pane>
             <el-tab-pane label="风险登记" name="risk" class="tab_list">
                 <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
             </el-tab-pane>
-            <el-tab-pane label="管理" name="manage" class="tab_list">
+            <el-tab-pane v-if="false" label="管理" name="manage" class="tab_list">
                 <manage-table :proId="projectId"></manage-table>
             </el-tab-pane>
-            <el-tab-pane label="退出" name="outing" class="tab_list">
+            <el-tab-pane v-if="false" label="退出" name="outing" class="tab_list">
                 <outing-form></outing-form>
             </el-tab-pane>
         </el-tabs>
@@ -245,7 +232,11 @@ import manageTable from './manage'
 import outingForm from './outing'
 import deleteReminders from 'components/deleteReminders'
 import {
-    getPreDetail
+    getPreDetail,
+    slectAllStage,
+    getStageUploadDocument,
+    nextStage,
+    suspendInvestProject
 } from 'api/projectPre';
 import {
     getProjectUsers
@@ -258,8 +249,23 @@ const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基
 
 export default {
     data() {
-        return {
+        return {            
+            stepLists: [
+                // { step: '考察储备' ,
+                // flag: true
+                // },
+                // { step: '立项会' ,
+                // flag: false},
+                // { step: '尽职调查' ,
+                // flag: false},
+                // { step: '管理' ,
+                // flag: false},
+                // { step: '退出',
+                // flag: false }
+            ],
             projectId: '',
+            investProjectId: '',
+            stageId: '',
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
@@ -274,7 +280,7 @@ export default {
             suspend: false,
             applyModal: false,
             progressModal: false,
-            title: '双子金服投资项目',
+            title: '',
             step_first: '考察储备',
             step_second: '立项会',
             step_third: '尽职调查',
@@ -286,20 +292,20 @@ export default {
             proUsers: [], // 项目用户列表
             proRoles: [], // 项目角色列表
             module: [{
-                count: 1,
-                desc: '上传项目考察报告',
-                state: false,
-                info: '立即上传'
+                id: '11111',
+                title: '项目考察报告',
+                status: 0,
+                type: 1
             }, {
-                count: 2,
-                desc: '进行保密协议申请',
-                state: false,
-                info: '发起申请'
+                id: '22222',
+                title: '保密协议（一）',
+                status: 0,
+                type: 2
             }, {
-                count: 3,
-                desc: '您的保密协议正在申请中',
-                state: true,
-                info: '查看进度'
+                id: '3333',
+                title: '保密协议（二）',
+                status: 0,
+                type: 3
             }],
             basicForm: {}, // 基本信息
             companyForm: {}, // 企业信息
@@ -374,12 +380,21 @@ export default {
         outingForm
     },
     created() {
+        this.investProjectId = this.$route.params.investProjectId;
         this.init();
+    },
+    watch: {
+        '$route' (to, from) {
+            this.investProjectId = this.$route.params.investProjectId;
+            this.init()      //再次调起我要执行的函数
+         }
     },
     methods: {
         init() {
             this.initInfo();
             this.getPreProDetail();
+            this.getStageUploadDocument(); //获取当前阶段及任务小助
+            this.slectAllStage();
         },
         initInfo() {
             let href = window.location.href;
@@ -396,6 +411,13 @@ export default {
                 this.proRoles = values[1] || [];
             }).catch(e => {
                 console.log('getProUsers() or getProRoles() exists error: ', e);
+            });
+        },
+        slectAllStage() {
+            slectAllStage().then(resp => {
+                this.stepLists = resp.data.result || [];
+                }).catch(e => {
+                console.log('getPreDetail() exists error: ', e);
             });
         },
         /**
@@ -418,8 +440,23 @@ export default {
                 }, resp.data.result.projectInvestmentInfo)
                 this.memberData = resp.data.result.listBoardMember
                 this.structureData = resp.data.result.listOwnershipStructure
+                this.title = resp.data.result.projectInfo.projectName
+
             }).catch(e => {
-                console.log('getProDetail() exists error: ', e);
+                console.log('getPreDetail() exists error: ', e);
+            });
+            // getStageUploadDocument()
+        },
+        getStageUploadDocument(){
+            let typeId = this.projectId;
+            let investProjectId = this.investProjectId;
+            let params = {typeId, investProjectId};
+            console.log("getStageUploadDocument****params****" + JSON.stringify(params));
+            getStageUploadDocument(params).then(resp => {
+                this.stageId = resp.data.stageId;
+                this.module = resp.data.result;
+            }).catch(e => {
+                console.log('getStageUploadDocument() exists error: ', e);
             });
         },
         /**
@@ -442,7 +479,9 @@ export default {
                             reject(data.message);
                         }
                         // console.log('users resp', resp);
-                    }).catch(reject);
+                    }).catch(e => {
+                        console.log('getProjectUsers() exists error: ', e);
+                    });
                 }
             });
         },
@@ -464,32 +503,52 @@ export default {
                             reject(data.message);
                         }
                         // console.log('roles resp', resp);
-                    }).catch(reject);
+                    }).catch(e => {
+                        console.log('getProRoles() exists error: ', e);
+                    });
                 }
             });
         },
         // 转至下一阶段 的方法
         changeStep() {
-            if (this.first_step) {
-                this.first_step = !this.first_step;
-                this.second_step = !this.second_step;
-            } else if (this.second_step) {
-                this.second_step = !this.second_step;
-                this.third_step = !this.third_step;
-            } else if (this.third_step) {
-                this.third_step = !this.third_step;
-                this.fourth_step = !this.fourth_step;
-            } else if (this.fourth_step) {
-                this.fourth_step = !this.fourth_step;
-                this.fiveth_step = !this.fiveth_step;
-                this.suspend = true;
-            } else if (this.fiveth_step) {
-                this.fiveth_step = !this.fiveth_step;
-                this.sixth_step = !this.sixth_step;
-            }
+            let typeId = this.projectId, investProjectId = this.investProjectId, stageId = this.stageId;
+            let params = {
+                typeId,
+                investProjectId,
+                stageId
+            };
+            nextStage(params).then(resp => {
+                if(resp.data.status === "200"){
+                    if (this.first_step) {
+                        this.first_step = !this.first_step;
+                        this.second_step = !this.second_step;
+                    } else if (this.second_step) {
+                        this.second_step = !this.second_step;
+                        this.third_step = !this.third_step;
+                    } else if (this.third_step) {
+                        this.third_step = !this.third_step;
+                        this.fourth_step = !this.fourth_step;
+                    } else if (this.fourth_step) {
+                        this.fourth_step = !this.fourth_step;
+                        this.fiveth_step = !this.fiveth_step;
+                        this.suspend = true;
+                    } else if (this.fiveth_step) {
+                        this.fiveth_step = !this.fiveth_step;
+                        this.sixth_step = !this.sixth_step;
+                    }
+
+                    this.getStageUploadDocument();
+                }else{
+                    reject(data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
+
+
         },
         // 小双助手 打开不同的对话框
-        openDialog(index) {
+        openDialog(index, id) {
             if (index == 1) {
                 this.applyModal = true;
             } else if (index == 2) {
@@ -521,12 +580,21 @@ export default {
             }
             return '';
         },
+        //中止项目
         jumpPool() {
-            this.deleteReminders = !this.deleteReminders;
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({
-                name: 'projectPool'
+            console.log("investProjectId" + this.investProjectId);
+            suspendInvestProject(this.investProjectId).then(resp => {
+                if(resp.data.status === "200"){
+                    this.deleteReminders = !this.deleteReminders;
+                    this.addTab('项目池', '/home/projectPool', 'projectPool');
+                    this.$router.push({name: 'projectPool'});
+                }else{
+                    reject(data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
             });
+
         },
         addTab(th, url, name) {
             this.$store.commit({
@@ -593,9 +661,9 @@ export default {
         .step_span_change {
             border: 1px solid #f05e5e;
         }
-        .step_first {
-            color: #F05E5E;
-            border: 1px solid #f05e5e;
+ .step_first {
+            color: #000;
+            border: 1px solid #000;
             &::after {
                 content: '';
                 width: 36px;
@@ -605,16 +673,16 @@ export default {
                 top: 7px;
                 right: -19px;
                 border: 1px solid;
-                border-color: #f05e5e #f05e5e transparent transparent;
+                border-color: #000 #000 transparent transparent;
                 transform: rotate(45deg);
                 z-index: 1;
             }
         }
         .step_first_change {
-            color: #000;
-            border: 1px solid #000;
+            color: #f05e5e;
+            border: 1px solid #f05e5e;
             &::after {
-                border-color: black black transparent transparent;
+                border-color: #f05e5e #f05e5e transparent transparent;
             }
         }
         .step_second {

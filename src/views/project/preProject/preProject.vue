@@ -26,7 +26,7 @@
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
                     <template scope="scope">
-                        <a class="project" @click="ShowPreMessage(scope.row.projectId, scope.row.projectName, scope.$index)">{{ scope.row.projectName }}</a>
+                        <a class="project" @click="ShowPreMessage(scope.row.projectId, scope.row.id, scope.row.projectName, scope.$index)">{{ scope.row.projectName }}</a>
                     </template>
                 </el-table-column>
                 <el-table-column prop="mananger" label="项目创建人" align="center">
@@ -229,9 +229,9 @@ export default {
             }
             return '';
         },
-        ShowPreMessage(projectId, title, idx) {
+        ShowPreMessage(projectId, investId, title, idx) {
             this.addTab('投资项目-' + title + '详情页', '/home/preProjectMessage/' + idx, 'preProjectMessage/' + idx);
-            this.$router.push({ name: 'preProjectMessage', params: { userId: projectId } });
+            this.$router.push({ name: 'preProjectMessage', params: { userId: projectId, investProjectId: investId}});
         },
         addTab(th, url, name) {
             this.$store.commit({
