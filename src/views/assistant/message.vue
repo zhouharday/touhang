@@ -446,8 +446,8 @@ export default {
         },
         messageList(id) { //获取项目详情
             this.$http.post(this.api + '/productClieController/selectMessage', {
-                // id: id
-                id: '10'
+                id: id
+                // id: '10'
             })
                 .then(res => {
                     if (res.status == '200') {

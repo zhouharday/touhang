@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
-                        <span :class="{active:list.yd,click:clickN==index,actives:list.week == 0 || list.week == 6}">
+                        <span @mouseover="getDate(index,list.day)" :class="{active:list.yd,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
                             {{list.day}}
                         </span>
                     </span>
@@ -77,6 +77,9 @@ export default {
     },
     data: function() {
         return {
+            arr: [],
+            obj: {},
+            dateMoveOver: false,
             getScheduleList: {},
             scheduleDialog: false,
             checkTime: '添加日程',
@@ -206,6 +209,18 @@ export default {
             // console.log(arr);
             this.$emit("readyfun", arr, this.date);
         },
+        getDate(index, n) { //moveOver Date
+            if (!n) {
+                return;
+            };
+            var self = this;
+            this.clickN = index;
+            this.changeDate = this.date.year + "-" + (this.date.month + 1) + "-" + n;
+            console.log(this.changeDate);
+            this.getData(this.changeDate);
+            return this.changeDate;
+
+        },
         //点击日期
         clickDate: function(index, n) {
             let new_scheduleForm = {
@@ -215,15 +230,16 @@ export default {
             this.scheduleForm = new_scheduleForm;
             if (!n) {
                 return;
-            }
+            };
             var self = this;
             this.clickN = index;
             this.changeDate = this.date.year + "-" + (this.date.month + 1) + "-" + n;
             this.$emit("changetime", self.changeDate);
-            this.scheduleDialog = !this.scheduleDialog;
             this.checkTime = this.changeDate;
+            this.scheduleDialog = !this.scheduleDialog;
+            console.log(this.changeDate);
         },
-        getData() { //获取日程列表 api
+        getData(time) { //获取日程列表 api
             this.$http.post(this.api + '/work/getScheduleList', {
                 "userId": this.user.userInfor.id,
                 "merchantId": this.user.merchants[0].id
@@ -231,8 +247,23 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
-                            this.getScheduleList = res.data;
-                            console.log(res);
+                            console.log('////////////////////////');
+                            console.log(res.data);
+                            res.data.result.map((item, index) => {
+                                this.arr = [];
+                                let start_Time = item.startTime.substr(0, 10)
+                                console.log('???????????????????????');
+                                console.log(start_Time);
+                                // console.log(item.startTime);
+                                if (start_Time == time) {
+                                    // alert(999);
+                                    this.arr.push(res.data.result[index]);
+                                } else {
+                                    return;
+                                }
+                            });
+                            console.log(this.arr);
+                            // this.getScheduleList = res.data.result;
                             // this.scheduleList = res.data.result;
                             this.$Message.success(res.data.message);
                         } else if (res.data.status == '403') {
@@ -254,8 +285,9 @@ export default {
         addSchedule(title, time) { //添加日程 api
             this.$http.post(this.api + '/work/addSchedule', {
                 "userId": this.user.userInfor.id,
-                "scheduleTitle": this.scheduleForm.theme,
-                "startTime": this.scheduleForm.time
+                "scheduleTitle": this.scheduleForm.title,
+                "startTime": this.scheduleForm.time,
+                "merchantId": this.user.merchants[0].id
             })
                 .then(res => {
                     if (res.status == '200') {
