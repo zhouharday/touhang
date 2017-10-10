@@ -1,77 +1,56 @@
 <template>
-    <section class="projectLimits">
-        <el-row :gutter="30">
-            <el-col :span="6">
-                <div class="roleBtn">
-                    <el-button size="small" @click="roleDialog=true">添加</el-button>
-                </div>
-                <el-table :data="roleData" border style="width: 100%">
-                    <el-table-column prop="roleName" label="角色名称" align="center">
-                        <template scope="scope">
-                            <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">{{ scope.row.roleName}}</span>
-                            <span v-if="scope.row.editFlag">
-                                <el-input v-model="scope.row.roleName" placeholder=""></el-input>
-                            </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作" align="center">
-                        <template scope="scope">
-                            <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                            </el-button>
-                            <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                            </el-button>
-                            <!--<el-button type="text" size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>-->
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-            <el-col :span="18">
-                <el-row>
-                    <el-col>
-                        <div class="limitBtn">
-                            <!--<el-button type="default" size="small">修改权限</el-button>-->
-                            <el-button type="danger" size="small" @click="saveRole" v-if="this.userId">保存</el-button>
-                        </div>
-                    </el-col>
-                    <el-col :span="6">
-                        <div class="left" style="font-weight:bold;background-color: #eef1f6;">权限点</div>
-                    </el-col>
-                    <el-col :span="18">
-                        <div class="f_right">权限</div>
-                    </el-col>
-
-                    <div v-for="item in allData.permissions">
-                        <el-col :span="6">
-                            <div class="left">{{item.permissionName}}</div>
+        <section  class="projectLimits">
+                <el-row  :gutter="30">
+                        <el-col  :span="6">
+                                <div  class="roleBtn">
+                                        <el-button  size="small"  @click="roleDialog=true">添加</el-button>
+                                </div>
+                                <el-table  :data="roleData"  border  style="width:  100%"    highlight-current-row  @current-change="handleCurrentChange">
+                                        <el-table-column  prop="roleName"  label="角色名称"  align="center">
+                                                <template  scope="scope">
+                                                        <span  v-if="!scope.row.editFlag"  @click="handleRole(scope.$index,  scope.row)">{{  scope.row.roleName}}</span>
+                                                        <span  v-if="scope.row.editFlag">
+                                                                <el-input  v-model="scope.row.roleName"  placeholder=""></el-input>
+                                                        </span>
+                                                </template>
+                                        </el-table-column>
+                                        <el-table-column  label="操作"  align="center">
+                                                <template  scope="scope">
+                                                        <el-button  v-if="!scope.row.editFlag"  type="text"  size="small"  @click="checkEdit(scope.$index,scope.row)">编辑
+                                                        </el-button>
+                                                        <el-button  v-if="scope.row.editFlag"  type="text"  size="small"  @click="checkEdit(scope.$index,scope.row)">保存
+                                                        </el-button>
+                                                        <!--<el-button  type="text"  size="small"  @click="handleDelete(scope.$index,scope.row)">删除</el-button>-->
+                                                </template>
+                                        </el-table-column>
+                                </el-table>
                         </el-col>
-                        <el-col :span="18">
-                            <div class="right">
-                                <!--<div v-if="item.falseId == 4">-->
-                                    <!--<div v-for="nextItem in item.children">-->
-                                        <!--<div >{{nextItem.permissionName}}</div>-->
-                                        <!--<div class="right">-->
-                                            <!--&lt;!&ndash;<el-checkbox-group v-model="nextItem.menuContentClick" @change="handleCheckedCitiesChange">&ndash;&gt;-->
-                                            <!--&lt;!&ndash;<el-checkbox v-for="(text, index) of nextItem.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>&ndash;&gt;-->
-                                            <!--&lt;!&ndash;</el-checkbox-group>&ndash;&gt;-->
-                                            <!--<el-checkbox-group v-model="checkList">-->
-                                                <!--<el-checkbox label="复选框 A"></el-checkbox>-->
-                                                <!--<el-checkbox label="复选框 B"></el-checkbox>-->
-                                                <!--<el-checkbox label="复选框 C"></el-checkbox>-->
-                                                <!--<el-checkbox label="禁用" disabled></el-checkbox>-->
-                                                <!--<el-checkbox label="选中且禁用" disabled></el-checkbox>-->
-                                            <!--</el-checkbox-group>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div v-if="item.falseId != 4">-->
-                                <!--<el-checkbox-group v-model="item.menuContentClick" @change="handleCheckedCitiesChange">-->
-                                    <!--<el-checkbox v-for="(text, index) of item.menuContent"   :label="text.path" >{{text.permissionName}}</el-checkbox>-->
-                                <!--</el-checkbox-group>-->
-                                <!--</div>-->
-                                <div v-if="item.children">
-                                    <div v-for="nextItem in item.children">
-                                        <div style="flex-direction: row; display: flex">
-                                            <div >{{nextItem.permissionName}}</div>
+                        <el-col  :span="18">
+                                <el-row>
+                                        <el-col>
+                                                <div  class="limitBtn">
+                                                        <!--<el-button  type="default"  size="small">修改权限</el-button>-->
+                                                        <el-button  type="danger"  size="small"  @click="saveRole"  v-if="this.userId">保存</el-button>
+                                                </div>
+                                        </el-col>
+                                        <el-col  :span="6">
+                                                <div  class="left"  style="font-weight:bold;background-color:  #eef1f6;">权限点</div>
+                                        </el-col>
+                                        <el-col  :span="18">
+                                                <div  class="f_right">权限</div>
+                                        </el-col>
+
+                                        <div  v-for="item  in  allData.permissions">
+                                                <el-col  :span="24"  style="border:  1px  solid  #dfe6ec;">
+                                                <el-col  :span="6">
+                                                        <div  class="left">{{item.permissionName}}</div>
+                                                </el-col>
+                                                <el-col  :span="18">
+                                                        <div  class="right">
+                                                                <div  v-if="item.children">
+                                                                        <div  v-for="nextItem  in  item.children">
+                                                                                <div  style="flex-direction:  row;  display:  flex">
+                                                                                     <div >{{nextItem.permissionName}}</div>
                                             <div style=" margin-left: 20px">
                                                 <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
                                                     <el-checkbox v-for="(text, index) of nextItem.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
@@ -86,6 +65,7 @@
                                     </el-checkbox-group>
                                 </div>
                             </div>
+                        </el-col>
                         </el-col>
                     </div>
                 </el-row>
@@ -156,10 +136,12 @@ export default {
     methods: {
 
         saveRole(){
+
             var String = getUpdataFund(this.clickMenu,this.allData.data )
             roleBindPermission(this.userId,String).then((res)=>{
                 console.log(res)
             })
+
         },
         // 添加角色 的方法
         addRole() {
@@ -183,7 +165,7 @@ export default {
             }
         },
 
-        handleRole(index,row){
+        handleCurrentChange(row){
             this.clickMenu = []
             this.userId = row.id
             permissionlistByRoleId(row.id).then((res)=>{
@@ -199,6 +181,7 @@ export default {
 
                 })
             })
+
         }
     },
     created(){
@@ -239,10 +222,10 @@ export default {
     }
     .left {
         /*min-height: ;*/
-        height: 40px;
+        /*height: 40px;*/
         line-height: 40px;
-        border: 1px solid #dfe6ec;
-        border-bottom: none;
+        /*border: 1px solid #dfe6ec;*/
+        /*border-bottom: none;*/
         text-align: center;
     }
     .f_right {
@@ -262,8 +245,8 @@ export default {
         /*padding: 5px 0;*/
         line-height: 40px;
         padding-left: 10px;
-        border: 1px solid #dfe6ec;
-        border-left: none;
+        border-left: 1px solid #dfe6ec;
+        /*border-left: none;*/
         border-bottom: none;
     }
     .mgr {
