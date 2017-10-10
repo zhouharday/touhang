@@ -1,12 +1,12 @@
 <template>
 <div class="baseInfo">
-    <tableHeader :data="dataTitle"></tableHeader>
+    <tableHeader :data="dataTitle" @add="editInvestorForm"></tableHeader>
     <div class="form_wrapper">
-        <investor-form :investorForm="baseInfo"></investor-form>
+        <investor-form :investorForm="baseInfo" :variable="variable"></investor-form>
         <el-row :gutter="10">
             <el-col :span="24" class="group">
-                <el-button type="info" class="btn" @click="handlerCancel">取消</el-button>
-                <el-button type="success" class="btn" @click="handlerConfirm">保存</el-button>
+                <el-button type="info" class="btn" @click="handlerCancel" :disabled="variable">取消</el-button>
+                <el-button type="success" :disabled="variable" class="btn" @click="handlerConfirm">保存</el-button>
             </el-col>
         </el-row>
     </div>
@@ -35,7 +35,8 @@ export default {
                 dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 id: JSON.parse(sessionStorage.getItem('userInfor')).id
             }],
-            baseInfo: {}
+            baseInfo: {},
+            variable: true
         }
     },
     methods: {
@@ -44,10 +45,12 @@ export default {
         handlerConfirm() {
             updateInvestor(this.baseInfo).then((res) => {
                 if(res.status == '200') {
-                    console.log(res)
                     this.$Message.success(res.data.message || '提交成功！')
                 }
             })
+        },
+        editInvestorForm() {
+            this.variable = !this.variable
         }
     },
     created() {

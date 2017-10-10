@@ -47,7 +47,8 @@
                     <el-col :span="12">
                         <el-form-item label="机构类型" :label-width="formLabelWidth" prop="orgType">
                             <el-select v-model="cooperativeInfo.orgType" style="width:100%">
-                                <el-option v-for="(item, index) of setOrgType" :key="item.id" :label="item.orgName"
+                                <el-option v-for="(item, index) of setOrgType"
+                                           :key="item.id" :label="item.dicName"
                                            :value="item.id">
                                 </el-option>
                             </el-select>
@@ -60,14 +61,14 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="联系电话" :label-width="formLabelWidth" prop="orgnNumber">
-                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgnNumber">
+                        <el-form-item label="联系电话" :label-width="formLabelWidth" prop="orgCnumber">
+                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgCnumber">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="公司地址" :label-width="formLabelWidth">
-                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgAddress">
+                            <el-input placeholder="请输入内容" v-model="cooperativeInfo.orgCaddress">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -91,7 +92,7 @@
     import deleteReminders from 'components/deleteReminders'
     import {
         getOrgList,
-        getAllOrgList,
+        cooperativeType,
         deleteOrg
     } from 'api/fund'
 
@@ -107,8 +108,8 @@
                     orgName: '',
                     orgType: '',
                     orgLinkman: '',
-                    orgnNumber: '',
-                    orgAddress: ''
+                    orgCnumber: '',
+                    orgCaddress: ''
                 },
                 headerInfo: {
                     btnGroup: [{
@@ -143,7 +144,7 @@
                         message: '请选择机构类型',
                         trigger: 'change'
                     }],
-                    orgnNumber: [{
+                    orgCnumber: [{
                         required: true,
                         message: '请输入数字',
                         trigger: 'change'
@@ -186,6 +187,15 @@
                             this.$http.post(this.api + '/organization/addOrganization', this.cooperativeInfo).then((response) => {
                                 if (response.status == '200') {
                                     this.$Message.success(response.data.message || '操作成功')
+                                    this.cooperativeInfo = {
+                                        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                                        orgName: '',
+                                        orgType: '',
+                                        orgLinkman: '',
+                                        orgCnumber: '',
+                                        orgCaddress: ''
+                                    }
+                                    this.getList()
                                 } else if (response.status == '9005') {
                                     return Promise.reject(error)
                                 }
@@ -204,6 +214,15 @@
                                 if (response.status == '200') {
                                     this.cooperativeOrg = false
                                     this.$Message.success(response.data.message || '操作成功')
+                                    this.cooperativeInfo = {
+                                        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                                        orgName: '',
+                                        orgType: '',
+                                        orgLinkman: '',
+                                        orgCnumber: '',
+                                        orgCaddress: ''
+                                    }
+                                    this.getList()
                                 } else {
                                     return Promise.reject(error)
                                 }
@@ -238,23 +257,16 @@
             },
             handleSizeChange(val) { // 下拉选择每页显示多少条数据
                 this.pageSize = val
-                getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
-                    if (response.data.status == '200') {
-                        this.totalPage = response.data.result.total
-                        this.teamData = response.data.result.list
-                    }
-                })
+                this.getList()
             },
             handleCurrentChange(val) { // 获取当前页码
                 this.page = val
-                getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
-                    if (response.data.status == '200') {
-                        this.totalPage = response.data.result.total
-                        this.teamData = response.data.result.list
-                    }
-                })
+                this.getList()
             },
             submitSearch() {
+                this.getList()
+            },
+            getList() {
                 getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
                     if (response.data.status == '200') {
                         this.totalPage = response.data.result.total
@@ -269,14 +281,13 @@
             })
         },
         created() {
-            getAllOrgList().then((res) => {
-                if (res.data.status == '200') {
+            cooperativeType().then((res) => {
+                if (res.status == '200') {
                     this.setOrgType = res.data.result
                 }
             })
             getOrgList(this.searchValue, this.page, this.pageSize).then((response) => {
-                if (response.data.status == '200') {
-                    console.log(response.data.result)
+                if (response.status == '200') {
                     this.totalPage = response.data.result.total
                     this.teamData = response.data.result.list
                 }
