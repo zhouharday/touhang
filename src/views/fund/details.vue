@@ -1,44 +1,44 @@
 <template>
 <div class="form">
-    <tabel-header :data="headerInfo_details" @method="disable(formDetails)" class="add_padding">
+    <tabel-header :data="headerInfo_details" @add="disable(formDetails)" class="add_padding">
     </tabel-header>
     <div class="formDetails">
-        <el-form ref="formDetails" :model="formDetails" label-width="120px">
+        <el-form ref="formDetails" :model="formDetails" :rules="rules" label-width="120px">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="基金名称">
-                        <el-input v-model="formDetails.fundName"></el-input>
+                    <el-form-item label="基金名称" prop="fundName">
+                        <el-input v-model="formDetails.fundName" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="基金编号">
-                        <el-input v-model="formDetails.fundNo"></el-input>
+                    <el-form-item label="基金编号" prop="fundNo">
+                        <el-input v-model="formDetails.fundNo" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="基金规模(元)">
-                        <el-input v-model="formDetails.fundScale"></el-input>
+                    <el-form-item label="基金规模(元)" prop="fundScale">
+                        <el-input v-model="formDetails.fundScale" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="管理类型">
-                        <el-select v-model="formDetails.manageTypeId" style="width:100%">
+                    <el-form-item label="管理类型" prop="manageTypeId">
+                        <el-select v-model="formDetails.manageTypeId" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of getManType" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="组织类型">
-                        <el-select v-model="formDetails.orgTypeId" style="width:100%">
+                    <el-form-item label="组织类型" prop="orgTypeId">
+                        <el-select v-model="formDetails.orgTypeId" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of OrgType" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="基金投向">
-                        <el-select v-model="formDetails.fundInvestId" style="width:100%">
+                    <el-form-item label="基金投向" prop="fundInvestId">
+                        <el-select v-model="formDetails.fundInvestId" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of fundInvestment" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -48,7 +48,7 @@
                     <el-form-item label="基金结构">
                         <el-row>
                             <el-col :span="6">
-                                <el-select v-model="formDetails.fundOrg" @change="selectStructure" style="width: 100%">
+                                <el-select v-model="formDetails.fundOrg" :disabled="formDetails.flag" @change="selectStructure" style="width: 100%">
                                     <el-option v-for="(item, index) of fundStructure" :key="item.id" :label="item.dicName" :value="item.id">
                                     </el-option>
                                 </el-select>
@@ -58,19 +58,19 @@
                                     <el-row>
                                         <el-col :span="7" :offset="1">
                                             <el-form-item class="itemStyle">
-                                                <el-input v-model="fundLevel.priority"></el-input>
+                                                <el-input v-model="fundLevel.priority" :disabled="formDetails.flag"></el-input>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="1" class="colon">:</el-col>
                                         <el-col :span="7">
                                             <el-form-item class="itemStyle">
-                                                <el-input v-model="fundLevel.intermediateStage"></el-input>
+                                                <el-input v-model="fundLevel.intermediateStage" :disabled="formDetails.flag"></el-input>
                                             </el-form-item>
                                         </el-col>
                                         <el-col :span="1" class="colon">:</el-col>
                                         <el-col :span="7">
                                             <el-form-item class="itemStyle">
-                                                <el-input v-model="fundLevel.generalLevel"></el-input>
+                                                <el-input v-model="fundLevel.generalLevel" :disabled="formDetails.flag"></el-input>
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
@@ -81,24 +81,24 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金期限">
-                        <el-input v-model="formDetails.fundTerm"></el-input>
+                        <el-input v-model="formDetails.fundTerm" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="成立日期">
-                        <el-date-picker v-model="formDetails.startDate" align="right" type="date" placeholder="选择成立日期" style="width:100%">
+                        <el-date-picker v-model="formDetails.startDate" align="right" type="date" placeholder="选择成立日期" :disabled="formDetails.flag" style="width:100%">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="到期日期">
-                        <el-date-picker v-model="formDetails.endDate" type="date" placeholder="选择日期" style="width:100%">
+                        <el-date-picker v-model="formDetails.endDate" :disabled="formDetails.flag" type="date" placeholder="选择日期" style="width:100%">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="业务部门">
-                        <el-select v-model="formDetails.businessDeptId" style="width:100%">
+                        <el-select v-model="formDetails.businessDeptId" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of businessDepartment" :key="item.id" :label="item.deptName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -106,7 +106,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="年天数">
-                        <el-select v-model="formDetails.yearsDaynum" style="width:100%">
+                        <el-select v-model="formDetails.yearsDaynum" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of days" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -114,29 +114,29 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="主要投资领域">
-                        <el-input v-model="formDetails.mainInvestField"></el-input>
+                        <el-input v-model="formDetails.mainInvestField" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="收益分配">
-                        <el-input v-model="formDetails.incomeDis"></el-input>
+                        <el-input v-model="formDetails.incomeDis" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="24">
                     <el-form-item label="备注">
-                        <el-input type="textarea" v-model="formDetails.fundRemarks"></el-input>
+                        <el-input type="textarea" v-model="formDetails.fundRemarks" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_MIS" @method="disable(formMIS)" class="add_padding"></tabel-header>
+    <tabel-header :data="headerInfo_MIS" @add="disable(formMIS)" class="add_padding"></tabel-header>
     <div class="formMIS">
         <el-form ref="formMIS" :model="formMIS" label-width="120px">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="基金管理人">
-                        <el-select v-model="formMIS.fundStratorId" style="width:100%">
+                        <el-select v-model="formMIS.fundStratorId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of managementCompany" :key="item.id" :label="item.companyName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -144,7 +144,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金托管人">
-                        <el-select v-model="formMIS.fundCustodianId" style="width:100%">
+                        <el-select v-model="formMIS.fundCustodianId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -152,7 +152,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金监理人">
-                        <el-select v-model="formMIS.fundSuperintId" style="width:100%">
+                        <el-select v-model="formMIS.fundSuperintId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -160,7 +160,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金监管人">
-                        <el-select v-model="formMIS.fundSupervisorId" style="width:100%">
+                        <el-select v-model="formMIS.fundSupervisorId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -168,7 +168,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金投资顾问">
-                        <el-select v-model="formMIS.fundAdvisorId" style="width:100%">
+                        <el-select v-model="formMIS.fundAdvisorId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -176,7 +176,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="第三方合作机构">
-                        <el-select v-model="formMIS.fundOrganizationId" style="width:100%">
+                        <el-select v-model="formMIS.fundOrganizationId" :disabled="formMIS.flag" style="width:100%">
                             <el-option v-for="(item, index) of getOrgList" :key="item.id" :label="item.orgName" :value="item.id">
                             </el-option>
                         </el-select>
@@ -185,26 +185,26 @@
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_Registration" @method="disable(formRegistration)" class="add_padding" v-show="showOrhiddren">
+    <tabel-header :data="headerInfo_Registration" @add="disable(formRegistration)" class="add_padding" v-show="showOrhiddren">
     </tabel-header>
     <div class="formRegistration" v-show="showOrhiddren">
         <el-form ref="formRegistration" :model="formRegistration" label-width="120px">
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="注册日期">
-                        <el-date-picker v-model="formRegistration.regDate" align="right" type="date" placeholder="注册日期" style="width:100%">
+                        <el-date-picker v-model="formRegistration.regDate" :disabled="formRegistration.flag" align="right" type="date" placeholder="注册日期" style="width:100%">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="注册地">
-                        <el-input v-model="formRegistration.regAddress">
+                        <el-input v-model="formRegistration.regAddress" :disabled="formRegistration.flag">
                         </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="是否备案">
-                        <el-select v-model="formRegistration.recordStatus" style="width:100%;">
+                        <el-select v-model="formRegistration.recordStatus" :disabled="formRegistration.flag" style="width:100%;">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
@@ -212,35 +212,35 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="备案日期">
-                        <el-date-picker v-model="formRegistration.recordDate" align="right" type="date" placeholder="注册日期" style="width:100%">
+                        <el-date-picker v-model="formRegistration.recordDate" :disabled="formRegistration.flag" align="right" type="date" placeholder="注册日期" style="width:100%">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="备案号">
-                        <el-input v-model="formRegistration.recordNo">
+                        <el-input v-model="formRegistration.recordNo" :disabled="formRegistration.flag">
                         </el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_Accountinfo" @method="disable(formAccountinfo)" class="add_padding">
+    <tabel-header :data="headerInfo_Accountinfo" @add="disable(formAccountinfo)" class="add_padding">
     </tabel-header>
     <el-table :data="formAccountInfo" style="width: 100%">
         <el-table-column prop="accountTypeName" label="账户类型">
         </el-table-column>
-        <el-table-column prop="username" label="户名">
+        <el-table-column label="户名">
             <template scope="scope">
                 <input v-model="scope.row.username" placeholder="请输入内容" style="border: none;"></input>
             </template>
         </el-table-column>
-        <el-table-column prop="openingBank" label="开户行">
+        <el-table-column label="开户行">
             <template scope="scope">
                 <input v-model="scope.row.openingBank" placeholder="请输入内容" style="border: none;"></input>
             </template>
         </el-table-column>
-        <el-table-column prop="accountNumber" label="账号">
+        <el-table-column label="账号">
             <template scope="scope">
                 <input v-model="scope.row.accountNumber" placeholder="请输入内容" style="border: none;"></input>
             </template>
@@ -339,7 +339,48 @@ export default {
                 id: 2,
                 dicName: '结构化'
             }],
-            businessDepartment: []
+            businessDepartment: [],
+            rules: {
+                fundName: [{
+                        required: true,
+                        message: '请输入基金名称',
+                        trigger: 'blur'
+                    },
+                    {
+                        min: 2,
+                        max: 20,
+                        message: '长度在 3 到 20 个字符',
+                        trigger: 'blur'
+                    }
+                ],
+                fundNo: [{
+                    type: 'string',
+                    required: true,
+                    message: '基金编号不能为空',
+                    trigger: 'change'
+                }],
+                fundScale: [{
+                    type: 'string',
+                    required: true,
+                    message: '基金规模必添',
+                    trigger: 'change'
+                }],
+                manageTypeId: [{
+                    required: true,
+                    message: '请选择管理类型',
+                    trigger: 'change'
+                }],
+                orgTypeId: [{
+                    required: true,
+                    message: '请选择组织类型',
+                    trigger: 'change'
+                }],
+                fundInvestId: [{
+                    required: true,
+                    message: '请选择基金投向',
+                    trigger: 'change'
+                }]
+            }
         }
     },
     methods: {
