@@ -5466,10 +5466,6 @@ code, kbd, pre, samp {
         display: block;
         width: 66.66666667%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
     .ivu-col-lg-push-16 {
         left: 66.66666667%
     }
@@ -5521,10 +5517,6 @@ code, kbd, pre, samp {
         display: block;
         width: 54.16666667%
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
     .ivu-col-lg-push-13 {
         left: 54.16666667%
     }
@@ -6634,11 +6626,11 @@ code, kbd, pre, samp {
 .ivu-btn>.ivu-icon+span, .ivu-btn>span+.ivu-icon {
     margin-left: 4px
 }
-
+/*本色为#57a3f3*/
 .ivu-btn-primary {
     color: #fff;
-    background-color: #2d8cf0;
-    border-color: #2d8cf0
+    background-color: #F05E5E;
+    border-color: #F05E5E
 }
 
 .ivu-btn-primary>a:only-child {
@@ -6654,11 +6646,11 @@ code, kbd, pre, samp {
     right: 0;
     background: 0 0
 }
-
+/*本色为#57a3f3*/
 .ivu-btn-primary:hover {
     color: #fff;
-    background-color: #57a3f3;
-    border-color: #57a3f3
+    background-color: #F05E5E;
+    border-color: #F05E5E
 }
 
 .ivu-btn-primary:hover>a:only-child {
@@ -6677,8 +6669,8 @@ code, kbd, pre, samp {
 
 .ivu-btn-primary.active, .ivu-btn-primary:active {
     color: #f2f2f2;
-    background-color: #2b85e4;
-    border-color: #2b85e4
+    background-color: #F05E5E;
+    border-color: #F05E5E
 }
 
 .ivu-btn-primary.active>a:only-child, .ivu-btn-primary:active>a:only-child {
@@ -6762,9 +6754,9 @@ code, kbd, pre, samp {
 }
 
 .ivu-btn-ghost {
-    color: #495060;
+    color: #F05E5E;
     background-color: transparent;
-    border-color: #dddee1
+    border-color: #F05E5E;
 }
 
 .ivu-btn-ghost>a:only-child {
@@ -6840,11 +6832,10 @@ code, kbd, pre, samp {
     right: 0;
     background: 0 0
 }
-
 .ivu-btn-ghost:hover {
-    color: #57a3f3;
+    color: #f05e5e;
     background-color: transparent;
-    border-color: #57a3f3
+    border-color: #f05e5e
 }
 
 .ivu-btn-ghost:hover>a:only-child {
@@ -6862,9 +6853,9 @@ code, kbd, pre, samp {
 }
 
 .ivu-btn-ghost.active, .ivu-btn-ghost:active {
-    color: #2b85e4;
+    color: #F05E5E;
     background-color: transparent;
-    border-color: #2b85e4
+    border-color: #F05E5E
 }
 
 .ivu-btn-ghost.active>a:only-child, .ivu-btn-ghost:active>a:only-child {
@@ -7001,11 +6992,11 @@ code, kbd, pre, samp {
     right: 0;
     background: 0 0
 }
-
+/*本色为 color: #495060;border-color: transparent*/
 .ivu-btn-text {
-    color: #495060;
+    color: #F05E5E;
     background-color: transparent;
-    border-color: transparent
+    border-color: #F05E5E
 }
 
 .ivu-btn-text>a:only-child {
@@ -7103,9 +7094,9 @@ code, kbd, pre, samp {
 }
 
 .ivu-btn-text:hover {
-    color: #57a3f3;
+    color: #F05E5E;
     background-color: transparent;
-    border-color: transparent
+    border-color: #F05E5E
 }
 
 .ivu-btn-text:hover>a:only-child {
@@ -7123,9 +7114,9 @@ code, kbd, pre, samp {
 }
 
 .ivu-btn-text.active, .ivu-btn-text:active {
-    color: #2b85e4;
+    color: #F05E5E;
     background-color: transparent;
-    border-color: transparent
+    border-color: #F05E5E;
 }
 
 .ivu-btn-text.active>a:only-child, .ivu-btn-text:active>a:only-child {
@@ -7312,8 +7303,8 @@ code, kbd, pre, samp {
 
 .ivu-btn-error {
     color: #fff;
-    background-color: #ed3f14;
-    border-color: #ed3f14
+    background-color: #F05E5E;
+    border-color: #F05E5E
 }
 
 .ivu-btn-error>a:only-child {
@@ -7352,8 +7343,8 @@ code, kbd, pre, samp {
 
 .ivu-btn-error.active, .ivu-btn-error:active {
     color: #f2f2f2;
-    background-color: #e13c13;
-    border-color: #e13c13
+    background-color: #F05E5E;
+    border-color: #F05E5E
 }
 
 .ivu-btn-error.active>a:only-child, .ivu-btn-error:active>a:only-child {
@@ -14065,12 +14056,9 @@ span.ivu-date-picker-cells-cell-disabled.ivu-date-picker-cells-cell-selected em 
 .ivu-upload-list-file:hover>span {
     color: #2d8cf0
 }
-
-<<<<<<< HEAD
 .ivu-upload-list-file:hover > span i {
-    color: #495060;}
-=======
->>>>>>> 913c054a3abb9ed981345156ec93a014acb172a8
+    color: #495060;
+}
 .ivu-upload-list-file:hover>span i {
     color: #495060
 }

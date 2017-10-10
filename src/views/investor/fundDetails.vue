@@ -15,11 +15,11 @@
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
-              <el-button size="small" type="default"
+              <el-button size="mini" type="default"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button size="small" type="danger"
+              <el-button size="mini" type="danger"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>
