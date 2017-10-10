@@ -75,6 +75,7 @@ export default {
 @import '../../common/styles/mixin.less';
 .baseInfo {
     .base-style();
+    padding: 0;
     .form_wrapper {
         padding: 24px 0;
         .changeWid {

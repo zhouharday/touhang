@@ -2,7 +2,7 @@
 <div class="fund">
     <div class="title">
         <div class="left">
-            <span class="desc">{{title}}</span>
+            <span class="desc">{{formDetails.fundName}}</span>
         </div>
         <div class="right">
             <el-button type="danger" @click="changeStep">下一阶段</el-button>
@@ -11,15 +11,12 @@
         </div>
     </div>
     <el-row class="step">
-        <el-col :span="8" class="step_one step_span" :class="{'step_span_change step_one_change':!first_step}">
-            <span>{{step_one}}</span>
-        </el-col>
-        <el-col :span="8" class="step_second step_span" :class="{'step_span_change step_second_change':second_step}">
-            <span>{{step_second}}</span>
-        </el-col>
-        <el-col :span="8" class="step_third step_span" :class="{'step_span_change step_third_change':third_step}">
-            <span>{{step_third}}</span>
-        </el-col>
+        <div class="step_lists" v-for="(step, index) of steps" :key="index" :class="{step_one: index == '0',
+                     step_third: index == steps.length-1,
+                     step_second:index > 0 && index < steps.length-1,
+                     current_border: step.id == currentStep}">
+            <span class="step_content">{{step.stageName}}</span>
+        </div>
     </el-row>
     <div class="picture">
         <div class="img_wrapper">
@@ -29,9 +26,11 @@
             <span class="prompt">{{prompt}}</span>
             <div class="item_wrapper">
                 <div v-for="(item, index) in module" class="item" :key="item.index">
-                    <span class="count">{{item.count}}</span>
-                    <p class="desc">{{item.desc}}</p>
-                    <span class="state" :class="{complete:item.state === true}">{{item.info}}</span>
+                    <span class="count">{{index + 1}}</span>
+                    <p class="desc">{{item.title}}</p>
+                    <span class="state" v-if="item.type == '1'">立即上传</span>
+                    <span class="state" v-if="item.type == '2'">立即申请</span>
+                    <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">查看进度</span>
                 </div>
             </div>
         </div>
@@ -97,37 +96,24 @@ import {
     selectProjectOrFundDocument,
     getFunAppraisement,
     getFundFeeList,
-    getFundApprList
+    getFundApprList,
+    selectStageUploadDocument,
+    slectStageAllocation,
+    nextStage
 } from 'api/fund'
-
+const NUM = 2
 export default {
     data() {
         return {
-            title: '双子金服投资项目',
-            step_one: '基金设立',
-            step_second: '运营管理',
-            step_third: '基金退出',
-            first_step: true,
-            second_step: false,
-            third_step: false,
-            suspend: false,
+            steps: [],
+            currentStep: '' || sessionStorage.getItem('currentStep'),
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
             btnText: '中止',
             modal_loading: false,
             prompt: '任务助手小双温馨提示:',
-            module: [{
-                count: 1,
-                desc: '上传基金发起概要',
-                state: true,
-                info: '已完成'
-            }, {
-                count: 2,
-                desc: '进行基金设立申请',
-                state: false,
-                info: '提交申请'
-            }],
+            module: [],
             tableData: {},
             activeName: 'details',
             showOrhiddren: true,
@@ -244,15 +230,34 @@ export default {
         },
         // 转至下一阶段 的方法
         changeStep() {
-            if (this.first_step) {
-                this.first_step = !this.first_step;
-                this.second_step = !this.second_step;
-                this.suspend = true;
-            } else if (this.second_step) {
-                this.second_step = !this.second_step;
-                this.third_step = !this.third_step;
-            }
+            nextStage(this.$route.params.id, NUM, this.currentStep).then((res) => {
+                if (res.status == '200') {
+                    if (res.data.status == '9021') {
+                        this.$Message.error(res.data.message || '操作失败，有未完成的任务')
+                    } else if (res.data.status == '9022') {
+                        this.$Message.error(res.data.message || '请勿重复操作')
+                    } else if (res.data.status == '200') {
+                        this.getDataStageAddUpload()
+                    }
+                }
+            })
         },
+        getDataStageAddUpload() { // 获取小双，阶段数据
+            selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
+                if (res.status == '200') {
+                    this.module = res.data.result
+                    // console.log('小双' + res)
+                    this.currentStep = res.data.stageId
+                    sessionStorage.setItem('currentStep', res.data.stageId)
+                }
+            })
+            slectStageAllocation().then((res) => {
+                if (res.status == '200') {
+                    this.steps = res.data.result
+                    // console.log('阶段' + res)
+                }
+            })
+        }
     },
     mounted() {
         this.$nextTick(() => {
@@ -262,6 +267,7 @@ export default {
                 }
             })
         })
+        this.getDataStageAddUpload()
     },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
@@ -374,20 +380,28 @@ export default {
         width: 100%;
         height: 52px;
         margin-top: 24px;
-        .step_span {
+        display: flex;
+        .step_lists {
+            flex: 1;
             line-height: 52px;
             text-align: center;
-            width: 32%;
             height: 52px;
-            float: left;
             border: 1px solid #000;
             position: relative;
         }
-        .step_span_change {
+        .current_border {
             border: 1px solid #f05e5e;
+            &::after {
+                border-color: red red transparent transparent;
+            }
+            &::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+            span {
+                color: #f05e5e;
+            }
         }
         .step_one {
-            border: 1px solid red;
             &::after {
                 content: '';
                 width: 36px;
@@ -402,15 +416,8 @@ export default {
                 z-index: 1;
             }
         }
-        .step_one_change {
-            color: #000;
-            border: 1px solid #000;
-            &::after {
-                border-color: black black transparent transparent;
-            }
-        }
         .step_second {
-            margin: 0 2%;
+            margin-left: 2%;
             &::after {
                 content: '';
                 width: 36px;
@@ -437,16 +444,8 @@ export default {
                 transform: rotate(45deg);
             }
         }
-        .step_second_change {
-            color: #f05e5e;
-            &::after {
-                border-color: #f05e5e #f05e5e transparent transparent;
-            }
-            &::before {
-                border-color: #f05e5e #f05e5e transparent transparent;
-            }
-        }
         .step_third {
+            margin-left: 2%;
             &::before {
                 content: '';
                 width: 36px;
@@ -458,12 +457,6 @@ export default {
                 border: 1px solid;
                 border-color: #000 #000 transparent transparent;
                 transform: rotate(45deg);
-            }
-        }
-        .step_third_change {
-            color: #f05e5e;
-            &::before {
-                border-color: #f05e5e #f05e5e transparent transparent;
             }
         }
     }

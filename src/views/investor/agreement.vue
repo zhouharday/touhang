@@ -60,7 +60,7 @@ export default {
                 id: '',
                 agreementName: '',
                 structuralLevelId: '',
-                investorName: this.$store.state.investor.investorName,
+                investorName: this.$store.state.investor.investorName || sessionStorage.getItem('INVESTORNAME'),
                 inverstorId: this.$route.params.userId,
                 fundId: '',
                 subscribeAmount: '',

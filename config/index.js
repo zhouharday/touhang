@@ -29,8 +29,8 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api':{
-                target:'http://192.168.0.122:9091',//平台
-                // target:'http://192.168.0.198:9091',
+                // target:'http://192.168.0.154:9091',//平台
+                target:'http://192.168.0.198:9091',
                 // target: 'http://zhqwjmw.eicp.net'
                 changeOrigin:true,
                 secure: false,
