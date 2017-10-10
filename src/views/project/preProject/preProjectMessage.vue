@@ -1,236 +1,221 @@
 <template>
-    <div class="preProjectMessage">
-        <div class="title">
-            <div class="left">
-                <span class="desc">{{title}}</span>
-            </div>
-            <div class="right">
-                <el-button type="danger" @click="changeStep">下一阶段</el-button>
-                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
-                </el-button>
-            </div>
+<div class="preProjectMessage">
+    <div class="title">
+        <div class="left">
+            <span class="desc">{{title}}</span>
         </div>
-        <el-row class="step">
-            <el-col :span="4" class="step_first step_span" :class="{'step_span_change step_first_change':!first_step}">
-                <span>{{step_first}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':second_step}">
-                <span>{{step_second}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':third_step}">
-                <span>{{step_third}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fourth_step}">
-                <span>{{step_fourth}}</span>
-            </el-col>
-            <el-col :span="4" class="step_second step_span" :class="{'step_span_change step_second_change':fiveth_step}">
-                <span>{{step_fiveth}}</span>
-            </el-col>
-
-            <el-col :span="4" class="step_third step_span" :class="{'step_span_change step_third_change':sixth_step}">
-                <span>{{step_sixth}}</span>
-            </el-col>
-        </el-row>
-        <div class="picture">
-            <div class="img_wrapper">
-                <img src="/static/img/double.png">
-            </div>
-            <!-- 小双助手 -->
-            <div class="prompt_message">
-                <span class="prompt">{{prompt}}</span>
-                <div class="item_wrapper">
-                    <div class="item" v-for="(item,index) in module" :key="item.index">
-                        <span class="count">{{item.count}}</span>
-                        <p class="desc">{{item.desc}}</p>
-                        <!-- 立即上传 -->
-                        <Upload v-show="index == 0" action="//jsonplaceholder.typicode.com/posts/">
-                            <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
-                        </Upload>
-                        <!-- 发起申请等 对话框 -->
-                        <el-button v-show="index != 0" type="text" class="state" @click="openDialog(index)">
-                            {{item.info}}
-                        </el-button>
-                        <!-- <el-button v-show="index != 0" type="text" :disabled="item.state" :class="{ complete:item.state === true,state:item.state === false}" @click="applyModal= true">
-                                                                                                                                                                        {{item.info}}
-                                                                                                                                                                       </el-button> -->
-                    </div>
+        <div class="right">
+            <el-button type="danger" @click="changeStep">下一阶段</el-button>
+            <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
+            </el-button>
+        </div>
+    </div>
+    <div class="step">
+        <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
+             'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+             'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+             'step_third':index==(stepLists.length-1)}">
+            <span>{{item.stageName}}</span>
+        </div>
+    </div>
+    <div class="picture">
+        <div class="img_wrapper">
+            <img src="/static/img/double.png">
+        </div>
+        <!-- 小双助手 -->
+        <div class="prompt_message">
+            <span class="prompt">{{prompt}}</span>
+            <div class="item_wrapper">
+                <div class="item" v-for="(item,index) in module" :key="item.index">
+                    <span class="count">{{index +1}}</span>
+                    <p class="desc" v-if="item.type == 1">{{item.title}}</p>
+                    <p class="desc" v-if="item.type == 2">{{item.title}}</p>
+                    <p class="desc" v-if="item.type == 3">{{item.title}}</p>
+                    <span v-if="item.status == 1" class="state">已完成</span>
+                    <!-- 立即上传 -->
+                    <Upload v-if="item.type == 1 && item.status == 0" action="http://192.168.0.198:9091/files/upload">
+                        <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
+                    </Upload>
+                    <!-- 发起申请对话框 -->
+                    <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
+                    <!-- 查看进度对话框 -->
+                    <el-button v-if="item.type == 3 && item.status == 0" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
                 </div>
             </div>
         </div>
-        <div class="tabs">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                        <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                        </detail-form>
-                    </detail-form>
-                    <table-form></table-form>
-                </el-tab-pane>
-                <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
-                    </team-table>
-                </el-tab-pane>
+    </div>
+    <div class="tabs">
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="详情" name="details" class="tab_list">
+                <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                </detail-form>
+                <table-form :memberData="memberData" :structureData="structureData"></table-form>
+            </el-tab-pane>
+            <el-tab-pane label="团队" name="team" class="tab_list">
+                <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
+                </team-table>
+            </el-tab-pane>
 
-                <!--<el-tab-pane label="工商信息" name="industry" class="tab_list">-->
-                <!--<industry-form :industryForm="industryForm">-->
-                <!--</industry-form>-->
-                <!--</el-tab-pane>-->
+            <!--<el-tab-pane label="工商信息" name="industry" class="tab_list">-->
+            <!--<industry-form :industryForm="industryForm">-->
+            <!--</industry-form>-->
+            <!--</el-tab-pane>-->
 
-                <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form :proId="projectId"></record-form>
-                </el-tab-pane>
-                <el-tab-pane label="审批" name="approve" class="tab_list">
-                    <approve-table></approve-table>
-                </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
-                </el-tab-pane>
-                <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
-                </el-tab-pane>
-                <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table :proId="projectId"></manage-table>
-                </el-tab-pane>
-                <el-tab-pane label="退出" name="outing" class="tab_list">
-                    <outing-form></outing-form>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
-        <!-- 中止确认弹框 -->
-        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
-        </delete-reminders>
-        <!-- 发起申请 对话框-->
+            <el-tab-pane label="记录" name="record" class="tab_list">
+                <record-form :proId="projectId"></record-form>
+            </el-tab-pane>
+            <el-tab-pane label="审批" name="approve" class="tab_list">
+                <approve-table></approve-table>
+            </el-tab-pane>
+            <el-tab-pane label="文档" name="file" class="tab_list">
+                <file-table :proId="projectId" ></file-table>
+            </el-tab-pane>
+            <el-tab-pane label="风险登记" name="risk" class="tab_list">
+                <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
+            </el-tab-pane>
+            <el-tab-pane v-if="false" label="管理" name="manage" class="tab_list">
+                <manage-table :proId="projectId"></manage-table>
+            </el-tab-pane>
+            <el-tab-pane v-if="false" label="退出" name="outing" class="tab_list">
+                <outing-form></outing-form>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+    <!-- 中止确认弹框 -->
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
+    </delete-reminders>
+    <!-- 发起申请 对话框-->
 
-        <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms>
-        <div class="applyBox">
-            <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-                <el-form :model="applyForm" ref="applyForm" label-width="100px">
+    <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms>
+    <div class="applyBox">
+        <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
+            <el-form :model="applyForm" ref="applyForm" label-width="100px">
+                <el-row>
+                    <el-col>
+                        <el-form-item label="标题" prop="name">
+                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="申请人" prop="person">
+                            <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="申请日期" prop="date">
+                            <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="备注" prop="notes">
+                            <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="考察报告" prop="appendix">
+                            <!-- action 上传的地址，必填 -->
+                            <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                <div style="padding: 20px 0">
+                                    <Icon type="ios-cloud-upload" size="52"></Icon>
+                                    <p>点击或将文件拖拽到这里上传</p>
+                                </div>
+                            </Upload>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="选择审批人" prop="date">
+                            <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
+                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer" style="text-align:center">
+                <el-button type="danger" @click="applyModal= false">提 交</el-button>
+            </div>
+        </el-dialog>
+    </div>
+    <!-- 查看进度 对话框 -->
+    <div class="progressBox">
+        <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
+            <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
+            <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
+                <el-table-column prop="node" label="节点" align="center">
+                </el-table-column>
+                <el-table-column prop="operator" label="处理人" align="center">
+                </el-table-column>
+                <el-table-column prop="conclusion" label="结论" align="center">
+                </el-table-column>
+                <el-table-column prop="startingTime" label="开始日期" align="center">
+                </el-table-column>
+                <el-table-column prop="time" label="用时" align="center">
+                </el-table-column>
+            </el-table>
+            <div>
+                <div class="title_f" style="background:#2a3142;color:#fff">
+                    <div class="desc">
+                        <span>申请详情</span>
+                    </div>
+                </div>
+                <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
                     <el-row>
                         <el-col>
                             <el-form-item label="标题" prop="name">
-                                <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                                <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="申请人" prop="person">
-                                <el-input v-model="applyForm.person" placeholder="当前用户" auto-complete="off" disabled></el-input>
+                                <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="申请日期" prop="date">
-                                <el-input v-model="applyForm.date" placeholder="当前日期" auto-complete="off" disabled></el-input>
+                                <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="备注" prop="notes">
-                                <el-input type="textarea" :rows="2" v-model="applyForm.notes" auto-complete="off">
+                                <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col>
-                            <el-form-item label="考察报告" prop="appendix">
-                                <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="applyForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
+                        <el-col :span="8">
+                            <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
+                                <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
+                                </el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col>
-                            <el-form-item label="选择审批人" prop="date">
-                                <el-select v-model="applyForm.auditor " filterable placeholder="请选择" style="width: 50%">
-                                    <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
+                        <el-col :span="1">
+                            <div style="text-align:center;line-height:35px;">
+                                <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
+                            </div>
                         </el-col>
                     </el-row>
                 </el-form>
-                <div slot="footer" class="dialog-footer" style="text-align:center">
-                    <el-button type="danger" @click="applyModal= false">提 交</el-button>
-                </div>
-            </el-dialog>
-        </div>
-        <!-- 查看进度 对话框 -->
-        <div class="progressBox">
-            <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
-                <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
-                <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
-                    <el-table-column prop="node" label="节点" align="center">
-                    </el-table-column>
-                    <el-table-column prop="operator" label="处理人" align="center">
-                    </el-table-column>
-                    <el-table-column prop="conclusion" label="结论" align="center">
-                    </el-table-column>
-                    <el-table-column prop="startingTime" label="开始日期" align="center">
-                    </el-table-column>
-                    <el-table-column prop="time" label="用时" align="center">
-                    </el-table-column>
-                </el-table>
-                <div>
-                    <div class="title_f" style="background:#2a3142;color:#fff">
-                        <div class="desc">
-                            <span>申请详情</span>
-                        </div>
-                    </div>
-                    <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
-                        <el-row>
-                            <el-col>
-                                <el-form-item label="标题" prop="name">
-                                    <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="申请人" prop="person">
-                                    <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="申请日期" prop="date">
-                                    <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col>
-                                <el-form-item label="备注" prop="notes">
-                                    <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
-                                    <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="1">
-                                <div style="text-align:center;line-height:35px;">
-                                    <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
-                                </div>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </div>
-                <div>
-                    <div class="title_f" style="background:#2a3142;color:#fff">
-                        <div class="desc">
-                            <span>意见汇总</span>
-                        </div>
-                    </div>
-                    <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
-                        <p class="comment_left">
-                            <span>{{item.comment}}</span>
-                        </p>
-                        <p class="comment_right">
-                            <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
-                            <span>{{item.note}}</span>
-                        </p>
+            </div>
+            <div>
+                <div class="title_f" style="background:#2a3142;color:#fff">
+                    <div class="desc">
+                        <span>意见汇总</span>
                     </div>
                 </div>
-            </el-dialog>
-        </div>
+                <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
+                    <p class="comment_left">
+                        <span>{{item.comment}}</span>
+                    </p>
+                    <p class="comment_right">
+                        <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
+                        <span>{{item.note}}</span>
+                    </p>
+                </div>
+            </div>
+        </el-dialog>
     </div>
+</div>
 </template>
 
 
@@ -246,15 +231,41 @@ import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
 import deleteReminders from 'components/deleteReminders'
-import { getPreDetail } from 'api/projectPre';
-import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+import {
+    getPreDetail,
+    slectAllStage,
+    getStageUploadDocument,
+    nextStage,
+    suspendInvestProject
+} from 'api/projectPre';
+import {
+    getProjectUsers
+} from 'api/projectSys';
+import {
+    queryList
+} from 'api/fund'
 
 const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 
 export default {
     data() {
-        return {
+        return {            
+            stepLists: [
+                // { step: '考察储备' ,
+                // flag: true
+                // },
+                // { step: '立项会' ,
+                // flag: false},
+                // { step: '尽职调查' ,
+                // flag: false},
+                // { step: '管理' ,
+                // flag: false},
+                // { step: '退出',
+                // flag: false }
+            ],
             projectId: '',
+            investProjectId: '',
+            stageId: '',
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
@@ -269,7 +280,7 @@ export default {
             suspend: false,
             applyModal: false,
             progressModal: false,
-            title: '双子金服投资项目',
+            title: '',
             step_first: '考察储备',
             step_second: '立项会',
             step_third: '尽职调查',
@@ -278,36 +289,29 @@ export default {
             step_sixth: '退出',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
-            proUsers: [],   // 项目用户列表
-            proRoles: [],   // 项目角色列表
+            proUsers: [], // 项目用户列表
+            proRoles: [], // 项目角色列表
             module: [{
-                count: 1,
-                desc: '上传项目考察报告',
-                state: false,
-                info: '立即上传'
+                id: '11111',
+                title: '项目考察报告',
+                status: 0,
+                type: 1
             }, {
-                count: 2,
-                desc: '进行保密协议申请',
-                state: false,
-                info: '发起申请'
+                id: '22222',
+                title: '保密协议（一）',
+                status: 0,
+                type: 2
             }, {
-                count: 3,
-                desc: '您的保密协议正在申请中',
-                state: true,
-                info: '查看进度'
+                id: '3333',
+                title: '保密协议（二）',
+                status: 0,
+                type: 3
             }],
-            basicForm: {
-                baseInfo: '基本信息',
-                flag: true
-            },
-            companyForm: {
-                baseInfo: '企业信息',
-                flag: true
-            },
-            capitalForm: {
-                baseInfo: '投资信息',
-                flag: true
-            },
+            basicForm: {}, // 基本信息
+            companyForm: {}, // 企业信息
+            memberData: [], // 董事会成员
+            structureData: [], // 股权结构
+            capitalForm: {}, // 投资信息
             industryForm: {
                 baseInfo: '工商信息',
                 flag: true
@@ -320,7 +324,7 @@ export default {
                 appendix: '',
                 auditor: ''
             },
-            progressTable: [//查看进度表单 节点table
+            progressTable: [ //查看进度表单 节点table
                 {
                     node: '发起申请',
                     operator: '管理员 2017/8/15 16:25:14',
@@ -376,12 +380,21 @@ export default {
         outingForm
     },
     created() {
+        this.investProjectId = this.$route.params.investProjectId;
         this.init();
+    },
+    watch: {
+        '$route' (to, from) {
+            this.investProjectId = this.$route.params.investProjectId;
+            this.init()      //再次调起我要执行的函数
+         }
     },
     methods: {
         init() {
             this.initInfo();
             this.getPreProDetail();
+            this.getStageUploadDocument(); //获取当前阶段及任务小助
+            this.slectAllStage();
         },
         initInfo() {
             let href = window.location.href;
@@ -393,11 +406,18 @@ export default {
 
             // 项目用户和角色
             Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
-                // console.log('values: ', values);
+                console.log('values: ', values);
                 this.proUsers = values[0] || [];
                 this.proRoles = values[1] || [];
             }).catch(e => {
                 console.log('getProUsers() or getProRoles() exists error: ', e);
+            });
+        },
+        slectAllStage() {
+            slectAllStage().then(resp => {
+                this.stepLists = resp.data.result || [];
+                }).catch(e => {
+                console.log('getPreDetail() exists error: ', e);
             });
         },
         /**
@@ -406,9 +426,37 @@ export default {
          */
         getPreProDetail() {
             getPreDetail(this.projectId).then(resp => {
-                console.log('getPreProDetail: ', resp.data.result);
+                this.companyForm = Object.assign({}, {
+                    baseInfo: '企业信息',
+                    flag: true
+                }, resp.data.result.enterpriseInfo)
+                this.basicForm = Object.assign({}, {
+                    baseInfo: '基本信息',
+                    flag: true
+                }, resp.data.result.projectInfo)
+                this.capitalForm = Object.assign({}, {
+                    baseInfo: '投资信息',
+                    flag: true
+                }, resp.data.result.projectInvestmentInfo)
+                this.memberData = resp.data.result.listBoardMember
+                this.structureData = resp.data.result.listOwnershipStructure
+                this.title = resp.data.result.projectInfo.projectName
+
             }).catch(e => {
-                console.log('getProDetail() exists error: ', e);
+                console.log('getPreDetail() exists error: ', e);
+            });
+            // getStageUploadDocument()
+        },
+        getStageUploadDocument(){
+            let typeId = this.projectId;
+            let investProjectId = this.investProjectId;
+            let params = {typeId, investProjectId};
+            console.log("getStageUploadDocument****params****" + JSON.stringify(params));
+            getStageUploadDocument(params).then(resp => {
+                this.stageId = resp.data.stageId;
+                this.module = resp.data.result;
+            }).catch(e => {
+                console.log('getStageUploadDocument() exists error: ', e);
             });
         },
         /**
@@ -431,7 +479,9 @@ export default {
                             reject(data.message);
                         }
                         // console.log('users resp', resp);
-                    }).catch(reject);
+                    }).catch(e => {
+                        console.log('getProjectUsers() exists error: ', e);
+                    });
                 }
             });
         },
@@ -445,43 +495,60 @@ export default {
                 if (proRoles.length) {
                     resolve(proRoles);
                 } else {
-                    getProjectRoles({
-                        merchantId: this.merchantId,
-                        roleType: PROJECT_TYPE
-                    }).then(resp => {
+                    queryList(PROJECT_TYPE).then(resp => {
                         let data = resp.data;
-                        if (+data.status === 200) {
+                        if (data.status == '200') {
                             resolve(data.result);
                         } else {
                             reject(data.message);
                         }
                         // console.log('roles resp', resp);
-                    }).catch(reject);
+                    }).catch(e => {
+                        console.log('getProRoles() exists error: ', e);
+                    });
                 }
             });
         },
         // 转至下一阶段 的方法
         changeStep() {
-            if (this.first_step) {
-                this.first_step = !this.first_step;
-                this.second_step = !this.second_step;
-            } else if (this.second_step) {
-                this.second_step = !this.second_step;
-                this.third_step = !this.third_step;
-            } else if (this.third_step) {
-                this.third_step = !this.third_step;
-                this.fourth_step = !this.fourth_step;
-            } else if (this.fourth_step) {
-                this.fourth_step = !this.fourth_step;
-                this.fiveth_step = !this.fiveth_step;
-                this.suspend = true;
-            } else if (this.fiveth_step) {
-                this.fiveth_step = !this.fiveth_step;
-                this.sixth_step = !this.sixth_step;
-            }
+            let typeId = this.projectId, investProjectId = this.investProjectId, stageId = this.stageId;
+            let params = {
+                typeId,
+                investProjectId,
+                stageId
+            };
+            nextStage(params).then(resp => {
+                if(resp.data.status === "200"){
+                    if (this.first_step) {
+                        this.first_step = !this.first_step;
+                        this.second_step = !this.second_step;
+                    } else if (this.second_step) {
+                        this.second_step = !this.second_step;
+                        this.third_step = !this.third_step;
+                    } else if (this.third_step) {
+                        this.third_step = !this.third_step;
+                        this.fourth_step = !this.fourth_step;
+                    } else if (this.fourth_step) {
+                        this.fourth_step = !this.fourth_step;
+                        this.fiveth_step = !this.fiveth_step;
+                        this.suspend = true;
+                    } else if (this.fiveth_step) {
+                        this.fiveth_step = !this.fiveth_step;
+                        this.sixth_step = !this.sixth_step;
+                    }
+
+                    this.getStageUploadDocument();
+                }else{
+                    reject(data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
+
+
         },
         // 小双助手 打开不同的对话框
-        openDialog(index) {
+        openDialog(index, id) {
             if (index == 1) {
                 this.applyModal = true;
             } else if (index == 2) {
@@ -513,13 +580,29 @@ export default {
             }
             return '';
         },
+        //中止项目
         jumpPool() {
-            this.deleteReminders = !this.deleteReminders;
-            this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
+            console.log("investProjectId" + this.investProjectId);
+            suspendInvestProject(this.investProjectId).then(resp => {
+                if(resp.data.status === "200"){
+                    this.deleteReminders = !this.deleteReminders;
+                    this.addTab('项目池', '/home/projectPool', 'projectPool');
+                    this.$router.push({name: 'projectPool'});
+                }else{
+                    reject(data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
+
         },
         addTab(th, url, name) {
-            this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
+            this.$store.commit({
+                type: 'addTab',
+                title: th,
+                url: url,
+                name: name
+            });
         }
     }
 }
@@ -578,9 +661,9 @@ export default {
         .step_span_change {
             border: 1px solid #f05e5e;
         }
-        .step_first {
-            color: #F05E5E;
-            border: 1px solid #f05e5e;
+ .step_first {
+            color: #000;
+            border: 1px solid #000;
             &::after {
                 content: '';
                 width: 36px;
@@ -590,16 +673,16 @@ export default {
                 top: 7px;
                 right: -19px;
                 border: 1px solid;
-                border-color: #f05e5e #f05e5e transparent transparent;
+                border-color: #000 #000 transparent transparent;
                 transform: rotate(45deg);
                 z-index: 1;
             }
         }
         .step_first_change {
-            color: #000;
-            border: 1px solid #000;
+            color: #f05e5e;
+            border: 1px solid #f05e5e;
             &::after {
-                border-color: black black transparent transparent;
+                border-color: #f05e5e #f05e5e transparent transparent;
             }
         }
         .step_second {
@@ -725,7 +808,8 @@ export default {
                 }
             }
         }
-    } // 小双助手 查看进度对话框中的样式
+    }
+    // 小双助手 查看进度对话框中的样式
     .title_f {
         margin-top: 30px;
         width: 100%;
@@ -749,7 +833,7 @@ export default {
         .comment_left {
             width: 100px;
             margin-right: 150px;
-            text-align: center
+            text-align: center;
         }
         .comment_right {
             display: flex;

@@ -61,8 +61,8 @@
                                         </div>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="表单模型" align="center">
-                                    <template scope="scope" class="model">
+                                <el-table-column label="表单模型" align="center" class="model">
+                                    <template scope="scope">
                                         <span v-if="!scope.row.editFlag" @click="handleRouter(scope.row,scope.$index)">{{ scope.row.model
                                             }}</span>
                                         <span v-if="scope.row.editFlag" class="cell-edit-input">
