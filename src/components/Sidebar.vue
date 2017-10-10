@@ -117,9 +117,6 @@
                     <el-menu-item index="configuration" @click="addTab(title36, '/home/configuration', 'configuration')">
                         {{title36}}
                     </el-menu-item>
-                    <el-menu-item index="dictionary" @click="addTab(title23, '/home/dictionary', 'dictionary')">
-                        {{title23}}
-                    </el-menu-item>
                     <el-menu-item index="role" @click="addTab(title22, '/home/role', 'role')">
                         {{title22}}
                     </el-menu-item>
@@ -388,7 +385,7 @@ export default {
             title20: '部门管理',
             title21: '用户管理',
             title22: '企业权限',
-            title23: '数据字典',
+            // title23: '数据字典',
             title24: '项目权限',
             title25: '流程管理',
             title26: '流程设置',
