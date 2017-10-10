@@ -79,6 +79,7 @@ export default {
         handleEdit(index, row) {
             this.modelAgreement = true
             this.addOrModify = false
+            this.deleteReminders = false
             this.AgreementInfo = row
             this.AgreementInfo.registerDate = row.register_date
         },

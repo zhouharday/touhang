@@ -5,8 +5,8 @@
         <investor-form :investorForm="baseInfo"></investor-form>
         <el-row :gutter="10">
             <el-col :span="24" class="group">
-                <el-button type="info" class="btn" @click="handlerCancel">取消</el-button>
-                <el-button type="success" class="btn" @click="handlerConfirm">保存</el-button>
+                <el-button type="default" class="btn" @click="handlerCancel">取消</el-button>
+                <el-button type="danger" class="btn" @click="handlerConfirm">保存</el-button>
             </el-col>
         </el-row>
     </div>
