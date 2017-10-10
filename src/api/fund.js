@@ -58,6 +58,13 @@ export function FundInvestment() {
     }
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
+// 合作机构类型
+export function cooperativeType() {
+    const data = {
+        dicParent: "308"
+    }
+    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+}
 // 管理公司
 export function managementCompany() {
     const data = {

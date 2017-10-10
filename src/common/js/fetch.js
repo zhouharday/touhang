@@ -8,8 +8,8 @@ const service = axios.create({
     // baseURL:'http://192.168.0.122:9091',
     // baseURL: 'http://18f46963j4.iok.la',
     // baseURL:'http://192.168.0.103:9091',
-    baseURL: 'http://192.168.0.198:9091',
-    // baseURL: 'http://sdwlyxgs.imwork.net:16380',
+    // baseURL: 'http://192.168.0.198:9091',
+    baseURL: 'http://sdwlyxgs.imwork.net:16380',
     headers: {
         'Content-Type': 'application/json'
     }
@@ -31,8 +31,8 @@ service.interceptors.response.use(response => {
     return response
 }, error => {
     // console.log(error)
-    let response = error.response
-    let status = response.status
+    let response = error.response || ''
+    let status = response.status || ''
     if (Object.is(status, 401)) {
         Message.error('权限不足，请重新登录！')
         // localStorage.removeItem('token')
