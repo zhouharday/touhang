@@ -3,17 +3,11 @@
     <div class="title">
         <div class="left">
             <span class="desc">{{title}}</span>
-            <!-- <span class="icon">
-                             <Icon type="pause"></Icon>
-                        </span> -->
         </div>
         <div class="right">
             <el-button type="danger" @click="changeStep">下一阶段</el-button>
             <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
             </el-button>
-            <!-- <span class="restart">
-                             <Icon type="ios-play"></Icon>
-                        </span> -->
         </div>
     </div>
     <el-row class="step">
@@ -158,7 +152,8 @@ export default {
                 fundType: '',
                 mainInvestField: '',
                 incomeDis: '',
-                fundRemarks: ''
+                fundRemarks: '',
+                flag: true
             }, //详情 - 基本信息
             formMIS: {
                 fundStratorId: '', //基金管理人
@@ -166,14 +161,16 @@ export default {
                 fundSupervisorId: '', // 基金监管人
                 fundSuperintId: '', // 基金监理人
                 fundAdvisorId: '', // 基金投资顾问
-                fundOrganizationId: '' // 第三方合作机构
+                fundOrganizationId: '', // 第三方合作机构
+                flag: true
             }, //详情 - 管理信息
             formRegistration: {
                 regDate: '',
                 regAddress: '',
                 recordStatus: '',
                 recordDate: '',
-                recordNo: ''
+                recordNo: '',
+                flag: true
             }, //详情 - 备案注册
             formAccountInfo: [{
                 username: '',
@@ -260,7 +257,7 @@ export default {
     mounted() {
         this.$nextTick(() => {
             getFundApprList(this.$route.params.id).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     console.log(res)
                 }
             })
@@ -274,8 +271,12 @@ export default {
         })
         getMyFundDetails(this.$route.params.id).then((res) => {
             if (res.status == '200') {
-                this.formDetails = res.data.result.fundBaseInfo
-                this.formMIS = res.data.result.fundManageInfo
+                this.formDetails = Object.assign({}, {
+                    flag: true
+                }, res.data.result.fundBaseInfo)
+                this.formMIS = Object.assign({}, {
+                    flag: true
+                }, res.data.result.fundManageInfo)
                 this.formAccountInfo = res.data.result.fundAccinfo
                 if (res.data.result.fundBaseInfo.fundOrgValue) {
                     this.fundLevel.priority = res.data.result.fundBaseInfo.fundOrgValue.split(':')[0]
@@ -284,12 +285,14 @@ export default {
                 } else {
                     this.fundLevel.priority = ''
                     this.fundLevel.intermediateStage = '',
-                    this.fundLevel.generalLevel = ''
+                        this.fundLevel.generalLevel = ''
                 }
                 if (res.data.result.fundRegistration == null) {
                     return
                 } else {
-                    this.formRegistration = res.data.result.fundRegistration
+                    this.formRegistration = Object.assign({}, {
+                        flag: true
+                    }, res.data.result.fundRegistration)
                 }
             }
         })

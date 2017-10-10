@@ -6,36 +6,40 @@ import {
     OrganizationType,
     getMyFund,
     fundStage,
-    // fundStatus,
     getAllOrgList
-} from '../../api/fund'
+} from 'api/fund'
 const state = {
-    getManType: [{
-        dicName: '全部'
-    }, {
-        dicName: '受托管理'
-    }, {
-        dicName: '自我管理'
-    }, {
-        dicName: '顾问管理'
-    }], // 管理类型
+    getManType: [
+        {
+            dicName: '全部'
+        }, {
+            dicName: '受托管理'
+        }, {
+            dicName: '自我管理'
+        }, {
+            dicName: '顾问管理'
+        }
+    ], // 管理类型
     fundInvestment: [],
     managementCompany: [],
-    OrgType: [{
-        dicName: '全部'
-    }, {
-        dicName: '契约型'
-    }, {
-        dicName: '合伙型'
-    }, {
-        dicName: '公司型'
-    }], // 组织类型
+    OrgType: [
+        {
+            dicName: '全部'
+        }, {
+            dicName: '契约型'
+        }, {
+            dicName: '合伙型'
+        }, {
+            dicName: '公司型'
+        }
+    ], // 组织类型
     myFundList: {},
     // myFundDetails: {},
-    fundStage: [{
-        dicName: '全部'
-    }], // 基金阶段
-    // fundStatus: {},
+    fundStage: [
+        {
+            dicName: '全部'
+        }
+    ], // 基金阶段
     getOrgList: {}
 }
 
@@ -45,9 +49,7 @@ const getters = {
     managementCompany: state => state.managementCompany,
     OrgType: state => state.OrgType,
     myFundList: state => state.myFundList,
-    // myFundDetails: state => state.myFundDetails,
     fundStage: state => state.fundStage,
-    // fundStatus: state => state.fundStatus,
     getOrgList: state => state.getOrgList
 }
 
@@ -67,15 +69,9 @@ const mutations = {
     [types.GET_MYFUNDLIDT](state, myFundList) {
         state.myFundList = myFundList
     },
-    // [types.GET_MYFUNDDETAILS](state, myFundDetails) {
-    //     state.myFundDetails = myFundDetails
-    // },
     [types.GET_FUNDSTAGE](state, fundStage) {
         state.fundStage = fundStage
     },
-    // [types.GET_FUNDSTATUS](state, fundStatus) {
-    //     state.fundStatus = fundStatus
-    // },
     [types.GET_ALLORGLIST](state, getOrgList) {
         state.getOrgList = getOrgList
     }
@@ -118,8 +114,10 @@ const actions = {
         })
     },
     getFundLists({commit, dispatch}) {
-        return getMyFund().then((res) => {
+        const LIST_DATA = null
+        return getMyFund(1, 10, LIST_DATA, LIST_DATA, LIST_DATA, LIST_DATA, LIST_DATA).then((res) => {
             if (res.status == '200') {
+                console.log(res)
                 commit(types.GET_MYFUNDLIDT, res.data.result)
             }
         }).catch(err => {
