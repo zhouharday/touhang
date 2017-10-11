@@ -238,12 +238,13 @@ export function delDanger(id = undefined) {
 }
 
 // 添加风险追踪
-export function danger(params = {}) {
-	let { riskRegisterId, disposeResult, disposeUserId, recordDetails } = params;
+export function insertRiskFollower(params = {}) {
+	let { riskRegisterId, disposeResult, recordDetails } = params;
+	let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 	const data = {
         riskRegisterId, //风险ID: "727339b17e6c4752a5eea2794e149dfd",
         disposeResult, //1:处理中 2：已完成: 1,
-        disposeUserId, //创建人ID: "727339b17e6c4752a5eea2794e149dfd",
+        disposeUserId: userId, //创建人ID: "727339b17e6c4752a5eea2794e149dfd",
         recordDetails //汇报内容: "测试风险跟踪"
 	}
 	return service({url: '/riskRegister/insertRiskFollower', method: 'post', data});
@@ -251,19 +252,21 @@ export function danger(params = {}) {
 
 ////////////////////  费用记录相关 ////////////////////
 // 费用列表
-export function fees(userid = undefined) {
+export function fees(projectId = undefined) {
 	const data = {
-		userid
+		projectId
 	}
 	return service({url: '/projectCost/selectProjectCost', method: 'post', data});
 }
 
 // 添加费用
 export function addFee(params = {}) {
-	let { costTypeId, amountMoney, userid } = params;
+	let { costTypeId, amountMoney, projectId } = params;
+	let userid = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 	const data = {
 		costTypeId, // :"je56fghkjfkfghkghkghkk6j",   //费用类型ID
 		amountMoney, // :"561561",    //金额
+		projectId,
 		userid // ":"dsgfgdgdfgdg"       //添加费用人的ID
 	}
 	return service({url: '/projectCost/addProjectCost', method: 'post', data});
@@ -271,12 +274,13 @@ export function addFee(params = {}) {
 
 // 修改费用
 export function editFee(params = {}) {
-	let { id, costStatus } = params;
+	let { id, costTypeId, amountMoney } = params;
+	let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 	const data = {
 		id, // :"164168f545b94a0bacbe4766a1d9bc92", //费用ID
 		costTypeId, //":"99669odnjdk"   //费用类型
 		amountMoney, // :"561561",    //金额
-		userid // ":"dsgfgdgdfgdg"       //添加费用人的ID
+		userId // ":"dsgfgdgdfgdg"       //费用修改人的ID
 	}
 	return service({url: '/projectCost/updateProjectCost', method: 'post', data});
 }
@@ -286,79 +290,41 @@ export function delFee(id = undefined) {
 	const data = {
 		id
 	}
-	return service({url: '/projectCost/delProjectCost', method: 'post', data});
+	return service({url: '/projectCost/deleteProjectCost', method: 'post', data});
 }
 
 ////////////////////  费用记录相关 ////////////////////
 // 合同列表
-export function contracts(userid = undefined) {
+export function contracts(projectId = undefined) {
 	const data = {
-		projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301"//合同id
-   		page, // ": 1,//分页
-    	pageSize // ": 5
+		projectId
 	}
 	return service({url: '/projectContract/selectAllProjectContract', method: 'post', data});
 }
 
 // 添加项目合同
 export function addContract(projectContract = {}, fundInfo = []) {
-	let { projectId, contractName, signDate, contractAmount, stockRatio, handlerUserId, handlerDate, documentInfo } = projectContract;
 	const data = {
-	    projectContract: {
-	    	projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301",
-	        contractName, // ": "测试合同1",//合同名称
-	        signDate, // ": "2017-08-27",//签订日期
-	        contractAmount, // ": "25",//合同金额
-	        stockRatio, // ": "0.45",//股权占比
-	        handlerUserId, // ": "d878a28b510e4e2993ff40cef98de33d",//经办人ID当前登录用户ID
-	        handlerDate, // ": "2017-09-01"//经办日期
-	        documentInfo //文档地址
-	        /*
-	        ":[{
-	        	"fileUrl":"https://123.sogou.com/",
-	        	"fileName":"搜狗网址"
-	        }] */
-	 	},
-	    fundInfo: fundInfo//基金列表
-	    /*[{
-	    	fundId, // ": "361e776103574723abab0a6df55b7eab",//基金id
-	        investAmount, // ": "25456",投资金额
-	        stockRatio // ": "0.45"//股权占比
-	    }
-	    ]*/
-	}
+        projectContract : projectContract,
+        fundInfo : fundInfo
+    }
 	return service({url: '/projectContract/addProjectContract', method: 'post', data});
 }
 
+// 获取项目合同详情
+export function getContractDetail(id) {
+	const data = {
+        id
+    }
+	return service({url: '/projectContract/getProjectContractDetails', method: 'post', data});
+}
 // 编辑项目合同
 export function editContract(projectContract = {}, fundInfo = []) {
 	let { projectId, contractName, signDate, contractAmount, stockRatio, handlerUserId, handlerDate, documentInfo } = projectContract;
 	const data = {
-	    projectContract: {
-	    	projectId, // ": "dc3e4b66ed5944ec9fa10e83aa0c3301",
-	        contractName, // ": "测试合同1",//合同名称
-	        signDate, // ": "2017-08-27",//签订日期
-	        contractAmount, // ": "25",//合同金额
-	        stockRatio, // ": "0.45",//股权占比
-	        handlerUserId, // ": "d878a28b510e4e2993ff40cef98de33d",//经办人ID当前登录用户ID
-	        handlerDate, // ": "2017-09-01"//经办日期
-	        documentInfo //文档地址
-	        /*
-	        ":[{
-	        	"fileUrl":"https://123.sogou.com/",
-	        	"fileName":"搜狗网址"
-	        }] */
-	 	},
-	    fundInfo: fundInfo//基金列表
-	    /*[{
-	    	"id": "577c7528b96a406fa0ef5e32a44afc1f",//必传
-            "contractId": "fff2ae16768b445f9c807a28804680d1", // 合同id
-            "fundId": "e7f8e145920f4c91a7e559b61dee8ec7", // 基金id
-	        investAmount, // ": "25456",投资金额
-	        stockRatio // ": "0.45"//股权占比
-	    }
-	    ]*/
-	}
+        projectContract : projectContract,
+        fundInfo : fundInfo
+    }
 	return service({url: '/projectContract/updateProjectContract', method: 'post', data});
 }
 
@@ -368,4 +334,29 @@ export function delContract(id = undefined) {
 		id // ": "dc3e4b66ed5944ec9fa10e83aa0c3301"//合同id
 	}
 	return service({url: '/projectContract/deleteProjectContract', method: 'post', data});
+}
+
+//项目分红列表
+export function getParticipationList(projectId = undefined) {
+	const data = {
+		projectId
+	}
+	return service({url: '/projectParticipation/getParticipationList', method: 'post', data});
+}
+
+//项目投资支付列表
+export function getContractPay(projectId = undefined) {
+	const data = {
+		projectId
+	}
+	return service({url: '/projectPay/getContractPayList', method: 'post', data});
+}
+
+//添加投资支付
+export function addContractPay(projectInvestPay = {}, payDetails = []) {
+	const data = {
+        projectInvestPay : projectInvestPay,
+        payDetails : payDetails
+    }
+	return service({url: '/projectPay/addProjectInvestPay', method: 'post', data});
 }

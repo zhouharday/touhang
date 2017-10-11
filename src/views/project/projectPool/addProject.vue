@@ -22,7 +22,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目类型" prop="projectType">
-                                        <el-select v-model="basicForm.projectTypeId" filterable placeholder="请选择项目类型"  style="width:100%">
+                                        <el-select v-model="basicForm.projectTypeId" @change="myChange" filterable placeholder="请选择项目类型"  style="width:100%">
                                             <el-option v-for="item in $store.state.project.typeOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
                                         </el-select>
@@ -267,6 +267,9 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
+        },
+        myChange(val){
+            console.log("改制"+val);
         },
         submitForm(formName) {
             let basicForm = this.basicForm;
