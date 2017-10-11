@@ -50,7 +50,7 @@
         <investor-form :investorForm="addInvestor"></investor-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalIncome = false">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
+            <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 确认删除模态框 -->
@@ -146,6 +146,7 @@ export default {
                     userId: rowList.id
                 }
             })
+            sessionStorage.setItem('INVESTORNAME', rowList.investorName)
             // console.log(this.$store.state.investor.investorName)
         },
         showModel() {
@@ -167,6 +168,7 @@ export default {
             addInvestor(this.addInvestor).then((res) => {
                 if (res.data.status == '200') {
                     this.modelInvestor = false
+                    this.getInvList()
                 }
             })
         },
@@ -195,29 +197,15 @@ export default {
         handleSizeChange(val) {
             // console.log(`每页 ${val} 条`);
             this.pageSize = val
-            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
-                    this.investorData = res.data.result.list
-                }
-            })
+            this.getInvList()
         },
         handleCurrentChange(val) {
             // console.log(`当前页: ${val}`);
             this.page = val
-            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
-                    this.investorData = res.data.result.list
-                }
-            })
+            this.getInvList()
         },
         investorSearch() {
-            getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
-                    this.investorData = res.data.result.list
-                    this.pageTotal = res.data.result.total
-                    this.investorName = ''
-                }
-            })
+            this.getInvList()
         },
         investorFilter(index, id) {
             if(index == 0) {
@@ -225,6 +213,9 @@ export default {
             } else {
                 this.investorId = id
             }
+            this.getInvList()
+        },
+        getInvList() {
             getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
                 if(res.status == '200') {
                     this.investorData = res.data.result.list
@@ -291,6 +282,7 @@ export default {
     }
     span.investorName {
         cursor: pointer;
+        color: #f05e5e;
     }
 }
 </style>

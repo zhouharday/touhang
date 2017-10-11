@@ -103,7 +103,6 @@ export default {
         },
         submitRecord() {
             let value = this.value;
-            let data = this.getSysDate();
             let record = {
                 projectId: this.projectId,
                 seedUserId: this.addProjectUserId,

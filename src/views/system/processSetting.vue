@@ -14,7 +14,7 @@
                                 <span>{{item.name}}</span>
                                 <div>
                                     <el-button type="text" class="commonBtn">+部署</el-button>
-                                    <el-button type="text" class="commonBtn">-删除</el-button>
+                                    <el-button type="text" class="commonBtn" @click="deleteReminders=true">-删除</el-button>
                                 </div>
                             </div>
                             <div>
@@ -226,7 +226,7 @@ export default {
             isShow: false,
             deleteReminders: false,
             modal_loading: false,
-            message: '是否确认删除该流程？',
+            message: '是否确认删除该流程模型？',
             f_show: true,
             s_show: false,
             //流程模型数组
@@ -397,20 +397,20 @@ export default {
             if (this.isShow) {
                 this.isShow = !this.isShow;
                 this.headerInfo_process.btnGroup[0].icon = 'edit',
-                    this.headerInfo_process.btnGroup[0].explain = '编辑'
+                this.headerInfo_process.btnGroup[0].explain = '编辑'
             } else {
                 this.isShow = !this.isShow;
                 this.headerInfo_process.btnGroup[0].icon = 'checkmark',
-                    this.headerInfo_process.btnGroup[0].explain = '保存'
+                this.headerInfo_process.btnGroup[0].explain = '保存'
             }
         },
         addApproval() {
             this.f_show = false,
-                this.s_show = true
+            this.s_show = true
         },
         turn() {
             this.s_show = false,
-                this.f_show = true
+            this.f_show = true
         },
         // 新建 的方法
         addRole() {

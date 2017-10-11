@@ -21,32 +21,32 @@
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
-            <el-table-column fixed label="基金名称" width="200">
+            <el-table-column fixed label="基金名称" width="200" align="center">
                 <template scope="scope">
                   <div class="name" @click="handleRouter(scope.$index, scope.row)">
                       <span class="investorName">{{ scope.row.fundName }}</span>
                   </div>
                 </template>
             </el-table-column>
-            <el-table-column prop="fundNo" label="基金编号" width="200">
+            <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="orgType" label="组织类型" width="200">
+            <el-table-column prop="orgType" label="组织类型" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="manageType" label="管理类型" width="200">
+            <el-table-column prop="manageType" label="管理类型" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="fundScale" label="基金规模（元）" width="200">
+            <el-table-column prop="fundScale" label="基金规模（元）" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="placementSum" label="募集总额（元）" width="200">
+            <el-table-column prop="placementSum" label="募集总额（元）" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="investSum" label="投资总额（元）" width="200">
+            <el-table-column prop="investSum" label="投资总额（元）" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200">
+            <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="createDate" label="成立日期" width="200">
+            <el-table-column prop="createDate" label="成立日期" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="fundStage" label="状态" width="200">
+            <el-table-column prop="fundStage" label="状态" width="200" align="center">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column fixed="right" label="操作" width="200" align="center">
                 <template scope="scope">
                    <el-button type="text" size="small" @click="addTeamlist(scope.$index, scope.row)">基金团队</el-button>
                    <el-button type="text" size="small" @click="deleteFundlist(scope.$index, scope.row)">删除</el-button>
@@ -92,17 +92,26 @@ export default {
             organizationId: '', //组织类型id
             organizationType: {
                 title: '组织类型：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             managementId: '', //管理类型id
             managementType: {
                 title: '管理类型：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             stageId: '', //基金阶段id
             allFundStage: {
                 title: '基金阶段：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             statusId: '', //基金状态id
             allFundStatus: {
@@ -254,10 +263,10 @@ export default {
             this.myFund = this.myFundList.list
         })
         this.$store.dispatch('getManageType').then(() => {
-            this.managementType.details = this.getManType
+            this.managementType.details = this.managementType.details.concat(this.getManType)
         })
         this.$store.dispatch('getOrganizationType').then(() =>{
-            this.organizationType.details = this.OrgType
+            this.organizationType.details = this.organizationType.details.concat(this.OrgType)
         })
         this.$store.dispatch('getFundStage').then(() => {
             this.allFundStage.details = this.fundStage

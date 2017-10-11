@@ -12,9 +12,9 @@
         </div>
         <div class="step">
             <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
-                                         'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
-                                         'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
-                                         'step_third':index==(stepLists.length-1)}">
+                             'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+                             'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+                             'step_third':index==(stepLists.length-1)}">
                 <span>{{item.stageName}}</span>
             </div>
         </div>
@@ -35,11 +35,11 @@
                         <!-- 立即上传 -->
                         <div v-if="item.type == 1 && item.status == 0" style="position:relative">
                             <el-button type="text" style="color:#f05e5e">立即上传</el-button>
-                            <input type="file"  class="fileInput" @change="changeImage($event)" ref="avatarInput">
+                            <input type="file" class="fileInput" @change="changeImage($event)" ref="avatarInput">
                         </div>
                         <!-- <Upload v-if="item.type == 1 && item.status == 0" action="http://192.168.0.198:9091/files/upload">
-                                        <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
-                                    </Upload> -->
+                                            <Button type="ghost" icon="ios-cloud-upload-outline">立即上传</Button>
+                                        </Upload> -->
                         <!-- 发起申请对话框 -->
                         <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
                         <!-- 查看进度对话框 -->
@@ -75,10 +75,10 @@
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
                     <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="false" label="管理" name="manage" class="tab_list">
+                <el-tab-pane v-if="true" label="管理" name="manage" class="tab_list">
                     <manage-table :proId="projectId"></manage-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="false" label="退出" name="outing" class="tab_list">
+                <el-tab-pane v-if="true" label="退出" name="outing" class="tab_list">
                     <outing-form></outing-form>
                 </el-tab-pane>
             </el-tabs>
@@ -221,7 +221,7 @@
 </template>
 
 
-<script>
+<script type="text/javascript">
 import detailForm from './details'
 import tableForm from './tables'
 import teamTable from './team'
@@ -232,6 +232,7 @@ import fileTable from './file'
 import riskTable from './risk'
 import manageTable from './manage'
 import outingForm from './outing'
+import Loading from 'element-ui'
 import deleteReminders from 'components/deleteReminders'
 import {
     getPreDetail,
@@ -250,8 +251,10 @@ import {
 const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 
 export default {
+    name: 'preProjectMessage',
     data() {
         return {
+            userId: '',
             file: '',
             stepLists: [],
             projectId: '',
@@ -262,42 +265,15 @@ export default {
             message: '是否确认中止该项目？',
             btnText: '中止',
             modal_loading: false,
-            first_step: true,
-            second_step: false,
-            third_step: false,
-            fourth_step: false,
-            fiveth_step: false,
-            sixth_step: false,
             suspend: false,
             applyModal: false,
             progressModal: false,
             title: '',
-            step_first: '考察储备',
-            step_second: '立项会',
-            step_third: '尽职调查',
-            step_fourth: '投决会',
-            step_fiveth: '管理',
-            step_sixth: '退出',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
             proUsers: [], // 项目用户列表
             proRoles: [], // 项目角色列表
-            module: [{
-                id: '11111',
-                title: '项目考察报告',
-                status: 0,
-                type: 1
-            }, {
-                id: '22222',
-                title: '保密协议（一）',
-                status: 0,
-                type: 2
-            }, {
-                id: '3333',
-                title: '保密协议（二）',
-                status: 0,
-                type: 3
-            }],
+            module: [],     // 该项目当前阶段需要完成的任务
             basicForm: {}, // 基本信息
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
@@ -372,11 +348,13 @@ export default {
     },
     created() {
         this.investProjectId = this.$route.params.investProjectId;
+        this.projectId = this.$route.params.userId;
         this.init();
     },
     watch: {
         '$route'(to, from) {
             this.investProjectId = this.$route.params.investProjectId;
+            this.projectId = this.$route.params.userId;
             this.init()      //再次调起我要执行的函数
         }
     },
@@ -389,7 +367,9 @@ export default {
         },
         initInfo() {
             let href = window.location.href;
-            this.projectId = href.substr(href.lastIndexOf('/') + 1, href.length);
+            // this.investProjectId = href.substr(href.lastIndexOf('_') + 1, href.length);
+            // href = href.substr(0, href.lastIndexOf('_'));
+            // this.projectId = href.substr(href.lastIndexOf('/') + 1, href.length);
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
@@ -464,11 +444,11 @@ export default {
                         merchantId: this.merchantId
                     }).then(resp => {
                         let data = resp.data;
-                        if (+data.status === 200) {
-                            resolve(data.result);
-                        } else {
-                            reject(data.message);
-                        }
+                        // if (data.status === 200) {
+                        //     resolve(data.result);
+                        // } else {
+                        //     reject(data.message);
+                        // }
                         // console.log('users resp', resp);
                     }).catch(e => {
                         console.log('getProjectUsers() exists error: ', e);
@@ -530,7 +510,7 @@ export default {
 
                     this.getStageUploadDocument();
                 } else {
-                    reject(data.message);
+                    //reject(data.message);
                 }
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
@@ -595,9 +575,77 @@ export default {
                 name: name
             });
         },
-        changeImage(e) { //上传文件input
+        onSubmit(event, fileId) { //上传文件input
             this.file = event.target.files[0];
+
+            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('file', this.file);
+            formData.append('stageId', this.stageId);
+            formData.append('userId', userId);
+            formData.append('type', 3);
+            formData.append('uploadTypeId', this.projectId);
+            formData.append('fileId', fileId);
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+            console.log("*************" + this.api);
+            this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+                .then((res) => {
+                    console.log("上传文件结果:" + JSON.stringify(res.data));
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            this.getStageUploadDocument();
+                        } else if (res.data.status == '403') {
+                            ;
+                            this.$Message.error(res.data.message);
+                            //loadingInstance.close();
+                        }
+                    }
+                })
+                .catch(e => {
+                    this.$Message.error("上传错误");
+                    console.log('上传错误: ', e);
+                    // loadingInstance.close();
+                })
         },
+        onSubmit(event, fileId) { //提交上传文件到服务器
+            // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+            // event.preventDefault();
+            // let formData = new FormData();
+            // formData.append('file', this.file);
+            // formData.append('stageId', this.stageId);
+            // formData.append('userId', userId);
+            // formData.append('type', 3);
+            // formData.append('uploadTypeId', this.projectId);
+            // formData.append('fileId', fileId);
+            // let config = {
+            //     headers: {
+            //         'Content-Type': 'multipart/form-data'
+            //     }
+            // };
+            // console.log("*************"+this.api);
+            // this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+            // .then((res)=> {
+            //     console.log("上传文件结果:"+ JSON.stringify(res.data));
+            //     if (res.status == '200') {
+            //         if (res.data.status == '200') {
+            //             this.getStageUploadDocument();
+            //         } else if (res.data.status == '403') {;
+            //             this.$Message.error(res.data.message);
+            //             //loadingInstance.close();
+            //         }
+            //     }
+            // })
+            // .catch(e => {
+            //     this.$Message.error("上传错误");
+            //     console.log('上传错误: ', e);
+            //    // loadingInstance.close();
+            // })
+        }
     }
 }
 </script>
@@ -752,13 +800,13 @@ export default {
             vertical-align: middle;
         }
         .fileInput {
-            opacity:0;
-            position:absolute;
-            left:135px;
-            top:0;
-            width:80px;
-            height:25px;
-            line-height:25px;
+            opacity: 0;
+            position: absolute;
+            left: 135px;
+            top: 0;
+            width: 80px;
+            height: 25px;
+            line-height: 25px;
         }
         .prompt_message {
             width: 48%; // height: 140px;

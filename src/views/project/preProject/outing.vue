@@ -17,7 +17,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出金额（元）">
-                        <el-input v-model="outingForm.outingMoney" auto-complete="off"></el-input>
+                        <el-input v-model="outingForm.outingMoney" auto-complete="off" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col>

@@ -1,25 +1,25 @@
 <template>
 <div class="quitCapital">
     <el-table :data="quitCapitalData" border show-summary style="width: 100%;">
-        <el-table-column label="协议名称" prop="agreementName">
+        <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
-        <el-table-column label="基金名称" prop="fundId">
+        <el-table-column label="基金名称" prop="fundId" align="center">
         </el-table-column>
-        <el-table-column label="实缴金额（元）" prop="sumValue">
+        <el-table-column label="实缴金额（元）" prop="sumValue" align="center">
         </el-table-column>
-        <el-table-column label="类型" prop="earningsType">
+        <el-table-column label="类型" prop="earningsType" align="center">
         </el-table-column>
-        <el-table-column label="分红金额" prop="shareMoney">
+        <el-table-column label="分红金额" prop="shareMoney" align="center">
         </el-table-column>
-        <el-table-column label="日期" prop="shareDate">
+        <el-table-column label="日期" prop="shareDate" align="center">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
-              <el-button size="small"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button size="small" type="danger"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>

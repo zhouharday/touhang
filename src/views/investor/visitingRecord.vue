@@ -2,13 +2,13 @@
 <div class="visitingRecord">
     <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader>
     <el-table :data="visitingRecord" border style="width: 100%">
-        <el-table-column prop="manageName" label="拜访人">
+        <el-table-column prop="manageName" label="拜访人" align="center">
         </el-table-column>
-        <el-table-column prop="seeDate" label="拜访时间">
+        <el-table-column prop="seeDate" label="拜访时间" align="center">
         </el-table-column>
-        <el-table-column prop="seeContent" label="拜访内容">
+        <el-table-column prop="seeContent" label="拜访内容" align="center">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
                     <el-button
                       @click.native.prevent="editRow(scope.$index, scope.row)"
@@ -53,7 +53,7 @@
                     <el-form-item label="拜访记录附件">
                         <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
                         </Upload>

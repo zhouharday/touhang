@@ -5,8 +5,8 @@
         <investor-form :investorForm="baseInfo" :variable="variable"></investor-form>
         <el-row :gutter="10">
             <el-col :span="24" class="group">
-                <el-button type="info" class="btn" @click="handlerCancel" :disabled="variable">取消</el-button>
-                <el-button type="success" :disabled="variable" class="btn" @click="handlerConfirm">保存</el-button>
+                <el-button type="default" class="btn" @click="handlerCancel" :disabled="variable">取消</el-button>
+                <el-button type="danger" :disabled="variable" class="btn" @click="handlerConfirm">保存</el-button>
             </el-col>
         </el-row>
     </div>
@@ -75,6 +75,7 @@ export default {
 @import '../../common/styles/mixin.less';
 .baseInfo {
     .base-style();
+    padding: 0;
     .form_wrapper {
         padding: 24px 0;
         .changeWid {

@@ -46,7 +46,7 @@
                         </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="名称" prop="deptName">
+                <el-table-column label="名称" prop="deptName"> 
                     <template scope="scope">
                         <span class="add_margin" v-if="!scope.row.editFlag">{{scope.row.deptName}}</span>
                         <span class="add_margin" v-if="scope.row.editFlag">
@@ -54,7 +54,7 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" align="center">
                     <template scope="scope">
 
                         <el-button size="small">

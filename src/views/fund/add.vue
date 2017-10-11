@@ -73,22 +73,16 @@ export default {
     },
     methods: {
         confirmSubmission() {
-            this.$refs.formDetails.validate((valid) => {
-                if (valid) {
-                    this.formData = {
-                        fundBaseInfo: this.formDetails,
-                        fundManageInfo: this.formMIS,
-                        fundAccinfo: this.formAccountInfo
-                    }
-                    this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
-                    addFund(this.formData).then((res) => {
-                        if (res.status == '200') {
-                            this.$Message.success(res.data.message || '添加成功！')
-                        }
-                    })
-                    console.log(this.fundLevel)
-                } else {
-                    return false
+            this.formData = {
+                fundBaseInfo: this.formDetails,
+                fundManageInfo: this.formMIS,
+                fundAccinfo: this.formAccountInfo
+            }
+            this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
+            addFund(this.formData).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '添加成功！')
+                    this.$router.push('/home/myfund')
                 }
             })
         }
@@ -105,5 +99,6 @@ export default {
     width: 100%;
     min-height: 100%;
     background: @color-base;
+     padding: 20px;
 }
 </style>

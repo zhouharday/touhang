@@ -1,25 +1,25 @@
 <template>
 <div class="fundDetails">
     <el-table :data="investorData" border style="width: 100%;">
-        <el-table-column label="协议名称" prop="agreementName">
+        <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
-        <el-table-column label="基金名称" prop="fundName">
+        <el-table-column label="基金名称" prop="fundName" align="center">
         </el-table-column>
-        <el-table-column label="认缴金额（元）" prop="subscribeAmount">
+        <el-table-column label="认缴金额（元）" prop="subscribeAmount" align="center">
         </el-table-column>
-        <el-table-column label="出资占比（%）" prop="contributiveRatio">
+        <el-table-column label="出资占比（%）" prop="contributiveRatio" align="center">
         </el-table-column>
-        <el-table-column label="实缴金额（元）" prop="paidAmount">
+        <el-table-column label="实缴金额（元）" prop="paidAmount" align="center">
         </el-table-column>
-        <el-table-column label="出资日期" prop="paidDate">
+        <el-table-column label="出资日期" prop="paidDate" align="center">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
-              <el-button size="small" type="default"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button size="small" type="danger"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>

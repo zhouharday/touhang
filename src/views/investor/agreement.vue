@@ -2,23 +2,23 @@
 <div class="agreement">
     <tableHeader :data="dataTitle" @add="showAgreement"></tableHeader>
     <el-table :data="agreementData" border style="width: 100%;">
-        <el-table-column label="协议名称" prop="agreementName">
+        <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
-        <el-table-column label="基金名称" prop="fundName">
+        <el-table-column label="基金名称" prop="fundName" align="center">
         </el-table-column>
-        <el-table-column label="结构级" prop="structuralLevelId">
+        <el-table-column label="结构级" prop="structuralLevelId" align="center">
         </el-table-column>
-        <el-table-column label="认缴金额（元)" prop="subscribeAmount">
+        <el-table-column label="认缴金额（元）" prop="subscribeAmount" align="center">
         </el-table-column>
-        <el-table-column label="签订日期" prop="signDate">
+        <el-table-column label="签订日期" prop="signDate" align="center">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
-              <el-button size="small"
+              <el-button  type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button size="small"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>
@@ -60,7 +60,7 @@ export default {
                 id: '',
                 agreementName: '',
                 structuralLevelId: '',
-                investorName: this.$store.state.investor.investorName,
+                investorName: this.$store.state.investor.investorName || sessionStorage.getItem('INVESTORNAME'),
                 inverstorId: this.$route.params.userId,
                 fundId: '',
                 subscribeAmount: '',
@@ -79,6 +79,7 @@ export default {
         handleEdit(index, row) {
             this.modelAgreement = true
             this.addOrModify = false
+            this.deleteReminders = false
             this.AgreementInfo = row
             this.AgreementInfo.registerDate = row.register_date
         },

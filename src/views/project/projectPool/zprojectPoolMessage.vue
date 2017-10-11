@@ -135,6 +135,7 @@ export default {
                 let data = resp.data.result;
                 let { projectInfo, projectInvestmentInfo,enterpriseInfo,listOwnershipStructure } = data;
                 this.getProjectData(data);
+                this.title = projectInfo.projectName;
                 if (projectInfo) {
                     this.basicForm = Object.assign({}, this.basicForm, projectInfo);
                 }

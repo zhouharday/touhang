@@ -22,8 +22,10 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="管理类型" prop="manageTypeId">
-                        <el-select v-model="formDetails.manageTypeId" :disabled="formDetails.flag" style="width:100%">
-                            <el-option v-for="(item, index) of getManType" :key="item.id" :label="item.dicName" :value="item.id">
+                        <el-select v-model="formDetails.manageTypeId"
+                                   :disabled="formDetails.flag"
+                                   style="width:100%">
+                            <el-option v-for="(list, index) of getManType" :key="list.id" :label="list.dicName" :value="list.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -48,7 +50,7 @@
                     <el-form-item label="基金结构">
                         <el-row>
                             <el-col :span="6">
-                                <el-select v-model="formDetails.fundOrg" :disabled="formDetails.flag" @change="selectStructure" style="width: 100%">
+                                <el-select v-model="formDetails.fundOrg" prop="fundOrg" :disabled="formDetails.flag" @change="selectStructure" style="width: 100%">
                                     <el-option v-for="(item, index) of fundStructure" :key="item.id" :label="item.dicName" :value="item.id">
                                     </el-option>
                                 </el-select>
@@ -80,7 +82,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="基金期限">
+                    <el-form-item label="基金期限" prop="fundTerm">
                         <el-input v-model="formDetails.fundTerm" :disabled="formDetails.flag"></el-input>
                     </el-form-item>
                 </el-col>
@@ -97,7 +99,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="业务部门">
+                    <el-form-item label="业务部门" prop="businessDeptId">
                         <el-select v-model="formDetails.businessDeptId" :disabled="formDetails.flag" style="width:100%">
                             <el-option v-for="(item, index) of businessDepartment" :key="item.id" :label="item.deptName" :value="item.id">
                             </el-option>
@@ -105,10 +107,10 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="年天数">
+                    <el-form-item label="年天数" prop="yearsDaynum">
                         <el-select v-model="formDetails.yearsDaynum" :disabled="formDetails.flag" style="width:100%">
-                            <el-option v-for="(item, index) of days" :key="item.id" :label="item.dicName" :value="item.id">
-                            </el-option>
+                            <el-option label="360天" value="360"></el-option>
+                            <el-option label="365天" value="365"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -247,8 +249,8 @@
         </el-table-column>
     </el-table>
     <div class="btnList">
-        <el-button type="success" class="btn" @click="preservation">保存</el-button>
-        <el-button type="danger" class="btn" @click="cancel">取消</el-button>
+        <el-button class="btn success" @click="preservation">保存</el-button>
+        <el-button class="btn danger" @click="cancel">取消</el-button>
     </div>
 </div>
 </template>
@@ -324,13 +326,6 @@ export default {
                 id: 1,
                 label: '未备案'
             }],
-            days: [{
-                id: 360,
-                dicName: '360天'
-            }, {
-                id: 365,
-                dicName: '365天'
-            }],
             structure: '',
             fundStructure: [{
                 id: 1,
@@ -379,6 +374,32 @@ export default {
                     required: true,
                     message: '请选择基金投向',
                     trigger: 'change'
+                }],
+                fundOrg: [{
+                    required: true,
+                    message: '请选择基金结构',
+                    trigger: 'change'
+                }],
+                fundTerm: [{
+                    required: true,
+                    message: '请输入基金期限',
+                    trigger: 'change'
+                }],
+                startDate: [{
+                    type: 'date',
+                    required: true,
+                    message: '请选择时间',
+                    trigger: 'change'
+                }],
+                businessDeptId: [{
+                    required: true,
+                    message: '请选择业务部门',
+                    trigger: 'change'
+                }],
+                yearsDaynum: [{
+                    required: true,
+                    message: '请选择年天数',
+                    trigger: 'change'
                 }]
             }
         }
@@ -395,7 +416,13 @@ export default {
             this.structure = value
         },
         preservation() {
-            this.$emit('confirmSubmission') // 确认保存
+            this.$refs.formDetails.validate((valid) => {
+                if (valid) {
+                    this.$emit('confirmSubmission') // 确认保存
+                } else {
+                    return false
+                }
+            })
         },
         cancel() {
             this.$emit('confirmCancel') // 确认取消
@@ -474,6 +501,14 @@ export default {
         text-align: center;
         .btn {
             width: 150px;
+        }
+        .success {
+            background: #f05e5e;
+            color: #fff;
+        }
+        .danger{
+            background: #fff;
+            color: #f05e5e;
         }
     }
 }

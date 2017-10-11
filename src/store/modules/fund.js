@@ -9,30 +9,10 @@ import {
     getAllOrgList
 } from 'api/fund'
 const state = {
-    getManType: [
-        {
-            dicName: '全部'
-        }, {
-            dicName: '受托管理'
-        }, {
-            dicName: '自我管理'
-        }, {
-            dicName: '顾问管理'
-        }
-    ], // 管理类型
+    getManType: [] || sessionStorage.getItem('MANTYPE'), // 管理类型
     fundInvestment: [],
     managementCompany: [],
-    OrgType: [
-        {
-            dicName: '全部'
-        }, {
-            dicName: '契约型'
-        }, {
-            dicName: '合伙型'
-        }, {
-            dicName: '公司型'
-        }
-    ], // 组织类型
+    OrgType: [] || sessionStorage.getItem('ORGTYPE'), // 组织类型
     myFundList: {},
     // myFundDetails: {},
     fundStage: [
@@ -81,6 +61,7 @@ const actions = {
         return getManagementType().then((res) => {
             if (res.status == '200') {
                 commit(types.GET_MANTYPE, res.data.result)
+                window.sessionStorage.setItem('MANTYPE', JSON.stringify(res.data.result))
             }
         }).catch(err => {
             console.log(err)
@@ -108,6 +89,7 @@ const actions = {
         return OrganizationType().then((res) => {
             if (res.status == '200') {
                 commit(types.GET_ORGTYPE, res.data.result)
+                window.sessionStorage.setItem('ORGTYPE', res.data.result)
             }
         }).catch(err => {
             console.log(err)

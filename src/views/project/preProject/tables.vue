@@ -34,7 +34,7 @@
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
                         </el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,memberData)">删除</el-button>
+                        <el-button type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
                     </template>
             </el-table-column>
         </el-table>
@@ -107,7 +107,7 @@
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
                         </el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,structureData)">删除</el-button>
+                        <el-button type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
                     </template>
             </el-table-column>
         </el-table>
@@ -141,6 +141,7 @@
 
 <script style="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
+import { addOwer, delOwer, addGu, delGu, owers, gus } from 'api/projectPre';
 export default {
     props: {
         memberData: {
@@ -245,15 +246,39 @@ export default {
             this.memberForm = new_memberForm;
             this.modalAdd1 = !this.modalAdd1;
         },
-        confirmAdd1(formName) {
+        confirmAdd1(formName) {1
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.memberData.push(this.memberForm);
-                    this.modalAdd1 = !this.modalAdd1;
+                    let memberForm = this.memberForm;
+                    let projectId = this.projectData.projectInfo.id;
+                    addOwer({
+                        id:'',
+                        projectId:projectId,
+                        enterpriseId: this.enterpriseInfo.id,
+                        name: memberForm.name,
+                        nature: memberForm.property,
+                        educationalBg: memberForm.edu
+                    }).then(resp => {
+                        let result = resp.data.result;
+                        result.editFlag = false;
+                        this.memberData.push(result);
+                        this.modalAdd1 = !this.modalAdd1;
+                    }).catch(e => {
+                        console.log('addOwer exists error: ', e);
+                    });
                 } else {
                     return false;
                 }
 
+            });
+        },
+        //删除董事会成员
+        handleDeleteMember(index, rows) {
+            delOwer(rows[index].id).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    rows.splice(index, 1);
+                }
             });
         },
         //添加 股权结构的方法
@@ -272,20 +297,43 @@ export default {
         confirmAdd2(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.structureData.push(this.structureForm);
-                    this.modalAdd2 = !this.modalAdd2;
+                    let structureForm = this.structureForm;
+                    let projectId = this.projectData.projectInfo.id;
+                    addGu({
+                        id:'',
+                        projectId:projectId,
+                        stockholderName: structureForm.name, //股东姓名: null
+                        stockholderNature: structureForm.property,//股东性质: null
+                        investmentAmount: structureForm.capital,//投资金额: null
+                        stockCount: structureForm.num, //持股数量: null
+                        stockRatio: structureForm.percent
+                        
+                    }).then(resp => {
+                        let result = resp.data.result;
+                        result.editFlag = false;
+                        this.structureData.push(result);
+                        this.modalAdd2 = !this.modalAdd2;
+                    }).catch(e => {
+                        console.log('addGu exists error: ', e);
+                    });
                 } else {
                     return false;
                 }
             });
         },
-        checkEdit(index, row) { //编辑
-            // console.log(row)
+        checkEdit(row) { //编辑
             row.editFlag = !row.editFlag;
+            this.memberData.push();
+            this.structureData.push();
         },
-        //删除当前行
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        //删除股权结构
+        handleDeleteOwner(index, rows) {
+            delGu(rows[index].id).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    rows.splice(index, 1);
+                }
+            });
         }
     },
     components: {
