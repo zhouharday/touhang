@@ -5,7 +5,7 @@
             <span class="desc">{{title}}</span>
         </div>
         <div class="right">
-            <el-button type="danger" @click="changeStep">下一阶段</el-button>
+            <el-button type="danger" :disabled="nextStageDisabled" @click="changeStep">下一阶段</el-button>
             <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
             </el-button>
         </div>
@@ -35,18 +35,8 @@
                     <!-- 立即上传 -->
                     <div v-if="item.type == 1 && item.status == 0" style="position:relative">
                         <el-button type="text" style="color:#f05e5e">立即上传</el-button>
-                        <input type="file" class="fileInput" @change="onSubmit($event, item.id)" ref="avatarInput">
+                        <input type="file" class="fileInput" @change="chageFile($event, item.id)" ref="avatarInput">
                     </div>
-
-
-<!--                     <div v-if="item.type == 1 && item.status == 0" >
-                        <form>
-                            <input type="file" style="display" @change="changeImage($event)" ref="avatarInput">
-                            <button @click="submitForm($event)" class="cursor">点击上传</button>
-                        </form>
-                    </div>
-                    <el-button v-if="item.type == 1 && item.status == 0" class="changeWidth" type="danger" @click="onSubmit($event, item.id)">上&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;传</el-button>
- -->
                     <!-- 发起申请对话框 -->
                     <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
                     <!-- 查看进度对话框 -->
@@ -84,10 +74,10 @@
             <el-tab-pane label="风险登记" name="risk" class="tab_list">
                 <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
             </el-tab-pane>
-            <el-tab-pane v-if="false" label="管理" name="manage" class="tab_list">
+            <el-tab-pane v-if="true" label="管理" name="manage" class="tab_list">
                 <manage-table :proId="projectId"></manage-table>
             </el-tab-pane>
-            <el-tab-pane v-if="false" label="退出" name="outing" class="tab_list">
+            <el-tab-pane v-if="true" label="退出" name="outing" class="tab_list">
                 <outing-form></outing-form>
             </el-tab-pane>
         </el-tabs>
@@ -288,6 +278,7 @@ export default {
             memberData: [], // 董事会成员
             structureData: [], // 股权结构
             capitalForm: {}, // 投资信息
+            nextStageDisabled: false,
             industryForm: {
                 baseInfo: '工商信息',
                 flag: true
@@ -396,7 +387,8 @@ export default {
         slectAllStage() {
             slectAllStage().then(resp => {
                 this.stepLists = resp.data.result || [];
-                }).catch(e => {
+            }).catch(e => {
+                
                 console.log('getPreDetail() exists error: ', e);
             });
         },
@@ -431,10 +423,19 @@ export default {
             let typeId = this.projectId;
             let investProjectId = this.investProjectId;
             let params = {typeId, investProjectId};
-            console.log("getStageUploadDocument****params****" + JSON.stringify(params));
             getStageUploadDocument(params).then(resp => {
                 this.stageId = resp.data.stageId;
                 this.module = resp.data.result;
+
+                //退出阶段，下一阶段按钮不可用
+                let nextStageDisabled = this.nextStageDisabled;
+                this.stepLists.forEach(function(item,index) {
+                    if(item.id == resp.data.stageId && item.stageKey == 3){
+                        nextStageDisabled = true;
+                        console.log("退出阶段，下一阶段按钮不可用");
+                    }
+                });
+                this.nextStageDisabled = nextStageDisabled;
             }).catch(e => {
                 console.log('getStageUploadDocument() exists error: ', e);
             });
@@ -584,9 +585,9 @@ export default {
                 name: name
             });
         },
-        onSubmit(event, fileId) { //上传文件input
+        chageFile(event, fileId) { //上传文件input
+            console.log("即将开始上传");
             this.file = event.target.files[0];
-
             let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
             event.preventDefault();
             let formData = new FormData();

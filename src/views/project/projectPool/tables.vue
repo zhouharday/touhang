@@ -29,9 +29,9 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">编辑
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">保存
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">保存
                         </el-button>
                         <el-button type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
                     </template>
@@ -102,9 +102,9 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">编辑
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.row)">保存
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">保存
                         </el-button>
                         <el-button type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
                     </template>
@@ -141,7 +141,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
-import { addOwer, delOwer, addGu, delGu, owers, gus } from 'api/projectPre';
+import { addOwer, delOwer, addGu, delGu, owers, gus, updateOwer } from 'api/projectPre';
 
 export default {
     computed: mapGetters({
@@ -345,7 +345,29 @@ export default {
                 }
             });
         },
-        checkEdit(row) { //编辑
+        checkEditOwer(row) { //编辑
+            console.log("editFlag "+row.editFlag);
+            if(row.editFlag){
+                addOwer(row).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '保存成功！');
+                    //rows.splice(index, 1);
+                }
+            });
+            }
+            row.editFlag = !row.editFlag;
+            this.memberData.push();
+            this.structureData.push();
+        },
+        checkEditGu(row) { //编辑
+            if(row.editFlag){
+                addGu(row).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '保存成功！');
+                    //rows.splice(index, 1);
+                }
+            });
+            }
             row.editFlag = !row.editFlag;
             this.memberData.push();
             this.structureData.push();

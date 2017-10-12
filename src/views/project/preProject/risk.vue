@@ -17,9 +17,9 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="getRiskInfo(scope.row.id, 2)">查看详情</el-button>
-                        <el-button type="text" size="small" @click="getRiskInfo(scope.row.id, 1)">跟踪</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.row.$index,riskData)">删除</el-button>
+                        <el-button type="text" size="small" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
+                        <el-button v-if="status != '已完成'" type="text" size="small" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -94,8 +94,8 @@
                         <div>处理记录</div>
                     </div>
                     <div class="right">
-                        <p v-for="(item,index) in tableData.record" :key="item.index">
-                            <span>{{item.disposeResult}}</span>
+                        <p v-for="item in recordList" :key="item.id">
+                            <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
                         </p>
                     </div>
@@ -124,8 +124,8 @@
                         <div>处理记录</div>
                     </div>
                     <div class="right">
-                        <p v-for="(item,index) in tableData.record" :key="item.index">
-                            <span>{{item.disposeResult}}</span>
+                        <p v-for="item in recordList" :key="item.id">
+                            <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
                         </p>
                     </div>
@@ -156,7 +156,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button  @click="modalTracking= false">取 消</el-button>
-                    <el-button type="danger" @click="confirmTracking(tableData.id)">保 存</el-button>
+                    <el-button type="danger" @click="confirmTracking()">保 存</el-button>
                 </div>
             </el-dialog>
         </section>
@@ -168,7 +168,7 @@
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
 
-import { dangers, addDanger, editDanger, delDanger, danger, selectRiskRegister } from 'api/projectPre'
+import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister } from 'api/projectPre'
 
 export default {
     props: {
@@ -188,6 +188,7 @@ export default {
     },
     data() {
         return {
+            riskId:'',
             projectId:'',
             modalAdd: false,
             modalRiskView: false,
@@ -219,12 +220,7 @@ export default {
                 }
             ],
             tableData: [],
-            riskRecords: [
-                {
-                    record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
-                    file: 'AAA.doc'
-                }
-            ],
+            recordList: [],
             trackingForm: {
                 result: '',
                 content: '',
@@ -273,18 +269,24 @@ export default {
             })
             return datas;
         },
+        //查看风险详情
         getRiskInfo(riskId,optType) {
-            if(optType === '1'){
-                //跟踪风险
-                this.modalTracking=true;
-            }
-            else{
-                //查看风险
-                this.modalRiskView=true;
-            }
-            //查看风险
+            //当前处理风险ID
+            this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
+                this.tableData = [];
+                this.recordList = [];
                 this.tableData.push(resp.data.result);
+                this.recordList = resp.data.result.record;
+                this.recordList.push();
+                if(optType == '1'){
+                    //跟踪风险
+                    this.modalTracking=true;
+                }
+                else{
+                    //查看风险
+                    this.modalRiskView=true;
+                }
             }).catch(e => {
                 console.log('dangers exists error: ', e);
             })
@@ -292,18 +294,15 @@ export default {
         getDatas() {
             dangers(this.proId).then(resp => {
                 this.riskData = resp.data.result.list;
-                console.log('riskData : ', JSON.stringify(resp.data.result.list));
             }).catch(e => {
                 console.log('dangers exists error: ', e);
             })
         },
         // 删除当前行
-        handleDelete(index, rows = []) {
-            let row = rows[index];
-            if (!row) return;
-            delDanger(row.id).then(resp => {
-                console.log('del succes');
-                // rows.splice(index, 1);
+        handleDelete(id) {
+            console.log(" 删除风险数据id：" + id);
+            delDanger(id).then(resp => {
+                console.log("删除风险结果："+ JSON.stringify(resp.data));
                 this.getDatas();
             }).catch(e => {
                 console.log('delDanger() exists error: ', e);
@@ -334,19 +333,18 @@ export default {
 
         },
         //添加风险跟踪
-        confirmTracking(riskId) {
-            console.log("riskId" + riskId);
+        confirmTracking() {
+            console.log("122121323");
+            let riskRegisterId = this.riskId,
+                disposeResult = this.trackingForm.disposeResult,
+                recordDetails = this.trackingForm.recordDetails;
             let params = {
-                projectId: this.proId
-                /*
-                riskTheme:
-                seedUserId:
-                receivedUserId:
-                riskDescribe: */
+                riskRegisterId,
+                disposeResult,
+                recordDetails
             };
-            params = Object.assign({}, params, this.trackingForm);
-            console.log('params: ', params);
-            danger(params).then(resp => {
+            console.log('添加风险跟踪参数: ',  + JSON.stringify(params));
+            insertRiskFollower(params).then(resp => {
                 this.modalTracking = false;
                 this.getDatas();
             }).catch(e => {
