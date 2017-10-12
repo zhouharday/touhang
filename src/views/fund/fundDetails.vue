@@ -11,7 +11,10 @@
         </div>
     </div>
     <el-row class="step">
-        <div class="step_lists" v-for="(step, index) of steps" :key="index" :class="{step_one: index == '0',
+        <div class="step_lists"
+             v-for="(step, index) of steps"
+             :key="index"
+             :class="{step_one: index == '0',
                      step_third: index == steps.length-1,
                      step_second:index > 0 && index < steps.length-1,
                      current_border: step.id == currentStep}">
@@ -360,10 +363,6 @@ export default {
                 padding: 5px 15px;
             }
         }
-        .bgc {
-            background: #a0a3aa;
-            border: 1px solid #a0a3aa;
-        }
         .restart {
             width: 24px;
             height: 24px;
@@ -392,7 +391,7 @@ export default {
         .current_border {
             border: 1px solid #f05e5e;
             &::after {
-                border-color: red red transparent transparent;
+                border-color: #f05e5e #f05e5e transparent transparent;
             }
             &::before {
                 border-color: #f05e5e #f05e5e transparent transparent;
@@ -411,7 +410,7 @@ export default {
                 top: 7px;
                 right: -19px;
                 border: 1px solid;
-                border-color: red red transparent transparent;
+                border-color: #000 #000 transparent transparent;
                 transform: rotate(45deg);
                 z-index: 1;
             }

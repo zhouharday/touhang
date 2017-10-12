@@ -71,6 +71,7 @@
 import tableHeader from "components/tabelHeader"
 import deleteReminders from "components/deleteReminders"
 import {
+    getVisitingRecordList,
     addVisitingRecord,
     updateVisitingRecord,
     deleteVisitingRecord
@@ -130,15 +131,15 @@ export default {
                 console.log(this.$route.params.userId)
                 addVisitingRecord(this.addVisiting).then((res) => {
                     this.$Message.success(res.data.message || '添加拜访记录成功')
+                    this.visitingRecordList()
                 }).catch(err => {
                     let res = err.data
                     this.$Message.success(res.message || '添加拜访记录失败')
                 })
             } else {
-                console.log(this.addVisiting)
                 updateVisitingRecord(this.addVisiting).then((res) => {
-                    console.log(res)
                     this.$Message.success(res.data.message || '修改拜访记录成功')
+                    this.visitingRecordList()
                 }).catch(err => {
                     console.log(err)
                     this.$Message.success(res.message || '修改拜访记录失败')
@@ -155,6 +156,16 @@ export default {
         },
         comfirmDelete() {
             this.deleteModal = false
+        },
+        visitingRecordList() {
+            getVisitingRecordList(this.$route.params.userId).then((res) => {
+                if (res.status == '200') {
+                    this.visitingRecord = res.data.result.list
+                }
+            }).catch(err => {
+                let response = err.data
+                this.$Message.error(response.message || '获取拜访记录失败！')
+            })
         }
     },
     components: {

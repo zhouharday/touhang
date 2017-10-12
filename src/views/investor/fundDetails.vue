@@ -11,7 +11,10 @@
         </el-table-column>
         <el-table-column label="实缴金额（元）" prop="paidAmount">
         </el-table-column>
-        <el-table-column label="出资日期" prop="paidDate">
+        <el-table-column label="出资日期">
+            <template scope="scope">
+                <div>{{scope.row.paidDate | formatDate}}</div>
+            </template>
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
@@ -34,6 +37,7 @@
 
 <script type="text/ecmascript-6">
 import fundsModal from './fundsModal'
+import '../../common/js/filter'
 import {updateAgreementAmount, deleteAgreementAmount} from 'api/investor'
 export default {
     props: {

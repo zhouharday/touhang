@@ -5,7 +5,7 @@
             <fundDetails :investorData="investorData"></fundDetails>
         </TabPane>
         <TabPane label="退出" name="secede">
-            <quitCapital :investorData="investorData"></quitCapital>
+            <quitCapital></quitCapital>
         </TabPane>
         <Button type="ghost" @click="handleTabsAdd" slot="extra">添加</Button>
     </Tabs>
