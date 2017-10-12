@@ -16,7 +16,7 @@
     <div class="tabs">
         <Tabs v-model="detailsName" type="card" @on-click="getTabs">
             <TabPane label="基本信息" name="info">
-                <baseInfo></baseInfo>
+                <baseInfo @investorDetailsInfo="investorDetailsInfo"></baseInfo>
             </TabPane>
             <TabPane label="投资者文档" name="invDoc">
                 <investorDoc :investmentData="investmentData"></investorDoc>
@@ -76,8 +76,8 @@ export default {
         getTabs(name) {
             if (name == 'agree') {
                 GetProtocolsList(this.$route.params.userId).then((res) => {
-                    console.log(res)
                     if (res.status == '200') {
+                        console.log(res)
                         this.agreementData = res.data.result.list
                     }
                 }).catch(err => {
@@ -112,6 +112,9 @@ export default {
                     }
                 })
             }
+        },
+        investorDetailsInfo(value) {
+            this.titleInfo.name = value
         }
     },
     components: {

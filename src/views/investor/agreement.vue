@@ -6,11 +6,25 @@
         </el-table-column>
         <el-table-column label="基金名称" prop="fundName">
         </el-table-column>
-        <el-table-column label="结构级" prop="structuralLevelId">
+        <el-table-column label="结构级">
+            <template scope="scope">
+                <div v-if="scope.row.structuralLevelId == '0'">优先级</div>
+                <div v-else-if="scope.row.structuralLevelId == '1'">中间级</div>
+                <div v-else-if="scope.row.structuralLevelId == '2'">一般级</div>
+                <div v-else-if="scope.row.structuralLevelId == '3'">平层</div>
+                <div v-else-if="scope.row.structuralLevelId == '4'">GP</div>
+                <div v-else="scope.row.structuralLevelId == '5'">LP</div>
+            </template>
         </el-table-column>
-        <el-table-column label="认缴金额（元)" prop="subscribeAmount">
+        <el-table-column label="认缴金额（元)">
+            <template scope="scope">
+                <div>{{scope.row.subscribeAmount | toMoney}}</div>
+            </template>
         </el-table-column>
-        <el-table-column label="签订日期" prop="signDate">
+        <el-table-column label="签订日期">
+            <template scope="scope">
+                <div>{{scope.row.signDate | formatDate}}</div>
+            </template>
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
@@ -37,7 +51,8 @@
 import tableHeader from 'components/tabelHeader'
 import protocolDetails from './protocolDetails'
 import deleteReminders from 'components/deleteReminders'
-import {addAgreement, updateAgreement, deleteAgreement} from 'api/investor'
+import '../../common/js/filter'
+import {addAgreement, updateAgreement, deleteAgreement, GetProtocolsList} from 'api/investor'
 export default {
     props: {
         agreementData: {
@@ -65,7 +80,7 @@ export default {
                 fundId: '',
                 subscribeAmount: '',
                 signDate: '',
-                regionName: '',
+                managerName: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
                 registerDate: new Date()
             }
@@ -77,6 +92,7 @@ export default {
             this.addOrModify = true
         },
         handleEdit(index, row) {
+            console.log(row)
             this.modelAgreement = true
             this.addOrModify = false
             this.deleteReminders = false
@@ -93,6 +109,7 @@ export default {
                     if(res.status == '200') {
                         this.$Message.success(res.data.message || '签约成功！')
                         this.modelSign = false
+                        this.getAgreementList()
                     }
                 })
             } else {
@@ -101,6 +118,7 @@ export default {
                     if(res.status == '200') {
                         this.$Message.success(res.data.message || '修改成功！')
                         this.modelSign = false
+                        this.getAgreementList()
                     }
                 })
             }
@@ -114,6 +132,17 @@ export default {
         },
         cancelAgreement() {
             this.deleteReminders = false
+        },
+        getAgreementList() {
+            GetProtocolsList(this.$route.params.userId).then((res) => {
+                if (res.status == '200') {
+                    this.agreementData = res.data.result.list
+                }
+            }).catch(err => {
+                console.log(err)
+                // let response = err.data
+                // this.$Message.error(response.message || '获取结构失败！')
+            })
         }
     },
     components: {

@@ -10,7 +10,7 @@
             <el-col :span="12">
                 <el-form-item label="结构级">
                     <el-select v-model="AgreementInfo.structuralLevelId" placeholder="请选择结构级" style="width:100%;">
-                        <el-option v-for="item in structuralLevel" :key="item.value" :label="item.label" :value="item.value">
+                        <el-option v-for="item in structuralLevel" :key="item.id" :label="item.label" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -26,7 +26,7 @@
             <el-col :span="12">
                 <el-form-item label="基金名称">
                     <el-select v-model="AgreementInfo.fundId" placeholder="请选择基金名称" style="width:100%;">
-                        <el-option v-for="item in fundName" :key="item.id" :label="item.fundName" :value="item.id">
+                        <el-option v-for="item in fundNameList" :key="item.id" :label="item.fundName" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -44,10 +44,11 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="投资经理">
-                    <el-select v-model="AgreementInfo.regionName" style="width:100%">
+                    <el-input v-model="AgreementInfo.managerName" disabled auto-complete="off"></el-input>
+                    <!-- <el-select v-model="AgreementInfo.managerName" style="width:100%">
                         <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
-                    </el-select>
+                    </el-select> -->
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -82,28 +83,28 @@ export default {
     },
     data() {
         return {
-            fundName: [],
-            investmentManager: [{
-                dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
-                id: JSON.parse(sessionStorage.getItem('userInfor')).id
-            }],
+            fundNameList: [],
+            // investmentManager: [{
+            //     dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+            //     id: JSON.parse(sessionStorage.getItem('userInfor')).id
+            // }],
             structuralLevel: [{
-                value: '0',
+                id: '0',
                 label: '优先级'
             }, {
-                value: '1',
+                id: '1',
                 label: '中间级'
             }, {
-                value: '2',
+                id: '2',
                 label: '一般级'
             }, {
-                value: '3',
+                id: '3',
                 label: '平层'
             }, {
-                value: '4',
+                id: '4',
                 label: 'GP'
             }, {
-                value: '5',
+                id: '5',
                 label: 'LP'
             }]
         }
@@ -111,7 +112,7 @@ export default {
     created() {
         getAllNormalFund().then((res) => {
             if (res.status == '200') {
-                this.fundName = res.data.result
+                this.fundNameList = res.data.result
             }
         }).catch(err => {
             let response = err.response
