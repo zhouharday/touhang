@@ -72,8 +72,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" @click="goEditContract(scope.row.id)">编辑</el-button>
-                                <el-button type="text"  @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
+                                <el-button v-if="scope.row.status == 1" type="text" @click="goEditContract(scope.row.id)">编辑</el-button>
+                                <el-button v-if="scope.row.status == 1" type="text"  @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -104,12 +104,12 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="contractForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlingDate" style="width: 100%;">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlerDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -131,7 +131,7 @@
                                 <span class="desc">{{ table_title }}</span>
                             </div>
                             <div class="right">
-                                <el-button type="danger" @click="contractAdd1=false,fundAdd1=true">添加</el-button>
+                                <el-button type="danger" @click="fundAdd1=true">添加</el-button>
                             </div>
                         </div>
                         <el-table :data="fundData1" border style="width: 100%" align="center">
@@ -139,8 +139,8 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-select v-model="scope.row.fundId" placeholder="请选择基金">
-                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
+                                        <el-select value-key="id" v-model="scope.row.fund" placeholder="请选择基金">
+                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item">
                                             </el-option>
                                         </el-select>
                                     </span>
@@ -165,7 +165,7 @@
                             <el-table-column label="操作" align="center">
                                 <template scope="scope">
                                     <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">保存</el-button>
+                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFund(scope.$index,scope.row, 'fundData1')">保存</el-button>
                                     <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData1, 'invest')">删除</el-button>
                                 </template>
                             </el-table-column>
@@ -180,7 +180,7 @@
                     <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
                         <el-form :model="fundForm1" label-width="110px">
                             <el-form-item label="基金名称">
-                                <el-select v-model="fundForm1.fund" placeholder="请选择基金" style="width: 100%">
+                                <el-select value-key="id" v-model="fundForm1.fund" placeholder="请选择基金" style="width: 100%">
                                     <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item">
                                     </el-option>
                                 </el-select>
@@ -251,7 +251,7 @@
                                 <span class="desc">{{ table_title }}</span>
                             </div>
                             <div class="right">
-                                <el-button type="danger" @click="contractAdd1=false,fundAdd1=true">添加</el-button>
+                                <el-button type="danger" @click="fundAdd1=true">添加</el-button>
                             </div>
                         </div>
                         <el-table :data="fundData1" border style="width: 100%" align="center">
@@ -259,8 +259,8 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-select v-model="scope.row.fundId" placeholder="请选择基金">
-                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
+                                        <el-select value-key="id" v-model="scope.row.fund" placeholder="请选择基金">
+                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item">
                                             </el-option>
                                         </el-select>
                                     </span>
@@ -285,7 +285,6 @@
                             <el-table-column label="操作" align="center">
                                 <template scope="scope">
                                     <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">编辑</el-button>
-                                    <!-- <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">保存</el-button> -->
                                     <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFund(scope.$index,scope.row, 'fundData1')">保存</el-button>
                                     <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData1, 'invest')">删除</el-button>
                                 </template>
@@ -313,8 +312,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" @click="paidAdd2=true">编辑</el-button>
-                                <el-button type="text" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
+                                <el-button v-if="scope.$index == 0" type="text" @click="goEditPay(scope.row.id)">编辑</el-button>
+                                <el-button v-if="scope.$index == 0" type="text" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -352,7 +351,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handleUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -390,17 +389,7 @@
                             </el-table-column>
                             <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.payAmount }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.payAmount" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData2')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFundPay(scope.$index,scope.row, 'fundData2')">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData2, 'fund2')">删除</el-button>
+                                        <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -443,7 +432,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handleUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -481,23 +470,13 @@
                             </el-table-column>
                             <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.payAmount }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.payAmount" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData2')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData2')">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData2,'last')">删除</el-button>
+                                        <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default"  @click="paidAdd2 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmPaidAdd2">确 定</el-button>
+                            <el-button type="danger" @click="confirmPaidAdd2(paidForm1.id)">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -517,8 +496,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" size="small" @click="sharingAdd2=true">编辑</el-button>
-                                <el-button type="text" size="small" @click="handleDelete(scope.$index,sharingData,'share')">删除</el-button>
+                                <el-button v-if="scope.$index == 0" type="text" size="small" @click="sharingAdd2=true">编辑</el-button>
+                                <el-button v-if="scope.$index == 0" type="text" size="small" @click="handleDelete(scope.$index,sharingData,'share')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -528,13 +507,83 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.title" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
-                                        <el-select v-model="sharingForm1.contractName" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item">
+                                        <el-select @change="selShareContract" value-key="id" v-model="sharingForm1.contract" placeholder="请选择合同" style="width: 100%;">
+                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item" :disabled="item.status == 1">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="合同金额（元）">
+                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="分红金额（元）">
+                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" :disabled="true"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办人">
+                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="经办日期">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                        <div class="table_title">
+                            <div class="left" style="width:20.3%">
+                                <span class="desc">{{ table_title }}</span>
+                            </div>
+                        </div>
+                        <el-table :data="fundData3" border style="width: 100%" align="center">
+                            <el-table-column label="基金名称" prop="fundName" align="center">
+                            </el-table-column>
+                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                            </el-table-column>
+                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                            </el-table-column>
+                            <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                                <template scope="scope">
+                                    <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
+                                </template>
+                            </el-table-column>
+                            <!-- <el-table-column label="操作" align="center">
+                                    <template scope="scope">
+                                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">编辑</el-button>
+                                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">保存</el-button>
+                                        <el-button type="text" size="small" @click="handleDelete(index, fundData3, '')">删除</el-button>
+                                    </template>
+                                </el-table-column> -->
+                        </el-table>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="sharingAdd1 = false">取 消</el-button>
+                            <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
+                        </div>
+                    </el-dialog>
+                    <!-- 编辑项目分红 对话框-->
+                    <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
+                        <el-form :model="sharingForm1" label-width="110px">
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="标题">
+                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off" :disabled="true"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="项目合同">
+                                        <el-select @change="selShareContract" value-key="id" v-model="sharingForm1.contract" placeholder="请选择合同" style="width: 100%;">
+                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item" :disabled="item.status == 1">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -574,92 +623,9 @@
                             </el-table-column>
                             <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                             </el-table-column>
-                            <el-table-column label="分红金额（元）" prop="sharingMoney" align="center">
+                            <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.sharingMoney }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.sharingMoney" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(index, fundData3, '')">删除</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="sharingAdd1 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <!-- 编辑项目分红 对话框-->
-                    <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
-                        <el-form :model="sharingForm1" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.title" auto-complete="off" :disabled="true"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同">
-                                        <el-select v-model="sharingForm1.contractName" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.value" :label="item.label" :value="item.value">
-                                            </el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractMoney" auto-complete="off" :disabled="true"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.sharingMoney" auto-complete="off" :disabled="true"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.handlingDate" style="width: 100%;">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:20.3%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData3" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="foundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="分红金额（元）" prop="sharingMoney" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.sharingMoney }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.sharingMoney" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(index,fundData3)">删除</el-button>
+                                    <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -679,7 +645,12 @@ import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'
 import {changeDate} from 'common/js/config'
-import { delGu, delContract, delFee, addFee, editFee, fees, addContract, contracts, getContractDetail, editContract, getContractPay, addContractPay, getParticipationList } from 'api/projectPre';
+import { 
+    delGu, delContract, delFee, addFee, editFee, fees,
+    addContract, contracts, getContractDetail, editContract,
+    getContractPay, addContractPay, getContractPayDetail, editContractPay,
+    getParticipationList, addParticipation, getParticipationDetail, editParticipation
+} from 'api/projectPre';
 
 export default {
     computed: mapGetters({
@@ -716,7 +687,10 @@ export default {
                 }]
             },
             // 项目合同
-            contractForm1: {},
+            contractForm1: {
+                signDate:'',
+                handlerDate:''
+            },
             contractForm2: {},
             contractData: [],
             headerInfo_contract: {
@@ -729,6 +703,7 @@ export default {
             // 添加 项目合同时 的基金table
             table_title: '出资主体',
             fundForm1: {
+                fund:'',
                 fundName: '',
                 investAmount: '',
                 stockRatio: '',
@@ -737,6 +712,7 @@ export default {
             fundData1: [],
             // 添加 投资支付时 的基金table
             fundData2: [],
+            // 添加 项目分红时 的基金table
             fundData3: [],
             //投资支付
             paidForm1: {
@@ -747,12 +723,10 @@ export default {
                 surplusAmount:0,
                 contractName: '',
                 contractAppendix: '',
-                contractMoney: '',
-                restingMonry: '',
                 relativedAppendix: '',
-                handleUserId: '',
+                handlerUserId: '',
                 payDate: '',
-                paidMoney: ''
+                paidInMoney: 0
             },
             paidData: [],
             headerInfo_paid: {
@@ -762,22 +736,15 @@ export default {
                     explain: '添加'
                 }]
             },
-
             // 项目分红
             sharingForm1: {
                 title: '',
+                contract: '',
                 contractName: '',
-                contractMoney: '',
-                sharingMoney: '',
-                operator: '',
-                handlingDate: '',
-            },
-            sharingForm2: {
-                foundName: '',
-                capitalMoney: '',
-                stockRatio: '',
-                sharingMoney: '',
-                sharingDate: ''
+                contractAmount: 0,
+                shareAmount: 0,
+                handlerUserId: '',
+                shareDate: '',
             },
             sharingData: [],
             headerInfo_sharing: {
@@ -786,17 +753,7 @@ export default {
                     icon: 'plus-round',
                     explain: '添加'
                 }]
-            },
-            // 添加 项目分红时 的基金table
-            fundData3: [
-                {
-                    foundName: 'AA基金',
-                    investAmount: '500,000',
-                    stockRatio: '10',
-                    sharingMoney: '',
-                    editFlag: false
-                }
-            ]
+            }
         }
     },
     created() {
@@ -864,7 +821,7 @@ export default {
         //获取投资支付列表
         getContractPay() {
             getContractPay(this.proId).then(resp => {
-                // console.log('getContractPay resp: '+ JSON.stringify( resp.data));
+                // console.log('获取投资支付列表: '+ JSON.stringify( resp.data));
                 if(resp.data.status === '200'){
                     this.paidData = resp.data.result.list;
                 }
@@ -901,7 +858,8 @@ export default {
                 signDate : this.contractForm1.signDate,
                 contractAmount : this.contractForm1.contractAmount,
                 stockRatio : this.contractForm1.stockRatio,
-                handlerUserId : this.contractForm1.handlerUserId,
+                handlerUserId : (this.contractForm1.handlerUserId != '' && this.contractForm1.handlerUserId != undefined)
+                                ? this.contractForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                 handlerDate : this.contractForm1.handlerDate
             };
             let data = {
@@ -914,6 +872,7 @@ export default {
                 if(resp.data.status == '200'){
                     this.contractForm1 = {};
                     this.fundData1 = [];
+                    this.fundData1.push();
                     this.contractAdd1 = false;
                     this.getContract();
                 }
@@ -923,17 +882,11 @@ export default {
         },
         // 添加出资主体 确定按钮
         confirmFundAdd1() {
-            let fundId = this.fundForm1.fund.id,
-                fundName = this.fundForm1.fund.fundName,
-                investAmount = this.fundForm1.investAmount,
-                stockRatio = this.fundForm1.stockRatio;
-            let data = {
-                fundId,
-                fundName,
-                investAmount,
-                stockRatio
-            };
-            this.fundData1.push(data);
+            this.fundForm1.fundId = this.fundForm1.fund.id;
+            this.fundForm1.fundName = this.fundForm1.fund.fundName;
+
+            this.fundData1.push(this.fundForm1);
+
             this.fundForm1 = {
                 fundName: '',
                 investAmount: '',
@@ -941,15 +894,25 @@ export default {
                 editFlag: false
             };
             this.fundAdd1 = false;
-            this.contractAdd1 = true;
+            //this.contractAdd1 = true;
         },
         //打开编辑 项目合同
         goEditContract(id) {
             this.contractAdd2 = !this.contractAdd2;
             getContractDetail(id).then(resp => {
                 if(resp.data.status == '200'){
+                    console.log('goEditContract合同详情: '+JSON.stringify(resp.data.result));
                     this.contractForm2 = resp.data.result.projectContract;
                     this.fundData1 = resp.data.result.fundInfo;
+                    this.fundData1.forEach(function(item, index){
+                        let fund = {
+                            id:item.fundId,
+                            fundName:item.fundName
+                        };
+
+                        item.fund = fund;
+                    });
+                    this.fundData1.push();
                 }
             }).catch(e => {
                 console.log('addContract() exists error: ', e);
@@ -963,7 +926,8 @@ export default {
                 signDate : this.contractForm2.signDate,
                 contractAmount : this.contractForm2.contractAmount,
                 stockRatio : this.contractForm2.stockRatio,
-                handlerUserId : this.contractForm2.handlerUserId,
+                handlerUserId : (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
+                                ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                 handlerDate : this.contractForm2.handlerDate
             };
             let data = {
@@ -976,6 +940,7 @@ export default {
                 if(resp.data.status == '200'){
                     this.contractForm2 = {};
                     this.fundData1 = [];
+                    this.fundData1.push();
                     this.contractAdd2 = !this.contractAdd2;
                     this.getContract();
                 }
@@ -986,7 +951,8 @@ export default {
         //保存投资主体
         saveFund(index, row, type = 'fundData1') {
             row.editFlag = !row.editFlag;
-            this.fundData1[index].fundName = row.fundId.label;
+            row.fundName = row.fund.fundName;
+            row.fundId = row.fund.id;
             this.fundData1.push();
         },
         //保存投资支付-明细行
@@ -1014,14 +980,21 @@ export default {
         //选择投资支付的合同
         selContract(value) {
             if(!value) return;
-            this.paidForm1.payTitle = value.contractName | '';
-            this.paidForm1.contractAmount = value.contractAmount | 0;
-            this.paidForm1.contractId = value.contractId;
+            this.paidForm1.payTitle = "投资支付-" + value.contractName;
+            this.paidForm1.contractAmount = value.contractAmount;
+            this.paidForm1.contractId = value.id;
+            console.log('选择的合同ID: '+ value.id);
             //获得合同中的投资主体(基金)列表
             getContractDetail(value.id).then(resp => {
-                console.log('选择的合同详情: ', resp.data.result);
+                console.log('选择的合同详情: '+JSON.stringify(resp.data.result));
                 if(resp.data.status == '200'){
                     this.fundData2 = resp.data.result.fundInfo;
+
+                    this.fundData2.forEach(function(item, index){
+                        item.contractFundId = item.id;
+                        item.id = '';
+                        console.log('合同中投资主体详情: '+JSON.stringify(item));
+                    });
                     this.calcSurplusAmount();
                 }
             }).catch(e => {
@@ -1038,16 +1011,14 @@ export default {
                 contractId : this.paidForm1.contractId,
                 payTitle : this.paidForm1.payTitle,
                 surplusAmount : this.paidForm1.surplusAmount,
-                handlerUserId : this.paidForm1.handlerUserId,
+                handlerUserId : (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
+                                ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                 payDate : this.paidForm1.payDate
             };
             let data = {
                 projectInvestPay : projectInvestPay,
                 payDetails : this.fundData2
             }
-            this.fundData2.forEach(function(item, index){
-                item.contractFundId = item.id;
-            });
             console.log("添加投资支付  :: "+JSON.stringify(data));
             addContractPay(projectInvestPay, this.fundData2).then(resp => {
                 console.log('addContractPay resp: ', resp.data);
@@ -1061,14 +1032,132 @@ export default {
                 console.log('addContractPay() exists error: ', e);
             })
         },
+        //打开编辑投资支付
+        goEditPay(id) {
+            getContractPayDetail(id).then(resp => {
+                console.log('打开编辑投资支付: '+JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    this.paidForm1 = resp.data.result.projectInvestPay;
+                    this.fundData2 = resp.data.result.payDetails;
+                    this.paidAdd2 = !this.paidAdd2;
+                }
+            }).catch(e => {
+                console.log('getContractPayDetail() exists error: ', e);
+            })
+        },
+        
         // 编辑 投资支付 确定按钮
-        confirmPaidAdd2() {
-            this.paidAdd2 = !this.paidAdd2;
+        confirmPaidAdd2(id) {
+            console.log("合同ID"+this.paidForm1.contractId);
+            let projectInvestPay = {
+                id : id,
+                paidInMoney : 0, 
+                payTitle : this.paidForm1.payTitle,
+                surplusAmount : this.paidForm1.surplusAmount,
+                handlerUserId : (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
+                                ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                payDate : this.paidForm1.payDate
+            };
+            let data = {
+                projectInvestPay : projectInvestPay,
+                payDetails : this.fundData2
+            }
+            console.log("添加投资支付  :: "+JSON.stringify(data));
+            editContractPay(projectInvestPay, this.fundData2).then(resp => {
+                console.log('editContractPay resp: ', resp.data);
+                if(resp.data.status == '200'){
+                    this.getContractPay();
+                    this.paidForm1 = {};
+                    this.fundData2 = [];
+                    this.paidAdd2 = !this.paidAdd2;
+                }
+            }).catch(e => {
+                console.log('editContractPay() exists error: ', e);
+            })
+        },
+        //投资支付金额合计
+        sumPay() {
+            let sum = 0.0, sumSurplus = 0.0;
+            for (let i = 0; i < this.fundData2.length; i++) {
+                sum += (parseFloat(this.fundData2[i].payAmount | 0));
+                if(this.fundData2[i].surplusAmount == undefined || this.fundData2[i].surplusAmount ==''){
+                    this.fundData2[i].surplusAmount = this.fundData2[i].investAmount;
+                }
+                sumSurplus += this.fundData2[i].surplusAmount - this.fundData2[i].payAmount;
+            }
+            this.paidForm1.surplusAmount = sumSurplus;
+        },
+        // 分红金额合计
+        valueSum() {
+            let sum = 0.0;
+            for (let i = 0; i < this.fundData3.length; i++) {
+                sum += (parseFloat(this.fundData3[i].shareAmount | 0));
+            }
+            this.sharingForm1.shareAmount = sum;
+        },
+        //选择项目分红的合同
+        selShareContract(value) {
+            if(!value) return;
+            this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
+            this.sharingForm1.contractAmount = value.contractAmount;
+            this.sharingForm1.contractId = value.id;
+            console.log('选择的合同ID: '+ value.id);
+            //获得合同中的投资主体(基金)列表
+            getContractDetail(value.id).then(resp => {
+                console.log('选择的合同详情: '+JSON.stringify(resp.data.result));
+                if(resp.data.status == '200'){
+                    this.fundData3 = resp.data.result.fundInfo;
+
+                    this.fundData3.forEach(function(item, index){
+                        item.contractFundId = item.id;
+                        item.id = '';
+                        console.log('合同中投资主体详情: '+JSON.stringify(item));
+                    });
+                    this.valueSum();
+                }
+            }).catch(e => {
+                console.log('selShareContract() exists error: ', e);
+            })
         },
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
-            this.sharingAdd1 = false;
-            this.sharingData.push(this.sharingForm1);
+            let projectParticipation = {
+                projectId : this.proId,
+                shareDate : this.sharingForm1.shareDate,
+                shareTitle: this.sharingForm1.shareTitle,
+                contractId : this.sharingForm1.contractId, 
+                shareAmount : this.sharingForm1.shareAmount,
+                handlerUserId : (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
+                                ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id
+            };
+            let data = {
+                projectParticipation : projectParticipation,
+                participationDetails : this.fundData3
+            }
+            console.log("添加项目分红  :: "+JSON.stringify(data));
+            addParticipation(projectParticipation, this.fundData3).then(resp => {
+                console.log('addParticipation resp: ', resp.data);
+                if(resp.data.status == '200'){
+                    this.getParticipation();
+                    this.sharingForm1 = {};
+                    this.sharingAdd1 = false;
+                }
+            }).catch(e => {
+                console.log('addContractPay() exists error: ', e);
+            })
+        },
+        //打开编辑 项目分红
+        goEditShare(id) {
+            getParticipationDetail(id).then(resp => {
+                console.log('打开编辑项目分红: '+JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    this.sharingForm1 = resp.data.result.participationResult;
+                    this.fundData3 = resp.data.result.participationDetails;
+                    this.sharingAdd2 = !this.sharingAdd2;
+                }
+            }).catch(e => {
+                console.log('getParticipationDetail() exists error: ', e);
+            })
         },
         // 编辑 项目分红 确定按钮
         confirmSharingAdd2() {
