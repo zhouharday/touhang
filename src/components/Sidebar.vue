@@ -245,7 +245,6 @@ export default {
     },
     data() {
         return {
-
             theModel: [],
             setting: {
                 view: {
@@ -612,4 +611,5 @@ export default {
 .el-menu-vertical-demo {
     background: #2E363F;
 }
+
 </style>

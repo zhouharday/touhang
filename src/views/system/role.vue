@@ -1,53 +1,50 @@
 <template>
-    <div class="role">
-        <div class="role">
-            <el-row :gutter="20">
-                <el-col :span="8">
-                    <div class="roleBtn">
-                        <el-button size="small" @click="tianjuese">添加</el-button>
-                    </div>
-                    <div class="roleContent">
-                        <el-table :data="roleInfo" border style="width:  100%" highlight-current-row @current-change="handleCurrentChange">
-                            <el-table-column label="角色名称" prop="roleName" width="160">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index,  scope.row)">
-                                        {{scope.row.roleName}}
-                                    </span>
-                                    <span v-if="scope.row.editFlag" @click="handleRole(scope.$index,  scope.row)">
-                                        <el-input v-model="scope.row.roleName" :placeholder="scope.row.roleName"></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作">
-                                <template scope="scope">
-                                    <el-button size="mini" @click="handleEdit(scope.$index,  scope.row)" v-if="!scope.row.editFlag">
-                                        编辑
-                                    </el-button>
-                                    <el-button size="mini" @click="handleEdit(scope.$index,  scope.row)" v-if="scope.row.editFlag">
-                                        保存
-                                    </el-button>
-                                    <el-button size="mini" type="text" @click="handleDelete(scope.$index,  scope.row)">
-                                        删除
-                                    </el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </div>
-                </el-col>
-                <el-col :span="16">
-                    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                        <el-tab-pane label="角色权限" name="first">
-                            <role-limits :treeData="treeData" :nowId="nowId"></role-limits>
-                        </el-tab-pane>
-                        <el-tab-pane label="角色用户" name="second">
-                            <role-user :roleUserList="roleUserList" :nowId="nowId" @refreshRoleUserList="refreshRoleUserList"></role-user>
-                        </el-tab-pane>
-                    </el-tabs>
-                </el-col>
-            </el-row>
-
-        </div>
-        <el-dialog title="角色名称" :visible.sync="fundDialog" class="fileDialog">
+    <section class="role">
+        <el-row :gutter="20">
+            <el-col :span="8">
+                <div class="roleBtn">
+                    <el-button type="danger" style="padding: 7px 14px;" @click="tianjuese">添加</el-button>
+                </div>
+                <div class="roleContent">
+                    <el-table :data="roleInfo" border style="width: 100%" highlight-current-row @current-change="handleCurrentChange">
+                        <el-table-column label="角色名称" prop="roleName" width="160" align="center">
+                            <template scope="scope">
+                                <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index,  scope.row)">
+                                    {{scope.row.roleName}}
+                                </span>
+                                <span v-if="scope.row.editFlag" @click="handleRole(scope.$index,  scope.row)">
+                                    <el-input v-model="scope.row.roleName" :placeholder="scope.row.roleName"></el-input>
+                                </span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="操作" align="center">
+                            <template scope="scope">
+                                <el-button type="text" @click="handleEdit(scope.$index,  scope.row)" v-if="!scope.row.editFlag">
+                                    编辑
+                                </el-button>
+                                <el-button type="text" @click="handleEdit(scope.$index,  scope.row)" v-if="scope.row.editFlag">
+                                    保存
+                                </el-button>
+                                <el-button type="text" @click="handleDelete(scope.$index,  scope.row)">
+                                    删除
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </el-col>
+            <el-col :span="16">
+                <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+                    <el-tab-pane label="角色权限" name="first">
+                        <role-limits :treeData="treeData" :nowId="nowId"></role-limits>
+                    </el-tab-pane>
+                    <el-tab-pane label="角色用户" name="second">
+                        <role-user :roleUserList="roleUserList" :nowId="nowId" @refreshRoleUserList="refreshRoleUserList"></role-user>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-col>
+        </el-row>
+        <el-dialog title="角色名称" :visible.sync="fundDialog">
             <el-form :model="fundForm">
                 <el-row>
                     <el-col>
@@ -61,11 +58,11 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn_active" @click="addjuese">保存</el-button>
-                <el-button class="dialogBtn" @click="fundDialog = false">取消</el-button>
+                <el-button type="danger" @click="addjuese">保 存</el-button>
+                <el-button type="default" @click="fundDialog = false">取 消</el-button>
             </div>
         </el-dialog>
-    </div>
+    </section>
 </template>
 
 <script type="text/ecmascript-6">

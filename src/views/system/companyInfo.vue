@@ -110,20 +110,20 @@ export default {
 <style lang="less" scoped>
 @import "../../common/styles/mixin.less";
 .companyInfo {
-    .base-style();
-    .row {
-        padding-top: @height-small;
-        .col {
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            padding: 24px;
+        .base-style();
+        .row {
+                padding-top: @height-small;
+                .col {
+                        border: 1px solid #ddd;
+                        border-radius: 6px;
+                        padding: 24px;
+                }
+                .btn_wrapper {
+                        text-align: center;
+                        .changeWidth {
+                                width: 120px;
+                        }
+                }
         }
-        .btn_wrapper {
-            text-align: center;
-            .changeWidth {
-                width: 120px;
-            }
-        }
-    }
 }
 </style>

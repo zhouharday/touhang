@@ -335,15 +335,7 @@ export function delContract(id = undefined) {
 	}
 	return service({url: '/projectContract/deleteProjectContract', method: 'post', data});
 }
-
-//项目分红列表
-export function getParticipationList(projectId = undefined) {
-	const data = {
-		projectId
-	}
-	return service({url: '/projectParticipation/getParticipationList', method: 'post', data});
-}
-
+	
 //项目投资支付列表
 export function getContractPay(projectId = undefined) {
 	const data = {
@@ -359,4 +351,55 @@ export function addContractPay(projectInvestPay = {}, payDetails = []) {
         payDetails : payDetails
     }
 	return service({url: '/projectPay/addProjectInvestPay', method: 'post', data});
+}
+
+//获取投资支付详情
+export function getContractPayDetail(id = undefined) {
+	const data = {
+        id
+    }
+	return service({url: '/projectPay/getContractPayDetails', method: 'post', data});
+}
+
+//编辑投资支付
+export function editContractPay(projectInvestPay = {}, payDetails = []) {
+	const data = {
+        projectInvestPay : projectInvestPay,
+        payDetails : payDetails
+    }
+	return service({url: '/projectPay/updateProjectInvestPay', method: 'post', data});
+}
+
+//添加项目分红
+export function addParticipation(projectParticipation = {}, participationDetails = []) {
+	const data = {
+        projectParticipation : projectParticipation,
+        participationDetails : participationDetails
+    }
+	return service({url: '/projectParticipation/addProjectParticipation', method: 'post', data});
+}
+
+//项目分红列表
+export function getParticipationList(projectId = undefined) {
+	const data = {
+		projectId
+	}
+	return service({url: '/projectParticipation/getParticipationList', method: 'post', data});
+}
+
+//获取项目分红详情
+export function getParticipationDetail(id = undefined) {
+	const data = {
+        id
+    }
+	return service({url: '/projectParticipation/getParticipationDetails', method: 'post', data});
+}
+
+//编辑项目分红
+export function editParticipation(projectParticipation = {}, participationDetails = []) {
+	const data = {
+        projectParticipation : projectParticipation,
+        participationDetails : participationDetails
+    }
+	return service({url: '/projectParticipation/updateParticipation', method: 'post', data});
 }

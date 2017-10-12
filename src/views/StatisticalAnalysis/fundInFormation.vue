@@ -43,9 +43,15 @@
                 </el-table-column>
                 <el-table-column prop="contributionTheme" label="基金浮盈" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="contributionTheme" label="投资项目数" width="150" align="center">
+                <el-table-column label="投资项目数" fixed="right" width="150" align="center">
+                    <template scope="scope">
+                        <el-button type="text" @click="openModal(1)" style="color:#f05e5e">{{ scope.row.contributionTheme }}</el-button>
+                    </template>
                 </el-table-column>
-                <el-table-column prop="shareholdingRatio" fixed="right" label="退出投资数" width="150" align="center">
+                <el-table-column label="退出投资数" fixed="right" width="150" align="center">
+                    <template scope="scope">
+                        <el-button type="text" @click="openModal(2)" style="color:#f05e5e">{{ scope.row.shareholdingRatio }}</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
             <el-row class="articlesNumber">
@@ -60,8 +66,23 @@
                 </el-col>
             </el-row>
         </div>
+        <div class="tableModal">
+            <el-dialog title="投资详情" :visible.sync="tableModal">
+                <el-table :data="projectData">
+                    <el-table-column property="projectName" label="项目名称"></el-table-column>
+                    <el-table-column property="projectType" label="项目类型"></el-table-column>
+                    <el-table-column property="industry" label="所属行业"></el-table-column>
+                    <el-table-column property="createUserName" label="项目创建人"></el-table-column>
+                    <el-table-column property="payDate" label="投资日期"></el-table-column>
+                    <el-table-column property="paySumAmount" label="投资金额"></el-table-column>
+                    <el-table-column property="outingAmount" label="退出金额"></el-table-column>
+                    <el-table-column property="outingIncome" label="退出收益"></el-table-column>
+                </el-table>
+            </el-dialog>
+        </div>
     </section>
 </template>
+
 
 <script>
 export default {
@@ -89,15 +110,18 @@ export default {
     methods: {
         handleClick() {
             console.log(1);
+        },
+        openModal(num) {
+            this.tableModal = true;
         }
     },
-
     data() {
         return {
             from: 0,
             to: 0,
             altogether: 0,
             every: 10,
+            tableModal: false,
             fundTabData: [
                 {
                     projectName: '2016-05-03',
@@ -110,6 +134,18 @@ export default {
                     exitProceeds: 200333,
                     contributionTheme: 200333,
                     shareholdingRatio: 200333,
+                }
+            ],
+            projectData: [
+                {
+                    projectName: '朝阳项目',
+                    projectType: '',
+                    industry: '',
+                    createUserName: '',
+                    payDate: '',
+                    paySumAmount: '',
+                    outingAmount: '',
+                    outingIncome: ''
                 }
             ]
         }

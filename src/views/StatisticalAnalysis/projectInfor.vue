@@ -41,26 +41,40 @@
                 </el-table-column>
                 <el-table-column prop="exitProceeds" label="退出收益" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="contributionTheme" label="出资主体" width="150" align="center">
+                <el-table-column prop="contributionTheme" fixed="right" label="出资主体" width="150" align="center">
+                    <template scope="scope">
+                        <div v-for="(item,index) in scope.row.contributionTheme" :key="item.index">{{ item.contributionName}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="incomeRate" fixed="right" label="收益率" width="150" align="center">
+                    <template scope="scope">
+                        <div v-for="(item,index) in scope.row.contributionTheme" :key="item.index">{{ item.incomeRate}}</div>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="investMoney" fixed="right" label="出资金额" width="150" align="center">
+                    <template scope="scope">
+                        <div v-for="(item,index) in scope.row.contributionTheme" :key="item.index">{{ item.investMoney}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column prop="shareholdingRatio" fixed="right" label="股权占比" width="150" align="center">
+                    <template scope="scope">
+                        <div v-for="(item,index) in scope.row.contributionTheme" :key="item.index">{{ item.shareholdingRatio}}</div>
+                    </template>
                 </el-table-column>
             </el-table>
             <!--<el-row class="articlesNumber">-->
-                <!--<el-col :span="24">-->
-                    <!--<div class="grid-content bg-purple-dark">-->
-                        <!--显示-->
-                        <!--<span> {{from}} </span>到-->
-                        <!--<span> {{to}} </span>条, 共-->
-                        <!--<span> {{altogether}} </span>条记录, 每页显示-->
-                        <!--<span> {{every}} </span>条-->
-                    <!--</div>-->
-                <!--</el-col>-->
+            <!--<el-col :span="24">-->
+            <!--<div class="grid-content bg-purple-dark">-->
+            <!--显示-->
+            <!--<span> {{from}} </span>到-->
+            <!--<span> {{to}} </span>条, 共-->
+            <!--<span> {{altogether}} </span>条记录, 每页显示-->
+            <!--<span> {{every}} </span>条-->
+            <!--</div>-->
+            <!--</el-col>-->
             <!--</el-row>-->
             <div class="pagination">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                               :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100"
-                               layout="total, sizes, prev, pager, next, jumper" :total="400">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
                 </el-pagination>
             </div>
         </div>
@@ -109,11 +123,36 @@ export default {
                     Industry: '上海',
                     projectLeader: '普陀区',
                     investmentTime: '上海市普陀区金沙江路 1518 弄',
+                    investmentAmount: '90000,0000',
                     lastValuation: 200333,
                     lastFloating: 200333,
                     exitProceeds: 200333,
-                    contributionTheme: 200333,
-                    shareholdingRatio: 200333,
+                    contributionTheme: [
+                        {
+                            contributionName: 'AA基金',
+                            incomeRate: '3%',
+                            investMoney: '2000,0000',
+                            shareholdingRatio: 200333
+                        },
+                        {
+                            contributionName: 'BB基金',
+                            incomeRate: '2.5%',
+                            investMoney: '10000,0000',
+                            shareholdingRatio: 200334
+                        },
+                        {
+                            contributionName: 'CC基金',
+                            incomeRate: '3%',
+                            investMoney: '2000,0000',
+                            shareholdingRatio: 200333
+                        },
+                        {
+                            contributionName: 'DD基金',
+                            incomeRate: '2.5%',
+                            investMoney: '10000,0000',
+                            shareholdingRatio: 200334
+                        }
+                    ]
                 }
             ]
         }
