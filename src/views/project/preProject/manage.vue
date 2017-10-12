@@ -309,6 +309,7 @@
                         <el-table-column label="支付金额（元）" prop="paidInMoney" align="center">
                         </el-table-column>
                         <el-table-column label="支付日期" prop="payDate" align="center">
+                            <template scope="scope"><div>{{scope.row.payDate | formatDate}}</div></template>
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
@@ -496,7 +497,7 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-if="scope.$index == 0" type="text" size="small" @click="sharingAdd2=true">编辑</el-button>
+                                <el-button v-if="scope.$index == 0" type="text" size="small" @click="goEditShare(scope.row.id)">编辑</el-button>
                                 <el-button v-if="scope.$index == 0" type="text" size="small" @click="handleDelete(scope.$index,sharingData,'share')">删除</el-button>
                             </template>
                         </el-table-column>
@@ -600,7 +601,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.operator" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -631,7 +632,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
-                            <el-button type="danger"  @click="confirmSharingAdd2">确 定</el-button>
+                            <el-button type="danger"  @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -641,6 +642,7 @@
 </template>
 
 <script>
+import '../../../common/js/filter'
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'
@@ -738,13 +740,11 @@ export default {
             },
             // 项目分红
             sharingForm1: {
-                title: '',
-                contract: '',
-                contractName: '',
-                contractAmount: 0,
+                id:'',
+                shareTitle: '',
                 shareAmount: 0,
                 handlerUserId: '',
-                shareDate: '',
+                shareDate: ''
             },
             sharingData: [],
             headerInfo_sharing: {
@@ -1148,10 +1148,11 @@ export default {
         },
         //打开编辑 项目分红
         goEditShare(id) {
+            console.log('打开编辑项目分红: '+JSON.stringify(id));
             getParticipationDetail(id).then(resp => {
                 console.log('打开编辑项目分红: '+JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
-                    this.sharingForm1 = resp.data.result.participationResult;
+                    this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
                     this.sharingAdd2 = !this.sharingAdd2;
                 }
@@ -1160,8 +1161,31 @@ export default {
             })
         },
         // 编辑 项目分红 确定按钮
-        confirmSharingAdd2() {
-            this.sharingAdd2 = !this.sharingAdd2;
+        confirmSharingAdd2(id) {
+            let projectParticipation = {
+                id : id,
+                shareTitle : this.sharingForm1.shareTitle,
+                shareAmount : this.sharingForm1.shareAmount,
+                handlerUserId : (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
+                                ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                shareDate : this.sharingForm1.shareDate
+            };
+            let data = {
+                projectInvestPay : projectInvestPay,
+                payDetails : this.fundData3
+            }
+            console.log("编辑 项目分红  :: "+JSON.stringify(data));
+            editParticipation(projectParticipation, this.fundData3).then(resp => {
+                console.log('editParticipation resp: ', resp.data);
+                if(resp.data.status == '200'){
+                    this.getParticipation();
+                    this.sharingForm1 = {};
+                    this.fundData3 = [];
+                    this.sharingAdd2 = !this.sharingAdd2;
+                }
+            }).catch(e => {
+                console.log('editParticipation() exists error: ', e);
+            })
         },
         checkEdit(index, row, type = '') { // 出资主体的table 编辑
             // console.log(row)
