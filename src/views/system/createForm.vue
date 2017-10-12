@@ -13,14 +13,27 @@
                 <div class="form-components">
                     <span>表单组件</span>
                     <ul>
-                        <li v-for="list in btnLists" @drop='drop($event)' @dragover='allowDrop($event)'>
-                            <el-button id="button">{{list.data}}</el-button>
+                        <li draggable='true' @dragstart='drag($event)' v-for="list in btnLists">
+                            <el-button type="button">{{list.data}}</el-button>
                         </li>
                     </ul>
                 </div>
             </el-col>
             <el-col :span="14" style="background-color: #fff;height: 100%;margin: 0 10px;">
-                <div class="form-components">中间内容</div>
+                <div class="form-components" @drop='drop($event)' @dragover='allowDrop($event)' style="height:100%">
+                    <span>中间内容</span>
+                    <div v-for="(item, index) in formData">
+                        <!--<el-input>{{item}}</el-input>-->
+                    </div>
+                    <!--<ul>-->
+                    <!--<li>-->
+                    <!--<el-input v-model="input"></el-input>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                    <!--<el-input type="textarea" :rows="2" v-model="textarea"></el-input>-->
+                    <!--</li>-->
+                    <!--</ul>-->
+                </div>
             </el-col>
             <el-col :span="5" style="background-color: #fff;height: 100%;margin-right: -10px;">
                 <div class="form-components">
@@ -80,6 +93,7 @@
 </style>
 
 <script>
+    let dom = 0;
     export default {
         data() {
             return {
@@ -111,20 +125,49 @@
 
                     }
                 ],
-                type: []
+                type: [],
+                input: '',
+                textarea: '',
+                formData: [{
+                    type: 'el-input',
+                    val: ''
+                }, {
+                    type: 'el-textarea',
+//                    data: {...},
+//                    process: this.textarea,
+                    val: ''
+                }, {
+                    type: 'el-input',
+//                    data: {...},
+//                    process: this.input,
+                    val: ''
+                }, {
+                    type: 'el-date',
+//                    data: {...},
+//                    process: this.date,
+                    val: ''
+                }, {
+                    type: 'el-file',
+//                    data: {...},
+//                    process: this.file,
+                    val: ''
+                }]
             }
         },
         methods: {
-            drag:function(event){
+            drag: function (event) {
                 dom = event.currentTarget
             },
-            drop:function(event){
-                e.preventDefault();
-                e.target.appendChild(dom);
+            drop: function (event) {
+                event.preventDefault();
+                this[0].type = "textarea"
+                event.target.appendChild(dom)
             },
-            allowDrop:function(e){
-                e.preventDefault();
+            allowDrop: function (e) {
+                event.preventDefault();
             }
         }
     }
 </script>
+
+
