@@ -12,7 +12,7 @@
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
                                 <el-button type="text" @click="goEditFee(scope.row)">编辑</el-button>
-                                <el-button type="text"  @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
+                                <el-button type="text" @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -30,8 +30,8 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button type="default"  @click="costAdd1 = false">取 消</el-button>
-                            <el-button type="danger"  @click="confirmCostAdd1">确 定</el-button>
+                            <el-button type="default" @click="costAdd1 = false">取 消</el-button>
+                            <el-button type="danger" @click="confirmCostAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
                     <!-- 编辑项目费用 对话框-->
@@ -48,13 +48,12 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button type="default"  @click="costAdd2 = false">取 消</el-button>
+                            <el-button type="default" @click="costAdd2 = false">取 消</el-button>
                             <el-button type="danger" @click="confirmCostAdd2()">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
             </el-collapse-item>
-
             <el-collapse-item title="项目合同" name="2">
                 <!-- 项目合同 部分 -->
                 <div class="fileTable">
@@ -233,7 +232,7 @@
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
-                                 <el-col>
+                                <el-col>
                                     <el-form-item label="合同附件">
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="contractForm2.appendix" action="//jsonplaceholder.typicode.com/posts/">
@@ -356,7 +355,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="支付日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -392,10 +391,10 @@
                                 <template scope="scope">
                                         <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
                                 </template>
-                            </el-table-column>
+                            </el-table-column> 
                         </el-table>
                         <div slot="footer" class="dialog-footer">
-                            <el-button type="default"  @click="paidAdd1 = false">取 消</el-button>
+                            <el-button type="default" @click="paidAdd1 = false">取 消</el-button>
                             <el-button type="danger" @click="confirmPaidAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
@@ -437,12 +436,12 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="支付日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
-                                 <el-col>
+                                <el-col>
                                     <el-form-item label="相关附件">
                                         <!-- action 上传的地址，必填 -->
                                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
@@ -473,7 +472,7 @@
                                 <template scope="scope">
                                         <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
                                 </template>
-                            </el-table-column>
+                            </el-table-column> 
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default"  @click="paidAdd2 = false">取 消</el-button>
@@ -535,7 +534,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="分红日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -605,7 +604,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="分红日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.handlingDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -629,6 +628,13 @@
                                     <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
                                 </template>
                             </el-table-column>
+                            <!-- <el-table-column label="操作" align="center">
+                                    <template scope="scope">
+                                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">编辑</el-button>
+                                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">保存</el-button>
+                                        <el-button type="text" size="small" @click="handleDelete(index,fundData3)">删除</el-button>
+                                    </template>
+                                </el-table-column> -->
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
@@ -656,8 +662,8 @@ import {
 
 export default {
     computed: mapGetters({
-        costSortOptions:'getCostSortOptions',   // 获取费用类型
-        myFundOptions:'getMyFundOptions'    //本商户的可签约基金列表
+        costSortOptions: 'getCostSortOptions',   // 获取费用类型
+        myFundOptions: 'getMyFundOptions'    //本商户的可签约基金列表
     }),
     props: {
         proId: {
@@ -720,9 +726,9 @@ export default {
             paidForm1: {
                 payTitle: '',
                 contract: '',
-                contractId:'',
-                payAmount:0,
-                surplusAmount:0,
+                contractId: '',
+                payAmount: 0,
+                surplusAmount: 0,
                 contractName: '',
                 contractAppendix: '',
                 relativedAppendix: '',
@@ -771,7 +777,7 @@ export default {
         //获取费用列表
         getFee() {
             fees(this.proId).then(resp => {
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.costData = resp.data.result;
                 }
             }).catch(e => {
@@ -786,7 +792,7 @@ export default {
         // 保存 项目费用 确定按钮
         confirmCostAdd2() {
             editFee(this.costForm2).then(resp => {
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.getFee();
                     this.costAdd2 = !this.costAdd2;
                 }
@@ -810,8 +816,8 @@ export default {
                 console.log('addFee resp: ', resp.data);
                 this.getFee();
                 this.costForm1 = {
-                    costTypeId:'',
-                    amountMoney:''
+                    costTypeId: '',
+                    amountMoney: ''
                 };
                 this.costAdd1 = !this.costAdd1;
             }).catch(e => {
@@ -833,7 +839,7 @@ export default {
         getParticipation() {
             getParticipationList(this.proId).then(resp => {
                 // console.log('getParticipationList resp: '+ JSON.stringify( resp.data));
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.sharingData = resp.data.result.list;
                 }
             }).catch(e => {
@@ -843,7 +849,7 @@ export default {
         //获取合同列表
         getContract() {
             contracts(this.proId).then(resp => {
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.contractData = resp.data.result;
                 }
             }).catch(e => {
@@ -863,13 +869,13 @@ export default {
                 handlerDate : this.contractForm1.handlerDate
             };
             let data = {
-                projectContract : projectContract,
-                fundInfo : this.fundData1
+                projectContract: projectContract,
+                fundInfo: this.fundData1
             }
-            console.log("添加项目合同  :: "+JSON.stringify(data));
+            console.log("添加项目合同  :: " + JSON.stringify(data));
             addContract(projectContract, this.fundData1).then(resp => {
                 console.log('addContract resp: ', resp.data);
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.contractForm1 = {};
                     this.fundData1 = [];
                     this.fundData1.push();
@@ -931,13 +937,13 @@ export default {
                 handlerDate : this.contractForm2.handlerDate
             };
             let data = {
-                projectContract : projectContract,
-                fundInfo : this.fundData1
+                projectContract: projectContract,
+                fundInfo: this.fundData1
             }
-            console.log("修改项目合同  :: "+JSON.stringify(data));
+            console.log("修改项目合同  :: " + JSON.stringify(data));
             editContract(projectContract, this.fundData1).then(resp => {
                 console.log('editContract resp: ', resp.data);
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.contractForm2 = {};
                     this.fundData1 = [];
                     this.fundData1.push();
@@ -958,24 +964,24 @@ export default {
         //保存投资支付-明细行
         saveFundPay(index, row, type = 'fundData2') {
             row.editFlag = !row.editFlag;
-            if(row.investAmount < row.payAmount){
+            if (row.investAmount < row.payAmount) {
                 //TODO message
-            }else{
+            } else {
                 this.fundData2[index].surplusAmount = row.investAmount - row.payAmount | 0;
             }
             this.calcSurplusAmount();
             this.fundData2.push();
-        },  
+        },
         //计算总剩余金额/支付金额
-        calcSurplusAmount(){
+        calcSurplusAmount() {
             let surplus = 0, payAmount = 0;
-            this.fundData2.forEach(function(item, index){
+            this.fundData2.forEach(function(item, index) {
                 surplus += item.surplusAmount | 0;
                 payAmount += item.payAmount | 0;
             });
             this.paidForm1.surplusAmount = surplus;
             this.paidForm1.payAmount = payAmount;
-            console.log("总剩余金额："+ this.paidForm1.surplusAmount+",总支付金额："+ this.paidForm1.payAmount);
+            console.log("总剩余金额：" + this.paidForm1.surplusAmount + ",总支付金额：" + this.paidForm1.payAmount);
         },
         //选择投资支付的合同
         selContract(value) {
@@ -1003,9 +1009,9 @@ export default {
         },
         // 添加 投资支付 确定按钮
         confirmPaidAdd1() {
-            console.log("合同ID"+this.paidForm1.contractId);
+            console.log("合同ID" + this.paidForm1.contractId);
             let projectInvestPay = {
-                projectId : this.proId,
+                projectId: this.proId,
                 investBeforeId: this.$route.params.investProjectId,
                 paidInMoney : this.paidForm1.payAmount, 
                 contractId : this.paidForm1.contractId,
@@ -1016,15 +1022,15 @@ export default {
                 payDate : this.paidForm1.payDate
             };
             let data = {
-                projectInvestPay : projectInvestPay,
-                payDetails : this.fundData2
+                projectInvestPay: projectInvestPay,
+                payDetails: this.fundData2
             }
             console.log("添加投资支付  :: "+JSON.stringify(data));
             addContractPay(projectInvestPay, this.fundData2).then(resp => {
                 console.log('addContractPay resp: ', resp.data);
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.getContractPay();
-                    this.paidForm1 = {};    
+                    this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd1 = false;
                 }
@@ -1119,6 +1125,17 @@ export default {
                 console.log('selShareContract() exists error: ', e);
             })
         },
+        // 合计
+        valueSum() {
+            let sum = 0;
+            for (let i = 0; i < this.fundData3.length; i++) {
+                //   console.log(typeof(this.fundData2[i].payAmount));
+                //   console.log(typeof(parseFloat(this.fundData2[i].payAmount)));
+                  sum += (parseFloat(this.fundData3[i].sharingMoney));
+                  this.sharingForm1.sharingMoney = sum;
+                  //   console.log(sum);
+            }
+        },
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
             let projectParticipation = {
@@ -1190,11 +1207,11 @@ export default {
         checkEdit(index, row, type = '') { // 出资主体的table 编辑
             // console.log(row)
             row.editFlag = !row.editFlag;
-            if(type == 'fundData1'){
+            if (type == 'fundData1') {
                 this.fundData1.push();
-            }else if(type == 'fundData2'){
+            } else if (type == 'fundData2') {
                 this.fundData2.push();
-            }else if(type == 'fundData3'){
+            } else if (type == 'fundData3') {
                 this.fundData3.push();
             }
         },
@@ -1204,8 +1221,8 @@ export default {
             let row = rows[index];
             if (!row) return console.warn('del row was null', row);
             let id = row.id;
-            console.log("DEL_ID"+id);
-            switch(type) {
+            console.log("DEL_ID" + id);
+            switch (type) {
                 case 'fee': // 删除费用
                     delFee(id).then(resp => {
                         console.log('delFee resp: ', resp);
@@ -1225,7 +1242,7 @@ export default {
                     })
                     break;
                 case 'invest':   // 删除投资主体
-                        rows.splice(index, 1);
+                    rows.splice(index, 1);
                     break;
                 case 'pay':      // 删除?
                     break;

@@ -3,7 +3,7 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button size="small" @click="roleDialog=true">添加</el-button>
+                    <el-button type="danger" style="padding: 7px 14px;" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width:  100%" highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
@@ -31,7 +31,7 @@
                     <el-col>
                         <div class="limitBtn">
                             <!--<el-button  type="default"  size="small"  v-if="this.userId">修改权限</el-button>-->
-                            <el-button type="danger" size="small" @click="saveRole" v-if="this.userId">保存</el-button>
+                            <el-button type="danger" style="padding: 7px 14px;" @click="saveRole" v-if="this.userId">保存</el-button>
                         </div>
                     </el-col>
                     <el-col :span="6">

@@ -50,7 +50,7 @@
         <investor-form :investorForm="addInvestor"></investor-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalIncome = false">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
+            <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 确认删除模态框 -->
@@ -282,6 +282,7 @@ export default {
     }
     span.investorName {
         cursor: pointer;
+        color: #f05e5e;
     }
 }
 </style>

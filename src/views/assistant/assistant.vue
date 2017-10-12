@@ -106,7 +106,7 @@
                     </el-table-column>
                     <el-table-column label="操作" align="center">
                         <template scope="scope">
-                            <el-button type="danger" size="small" @click="insertProjectBtn(scope.$index,scope.row)">
+                            <el-button type="text" size="small" @click="insertProjectBtn(scope.$index,scope.row)">
                                 +项目池
                             </el-button>
                             <el-button type="danger" size="small" style="display:none">

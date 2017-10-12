@@ -4,8 +4,8 @@
             <el-button type="danger" size="small" @click="openDialog" v-if="this.nowId">添加用户</el-button>
         </div>
         <el-table :data="roleUserList" border style="width: 100%">
-            <el-table-column label="名称" prop="name"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="名称" prop="name" align="center"></el-table-column>
+            <el-table-column label="操作"  align="center">
                 <template scope="props">
                     <el-button size="small" @click="removeEdit(props.$index, props.row)">
                         删除

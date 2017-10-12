@@ -14,13 +14,13 @@
         <!-- table_content start-->
         <div class="table_content">
             <el-table :data="teamData" border style="width: 100%">
-                <el-table-column label="机构名称" prop="orgName">
+                <el-table-column label="机构名称" prop="orgName" align="center">
                 </el-table-column>
-                <el-table-column label="机构类型" prop="orgType">
+                <el-table-column label="机构类型" prop="orgType" align="center">
                 </el-table-column>
-                <el-table-column label="联系人" prop="orgLinkman">
+                <el-table-column label="联系人" prop="orgLinkman" align="center">
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除

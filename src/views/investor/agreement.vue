@@ -2,37 +2,37 @@
 <div class="agreement">
     <tableHeader :data="dataTitle" @add="showAgreement"></tableHeader>
     <el-table :data="agreementData" border style="width: 100%;">
-        <el-table-column label="协议名称" prop="agreementName">
+        <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
-        <el-table-column label="基金名称" prop="fundName">
+        <el-table-column label="基金名称" prop="fundName" align="center">
         </el-table-column>
-        <el-table-column label="结构级">
+        <el-table-column label="结构级" align="center">
             <template scope="scope">
                 <div v-if="scope.row.structuralLevelId == '0'">优先级</div>
                 <div v-else-if="scope.row.structuralLevelId == '1'">中间级</div>
                 <div v-else-if="scope.row.structuralLevelId == '2'">一般级</div>
                 <div v-else-if="scope.row.structuralLevelId == '3'">平层</div>
                 <div v-else-if="scope.row.structuralLevelId == '4'">GP</div>
-                <div v-else="scope.row.structuralLevelId == '5'">LP</div>
+                <div v-else-if="scope.row.structuralLevelId == '5'">LP</div>
             </template>
         </el-table-column>
-        <el-table-column label="认缴金额（元)">
+        <el-table-column label="认缴金额（元）" align="center">
             <template scope="scope">
                 <div>{{scope.row.subscribeAmount | toMoney}}</div>
             </template>
         </el-table-column>
-        <el-table-column label="签订日期">
+        <el-table-column label="签订日期" align="center">
             <template scope="scope">
                 <div>{{scope.row.signDate | formatDate}}</div>
             </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
-              <el-button size="small"
+              <el-button  type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button size="small"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>

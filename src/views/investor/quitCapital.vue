@@ -1,32 +1,32 @@
 <template>
 <div class="quitCapital">
     <el-table :data="quitCapitalData" border show-summary style="width: 100%;">
-        <el-table-column label="协议名称" prop="agreementName">
+        <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
-        <el-table-column label="基金名称" prop="fundName">
+        <el-table-column label="基金名称" prop="fundName" align="center">
         </el-table-column>
-        <el-table-column label="实缴金额（元）" prop="sumValue">
+        <el-table-column label="实缴金额（元）" prop="sumValue" align="center">
         </el-table-column>
-        <el-table-column label="类型">
+        <el-table-column label="类型" align="center">
             <template scope="scope">
                 <div v-if="scope.row.earningsType == '1'">退出</div>
-                <div v-else="scope.row.earningsType == '2'">分红</div>
+                <div v-else-if="scope.row.earningsType == '2'">分红</div>
             </template>
         </el-table-column>
-        <el-table-column label="分红金额" prop="shareMoney">
+        <el-table-column label="分红金额" prop="shareMoney" align="center">
         </el-table-column>
-        <el-table-column label="日期">
+        <el-table-column label="日期" align="center">
             <template scope="scope">
                 <div>{{scope.row.shareDate | formatDate}}</div>
             </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
-              <el-button size="mini"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button size="mini" type="danger"
+              <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>
