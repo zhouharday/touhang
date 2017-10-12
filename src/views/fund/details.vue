@@ -257,13 +257,8 @@
 
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
-import {
-    mapGetters
-} from 'vuex'
-import {
-    selectAllManageCompany,
-    sectorList
-} from 'api/fund'
+import {mapGetters} from 'vuex'
+import {selectAllManageCompany,sectorList} from 'api/fund'
 export default {
     props: {
         formDetails: {

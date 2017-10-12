@@ -3,15 +3,22 @@
     <el-table :data="quitCapitalData" border show-summary style="width: 100%;">
         <el-table-column label="协议名称" prop="agreementName">
         </el-table-column>
-        <el-table-column label="基金名称" prop="fundId">
+        <el-table-column label="基金名称" prop="fundName">
         </el-table-column>
         <el-table-column label="实缴金额（元）" prop="sumValue">
         </el-table-column>
-        <el-table-column label="类型" prop="earningsType">
+        <el-table-column label="类型">
+            <template scope="scope">
+                <div v-if="scope.row.earningsType == '1'">退出</div>
+                <div v-else="scope.row.earningsType == '2'">分红</div>
+            </template>
         </el-table-column>
         <el-table-column label="分红金额" prop="shareMoney">
         </el-table-column>
-        <el-table-column label="日期" prop="shareDate">
+        <el-table-column label="日期">
+            <template scope="scope">
+                <div>{{scope.row.shareDate | formatDate}}</div>
+            </template>
         </el-table-column>
         <el-table-column label="操作">
             <template scope="scope">
@@ -34,6 +41,7 @@
 
 <script type="text/ecmascript-6">
 import quitApply from './quitApply'
+import '../../common/js/filter'
 import {getEarningsAmountList, updateEarningsAmount, deleteEarningsAmount} from 'api/investor'
 export default {
     data() {
