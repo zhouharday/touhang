@@ -370,6 +370,14 @@ export function editContractPay(projectInvestPay = {}, payDetails = []) {
 	return service({url: '/projectPay/updateProjectInvestPay', method: 'post', data});
 }
 
+// 删除投资支付
+export function delPay(id = undefined) {
+	const data = {
+		id 
+	}
+	return service({url: '/projectPay/deleteProjectInvestPay', method: 'post', data});
+}
+
 //添加项目分红
 export function addParticipation(projectParticipation = {}, participationDetails = []) {
 	const data = {
@@ -402,4 +410,12 @@ export function editParticipation(projectParticipation = {}, participationDetail
         participationDetails : participationDetails
     }
 	return service({url: '/projectParticipation/updateParticipation', method: 'post', data});
+}
+
+// 删除项目分红
+export function delShare(id = undefined) {
+	const data = {
+		id 
+	}
+	return service({url: '/projectParticipation/deleteParticipation', method: 'post', data});
 }

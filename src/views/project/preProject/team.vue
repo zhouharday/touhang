@@ -134,7 +134,7 @@ export default {
         },
         // 项目成员列表
         getDatas() {
-            getTeams(this.proId).then(resp => {
+            getTeams(this.$route.params.investProjectId).then(resp => {
                 this.teamData = resp.data.result;
             }).catch(e => {
                 console.log('getDatas() exists error: ', e);
@@ -145,7 +145,7 @@ export default {
             this.teamForm = {
                 userId: '',
                 roleId: '',
-                investProjectId: this.$route.params.userId,
+                investProjectId: this.$route.params.investProjectId,
                 createDate: new Date(),
                 editFlag: false
             }
@@ -153,7 +153,7 @@ export default {
         },
         confirmAdd(formName) {
             this.teamForm.createDate= changeDate(this.teamForm.createDate)
-            this.teamForm.investProjectId = this.$route.params.userId
+            this.teamForm.investProjectId = this.$route.params.investProjectId
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     addInsertProjectTeam(this.teamForm).then((res) => {
