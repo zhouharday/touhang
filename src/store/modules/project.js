@@ -1,18 +1,21 @@
 import * as types from '../mutations-type'
 import { getDicChildren, getDicChildrenII } from '../../common/js/dictionary'
 import { getDeptListByMid } from '../../api/project'
+import { getAllNormalFund } from '../../api/investor'
 
 const state = {
     projectData: {},        // 项目详情信息
     projectTurnType: [],    // 项目融资轮次
     typeOptions: [],        // 项目类型
-    typeOptionsII: [],        // 项目类型 （含全部）
+    typeOptionsII: [],      // 项目类型 （含全部）
     industryOptions: [],    // 项目所属行业
-    industryOptionsII: [],    // 项目所属行业 （含全部）
+    industryOptionsII: [],  // 项目所属行业 （含全部）
     fromOptions: [],        // 项目来源
     addressOptions: [],     // 项目所在地
     stageOptionsII: [],     // 项目阶段
-    departmentOptions: []   // 业务部门
+    departmentOptions: [],  // 业务部门
+    costSortOptions: [],    // 项目费用类型
+    myFundOptions: []       // 项目中可签约基金列表(本商户)
 }
 
 const getters = {
@@ -28,7 +31,10 @@ const getters = {
     getFromOptions: state => state.fromOptions,
     getAddressOptions: state => state.addressOptions,
     getStageOptionsII: state => state.stageOptionsII,
-    getDepartmentOptions: state => state.departmentOptions
+    getDepartmentOptions: state => state.departmentOptions,
+
+    getCostSortOptions: state => state.costSortOptions,
+    getMyFundOptions: state => state.myFundOptions
 }
 
 const mutations = {
@@ -61,7 +67,14 @@ const mutations = {
     },
     [types.GET_DEPARTMENTOPTIONS](state, departmentOptions) {
         state.departmentOptions = departmentOptions;
+    },
+    [types.GET_COSTSORTOPTIONS](state, costSortOptions) {
+        state.costSortOptions = costSortOptions;
+    },
+    [types.GET_MYFUNDOPTIONS](state, myFundOptions) {
+        state.myFundOptions = myFundOptions;
     }
+
 }
 
 const actions = {
@@ -157,9 +170,28 @@ const actions = {
         }).catch(err => {
             console.log(err)
         })
+    },
+    getCostSortOptions({commit, dispatch}) {
+        return getDicChildren('212').
+        then((res) => {
+            if (res.status == '200') {
+                commit(types.GET_COSTSORTOPTIONS, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getMyFundOptions({commit, dispatch}) {
+        return getAllNormalFund().
+        then((res) => {
+            if (res.status == '200') {
+                commit(types.GET_MYFUNDOPTIONS, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
     }
 }
-
 export default {
     state,
     getters,
