@@ -10,14 +10,7 @@
     <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
-            <el-input placeholder="请输入搜索内容"
-                      icon="search"
-                      v-model="fundSearch"
-                      :on-icon-click="handleIconClick"
-                      autofocus='true'
-                      style="width: 320px;"
-                      @click="submitSearch"
-                      @blur="submitSearch">
+            <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
             </el-input>
         </table-header>
         <el-table :data="myFund" border style="width: 100%">
@@ -42,7 +35,10 @@
             </el-table-column>
             <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="createDate" label="成立日期" width="200" align="center">
+            <el-table-column label="成立日期" width="200" align="center">
+                <template scope="scope">
+                    <div style="width: 100%;height: 100%;">{{scope.row.createDate | formatDate}}</div>
+                </template>
             </el-table-column>
             <el-table-column prop="fundStage" label="状态" width="200" align="center">
             </el-table-column>
@@ -55,19 +51,10 @@
         </el-table>
     </div>
     <div class="page">
-        <el-pagination @size-change="handleSizeChange"
-                       @current-change="handleCurrentChange"
-                       :current-page="currentPage"
-                       :page-sizes="[10, 20, 30, 50]"
-                       :page-size=pageSize
-                       layout="total, sizes, prev, pager, next, jumper"
-                       :total="pageTotal">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size=pageSize layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
         </el-pagination>
     </div>
-    <delete-reminders :deleteReminders="deleteReminders"
-                      :modal_loading="modal_loading"
-                      @cancel="cancelDel"
-                      @del="delFundList">
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @cancel="cancelDel" @del="delFundList">
     </delete-reminders>
 </div>
 </template>
@@ -77,8 +64,16 @@ import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
 import deleteReminders from 'components/deleteReminders'
 import Service from 'common/js/fetch'
-import {mapMutations, mapGetters} from 'vuex'
-import {getManagementType, getMyFund, deleteFundInfo} from 'api/fund'
+import '../../common/js/filter.js' //时间格式过滤器
+import {
+    mapMutations,
+    mapGetters
+} from 'vuex'
+import {
+    getManagementType,
+    getMyFund,
+    deleteFundInfo
+} from 'api/fund'
 export default {
     data() {
         return {
@@ -168,7 +163,7 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val
             getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                 }
             })
@@ -176,14 +171,14 @@ export default {
         handleCurrentChange(val) {
             this.page = val
             getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                 }
             })
         },
         submitSearch() {
             getMyFund(this.page, this.pageSize, this.fundSearch).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }
@@ -191,39 +186,39 @@ export default {
         },
         // (num, size, value, orgId, manageId, stageId, statusId)
         clickOrgType(index, id) {
-            if(index == 0) {
+            if (index == 0) {
                 this.organizationId = ''
             } else {
                 this.organizationId = id
             }
             getMyFund(this.page, this.pageSize, '', this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }
             })
         },
         clickmanType(index, id) {
-            if(index == 0) {
+            if (index == 0) {
                 this.managementId = ''
             } else {
                 this.managementId = id
             }
             getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }
             })
         },
         clickStage(index, id) {
-            if(index == 0) {
+            if (index == 0) {
                 this.stageId = ''
             } else {
                 this.stageId = id
             }
             getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }
@@ -232,7 +227,7 @@ export default {
         clickStatus(index, id) {
             this.statusId = id
             getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }
@@ -247,7 +242,7 @@ export default {
         },
         delFundList() {
             deleteFundInfo(this.fundListId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
                     this.deleteReminders = false
                 }
@@ -265,7 +260,7 @@ export default {
         this.$store.dispatch('getManageType').then(() => {
             this.managementType.details = this.managementType.details.concat(this.getManType)
         })
-        this.$store.dispatch('getOrganizationType').then(() =>{
+        this.$store.dispatch('getOrganizationType').then(() => {
             this.organizationType.details = this.organizationType.details.concat(this.OrgType)
         })
         this.$store.dispatch('getFundStage').then(() => {
@@ -275,7 +270,7 @@ export default {
         //     this.allFundStatus.details = this.fundStatus
         // })
         getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 this.pageTotal = res.data.result.total
             }
         })
@@ -352,7 +347,7 @@ export default {
         text-align: right;
         padding: @font-size-large-x 0;
     }
-    span.investorName{
+    span.investorName {
         cursor: pointer;
     }
 }

@@ -21,15 +21,15 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目类型" prop="projectType">
-                                        <el-select v-model="basicForm.projectTypeId" filterable placeholder="请选择项目类型"  style="width:100%">
+                                    <el-form-item label="项目类型" prop="projectTypeId">
+                                        <el-select v-model="basicForm.projectTypeId" @change="myChange" filterable placeholder="请选择项目类型"  style="width:100%">
                                             <el-option v-for="item in $store.state.project.typeOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="所属行业" prop="industry">
+                                    <el-form-item label="所属行业" prop="industryId">
                                         <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业"  style="width:100%">
                                             <el-option v-for="item in $store.state.project.industryOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
@@ -37,7 +37,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目来源" prop="projectFrom">
+                                    <el-form-item label="项目来源" prop="projectFromId">
                                          <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源"  style="width:100%">
                                             <el-option v-for="item in $store.state.project.fromOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
@@ -45,7 +45,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="所在地" prop="address">
+                                    <el-form-item label="所在地" prop="addressId">
                                         <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
                                             <el-option v-for="item in $store.state.project.addressOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
@@ -53,7 +53,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="业务部门" prop="department">
+                                    <el-form-item label="业务部门" prop="departmentId">
                                          <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门"  style="width:100%">
                                             <el-option v-for="item in $store.state.project.departmentOptions" :key="item.id" :label="item.deptName" :value="item.id">
                                             </el-option>
@@ -62,7 +62,7 @@
                                 </el-col>
                                 <!-- 上传 企业LOGO -->
                                 <el-col>
-                                    <el-form-item label="企业LOGO" prop="logo">
+                                    <el-form-item label="企业LOGO" prop="projectLogo">
                                         <div class="demo-upload-list" v-for="item in uploadList" :key="item.index">
                                             <template v-if="item.status === 'finished'">
                                                 <img :src="item.url">
@@ -224,7 +224,10 @@ export default {
                     { required: true, message: '请输入项目类型', trigger: 'blur' }
                 ],
                 industryId: [
-                    { required: true, message: '请输入所属行业', trigger: 'blur' }
+                    { required: true, message: '请选择所属行业', trigger: 'blur' }
+                ],
+                addressId: [
+                    { required: true, message: '请选择所在地', trigger: 'blur' }
                 ]
             },
             // 上传 企业LOGO
@@ -267,6 +270,9 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
+        },
+        myChange(val){
+            console.log("改制"+val);
         },
         submitForm(formName) {
             let basicForm = this.basicForm;

@@ -165,8 +165,10 @@ export default {
         jumpPre() {
             let projectId = this.projectPoolId;
             transPro(projectId).then(resp => {
-                this.addTab('投前项目', '/home/preProject', 'preProject');
-                this.$router.push({ name: 'preProject' });
+                if(resp.data.status === '200'){
+                    this.addTab('投前项目', '/home/preProject', 'preProject');
+                    this.$router.push({ name: 'preProject' });
+                }
                 this.investDialog=false;
             }).catch(e => {
                 console.log('jumpPre error: ', e);
@@ -175,11 +177,13 @@ export default {
         },
         jumpObserve() {
             setProjectStatus(this.projectPoolId, '2').then(resp =>{
+                if(resp.data.status === '200'){
+                    this.show_f = false;
+                    this.show_s = false;
+                    this.isShow = true;
+                    this.state = "观察";
+                }
                 this.observeDialog = !this.observeDialog;
-                this.show_f = false;
-                this.show_s = false;
-                this.isShow = true;
-                this.state = "观察";
             }).catch(e => {
                 console.log('jumpObserve error: ', e);
                 this.observeDialog=false;
@@ -188,11 +192,13 @@ export default {
         },
         jumpEliminate() {
             setProjectStatus(this.projectPoolId, '4').then(resp =>{
+                if(resp.data.status === '200'){
+                    this.show_f = false;
+                    this.show_t = false,
+                    this.isShow = true;
+                    this.state = "淘汰";
+                }
                 this.eliminateDialog = !this.eliminateDialog;
-                this.show_f = false;
-                this.show_t = false,
-                this.isShow = true;
-                this.state = "淘汰";
             }).catch(e => {
                 console.log('jumpEliminate error: ', e);
                 this.eliminateDialog=false;
@@ -200,11 +206,13 @@ export default {
         },
         changeNormal() {
             setProjectStatus(this.projectPoolId, '1').then(resp =>{
-                this.isShow = false;
-                this.show_f = true;
-                this.show_s = true;
-                this.show_t = true;
-                this.state = "正常";
+                if(resp.data.status === '200'){
+                    this.isShow = false;
+                    this.show_f = true;
+                    this.show_s = true;
+                    this.show_t = true;
+                    this.state = "正常";
+                }
             }).catch(e => {
                 console.log('changeNormal error: ', e);
             });

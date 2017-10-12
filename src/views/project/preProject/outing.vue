@@ -53,18 +53,18 @@
             </el-table-column>
             <el-table-column label="回款金额（元）" prop="outingMoney" align="center">
                 <template scope="scope">
-                    <span v-if="!scope.row.editFlag">{{ scope.row.outingMoney }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                        <el-input v-model="scope.row.outingMoney" placeholder=""></el-input>
-                    </span>
+                    <!-- <span v-if="!scope.row.editFlag">{{ scope.row.outingMoney }}</span>
+                    <span v-if="scope.row.editFlag" class="cell-edit-input"> -->
+                        <el-input v-model="scope.row.outingMoney" placeholder="">{{ scope.row.outingMoney }}</el-input>
+                    <!-- </span> -->
                 </template>
             </el-table-column>
-            <el-table-column label="操作" align="center">
+            <!-- <el-table-column label="操作" align="center">
                 <template scope="scope">
                     <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑</el-button>
                     <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存</el-button>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
