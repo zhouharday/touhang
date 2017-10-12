@@ -16,7 +16,6 @@
                                 </el-input>
                             </el-form-item>
                             <el-form-item>
-
                                 <el-select v-model="value2" placeholder="请选择">
                                     <el-option v-for="item  in  options" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
@@ -36,7 +35,7 @@
                     </el-table-column>
                     <el-table-column prop="number" label="账号" width="180">
                     </el-table-column>
-                    <el-table-column prop="dept" label="部门" width="180">
+                    <el-table-column prop="deptName" label="部门" width="180">
                     </el-table-column>
                     <!--<el-table-column  prop="role"  label="所属角色"  width="180">-->
                     <!--</el-table-column>-->
@@ -55,7 +54,6 @@
                             <!--编辑-->
                             <!--</el-button>-->
                             <el-button @click.native.prevent="deleteRow(scope.$index,  scope.row)" type="text" size="small">
-
                                 <div v-if="scope.row.umdisables  ==  1">锁定</div>
                                 <div v-if="scope.row.umdisables == 0">启用</div>
                             </el-button>
@@ -110,6 +108,7 @@
                     </el-col>
                     <el-col :span="11" :offset="2">
                         <el-form-item label="年龄" :label-width="formLabelWidth">
+
                             <el-select placeholder="请选择年龄" v-model="addSubscriber.birthday" style="width:100%;">
                                 <div v-for="item in allAge">
                                     <el-option :value="item">{{item}}</el-option>
@@ -131,8 +130,10 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
+
                 <el-button type="default" @click="modalIncome">取 消</el-button>
                 <el-button type="danger" @click="confirmIncome">确 定</el-button>
+
             </div>
         </el-dialog>
     </div>
@@ -184,10 +185,14 @@ export default {
     },
     methods: {
         deleteRow(index, row) {
-            console.log(row)
-            var disables = row.disables ? 0 : 1;
-            console.log(row.id, disables)
-            openOrClose(row.id, disables).then((res) => {
+            var disables
+            if (row.umdisables == 0) {
+                disables = 1
+            } else
+                disables = 0
+            console.log(disables)
+            openOrClose(row.umId, disables).then((res) => {
+                console.log(res.data)
                 getUserlist(this.addId).then((res) => {
 
                     this.subscriberData = res.data.result
@@ -206,12 +211,15 @@ export default {
             this.modelSubscriber = true
             this.addSubscriber = row
         },
+
         handleNodeClick(data) {
             this.addId = data.id;
             getUserlist(data.id).then((res) => {
+
                 this.subscriberData = res.data.result
                 console.log(this.subscriberData)
             })
+
         },
         confirmIncome() {
 
@@ -277,16 +285,19 @@ export default {
 
     },
     created() {
+
         getDepartmentList().then((res) => {
             var dataList = res.data.result
             this.allDepartmentList = dataList
             var treeList = getNodes(dataList)
             this.structure = treeList
-        });
+        })
         getUserlist().then((res) => {
+
             this.subscriberData = res.data.result
             console.log(this.subscriberData)
         })
+
     }
 }
 </script>

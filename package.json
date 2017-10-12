@@ -19,7 +19,7 @@
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
     "lodash": "^4.17.4",
-    "moment": "^2.19.0",
+    "moment": "^2.19.1",
     "node-sass": "^4.5.3",
     "postcss-cssnext": "^3.0.2",
     "qs": "^6.5.0",

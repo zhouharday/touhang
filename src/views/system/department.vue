@@ -12,7 +12,7 @@
 
                     <template scope="props">
                         <el-row>
-                            <el-col v-for="(item,  index)  of  props.row.children">
+                            <el-col v-for="(item,index)  of  props.row.children" :key="item">
                                 <el-row :gutter="20">
                                     <el-col :span="13" class="item">
                                         <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>

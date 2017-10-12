@@ -76,12 +76,10 @@ export function getUserlist(id,lockValue,userName) {
 //客户锁定启用
 export function openOrClose(id,disables) {
     const data = {
-        "dept_id":id,
-        "disables":disables //0:禁用,1正常 必须
+        "umid":id,
+        "lockValue":disables //0:禁用,1正常 必须
     }
-
-    return service({url: '/merchant/enableOrLock', method: 'post', data})
-
+    return service({url: '/user/lockUnlock', method: 'post', data})
 }
 
 export function addNewUser(User) {
