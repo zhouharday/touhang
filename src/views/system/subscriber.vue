@@ -35,11 +35,7 @@
                     </el-table-column>
                     <el-table-column prop="number" label="账号" width="180" align="center">
                     </el-table-column>
-<<<<<<< HEAD
-                    <el-table-column prop="deptName" label="部门" width="180">
-=======
                     <el-table-column prop="dept" label="部门" width="180" align="center">
->>>>>>> 2d0a3edc0f50000d8244ec6826b287a1c872f980
                     </el-table-column>
                     <!--<el-table-column  prop="role"  label="所属角色"  width="180">-->
                     <!--</el-table-column>-->
@@ -57,12 +53,8 @@
                             <!--size="small">-->
                             <!--编辑-->
                             <!--</el-button>-->
-<<<<<<< HEAD
-                            <el-button @click.native.prevent="deleteRow(scope.$index,  scope.row)" type="text" size="small">
-=======
                             <el-button @click.native.prevent="deleteRow(scope.$index,  scope.row)" type="text" size="small" style="color:#f05e5e">
 
->>>>>>> 2d0a3edc0f50000d8244ec6826b287a1c872f980
                                 <div v-if="scope.row.umdisables  ==  1">锁定</div>
                                 <div v-if="scope.row.umdisables == 0">启用</div>
                             </el-button>
