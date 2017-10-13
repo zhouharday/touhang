@@ -12,18 +12,21 @@
                 <div class="form-components">
                     <span>表单组件</span>
                     <ul>
-                        <li v-for="list in btnLists" @drop='drop($event)' @dragover='allowDrop($event)'>
-                            <el-button id="button">{{list.data}}</el-button>
+                        <li draggable='true' @dragstart='drag($event)' v-for="list in btnLists">
+                            <el-button type="button">{{list.data}}</el-button>
                         </li>
                     </ul>
                 </div>
             </el-col>
             <el-col :span="14" style="background-color: #fff;height: 100%;margin: 0 10px;">
-                <div class="form-components">中间内容</div>
+                <div class="form-components" @drop='drop($event)' @dragover='allowDrop($event)' style="height:100%">
+                    <span>中间内容</span>
+                </div>
             </el-col>
             <el-col :span="5" style="background-color: #fff;height: 100%;margin-right: -10px;">
                 <div class="form-components">
                     <span style="text-align: center;margin-top: 30px;">组件设置</span>
+<<<<<<< HEAD
                     <!--<ul>-->
                     <!--<li prop="标题">-->
                     <!--标题-->
@@ -35,6 +38,10 @@
                     <!--</li>-->
                     <!--</ul>-->
                     <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" styele="margin-top:30px;">
+=======
+                    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign"
+                             styele="margin-top:30px;">
+>>>>>>> 0feaccc8cda5e235196396e9ffba8483216d267b
                         <el-form-item label="标题">
                             <el-input v-model="formLabelAlign.name"></el-input>
                         </el-form-item>
@@ -78,6 +85,7 @@
 </style>
 
 <script>
+<<<<<<< HEAD
 import jquery from 'jquery'
 import core from 'common/js/leipi.form.build.core'
 import plugins from 'common/js/leipi.form.build.plugins'
@@ -93,6 +101,18 @@ export default {
             btnLists: [
                 {
                     data: '单行文本框'
+=======
+//    import core from '../../common/js/leipi.form.build.core'
+//    import plugins from '../../common/js/leipi.form.build.plugins'
+    let dom = 0;
+    export default {
+        data() {
+            return {
+                labelPosition: 'top',
+                formLabelAlign: {
+                    name: '',
+                    must: ''
+>>>>>>> 0feaccc8cda5e235196396e9ffba8483216d267b
                 },
                 {
                     data: '多行文本框'
@@ -111,6 +131,7 @@ export default {
                 {
                     title: '标题',
 
+<<<<<<< HEAD
                 }
             ],
             type: []
@@ -126,7 +147,29 @@ export default {
         },
         allowDrop: function(e) {
             e.preventDefault();
+=======
+                    }
+                ],
+                type: [],
+                input: '',
+                textarea: ''
+            }
+        },
+        methods: {
+            drag: function (event) {
+                dom = event.currentTarget
+            },
+            drop: function (event) {
+                event.preventDefault();
+                event.target.appendChild(dom)
+            },
+            allowDrop: function (e) {
+                event.preventDefault();
+            }
+>>>>>>> 0feaccc8cda5e235196396e9ffba8483216d267b
         }
     }
 }
 </script>
+
+
