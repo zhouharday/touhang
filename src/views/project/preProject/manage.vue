@@ -103,7 +103,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -223,7 +223,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm2.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -351,7 +351,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -432,7 +432,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -530,7 +530,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -593,7 +593,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -659,6 +659,7 @@ export default {
     },
     data() {
         return {
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name, //当前用户
             activeNames: ['1'],
             costAdd1: false,
             costAdd2: false,
@@ -670,8 +671,12 @@ export default {
             sharingAdd1: false,
             sharingAdd2: false,
             //项目费用
-            costForm1: {},
-            costForm2: {},
+            costForm1: {
+                costTypeId:''
+            },
+            costForm2: {
+                costTypeId:''
+            },
             costData: [],
             headerInfo_cost: {
                 desc: '项目费用',

@@ -156,7 +156,7 @@ export default {
             getProjectDoc(this.projectId).then(resp => {
                 this.projectDocList = resp.data.result || [];
             }).catch(e => {
-                console.log('getPreDetail() exists error: ', e);
+                console.log('getProjectDoc() exists error: ', e);
             });
         },
         inspectionDialog() {

@@ -24,6 +24,16 @@ export function getPreDetail(projectId = undefined) {
 	//return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
 }
 
+//投前项目所有阶段 含全部
+export function slectAllStageIndex() {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	const data = {
+		merchantId:merchantId,
+		type:1
+	}
+	return service({url: '/dictionaryController/slectAllStageIndex', method: 'post', data});
+}
+
 //投前项目所有阶段
 export function slectAllStage() {
 	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
@@ -149,7 +159,7 @@ export function delTeam(id = undefined) {
 	const data = {
 		id
 	}
-	return service({url: '/projectTeam/insertProjectTeam', method: 'post', data});
+	return service({url: 'projectTeam/deleteProjectTeam', method: 'post', data});
 }
 
 ////// 股权 ////////////////
@@ -418,4 +428,21 @@ export function delShare(id = undefined) {
 		id 
 	}
 	return service({url: '/projectParticipation/deleteParticipation', method: 'post', data});
+}
+
+//获取项目退出详情
+export function getExitDetail(projectId = undefined) {
+	const data = {
+        projectId
+    }
+	return service({url: '/projectExit/getProjectExitDetails', method: 'post', data});
+}
+
+//保存项目退出单
+export function saveExit(projectExit = {}, projectExitList = []) {
+	const data = {
+        projectExit : projectExit,
+        projectExitList : projectExitList
+    }
+	return service({url: '/projectExit/addProjectExit', method: 'post', data});
 }

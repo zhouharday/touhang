@@ -4,20 +4,20 @@
             <el-row>
                 <el-col>
                     <el-form-item label="标题">
-                        <el-input v-model="outingForm.title" auto-complete="off" :disabled="true"></el-input>
+                        <el-input v-model="outingForm.exitTitle" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出类型">
-                        <el-select v-model="outingForm.outingSort" placeholder="请选择退出类型" style="width:100%;">
-                            <el-option v-for="item in outingSortOptions" :key="item.value" :label="item.label" :value="item.value">
+                        <el-select v-model="outingForm.exitType" placeholder="请选择退出类型" style="width:100%;">
+                            <el-option v-for="item in outingSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出金额（元）">
-                        <el-input v-model="outingForm.outingMoney" auto-complete="off" disabled></el-input>
+                        <el-input v-model="outingForm.exitAmount" auto-complete="off" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col>
@@ -33,38 +33,29 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人">
-                        <el-input placeholder="默认当前登陆用户" v-model="outingForm.operator" auto-complete="off"></el-input>
+                        <el-input placeholder="默认当前登陆用户" v-model="userName" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="outingForm.handlingDate" style="width: 100%;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="outingForm.exitDate" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
         <el-table :data="outingData2" border>
-            <el-table-column label="基金名称" prop="foundName" align="center">
+            <el-table-column label="基金名称" prop="fundName" align="center">
             </el-table-column>
-            <el-table-column label="投资金额（元）" prop="investment" align="center">
+            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
             </el-table-column>
-            <el-table-column label="股权占比（%）" prop="percent" align="center">
+            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
             </el-table-column>
-            <el-table-column label="回款金额（元）" prop="outingMoney" align="center">
+            <el-table-column label="回款金额（元）" prop="exitAmount" align="center">
                 <template scope="scope">
-                    <!-- <span v-if="!scope.row.editFlag">{{ scope.row.outingMoney }}</span>
-                    <span v-if="scope.row.editFlag" class="cell-edit-input"> -->
-                        <el-input v-model="scope.row.outingMoney" placeholder="">{{ scope.row.outingMoney }}</el-input>
-                    <!-- </span> -->
+                    <el-input v-model="scope.row.exitAmount" @input="sumExit" placeholder="请输入回款金额">{{ scope.row.exitAmount | 0}}</el-input>
                 </template>
             </el-table-column>
-            <!-- <el-table-column label="操作" align="center">
-                <template scope="scope">
-                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑</el-button>
-                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存</el-button>
-                </template>
-            </el-table-column> -->
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
@@ -76,53 +67,101 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
+import { mapGetters } from 'vuex'
+import { getDicChildren } from 'common/js/dictionary'
+import {
+    getExitDetail, saveExit
+} from 'api/projectPre';
 export default {
+    computed: mapGetters({
+        outingSortOptions: 'getOutingSortOptions',   // 获取退出类型
+    }),
+    props: {
+        proId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             isShow: true,
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             outingForm: {
-                title: 'AAA项目',
-                outingSort: '',
-                outingMoney: '',
+                id:'',
+                projectId:'',
+                investBeforeId:'',
+                exitType: '',
+                exitAmount: '',
                 relativedAppendix: '',
-                operator: '',
-                handlingDate: '',
+                handlerUserId: '',
+                exitDate: '',
             },
-            outingSortOptions: [
-                 { //退出类型列表
-                    value: '选项1',
-                    label: '退出类型一'
-                }, {
-                    value: '选项2',
-                    label: '退出类型二'
-                }
-            ],
             outingData2: [
                 {
-                    foundName: 'AA基金',
-                    investment: '500,000',
-                    percent: '10',
-                    outingMoney: '10',
+                    id: "",//本条记录id 修改时需要
+                    fundId: "",//基金id
+                    fundName: "",//基金名称
+                    projectExitId: "",
+                    investAmount: '',//投资金额
+                    stockRatio: '',//股权占比
+                    exitAmount: "300",//回款金额
+                    detailsStatus: 1,
                     editFlag: false
                 }
             ]
         }
     },
+    created() {
+        this.$store.dispatch('getOutingSortOptions');
+        this.init();
+    },
     methods: {
-        // 保存按钮 的方法
-        confirmSave() {
-           this.isShow = !this.isShow;
+        init() {
+            this.getExitDetail();
         },
-        checkEdit(index, row) { //编辑
-            // console.log(row)
-            row.editFlag = !row.editFlag;
-            this.isShow = true;
+        //获取退出单
+        getExitDetail(){
+            getExitDetail(this.proId).then(resp => {
+                if (resp.data.status === '200') {
+                    this.outingForm = resp.data.result.projectExit;
+                    this.outingData2 = resp.data.result.projectExitList
+                }
+            }).catch(e => {
+                console.log('获取退出单 error: ', e);
+            })
+        },
+        // 保存退出单
+        confirmSave() {
+            this.isShow = !this.isShow;
+            this.outingForm.projectId = this.proId;
+            this.outingForm.investBeforeId = this.$route.params.investProjectId;
+            this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
+                                ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
+            let data = {
+                projectExit: this.outingForm,
+                projectExitList: this.outingData2
+            };
+
+            console.log('保存退出单: '+ JSON.stringify(data));
+            saveExit(this.outingForm, this.outingData2).then(resp => {
+                if (resp.data.status == '200') {
+                    this.getExitDetail();
+                }
+            }).catch(e => {
+                console.log('保存退出单 error: ', e);
+            })
+        },
+        sumExit() {
+            let sum = 0.0;
+            for (let i = 0; i < this.outingData2.length; i++) {
+                sum += (parseFloat(this.outingData2[i].exitAmount | 0));
+            }
+            this.outingForm.exitAmount = sum;
         }
     }
 }
 </script>
-
 
 <style lang="less" scoped>
 .outing {

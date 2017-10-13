@@ -32,10 +32,10 @@
                     </el-table-column>
                     <el-table-column align="center">
                         <template scope="scope">
-                            <el-button v-if="index != 0" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
-                            <a v-if="id != '' && id != null" href="documentUrl" style="font-size:12px;" download="xxxxx文档">下载</a>
-                            <el-button v-if="id != '' && id != null" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                            <el-button v-if="id != '' && id != null" type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
+                            <el-button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
+                            <a v-if="scope.row.id != '' && scope.row.id != undefined" href="documentUrl" style="font-size:12px;" download="xxxxx文档">下载</a>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
                         </template>
                     </el-table-column>
                 </v-for>
@@ -156,7 +156,7 @@ export default {
             getProjectDoc(this.projectId).then(resp => {
                 this.projectDocList = resp.data.result || [];
             }).catch(e => {
-                console.log('getPreDetail() exists error: ', e);
+                console.log('getProjectDoc() exists error: ', e);
             });
         },
         inspectionDialog() {
