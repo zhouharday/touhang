@@ -54,9 +54,9 @@
                         <el-button type="text" size="small" @click="modalAdd=true">
                             项目团队
                         </el-button>
-                        <el-button type="text" size="small" @click="deleteReminders=true">
+                        <!-- <el-button type="text" size="small" @click="deleteReminders=true">
                             删除
-                        </el-button>
+                        </el-button> -->
                     </template>
                 </el-table-column>
             </el-table>

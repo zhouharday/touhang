@@ -83,96 +83,31 @@
             <el-dialog title="添加经营数据明细" :visible.sync="operatingModal2" :close-on-click-modal="false" class="editData">
                 <el-table :data="operatingData1" border style="width:100%">
                     <el-table-column label="项目" prop="project" align="center">
-                        <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.project }}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.project" placeholder=""></el-input>
-                            </span>
-                        </template>
                     </el-table-column>
                     <el-table-column label="经营目标" prop="operatingGoal" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.operatingGoal }}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.operatingGoal" placeholder=""></el-input>
-                            </span>
+                            <el-input v-model="scope.row.operatingGoal" placeholder="">{{ scope.row.operatingGoal }}</el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="截止基准日实际情况" prop="realSituation" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.realSituation }}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.realSituation" placeholder=""></el-input>
-                            </span>
+                            <el-input v-model="scope.row.realSituation" placeholder="">{{ scope.row.realSituation }}</el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="完成率" prop="completionRate" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.completionRate }}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.completionRate" placeholder=""></el-input>
-                            </span>
+                            <el-input v-model="scope.row.completionRate" placeholder="">{{ scope.row.completionRate }}</el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="下半年计划" prop="secondPlan" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag">{{ scope.row.secondPlan }}</span>
-                            <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                <el-input v-model="scope.row.secondPlan" placeholder=""></el-input>
-                            </span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作" min-width="100" align="center">
-                        <template scope="scope">
-                            <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="operatingModal3=true">添加
-                            </el-button>
-                            <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                            </el-button>
-                            <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                            </el-button>
-                            <el-button type="text" size="small" @click="handleDelete(scope.$index,operatingData1)">删除</el-button>
+                            <el-input v-model="scope.row.secondPlan" placeholder="">{{ scope.row.secondPlan }}</el-input>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal2 = false">取 消</el-button>
                     <el-button type="danger" @click="operatingEdit">保 存</el-button>
-                </div>
-            </el-dialog>
-            <!--  添加经营数据项目 对话框-->
-            <el-dialog title="添加经营数据项目" :visible.sync="operatingModal3" :close-on-click-modal="false">
-                <el-form :model="operatingForm2" label-width="140px">
-                    <el-row>
-                        <el-col :span="12">
-                            <el-form-item label="项目">
-                                <el-input v-model="operatingForm2.project" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="经营目标">
-                                <el-input v-model="operatingForm2.operatingGoal" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="完成率">
-                                <el-input v-model="operatingForm2.completionRate" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="下半年计划">
-                                <el-input v-model="operatingForm2.secondPlan" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="截止基准日实际情况">
-                                <el-input v-model="operatingForm2.realSituation" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="operatingModal3 = false">取 消</el-button>
-                    <el-button type="danger" @click="confirmOperating">保 存</el-button>
                 </div>
             </el-dialog>
             <delete-reminders :deleteReminders="operatingDelete" :message="operatingMessage" :modal_loading="modal_loading" @del="operatingDelete=false" @cancel="operatingDelete=false">
@@ -262,62 +197,27 @@
                     <el-tab-pane label="资产负债表" name="first">
                         <el-table :data="balanceSheet" border style="width: 100%" align="center">
                             <el-table-column label="资产" prop="capital" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.capital }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.capital" placeholder=""></el-input>
-                                    </span>
-                                </template>
                             </el-table-column>
                             <el-table-column label="期末余额" prop="endingCBalance" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.endingCBalance }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.endingCBalance" placeholder=""></el-input>
-                                    </span>
+                                    <el-input v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="年初余额" prop="beginningCBalance" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.beginningCBalance }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.beginningCBalance" placeholder=""></el-input>
-                                    </span>
+                                    <el-input v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="负债和所有者权益" prop="debt" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.debt }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.debt" placeholder=""></el-input>
-                                    </span>
-                                </template>
                             </el-table-column>
                             <el-table-column label="期末余额" prop="endingDBalance" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.endingDBalance }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.endingDBalance" placeholder=""></el-input>
-                                    </span>
+                                    <el-input v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="年初余额" prop="beginningDBalance" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.beginningDBalance }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.beginningDBalance" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" min-width="100" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="balanceModal=true">添加
-                                    </el-button>
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                                    </el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                                    </el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,balanceSheet)">删除</el-button>
+                                    <el-input v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -325,38 +225,15 @@
                     <el-tab-pane label="利润表" name="second">
                         <el-table :data="incomeStatement" border style="width: 100%" align="center">
                             <el-table-column label="项目" prop="project" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.project }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.project" placeholder=""></el-input>
-                                    </span>
-                                </template>
                             </el-table-column>
                             <el-table-column label="本月金额" prop="monthCounts" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.monthCounts }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.monthCounts" placeholder=""></el-input>
-                                    </span>
+                                    <el-input v-model="scope.row.monthCounts" placeholder="">{{ scope.row.monthCounts }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="本年累计金额" prop="yearCounts" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.yearCounts }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.yearCounts" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="incomeModal=true">添加
-                                    </el-button>
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                                    </el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                                    </el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,incomeStatement)">删除</el-button>
+                                    <el-input v-model="scope.row.yearCounts" placeholder="">{{ scope.row.yearCounts }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -364,38 +241,15 @@
                     <el-tab-pane label="现金流量表" name="third">
                         <el-table :data="cashFlowStatements" border style="width: 100%" align="center">
                             <el-table-column label="项目" prop="project" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.project }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.project" placeholder=""></el-input>
-                                    </span>
-                                </template>
                             </el-table-column>
                             <el-table-column label="本月金额" prop="monthCounts" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.monthCounts }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.monthCounts" placeholder=""></el-input>
-                                    </span>
+                                    <el-input v-model="scope.row.monthCounts" placeholder="">{{ scope.row.monthCounts }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="本年累计金额" prop="yearCounts" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.yearCounts }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.yearCounts" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="cashFlowModal=true">添加
-                                    </el-button>
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                                    </el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                                    </el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,cashFlowStatements)">删除</el-button>
+                                    <el-input v-model="scope.row.yearCounts" placeholder="">{{ scope.row.yearCounts }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -404,99 +258,6 @@
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal2 = false">取 消</el-button>
                     <el-button type="danger" @click="financialEdit">保 存</el-button>
-                </div>
-            </el-dialog>
-            <!--  添加资产负债表数据 对话框-->
-            <el-dialog title="添加资产负债数据" :visible.sync="balanceModal" :close-on-click-modal="false">
-                <el-form :model="balanceForm" label-width="140px">
-                    <el-row>
-                        <el-col :span="12">
-                            <el-form-item label="资产">
-                                <el-input v-model="balanceForm.capital" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="期末余额">
-                                <el-input v-model="balanceForm.endingCBalance" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="年初余额">
-                                <el-input v-model="balanceForm.beginningCBalance" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="负债和所有者权益">
-                                <el-input v-model="balanceForm.debt" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="期末余额">
-                                <el-input v-model="balanceForm.endingDBalance" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="12">
-                            <el-form-item label="年初余额">
-                                <el-input v-model="balanceForm.beginningDBalance" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="balanceModal = false">取 消</el-button>
-                    <el-button type="danger" @click="balanceAdd">保 存</el-button>
-                </div>
-            </el-dialog>
-            <!--  添加利润表数据 对话框-->
-            <el-dialog title="添加利润表数据" :visible.sync="incomeModal" :close-on-click-modal="false">
-                <el-form :model="incomeForm" label-width="140px">
-                    <el-row>
-                        <el-col>
-                            <el-form-item label="项目">
-                                <el-input v-model="incomeForm.project" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="本月金额">
-                                <el-input v-model="incomeForm.monthCounts" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="本年累计金额">
-                                <el-input v-model="incomeForm.yearCounts" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="incomeModal = false">取 消</el-button>
-                    <el-button type="danger" @click="incomeAdd">保 存</el-button>
-                </div>
-            </el-dialog>
-            <!--  添加现金流量表数据 对话框-->
-            <el-dialog title="添加现金流量表数据" :visible.sync="cashFlowModal" :close-on-click-modal="false">
-                <el-form :model="cashFlowForm" label-width="140px">
-                    <el-row>
-                        <el-col>
-                            <el-form-item label="项目">
-                                <el-input v-model="cashFlowForm.project" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="本月金额">
-                                <el-input v-model="cashFlowForm.monthCounts" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="本年累计金额">
-                                <el-input v-model="cashFlowForm.yearCounts" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="cashFlowModal = false">取 消</el-button>
-                    <el-button type="danger" @click="cashFlowAdd">保 存</el-button>
                 </div>
             </el-dialog>
             <delete-reminders :deleteReminders="financialDelete" :message="financialMessage" :modal_loading="modal_loading" @del="financialDelete=false" @cancel="financialDelete=false">
@@ -520,13 +281,9 @@ export default {
             financialMessage: '是否确认删除该条财务数据？',
             operatingModal1: false,
             operatingModal2: false,
-            operatingModal3: false,
             financialModal1: false,
             financialModal2: false,
             formLabelWidth: '100px',
-            balanceModal: false,
-            incomeModal: false,
-            cashFlowModal: false,
             file: null,
             loadingStatus: false,
             activeName: 'first',
@@ -539,7 +296,7 @@ export default {
                     date: ''
                 }
             ],
-            // 添加 经营数据表头 表单
+            // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
                 sort: '',
@@ -563,26 +320,58 @@ export default {
                     label: '月报'
                 }
             ],
-            // 编辑/添加 经营数据 table
+            // 经营数据-添加数据 table
             operatingData1: [
                 {
-                    project: '',
+                    project: '营业收入',
                     operatingGoal: '',
                     realSituation: '',
                     completionRate: '',
-                    secondPlan: '',
-                    editFlag: false
+                    secondPlan: ''
+                },
+                {
+                    project: '净利润',
+                    operatingGoal: '',
+                    realSituation: '',
+                    completionRate: '',
+                    secondPlan: ''
+                },
+                {
+                    project: '总资产',
+                    operatingGoal: '',
+                    realSituation: '',
+                    completionRate: '',
+                    secondPlan: ''
+                },
+                {
+                    project: '净资产',
+                    operatingGoal: '',
+                    realSituation: '',
+                    completionRate: '',
+                    secondPlan: ''
+                },
+                {
+                    project: '用户数',
+                    operatingGoal: '',
+                    realSituation: '',
+                    completionRate: '',
+                    secondPlan: ''
+                },
+                {
+                    project: '活跃用户数',
+                    operatingGoal: '',
+                    realSituation: '',
+                    completionRate: '',
+                    secondPlan: ''
+                },
+                {
+                    project: '其他',
+                    operatingGoal: '',
+                    realSituation: '',
+                    completionRate: '',
+                    secondPlan: ''
                 }
             ],
-            // 添加 经营数据明细 表单
-            operatingForm2: {
-                project: '',
-                operatingGoal: '',
-                realSituation: '',
-                completionRate: '',
-                secondPlan: '',
-                editFlag: false
-            },
             //  财务数据
             financialData: [
                 {
@@ -592,6 +381,7 @@ export default {
                     date: ''
                 }
             ],
+            // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
                 sort: '',
@@ -600,57 +390,104 @@ export default {
                 remark: '',
                 appendix: ''
             },
-            // 编辑/添加数据  资产负债表
+            // 财务数据-添加数据  资产负债表
             balanceSheet: [
                 {
-                    capital: '',
+                    capital: '流动资产：',
                     endingCBalance: '',
                     beginningCBalance: '',
-                    debt: '',
+                    debt: '流动负债：',
                     endingDBalance: '',
-                    beginningDBalance: '',
-                    editFlag: false
+                    beginningDBalance: ''
+                },
+                {
+                    capital: '货币资金',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '短期借款',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },
+                {
+                    capital: '短期投资',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '应付票据',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },  {
+                    capital: '应收票据',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: ' 应付账款',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },
+                {
+                    capital: '应收账款',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '预收账款',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },
+                {
+                    capital: '预付账款',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '应付职工薪酬',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                }
+                ,
+                {
+                    capital: '应收股利',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: ' 应交税费',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },  {
+                    capital: '应收利息',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '应付利息',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },
+                {
+                    capital: '其他应收款',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '应付利润',
+                    endingDBalance: '',
+                    beginningDBalance: ''
+                },
+                {
+                    capital: '存货',
+                    endingCBalance: '',
+                    beginningCBalance: '',
+                    debt: '其他应付款',
+                    endingDBalance: '',
+                    beginningDBalance: ''
                 }
             ],
-            balanceForm: {
-                capital: '',
-                endingCBalance: '',
-                beginningCBalance: '',
-                debt: '',
-                endingDBalance: '',
-                beginningDBalance: '',
-                editFlag: false
-            },
-            // 编辑/添加数据  利润表表
+            // 财务数据-添加数据  利润表
             incomeStatement: [
                 {
-                    project: '',
+                    project: '一、营业收入',
                     monthCounts: '',
-                    yearCounts: '',
-                    editFlag: false
+                    yearCounts: ''
                 }
             ],
-            incomeForm: {
-                project: '',
-                monthCounts: '',
-                yearCounts: '',
-                editFlag: false
-            },
-            // 编辑/添加数据  现金流量表
+            // 财务数据-添加数据  现金流量表
             cashFlowStatements: [
                 {
-                    project: '',
+                    project: '一、经营活动产生的现金流量：',
                     monthCounts: '',
-                    yearCounts: '',
-                    editFlag: false
+                    yearCounts: ''
                 }
-            ],
-            cashFlowForm: {
-                project: '',
-                monthCounts: '',
-                yearCounts: '',
-                editFlag: false
-            }
+            ]
         }
     },
     methods: {
@@ -663,7 +500,6 @@ export default {
             this.f_show = false;
             this.s_show = true;
         },
-
         // 切换 两种数据的添加
         addData() {
             if (this.f_show) {
@@ -672,8 +508,7 @@ export default {
                 this.financialModal1 = true;
             }
         },
-
-        // 添加 经营数据 的方法
+        // 经营数据-添加  保存按钮的方法
         operatingAdd() {
             this.operatingForm1.date = changeDate(this.operatingForm1.date);
             this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
@@ -681,19 +516,14 @@ export default {
             this.operatingForm1 = {};
             this.operatingModal1 = false;
         },
-        // 编辑 经营数据 的方法
+        // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
             this.operatingModal2 = false;
-        },
-        // 添加 经营数据明细 的方法
-        confirmOperating() {
-            this.operatingData1.push(this.operatingForm2);
-            this.operatingForm2 = {};
-            this.operatingModal3 = false;
+            // console.log(this.operatingData1);
         },
 
 
-        // 添加 财务数据 的方法
+        // 财务数据-添加 的方法
         financialAdd() {
             this.financialForm1.date = changeDate(this.financialForm1.date);
             this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
@@ -701,7 +531,7 @@ export default {
             this.financialForm1 = {};
             this.financialModal1 = false;
         },
-        // 编辑 经营数据 的方法
+        // 财务数据-添加数据 的方法
         financialEdit() {
             this.financialModal2 = false;
         },

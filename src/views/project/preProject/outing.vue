@@ -4,7 +4,7 @@
             <el-row>
                 <el-col>
                     <el-form-item label="标题">
-                        <el-input v-model="outingForm.title" auto-complete="off" :disabled="true"></el-input>
+                        <el-input v-model="outingForm.title" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -68,7 +68,7 @@
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button type="default"  v-show="isShow">取 消</el-button>
+                <el-button type="default"  v-show="isShow">编 辑</el-button>
                 <el-button type="danger"  v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
