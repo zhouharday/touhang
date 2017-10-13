@@ -20,92 +20,27 @@
                     <span>操作</span>
                 </div>
             </div>
-            <el-table :data="fileData" border style="width: 100%" align="center">
-                <el-table-column label="前期文档" prop="stageFile" align="center">
-                </el-table-column>
-                <el-table-column prop="fileName" align="center">
-                </el-table-column>
-                <el-table-column prop="user" align="center">
-                </el-table-column>
-                <el-table-column prop="date" align="center">
-                </el-table-column>
-                <el-table-column align="center">
-                    <template scope="scope">
-                        <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
-                        <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-
-        <!-- 考察报告部分 -->
-        <div class="fileTable" v-show="isShow">
-            <el-table :data="inspectionData" border style="width: 100%;margin-top:30px" align="center">
-                <el-table-column label="考察储备" prop="stageFile" align="center">
-                </el-table-column>
-                <el-table-column prop="inspectionName" align="center">
-                </el-table-column>
-                <el-table-column prop="user" align="center">
-                </el-table-column>
-                <el-table-column prop="date" align="center">
-                </el-table-column>
-                <el-table-column align="center">
-                    <template scope="scope">
-                        <el-button type="text" size="small" class="border_right" @click="inspectionDialog">上传</el-button>
-                        <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
-                        <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,inspectionData)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <!-- 上传文档 对话框-->
-            <el-dialog title="上传文档" :visible.sync="modalAdd2" :close-on-click-modal="false">
-                <el-form :model="inspectionForm" :label-width="formLabelWidth">
-                    <el-form-item label="用户">
-                        <el-input v-model="inspectionForm.user" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="上传日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="inspectionForm.date" style="width: 100%;">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="上传文件">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="modalAdd2 = false">取 消</el-button>
-                    <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
-                </div>
-            </el-dialog>
-        </div>
-
-        <!-- 立项报告部分 -->
-        <div class="fileTable" v-show="isShow">
-            <el-table :data="projectData" border style="width: 100%;margin-top:30px" align="center">
-                <el-table-column label="立项会" prop="stageFile" align="center">
-                </el-table-column>
-                <el-table-column prop="projectName" align="center">
-                </el-table-column>
-                <el-table-column prop="user" align="center">
-                </el-table-column>
-                <el-table-column prop="date" align="center">
-                </el-table-column>
-                <el-table-column align="center">
-                    <template scope="scope">
-                        <el-button type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
-                        <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
-                        <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,projectData)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+            <template v-for="(docList, index) in projectDocList">
+                <el-table :data="docList.dataDocumentResult" border style="width: 100%" align="center">
+                    <el-table-column :label="docList.title" prop="allocationDocumentName" align="center">
+                    </el-table-column>
+                    <el-table-column prop="documentName" align="center">
+                    </el-table-column>
+                    <el-table-column prop="uploadUser" align="center">
+                    </el-table-column>
+                    <el-table-column prop="createDate" align="center">
+                    </el-table-column>
+                    <el-table-column align="center">
+                        <template scope="scope">
+                            <el-button v-if="index != 0" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
+                            <a v-if="id != '' && id != null" href="documentUrl" style="font-size:12px;" download="xxxxx文档">下载</a>
+                            <el-button v-if="id != '' && id != null" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <el-button v-if="id != '' && id != null" type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </v-for>
+                </el-table>
+            </template>
             <!-- 上传文档 对话框-->
             <el-dialog title="上传文档" :visible.sync="modalAdd3" :close-on-click-modal="false">
                 <el-form :model="projectForm" :label-width="formLabelWidth">
@@ -127,12 +62,11 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalAdd3 = false">取 消</el-button>
-                    <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+                    <el-button type="default"  @click="modalAdd3 = false">取 消</el-button>
+                    <el-button type="danger"  @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
                 </div>
             </el-dialog>
         </div>
-
         <!-- 文件预览功能 -->
         <div class="viewFiles" v-show="isHide">
             <div class="closeView" @click="closeView">
@@ -146,10 +80,25 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
+import {
+    getProjectDoc
+} from 'api/projectPre';
+    
 export default {
+    props:{
+        proId: {
+            type: String,
+            default: ''
+        },
+        projectId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
+            projectDocList: [],
             isShow: true,
             isHide: false,
             file: null,
@@ -162,7 +111,7 @@ export default {
                 date: ''
             },
             fileData: [{
-                stageFile: 'AAAAAAAAA.PDF',
+                stageFile: 'BBBBBBBB.PDF',
                 fileName: 'AAAAAAAAA.PDF',
                 user: '张三',
                 date: '2017-09-09'
@@ -195,7 +144,21 @@ export default {
             }]
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init() {
+            this.projectId = this.proId;
+            this.getProjectDocument();
+        },
+        getProjectDocument() {
+            getProjectDoc(this.projectId).then(resp => {
+                this.projectDocList = resp.data.result || [];
+            }).catch(e => {
+                console.log('getPreDetail() exists error: ', e);
+            });
+        },
         inspectionDialog() {
             this.modalAdd2 = true
         },
