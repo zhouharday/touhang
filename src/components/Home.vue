@@ -5,20 +5,20 @@
     <div class="content">
         <v-Tab></v-Tab>
         <transition name="bounce">
-            <!-- <keep-alive> -->
+            <keep-alive>
                 <router-view></router-view>
-            <!-- </keep-alive> -->
+            </keep-alive>
         </transition>
     </div>
 </div>
 </template>
 <style lang="less" scoped>
 .bounce-enter-active {
-    animation: bounce-in 0.3s;
+    // animation: bounce-in 0.3s;
 }
 
 .bounce-leave-active {
-    animation: bounce-in 0.3s reverse;
+    // animation: bounce-in 0.3s reverse;
 }
 @keyframes bounce-in {
     0% {
