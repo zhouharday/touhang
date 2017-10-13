@@ -179,16 +179,10 @@ export default {
                 }
             ],
             basicForm: {
-                baseInfo: '基本信息',
-                flag: true
             },
             companyForm: {
-                baseInfo: '企业信息',
-                flag: true
             },
             capitalForm: {
-                baseInfo: '投资信息',
-                flag: true
             },
             // 风险预警 立即处理表单
             alarmForm: {

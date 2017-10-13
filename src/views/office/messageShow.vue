@@ -2,7 +2,7 @@
     <section>
         <!-- 这是消息公告页内容 -->
         <div class="messageShow">
-            <el-tabs type="border-card" @tab-click="tableDatasss">
+            <el-tabs  @tab-click="tableDatasss">
                 <!-- 公司公告 Tab -->
                 <el-tab-pane value="1" label="公司公告">
                     <el-table stripe :data="tableData1" border style="width: 100%">

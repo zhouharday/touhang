@@ -100,6 +100,7 @@
                     </div>
                     <!--tab-content-->
                 </div>
+<<<<<<< HEAD
                 <!---tabbable-->
             </div>
             <!-- row -->
@@ -173,6 +174,31 @@
     }
 }
 </style>
+=======
+            </el-col>
+            <el-col :span="14" style="background-color: #fff;height: 100%;margin: 0 10px;">
+                <div class="form-components" @drop='drop($event)' @dragover='allowDrop($event)' style="height:100%">
+                    <span>中间内容</span>
+                </div>
+            </el-col>
+            <el-col :span="5" style="background-color: #fff;height: 100%;margin-right: -10px;">
+                <div class="form-components">
+                    <span style="text-align: center;margin-top: 30px;">组件设置</span>
+                    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" styele="margin-top:30px;">
+                        <el-form-item label="标题">
+                            <el-input v-model="formLabelAlign.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="必填项目">
+                            <el-checkbox v-model="formLabelAlign.must" label="这个是必填项" name="must">
+                            </el-checkbox>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-col>
+        </el-row>
+    </section>
+</template>
+>>>>>>> fbdde50bec77a4a54e7a33aa5681452e0badd0c7
 
 <script>
 //    import jquery from '../../../static/js/jquery-1.8.3.min'
@@ -181,11 +207,14 @@
 let dom = 0;
 export default {
     // components: {jquery,core,plugins},
+<<<<<<< HEAD
     created() {
         console.log($('#build'));
         this.coreForm();
         this.plugins();
     },
+=======
+>>>>>>> fbdde50bec77a4a54e7a33aa5681452e0badd0c7
     data() {
         return {
             labelPosition: 'top',
@@ -510,4 +539,30 @@ export default {
 }
 </script>
 
+<style lang="less" scoped>
+@import "../../common/styles/variable.less";
 
+.createForm {
+    width: 100%;
+    min-height: 100%;
+    font-size: 14px;
+    .button {
+        background-color: #fff;
+        margin-bottom: 20px;
+        padding: 5px;
+        /*padding-bottom: 5px;*/
+        text-align: right;
+    }
+    .form-components {
+        text-align: center;
+        padding-top: 10px;
+    }
+    ul {
+        margin-top: 30px;
+        text-align: center;
+    }
+    ul>li {
+        margin-bottom: 10px;
+    }
+}
+</style>

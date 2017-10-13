@@ -38,7 +38,6 @@
                             <el-button v-if="id != '' && id != null" type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
                         </template>
                     </el-table-column>
-                </v-for>
                 </el-table>
             </template>
             <!-- 上传文档 对话框-->
@@ -62,8 +61,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="default"  @click="modalAdd3 = false">取 消</el-button>
-                    <el-button type="danger"  @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+                    <el-button type="default" @click="modalAdd3 = false">取 消</el-button>
+                    <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -84,9 +83,9 @@
 import {
     getProjectDoc
 } from 'api/projectPre';
-    
+
 export default {
-    props:{
+    props: {
         proId: {
             type: String,
             default: ''

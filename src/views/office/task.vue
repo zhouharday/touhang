@@ -3,7 +3,7 @@
         <!-- 任务页菜单内容 -->
         <div class="Task">
             <!-- 任务页 Tab -->
-            <Tabs size="small" @on-click="getTaskList">
+            <Tabs  @on-click="getTaskList">
                 <Tab-pane :name="1" label="指派任务">
                     <!-- <Table border :columns="columns1" :data="data1" align="center"></Table> -->
                     <Table border :data="data1" :columns="columns1" stripe></Table>
@@ -518,7 +518,8 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '5px',
+                                    border: 'none'
                                 },
                                 on: {
                                     click: () => {
@@ -530,6 +531,9 @@ export default {
                                 props: {
                                     type: 'text',
                                     size: 'small'
+                                },
+                                style: {
+                                    border: 'none'
                                 },
                                 on: {
                                     click: () => {
