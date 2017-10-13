@@ -33,11 +33,11 @@
                 <!-- 系统消息 Tab -->
                 <el-tab-pane value="2" label="系统消息">
                     <el-table stripe :data="tableData2" border style="">
-                        <el-table-column prop="title" label="主题" width="550" align="center">
+                        <el-table-column prop="assistMessage.msgTitle" label="主题" width="550" align="center">
                         </el-table-column>
-                        <el-table-column prop="releasePeople" label="发布人" width="" align="center">
+                        <el-table-column prop="assistMessage.seedUserName" label="发布人" width="" align="center">
                         </el-table-column>
-                        <el-table-column prop="releaseDate" label="时间" width="" align="center">
+                        <el-table-column prop="assistMessage.seedMsgDate" label="时间" width="" align="center">
                         </el-table-column>
                         <el-table-column label="操作" width="" align="center">
                             <template scope="scope">
@@ -55,7 +55,7 @@
                 </el-tab-pane>
             </el-tabs>
             <!-- 发布新公告 btn -->
-            <el-button v-show="isAddMsg" type="danger" size="small"  @click="realseBtn" class="messageBtn">发布新公告</el-button>
+            <el-button v-show="isAddMsg" type="danger" size="small" @click="realseBtn" class="messageBtn">发布新公告</el-button>
             <!-- 发布新公告 dialog -->
             <el-dialog style="width:1100px" title="发布新公告" :visible.sync="dialogFormVisible">
                 <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
@@ -115,7 +115,7 @@ export default {
     },
     created() {
         // console.log(this.$store.state.login.userInfor.id);
-        this.getNoticeUserList1(1);
+        this.getNoticeUserList1(this.page, this.pageSize);
     },
     mounted() {
 
@@ -129,6 +129,8 @@ export default {
             //     d: false, //查看
             // },
             isAddMsg: true,
+            page: 1,
+            pageSize: 10,
             page1: {
                 pageNum: '', //当前页码
                 total: '', //数据总数
@@ -156,27 +158,27 @@ export default {
                 seedNoticeDate: '', //发布日期
                 noticeType: "" //发布状态
             },
-            tableData1: [],
-            tableData2: []
+            tableData1: [], //公司公告列表数据
+            tableData2: [], //系统消息列表数据
         }
     },
     methods: {
         /************公告 Start***************/
-        getNoticeUserList1(pages) { //获取公司公告列表数据
+        getNoticeUserList1(pages, pageSize) { //获取公司公告列表数据
             // alert(1);
             this.$http.post(this.api + '/work/getNoticeList', {
                 "seedUserId": this.userId,
                 "page": pages,
-                "pageSize": 10,
+                "pageSize": pageSize,
                 "merchantId": this.$store.state.login.merchants[0].id
             })
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data);
-                        res.data.result.list.forEach(function(item,index) {
-                            if (item.noticeType == '1'){
+                        res.data.result.list.forEach(function(item, index) {
+                            if (item.noticeType == '1') {
                                 item.noticeType = '未发布';
-                            }else{
+                            } else {
                                 item.noticeType = '已发布';
                             }
                         }, this);
@@ -292,35 +294,26 @@ export default {
         },
         /***************公告 End******************* */
         /***************系统消息 Start********************/
-        getSysNoticeList2(pages) { //获取系统消息列表数据
-            this.$http.post(this.api + '/sysManage/selectSysMessageList', {
-                "seedUserId": this.userId,
-                "page": pages,
-                "pageSize": 10,
-                "merchantId": this.$store.state.login.merchants[0].id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data);
-                        if (res.data.status == '49999') { //数据为空
-                            console.log('没有新数据');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
         /***************系统消息 End******************* */
         handleCurrentChange1(pages) { //获取tabList1 分页数据
             console.log(pages);
-            this.getNoticeUserList1(pages);
+            this.pages = pages;
+            this.getNoticeUserList1(this.pages, this.pageSize);
         },
         handleCurrentChange2(pages) { //获取tabList2 分页数据
             console.log(pages);
-            this.getNoticeUserList2(pages);
+            this.pages = pages;
+            this.getMessageList(this.pages, this.pageSize);
+        },
+        handleSizeChange1(pages) { //获取tabList2 分页数据
+            console.log(pages);
+            this.pageSize = pages;
+            this.getNoticeUserList1(this.pages, this.pageSize);
+        },
+        handleSizeChange2(pages) { //获取tabList2 分页数据
+            console.log(pages);
+            this.pageSize = pages;
+            this.getMessageList(this.pages, this.pageSize);
         },
         tableDatasss(tab) {
             if (tab.index == '0') {
@@ -328,7 +321,7 @@ export default {
                 this.getNoticeUserList1();
             } else if (tab.index == '1') {
                 this.isAddMsg = false;
-                this.getNoticeUserList2();
+                this.getMessageList(1, 10);
             }
         },
         cancle() { //取消 Btn
@@ -385,11 +378,51 @@ export default {
             return val;
         },
         lookNotice(row) { //查看方法
-            alert(row.noticeContent);
+            // alert(row.noticeContent);
+            console.log(row);
+            if(row.noticeContent == null || row.noticeTitle == null){
+                this.$Message.warning('无消息');
+                return;
+            };
+            this.$alert(row.noticeContent, row.noticeTitle, {
+                confirmButtonText: '确定',
+                callback: action => {
+                    this.$message({
+                        type: 'info',
+                        message: `action: ${action}`
+                    });
+                }
+            });
         },
         deleteRow(index, rows) { //删除当前行
             rows.splice(index, 1);
-        }
+        },
+        getMessageList(page, pageSize) { //获取系统消息 api
+            this.$http.post(this.api + '/work/getMessageList', {
+                "userId": this.userId,
+                "page": page,
+                "pageSize": pageSize,
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log('系统消息');
+                            console.log(res.data);
+                            this.tableData2 = res.data.result.list;
+                            this.page2.pageNum = res.data.result.pageNum; //当前页码
+                            this.page2.total = res.data.result.total; //数据总数
+                            this.page2.pageSize = res.data.result.pageSize; //每页条数
+                            this.page2.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+                            this.$Message.success(res.data.message);
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                })
+        },
     },
 }
 </script>

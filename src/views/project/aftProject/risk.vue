@@ -6,7 +6,7 @@
                 <el-button @click="changeRisk2" :class="{active:s_show}">风险预警</el-button>
             </div>
             <div class="rightBtn">
-                <el-button type="danger" size="small" @click="modalAdd=true" v-if="addBtn">添加</el-button>
+                <el-button type="danger" size="small" @click="openAddModal" v-if="addBtn">添加</el-button>
             </div>
         </div>
         <div class="f_risk" v-show="f_show">
@@ -25,56 +25,56 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text"  @click="modalRiskView=true">查看详情</el-button>
-                        <el-button type="text"  @click="modalTracking=true">跟踪</el-button>
+                        <el-button type="text" @click="modalRiskView=true">查看详情</el-button>
+                        <el-button type="text" @click="modalTracking=true">跟踪</el-button>
                         <el-button type="text" @click="handleDelete(scope.$index,riskData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!-- 添加风险 对话框-->
             <el-dialog title="添加风险" :visible.sync="modalAdd" :close-on-click-modal="false">
-                <el-form :model="AddForm" :label-width="formLabelWidth">
+                <el-form :model="addForm" :rules="rules1" ref="addForm" :label-width="formLabelWidth">
                     <el-row>
                         <el-col>
-                            <el-form-item label="风险主题">
-                                <el-input v-model="AddForm.riskTheme" auto-complete="off"></el-input>
+                            <el-form-item label="风险主题" prop="riskTheme">
+                                <el-input v-model="addForm.riskTheme" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="风险描述">
-                                <el-input type="textarea" :rows="3" v-model="AddForm.description" auto-complete="off">
+                            <el-form-item label="风险描述" prop="description">
+                                <el-input type="textarea" :rows="3" v-model="addForm.description" auto-complete="off">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="提出人">
-                                <el-input v-model="AddForm.proposer" auto-complete="off" disabled></el-input>
+                            <el-form-item label="提出人" prop="proposer">
+                                <el-input v-model="addForm.proposer" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="提出时间">
-                                <el-input placeholder="当前默认时间" v-model="AddForm.startingDate" disabled>
+                            <el-form-item label="提出时间" prop="startingDate">
+                                <el-input placeholder="当前默认时间" v-model="addForm.startingDate" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="接收人">
-                                <el-select v-model="AddForm.recipient" placeholder="请选择接收人" style="width:100%">
+                            <el-form-item label="接收人" prop="recipient">
+                                <el-select v-model="addForm.recipient" placeholder="请选择接收人" style="width:100%">
                                     <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="完成时间">
-                                <el-date-picker type="date" placeholder="完成时间" v-model="AddForm.endingDate" style="width: 100%;">
+                            <el-form-item label="完成时间" prop="endingDate">
+                                <el-date-picker type="date" placeholder="完成时间" v-model="addForm.endingDate" style="width: 100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="附件">
                                 <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="addForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
                                         <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
@@ -86,7 +86,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd = false">取 消</el-button>
-                    <el-button type="danger" @click="confirmAdd">保 存</el-button>
+                    <el-button type="danger" @click="submitaddForm('addForm')">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 查看风险详情 对话框 -->
@@ -148,18 +148,18 @@
                         </p>
                     </div>
                 </div>
-                <el-form :model="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
-                    <el-form-item label="处理结果" :label-width="formLabelWidth">
+                <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
+                    <el-form-item label="处理结果" prop="result" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.result" placeholder="请选择处理状态">
                             <el-option label="处理中" value="处理中"></el-option>
                             <el-option label="已解决" value="已解决"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="汇报内容" :label-width="formLabelWidth">
+                    <el-form-item label="汇报内容" prop="content" :label-width="formLabelWidth">
                         <el-input type="textarea" :rows="2" v-model="trackingForm.content" auto-complete="off">
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="处理方案" :label-width="formLabelWidth">
+                    <el-form-item label="处理方案" prop="appendix" :label-width="formLabelWidth">
                         <!-- action 上传的地址，必填 -->
                         <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
@@ -171,7 +171,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalTracking= false">取 消</el-button>
-                    <el-button type="danger" @click="confirmTracking">保 存</el-button>
+                    <el-button type="danger" @click="submitTracking('trackingForm')">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -190,8 +190,8 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text"  @click="modalAlarmView=true">查看详情</el-button>
-                        <el-button type="text"  @click="modalAlarm=true">立即处理</el-button>
+                        <el-button type="text" @click="modalAlarmView=true">查看详情</el-button>
+                        <el-button type="text" @click="modalAlarm=true">立即处理</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -305,7 +305,7 @@ export default {
             file: null,
             loadingStatus: false,
             // 风险上报 添加表单
-            AddForm: {
+            addForm: {
                 riskTheme: '',
                 description: '',
                 proposer: '',
@@ -314,6 +314,20 @@ export default {
                 endingDate: '',
                 appendix: '',
                 Records: ''
+            },
+            rules1: {
+                riskTheme: [
+                    { required: true, message: '请输入风险主题', trigger: 'blur' }
+                ],
+                description: [
+                    { required: true, message: '请输入风险描述', trigger: 'blur' }
+                ],
+                recipient: [
+                    { required: true, message: '请选择接收人', trigger: 'blur' }
+                ],
+                endingDate: [
+                    { type: 'date', required: true, message: '请选择完成时间', trigger: 'blur' }
+                ]
             },
             recipientOptions: [
                 { //接收人列表
@@ -352,6 +366,14 @@ export default {
                 result: '',
                 content: '',
                 appendix: ''
+            },
+            rules2: {
+                result: [
+                    { required: true, message: '请选择处理结果', trigger: 'blur' }
+                ],
+                content: [
+                    { required: true, message: '请输入汇报内容', trigger: 'blur' }
+                ],
             },
             resultOptions: [
                 { //处理结果列表
@@ -423,8 +445,6 @@ export default {
         // 添加预警 的保存按钮
         confirmAlarm() {
             this.modalAlarm = false;
-
-
         },
         // 切换 上报/预警 的显示隐藏
         changeRisk1() {
@@ -441,13 +461,41 @@ export default {
         handleDelete(index, rows) {
             rows.splice(index, 1);
         },
-        confirmAdd() {
-            this.modalAdd = false;
-            this.AddForm.startingDate = changeDate(this.AddForm.startingDate);
-            this.AddForm.endingDate = changeDate(this.AddForm.endingDate);
+        // 添加风险的 添加按钮方法
+        openAddModal() {
+            let new_addForm = {
+                riskTheme: '',
+                description: '',
+                proposer: '',
+                startingDate: '',
+                recipient: '',
+                endingDate: '',
+                appendix: '',
+                Records: ''
+            };
+            this.addForm = new_addForm;
+            this.modalAdd = true;
         },
-        confirmTracking() {
-            this.modalTracking = false;
+        // 添加风险的 保存按钮方法
+        submitaddForm(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    // this.addForm.endingDate = changeDate(this.addForm.endingDate);
+                    this.modalAdd = false;
+                } else {
+                    return false;
+                }
+            });
+        },
+        // 风险跟踪的 保存按钮方法
+        submitTracking(formName) {
+             this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.modalTracking = false;
+                } else {
+                    return false;
+                }
+            });
         },
         // 上传附件的方法
         handleUpload(file) {

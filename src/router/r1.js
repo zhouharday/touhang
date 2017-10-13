@@ -87,9 +87,13 @@ const r1 = [{
         name: 'manageCompany',
         component: resolve => require(['../views/fund/manageCompany.vue'], resolve)
     }, {
-        path: 'createForm/:userId', //home/基金管理下的管理公司
+        path: 'createForm/:userId', //home/系统管理下的表单详情页
         name: 'createForm',
         component: resolve => require(['../views/system/createForm.vue'], resolve)
+    }, {
+        path: 'createProcess', //home/基金管理下的管理公司
+        name: 'createProcess',
+        component: resolve => require(['../views/system/createProcess.vue'], resolve)
     }
 ]
 export default r1

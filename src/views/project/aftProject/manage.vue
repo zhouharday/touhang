@@ -374,7 +374,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="支付日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.handlingDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -465,7 +465,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="支付日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.handlingDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -573,7 +573,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="分红日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.handlingDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -646,7 +646,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="经办日期">
+                                    <el-form-item label="分红日期">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.handlingDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>

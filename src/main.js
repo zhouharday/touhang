@@ -27,7 +27,6 @@ Vue.prototype.md5 = md5;
 Vue.prototype.$http = axios;
 Vue.prototype.api = '/api'; //公司IP请求时 URL
 // Vue.prototype._ = _ // lodash.js
-// Vue.prototype.api = 'http://18f46963j4.iok.la'; //外网请求时 URL
 // Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
 // Vue.prototype.api = ''; //上线时 URL
 // Vue.prototype.api = process.env.NODE_ENV === 'production'? "" : "/api";

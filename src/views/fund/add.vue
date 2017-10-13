@@ -106,5 +106,6 @@ export default {
     width: 100%;
     min-height: 100%;
     background: @color-base;
+     padding: 20px;
 }
 </style>
