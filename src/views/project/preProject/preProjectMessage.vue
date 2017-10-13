@@ -498,14 +498,10 @@ export default {
             nextStage(params).then(resp => {
                 if(resp.data.status === "200"){
                     this.getStageUploadDocument();
-                }else{
-                    //reject(data.message);
                 }
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
             });
-
-
         },
         // 小双助手 打开不同的对话框
         openDialog(index, id) {

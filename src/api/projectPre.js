@@ -82,18 +82,6 @@ export function updatePreDetail(projectId = undefined) {
 	return service({url: '/projectInvestInfo/insertAndUpdate', method: 'post', data});
 }
 
-//文档标签页
-export function getProjectDoc(projectId = undefined) {
-	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
-	let typeId = projectId;
-	const data = {
-		merchantId,
-		typeId,
-		type: 1
-	}
-	return service({url: '/dictionaryController/selectProjectOrFundDocument', method: 'post', data});
-}
-
 /////// 董事会 ///////////////
 // 董事会列表
 export function owers(enterpriseId = undefined) {
@@ -445,4 +433,24 @@ export function saveExit(projectExit = {}, projectExitList = []) {
         projectExitList : projectExitList
     }
 	return service({url: '/projectExit/addProjectExit', method: 'post', data});
+}
+
+//文档标签页
+export function getProjectDoc(projectId = undefined) {
+	let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //商户id必传"
+	let typeId = projectId;
+	const data = {
+		merchantId,
+		typeId,
+		type: 1
+	}
+	return service({url: '/dictionaryController/selectProjectOrFundDocument', method: 'post', data});
+}
+
+//删除文档
+export function delDocument(id = undefined) {
+	const data = {
+		id 
+	}
+	return service({url: '/dictionaryController/deleteDocument', method: 'post', data});
 }
