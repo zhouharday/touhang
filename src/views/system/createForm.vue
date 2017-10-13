@@ -26,22 +26,7 @@
             <el-col :span="5" style="background-color: #fff;height: 100%;margin-right: -10px;">
                 <div class="form-components">
                     <span style="text-align: center;margin-top: 30px;">组件设置</span>
-<<<<<<< HEAD
-                    <!--<ul>-->
-                    <!--<li prop="标题">-->
-                    <!--标题-->
-                    <!--<el-input></el-input>-->
-                    <!--</li>-->
-                    <!--<li prop="必填项目">-->
-                    <!--必填项目-->
-                    <!--<el-checkbox label="这个是必填项" name="type"></el-checkbox>-->
-                    <!--</li>-->
-                    <!--</ul>-->
                     <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" styele="margin-top:30px;">
-=======
-                    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign"
-                             styele="margin-top:30px;">
->>>>>>> 0feaccc8cda5e235196396e9ffba8483216d267b
                         <el-form-item label="标题">
                             <el-input v-model="formLabelAlign.name"></el-input>
                         </el-form-item>
@@ -55,6 +40,60 @@
         </el-row>
     </section>
 </template>
+
+<script>
+//    import jquery from '../../../static/js/jquery-1.8.3.min'
+//    import core from 'common/js/leipi.form.build.core'
+//    import plugins from 'common/js/leipi.form.build.plugins'
+let dom = 0;
+export default {
+    // components: {jquery,core,plugins},
+    data() {
+        return {
+            labelPosition: 'top',
+            formLabelAlign: {
+                name: '',
+                must: ''
+            },
+            btnLists: [
+                {
+                    data: '多行文本框'
+                },
+                {
+                    data: '时间'
+                },
+                {
+                    data: '日期'
+                },
+                {
+                    data: '上传'
+                }
+            ],
+            pluginslists: [
+                {
+                    title: '标题',
+
+                }
+            ],
+            type: [],
+            input: '',
+            textarea: ''
+        }
+    },
+    methods: {
+        drag: function(event) {
+            dom = event.currentTarget
+        },
+        drop: function(event) {
+            event.preventDefault();
+            event.target.appendChild(dom)
+        },
+        allowDrop: function(e) {
+            event.preventDefault();
+        }
+    }
+}
+</script>
 
 <style lang="less" scoped>
 @import "../../common/styles/variable.less";
@@ -83,93 +122,3 @@
     }
 }
 </style>
-
-<script>
-<<<<<<< HEAD
-import jquery from 'jquery'
-import core from 'common/js/leipi.form.build.core'
-import plugins from 'common/js/leipi.form.build.plugins'
-export default {
-    components: {jquery,core,plugins},
-    data() {
-        return {
-            labelPosition: 'top',
-            formLabelAlign: {
-                name: '',
-                must: ''
-            },
-            btnLists: [
-                {
-                    data: '单行文本框'
-=======
-//    import core from '../../common/js/leipi.form.build.core'
-//    import plugins from '../../common/js/leipi.form.build.plugins'
-    let dom = 0;
-    export default {
-        data() {
-            return {
-                labelPosition: 'top',
-                formLabelAlign: {
-                    name: '',
-                    must: ''
->>>>>>> 0feaccc8cda5e235196396e9ffba8483216d267b
-                },
-                {
-                    data: '多行文本框'
-                },
-                {
-                    data: '时间'
-                },
-                {
-                    data: '日期'
-                },
-                {
-                    data: '上传'
-                }
-            ],
-            pluginslists: [
-                {
-                    title: '标题',
-
-<<<<<<< HEAD
-                }
-            ],
-            type: []
-        }
-    },
-    methods: {
-        drag: function(event) {
-            dom = event.currentTarget
-        },
-        drop: function(event) {
-            e.preventDefault();
-            e.target.appendChild(dom);
-        },
-        allowDrop: function(e) {
-            e.preventDefault();
-=======
-                    }
-                ],
-                type: [],
-                input: '',
-                textarea: ''
-            }
-        },
-        methods: {
-            drag: function (event) {
-                dom = event.currentTarget
-            },
-            drop: function (event) {
-                event.preventDefault();
-                event.target.appendChild(dom)
-            },
-            allowDrop: function (e) {
-                event.preventDefault();
-            }
->>>>>>> 0feaccc8cda5e235196396e9ffba8483216d267b
-        }
-    }
-}
-</script>
-
-
