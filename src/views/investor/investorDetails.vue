@@ -114,7 +114,9 @@ export default {
             }
         },
         investorDetailsInfo(value) {
-            this.titleInfo.name = value
+            this.titleInfo.name = value.investorName
+            this.titleInfo.total[0].amount = value.investAmountSum
+            this.titleInfo.total[1].amount = value.earningsAmountSum
         }
     },
     components: {
