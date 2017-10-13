@@ -7,8 +7,7 @@
                 <el-button type="danger" size="small">取消</el-button>
             </div>
         </el-row>
-        <el-row :gutter="20"
-                style="margin:0;background-color:#F2F4F8;height:100%;box-sizing: border-box;overflow: hidden">
+        <el-row :gutter="20" style="margin:0;background-color:#F2F4F8;height:100%;box-sizing: border-box;overflow: hidden">
             <el-col :span="5" style="background-color: #fff;height: 100%;margin-left: -10px">
                 <div class="form-components">
                     <span>表单组件</span>
@@ -35,8 +34,7 @@
                     <!--<el-checkbox label="这个是必填项" name="type"></el-checkbox>-->
                     <!--</li>-->
                     <!--</ul>-->
-                    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign"
-                             styele="margin-top:30px;">
+                    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" styele="margin-top:30px;">
                         <el-form-item label="标题">
                             <el-input v-model="formLabelAlign.name"></el-input>
                         </el-form-item>
@@ -52,79 +50,83 @@
 </template>
 
 <style lang="less" scoped>
-    @import "../../common/styles/variable.less";
+@import "../../common/styles/variable.less";
 
-    .createForm {
-        width: 100%;
-        min-height: 100%;
-        font-size: 14px;
-        .button {
-            background-color: #fff;
-            margin-bottom: 20px;
-            padding: 5px;
-            /*padding-bottom: 5px;*/
-            text-align: right;
-        }
-        .form-components {
-            text-align: center;
-            padding-top: 10px;
-        }
-        ul {
-            margin-top: 30px;
-            text-align: center;
-        }
-        ul > li {
-            margin-bottom: 10px;
-        }
+.createForm {
+    width: 100%;
+    min-height: 100%;
+    font-size: 14px;
+    .button {
+        background-color: #fff;
+        margin-bottom: 20px;
+        padding: 5px;
+        /*padding-bottom: 5px;*/
+        text-align: right;
     }
+    .form-components {
+        text-align: center;
+        padding-top: 10px;
+    }
+    ul {
+        margin-top: 30px;
+        text-align: center;
+    }
+    ul>li {
+        margin-bottom: 10px;
+    }
+}
 </style>
 
 <script>
-    export default {
-        data() {
-            return {
-                labelPosition: 'top',
-                formLabelAlign: {
-                    name: '',
-                    must: ''
+import jquery from 'jquery'
+import core from 'common/js/leipi.form.build.core'
+import plugins from 'common/js/leipi.form.build.plugins'
+export default {
+    components: {jquery,core,plugins},
+    data() {
+        return {
+            labelPosition: 'top',
+            formLabelAlign: {
+                name: '',
+                must: ''
+            },
+            btnLists: [
+                {
+                    data: '单行文本框'
                 },
-                btnLists: [
-                    {
-                        data: '单行文本框'
-                    },
-                    {
-                        data: '多行文本框'
-                    },
-                    {
-                        data: '时间'
-                    },
-                    {
-                        data: '日期'
-                    },
-                    {
-                        data: '上传'
-                    }
-                ],
-                pluginslists: [
-                    {
-                        title: '标题',
+                {
+                    data: '多行文本框'
+                },
+                {
+                    data: '时间'
+                },
+                {
+                    data: '日期'
+                },
+                {
+                    data: '上传'
+                }
+            ],
+            pluginslists: [
+                {
+                    title: '标题',
 
-                    }
-                ],
-                type: []
-            }
+                }
+            ],
+            type: []
+        }
+    },
+    methods: {
+        drag: function(event) {
+            dom = event.currentTarget
         },
-        methods: {
-            drag:function(event){
-                dom = event.currentTarget
-            },
-            drop:function(event){
-                e.preventDefault();
-                e.target.appendChild(dom);
-            },
-            allowDrop:function(e){
-                e.preventDefault();
-            }
+        drop: function(event) {
+            e.preventDefault();
+            e.target.appendChild(dom);
+        },
+        allowDrop: function(e) {
+            e.preventDefault();
         }
     }
+}
 </script>
