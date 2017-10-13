@@ -1,153 +1,92 @@
 <template>
     <section class="createForm" style="height: 100%">
-        <div class="bs-header" id="content">
-            <div class="container">
-                <h1><img src="Public/js/formbuild/images/leipi_formbuild.png" width="64" />拖拽式表单设计器
-                    <small>Formbuild Leipi Org</small>
-                </h1>
-                <p>
-                    <strong>拖拽式</strong> VS
-                    <strong>编辑器</strong><br/>VS：设计的表单是兼容的，但它们的样式不同，拖拽式是傻瓜式排版而编辑器排版难度大一些但效果更好。
-                    <br/> 交流Q群：143263697
-                </p>
+        <el-row :gutter="20" style="margin:0;background-color: #F2F4F8;">
+            <div class="button" style="margin-bottom: 20px; padding-top: 20px;">
+                <el-button type="danger" size="small">保存</el-button>
+                <el-button type="danger" size="small">预览</el-button>
+                <el-button type="danger" size="small">取消</el-button>
             </div>
-        </div>
-        <div class="container">
-            <div class="row clearfix">
-                <div class="span6">
-                    <div class="clearfix">
-                        <h2>我的表单</h2>
-                        <hr>
-                        <div id="build">
-                            <form id="target" class="form-horizontal">
-                                <fieldset>
-                                    <div id="legend" class="component" rel="popover" title="编辑属性" trigger="manual" data-content="
-                                        <form class='form'>
-                                          <div class='controls'>
-                                            <label class='control-label'>表单名称</label> <input type='text' id='orgvalue' placeholder='请输入表单名称'>
-                                            <hr/>
-                                            <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
-                                          </div>
-                                        </form>">
-                                        <input type="hidden" name="form_name" value="" class="leipiplugins" leipiplugins="form_name" />
-                                        <legend class="leipiplugins-orgvalue">点击填写表单名</legend>
-                                    </div>
-                                </fieldset>
-                            </form>
+        </el-row>
+        <el-row :gutter="20" style="margin:0;background-color:#F2F4F8;height:100%;box-sizing: border-box;overflow: hidden">
+            <!-- <el-col :span="5" style="background-color: #fff;height: 100%;margin-left: -10px">
+                                                                <div class="form-components">
+                                                                    <span>表单组件</span>
+                                                                    <ul>
+                                                                        <li draggable='true' @dragstart='drag($event)' v-for="list in btnLists">
+                                                                            <el-button type="button">{{list.data}}</el-button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </el-col> -->
+            <el-col :span="5" style="background-color: #fff;height: 100%;margin-left: -10px">
+                <!-- Text start -->
+                <form class="form-horizontal" id="components">
+                    <fieldset>
+                        <!-- Text start -->
+                        <div class="control-group component" rel="popover" title="文本框控件" trigger="manual" data-content="
+                                      <form class='form'>
+                                        <div class='controls'>
+                                          <label class='control-label'>控件名称</label> 
+                                          <input type='text' id='orgname' placeholder='必填项'>
+                                          <label class='control-label'>默认值</label>
+                                           <input type='text' id='orgvalue' placeholder='默认值'>
+                                          <hr/>
+                                          <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                        </div>
+                                      </form>
+                                      ">
+                            <!-- Text -->
+                            <label class="control-label leipiplugins-orgname">文本框</label>
+                            <div class="controls">
+                                <input name="leipiNewField" type="text" placeholder="默认值" title="文本框" value="" class="leipiplugins" leipiplugins="text" />
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="span6">
-                <h2>拖拽下面的控件到左侧</h2>
-                <hr>
-                <div class="tabbable">
-                    <ul class="nav nav-tabs" id="navtab">
-                        <li class="active">
-                            <a href="#1" data-toggle="tab">常用控件</a>
-                        </li>
-                        <li class>
-                            <a href="#2" data-toggle="tab">定制控件</a>
-                        </li>
-                        <li class>
-                            <a id="sourcetab" href="#5" data-toggle="tab">源代码</a>
-                        </li>
-                    </ul>
-                    <form class="form-horizontal" id="components">
+                        <!-- Text end -->
+                    </fieldset>
+                </form>
+            </el-col>
+            <div id="build">
+                <form id="target" class="form-horizontal">
+                    <el-col :span="14" style="background-color: #fff;height: 100%;margin: 0 10px;">
+                        <!-- <div class="form-components" @drop='drop($event)' @dragover='allowDrop($event)' style="height:100%"> -->
+                        <!-- <span>中间内容</span> -->
                         <fieldset>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="1">
-                                    <!-- Text start -->
-                                    <div class="control-group component" rel="popover" title="文本框控件" trigger="manual" data-content="
-                                              <form class='form'>
-                                                <div class='controls'>
-                                                  <label class='control-label'>控件名称</label> 
-                                                  <input type='text' id='orgname' placeholder='必填项'>
-                                                  <label class='control-label'>默认值</label>
-                                                   <input type='text' id='orgvalue' placeholder='默认值'>
-                                                  <hr/>
-                                                  <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
-                                                </div>
-                                              </form>">
-                                        <!-- Text -->
-                                        <label class="control-label leipiplugins-orgname">文本框</label>
-                                        <div class="controls">
-                                            <input name="leipiNewField" type="text" placeholder="默认值" title="文本框" value="" class="leipiplugins" leipiplugins="text" />
-                                        </div>
-                                    </div>
-                                    <!-- Text end -->
-                                </div>
-                                <div class="tab-pane" id="2">
-                                    <div class="control-group component" rel="popover" title="文件上传" trigger="manual" data-content="
-                                          <form class='form'>
-                                            <div class='controls'>
-                                              <label class='control-label'>控件名称</label> <input type='text' id='orgname' placeholder='必填项'>
-                                              <hr/>
-                                              <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
-                                            </div>
-                                          </form>">
-                                        <label class="control-label leipiplugins-orgname">文件上传</label>
-
-                                        <!-- File Upload -->
-                                        <div>
-                                            <input type="file" name="leipiNewField" title="文件上传" class="leipiplugins" leipiplugins="uploadfile">
-                                        </div>
-                                    </div>
-                                </div>
-                        </div>
+                            <div id="legend" class="component" rel="popover" title="编辑属性" trigger="manual" data-content="
+                                                        <form class='form'>
+                                                          <div class='controls'>
+                                                            <label class='control-label'>表单名称</label> <input type='text' id='orgvalue' placeholder='请输入表单名称'>
+                                                            <hr/>
+                                                            <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                                          </div>
+                                                        </form>">
+                                <input type="hidden" name="form_name" value="" class="leipiplugins" leipiplugins="form_name" />
+                                <legend class="leipiplugins-orgvalue">点击填写表单名</legend>
+                            </div>
                         </fieldset>
-                    </form>
-                    </div>
-                    <!--tab-content-->
-                </div>
-                <!---tabbable-->
+                        <!-- </div> -->
+                    </el-col>
+                </form>
             </div>
-            <!-- row -->
-        </div>
-        <!-- /container -->
+            <el-col :span="5" style="background-color: #fff;height: 100%;margin-right: -10px;">
+                <div class="form-components">
+                    <span style="text-align: center;margin-top: 30px;">组件设置</span>
+                    <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign" styele="margin-top:30px;">
+                        <el-form-item label="标题">
+                            <el-input v-model="formLabelAlign.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="必填项目">
+                            <el-checkbox v-model="formLabelAlign.must" label="这个是必填项" name="must">
+                            </el-checkbox>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-col>
+        </el-row>
     </section>
 </template>
+
 <style lang="less" scoped>
 @import "../../common/styles/variable.less";
-
-/********************************/
-
-#components {
-    min-height: 600px;
-}
-
-#target {
-    min-height: 200px;
-    border: 1px solid #ccc;
-    padding: 5px;
-}
-
-#target .component {
-    border: 1px solid #fff;
-}
-
-#temp {
-    width: 500px;
-    background: white;
-    border: 1px dotted #ccc;
-    border-radius: 10px;
-}
-
-.popover-content form {
-    margin: 0 auto;
-    width: 213px;
-}
-
-.popover-content form .btn {
-    margin-right: 10px
-}
-
-#source {
-    min-height: 500px;
-}
-
-
-/*******************************/
 
 .createForm {
     width: 100%;
