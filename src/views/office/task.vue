@@ -585,7 +585,8 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '5px',
+                                    border: 'none'
                                 },
                                 on: {
                                     click: () => {
@@ -637,7 +638,8 @@ export default {
                                     size: 'small'
                                 },
                                 style: {
-                                    marginRight: '5px'
+                                    marginRight: '5px',
+                                    border: 'none'
                                 },
                                 on: {
                                     click: () => {
@@ -649,6 +651,9 @@ export default {
                                 props: {
                                     type: 'text',
                                     size: 'small'
+                                },
+                                style: {
+                                    border: 'none'
                                 },
                                 on: {
                                     click: () => {

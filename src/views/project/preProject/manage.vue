@@ -103,7 +103,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -174,7 +174,6 @@
                             <el-button type="danger" @click="confirmContractAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
-
                     <!-- 添加 出资主体dialog -->
                     <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
                         <el-form :model="fundForm1" label-width="110px">
@@ -223,7 +222,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户"  disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -323,7 +322,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="paidForm1.payTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -336,22 +335,22 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="剩余金额（元）">
-                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -404,7 +403,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="paidForm1.payTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -417,22 +416,22 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="剩余金额（元）">
-                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -507,7 +506,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -520,17 +519,17 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -570,7 +569,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -583,17 +582,17 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
