@@ -558,13 +558,6 @@
                                     <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
                                 </template>
                             </el-table-column>
-                            <!-- <el-table-column label="操作" align="center">
-                                    <template scope="scope">
-                                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">编辑</el-button>
-                                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">保存</el-button>
-                                        <el-button type="text" size="small" @click="handleDelete(index, fundData3, '')">删除</el-button>
-                                    </template>
-                                </el-table-column> -->
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="sharingAdd1 = false">取 消</el-button>
@@ -590,12 +583,12 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractMoney" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.sharingMoney" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" :disabled="true"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -628,13 +621,6 @@
                                     <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
                                 </template>
                             </el-table-column>
-                            <!-- <el-table-column label="操作" align="center">
-                                    <template scope="scope">
-                                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">编辑</el-button>
-                                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData3')">保存</el-button>
-                                        <el-button type="text" size="small" @click="handleDelete(index,fundData3)">删除</el-button>
-                                    </template>
-                                </el-table-column> -->
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
@@ -656,8 +642,8 @@ import {changeDate} from 'common/js/config'
 import { 
     delGu, delContract, delFee, addFee, editFee, fees,
     addContract, contracts, getContractDetail, editContract,
-    getContractPay, addContractPay, getContractPayDetail, editContractPay,
-    getParticipationList, addParticipation, getParticipationDetail, editParticipation
+    getContractPay, addContractPay, getContractPayDetail, editContractPay, delPay,
+    getParticipationList, addParticipation, getParticipationDetail, editParticipation, delShare
 } from 'api/projectPre';
 
 export default {
@@ -747,6 +733,7 @@ export default {
             // 项目分红
             sharingForm1: {
                 id:'',
+                contract:'',
                 shareTitle: '',
                 shareAmount: 0,
                 handlerUserId: '',
@@ -779,6 +766,8 @@ export default {
             fees(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.costData = resp.data.result;
+                }else if(resp.data.status === '49999'){
+                    this.costData = [];
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -830,6 +819,8 @@ export default {
                 // console.log('获取投资支付列表: '+ JSON.stringify( resp.data));
                 if(resp.data.status === '200'){
                     this.paidData = resp.data.result.list;
+                }else if(resp.data.status === '49999'){
+                    this.paidData = [];
                 }
             }).catch(e => {
                 console.log('getContractPay() exists error: ', e);
@@ -841,6 +832,8 @@ export default {
                 // console.log('getParticipationList resp: '+ JSON.stringify( resp.data));
                 if (resp.data.status === '200') {
                     this.sharingData = resp.data.result.list;
+                }else if(resp.data.status === '49999'){
+                    this.sharingData = [];
                 }
             }).catch(e => {
                 console.log('getParticipationList() exists error: ', e);
@@ -851,6 +844,8 @@ export default {
             contracts(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.contractData = resp.data.result;
+                }else if(resp.data.status === '49999'){
+                    this.contractData = [];
                 }
             }).catch(e => {
                 console.log('contracts() exists error: ', e);
@@ -989,17 +984,14 @@ export default {
             this.paidForm1.payTitle = "投资支付-" + value.contractName;
             this.paidForm1.contractAmount = value.contractAmount;
             this.paidForm1.contractId = value.id;
-            console.log('选择的合同ID: '+ value.id);
             //获得合同中的投资主体(基金)列表
             getContractDetail(value.id).then(resp => {
-                console.log('选择的合同详情: '+JSON.stringify(resp.data.result));
                 if(resp.data.status == '200'){
                     this.fundData2 = resp.data.result.fundInfo;
 
                     this.fundData2.forEach(function(item, index){
                         item.contractFundId = item.id;
                         item.id = '';
-                        console.log('合同中投资主体详情: '+JSON.stringify(item));
                     });
                     this.calcSurplusAmount();
                 }
@@ -1107,10 +1099,8 @@ export default {
             this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             this.sharingForm1.contractAmount = value.contractAmount;
             this.sharingForm1.contractId = value.id;
-            console.log('选择的合同ID: '+ value.id);
             //获得合同中的投资主体(基金)列表
             getContractDetail(value.id).then(resp => {
-                console.log('选择的合同详情: '+JSON.stringify(resp.data.result));
                 if(resp.data.status == '200'){
                     this.fundData3 = resp.data.result.fundInfo;
 
@@ -1124,17 +1114,6 @@ export default {
             }).catch(e => {
                 console.log('selShareContract() exists error: ', e);
             })
-        },
-        // 合计
-        valueSum() {
-            let sum = 0;
-            for (let i = 0; i < this.fundData3.length; i++) {
-                //   console.log(typeof(this.fundData2[i].payAmount));
-                //   console.log(typeof(parseFloat(this.fundData2[i].payAmount)));
-                  sum += (parseFloat(this.fundData3[i].sharingMoney));
-                  this.sharingForm1.sharingMoney = sum;
-                  //   console.log(sum);
-            }
         },
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
@@ -1188,8 +1167,8 @@ export default {
                 shareDate : this.sharingForm1.shareDate
             };
             let data = {
-                projectInvestPay : projectInvestPay,
-                payDetails : this.fundData3
+                projectParticipation : projectParticipation,
+                participationDetails : this.fundData3
             }
             console.log("编辑 项目分红  :: "+JSON.stringify(data));
             editParticipation(projectParticipation, this.fundData3).then(resp => {
@@ -1226,8 +1205,9 @@ export default {
                 case 'fee': // 删除费用
                     delFee(id).then(resp => {
                         console.log('delFee resp: ', resp);
-                        rows.splice(index, 1);
-                        // TODO: 请求列表接口,
+                        if(resp.data.status == '200'){
+                            this.getFee();
+                        }
                     }).catch(e => {
                         console.log('delFee() exists error: ', e);
                     })
@@ -1235,8 +1215,9 @@ export default {
                 case 'contract': // 删除合同
                     delContract(id).then(resp => {
                         console.log('delContract resp: ', resp);
-                        rows.splice(index, 1);
-                        // TODO: 请求列表接口
+                        if(resp.data.status == '200'){
+                            this.getContract();
+                        }
                     }).catch(e => {
                         console.log('delContract() exists error: ', e);
                     })
@@ -1244,12 +1225,25 @@ export default {
                 case 'invest':   // 删除投资主体
                     rows.splice(index, 1);
                     break;
-                case 'pay':      // 删除?
+                case 'pay':      // 删除投资支付
+                    delPay(id).then(resp => {
+                        console.log('delPay resp: ', resp);
+                        if(resp.data.status == '200'){
+                            this.getContractPay();
+                        }
+                    }).catch(e => {
+                        console.log('delPay() exists error: ', e);
+                    })
                     break;
-                case 'fund2':    // 删除基金
-                    break;
-                case 'share':    // 删除分红
-
+                case 'share':    // 删除项目分红
+                    delShare(id).then(resp => {
+                        console.log('delShare resp: ', resp);
+                        if(resp.data.status == '200'){
+                            this.getParticipation();
+                        }
+                    }).catch(e => {
+                        console.log('delShare() exists error: ', e);
+                    })
                     break;
             }
         }

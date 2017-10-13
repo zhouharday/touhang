@@ -454,11 +454,11 @@ export default {
                         merchantId: this.merchantId
                     }).then(resp => {
                         let data = resp.data;
-                        // if (data.status === 200) {
-                        //     resolve(data.result);
-                        // } else {
-                        //     reject(data.message);
-                        // }
+                        if (data.status === 200) {
+                            resolve(data.result);
+                        } else {
+                            reject(data.message);
+                        }
                         // console.log('users resp', resp);
                     }).catch(e => {
                         console.log('getProjectUsers() exists error: ', e);
