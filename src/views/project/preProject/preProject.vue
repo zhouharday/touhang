@@ -7,7 +7,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" @keyup.enter.native="getDatas" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
             <!-- 后期所做导入和下载模板功能 -->

@@ -47,7 +47,6 @@ export function getPros(params = {}) {
 		page,
 		pageSize
 	}
-	console.log("projectList condition:" + JSON.stringify(data));
 	return service({url: '/projectPool/searchProject', method: 'post', data})
 }
 

@@ -148,7 +148,7 @@ const actions = {
         })
     },
     getAddressOptions({commit, dispatch}) {
-        return getDicChildren('3').
+        return getDicChildren('501').
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_ADDRESSOPTIONS, res.data.result)
