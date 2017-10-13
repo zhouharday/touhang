@@ -74,7 +74,7 @@ export default {
                 this.isSendCode = !this.isSendCode;
                 this.valueData = false;
                 var self = this;
-                var sec = 10;
+                var sec = 60;
                 var timer1 = setInterval(
                     function() {
                         // self.isSendCode = true;

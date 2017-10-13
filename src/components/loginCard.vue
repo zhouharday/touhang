@@ -41,7 +41,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm('form1')" :class="{ active:valueData }">保 存</el-button>
+                <el-button type="danger" @click="submitForm('form1')" :class="{ active:valueData }">完 成</el-button>
             </div>
         </el-dialog>
     </div>

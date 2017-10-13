@@ -114,14 +114,14 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="24">
-                            <el-form-item porp="recording" label="处理记录" :label-width="formLabelWidth">
-                                <el-input v-model="addTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <!--<el-row :gutter="20">-->
+                        <!--<el-col :span="24">-->
+                            <!--<el-form-item porp="recording" label="处理记录" :label-width="formLabelWidth">-->
+                                <!--<el-input v-model="addTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">-->
+                                <!--</el-input>-->
+                            <!--</el-form-item>-->
+                        <!--</el-col>-->
+                    <!--</el-row>-->
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible1 = 0">取 消</el-button>
@@ -262,6 +262,64 @@
                                                                                                                                                                     <el-button type="primary" @click="tabValue(1)">确 定</el-button>
                                                                                                                                                                 </div>
                                                                                                                                                             </el-dialog> -->
+
+            <!--指派任务查看对话框-->
+            <el-dialog title="查看任务" :visible.sync="dialogLookVisible1">
+                <el-form :rules="rules1" :label-position="labelPosition" :model="addTaskForm1" ref="addTaskForm1">
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item porp="taskName" label="任务名称" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="addTaskForm1.taskName" class="el_input" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item porp="createDate" label="开始时间" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="addTaskForm1.createDate" class="el_input" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span="12">
+                            <el-form-item porp="endTime" label="完成时间" :label-width="formLabelWidth">
+                                <el-date-picker :disabled="true" :picker-options="pickerOptions0" @change="getDateValue" v-model="addTaskForm1.endTime" type="datetime" auto-complete="off" placeholder="选择日期时间">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <el-form-item porp="receiveUserName" label="接收人" :label-width="formLabelWidth">
+                                <el-select :disabled="true" @change="getReceiveUserId" v-model="addTaskForm1.receiveUserName" filterable placeholder="请选择">
+                                    <el-option @click="getItem(item)" v-for="item in userOptions" :key="item.id" :label="item.name" :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item porp="seedUserName" label="指派人" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="addTaskForm1.seedUserName" class="el_input" auto-complete="off"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                        <el-col :span="24">
+                            <el-form-item porp="taskInfo" label="任务说明" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="addTaskForm1.taskInfo" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row :gutter="20">
+                    <el-col :span="24">
+                    <el-form-item porp="recording" label="处理记录" :label-width="formLabelWidth">
+                    <el-input :disabled="true" v-model="addTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
+                    </el-input>
+                    </el-form-item>
+                    </el-col>
+                    </el-row>
+                </el-form>
+            </el-dialog>
             <div>
             </div>
         </div>
@@ -374,6 +432,7 @@ export default {
             dialogFormVisible1: false, //添加指派任务Diglog
             dialogFormVisible2: false,
             dialogFormVisible3: false,
+            dialogLookVisible1:false,
             formLabelWidth: '68px',
             userOptions: [], //企业用户列表
             addTaskForm1: { //添加任务表单
@@ -685,10 +744,8 @@ export default {
             }, 2000);
         },
         showTask1(index) { //查看指派任务详情
-            this.$Modal.info({
-                title: '任务详情',
-                content: `${this.data1[index].taskInfo}`
-            })
+//            this.rules1 = this.data1(index)
+            this.dialogLookVisible1 = true;
         },
         removeTask1(row) { //删除指派任务列表
             this.params1 = row;
