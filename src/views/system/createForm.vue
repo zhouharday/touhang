@@ -28,11 +28,72 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
             <div class="rightForm">
                 <form id="dragArea">
                     <div class="form-group">
                         <label>单行文本</label>
                         <input type="text" class="form-control" placeholder="单行文本">
+=======
+            <div class="span6">
+                <h2>拖拽下面的控件到左侧</h2>
+                <hr>
+                <div class="tabbable">
+                    <ul class="nav nav-tabs" id="navtab">
+                        <li class="active">
+                            <a href="#1" data-toggle="tab">常用控件</a>
+                        </li>
+                        <li class>
+                            <a href="#2" data-toggle="tab">定制控件</a>
+                        </li>
+                        <li class>
+                            <a id="sourcetab" href="#5" data-toggle="tab">源代码</a>
+                        </li>
+                    </ul>
+                    <form class="form-horizontal" id="components">
+                        <fieldset>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="1">
+                                    <!-- Text start -->
+                                    <div class="control-group component" rel="popover" title="文本框控件" trigger="manual" data-content="
+                                                      <form class='form'>
+                                                        <div class='controls'>
+                                                          <label class='control-label'>控件名称</label>
+                                                          <input type='text' id='orgname' placeholder='必填项'>
+                                                          <label class='control-label'>默认值</label>
+                                                           <input type='text' id='orgvalue' placeholder='默认值'>
+                                                          <hr/>
+                                                          <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                                        </div>
+                                                      </form>">
+                                        <!-- Text -->
+                                        <label class="control-label leipiplugins-orgname">文本框</label>
+                                        <div class="controls">
+                                            <input name="leipiNewField" type="text" placeholder="默认值" title="文本框" value="" class="leipiplugins" leipiplugins="text" />
+                                        </div>
+                                    </div>
+                                    <!-- Text end -->
+                                </div>
+                                <div class="tab-pane" id="2">
+                                    <div class="control-group component" rel="popover" title="文件上传" trigger="manual" data-content="
+                                                  <form class='form'>
+                                                    <div class='controls'>
+                                                      <label class='control-label'>控件名称</label> <input type='text' id='orgname' placeholder='必填项'>
+                                                      <hr/>
+                                                      <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                                    </div>
+                                                  </form>">
+                                        <label class="control-label leipiplugins-orgname">文件上传</label>
+                                        <!-- File Upload -->
+                                        <div>
+                                            <input type="file" name="leipiNewField" title="文件上传" class="leipiplugins" leipiplugins="uploadfile">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+>>>>>>> ddad470f3622df18e1adb8dd05c7b9e3c73c6773
                     </div>
 
                     <div class="form-group">
@@ -125,11 +186,65 @@ export default {
                     dragArea: "dragArea",
                     dropArea: "dropArea",
                 }
+<<<<<<< HEAD
             //document.getElementById捕捉到的节点
             var targset =
                 {
                     dragArea: null,
                     dropArea: null,
+=======
+            };
+            /* 表单名称控件 form_name
+            acc  是 class="component" 的DIV
+            e 是 class="leipiplugins" 的控件
+            */
+            LPB.plugins['form_name'] = function(active_component, leipiplugins) {
+                var plugins = 'form_name',
+                    popover = $(".popover");
+                //右弹form  初始化值
+                $(popover).find("#orgvalue").val($(leipiplugins).val());
+                //右弹form  取消控件
+                $(popover).delegate(".btn-danger", "click", function(e) {
+                    e.preventDefault();
+                    active_component.popover("hide");
+                });
+                //右弹form  确定控件
+                $(popover).delegate(".btn-info", "click", function(e) {
+                    e.preventDefault(); //阻止元素发生默认的行为(例如,当点击提交按钮时阻止对表单的提交
+                    var inputs = $(popover).find("input");
+                    $.each(inputs, function(i, e) {
+                        var attr_name = $(e).attr("id"); //属性名称
+                        var attr_val = $("#" + attr_name).val();
+                        if (attr_name == 'orgvalue') {
+                            $(leipiplugins).attr("value", attr_val);
+                            active_component.find(".leipiplugins-orgvalue").text(attr_val);
+                        }
+                        active_component.popover("hide");
+                        LPB.genSource(); //重置源代码
+                    });
+                });
+
+            }
+            // })();
+
+            // $(document).ready(function () {
+            $("#navtab").delegate("#sourcetab", "click", function(e) {
+                LPB.genSource();
+            });
+            $("form").delegate(".component", "mousedown", function(md) {
+                $(".popover").remove();
+
+                md.preventDefault();
+                var tops = [];
+                var mouseX = md.pageX;
+                var mouseY = md.pageY;
+                var $temp;
+                var timeout;
+                var $this = $(this);
+                var delays = {
+                    main: 0,
+                    form: 120
+>>>>>>> ddad470f3622df18e1adb8dd05c7b9e3c73c6773
                 }
             //后面用于判断鼠标移动的时候是把元素底部的边变蓝还是上部的边变蓝
             var deraction =
@@ -351,6 +466,7 @@ export default {
                     exception("请设置拖拽区域");
                 }
 
+<<<<<<< HEAD
                 if (!empty(options.dropArea)) {
                     targset.dropArea = getTargset(options.dropArea);
                     targset.dropArea.addEventListener("drop", drop);
@@ -372,6 +488,19 @@ export default {
             // if (args.length > 1) 
             //     args = args[0];
             //     init.apply(this, args);
+=======
+            /* 文本框控件 text
+            acc  是 class="component" 的DIV
+            e 是 class="leipiplugins" 的控件
+            */
+            LPB.plugins['text'] = function(active_component, leipiplugins) {
+                var plugins = 'text', popover = $(".popover");
+                //右弹form  初始化值
+                $(popover).find("#orgname").val($(leipiplugins).attr("title"));
+                $(popover).find("#orgvalue").val($(leipiplugins).val());
+                //右弹form  取消控件
+                $(popover).delegate(".btn-danger", "click", function(e) {
+>>>>>>> ddad470f3622df18e1adb8dd05c7b9e3c73c6773
 
 
         },

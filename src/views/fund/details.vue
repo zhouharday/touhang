@@ -48,9 +48,9 @@
                         <el-form-item label="基金结构" prop="fundOrg">
                             <el-row>
                                 <el-col :span="6">
-                                    <el-select v-model="formDetails.fundOrg" prop="fundOrg" :disabled="formDetails.flag" @change="selectStructure" style="width: 100%">
-                                        <el-option v-for="(item, index) of fundStructure" :key="item.id" :label="item.dicName" :value="item.id">
-                                        </el-option>
+                                    <el-select v-model="formDetails.fundOrg" :disabled="formDetails.flag" @change="selectStructure" style="width: 100%">
+                                        <el-option label="平级" value="1"></el-option>
+                                        <el-option label="结构化" value="2"></el-option>
                                     </el-select>
                                 </el-col>
                                 <el-col :span="18" v-show="structure == 2 || formDetails.fundOrg == 2">
@@ -320,13 +320,6 @@ export default {
                 label: '未备案'
             }],
             structure: '',
-            fundStructure: [{
-                id: 1,
-                dicName: '平级'
-            }, {
-                id: 2,
-                dicName: '结构化'
-            }],
             businessDepartment: [],
             rules1: {
                 fundName: [{
