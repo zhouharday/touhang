@@ -56,8 +56,9 @@ export default {
     created() {
         getInvestorDetails(this.$route.params.userId).then((res) => {
             if (res.status == '200') {
+                console.log(res)
                 this.baseInfo = res.data.record
-                this.$emit('investorDetailsInfo', res.data.record.investorName)
+                this.$emit('investorDetailsInfo', res.data.record)
             }
         }).catch(err => {
             let response = err.response

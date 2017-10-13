@@ -56,12 +56,6 @@
                 <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
                 </team-table>
             </el-tab-pane>
-
-            <!--<el-tab-pane label="工商信息" name="industry" class="tab_list">-->
-            <!--<industry-form :industryForm="industryForm">-->
-            <!--</industry-form>-->
-            <!--</el-tab-pane>-->
-
             <el-tab-pane label="记录" name="record" class="tab_list">
                 <record-form :proId="projectId"></record-form>
             </el-tab-pane>
