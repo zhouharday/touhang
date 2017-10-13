@@ -22,13 +22,13 @@
                             <form id="target" class="form-horizontal">
                                 <fieldset>
                                     <div id="legend" class="component" rel="popover" title="编辑属性" trigger="manual" data-content="
-                                        <form class='form'>
-                                          <div class='controls'>
-                                            <label class='control-label'>表单名称</label> <input type='text' id='orgvalue' placeholder='请输入表单名称'>
-                                            <hr/>
-                                            <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
-                                          </div>
-                                        </form>">
+                                                <form class='form'>
+                                                  <div class='controls'>
+                                                    <label class='control-label'>表单名称</label> <input type='text' id='orgvalue' placeholder='请输入表单名称'>
+                                                    <hr/>
+                                                    <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                                  </div>
+                                                </form>">
                                         <input type="hidden" name="form_name" value="" class="leipiplugins" leipiplugins="form_name" />
                                         <legend class="leipiplugins-orgvalue">点击填写表单名</legend>
                                     </div>
@@ -59,16 +59,16 @@
                                 <div class="tab-pane active" id="1">
                                     <!-- Text start -->
                                     <div class="control-group component" rel="popover" title="文本框控件" trigger="manual" data-content="
-                                              <form class='form'>
-                                                <div class='controls'>
-                                                  <label class='control-label'>控件名称</label> 
-                                                  <input type='text' id='orgname' placeholder='必填项'>
-                                                  <label class='control-label'>默认值</label>
-                                                   <input type='text' id='orgvalue' placeholder='默认值'>
-                                                  <hr/>
-                                                  <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
-                                                </div>
-                                              </form>">
+                                                      <form class='form'>
+                                                        <div class='controls'>
+                                                          <label class='control-label'>控件名称</label> 
+                                                          <input type='text' id='orgname' placeholder='必填项'>
+                                                          <label class='control-label'>默认值</label>
+                                                           <input type='text' id='orgvalue' placeholder='默认值'>
+                                                          <hr/>
+                                                          <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                                        </div>
+                                                      </form>">
                                         <!-- Text -->
                                         <label class="control-label leipiplugins-orgname">文本框</label>
                                         <div class="controls">
@@ -79,102 +79,27 @@
                                 </div>
                                 <div class="tab-pane" id="2">
                                     <div class="control-group component" rel="popover" title="文件上传" trigger="manual" data-content="
-                                          <form class='form'>
-                                            <div class='controls'>
-                                              <label class='control-label'>控件名称</label> <input type='text' id='orgname' placeholder='必填项'>
-                                              <hr/>
-                                              <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
-                                            </div>
-                                          </form>">
+                                                  <form class='form'>
+                                                    <div class='controls'>
+                                                      <label class='control-label'>控件名称</label> <input type='text' id='orgname' placeholder='必填项'>
+                                                      <hr/>
+                                                      <button class='btn btn-info' type='button'>确定</button><button class='btn btn-danger' type='button'>取消</button>
+                                                    </div>
+                                                  </form>">
                                         <label class="control-label leipiplugins-orgname">文件上传</label>
-
                                         <!-- File Upload -->
                                         <div>
                                             <input type="file" name="leipiNewField" title="文件上传" class="leipiplugins" leipiplugins="uploadfile">
                                         </div>
                                     </div>
                                 </div>
-                        </div>
+                            </div>
                         </fieldset>
                     </form>
                     </div>
-                    <!--tab-content-->
                 </div>
-<<<<<<< HEAD
-                <!---tabbable-->
+                <!--tab-content-->
             </div>
-            <!-- row -->
-        </div>
-        <!-- /container -->
-    </section>
-</template>
-<style lang="less" scoped>
-@import "../../common/styles/variable.less";
-
-/********************************/
-
-#components {
-    min-height: 600px;
-}
-
-#target {
-    min-height: 200px;
-    border: 1px solid #ccc;
-    padding: 5px;
-}
-
-#target .component {
-    border: 1px solid #fff;
-}
-
-#temp {
-    width: 500px;
-    background: white;
-    border: 1px dotted #ccc;
-    border-radius: 10px;
-}
-
-.popover-content form {
-    margin: 0 auto;
-    width: 213px;
-}
-
-.popover-content form .btn {
-    margin-right: 10px
-}
-
-#source {
-    min-height: 500px;
-}
-
-
-/*******************************/
-
-.createForm {
-    width: 100%;
-    min-height: 100%;
-    font-size: 14px;
-    .button {
-        background-color: #fff;
-        margin-bottom: 20px;
-        padding: 5px;
-        /*padding-bottom: 5px;*/
-        text-align: right;
-    }
-    .form-components {
-        text-align: center;
-        padding-top: 10px;
-    }
-    ul {
-        margin-top: 30px;
-        text-align: center;
-    }
-    ul>li {
-        margin-bottom: 10px;
-    }
-}
-</style>
-=======
             </el-col>
             <el-col :span="14" style="background-color: #fff;height: 100%;margin: 0 10px;">
                 <div class="form-components" @drop='drop($event)' @dragover='allowDrop($event)' style="height:100%">
@@ -195,10 +120,9 @@
                     </el-form>
                 </div>
             </el-col>
-        </el-row>
+            </el-row>
     </section>
 </template>
->>>>>>> fbdde50bec77a4a54e7a33aa5681452e0badd0c7
 
 <script>
 //    import jquery from '../../../static/js/jquery-1.8.3.min'
@@ -207,14 +131,6 @@
 let dom = 0;
 export default {
     // components: {jquery,core,plugins},
-<<<<<<< HEAD
-    created() {
-        console.log($('#build'));
-        this.coreForm();
-        this.plugins();
-    },
-=======
->>>>>>> fbdde50bec77a4a54e7a33aa5681452e0badd0c7
     data() {
         return {
             labelPosition: 'top',
