@@ -93,6 +93,8 @@
 </style>
 
 <script>
+//    import core from '../../common/js/leipi.form.build.core'
+//    import plugins from '../../common/js/leipi.form.build.plugins'
     let dom = 0;
     export default {
         data() {
@@ -160,7 +162,7 @@
             },
             drop: function (event) {
                 event.preventDefault();
-                this[0].type = "textarea"
+//                this[0].type = "textarea"
                 event.target.appendChild(dom)
             },
             allowDrop: function (e) {
