@@ -62,7 +62,7 @@ Object.keys(proxyTable).forEach(function (context) {
             target: options
         }
     }
-    app.use(proxyMiddleware(options.filter || context, options))
+    // app.use(proxyMiddleware(options.filter || context, options))
 })
 
 
