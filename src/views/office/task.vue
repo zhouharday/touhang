@@ -184,13 +184,13 @@
             <!-- 待办任务-处理 dialog-->
             <el-dialog title="处理待办任务" :visible.sync="dialogFormVisible2">
                 <!-- <el-table :data="gridData">
-                                                                                                                                                                                                                                                                                                        <el-table-column property="date" label="接受日期" width="150"></el-table-column>
-                                                                                                                                                                                                                                                                                                        <el-table-column property="name" label="任务名称" width="200"></el-table-column>
-                                                                                                                                                                                                                                                                                                        <el-table-column property="address" label="接收人"></el-table-column>
-                                                                                                                                                                                                                                                                                                        <el-table-column property="address" label="指派人"></el-table-column>
-                                                                                                                                                                                                                                                                                                        <el-table-column property="address" label="完成日期"></el-table-column>
-                                                                                                                                                                                                                                                                                                        <el-table-column property="address" label=""></el-table-column>
-                                                                                                                                                                                                                                                                                                    </el-table> -->
+                                                                                                                                                                                                                                                                                                                <el-table-column property="date" label="接受日期" width="150"></el-table-column>
+                                                                                                                                                                                                                                                                                                                <el-table-column property="name" label="任务名称" width="200"></el-table-column>
+                                                                                                                                                                                                                                                                                                                <el-table-column property="address" label="接收人"></el-table-column>
+                                                                                                                                                                                                                                                                                                                <el-table-column property="address" label="指派人"></el-table-column>
+                                                                                                                                                                                                                                                                                                                <el-table-column property="address" label="完成日期"></el-table-column>
+                                                                                                                                                                                                                                                                                                                <el-table-column property="address" label=""></el-table-column>
+                                                                                                                                                                                                                                                                                                            </el-table> -->
                 <el-form :label-position="labelPosition" :model="form1" :rules="rules2" ref="form1">
                     <el-row :gutter="20">
                         <el-col :span="24">
@@ -278,12 +278,12 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item prop="createDate" label="开始时间" :label-width="formLabelWidth">
-                                <el-input  v-model="doneTaskForm1.createDate" class="el_input" disabled></el-input>
+                                <el-input v-model="doneTaskForm1.createDate" class="el_input" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item prop="endTime" label="完成时间" :label-width="formLabelWidth">
-                                <el-input  v-model="doneTaskForm1.endTime" class="el_input" disabled>
+                                <el-input v-model="doneTaskForm1.endTime" class="el_input" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -291,13 +291,13 @@
                     <el-row :gutter="20">
                         <el-col :span="12">
                             <el-form-item prop="receiveUserName" label="接收人" :label-width="formLabelWidth">
-                                <el-input  v-model="doneTaskForm1.receiveUserName" class="el_input" disabled>
+                                <el-input v-model="doneTaskForm1.receiveUserName" class="el_input" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item prop="seedUserName" label="指派人" :label-width="formLabelWidth">
-                                <el-input  v-model="doneTaskForm1.seedUserName" class="el_input" disabled></el-input>
+                                <el-input v-model="doneTaskForm1.seedUserName" class="el_input" disabled></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -322,54 +322,54 @@
 
             <!-- 指派任务 dialog-->
             <!-- <el-dialog title="添加任务" :visible.sync="dialogFormVisible3" class="taskDialog_title">
-                                                                                                                                                                            <el-form :label-position="labelPosition" :model="form" ref="numberValidateForm">
-                                                                                                                                                                                <el-row :gutter="20">
-                                                                                                                                                                                    <el-col :span="24">
-                                                                                                                                                                                        <el-form-item label="任务名称" :label-width="formLabelWidth">
-                                                                                                                                                                                            <el-input v-model="form.taskName" class="el_input" auto-complete="off"></el-input>
-                                                                                                                                                                                        </el-form-item>
-                                                                                                                                                                                    </el-col>
-                                                                                                                                                                                </el-row>
-                                                                                                                                                                                <el-row :gutter="20">
-                                                                                                                                                                                    <el-col :span="12">
-                                                                                                                                                                                        <el-form-item label="开始时间" :label-width="formLabelWidth">
-                                                                                                                                                                                            <el-input v-model="form.startDate" class="el_input" auto-complete="off"></el-input>
-                                                                                                                                                                                        </el-form-item>
-                                                                                                                                                                                    </el-col>
+                                                                                                                                                                                    <el-form :label-position="labelPosition" :model="form" ref="numberValidateForm">
+                                                                                                                                                                                        <el-row :gutter="20">
+                                                                                                                                                                                            <el-col :span="24">
+                                                                                                                                                                                                <el-form-item label="任务名称" :label-width="formLabelWidth">
+                                                                                                                                                                                                    <el-input v-model="form.taskName" class="el_input" auto-complete="off"></el-input>
+                                                                                                                                                                                                </el-form-item>
+                                                                                                                                                                                            </el-col>
+                                                                                                                                                                                        </el-row>
+                                                                                                                                                                                        <el-row :gutter="20">
+                                                                                                                                                                                            <el-col :span="12">
+                                                                                                                                                                                                <el-form-item label="开始时间" :label-width="formLabelWidth">
+                                                                                                                                                                                                    <el-input v-model="form.startDate" class="el_input" auto-complete="off"></el-input>
+                                                                                                                                                                                                </el-form-item>
+                                                                                                                                                                                            </el-col>
 
-                                                                                                                                                                                    <el-col :span="12">
-                                                                                                                                                                                        <el-form-item label="完成时间" :label-width="formLabelWidth">
-                                                                                                                                                                                            <el-date-picker @change="getValue" format="yyyy-MM-dd HH-mm-ss" v-model="form.switchDate" type="datetime" placeholder="选择日期时间" align="right" :picker-options="pickerOptions1">
-                                                                                                                                                                                            </el-date-picker>
-                                                                                                                                                                                        </el-form-item>
-                                                                                                                                                                                    </el-col>
-                                                                                                                                                                                </el-row>
-                                                                                                                                                                                <el-row :gutter="20">
-                                                                                                                                                                                    <el-col :span="12">
-                                                                                                                                                                                        <el-form-item label="接收人" :label-width="formLabelWidth">
-                                                                                                                                                                                            <el-input v-model="form.pople1" class="el_input" auto-complete="off"></el-input>
-                                                                                                                                                                                        </el-form-item>
-                                                                                                                                                                                    </el-col>
-                                                                                                                                                                                    <el-col :span="12">
-                                                                                                                                                                                        <el-form-item label="指派人" :label-width="formLabelWidth">
-                                                                                                                                                                                            <el-input v-model="form.pople1_1" class="el_input" auto-complete="off"></el-input>
-                                                                                                                                                                                        </el-form-item>
-                                                                                                                                                                                    </el-col>
-                                                                                                                                                                                </el-row>
-                                                                                                                                                                                <el-row :gutter="20">
-                                                                                                                                                                                    <el-col :span="24">
-                                                                                                                                                                                        <el-form-item label="任务说明" :label-width="formLabelWidth">
-                                                                                                                                                                                            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="form.textContent">
-                                                                                                                                                                                            </el-input>
-                                                                                                                                                                                        </el-form-item>
-                                                                                                                                                                                    </el-col>
-                                                                                                                                                                                </el-row>
-                                                                                                                                                                            </el-form>
-                                                                                                                                                                            <div slot="footer" class="dialog-footer">
-                                                                                                                                                                                <el-button @click="tableCancle">取 消</el-button>
-                                                                                                                                                                                <el-button type="primary" @click="tabValue(1)">确 定</el-button>
-                                                                                                                                                                            </div>
-                                                                                                                                                                        </el-dialog> -->
+                                                                                                                                                                                            <el-col :span="12">
+                                                                                                                                                                                                <el-form-item label="完成时间" :label-width="formLabelWidth">
+                                                                                                                                                                                                    <el-date-picker @change="getValue" format="yyyy-MM-dd HH-mm-ss" v-model="form.switchDate" type="datetime" placeholder="选择日期时间" align="right" :picker-options="pickerOptions1">
+                                                                                                                                                                                                    </el-date-picker>
+                                                                                                                                                                                                </el-form-item>
+                                                                                                                                                                                            </el-col>
+                                                                                                                                                                                        </el-row>
+                                                                                                                                                                                        <el-row :gutter="20">
+                                                                                                                                                                                            <el-col :span="12">
+                                                                                                                                                                                                <el-form-item label="接收人" :label-width="formLabelWidth">
+                                                                                                                                                                                                    <el-input v-model="form.pople1" class="el_input" auto-complete="off"></el-input>
+                                                                                                                                                                                                </el-form-item>
+                                                                                                                                                                                            </el-col>
+                                                                                                                                                                                            <el-col :span="12">
+                                                                                                                                                                                                <el-form-item label="指派人" :label-width="formLabelWidth">
+                                                                                                                                                                                                    <el-input v-model="form.pople1_1" class="el_input" auto-complete="off"></el-input>
+                                                                                                                                                                                                </el-form-item>
+                                                                                                                                                                                            </el-col>
+                                                                                                                                                                                        </el-row>
+                                                                                                                                                                                        <el-row :gutter="20">
+                                                                                                                                                                                            <el-col :span="24">
+                                                                                                                                                                                                <el-form-item label="任务说明" :label-width="formLabelWidth">
+                                                                                                                                                                                                    <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="form.textContent">
+                                                                                                                                                                                                    </el-input>
+                                                                                                                                                                                                </el-form-item>
+                                                                                                                                                                                            </el-col>
+                                                                                                                                                                                        </el-row>
+                                                                                                                                                                                    </el-form>
+                                                                                                                                                                                    <div slot="footer" class="dialog-footer">
+                                                                                                                                                                                        <el-button @click="tableCancle">取 消</el-button>
+                                                                                                                                                                                        <el-button type="primary" @click="tabValue(1)">确 定</el-button>
+                                                                                                                                                                                    </div>
+                                                                                                                                                                                </el-dialog> -->
             <div>
             </div>
         </div>
@@ -663,7 +663,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.viewTask1()
+                                        this.viewTask1(params)
                                     }
                                 }
                             }, '查看'),
@@ -783,7 +783,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.showTask3(params.index)
+                                        this.showTask3(params)
                                     }
                                 }
                             }, '查看'),
@@ -835,8 +835,16 @@ export default {
                 this.$Message.success('删除成功');
             }, 2000);
         },
-        viewTask1() { //查看指派任务详情
+        viewTask1(params) { //查看指派任务详情
+            console.log(params.row);
             this.viewDialog1 = true;
+            this.viewTaskForm1.taskName = params.row.taskName;
+            this.viewTaskForm1.createDate = params.row.createDate;
+            this.viewTaskForm1.endTime = params.row.endTime;
+            this.viewTaskForm1.receiveUserName = params.row.receiveUserName;
+            this.viewTaskForm1.seedUserName = params.row.seedUserName;
+            this.viewTaskForm1.taskInfo = params.row.taskInfo;
+            this.viewTaskForm1.assistTaskRecords = params.row.assistTaskRecords;
         },
         removeTask1(row) { //删除指派任务列表
             this.params1 = row;
@@ -844,11 +852,18 @@ export default {
             console.log(row);
             // this.data1.splice(index, 1);
         },
-        showTask3(index) { //查看已办任务详情
+        showTask3(params) { //查看已办任务详情
             // this.$Modal.info({
             //     title: '任务详情',
             //     content: `${this.data3[index].taskInfo}`
             // })
+            this.doneTaskForm1.taskName = params.row.taskName;
+            this.doneTaskForm1.createDate = params.row.createDate;
+            this.doneTaskForm1.endTime = params.row.endTime;
+            this.doneTaskForm1.receiveUserName = params.row.receiveUserName;
+            this.doneTaskForm1.seedUserName = params.row.seedUserName;
+            this.doneTaskForm1.taskInfo = params.row.taskInfo;
+            this.doneTaskForm1.assistTaskRecords = params.row.assistTaskRecords;
             this.doneDialog = true;
 
         },
@@ -968,7 +983,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    this.$Message.error(res.data.message);
+                    console.log(error);
                 })
         },
         getReceiveUserId(val) {
@@ -1148,20 +1163,24 @@ export default {
             })
                 .then(res => {
                     if (res.status == '200') {
-                        this.taskInfo = res.data.record; //任务数据列表
-                        console.log(res.data);
-                        res.data.record.assistTaskRecords.forEach(function(ele, index) {
-                            this.form1.recording = ele.recordDetails;
-                        }, this);
-                        this.form1.taskId = res.data.record.id;
-                        this.form1.taskName = this.taskInfo.taskName; //任务名称
-                        this.form1.startDate = this.taskInfo.createDate; //指派时间
-                        this.form1.switchDate = this.taskInfo.endTime; //完成时间
-                        this.form1.peopele1 = this.taskInfo.seedUserName; //指派人
-                        this.form1.peopele1_1 = this.taskInfo.receiveUserName; //接收人
-                        this.form1.textContent = this.taskInfo.taskInfo; //任务详情
-                    } else if (res.status == '403') {
-                        this.$Message.info(res.data.message);
+                        // alert(666);
+                        if (res.data.status == '200') {
+
+                            this.taskInfo = res.data.record; //任务数据列表
+                            console.log(res.data);
+                            res.data.record.assistTaskRecords.forEach((ele, index) => {
+                                this.form1.recording = ele.recordDetails;
+                            }, this);
+                            this.form1.taskId = res.data.record.id;
+                            this.form1.taskName = this.taskInfo.taskName; //任务名称
+                            this.form1.startDate = this.taskInfo.createDate; //指派时间
+                            this.form1.switchDate = this.taskInfo.endTime; //完成时间
+                            this.form1.peopele1 = this.taskInfo.seedUserName; //指派人
+                            this.form1.peopele1_1 = this.taskInfo.receiveUserName; //接收人
+                            this.form1.textContent = this.taskInfo.taskInfo; //任务详情
+                        } else if (res.status == '403') {
+                            this.$Message.info(res.data.message);
+                        }
                     }
                 })
                 .catch(error => {

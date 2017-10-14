@@ -11,20 +11,20 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="性质" prop="property" align="center">
+                <el-table-column label="性质" prop="nature" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.property }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.nature }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.property"></el-input>
+                            <el-input v-model="scope.row.nature"></el-input>
                         </span>
                     </template>
 
                 </el-table-column>
-                <el-table-column label="教育背景" prop="edu" align="center">
+                <el-table-column label="教育背景" prop="educationalBg" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.edu }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.educationalBg }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.edu"></el-input>
+                            <el-input v-model="scope.row.educationalBg"></el-input>
                         </span>
                     </template>
                 </el-table-column>
@@ -34,43 +34,43 @@
         <div class="structureTable">
             <tabel-header :data="headerInfo_structure" @add="addStructure" class="structureHeader"></tabel-header>
             <el-table :data="structureData" border style="width: 100%">
-                <el-table-column label="股东姓名" prop="name" align="center">
+                <el-table-column label="股东姓名" prop="stockholderName" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.name }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.stockholderName }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.name"></el-input>
+                            <el-input v-model="scope.row.stockholderName"></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="股东性质" prop="property" align="center">
+                <el-table-column label="股东性质" prop="stockholderNature" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.property }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.stockholderNature }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.property"></el-input>
+                            <el-input v-model="scope.row.stockholderNature"></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="投资金额（元）" prop="capital" align="center">
+                <el-table-column label="投资金额（元）" prop="investmentAmount" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.capital }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.investmentAmount }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.capital"></el-input>
+                            <el-input v-model="scope.row.investmentAmount"></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="持股数量（股）" prop="num" align="center">
+                <el-table-column label="持股数量（股）" prop="stockCount" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.num }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.stockCount }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.num"></el-input>
+                            <el-input v-model="scope.row.stockCount"></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="股权占比（%）" prop="percent" align="center">
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.percent }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-input v-model="scope.row.percent"></el-input>
+                            <el-input v-model="scope.row.stockRatio"></el-input>
                         </span>
                     </template>
                 </el-table-column>  
@@ -84,41 +84,18 @@
 <script style="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 export default {
+    props: {
+        memberData: {
+            type: Array,
+            default: []
+        },
+        structureData: {
+            type: Array,
+            default: []
+        }
+    },
     data() {
         return {
-            //董事会成员
-            memberData: [
-                {
-                    name: '张飞',
-                    property: '合伙人',
-                    edu: '北大金融系研究院博士后',
-                    editFlag: false
-                }, {
-                    name: '李四',
-                    property: '创建人',
-                    edu: '中国人民大学金融系博士',
-                    editFlag: false
-                }
-            ],
-            //股权结构
-            structureData: [
-                {
-                    name: '张飞',
-                    property: '合伙人',
-                    capital: '10,000,000,000',
-                    num: '20',
-                    percent: '12%',
-                    editFlag: false
-                },
-                {
-                    name: '李四',
-                    property: '创建人',
-                    capital: '10,000,000,000',
-                    num: '15',
-                    percent: '10%',
-                    editFlag: false
-                }
-            ],
             headerInfo_member: {
                 desc: '董事会成员'
             },

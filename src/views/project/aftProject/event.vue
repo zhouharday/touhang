@@ -44,12 +44,17 @@
     </div>
 </template>
 
-
-
-
-<script type="text/ecmascript-6">
-import tabelHeader from 'components/tabelHeader'
+<script>
+import {
+    getEventList, addEvent, delEvent
+} from 'api/projectAfter';
 export default {
+    props: {
+        projectId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
             value: {
@@ -63,7 +68,7 @@ export default {
             eventOptions: [
                  { //汇报事项列表
                     value: '选项1',
-                    label: '上市进展情况'
+                    label: '上市进展'
                 }, {
                     value: '选项2',
                     label: '重大股东会决议'
@@ -115,7 +120,22 @@ export default {
             ]
         }
     },
+    created() {
+        init();
+    },
     methods: {
+        init(){
+            //查询重大事项列表
+            getEventList(this.projectId).then(resp => {
+                if(resp.data.status == '200'){
+                    this.recordList = resp.data.result || [];
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('查询重大事项列表 error: ', e);
+            });
+        },
         submitRecord() {
             console.log(this.value);
             this.recordList.push(this.value);
@@ -125,15 +145,10 @@ export default {
             this.recordList.splice(index, 1);
         }
 
-    },
-    components: {
-        tabelHeader
     }
 }
 
 </script>
-
-
 
 <style  lang="less" scoped>
 .title {

@@ -35,7 +35,7 @@
                     <!-- 立即上传 -->
                     <div v-if="item.type == 1 && item.status == 0" style="position:relative">
                         <el-button type="text" style="color:#f05e5e">立即上传</el-button>
-                        <input type="file" class="fileInput" @change="chageFile($event, item.id)" ref="avatarInput">
+                        <input type="file" class="fileInput" @change="changeFile($event, item.id)" ref="avatarInput">
                     </div>
                     <!-- 发起申请对话框 -->
                     <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
@@ -48,9 +48,9 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                <detail-form :proId="projectId" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                 </detail-form>
-                <table-form :memberData="memberData" :structureData="structureData"></table-form>
+                <table-form :companyForm="companyForm" :memberData="memberData" :structureData="structureData"></table-form>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
                 <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
@@ -272,7 +272,10 @@ export default {
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
             structureData: [], // 股权结构
-            capitalForm: {}, // 投资信息
+            capitalForm: {
+                startInvestDate:'',
+                exitDate:''
+            }, // 投资信息
             nextStageDisabled: false,
             industryForm: {
                 baseInfo: '工商信息',
@@ -361,24 +364,9 @@ export default {
             this.slectAllStage();
         },
         initInfo() {
-            let href = window.location.href;
-            // this.investProjectId = href.substr(href.lastIndexOf('_') + 1, href.length);
-            // href = href.substr(0, href.lastIndexOf('_'));
-            // this.projectId = href.substr(href.lastIndexOf('/') + 1, href.length);
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
-            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
-            this.addProjectUserId = info.id;
             this.getProUsers(), this.getProRoles();
-            // // 项目用户和角色
-            // Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
-            //     console.log('项目用户和角色: '+Json.stringify(values));
-            //     this.proUsers = values[0] || [];
-            //     this.proRoles = values[1] || [];
-
-            // }).catch(e => {
-            //     console.log('项目用户和角色 exists error: ', e);
-            // });
         },
         slectAllStage() {
             slectAllStage().then(resp => {
@@ -561,7 +549,7 @@ export default {
                 name: name
             });
         },
-        chageFile(event, fileId) { //上传文件input
+        changeFile(event, fileId) { //上传文件input
             this.file = event.target.files[0];
             let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
             event.preventDefault();

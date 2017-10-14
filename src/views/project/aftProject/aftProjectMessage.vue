@@ -4,9 +4,6 @@
             <div class="left">
                 <span class="desc">{{title}}</span>
             </div>
-            <!-- <div class="right">
-                <el-button type="danger">&nbsp;返回&nbsp;</el-button>
-            </div> -->
         </div>
         <div class="firstLayer">
             <el-row :gutter="40">
@@ -63,25 +60,25 @@
                     <approve-table></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table :proId="projectId" ></file-table>
+                    <file-table :projectId="projectId" ></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
                     <manage-table :proId="projectId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form></record-form>
+                    <record-form :projectId="projectId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="风险管理" name="risk" class="tab_list">
-                    <risk-table></risk-table>
+                    <risk-table :projectId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="重大事项" name="event" class="tab_list">
-                    <event-table></event-table>
+                    <event-table :projectId="projectId"></event-table>
                 </el-tab-pane>
                 <el-tab-pane label="数据填报" name="data" class="tab_list">
-                    <data-table></data-table>
+                    <data-table :projectId="projectId"></data-table>
                 </el-tab-pane>
                 <el-tab-pane label="监控设置" name="monitor" class="tab_list">
-                    <monitor-table></monitor-table>
+                    <monitor-table :projectId="projectId"></monitor-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -103,6 +100,7 @@ import eventTable from './event'
 import dataTable from './data'
 import monitorTable from './monitor'
 
+import { getProjectUsers } from 'api/projectSys';
 import { getPreDetail } from 'api/projectPre';
 
 export default {
@@ -122,9 +120,12 @@ export default {
     },
     data() {
         return {
-            title: '双子金服投资项目',
+            projectId: '',
+            investProjectId: '',
+            title: '',
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
+            proUsers: [], // 项目用户列表
             message: [
                 {
                     count: 1,
@@ -178,12 +179,10 @@ export default {
                     name: '成立日期'
                 }
             ],
-            basicForm: {
-            },
-            companyForm: {
-            },
-            capitalForm: {
-            },
+            basicForm: {}, // 基本信息
+            companyForm: {}, // 企业信息
+            memberData: [], // 董事会成员
+            structureData: [], // 股权结构
             // 风险预警 立即处理表单
             alarmForm: {
                 result: '',
@@ -193,7 +192,16 @@ export default {
         }
     },
     created() {
+        this.investProjectId = this.$route.params.investProjectId;
+        this.projectId = this.$route.params.projectId;
         this.init();
+    },
+    watch: {
+        '$route' (to, from) {
+            this.investProjectId = this.$route.params.investProjectId;
+            this.projectId = this.$route.params.projectId;
+            this.init()      //再次调起我要执行的函数
+         }
     },
     methods: {
         init() {
@@ -202,19 +210,49 @@ export default {
         },
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
-            let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
-            this.addProjectUserId = info.id;
-
-            let href = window.location.href;
-            let id = href.substr(href.lastIndexOf('/') + 1, href.length);
-            this.id = id;
+            this.getProUsers();
+        },
+        /**
+         * [getProUsers 获取项目用户列表]
+         * @return {[type]} [description]
+         */
+        getProUsers() {
+            getProjectUsers({
+                merchantId: this.merchantId
+            }).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proUsers = data.result;
+                }
+            }).catch(e => {
+                console.log('getProjectUsers() exists error: ', e);
+            });
         },
         initData() {
-            getPreDetail(this.id).then(resp => {
-                console.log('after pro detail: ', resp);
-                let data = resp.data;
-                this.fundTable = data.result.list;
+            getPreDetail(this.projectId).then(resp => {
+                if(resp.data.result.enterpriseInfo == undefined || resp.data.result.enterpriseInfo == ''){
+                    console.log('项目详情-企业信息为空: '+JSON.stringify(resp.data.result.enterpriseInfo));
+                } else {
+                    this.companyForm = Object.assign({}, {
+                        baseInfo: '企业信息',
+                        flag: true
+                    }, resp.data.result.enterpriseInfo);
+                }
+
+                this.basicForm = Object.assign({}, {
+                    baseInfo: '基本信息',
+                    flag: true
+                }, resp.data.result.projectInfo);
+
+                this.capitalForm = Object.assign({}, {
+                    baseInfo: '投资信息',
+                    flag: true
+                }, resp.data.result.projectInvestmentInfo);
+                this.memberData = resp.data.result.listBoardMember;
+                this.structureData = resp.data.result.listOwnershipStructure;
+                this.title = resp.data.result.projectInfo.projectName;
+                //this.fundTable = data.result.list;
             }).catch(e => {
 
             });
