@@ -38,8 +38,8 @@ export function addEvent(params = {}) {
 		projectId, 
 		issuesType, 
 		issuesDate, 
-		issuesContent,
-		documentInfo,
+		issuesContent, 
+		documentInfo, 
 		addUserId : JSON.parse(sessionStorage.getItem('userInfor')).id
 	}
 	return service({url: '/bigIssuesclie/insertBigIssuesclie', method: 'post', data});
@@ -53,8 +53,29 @@ export function delEvent(id = undefined) {
 	return service({url: '/bigIssuesclie/delectBigIssues', method: 'post', data});
 }
 
+//投后项目详情上面的出资主体
+export function getInvestSubject(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/projectContract/investSubject', method: 'post', data});
+}
 
+//获取投后项目详情上面的小双提醒（预警）
+export function getWarnMessageList(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/WarnRecords/selectWarnMessageList', method: 'post', data});
+}
 
+//获取投后项目的估值信息
+export function getAppraisementRep(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/appraisement/appraisementDetails', method: 'post', data});
+}
 // // 投后 重大事项详情
 // export function getPreDetail(projectId = undefined) {
 // 	const data = {

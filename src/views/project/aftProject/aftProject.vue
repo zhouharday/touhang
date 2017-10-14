@@ -52,7 +52,7 @@ export default {
         return {
             total: 0,
             page: 1,
-            pageSize: 2,
+            pageSize: 5,
             projectName: '',
             currentIndex: 0,
             projectTypeId: '',

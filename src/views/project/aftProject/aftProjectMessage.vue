@@ -12,11 +12,11 @@
                     <el-table :data="fundTable" style="width:100%;height:260px;overflow:hidden" :row-class-name="tableRowClassName">
                         <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
-                        <el-table-column prop="investorMoney" label="投资金额（元）" align="center">
+                        <el-table-column prop="investAmount" label="投资金额（元）" align="center">
                         </el-table-column>
-                        <el-table-column prop="percent" label="股权占比（%）" align="center">
+                        <el-table-column prop="stockRatio" label="股权占比（%）" align="center">
                         </el-table-column>
-                        <el-table-column prop="paidMoney" label="支付金额（元）" align="center">
+                        <el-table-column prop="sumPayAmount" label="支付金额（元）" align="center">
                         </el-table-column>
                     </el-table>
                 </el-col>
@@ -35,8 +35,8 @@
                         <span class="prompt">{{prompt}}</span>
                         <div class="item_wrapper">
                             <div class="item" v-for="(item, index) in message" :key="item.index">
-                                <span class="count">{{item.count}}</span>
-                                <p class="desc">{{item.desc}}</p>
+                                <span class="count">{{index + 1}}</span>
+                                <p class="desc">{{item.message}}</p>
                                 <!-- <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="modalAlarm=true">
                                         {{item.info}}
                                     </el-button> -->
@@ -102,6 +102,7 @@ import monitorTable from './monitor'
 
 import { getProjectUsers } from 'api/projectSys';
 import { getPreDetail } from 'api/projectPre';
+import { getWarnMessageList, getInvestSubject, getAppraisementRep } from 'api/projectAfter';
 
 export default {
     components: {
@@ -135,14 +136,6 @@ export default {
                     count: 2,
                     desc: '2017【年报】指标出现警告',
                     state: false
-                }
-            ],
-            fundTable: [
-                {
-                    fundName: '京东',
-                    investorMoney: '56,000,000,000',
-                    percent: '0.3%',
-                    paidMoney: '24,000,000,000'
                 }
             ],
             tableData: [
@@ -211,6 +204,8 @@ export default {
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             this.merchantId = merchants[0].id;
+            this.getWarnMessageList();
+            this.getInvestSubject();
             this.getProUsers();
         },
         /**
@@ -252,9 +247,41 @@ export default {
                 this.memberData = resp.data.result.listBoardMember;
                 this.structureData = resp.data.result.listOwnershipStructure;
                 this.title = resp.data.result.projectInfo.projectName;
-                //this.fundTable = data.result.list;
             }).catch(e => {
 
+            });
+        },
+        //获取预警提醒
+        getWarnMessageList() {
+            getWarnMessageList(this.projectId).then(resp => {
+                console.log("获取预警提醒: "+ JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    this.message = resp.data.result;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            });
+        },
+        //获取投资主体
+        getInvestSubject() {
+            getInvestSubject(this.projectId).then(resp => {
+                console.log("获取投资主体: "+ JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    this.fundTable = resp.data.result;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            });
+        },
+        //获取投后项目的估值信息
+        getAppraisementRep() {
+            getAppraisementRep(this.projectId).then(resp => {
+                console.log("获取投资主体: "+ JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    // this.fundTable = resp.data.result;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
             });
         },
         disable(name) {
