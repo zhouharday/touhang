@@ -4,7 +4,7 @@
         <!--搜索框-->
         <el-row class="search-box">
             <el-col :span="10" class="search">
-                <el-input placeholder="请按项目名称进行查询" icon="search" v-model="search" :on-icon-click="handleIconClick">
+                <el-input placeholder="请按项目名称进行查询" icon="search" v-model="name" :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
         </el-row>
@@ -43,32 +43,32 @@
             </el-col>
         </el-row>
         <!--所在地ul-->
-        <div class="common">
-            <el-row>
-                <el-col :span="1">
-                    <div class="tag_s">所在地：</div>
-                </el-col>
-                <el-col :span="23">
-                    <div class="location-ul">
-                        <ul ref="location" :class="{ changeList: !btnObject2.downtriangle }" style="width:100%;">
-                            <li v-for="(item,index) in locationList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex3}" @click="changeActive(index,3,item)">
-                                {{item.dicName}}
-                            </li>
-                            <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
-                                <span :class="btnObject2"></span>
-                                {{collapseBtn2}}
-                            </button>
-                        </ul>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+        <!-- <div class="common"> -->
+        <el-row class="common">
+            <el-col :span="1">
+                <div class="tag_s">所在地：</div>
+            </el-col>
+            <el-col :span="23">
+                <div class="location-ul">
+                    <ul ref="location" :class="{ changeList: !btnObject2.downtriangle }" style="width:100%;">
+                        <li v-for="(item,index) in locationList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex3}" @click="changeActive(index,3,item)">
+                            {{item.dicName}}
+                        </li>
+                        <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
+                            <span :class="btnObject2"></span>
+                            {{collapseBtn2}}
+                        </button>
+                    </ul>
+                </div>
+            </el-col>
+        </el-row>
+        <!-- </div> -->
         <!--搜索结果-->
         <el-row class="common">
             <el-col :span="24">
                 <div>
                     <p>共搜索到
-                        <span>4</span>
+                        <span>{{page.total}}</span>
                         个结果
                     </p>
                 </div>
@@ -152,9 +152,9 @@ export default {
                 console.log(res.data.result);
             }
         });
-        this.selectCompany();
         this.location();
         this.rounds();
+        this.selectCompany();
     },
     mounted() {
         this.$nextTick(function() {
@@ -164,6 +164,12 @@ export default {
     },
     data() {
         return {
+            name: '',
+            industry: '',
+            phase: '',
+            citystr: '',
+            pages: 1, //当前页码
+            pageSize: 10, //每页条数
             row: '',
             no: '',
             num: 1, // 数据字典传值
@@ -171,7 +177,7 @@ export default {
             dialogVisible: false,
             search: '',
             collapseBtn1: '收起',
-            collapseBtn2: '下拉',
+            collapseBtn2: '收起',
             currentIndex1: '',
             currentIndex2: '',
             currentIndex3: '',
@@ -199,7 +205,7 @@ export default {
     methods: {
         handleIconClick() { //搜索
             // alert(11);
-            this.selectCompany(this.search);
+            this.selectCompany();
             this.search = '';
         },
         // 点击折叠按钮，控制列表项的下拉与收起
@@ -239,26 +245,28 @@ export default {
         },
         changeActive(index, ind, item) { //按条件查询
             if (ind == 1) { //行业
-                this.selectCompany('', item.id, '', '');
+                this.industry = item.id;
+                this.selectCompany();
                 console.log(item);
                 this.currentIndex1 = index;
-                this.currentIndex2 = '';
-                this.currentIndex3 = '';
+                // this.currentIndex2 = '';
+                // this.currentIndex3 = '';
                 return;
             } else if (ind == 2) { //轮次
-                this.selectCompany('', '', item.id, '', '');
+                this.phase = item.id;
+                this.selectCompany();
                 console.log(item);
                 this.currentIndex2 = index;
-                this.currentIndex1 = '';
-                this.currentIndex3 = '';
+                // this.currentIndex1 = '';
+                // this.currentIndex3 = '';
                 return;
             } else if (ind == 3) { //所在地
-            alert(555);
-                this.selectCompany('', '', '', item.id,1,10);
                 console.log(item);
+                this.citystr = item.id;
+                this.selectCompany();
                 this.currentIndex3 = index;
-                this.currentIndex1 = '';
-                this.currentIndex2 = '';
+                // this.currentIndex1 = '';
+                // this.currentIndex2 = '';
                 return;
             }
         },
@@ -302,20 +310,18 @@ export default {
                     return;
                 })
         },
-        selectCompany(name, industry, phase, citystr, pages, pageSize) { //查询云项目列表数据 api
-            alert(1);
+        selectCompany() { //查询云项目列表数据 api
             this.$http.post(this.api + '/CompanyClieController/selectCompany', {
-                "name": name, //根据项目名模糊查询
-                "industry": industry,  //按照行业查询
-                "phase": phase,  //按照轮次查询
-                "citystr": citystr,  //按照项目所在地查询
-                "page": pages,  //当前页数
-                "pageSize": pageSize  //每页显示条数
+                "name": this.name, //根据项目名模糊查询
+                "industry": this.industry,  //按照行业查询
+                "phase": this.phase,  //按照轮次查询
+                "city": this.citystr,  //按照项目所在地查询
+                "page": this.pages,  //当前页数
+                "pageSize": this.pageSize  //每页显示条数
             })
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
-                            alert(2);
                             console.log(res.data);
                             this.tableData = res.data.result.list;
                             this.page.pageNum = res.data.result.pageNum; //当前页码
@@ -333,12 +339,15 @@ export default {
                     this.$Message.error("请求超时");
                 })
         },
-        handleSizeChange(pageSize) {
-            this.selectCompany(pageSize);
+        handleSizeChange(pageSize) { //每页条数切换
+            console.log(pageSize);
+            this.pageSize = pageSize;
+            this.selectCompany();
         },
         handleCurrentChange(pages) { //获取tabList 分页数据
             // console.log(pages);
-            this.selectCompany(pages);
+            this.pages = pages;
+            this.selectCompany();
         },
         location() { //查询省份数据
             this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>省份

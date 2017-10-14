@@ -2,7 +2,7 @@
     <section>
         <!-- 这是消息公告页内容 -->
         <div class="messageShow">
-            <el-tabs  @tab-click="tableDatasss">
+            <el-tabs @tab-click="tableDatasss">
                 <!-- 公司公告 Tab -->
                 <el-tab-pane value="1" label="公司公告">
                     <el-table stripe :data="tableData1" border style="width: 100%">
@@ -16,9 +16,9 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNotice(scope.row)" type="text" size="small">编辑</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNoticeBtn(scope.row)" type="text" size="small">编辑</el-button>
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="deleteNotice(scope.row,scope.$index, tableData1)" type="text" size="small">删除</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="delModal1Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
                                 <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
@@ -30,9 +30,23 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <!-- 删除公司公告提示弹框 -->
+                <Modal v-model="delModal1" width="360">
+                    <p slot="header" style="color:#f60;text-align:center">
+                        <Icon type="information-circled"></Icon>
+                        <span>删除确认</span>
+                    </p>
+                    <div style="text-align:center">
+                        <p>此操作将会永久删除当前公告</p>
+                        <p>是否继续删除？</p>
+                    </div>
+                    <div slot="footer">
+                        <Button type="error" size="large" long :loading="modal_loading1" @click="del1">删除</Button>
+                    </div>
+                </Modal>
                 <!-- 系统消息 Tab -->
                 <el-tab-pane value="2" label="系统消息">
-                    <el-table stripe :data="tableData2" border style="">
+                    <el-table stripe :data="tableData2" border style="width: 100%">
                         <el-table-column prop="assistMessage.msgTitle" label="主题" width="550" align="center">
                         </el-table-column>
                         <el-table-column prop="assistMessage.seedUserName" label="发布人" width="" align="center">
@@ -42,7 +56,7 @@
                         <el-table-column label="操作" width="" align="center">
                             <template scope="scope">
                                 <!-- <el-button @click="remove" type="text" size="small">删除</el-button> -->
-                                <el-button @click.native.prevent="deleteRow(scope.$index, tableData2)" type="text" size="small">删除</el-button>
+                                <el-button @click.native.prevent="delModal2Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -53,6 +67,20 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <!-- 删除系统消息提示弹框 -->
+                <Modal v-model="delModal2" width="360">
+                    <p slot="header" style="color:#f60;text-align:center">
+                        <Icon type="information-circled"></Icon>
+                        <span>删除确认</span>
+                    </p>
+                    <div style="text-align:center">
+                        <p>此操作将会永久删除当前消息</p>
+                        <p>是否继续删除？</p>
+                    </div>
+                    <div slot="footer">
+                        <Button type="error" size="large" long :loading="modal_loading2" @click="del2">删除</Button>
+                    </div>
+                </Modal>
             </el-tabs>
             <!-- 发布新公告 btn -->
             <el-button v-show="isAddMsg" type="danger" size="small" @click="realseBtn" class="messageBtn">发布新公告</el-button>
@@ -70,15 +98,34 @@
                         <el-input :disabled="1" v-model="sendNoticeform.seedUserId" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
-                        <el-date-picker @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" type="datetime" placeholder="选择日期时间">
-                        </el-date-picker>
+                        <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
+                        </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button v-show="cancles" type="default" size="small" @click="cancle">取 消</el-button>
                     <el-button v-show="saves" type="danger" size="small" @click="saveORrealse(1)">保 存</el-button>
-                    <el-button v-show="realses" type="success" size="small" @click="saveORrealse(2)">发 布</el-button>
+                    <el-button v-show="realses" type="danger" size="small" @click="saveORrealse(2)">发 布</el-button>
                 </div>
+            </el-dialog>
+            <!-- 查看公司公告 dialog -->
+            <el-dialog style="width:1100px" title="查看公司公告" :visible.sync="viewModal">
+                <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
+                    <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
+                        <el-input v-model="sendNoticeform.noticeTitle" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
+                        <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" disabled>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
+                        <el-input :disabled="1" v-model="sendNoticeform.seedUserId" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
+                        <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
+                        </el-input>
+                    </el-form-item>
+                </el-form>
             </el-dialog>
         </div>
     </section>
@@ -122,6 +169,18 @@ export default {
     },
     data() {
         return {
+            isNotice: false,
+            isAssist: false,
+            modal_loading1: false,
+            modal_loading2: false,
+            noticeIndex: '',
+            assistIndex: '',
+            rowNotice: '', //公司公告
+            rowAssist: '', //系统消息
+            delModal1: false,
+            delModal2: false,
+            viewModal: false,
+            edit: false,
             // start: { //消息发布状态
             //     a: true, //编辑
             //     b: true, //发布
@@ -163,6 +222,47 @@ export default {
         }
     },
     methods: {
+        delModal1Btn(index, row) {
+            this.isNotice = true;
+            this.isAssist = false;
+            this.noticeIndex = index;
+            this.rowNotice = row;
+            console.log(this.rowNotice);
+            this.delModal1 = true;
+            this.modal_loading1 = false;
+        },
+        delModal2Btn(index, row) {
+            this.isAssist = true;
+            this.isNotice = false;
+            this.assistIndex = index;
+            this.rowAssist = row;
+            console.log(this.rowAssist);
+            this.delModal2 = true;
+            this.modal_loading2 = false;
+        },
+        del1() {
+            console.log(this.rowNotice);
+            this.modal_loading1 = true;
+            this.deleteNotice(this.rowNotice.id);
+            setTimeout(() => {
+                this.tableData1.splice(this.noticeIndex, 1);
+                this.modal_loading3 = false;
+                this.delModal1 = false;
+                this.$Message.success('删除成功');
+            }, 2000);
+        },
+        del2() {
+            console.log(this.rowAssist);
+            this.modal_loading2 = true;
+            this.deleteAssistMsgUser(this.rowAssist.id);
+            setTimeout(() => {
+                this.tableData2.splice(this.assistIndex, 1);
+                this.modal_loading3 = false;
+                this.delModal2 = false;
+                this.$Message.success('删除成功');
+            }, 2000);
+        },
+
         /************公告 Start***************/
         getNoticeUserList1(pages, pageSize) { //获取公司公告列表数据
             // alert(1);
@@ -199,6 +299,12 @@ export default {
                 })
         },
         getNoticeUserList2(num) { //保存/发布公司公告列表数据
+            if (this.edit) {
+                console.log('编辑数据');
+                console.log(this.sendNoticeform);
+                this.editNotice();
+                return;
+            };
             // alert(2);
             this.$http.post(this.api + '/work/addNotice', {
                 "seedUserId": this.userId,
@@ -211,7 +317,7 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data.message);
-                        this.getNoticeUserList1(1);
+                        this.getNoticeUserList1(1, 10);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -244,23 +350,30 @@ export default {
                     console.log(error);
                 })
         },
-        editNotice(row) { //编辑公告列表
-            console.log(row);
+        editNoticeBtn(row) { //编辑公告列表 Btn
+            this.edit = true;
+            this.sendNoticeform.noticeTitle = row.noticeTitle;
+            this.sendNoticeform.noticeContent = row.noticeContent;
+            this.sendNoticeform.seedUserId = row.seedUserName;
+            this.sendNoticeform.seedNoticeDate = row.createDate;
+            this.sendNoticeform.id = row.id;
             this.dialogFormVisible = true;
+        },
+        editNotice() { //编辑公告列表 api
+            // alert('bj');
             this.$http.post(this.api + '/work/modifyNoticeInfo', {
-                "id": row.id,
-                "noticeTitle": row.noticeTitle,
-                "seedNoticeDate": row.seedNoticeDate,
-                "noticeContent": row.seedNoticeDate
+                "id": this.sendNoticeform.id,
+                "noticeTitle": this.sendNoticeform.noticeTitle,
+                "seedNoticeDate": this.sendNoticeform.seedNoticeDate,
+                "noticeContent": this.sendNoticeform.noticeContent
             })
                 .then(res => {
                     if (res.status == '200') {
-                        alert(565);
-                        row.noticeTitle = this.sendNoticeform.noticeTitle;
-                        row.noticeContent = this.sendNoticeform.noticeContent;
-                        row.seedUserName = this.sendNoticeform.seedUserId;
-                        row.seedNoticeDate = this.sendNoticeform.seedNoticeDate;
-                        console.log(res.data.message);
+                        // alert(565);
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                        };
+                        this.getNoticeUserList1(1, 10);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -272,15 +385,52 @@ export default {
                     console.log(error);
                 })
         },
-        deleteNotice(row) { //删除公告列表
+        lookNotice(row) { //查看公告列表 Btn
+            // alert(row.noticeContent);
             // console.log(row);
+            // if (row.noticeContent == null || row.noticeTitle == null) {
+            //     this.$Message.warning('无消息');
+            //     return;
+            // };
+            // this.$alert(row.noticeContent, row.noticeTitle, {
+            //     confirmButtonText: '确定',
+            //     callback: action => {
+            //         this.$message({
+            //             type: 'info',
+            //             message: `action: ${action}`
+            //         });
+            //     }
+            // });
+            this.viewModal = true;
+
+        },
+        deleteNotice(id) { //删除公告列表
             this.$http.post(this.api + '/work/deleteNotice', {
-                id: row.id
+                id: id
             })
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data.message);
-                        this.getNoticeUserList1(1);
+                        this.getNoticeUserList1(this.pages, this.pageSize);
+                        if (res.data.status == '49996') { //数据为空
+                            console.log('传入参数非法');
+                        }
+                    } else if (res.data.status == '403') {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        deleteAssistMsgUser(id) { //删除系统消息
+            this.$http.post(this.api + '/work/deleteAssistMsgUser', {
+                id: id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data.message);
+                        this.getMessageList(this.pages, this.pageSize);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -346,6 +496,7 @@ export default {
         },
         realseBtn() { //发布新公告Dialog btn 方法
             // alert(111);
+            this.edit = false;
             let new_sendNoticeform = {
                 noticeTitle: "", //主题
                 noticeContent: '', //内容
@@ -362,13 +513,6 @@ export default {
             this.dialogFormVisible = false;
             this.form.start = "已发布";
             // this.start.d = true;
-            this.tableData1.push({
-                title: this.form.title,
-                releasePeople: this.form.pople,
-                releaseDate: this.form.date,
-                start: this.form.start,
-                text: this.form.textarea,
-            });
             this.sendData(); //send data for server
             this.clearVal();
         },
@@ -377,31 +521,14 @@ export default {
             this.sendNoticeform.seedNoticeDate = val;
             return val;
         },
-        lookNotice(row) { //查看方法
-            // alert(row.noticeContent);
-            console.log(row);
-            if(row.noticeContent == null || row.noticeTitle == null){
-                this.$Message.warning('无消息');
-                return;
-            };
-            this.$alert(row.noticeContent, row.noticeTitle, {
-                confirmButtonText: '确定',
-                callback: action => {
-                    this.$message({
-                        type: 'info',
-                        message: `action: ${action}`
-                    });
-                }
-            });
-        },
         deleteRow(index, rows) { //删除当前行
             rows.splice(index, 1);
         },
         getMessageList(page, pageSize) { //获取系统消息 api
             this.$http.post(this.api + '/work/getMessageList', {
                 "userId": this.userId,
-                "page": page,
-                "pageSize": pageSize,
+                "page": this.pages,
+                "pageSize": this.pageSize,
             })
                 .then(res => {
                     if (res.status == '200') {

@@ -278,9 +278,9 @@ import service from 'common/js/fetch'
 import axios from 'axios'
 
 export default {
-    beforeCreate() {},
     created() {
-        this.$http.post( this.api + '/merchantType/queryList', {})
+        this.getData();
+        this.$http.post(this.api + '/merchantType/queryList', {})
             .then(res => {
                 if (res.status == '200') {
                     this.typePostage = res.data.result;
@@ -292,6 +292,10 @@ export default {
             });
     },
     computed: {
+        user(){
+            this.$store.state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
+            return this.$store.state.login.logoSrc;
+        },
         typeText() {
             if (JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null) {
                 this.$store.state.login.approvelType.type = '';
@@ -320,14 +324,14 @@ export default {
                 {
                     src: "/static/img/my_tuxiang.png",
                     name: this.$store.state.login.userInfor.name,
-                    name_bot: "最新版昂",
-                    time: "17:05"
+                    name_bot: '',
+                    time: ""
                 },
             ],
             srcContent: {
                 src: "",
-                name: "",
-                title: "聚乐新能源集团-研发部总监"
+                name: this.$store.state.login.userInfor.name,
+                title: this.$store.state.login.logoSrc.merchantName,
             },
             form: {
                 creditCode: '', //统一社会信用代码
@@ -358,12 +362,24 @@ export default {
         }
     },
     methods: {
+        getData(){
+            let myDate = new Date();
+            let hour = myDate.getHours(); //小时
+            let minuts = myDate.getMinutes(); //分钟
+            if(minuts <= 9){
+                minuts = '0' + minuts;
+            };
+            this.contacts_list.forEach(function(item) {
+                item.time = hour + ':' + minuts;
+                item.name_bot = this.user.merchantName
+            }, this);
+        },
         active(index, item) {
             // console.log(item);
             this.ind = index;
             this.srcContent.src = item.src;
             this.srcContent.name = item.name;
-            this.srcContent.title = item.src;
+            // this.srcContent.title = item.src;
         },
         openDialog(formName) { //查询企业类型
             let new_form = {
@@ -393,7 +409,7 @@ export default {
                         .then(res => {
                             if (res.status == '200') {
                                 console.log('申请开通企业权限: ' + res.data.message);
-                            } else if(res.data.status == '403'){
+                            } else if (res.data.status == '403') {
                                 alert(res.data.message);
                             }
                         })
