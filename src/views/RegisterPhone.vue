@@ -91,33 +91,19 @@ export default {
             }
         },
         sendVerificationCode() { //发送验证码 Ajax
-            // this.time();
-            // return service({
-            //     url: this.api + '/merchant/validationCode',
-            //     method: 'post',
-            //     data: { contactPhone: this.phonecontactPhone }
-            // })
-
-                this.$http.post(this.api + '/merchant/validationCode', {
-                    contactPhone: this.phonecontactPhone
-                })
+            this.$http.post(this.api + '/merchant/validationCode', {
+                contactPhone: this.phonecontactPhone
+            })
                 .then(res => {
                     if (res.data.status == '200') {
-                        // this.provinces = res.data.result;
-                        // this.time();
-                        // this.isValidationCode = 1;
                         this.time();
                         console.log(res.data);
                     } else if (res.data.status == '1006') { //手机号已注册
                         this.isSendCode = 1;
                         alert(res.data.message);
                     } else if (res.data.status == '1008') { //手机号不合法
-                        // console.log(res.data);
-                        // this.isSendCode = 1;
                         alert(res.data.message);
                     } else if (res.data.status == '403') { //服务器异常
-                        // console.log(res.data);
-                        // this.isSendCode = 1;
                         alert(res.data.message);
                     }
                 })

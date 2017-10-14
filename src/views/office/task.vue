@@ -848,6 +848,7 @@ export default {
                 this.addTaskForm1.createDate = startDate;
         },
         show(data) { //处理任务
+            alert(999);
             console.log(data.row);
             this.getTaskList4(data.row.id);
             this.dialogFormVisible2 = true;
@@ -1075,7 +1076,6 @@ export default {
                         console.log(res.data);
                         res.data.record.assistTaskRecords.forEach(function(ele, index) {
                             this.form1.recording = ele.recordDetails;
-
                         }, this);
                         this.form1.taskId = res.data.record.id;
                         this.form1.taskName = this.taskInfo.taskName; //任务名称
@@ -1085,7 +1085,7 @@ export default {
                         this.form1.peopele1_1 = this.taskInfo.receiveUserName; //接收人
                         this.form1.textContent = this.taskInfo.taskInfo; //任务详情
                     } else if (res.status == '403') {
-                        alert(res.data.message);
+                        this.$Message.info(res.data.message);
                     }
                 })
                 .catch(error => {
