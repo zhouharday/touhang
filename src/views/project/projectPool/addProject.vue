@@ -286,10 +286,10 @@ export default {
                         basicForm: basicForm,
                         companyForm: basicForm
                     }).then(resp => {
+                        this.addTab('项目池', '/home/projectPool', 'projectPool');
+                        this.$router.push({ name: 'projectPool' });
                         store.isSubmit = false;
                         console.log('resp: ', resp);
-                        // this.addTab('项目池', '/home/projectPool', 'projectPool');
-                        // this.$router.push({ name: 'projectPool' });
                     }).catch(e => {
                         console.log(e);
                     })

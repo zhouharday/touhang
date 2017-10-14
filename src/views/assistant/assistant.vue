@@ -412,6 +412,8 @@ export default {
     ul {
         float: left;
         li {
+            // width:84px;
+            // width:95px;
             height: 20px;
             display: inline-block;
             box-sizing: border-box;
