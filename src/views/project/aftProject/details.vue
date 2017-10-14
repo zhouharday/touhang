@@ -17,7 +17,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目类型" prop="projectType">
-                             <el-input v-model="basicForm.projectTypeId" disabled></el-input>
+                             <el-input v-model="basicForm.projectType" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -31,8 +31,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="所在地" prop="addressId">
-                            <el-input v-model="basicForm.addressId" disabled></el-input>
+                        <el-form-item label="所在地" prop="address">
+                            <el-input v-model="basicForm.address" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -50,52 +50,52 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="企业名称" prop="enterpriseName">
-                            <el-input v-model="basicForm.enterpriseName" disabled></el-input>
+                            <el-input v-model="companyForm.enterpriseName" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="法人代表" prop="legalPerson">
-                             <el-input v-model="basicForm.legalPerson" disabled></el-input>
+                             <el-input v-model="companyForm.legalPerson" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册资本（元）" prop="registeredCapital">
-                             <el-input v-model="basicForm.registeredCapital" disabled></el-input>
+                             <el-input v-model="companyForm.registeredCapital" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="实收资本（元）" prop="paiclCapital">
-                             <el-input v-model="basicForm.paiclCapital" disabled></el-input>
+                             <el-input v-model="companyForm.paiclCapital" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册登记日期" prop="registerDate">
-                             <el-input type="date" v-model="basicForm.registerDate" disabled></el-input>
+                             <el-input v-model="companyForm.registerDate" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="统一信用代码" prop="creditCode">
-                             <el-input v-model="basicForm.creditCode" disabled></el-input>
+                             <el-input v-model="companyForm.creditCode" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="注册地址" prop="registerAddress">
-                             <el-input v-model="basicForm.registerAddress" disabled></el-input>
+                             <el-input v-model="companyForm.registerAddress" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="办公地址" prop="workAddress">
-                             <el-input v-model="basicForm.workAddress" disabled></el-input>
+                             <el-input v-model="companyForm.workAddress" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
                         <el-form-item label="主营业务" prop="mainBusiness">
-                             <el-input v-model="basicForm.mainBusiness" disabled></el-input>
+                             <el-input v-model="companyForm.mainBusiness" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col>
                         <el-form-item label="备注" prop="remark">
-                             <el-input type="textarea" v-model="basicForm.remark" disabled></el-input>
+                             <el-input type="textarea" v-model="companyForm.remark" disabled></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -133,7 +133,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="币种" prop="currency">
-                            <el-input v-model="capitalForm.currency" disabled></el-input>
+                            <el-input v-model="capitalForm.currencyName" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -148,13 +148,13 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="初始投资时间" prop="startInvestDate">
-                            <el-input type="date" v-model="capitalForm.startInvestDate" disabled style="width:100%">
+                            <el-input v-model="capitalForm.startInvestDate" disabled style="width:100%">
                             </el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目预计退出时间" prop="exitDate">
-                            <el-input type="date" v-model="capitalForm.exitDate" disabled style="width:100%">
+                            <el-input v-model="capitalForm.exitDate" disabled style="width:100%">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -194,13 +194,6 @@ export default {
     },
     data() {
         return {
-            options: [{
-                value: 'yes',
-                label: '是'
-            }, {
-                value: 'no',
-                label: '否'
-            }],
             headerInfo_basic: {
                 desc: '基本信息'
             },

@@ -1,11 +1,12 @@
 import * as types from '../mutations-type'
 import { getDicChildren, getDicChildrenII } from '../../common/js/dictionary'
 import { getDeptListByMid } from '../../api/project'
+import { slectAllStageIndex } from '../../api/projectPre'
 import { getAllNormalFund } from '../../api/investor'
 
 const state = {
     projectData: {},        // 项目详情信息
-    projectTurnType: [],    // 项目融资轮次
+    projectTurnType: [],    // 项目投资轮次
     typeOptions: [],        // 项目类型
     typeOptionsII: [],      // 项目类型 （含全部）
     industryOptions: [],    // 项目所属行业
@@ -13,8 +14,12 @@ const state = {
     fromOptions: [],        // 项目来源
     addressOptions: [],     // 项目所在地
     stageOptionsII: [],     // 项目阶段
+
+    currencyOptions: [],    // 获取币种类型
+
     departmentOptions: [],  // 业务部门
     costSortOptions: [],    // 项目费用类型
+    outingSortOptions: [],  // 项目退出类型
     myFundOptions: []       // 项目中可签约基金列表(本商户)
 }
 
@@ -31,9 +36,12 @@ const getters = {
     getFromOptions: state => state.fromOptions,
     getAddressOptions: state => state.addressOptions,
     getStageOptionsII: state => state.stageOptionsII,
+    getCurrencyOptions: state => state.currencyOptions,
+
     getDepartmentOptions: state => state.departmentOptions,
 
     getCostSortOptions: state => state.costSortOptions,
+    getOutingSortOptions: state => state.outingSortOptions,
     getMyFundOptions: state => state.myFundOptions
 }
 
@@ -65,16 +73,21 @@ const mutations = {
     [types.GET_STAGEOPTIONSII](state, stageOptionsII) {
         state.stageOptionsII = stageOptionsII;
     },
+    [types.GET_CURRENCYOPTIONS](state, currencyOptions) {
+        state.currencyOptions = currencyOptions;
+    },
     [types.GET_DEPARTMENTOPTIONS](state, departmentOptions) {
         state.departmentOptions = departmentOptions;
     },
     [types.GET_COSTSORTOPTIONS](state, costSortOptions) {
         state.costSortOptions = costSortOptions;
     },
+    [types.GET_OUTINGSORTOPTIONS](state, outingSortOptions) {
+        state.outingSortOptions = outingSortOptions;
+    },
     [types.GET_MYFUNDOPTIONS](state, myFundOptions) {
         state.myFundOptions = myFundOptions;
     }
-
 }
 
 const actions = {
@@ -142,7 +155,7 @@ const actions = {
         })
     },
     getAddressOptions({commit, dispatch}) {
-        return getDicChildren('3').
+        return getDicChildren('501').
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_ADDRESSOPTIONS, res.data.result)
@@ -152,10 +165,20 @@ const actions = {
         })
     },
     getStageOptionsII({commit, dispatch}) {
-        return getDicChildrenII('203').
+        return slectAllStageIndex().
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_STAGEOPTIONSII, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getCurrencyOptions({commit, dispatch}) {
+        return getDicChildren('211').
+        then((res) => {
+            if (res.status == '200') {
+                commit(types.GET_CURRENCYOPTIONS, res.data.result)
             }
         }).catch(err => {
             console.log(err)
@@ -176,6 +199,16 @@ const actions = {
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_COSTSORTOPTIONS, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getOutingSortOptions({commit, dispatch}) {
+        return getDicChildren('205').
+        then((res) => {
+            if (res.status == '200') {
+                commit(types.GET_OUTINGSORTOPTIONS, res.data.result)
             }
         }).catch(err => {
             console.log(err)

@@ -103,7 +103,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -174,7 +174,6 @@
                             <el-button type="danger" @click="confirmContractAdd1">确 定</el-button>
                         </div>
                     </el-dialog>
-
                     <!-- 添加 出资主体dialog -->
                     <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
                         <el-form :model="fundForm1" label-width="110px">
@@ -223,7 +222,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm2.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户"  disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -323,7 +322,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="paidForm1.payTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -336,22 +335,22 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="剩余金额（元）">
-                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -404,7 +403,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="paidForm1.payTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -417,22 +416,22 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="剩余金额（元）">
-                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -507,7 +506,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -520,17 +519,17 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -570,7 +569,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -583,17 +582,17 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" :disabled="true"></el-input>
+                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" auto-complete="off"></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -659,6 +658,7 @@ export default {
     },
     data() {
         return {
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name, //当前用户
             activeNames: ['1'],
             costAdd1: false,
             costAdd2: false,
@@ -670,8 +670,12 @@ export default {
             sharingAdd1: false,
             sharingAdd2: false,
             //项目费用
-            costForm1: {},
-            costForm2: {},
+            costForm1: {
+                costTypeId:''
+            },
+            costForm2: {
+                costTypeId:''
+            },
             costData: [],
             headerInfo_cost: {
                 desc: '项目费用',
@@ -768,6 +772,8 @@ export default {
                     this.costData = resp.data.result;
                 }else if(resp.data.status === '49999'){
                     this.costData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -784,6 +790,8 @@ export default {
                 if (resp.data.status === '200') {
                     this.getFee();
                     this.costAdd2 = !this.costAdd2;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('confirmCostAdd2() exists error: ', e);
@@ -803,12 +811,16 @@ export default {
             console.log("addFee params:" + JSON.stringify(params));
             addFee(params).then(resp => {
                 console.log('addFee resp: ', resp.data);
-                this.getFee();
-                this.costForm1 = {
-                    costTypeId: '',
-                    amountMoney: ''
-                };
-                this.costAdd1 = !this.costAdd1;
+                if(resp.data.status === '200'){
+                    this.getFee();
+                    this.costForm1 = {
+                        costTypeId: '',
+                        amountMoney: ''
+                    };
+                    this.costAdd1 = !this.costAdd1;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
                 console.log('addFee() exists error: ', e);
             })
@@ -821,6 +833,8 @@ export default {
                     this.paidData = resp.data.result.list;
                 }else if(resp.data.status === '49999'){
                     this.paidData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getContractPay() exists error: ', e);
@@ -834,6 +848,8 @@ export default {
                     this.sharingData = resp.data.result.list;
                 }else if(resp.data.status === '49999'){
                     this.sharingData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getParticipationList() exists error: ', e);
@@ -846,6 +862,8 @@ export default {
                     this.contractData = resp.data.result;
                 }else if(resp.data.status === '49999'){
                     this.contractData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('contracts() exists error: ', e);
@@ -876,6 +894,8 @@ export default {
                     this.fundData1.push();
                     this.contractAdd1 = false;
                     this.getContract();
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('addContract() exists error: ', e);
@@ -944,6 +964,8 @@ export default {
                     this.fundData1.push();
                     this.contractAdd2 = !this.contractAdd2;
                     this.getContract();
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('editContract() exists error: ', e);
@@ -994,6 +1016,8 @@ export default {
                         item.id = '';
                     });
                     this.calcSurplusAmount();
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('selContract() exists error: ', e);
@@ -1025,6 +1049,8 @@ export default {
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd1 = false;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('addContractPay() exists error: ', e);
@@ -1038,6 +1064,8 @@ export default {
                     this.paidForm1 = resp.data.result.projectInvestPay;
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidAdd2 = !this.paidAdd2;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getContractPayDetail() exists error: ', e);
@@ -1060,7 +1088,6 @@ export default {
                 projectInvestPay : projectInvestPay,
                 payDetails : this.fundData2
             }
-            console.log("添加投资支付  :: "+JSON.stringify(data));
             editContractPay(projectInvestPay, this.fundData2).then(resp => {
                 console.log('editContractPay resp: ', resp.data);
                 if(resp.data.status == '200'){
@@ -1068,6 +1095,8 @@ export default {
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd2 = !this.paidAdd2;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('editContractPay() exists error: ', e);
@@ -1110,6 +1139,8 @@ export default {
                         console.log('合同中投资主体详情: '+JSON.stringify(item));
                     });
                     this.valueSum();
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('selShareContract() exists error: ', e);
@@ -1137,6 +1168,8 @@ export default {
                     this.getParticipation();
                     this.sharingForm1 = {};
                     this.sharingAdd1 = false;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('addContractPay() exists error: ', e);
@@ -1144,13 +1177,14 @@ export default {
         },
         //打开编辑 项目分红
         goEditShare(id) {
-            console.log('打开编辑项目分红: '+JSON.stringify(id));
             getParticipationDetail(id).then(resp => {
                 console.log('打开编辑项目分红: '+JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
                     this.sharingAdd2 = !this.sharingAdd2;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getParticipationDetail() exists error: ', e);
@@ -1178,6 +1212,8 @@ export default {
                     this.sharingForm1 = {};
                     this.fundData3 = [];
                     this.sharingAdd2 = !this.sharingAdd2;
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('editParticipation() exists error: ', e);
@@ -1207,6 +1243,8 @@ export default {
                         console.log('delFee resp: ', resp);
                         if(resp.data.status == '200'){
                             this.getFee();
+                        }else{
+                            this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
                         console.log('delFee() exists error: ', e);
@@ -1217,6 +1255,8 @@ export default {
                         console.log('delContract resp: ', resp);
                         if(resp.data.status == '200'){
                             this.getContract();
+                        }else{
+                            this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
                         console.log('delContract() exists error: ', e);
@@ -1230,6 +1270,8 @@ export default {
                         console.log('delPay resp: ', resp);
                         if(resp.data.status == '200'){
                             this.getContractPay();
+                        }else{
+                            this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
                         console.log('delPay() exists error: ', e);
@@ -1240,6 +1282,8 @@ export default {
                         console.log('delShare resp: ', resp);
                         if(resp.data.status == '200'){
                             this.getParticipation();
+                        }else{
+                            this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
                         console.log('delShare() exists error: ', e);

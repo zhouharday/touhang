@@ -128,7 +128,7 @@ export const dictionaryList = [
 
 // 获取数据字典一级子项 By CJ 2017-9-29 10:42:50
 export function getDicChildren(Pid) {
-    console.log("查询父ID为：" + Pid + " 的数据字典项");
+    // console.log("查询父ID为：" + Pid + " 的数据字典项");
     const data = {
         dicParent: Pid
     }
@@ -136,7 +136,7 @@ export function getDicChildren(Pid) {
 }
 // 获取数据字典一级子项 By CJ 2017-9-30 14:47:26
 export function getDicChildrenII(Pid) {
-    console.log("查询父ID为：" + Pid + " 的数据字典项 **含全部");
+    // console.log("查询父ID为：" + Pid + " 的数据字典项 **含全部");
     const data = {
         dicParent: Pid,
         identification: 'identification'

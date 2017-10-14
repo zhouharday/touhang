@@ -47,7 +47,6 @@ export function getPros(params = {}) {
 		page,
 		pageSize
 	}
-	console.log("projectList condition:" + JSON.stringify(data));
 	return service({url: '/projectPool/searchProject', method: 'post', data})
 }
 
@@ -193,7 +192,6 @@ export function changeProjectInfo(params = {}) {
     return service({url: '/projectPool/updateProjectInfo', method: 'post', data})
 }
 
-
 ////// 项目池记录 ////
 // 获取记录列表
 export function getRecords(projectId, recordStatus) {
@@ -214,7 +212,6 @@ export function addRecord(params = {}) {
 		merchantId,  // 商户ID
 		recordType     //记录类型
 	}
-	console.log('addRecord: ', data);
 	return service({url: '/operatingRecord/addOperatingRecord', method: 'post', data});
 }
 

@@ -62,7 +62,7 @@ export default {
         }
     },
 
-    mounted() {},
+    mounted() { },
     created() {
         this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>行业
             "dicParent": '1'
@@ -74,7 +74,7 @@ export default {
                 }
             })
             .catch(error => {
-
+                console.log(error);
             });
         this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>省份
             "dicParent": 501
@@ -114,7 +114,7 @@ export default {
         //     }))
     },
     computed: mapState({
-        register(state){
+        register(state) {
             state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
             return state.register.register;
         }
@@ -129,6 +129,7 @@ export default {
         },
         submitForm() { //最后一步提交所有注册数据
             if (this.valueData) {
+                this.$store.state.login.loading = true;
                 this.$store.state.register.register.merchantName = this.register.merchantName;
                 this.$store.state.register.register.industry = this.register.industry;
                 this.$store.state.register.register.province = this.register.province;
@@ -150,11 +151,11 @@ export default {
                             });
                             // this.$router.push({ name: 'contacts' }); //进入通讯录页面
                             // console.log(res.data);
-                        } else if (res.data.status == '403') { //网络异常
+                        } else { //网络异常
                             // console.log(res.data);
-                            alert(res.data.message);
-                        } else {
-                            alert('验证码不正确!');
+                            // alert(res.data.message);
+                            this.$store.state.login.loading = false;
+                            this.$Message.warning(res.data.message);
                         }
                     })
                     .catch(error => {

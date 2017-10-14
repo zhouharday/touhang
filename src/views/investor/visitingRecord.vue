@@ -1,6 +1,9 @@
 <template>
     <div class="visitingRecord">
-        <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader>
+        <div style="text-align:right;margin-bottom:10px">
+            <el-button type="danger" style="background-color:#fff;padding:8px 15px;" @click="showVisiting">添加</el-button>
+        </div>
+        <!-- <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader> -->
         <el-table :data="visitingRecord" border style="width: 100%">
             <el-table-column prop="manageName" label="拜访人" align="center">
             </el-table-column>

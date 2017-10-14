@@ -5,13 +5,13 @@
         <TabPane label="基金费用" name="fundCost">
             <tabel-header :data="costInfo" @add="methodCost"></tabel-header>
             <el-table :data="costData" border :show-summary="true" style="width: 100%">
-                <el-table-column label="费用类型" prop="feeTypeId">
+                <el-table-column label="费用类型" prop="feeTypeId" align="center">
                 </el-table-column>
-                <el-table-column label="费率（%）" prop="feeRate">
+                <el-table-column label="费率（%）" prop="feeRate" align="center">
                 </el-table-column>
-                <el-table-column label="金额（元）" prop="feeMoney">
+                <el-table-column label="金额（元）" prop="feeMoney" align="center">
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" align="center">
                     <template scope="scope">
                        <el-button type="text" size="small"
                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -24,24 +24,18 @@
         <TabPane label="收益分配" name="income">
             <tabel-header :data="incomeInfo" @add="methodIncome"></tabel-header>
             <el-table :data="incomeData" border style="width: 100%">
-                <el-table-column label="分配日期">
-                    <template scope="scope">
-                        <div>{{scope.row.shareDate | formatDate}}</div>
-                    </template>
+                <el-table-column label="分配日期" prop="shareDate" align="center">
                 </el-table-column>
-                <el-table-column label="分配总额">
-                    <template scope="scope">
-                        <div>{{scope.row.allocationMoney | toMoney}}</div>
-                    </template>
+                <el-table-column label="分配总额" prop="allocationMoney" align="center">
                 </el-table-column>
-                <el-table-column label="经办人" prop="handleName">
+                <el-table-column label="经办人" prop="handleName" align="center">
                 </el-table-column>
                 <el-table-column label="经办日期">
                     <template scope="scope">
                         <div>{{scope.row.handleDate | formatDate}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" align="center">
                     <template scope="scope">
                        <el-button type="text" size="small" @click="editIncomeDis(scope.$index, scope.row)">编辑</el-button>
                        <el-button type="text" size="small" @click="delIncomeDis(scope.$index, scope.row)">删除</el-button>
@@ -71,7 +65,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalCost = false">取 消</el-button>
-            <el-button type="primary" @click="confirmCost">确 定</el-button>
+            <el-button type="danger" @click="confirmCost">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -131,7 +125,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalIncome = false">取 消</el-button>
-            <el-button type="primary" @click="confirmIncome">确 定</el-button>
+            <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 确认删除模态框 -->

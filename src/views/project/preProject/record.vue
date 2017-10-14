@@ -41,7 +41,6 @@ export default {
     },
     data() {
         return {
-            userName: '',
             headerInfo_record: {
                 desc: '记录'
             },
@@ -50,14 +49,7 @@ export default {
                 recordText: '',
                 year: '2017'
             },
-            recordList: [
-                /*{
-                    userName: this.$store.state.login.userInfor.name,
-                    date: '2018-5-9 12:25',
-                    recordText: '',
-                    year: '2017'
-                }*/
-            ]
+            recordList: []
         }
     },
     created() {
@@ -94,9 +86,6 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             let href = window.location.href;
             let id = href.substr(href.lastIndexOf('/') + 1, href.length);
-
-            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            this.userName = this.$store.state.login.userInfor.name;
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
             this.projectId = id;
@@ -129,6 +118,8 @@ export default {
                 let data = resp.data;
                 if (+data.status === 200) {
                     this.recordList.splice(index, 1);
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('delRecord exists error: ', e);

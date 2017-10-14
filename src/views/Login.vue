@@ -231,11 +231,12 @@ input::-webkit-input-placeholder {
 .login-account {
     width: 382px;
     height: 84px;
-    background: transparent;
+    // background: transparent;
+    border-radius: 5px;
     border: none;
     font-size: 20px;
     outline: none;
-    color: #fff;
+    // color: #fff;
 }
 
 .login-ac,

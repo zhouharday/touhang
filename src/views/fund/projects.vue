@@ -2,19 +2,19 @@
 <div class="projects">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
     <el-table :data="projectsData" border style="width: 100%">
-        <el-table-column label="项目名称" prop="project_name">
+        <el-table-column label="项目名称" prop="project_name" align="center">
         </el-table-column>
-        <el-table-column label="投资金额（元）" prop="sumInvestAmount">
+        <el-table-column label="投资金额（元）" prop="sumInvestAmount" align="center">
         </el-table-column>
-        <el-table-column label="实缴金额（元）" prop="payAmount">
+        <el-table-column label="实缴金额（元）" prop="payAmount" align="center">
         </el-table-column>
-        <el-table-column label="股权占比（%）" prop="sumStockRatio">
+        <el-table-column label="股权占比（%）" prop="sumStockRatio" align="center">
         </el-table-column>
-        <el-table-column label="退出金额（元）" prop="exitAmount">
+        <el-table-column label="退出金额（元）" prop="exitAmount" align="center">
         </el-table-column>
-        <el-table-column label="退出收益（元）" prop="earningsAmount">
+        <el-table-column label="退出收益（元）" prop="earningsAmount" align="center">
         </el-table-column>
-        <el-table-column label="收益率（%）" prop="yield">
+        <el-table-column label="收益率（%）" prop="yield" align="center">
         </el-table-column>
     </el-table>
 </div>

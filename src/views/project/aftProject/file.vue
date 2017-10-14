@@ -60,10 +60,6 @@ import {
 
 export default {
     props: {
-        proId: {
-            type: String,
-            default: ''
-        },
         projectId: {
             type: String,
             default: ''
@@ -107,14 +103,17 @@ export default {
     },
     methods: {
         init() {
-            this.projectId = this.proId;
             this.getProjectDocument();
         },
         getProjectDocument() {
             getProjectDoc(this.projectId).then(resp => {
-                this.projectDocList = resp.data.result || [];
+                if(resp.data.status == '200'){
+                    this.projectDocList = resp.data.result || [];
+                }else{
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
-                console.log('getPreDetail() exists error: ', e);
+                console.log('getProjectDoc() exists error: ', e);
             });
         },
         handleUpload(file) {

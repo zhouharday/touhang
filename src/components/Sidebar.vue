@@ -19,7 +19,7 @@
                             <img style="margin-top: 18px;display: block;float: left; margin-right: 7px;" src="/static/img/office.png" />
                             <span>{{title_01}}</span>
                         </template>
-                        <el-menu-item index="contacts">{{title3}}</el-menu-item>
+                        <el-menu-item index="contacts">{{title2}}</el-menu-item>
                     </el-submenu>
                 </el-menu>
             </div>
@@ -364,7 +364,7 @@ export default {
             title_04: '基金管理',
             title11: '我的基金',
             title12: '合作机构',
-            title37: '管理公司',
+            title37: '基金管理人',
             title_05: '投资者管理',
             title13: '我的投资者',
             title_06: '综合查询',

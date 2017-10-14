@@ -1,11 +1,11 @@
 <template>
     <section class="aftProject">
         <!-- 类型ul -->
-        <my-filter :chooseInfo="sortList"></my-filter>
+        <my-filter :chooseInfo="projectType" @getIdInfo="clickType"></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
-                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" @keyup.enter.native="getDatas" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
         </el-row>
@@ -14,14 +14,14 @@
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
                     <template scope="scope">
-                        <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.projectName }}</a>
+                        <a class="project" @click="ShowPreMessage(scope.row.projectId, scope.row.id, scope.row.projectName, scope.$index)">{{ scope.row.projectName }}</a>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="mananger" label="项目创建人" align="center">
                 </el-table-column> -->
-                <el-table-column prop="industryId" label="所属行业" align="center">
+                <el-table-column prop="industry" label="所属行业" align="center">
                 </el-table-column>
-                <el-table-column prop="projectTypeId" label="项目类型" align="center">
+                <el-table-column prop="projectType" label="项目类型" align="center">
                 </el-table-column>
                 <el-table-column prop="payDate" label="投资日期" align="center">
                 </el-table-column>
@@ -31,17 +31,23 @@
                 </el-table-column>
             </el-table>
         </div>
+        <!-- 分页 -->
         <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 3, 5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
     </section>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { getDicChildrenII } from 'common/js/dictionary'
 import myFilter from 'components/myFilter'
 import { getAfters } from 'api/projectAfter';
 export default {
+    computed: mapGetters({
+        typeOptionsII:'getTypeOptionsII',       // 获取项目类型
+    }),
     data() {
         return {
             total: 0,
@@ -49,19 +55,10 @@ export default {
             pageSize: 5,
             projectName: '',
             currentIndex: 0,
-            sortList: { //筛选选项
-                title: '类型：',
-                details: [{
-                    dicName: '全部'
-                }, {
-                    dicName: '天使'
-                }, {
-                    dicName: '并购重组'
-                }, {
-                    dicName: 'PE'
-                }, {
-                    dicName: 'VC'
-                }]
+            projectTypeId: '',
+            projectType:{
+                title: '项目类型：',
+                details: []
             },
             tableData: [{
                 project: '京东',
@@ -75,7 +72,10 @@ export default {
             }]
         }
     },
-    created() {
+    created() {        
+        this.$store.dispatch('getTypeOptionsII').then(() => {
+            this.projectType.details = this.typeOptionsII
+        });
         this.init();
     },
     methods: {
@@ -90,13 +90,11 @@ export default {
             this.addProjectUserId = info.id;
         },
         getDatas() {
-            let projectTypeId = this.projectTypeId;
-            if (projectTypeId == '全部') projectTypeId = '';
 
             let params = {
                 merchantId: this.merchantId,
                 projectName: this.projectName,
-                projectTypeId: projectTypeId,
+                projectTypeId: this.projectTypeId,
                 page: this.page,
                 pageSize: this.pageSize
             };
@@ -111,12 +109,17 @@ export default {
                 console.log('getPres exists error: ', e);
             });
         },
-        pageChanged(page) {
+        handleSizeChange(pageSize) {
+            this.pageSize = pageSize;
+            this.getDatas();
+        },
+        handleCurrentChange(page) {
             this.page = page;
             this.getDatas();
         },
-        pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
+        clickType(index, id) {
+            this.projectTypeId = index == 0 ? '' : id;
+            this.getDatas();
         },
         handleIconClick(ev) {
             // console.log(ev);
@@ -131,10 +134,9 @@ export default {
             }
             return '';
         },
-        ShowPreMessage(title, ind) {
-            this.index = ind;
-            this.addTab('投后' + title.projectName + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
-            this.$router.push({ name: 'aftProjectMessage', params: { userId: title.id } });
+        ShowPreMessage(projectId, investProjectId, title, idx) {
+            this.addTab('投后项目-' + title, '/home/aftProjectMessage/' + projectId + '/' + investProjectId, 'aftProjectMessage/' + projectId + '/' + investProjectId);
+            this.$router.push({ name: 'aftProjectMessage', params: { projectId: projectId, investProjectId: investProjectId } });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
