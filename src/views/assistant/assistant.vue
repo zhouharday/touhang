@@ -253,7 +253,6 @@ export default {
                 this.currentIndex3 = '';
                 return;
             } else if (ind == 3) { //所在地
-            alert(555);
                 this.selectCompany('', '', '', item.id,1,10);
                 console.log(item);
                 this.currentIndex3 = index;
@@ -303,7 +302,6 @@ export default {
                 })
         },
         selectCompany(name, industry, phase, citystr, pages, pageSize) { //查询云项目列表数据 api
-            alert(1);
             this.$http.post(this.api + '/CompanyClieController/selectCompany', {
                 "name": name, //根据项目名模糊查询
                 "industry": industry,  //按照行业查询
@@ -315,7 +313,6 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
-                            alert(2);
                             console.log(res.data);
                             this.tableData = res.data.result.list;
                             this.page.pageNum = res.data.result.pageNum; //当前页码

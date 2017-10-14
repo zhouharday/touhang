@@ -385,9 +385,23 @@ export default {
                 }
             ],
             productInfo: { //项目描述
+                brief: ''
             },
             basicInfo: [], //工商信息
-            company: {}, //公司基本信息
+            company: {
+                brief: '',
+                citystr: '',
+                createDate: '',
+                foundingTime: '',
+                id: '',
+                industryName: '',
+                lastCast: '',
+                logo: '',
+                name: '',
+                no: '',
+                phaseName: '',
+                logo: '',
+            }, //公司基本信息
             finance: [], //融资信息
             member: [], //董事会
             product: [], //
@@ -403,7 +417,8 @@ export default {
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
-        viewFile() {
+        viewFile() { //预览
+            window.location.href = this.company.logo;
             this.isShow = false;
             this.isHide = true;
         },
@@ -446,8 +461,8 @@ export default {
         },
         messageList(id) { //获取项目详情
             this.$http.post(this.api + '/productClieController/selectMessage', {
-                id: id
-                // id: '10'
+                // id: id
+                id: '10'
             })
                 .then(res => {
                     if (res.status == '200') {
@@ -456,6 +471,7 @@ export default {
                             this.productInfo = res.data.result.productInfo;
                             this.basicInfo = res.data.result.basicInfo;
                             this.company = res.data.result.company;
+                            this.company.name = res.data.result.company.name;
                             this.finance = res.data.result.finance;
                             this.member = res.data.result.member;
                             this.product = res.data.result.product;

@@ -129,8 +129,8 @@ function drag(o) {
         var pageLocation = getPageLocation();
         var index = -1;
         //检测目前鼠标正落在哪个表单元素上面
-        if (target.dropArea.children.length > 0)
-            alert(1); {
+        if (target.dropArea.children.length > 0){
+			// alert(111)
             for (var i = 0; i < target.dropArea.children.length; i++) {
                 var pos = target.dropArea.children[i].getBoundingClientRect();
                 if (pageLocation.y >= pos.bottom)
@@ -218,7 +218,7 @@ function drag(o) {
         }
         deraction.index = -1;
         //  setBorderDefault();
-    }
+    };
 
 
     //  ========== 

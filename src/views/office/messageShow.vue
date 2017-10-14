@@ -2,7 +2,7 @@
     <section>
         <!-- 这是消息公告页内容 -->
         <div class="messageShow">
-            <el-tabs  @tab-click="tableDatasss">
+            <el-tabs @tab-click="tableDatasss">
                 <!-- 公司公告 Tab -->
                 <el-tab-pane value="1" label="公司公告">
                     <el-table stripe :data="tableData1" border style="width: 100%">
@@ -16,7 +16,7 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNotice(scope.row)" type="text" size="small">编辑</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNoticeBtn(scope.row)" type="text" size="small">编辑</el-button>
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="deleteNotice(scope.row,scope.$index, tableData1)" type="text" size="small">删除</el-button>
                                 <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
@@ -122,6 +122,7 @@ export default {
     },
     data() {
         return {
+            edit: false,
             // start: { //消息发布状态
             //     a: true, //编辑
             //     b: true, //发布
@@ -199,6 +200,12 @@ export default {
                 })
         },
         getNoticeUserList2(num) { //保存/发布公司公告列表数据
+        if(this.edit){
+            console.log('编辑数据');
+            console.log(this.sendNoticeform);
+            this.editNotice();
+            return;
+        };
             // alert(2);
             this.$http.post(this.api + '/work/addNotice', {
                 "seedUserId": this.userId,
@@ -211,7 +218,7 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data.message);
-                        this.getNoticeUserList1(1);
+                        this.getNoticeUserList1(1,10);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -244,23 +251,30 @@ export default {
                     console.log(error);
                 })
         },
-        editNotice(row) { //编辑公告列表
-            console.log(row);
+        editNoticeBtn(row) { //编辑公告列表 Btn
+            this.edit = true;
+            this.sendNoticeform.noticeTitle = row.noticeTitle;
+            this.sendNoticeform.noticeContent = row.noticeContent;
+            this.sendNoticeform.seedUserId = row.seedUserName;
+            this.sendNoticeform.seedNoticeDate = row.createDate;
+            this.sendNoticeform.id = row.id;
             this.dialogFormVisible = true;
+        },
+        editNotice() { //编辑公告列表 api
+            // alert('bj');
             this.$http.post(this.api + '/work/modifyNoticeInfo', {
-                "id": row.id,
-                "noticeTitle": row.noticeTitle,
-                "seedNoticeDate": row.seedNoticeDate,
-                "noticeContent": row.seedNoticeDate
+                "id": this.sendNoticeform.id,
+                "noticeTitle": this.sendNoticeform.noticeTitle,
+                "seedNoticeDate": this.sendNoticeform.seedNoticeDate,
+                "noticeContent": this.sendNoticeform.noticeContent
             })
                 .then(res => {
                     if (res.status == '200') {
-                        alert(565);
-                        row.noticeTitle = this.sendNoticeform.noticeTitle;
-                        row.noticeContent = this.sendNoticeform.noticeContent;
-                        row.seedUserName = this.sendNoticeform.seedUserId;
-                        row.seedNoticeDate = this.sendNoticeform.seedNoticeDate;
-                        console.log(res.data.message);
+                        // alert(565);
+                        if(res.data.status == '200'){
+                            console.log(res.data);
+                        };
+                        this.getNoticeUserList1(1,10);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -346,6 +360,7 @@ export default {
         },
         realseBtn() { //发布新公告Dialog btn 方法
             // alert(111);
+            this.edit = false;
             let new_sendNoticeform = {
                 noticeTitle: "", //主题
                 noticeContent: '', //内容
@@ -362,13 +377,6 @@ export default {
             this.dialogFormVisible = false;
             this.form.start = "已发布";
             // this.start.d = true;
-            this.tableData1.push({
-                title: this.form.title,
-                releasePeople: this.form.pople,
-                releaseDate: this.form.date,
-                start: this.form.start,
-                text: this.form.textarea,
-            });
             this.sendData(); //send data for server
             this.clearVal();
         },
@@ -380,7 +388,7 @@ export default {
         lookNotice(row) { //查看方法
             // alert(row.noticeContent);
             console.log(row);
-            if(row.noticeContent == null || row.noticeTitle == null){
+            if (row.noticeContent == null || row.noticeTitle == null) {
                 this.$Message.warning('无消息');
                 return;
             };

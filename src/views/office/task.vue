@@ -356,8 +356,8 @@ export default {
 
     data() {
         return {
-            params1: {},
-            params3: {},
+            params1: '',
+            params3: '',
             modal1: false,
             modal3: false,
             modal_loading1: false,
@@ -670,7 +670,7 @@ export default {
     methods: {
         del1() { //删除指派任务
             this.modal_loading1 = true;
-            this.closeTask(this.params1.row.id, 1);
+            this.closeTask(this.params1.row.id);
             setTimeout(() => {
                 this.data1.splice(this.params1.index, 1);
                 this.modal_loading1 = false;
@@ -679,8 +679,10 @@ export default {
             }, 2000);
         },
         del3() { //删除已办任务任务
+        // alert(888);
+        console.log(this.params3);
             this.modal_loading3 = true;
-            this.closeTask(this.params3.row.id, 3);
+            this.closeTask(this.params3.row.id);
             setTimeout(() => {
                 this.data3.splice(this.params3.index, 1);
                 this.modal_loading3 = false;
@@ -707,6 +709,8 @@ export default {
             })
         },
         removeTask3(row) { //删除已办任务列表
+        // alert(555);
+            console.log(row);
             this.modal3 = true;
             this.params3 = row;
             // this.data3.splice(index, 1);
@@ -807,7 +811,7 @@ export default {
                     this.$Message.error('请求超时');
                 });
         },
-        closeTask(id, num) { //删除任务
+        closeTask(id) { //删除任务
             this.$http.post(this.api + '/work/closeTask', {
                 id: id
             })
