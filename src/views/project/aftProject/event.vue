@@ -30,12 +30,15 @@
                     <b>{{item.year}}</b>
                     <div class="recordText">
                         <p>
-                            <span>{{item.userName}}</span>
-                            <span>{{item.date}}</span>
+                            <span>{{item.event}}</span>
+                            <span style="margin-right:50px">{{item.date}}</span>
+                            <span>{{item.doc}}</span>
+                            <el-button type="text" class="delbtn" @click="delRecord(index)">删除</el-button>
                         </p>
                         <p>{{item.recordText}}</p>
-                        <p>
-                            <el-button type="text" class="delbtn" @click="delRecord(index)">删除</el-button>
+                        <p style="text-align:right">
+                            <span>{{item.userName}}</span>
+                            <span>{{item.eventTime}}</span>
                         </p>
                     </div>
                 </TimelineItem>
@@ -101,21 +104,30 @@ export default {
             recordList: [
                 {
                     userName: '张三',
-                    date: '2018-5-9 12:25',
+                    event: '重大筹融资事项',
+                    date: '2018-9-9',
                     recordText: '拜访客户，进行相关数据收集',
-                    year: '2017'
+                    doc:'AAAAAA.doc',
+                    year: '2017',
+                    eventTime: '2018-5-9 12:25'
                 },
                 {
                     userName: '张三',
-                    date: '2018-5-9 12:25',
+                    event: '重大董事事项',
+                    date: '2018-9-9 ',
                     recordText: '拜访客户，进行相关数据收集',
-                    year: '2017'
+                    doc:'AAAAAA.doc',
+                    year: '2017',
+                    eventTime: '2018-5-9 12:25'
                 },
                 {
                     userName: '张三',
-                    date: '2018-5-9 12:25',
+                    event: '重大股东事项',
+                    date: '2018-9-9 ',
                     recordText: '拜访客户，进行相关数据收集',
-                    year: '2016'
+                    doc:'AAAAAA.doc',
+                    year: '2016',
+                    eventTime: '2018-5-9 12:25'
                 }
             ]
         }
