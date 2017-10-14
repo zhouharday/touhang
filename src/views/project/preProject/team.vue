@@ -6,33 +6,17 @@
             <el-table-column label="姓名" prop="userName" align="center">
                 <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.userName }}</span>
-                        <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-select v-model="scope.row.userName" style="width:100%">
-                                <el-option v-for="item in  nameOptions" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </span>
                     </template>
             </el-table-column>
             <el-table-column label="角色" prop="roleName" align="center">
                 <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
-                        <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-select v-model="scope.row.roleName" style="width:100%">
-                                <el-option v-for="item in  roleOptions" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </span>
                     </template>
             </el-table-column>
             <el-table-column label="添加日期" prop="createDate" align="center">
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
-                        </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">保存
-                        </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,teamData)">删除</el-button>
                     </template>
             </el-table-column>
@@ -42,7 +26,7 @@
             <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
                 <el-form-item label="姓名" prop="userId">
                     <el-select v-model="teamForm.userId" placeholder="请选择姓名" style="width:100%">
-                        <el-option v-for="item in proUsers" :key="item.id" :label="item.label" :value="item.id">
+                        <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -72,7 +56,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import {changeDate} from 'common/js/config'
-import {getTeams, addInsertProjectTeam} from 'api/projectPre'
+import {getTeams, addInsertProjectTeam, delTeam} from 'api/projectPre'
 
 export default {
     props: {
@@ -160,6 +144,7 @@ export default {
                         if(res.status == '200') {
                             this.$Message.success(res.data.message || '添加成功！')
                             this.modalAdd = !this.modalAdd;
+                            this.getDatas();
                         }
                     }).catch(err => {
                         this.$Message.error(err.data.message || '添加失败！')
@@ -169,13 +154,14 @@ export default {
                 }
             });
         },
-        checkEdit(index, row) { //编辑
-            console.log(row)
-            row.editFlag = !row.editFlag;
-        },
         //删除当前行
         handleDelete(index, rows) {
-            rows.splice(index, 1);
+            delTeam(rows[index].id).then((res) => {
+                if (res.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    this.getDatas();
+                }
+            });
         }
     },
     components: {

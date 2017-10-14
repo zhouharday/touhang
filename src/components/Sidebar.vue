@@ -364,7 +364,7 @@ export default {
             title_04: '基金管理',
             title11: '我的基金',
             title12: '合作机构',
-            title37: '管理公司',
+            title37: '基金管理人',
             title_05: '投资者管理',
             title13: '我的投资者',
             title_06: '综合查询',

@@ -57,16 +57,16 @@
                 <el-tab-pane label="详情" name="details" class="tab_list">
                     <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
-                    <table-form></table-form>
+                    <table-form :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
                     <approve-table></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
+                    <file-table :proId="projectId" ></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table></manage-table>
+                    <manage-table :proId="projectId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form></record-form>

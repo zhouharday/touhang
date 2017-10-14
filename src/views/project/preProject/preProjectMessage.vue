@@ -68,11 +68,11 @@
             <el-tab-pane label="风险登记" name="risk" class="tab_list">
                 <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
             </el-tab-pane>
-            <el-tab-pane v-if="true" label="管理" name="manage" class="tab_list">
+            <el-tab-pane v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
                 <manage-table :proId="projectId"></manage-table>
             </el-tab-pane>
-            <el-tab-pane v-if="true" label="退出" name="outing" class="tab_list">
-                <outing-form></outing-form>
+            <el-tab-pane v-if="isExit" label="退出" name="outing" class="tab_list">
+                <outing-form :proId="projectId"></outing-form>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -213,7 +213,6 @@
 </div>
 </template>
 
-
 <script type="text/javascript">
 import detailForm from './details'
 import tableForm from './tables'
@@ -253,6 +252,8 @@ export default {
             projectId: '',
             investProjectId: '',
             stageId: '',
+            isExit: false,
+            isManage: false,
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
@@ -368,23 +369,47 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
+            this.getProUsers(), this.getProRoles();
+            // // 项目用户和角色
+            // Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
+            //     console.log('项目用户和角色: '+Json.stringify(values));
+            //     this.proUsers = values[0] || [];
+            //     this.proRoles = values[1] || [];
 
-            // 项目用户和角色
-            Promise.all([this.getProUsers(), this.getProRoles()]).then(values => {
-                console.log('values: ', values);
-                this.proUsers = values[0] || [];
-                this.proRoles = values[1] || [];
-            }).catch(e => {
-                console.log('getProUsers() or getProRoles() exists error: ', e);
-            });
+            // }).catch(e => {
+            //     console.log('项目用户和角色 exists error: ', e);
+            // });
         },
         slectAllStage() {
             slectAllStage().then(resp => {
                 this.stepLists = resp.data.result || [];
+                this.projectStage();
             }).catch(e => {
-                
-                console.log('getPreDetail() exists error: ', e);
+                console.log('slectAllStage() exists error: ', e);
             });
+        },
+        //控制当前阶段
+        projectStage() {
+            if(this.stageId == undefined || this.stageId == '') return;
+            console.log("项目当前阶段ID："+this.stageId);
+            let isExit = this.isExit, isManage = this.isManage;
+            let stageId = this.stageId;
+            //退出阶段，下一阶段按钮不可用
+            let nextStageDisabled = this.nextStageDisabled;
+            this.stepLists.forEach(function(item,index) {
+                if(item.id == stageId && item.stageKey == 3){
+                    nextStageDisabled = true;
+                    console.log("退出阶段, 显示管理、退出标签");
+                    isExit = true;
+                }
+                if(item.id == stageId && item.stageKey == 2){
+                    console.log("管理阶段，显示管理标签");
+                    isManage = true;
+                }
+            });
+            this.isExit = isExit;
+            this.isManage = isManage;
+            this.nextStageDisabled = nextStageDisabled;
         },
         /**
          * [getPreProDetail 项目详情]
@@ -392,24 +417,30 @@ export default {
          */
         getPreProDetail() {
             getPreDetail(this.projectId).then(resp => {
-                this.companyForm = Object.assign({}, {
-                    baseInfo: '企业信息',
-                    flag: true
-                }, resp.data.result.enterpriseInfo)
+                if(resp.data.result.enterpriseInfo == undefined || resp.data.result.enterpriseInfo == ''){
+                    console.log('项目详情-企业信息为空: '+JSON.stringify(resp.data.result.enterpriseInfo));
+                } else {
+                    this.companyForm = Object.assign({}, {
+                        baseInfo: '企业信息',
+                        flag: true
+                    }, resp.data.result.enterpriseInfo);
+                }
+
                 this.basicForm = Object.assign({}, {
                     baseInfo: '基本信息',
                     flag: true
-                }, resp.data.result.projectInfo)
+                }, resp.data.result.projectInfo);
+
                 this.capitalForm = Object.assign({}, {
                     baseInfo: '投资信息',
                     flag: true
-                }, resp.data.result.projectInvestmentInfo)
-                this.memberData = resp.data.result.listBoardMember
-                this.structureData = resp.data.result.listOwnershipStructure
-                this.title = resp.data.result.projectInfo.projectName
+                }, resp.data.result.projectInvestmentInfo);
+                this.memberData = resp.data.result.listBoardMember;
+                this.structureData = resp.data.result.listOwnershipStructure;
+                this.title = resp.data.result.projectInfo.projectName;
 
             }).catch(e => {
-                console.log('getPreDetail() exists error: ', e);
+                console.log('获取项目详情出错: ', e);
             });
             // getStageUploadDocument()
         },
@@ -421,15 +452,7 @@ export default {
                 this.stageId = resp.data.stageId;
                 this.module = resp.data.result;
 
-                //退出阶段，下一阶段按钮不可用
-                let nextStageDisabled = this.nextStageDisabled;
-                this.stepLists.forEach(function(item,index) {
-                    if(item.id == resp.data.stageId && item.stageKey == 3){
-                        nextStageDisabled = true;
-                        console.log("退出阶段，下一阶段按钮不可用");
-                    }
-                });
-                this.nextStageDisabled = nextStageDisabled;
+                this.projectStage();
             }).catch(e => {
                 console.log('getStageUploadDocument() exists error: ', e);
             });
@@ -439,25 +462,15 @@ export default {
          * @return {[type]} [description]
          */
         getProUsers() {
-            return new Promise((resolve, reject) => {
-                let proUsers = this.proUsers;
-                if (proUsers.length) {
-                    resolve(proUsers);
-                } else {
-                    getProjectUsers({
-                        merchantId: this.merchantId
-                    }).then(resp => {
-                        let data = resp.data;
-                        if (data.status === 200) {
-                            resolve(data.result);
-                        } else {
-                            reject(data.message);
-                        }
-                        // console.log('users resp', resp);
-                    }).catch(e => {
-                        console.log('getProjectUsers() exists error: ', e);
-                    });
+            getProjectUsers({
+                merchantId: this.merchantId
+            }).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proUsers = data.result;
                 }
+            }).catch(e => {
+                console.log('getProjectUsers() exists error: ', e);
             });
         },
         /**
@@ -465,23 +478,13 @@ export default {
          * @return {[type]} [description]
          */
         getProRoles() {
-            return new Promise((resolve, reject) => {
-                let proRoles = this.proRoles;
-                if (proRoles.length) {
-                    resolve(proRoles);
-                } else {
-                    queryList(PROJECT_TYPE).then(resp => {
-                        let data = resp.data;
-                        if (data.status == '200') {
-                            resolve(data.result);
-                        } else {
-                            reject(data.message);
-                        }
-                        // console.log('roles resp', resp);
-                    }).catch(e => {
-                        console.log('getProRoles() exists error: ', e);
-                    });
+            queryList(PROJECT_TYPE).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proRoles = data.result;
                 }
+            }).catch(e => {
+                console.log('获取项目角色列表 error: ', e);
             });
         },
         // 转至下一阶段 的方法
@@ -494,33 +497,11 @@ export default {
             };
             nextStage(params).then(resp => {
                 if(resp.data.status === "200"){
-                    if (this.first_step) {
-                        this.first_step = !this.first_step;
-                        this.second_step = !this.second_step;
-                    } else if (this.second_step) {
-                        this.second_step = !this.second_step;
-                        this.third_step = !this.third_step;
-                    } else if (this.third_step) {
-                        this.third_step = !this.third_step;
-                        this.fourth_step = !this.fourth_step;
-                    } else if (this.fourth_step) {
-                        this.fourth_step = !this.fourth_step;
-                        this.fiveth_step = !this.fiveth_step;
-                        this.suspend = true;
-                    } else if (this.fiveth_step) {
-                        this.fiveth_step = !this.fiveth_step;
-                        this.sixth_step = !this.sixth_step;
-                    }
-
                     this.getStageUploadDocument();
-                }else{
-                    //reject(data.message);
                 }
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
             });
-
-
         },
         // 小双助手 打开不同的对话框
         openDialog(index, id) {
@@ -565,6 +546,7 @@ export default {
                     this.$router.push({name: 'projectPool'});
                 }else{
                     reject(data.message);
+                    this.deleteReminders = !this.deleteReminders;
                 }
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
@@ -580,7 +562,6 @@ export default {
             });
         },
         chageFile(event, fileId) { //上传文件input
-            console.log("即将开始上传");
             this.file = event.target.files[0];
             let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
             event.preventDefault();
@@ -596,7 +577,6 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             };
-            console.log("*************"+this.api);
             this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
             .then((res)=> {
                 console.log("上传文件结果:"+ JSON.stringify(res.data));
@@ -614,40 +594,6 @@ export default {
                 console.log('上传错误: ', e);
                // loadingInstance.close();
             })
-        },
-        onSubmit(event, fileId) { //提交上传文件到服务器
-            // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
-            // event.preventDefault();
-            // let formData = new FormData();
-            // formData.append('file', this.file);
-            // formData.append('stageId', this.stageId);
-            // formData.append('userId', userId);
-            // formData.append('type', 3);
-            // formData.append('uploadTypeId', this.projectId);
-            // formData.append('fileId', fileId);
-            // let config = {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data'
-            //     }
-            // };
-            // console.log("*************"+this.api);
-            // this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
-            // .then((res)=> {
-            //     console.log("上传文件结果:"+ JSON.stringify(res.data));
-            //     if (res.status == '200') {
-            //         if (res.data.status == '200') {
-            //             this.getStageUploadDocument();
-            //         } else if (res.data.status == '403') {;
-            //             this.$Message.error(res.data.message);
-            //             //loadingInstance.close();
-            //         }
-            //     }
-            // })
-            // .catch(e => {
-            //     this.$Message.error("上传错误");
-            //     console.log('上传错误: ', e);
-            //    // loadingInstance.close();
-            // })
         }
     }
 }
