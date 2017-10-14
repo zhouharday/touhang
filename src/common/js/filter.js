@@ -15,3 +15,13 @@ Vue.filter('toMoney', (num) => {
         return num + '.00'
     }
 })
+
+Vue.filter('key2value', (value, options = []) => {
+	let res='未知'
+	options.forEach((item = {}) => {
+		if(item.key == value){
+			res = item.value;
+		}
+	});
+	return res;
+});
