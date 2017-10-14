@@ -19,7 +19,7 @@
                             <img style="margin-top: 18px;display: block;float: left; margin-right: 7px;" src="/static/img/office.png" />
                             <span>{{title_01}}</span>
                         </template>
-                        <el-menu-item index="contacts">{{title3}}</el-menu-item>
+                        <el-menu-item index="contacts">{{title2}}</el-menu-item>
                     </el-submenu>
                 </el-menu>
             </div>

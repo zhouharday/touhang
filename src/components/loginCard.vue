@@ -21,7 +21,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-button :class="{'active-code':!isSendCode}" class="code-btn" :disabled="isSendCode" type="primary">{{ btnText}}</el-button>
+                        <el-button @click="sendVerificationCode" :class="{'active-code':!isSendCode}" class="code-btn" :disabled="isSendCode" type="primary">{{ btnText}}</el-button>
                     </el-col>
                     <el-col :span="16" offset="2">
                         <el-form-item label="验证码" prop="code">
@@ -128,23 +128,38 @@ export default {
                 this.$emit("sendVal", 0)
             }
         },
-         /*******************验证 找回密码表单 开始*************************/
-        // checkVata() {
-        //     // console.log(this.rules.phone);
-        //      if ( this.validatePhone && this.validatePwd && this.validatePwd2 ) {
-        //         this.valueData = true;
-        //         this.isSendCode = false;
-        //     }
-        //     else if (this.validatePhone) {
-        //         alert(1);
-        //         this.isSendCode = false;
-        //         this.valueData = false;
-        //     } else {
-        //         this.isSendCode = true;
-        //         this.valueData = false;
-        //     }
-        // },
+        /*******************验证 找回密码表单 开始*************************/
+        checkVata() {
+            // console.log(this.rules.phone);
+            // alert()
+            this.checkPhone(this.form1.phone);
+            //  if ( this.checkPhone(this.form1.phone) && this.validatePwd && this.validatePwd2 ) {
+            //     this.valueData = true;
+            //     // this.isSendCode = true;
+            // }
+            // else if (this.validatePhone) {
+            //     alert(1);
+            //     this.isSendCode = false;
+            //     this.valueData = false;
+            // } else {
+            //     this.isSendCode = true;
+            //     this.valueData = false;
+            // }
+        },
         /***********************手机号码验证开始************************************************/
+        checkPhone(phone) { //验证手机号码
+            var pattern = /^1[34578][0-9]{9}$/;
+            if (phone != '') {
+                if (pattern.test(phone)) {
+                    // alert(666);
+                    this.isSendCode = false;
+                    return true;
+                } else {
+                    this.isSendCode = true;
+                    return false;
+                }
+            }
+        },
         openDialog(formName) {
             let new_form1 = {
                 phone: '',
@@ -155,12 +170,81 @@ export default {
             this.form1 = new_form1;
             this.findDialog = !this.findDialog;
         },
+        time() { //倒计时功能
+            if (!this.isSendCode) {
+                alert(111);
+                // this.sendVerificationCode();
+                this.isSendCode = !this.isSendCode;
+                this.valueData = false;
+                var self = this;
+                var sec = 10;
+                var timer1 = setInterval(
+                    function() {
+                        // self.isSendCode = true;
+                        self.btnText = sec + 's';
+                        if (sec < 0) {
+                            // self.isSendCode = false;
+                            clearInterval(timer1);
+                            self.isSendCode = !self.isSendCode;
+                            self.btnText = '获取验证码';
+                        }
+                        sec--;
+                    }
+                    , 1000);
+            }
+        },
+        sendVerificationCode() { //发送验证码 Ajax
+            this.$http.post(this.api + '/user/seedCode', {
+                contactPhone: this.form1.phone
+            })
+                .then(res => {
+                    if (res.data.status == '200') {
+                        // this.provinces = res.data.result;
+                        // this.time();
+                        // this.isValidationCode = 1;
+                        this.time();
+                        this.$Message.info(res.data.message);
+                        console.log(res.data);
+                    } else {
+                        this.$Message.info(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        forgetPassword() { //忘记密码 api
+            this.$http.post(this.api + '/user/forgetPassword', {
+                "phone": this.form1.phone,
+                "code": this.form1.code,
+                "password": this.form1.checkPwd
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res);
+                        if (res.data.status == '200') {
+                            console.log(res.data);
+                            this.$Message.success(res.data.message);
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
+                    console.log('请求超时');
+                })
+        },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    console.log('验证通过');
+                    console.log(this.form1);
+                    this.forgetPassword();
                     this.findDialog = !this.findDialog;
                 } else {
                     this.$refs[formName].resetFields();
+                    this.isSendCode = !this.isSendCode;
                     return false;
                 }
             });
@@ -281,12 +365,11 @@ span {
 
 .login-account {
     width: 382px; // height: 84px;
-    margin-top: 30px;
-    background: transparent;
+    margin-top: 30px; // background: transparent;
+    border-radius: 5px;
     border: none;
     font-size: 20px;
-    outline: none;
-    color: #fff;
+    outline: none; // color: #fff;
 }
 
 .login-ac,
@@ -300,11 +383,11 @@ span {
 }
 
 .login-ac {
-    background: url(/static/img/账号.png) no-repeat left center;
+    background: url(/static/img/account.png) no-repeat left center;
 }
 
 .login-pass {
-    background: url(/static/img/密码.png) no-repeat left center;
+    background: url(/static/img/pwd.png) no-repeat left center;
     margin-bottom: 16px;
 }
 
