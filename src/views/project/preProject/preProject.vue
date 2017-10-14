@@ -230,7 +230,7 @@ export default {
             return '';
         },
         ShowPreMessage(projectId, investProjectId, title, idx) {
-            this.addTab('投资项目-' + title + '详情页', '/home/preProjectMessage/' + projectId + '/' + investProjectId, 'preProjectMessage/' + projectId + '/' + investProjectId);
+            this.addTab('投资项目-' + title, '/home/preProjectMessage/' + projectId + '/' + investProjectId, 'preProjectMessage/' + projectId + '/' + investProjectId);
             this.$router.push({name: 'preProjectMessage', params: { userId: projectId, investProjectId: investProjectId}});
         },
         addTab(th, url, name) {

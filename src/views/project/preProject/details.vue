@@ -118,13 +118,16 @@
             </el-form>
         </div>
         <!-- 投资信息 -->
-        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)" @show="changeCapitalInfo()" class="title"></tabel-header>
         <div class="capitalForm">
             <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="投资轮次" prop="projectTurn">
-                            <el-input v-model="capitalForm.projectTurn" :disabled="capitalForm.flag"></el-input>
+                            <el-select v-model="capitalForm.projectTurnId" filterable placeholder="请选择投资轮次" style="width:100%" :disabled="capitalForm.flag">
+                                <el-option v-for="item in projectTurnType" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -148,8 +151,11 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="币种" prop="currency">
-                            <el-input v-model="capitalForm.currency" :disabled="capitalForm.flag"></el-input>
+                        <el-form-item label="币种" prop="currencyName">
+                            <el-select v-model="capitalForm.currency" filterable placeholder="请选择币种" style="width:100%" :disabled="capitalForm.flag">
+                                <el-option v-for="item in currencyOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -181,11 +187,13 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'
 import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
+import { changeCapitalInfo } from 'api/projectPre';
+
 export default {
     computed: mapGetters({
         typeOptions:'getTypeOptions',   // 获取项目类型
@@ -193,8 +201,18 @@ export default {
         fromOptions:'getFromOptions',   // 获取项目来源
         addressOptions:'getAddressOptions',   // 获取项目所在地
         departmentOptions:'getDepartmentOptions',   // 获取业务部门
+        projectTurnType:'getProjectTurnType',   // 获取项目投资信息轮次
+        currencyOptions:'getCurrencyOptions'   // 获取币种类型
     }),
     props: {
+        proId: {
+            type: String,
+            default: ''
+        },
+        projectId: {
+            type: String,
+            default: ''
+        },
         basicForm: {
             type: Object,
             default: {}
@@ -253,19 +271,18 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch('getTypeOptions')
-        this.$store.dispatch('getIndustryOptions')
-        this.$store.dispatch('getFromOptions')
-        this.$store.dispatch('getAddressOptions')
-        this.$store.dispatch('getDepartmentOptions')
+        this.$store.dispatch('getTypeOptions');
+        this.$store.dispatch('getIndustryOptions');
+        this.$store.dispatch('getFromOptions');
+        this.$store.dispatch('getAddressOptions');
+        this.$store.dispatch('getDepartmentOptions');
+        this.$store.dispatch('getProjectTurnType');  // 获取项目投资信息轮次
+        this.$store.dispatch('getCurrencyOptions');   // 获取币种类型
+        this.projectId = this.proId;
     },
     methods: {
         disable(name) {
-            if (name.flag === false) {
-                return name.flag = true
-            } else {
-                return name.flag = false
-            }
+            return name.flag = !name.flag;
         },
         changeProjectInfo() {
             let basicForm = this.basicForm;
@@ -281,11 +298,47 @@ export default {
             companyForm.projectId = this.projectId;
             changeEnterpriseInfo(companyForm).then(resp => {
                 this.disable(companyForm);
-                console.log('changeEnterpriseInfo resp: ', resp);
+                console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
             }).catch(e => {
                 console.log('changeEnterpriseInfo exists error: ', e);
             })
-        }
+        },
+        changeCapitalInfo() {
+            let capitalForm = this.capitalForm;
+            capitalForm.projectId = this.projectId;
+            let {
+             id, 
+             projectTurnId, 
+             appraisementAmount, 
+             investAmount, 
+             stockProportion, 
+             oldAmount, 
+             currency, 
+             stock, 
+             investmentCapital, 
+             startInvestDate, 
+             exitDate
+            } = this.capitalForm;
+            let params = {
+                id, 
+                projectId : this.projectId,
+                projectTurnId, 
+                appraisementAmount, 
+                investAmount, 
+                stockProportion, 
+                oldAmount, 
+                currency, 
+                stock, 
+                investmentCapital, 
+                startInvestDate, 
+                exitDate
+            }
+            changeCapitalInfo(capitalForm).then(resp => {
+                this.disable(this.capitalForm);
+            }).catch(e => {
+                console.log('changeCapitalInfo exists error: ', e);
+            })
+        },
     },
     components: {
         tabelHeader

@@ -17,9 +17,9 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
-                        <el-button v-if="status != '已完成'" type="text" size="small" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button type="text" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
+                        <el-button v-if="scope.row.status != '已完成'" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button type="text" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -41,7 +41,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="处理人">
-                                <el-select v-model="AddForm.receivedUserId" placeholder="请选择接收人" style="width:100%">
+                                <el-select v-model="AddForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
                                     <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>    
                                 </el-select>
@@ -49,7 +49,7 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="完成时间">
-                                <el-date-picker type="date" placeholder="完成时间" v-model="AddForm.completeDate">
+                                <el-date-picker type="date" placeholder="完成时间" v-model="AddForm.completeDate" style="width: 100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
@@ -208,7 +208,7 @@ export default {
                 description: '',
                 proposer: '',
                 createDate: '',
-                recipient: '',
+                receivedUserId: '',
                 completeDate: '',
                 appendix: '',
                 Records: ''
@@ -300,10 +300,12 @@ export default {
         },
         // 删除当前行
         handleDelete(id) {
-            console.log(" 删除风险数据id：" + id);
             delDanger(id).then(resp => {
-                console.log("删除风险结果："+ JSON.stringify(resp.data));
-                this.getDatas();
+                if(resp.data.status == '200') {
+                    this.getDatas();
+                }else{
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
                 console.log('delDanger() exists error: ', e);
             })
@@ -312,8 +314,6 @@ export default {
         confirmAdd() {
             this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
             let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
-
-            console.log("projectId" + this.projectId);
             let risk = {
                 projectId: this.projectId,
                 riskTheme: this.AddForm.riskTheme,
@@ -322,11 +322,13 @@ export default {
                 completeDate: this.AddForm.completeDate,
                 riskDescribe: this.AddForm.riskDescribe
             };
-            console.log("add----risk :" + JSON.stringify(risk));
             addDanger(risk).then(resp => {
-                console.log("addDanger result:" + JSON.stringify(resp.data));
-                this.modalAdd = false;
-                this.getDatas();
+                if(resp.data.status == '200') {
+                    this.getDatas();
+                    this.modalAdd = false;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
                 console.log('addRecord exists error: ', e)
             });
@@ -334,7 +336,6 @@ export default {
         },
         //添加风险跟踪
         confirmTracking() {
-            console.log("122121323");
             let riskRegisterId = this.riskId,
                 disposeResult = this.trackingForm.disposeResult,
                 recordDetails = this.trackingForm.recordDetails;
@@ -343,10 +344,13 @@ export default {
                 disposeResult,
                 recordDetails
             };
-            console.log('添加风险跟踪参数: ',  + JSON.stringify(params));
             insertRiskFollower(params).then(resp => {
-                this.modalTracking = false;
-                this.getDatas();
+                if(resp.data.status == '200') {
+                    this.getDatas();
+                    this.modalTracking = false;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
                 console.log('confirmTracking() exists error: ', e);
             })

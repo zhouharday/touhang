@@ -57,12 +57,12 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.handlerUserId" placeholder="默认当前登录用户" disabled></el-input>
+                                        <el-input v-model="contractForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办日期">
-                                        <el-input type="date" v-model="contractForm1.stockRatio" disabled></el-input>
+                                        <el-input type="date" v-model="contractForm1.handlerDate" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col>
@@ -119,7 +119,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
-                                        <el-input v-model="paidForm1.contract" disabled></el-input>
+                                        <el-input v-model="paidForm1.contractName" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col>
@@ -139,7 +139,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handlerUserId" placeholder="默认当前登录用户" disabled></el-input>
+                                        <el-input v-model="paidForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -203,7 +203,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目合同">
-                                          <el-input v-model="sharingForm1.contract" disabled></el-input>
+                                          <el-input v-model="sharingForm1.contractName" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -218,7 +218,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.handlerUserId" placeholder="默认当前登录用户" disabled></el-input>
+                                        <el-input v-model="sharingForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -258,10 +258,10 @@ import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'
 import { changeDate } from 'common/js/config'
 import {
-    delGu, delContract, delFee, addFee, editFee, fees,
-    addContract, contracts, getContractDetail, editContract,
-    getContractPay, addContractPay, getContractPayDetail, editContractPay, delPay,
-    getParticipationList, addParticipation, getParticipationDetail, editParticipation, delShare
+    delGu, fees,
+    contracts, getContractDetail,
+    getContractPay, getContractPayDetail,
+    getParticipationList, getParticipationDetail
 } from 'api/projectPre';
 
 export default {
@@ -329,6 +329,8 @@ export default {
                     this.costData = resp.data.result;
                 } else if (resp.data.status === '49999') {
                     this.costData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -341,6 +343,8 @@ export default {
                     this.contractData = resp.data.result;
                 } else if (resp.data.status === '49999') {
                     this.contractData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('contracts() exists error: ', e);
@@ -348,16 +352,36 @@ export default {
         },
         // 获取项目合同详情
         openContract(row,index) {
-           this.contractDetails = !this.contractDetails;
+           getContractDetail(row.id).then(resp => {
+                if(resp.data.status == '200'){
+                    this.contractDetails = !this.contractDetails;
+                    this.contractForm1 = resp.data.result.projectContract;
+                    this.fundData1 = resp.data.result.fundInfo;
+                    this.fundData1.forEach(function(item, index){
+                        let fund = {
+                            id:item.fundId,
+                            fundName:item.fundName
+                        };
+
+                        item.fund = fund;
+                    });
+                    this.fundData1.push();
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('addContract() exists error: ', e);
+            })
         },
         //获取投资支付列表
         getContractPay() {
             getContractPay(this.proId).then(resp => {
-                // console.log('获取投资支付列表: '+ JSON.stringify( resp.data));
                 if (resp.data.status === '200') {
                     this.paidData = resp.data.result.list;
                 } else if (resp.data.status === '49999') {
                     this.paidData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getContractPay() exists error: ', e);
@@ -365,16 +389,28 @@ export default {
         },
         // 获取投资支付详情
         openPaid(row,index) {
-           this.paidDetails = !this.paidDetails;
+           getContractPayDetail(row.id).then(resp => {
+                console.log('打开编辑投资支付: '+JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    this.paidForm1 = resp.data.result.projectInvestPay;
+                    this.fundData2 = resp.data.result.payDetails;
+                    this.paidDetails = !this.paidDetails;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getContractPayDetail() exists error: ', e);
+            })
         },
         //获取项目分红列表
         getParticipation() {
             getParticipationList(this.proId).then(resp => {
-                // console.log('getParticipationList resp: '+ JSON.stringify( resp.data));
                 if (resp.data.status === '200') {
                     this.sharingData = resp.data.result.list;
                 } else if (resp.data.status === '49999') {
                     this.sharingData = [];
+                }else{
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getParticipationList() exists error: ', e);
@@ -382,7 +418,18 @@ export default {
         },
         // 获取项目分红详情
         openSharing(row,index) {
-           this.sharingDetails = !this.sharingDetails;
+            getParticipationDetail(row.id).then(resp => {
+                console.log('打开编辑项目分红: '+JSON.stringify(resp.data));
+                if(resp.data.status == '200'){
+                    this.sharingForm1 = resp.data.result.projectParticipation;
+                    this.fundData3 = resp.data.result.participationDetails;
+                    this.sharingDetails = !this.sharingDetails;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getParticipationDetail() exists error: ', e);
+            })
         }
     },
     components: {
