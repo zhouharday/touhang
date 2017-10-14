@@ -18,7 +18,7 @@
                             <template scope="scope">
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click="editNoticeBtn(scope.row)" type="text" size="small">编辑</el-button>
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="deleteNotice(scope.row,scope.$index, tableData1)" type="text" size="small">删除</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="delModal1=true" type="text" size="small">删除</el-button>
                                 <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
@@ -30,6 +30,20 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <!-- 删除公司公告提示弹框 -->
+                <Modal v-model="delModal1" width="360">
+                    <p slot="header" style="color:#f60;text-align:center">
+                        <Icon type="information-circled"></Icon>
+                        <span>删除确认</span>
+                    </p>
+                    <div style="text-align:center">
+                        <p>此操作将会永久删除当前公告</p>
+                        <p>是否继续删除？</p>
+                    </div>
+                    <div slot="footer">
+                        <Button type="error" size="large" long :loading="modal_loading3" @click="deleteNotice(scope.$index, tableData2)">删除</Button>
+                    </div>
+                </Modal>
                 <!-- 系统消息 Tab -->
                 <el-tab-pane value="2" label="系统消息">
                     <el-table stripe :data="tableData2" border style="">
@@ -42,7 +56,7 @@
                         <el-table-column label="操作" width="" align="center">
                             <template scope="scope">
                                 <!-- <el-button @click="remove" type="text" size="small">删除</el-button> -->
-                                <el-button @click.native.prevent="deleteRow(scope.$index, tableData2)" type="text" size="small">删除</el-button>
+                                <el-button @click.native.prevent="delModal2=true" type="text" size="small">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -53,6 +67,20 @@
                         </div>
                     </div>
                 </el-tab-pane>
+                <!-- 删除系统消息提示弹框 -->
+                <Modal v-model="delModal2" width="360">
+                    <p slot="header" style="color:#f60;text-align:center">
+                        <Icon type="information-circled"></Icon>
+                        <span>删除确认</span>
+                    </p>
+                    <div style="text-align:center">
+                        <p>此操作将会永久删除当前消息</p>
+                        <p>是否继续删除？</p>
+                    </div>
+                    <div slot="footer">
+                        <Button type="error" size="large" long :loading="modal_loading3" @click="deleteRow(scope.$index, tableData2)">删除</Button>
+                    </div>
+                </Modal>
             </el-tabs>
             <!-- 发布新公告 btn -->
             <el-button v-show="isAddMsg" type="danger" size="small" @click="realseBtn" class="messageBtn">发布新公告</el-button>
@@ -70,15 +98,34 @@
                         <el-input :disabled="1" v-model="sendNoticeform.seedUserId" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
-                        <el-date-picker @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" type="datetime" placeholder="选择日期时间">
-                        </el-date-picker>
+                        <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
+                        </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button v-show="cancles" type="default" size="small" @click="cancle">取 消</el-button>
                     <el-button v-show="saves" type="danger" size="small" @click="saveORrealse(1)">保 存</el-button>
-                    <el-button v-show="realses" type="success" size="small" @click="saveORrealse(2)">发 布</el-button>
+                    <el-button v-show="realses" type="danger" size="small" @click="saveORrealse(2)">发 布</el-button>
                 </div>
+            </el-dialog>
+            <!-- 查看公司公告 dialog -->
+            <el-dialog style="width:1100px" title="查看公司公告" :visible.sync="viewModal">
+                <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
+                    <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
+                        <el-input v-model="sendNoticeform.noticeTitle" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
+                        <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" disabled>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
+                        <el-input :disabled="1" v-model="sendNoticeform.seedUserId" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
+                        <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
+                        </el-input>
+                    </el-form-item>
+                </el-form>
             </el-dialog>
         </div>
     </section>
@@ -122,6 +169,9 @@ export default {
     },
     data() {
         return {
+            delModal1: false,
+            delModal2: false,
+            viewModal: false,
             edit: false,
             // start: { //消息发布状态
             //     a: true, //编辑
@@ -200,12 +250,12 @@ export default {
                 })
         },
         getNoticeUserList2(num) { //保存/发布公司公告列表数据
-        if(this.edit){
-            console.log('编辑数据');
-            console.log(this.sendNoticeform);
-            this.editNotice();
-            return;
-        };
+            if (this.edit) {
+                console.log('编辑数据');
+                console.log(this.sendNoticeform);
+                this.editNotice();
+                return;
+            };
             // alert(2);
             this.$http.post(this.api + '/work/addNotice', {
                 "seedUserId": this.userId,
@@ -218,7 +268,7 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data.message);
-                        this.getNoticeUserList1(1,10);
+                        this.getNoticeUserList1(1, 10);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -271,10 +321,10 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         // alert(565);
-                        if(res.data.status == '200'){
+                        if (res.data.status == '200') {
                             console.log(res.data);
                         };
-                        this.getNoticeUserList1(1,10);
+                        this.getNoticeUserList1(1, 10);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -285,6 +335,25 @@ export default {
                 .catch(error => {
                     console.log(error);
                 })
+        },
+        lookNotice(row) { //查看公告列表 Btn
+            // alert(row.noticeContent);
+            // console.log(row);
+            // if (row.noticeContent == null || row.noticeTitle == null) {
+            //     this.$Message.warning('无消息');
+            //     return;
+            // };
+            // this.$alert(row.noticeContent, row.noticeTitle, {
+            //     confirmButtonText: '确定',
+            //     callback: action => {
+            //         this.$message({
+            //             type: 'info',
+            //             message: `action: ${action}`
+            //         });
+            //     }
+            // });
+            this.viewModal = true;
+
         },
         deleteNotice(row) { //删除公告列表
             // console.log(row);
@@ -384,23 +453,6 @@ export default {
             // console.log(val);
             this.sendNoticeform.seedNoticeDate = val;
             return val;
-        },
-        lookNotice(row) { //查看方法
-            // alert(row.noticeContent);
-            console.log(row);
-            if (row.noticeContent == null || row.noticeTitle == null) {
-                this.$Message.warning('无消息');
-                return;
-            };
-            this.$alert(row.noticeContent, row.noticeTitle, {
-                confirmButtonText: '确定',
-                callback: action => {
-                    this.$message({
-                        type: 'info',
-                        message: `action: ${action}`
-                    });
-                }
-            });
         },
         deleteRow(index, rows) { //删除当前行
             rows.splice(index, 1);
