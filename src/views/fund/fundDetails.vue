@@ -70,7 +70,7 @@
                 <my-file :fileListData="fileListData"></my-file>
             </el-tab-pane>
             <el-tab-pane label="运营管理" name="manage" class="tab_list">
-                <manage :costData="costData"></manage>
+                <manage :costData="costData" :fundName="formDetails.fundName"></manage>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -283,6 +283,7 @@ export default {
                 this.formDetails = Object.assign({}, {
                     flag: true
                 }, res.data.result.fundBaseInfo)
+                window.sessionStorage.setItem('FUNDNAME', JSON.stringify(res.data.result.fundBaseInfo.fundName))
                 this.formMIS = Object.assign({}, {
                     flag: true
                 }, res.data.result.fundManageInfo)
@@ -390,14 +391,20 @@ export default {
         }
         .current_border {
             border: 1px solid #f05e5e;
-            &::after {
-                border-color: #f05e5e #f05e5e transparent transparent;
-            }
-            &::before {
-                border-color: #f05e5e #f05e5e transparent transparent;
-            }
             span {
                 color: #f05e5e;
+            }
+            &.step_one::after {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+            &.step_second::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+            &.step_second::after {
+                border-color: #f05e5e #f05e5e transparent transparent;
+            }
+            &.step_third::before {
+                border-color: #f05e5e #f05e5e transparent transparent;
             }
         }
         .step_one {

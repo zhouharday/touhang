@@ -157,9 +157,9 @@
                     orgLinkman: [{
                         required: true,
                         message: '请输入机构名称',
-                        trigger: 'blur'
+                        trigger: 'change'
                     }, {
-                        min: 3,
+                        min: 2,
                         max: 20,
                         message: '长度在 3 到 5 个字符',
                         trigger: 'blur'

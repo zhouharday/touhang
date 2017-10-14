@@ -58,6 +58,13 @@ export function FundInvestment() {
     }
     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
 }
+// 费用类型
+export function costType() {
+    const data = {
+        dicParent: "311"
+    }
+    return service({url: '/dictionaryController/select2Menu', method: 'post', data})
+}
 // 合作机构类型
 export function cooperativeType() {
     const data = {
@@ -188,6 +195,13 @@ export function selectProjectOrFundDocument(fundId, typeNum) {
     }
     return service({url: '/dictionaryController/selectProjectOrFundDocument', method: 'post', data})
 }
+// 删除项目或者基金或者投资者下面的文档 /dictionaryController/deleteDocument
+export function deleteDocument(deleteId) {
+    const data = {
+        id: deleteId
+    }
+    return service({url: '/dictionaryController/deleteDocument', method: 'post', data})
+}
 //基金估值信息 /fund/getFunAppraisement
 export function getFunAppraisement(id) {
     const data = {
@@ -202,6 +216,25 @@ export function getFundAllocationList(id) {
     }
     return service({url: '/fund/getFundAllocationList', method: 'post', data})
 }
+// 获取一个批次的详情 /fund/getFundAllocationDetails
+export function getFundAllocationDetails(batchId) {
+    const data = {
+        id: batchId
+    }
+    return service({url: '/fund/getFundAllocationDetails', method: 'post', data})
+}
+// 编辑一条批次的详情（跟上面配合）/fund/updateAllocation
+export function updateAllocation(batchInfo) {
+    const data = batchInfo
+    return service({url: '/fund/updateAllocation', method: 'post', data})
+}
+// 删除一个批次 /fund/deleteAllocation
+export function deleteAllocation(batchId) {
+    const data = {
+        id: batchId
+    }
+    return service({url: '/fund/deleteAllocation', method: 'post', data})
+}
 // 获取一个基金的费用列表 /fund/getFundFeeList
 export function getFundFeeList(id) {
     const data = {
@@ -209,10 +242,20 @@ export function getFundFeeList(id) {
     }
     return service({url: '/fund/getFundFeeList', method: 'post', data})
 }
+// 添加一个基金费用类型 /fund/addFundFee
+export function addFundFee(fundDataInfo) {
+    const data = fundDataInfo
+    return service({url: '/fund/addFundFee', method: 'post', data})
+}
 // 修改某一个费用 /fund/updateFundFee
 export function updateFundFee(fundData) {
     const data = fundData
     return service({url: '/fund/updateFundFee', method: 'post', data})
+}
+// 添加收益分配 /fund/addAllocation
+export function addAllocation(allocation) {
+    const data = allocation
+    return service({url: '/fund/addAllocation', method: 'post', data})
 }
 // 获取公司的所有的管理公司（分页） /fundId/selectManageCompany
 export function selectManageCompany(num, size) {
@@ -278,4 +321,9 @@ export function nextStage(fundId, num, currentStepId) {
         stageId: currentStepId
     }
     return service({url: '/dictionaryController/nextStage', method: 'post', data})
+}
+// 上传文档接口 /files/uploadProjectDocument
+export function uploadProjectDocument(uploadData) {
+    const data = uploadData
+    return service({url: '/files/uploadProjectDocument', method: 'post', data})
 }

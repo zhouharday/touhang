@@ -24,18 +24,27 @@
         <TabPane label="收益分配" name="income">
             <tabel-header :data="incomeInfo" @add="methodIncome"></tabel-header>
             <el-table :data="incomeData" border style="width: 100%">
-                <el-table-column label="分配日期" prop="shareDate">
+                <el-table-column label="分配日期">
+                    <template scope="scope">
+                        <div>{{scope.row.shareDate | formatDate}}</div>
+                    </template>
                 </el-table-column>
-                <el-table-column label="分配总额" prop="allocationMoney">
+                <el-table-column label="分配总额">
+                    <template scope="scope">
+                        <div>{{scope.row.allocationMoney | toMoney}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="经办人" prop="handleName">
                 </el-table-column>
-                <el-table-column label="经办日期" prop="handleDate">
+                <el-table-column label="经办日期">
+                    <template scope="scope">
+                        <div>{{scope.row.handleDate | formatDate}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作">
                     <template scope="scope">
-                       <el-button type="text" size="small">编辑</el-button>
-                       <el-button type="text" size="small">删除</el-button>
+                       <el-button type="text" size="small" @click="editIncomeDis(scope.$index, scope.row)">编辑</el-button>
+                       <el-button type="text" size="small" @click="delIncomeDis(scope.$index, scope.row)">删除</el-button>
                    </template>
                 </el-table-column>
             </el-table>
@@ -46,7 +55,10 @@
     <el-dialog title="基金费用" :visible.sync="modalCost" :close-on-click-modal="false">
         <el-form :model="formCost">
             <el-form-item label="费用类型" :label-width="formLabelWidth">
-                <el-input v-model="formCost.feeTypeId" auto-complete="off"></el-input>
+                <el-select v-model="formCost.feeTypeId" style="width:100%">
+                    <el-option v-for="(list, index) of costTypes" :key="list.id" :label="list.dicName" :value="list.id">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="费率(%)" :label-width="formLabelWidth">
                 <el-input placeholder="请输入内容" v-model="formCost.feeRate">
@@ -68,55 +80,52 @@
         <el-form :model="modeIncome">
             <el-row :gutter="10">
                 <el-col :span="12">
+                    <el-form-item label="标题" :label-width="formLabelWidth">
+                        <el-input v-model="formIncome.allocationName" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="基金名称" :label-width="formLabelWidth" width="100">
+                        <el-input v-model="formIncome.fundName" auto-complete="off"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
                     <el-form-item label="分配日期" :label-width="formLabelWidth">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="formIncome.date" style="width: 100%;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="formIncome.shareDate" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="分配总额（元）" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="formIncome.total" auto-complete="off"></el-input>
+                    <el-form-item label="分配总额" :label-width="formLabelWidth" width="100">
+                        <el-input v-model="formIncome.allocationMoney" auto-complete="off"></el-input>
                     </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="分配明细" :label-width="formLabelWidth">
-                        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="formIncome.detailed">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24" style="padding-left:20px;">
-                    <el-row :gutter="20" style="margin-bottom: 22px;">
-                        <el-col :span="6">投资者</el-col>
-                        <el-col :span="6">认缴金额（元）</el-col>
-                        <el-col :span="6">出资占比（%）</el-col>
-                        <el-col :span="6">分配金额（元）</el-col>
-                    </el-row>
-                    <el-row :gutter="20" style="margin-bottom: 22px;"
-                            v-for="(item, index) in formIncome.incomeDis">
-                        <el-col :span="6">
-                            <el-input v-model="formIncome.incomeDis[index].investor" placeholder="请输入内容"></el-input>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-input v-model="formIncome.incomeDis[index].pay" placeholder="请输入内容"></el-input>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-input v-model="formIncome.incomeDis[index].prec" placeholder="请输入内容"></el-input>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-input v-model="formIncome.incomeDis[index].dists" placeholder="请输入内容"></el-input>
-                        </el-col>
-                    </el-row>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="formIncome.person" auto-complete="off"></el-input>
+                        <el-input v-model="formIncome.handleUser" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办日期" :label-width="formLabelWidth">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="formIncome.handling" style="width: 100%;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="formIncome.handleDate" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                    <div class="title_info">分配明细</div>
+                    <el-table :data="tableData" border style="width: 100%">
+                        <el-table-column prop="investorName" label="投资者" width="180">
+                        </el-table-column>
+                        <el-table-column prop="subscribeAmount" label="认缴金额（元）" width="180">
+                        </el-table-column>
+                        <el-table-column prop="contributiveRatio" label="出资占比（%）">
+                        </el-table-column>
+                        <el-table-column label="分配金额（元）">
+                            <template scope="scope">
+                                <el-input v-model="scope.row.shareMoney"></el-input>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-col>
             </el-row>
         </el-form>
@@ -125,17 +134,36 @@
             <el-button type="primary" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
+    <!-- 确认删除模态框 -->
+    <delete-reminders @cancel="comfirCancel" @del="comfirmDel" :deleteReminders="deleteReminders"></delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+import 'common/js/filter'
 import tabelHeader from 'components/tabelHeader'
-import {getFundAllocationList, updateFundFee} from 'api/fund'
+import deleteReminders from 'components/deleteReminders'
+import {
+    getFundAllocationList,
+    updateFundFee,
+    costType,
+    addFundFee,
+    getFundFeeList,
+    getInvestorByFund,
+    addAllocation,
+    getFundAllocationDetails,
+    updateAllocation,
+    deleteAllocation
+} from 'api/fund'
 export default {
     props: {
         costData: {
             type: Array,
             default: []
+        },
+        fundName: {
+            type: String,
+            default: JSON.parse(sessionStorage.getItem('FUNDNAME'))
         }
     },
     data() {
@@ -159,70 +187,180 @@ export default {
             modalCost: false,
             modalIncome: false,
             formCost: {
-                name: '',
-                rate: '',
-                amount: ''
+                fundId: this.$route.params.id,
+                feeTypeId: '',
+                feeRate: '',
+                feeMoney: ''
             },
+            addOrEdit: true,
+            profit: true,
+            fundValue: this.$route.params.id,
             formIncome: {
-                date: '',
-                total: '',
-                detailed: '',
-                incomeDis: [{
-                    investor: '张三',
-                    pay: '10000',
-                    prec: '0.02%',
-                    dists: '200'
-                }, {
-                    investor: '张三',
-                    pay: '10000',
-                    prec: '0.02%',
-                    dists: '200'
-                }],
-                person: '',
-                handling: ''
-            }
+                allocationName: this.fundName + '收益分配申请表', //分配标题
+                shareDate: '', //分配日期
+                allocationMoney: '', //分配金额
+                handleUserId: JSON.parse(sessionStorage.getItem('userInfor')).id, //经办人ID 当前登录用户ID
+                documentInfo: [],
+                handleUser: JSON.parse(sessionStorage.getItem('userInfor')).name,
+                fundId: this.$route.params.id, //基金id
+                fundName: this.fundName,
+                handleDate: ''
+            },
+            params: [],
+            costTypes: [] || JSON.parse(sessionStorage.getItem('costTypes')),
+            paramsId: '', // 当前id
+            deleteReminders: false // 确认删除模态框
         }
     },
     methods: {
         methodCost() {
             this.modalCost = true
+            this.addOrEdit = true
         },
         methodIncome() {
             this.modalIncome = true
+            this.profit = true
+        },
+        editIncomeDis(index, row) {
+            this.modalIncome = true
+            this.profit = false
+            getFundAllocationDetails(row.id).then((res) => {
+                if(res.status == '200') {
+                    this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
+                    this.tableData = res.data.params
+                }
+            })
+            this.formIncome = Object.assign({}, this.formIncome, row)
         },
         confirmIncome() {
-            console.log(this.tableData)
+            this.tableData.map((x) => {
+                this.params.push({
+                    agreementId: x.agreementId || x.id,
+                    id: x.id,
+                    shareMoney: x.shareMoney
+                })
+            })
+            if (this.profit === true) {
+                addAllocation({
+                    fundAllocation: this.formIncome,
+                    params: this.params
+                }).then((res) => {
+                    if(res.status == '200') {
+                        this.$Message.success(res.data.message || '添加成功！')
+                        this.modalIncome = false
+                        this._getAllocationList()
+                    }
+                })
+            } else {
+                updateAllocation({
+                    fundAllocation: this.formIncome,
+                    params: this.params
+                }).then((res) => {
+                    if (res.status == '200') {
+                        this.$Message.success(res.data.message || '编辑成功！')
+                        this.modalIncome = false
+                        this._getAllocationList()
+                    } else if(res.status == '9004') {
+                        this.$Message.success(res.data.message || '有投资者退出,无法更改!')
+                        this.modalIncome = false
+                    }
+                })
+            }
         },
         changeTabs(name) {
-            if(name == 'income') {
-                getFundAllocationList(this.$route.params.id).then((res) => {
-                    if(res.status == '200') {
-                        console.log(res)
-                        this.incomeData = res.data.result
+            if (name == 'income') {
+                this._getAllocationList()
+                getInvestorByFund(this.$route.params.id).then((res) => {
+                    if (res.status == '200') {
+                        // console.log(res.data.result) // 投资者数据为空
+                        this.tableData = res.data.result
+                        this.tableData.map((x) => {
+                            x.shareMoney = x.earningsSum
+                        })
                     }
                 })
             }
         },
         handleEdit(index, row) { // 编辑按钮
             this.modalCost = true
+            this.addOrEdit = false
             this.formCost = row
         },
-        confirmCost() {
-            updateFundFee(this.formCost).then((res) => {
+        delIncomeDis(index, row) { // 删除收益分配
+            this.paramsId = row.id
+            this.deleteReminders = true
+        },
+        comfirmDel() {
+            deleteAllocation(this.paramsId).then((res) => {
                 if(res.status == '200') {
-                    this.$Message.success(res.data.message || '修改成功！')
-                    // getFundFeeList(this.$route.params.id).then((res) => {
-                    //     if(res.status == '200') {
-                    //         this.costData = res.data.result
-                    //     }
-                    // })
-                    this.modalCost = false
+                    this.$Message.success(res.data.message || '删除成功！')
+                    this.deleteReminders = false
+                    this._getAllocationList()
+                }
+            })
+        },
+        comfirCancel() {
+            this.deleteReminders = false
+        },
+        confirmCost() {
+            if (this.addOrEdit == false) {
+                updateFundFee(this.formCost).then((res) => {
+                    if (res.status == '200') {
+                        this.$Message.success(res.data.message || '修改成功！')
+                        this._getFundFeeList()
+                        this.modalCost = false
+                        this.formCost = {
+                            fundId: this.$route.params.id,
+                            feeTypeId: '',
+                            feeRate: '',
+                            feeMoney: ''
+                        }
+                    }
+                })
+            } else {
+                addFundFee(this.formCost).then((res) => {
+                    if (res.status == '200') {
+                        this.$Message.success(res.data.message || '添加基金费用成功！')
+                        this._getFundFeeList()
+                        this.modalCost = false
+                        this.formCost = {
+                            fundId: this.$route.params.id,
+                            feeTypeId: '',
+                            feeRate: '',
+                            feeMoney: ''
+                        }
+                        this.addOrEdit == false
+                    }
+                })
+            }
+        },
+        _getFundFeeList() {
+            getFundFeeList(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    this.costData = res.data.result
+                }
+            })
+        },
+        _getAllocationList() {
+            getFundAllocationList(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    this.incomeData = res.data.result
                 }
             })
         }
     },
+    mounted() {
+        costType().then((res) => {
+            if (res.status == '200') {
+                this.costTypes = res.data.result
+                window.sessionStorage.setItem('costTypes', JSON.stringify(res.data.result))
+            }
+        })
+        console.log(this.fundName)
+    },
     components: {
-        tabelHeader
+        tabelHeader,
+        deleteReminders
     }
 }
 </script>
@@ -238,6 +376,15 @@ export default {
             border-radius: 0;
             padding: 0 12px;
         }
+    }
+    .title_info {
+        height: 40px;
+        background: rgb(42, 49, 66);
+        color: #fff;
+        font-size: 18px;
+        padding-left: 10px;
+        font-weight: 600;
+        line-height: 40px;
     }
 }
 </style>

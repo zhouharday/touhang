@@ -112,6 +112,7 @@ export default {
     created() {
         GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
             if (res.status == '200') {
+                console.log(res)
                 this.allAgreement = res.data.result.list
             }
         }).catch(err => {
