@@ -18,7 +18,7 @@
                             <template scope="scope">
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click="editNoticeBtn(scope.row)" type="text" size="small">编辑</el-button>
                                 <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="delModal1=true" type="text" size="small">删除</el-button>
+                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="delModal1Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
                                 <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
                             </template>
                         </el-table-column>
@@ -41,7 +41,7 @@
                         <p>是否继续删除？</p>
                     </div>
                     <div slot="footer">
-                        <Button type="error" size="large" long :loading="modal_loading3" @click="deleteNotice(scope.$index, tableData2)">删除</Button>
+                        <Button type="error" size="large" long :loading="modal_loading1" @click="del1">删除</Button>
                     </div>
                 </Modal>
                 <!-- 系统消息 Tab -->
@@ -56,7 +56,7 @@
                         <el-table-column label="操作" width="" align="center">
                             <template scope="scope">
                                 <!-- <el-button @click="remove" type="text" size="small">删除</el-button> -->
-                                <el-button @click.native.prevent="delModal2=true" type="text" size="small">删除</el-button>
+                                <el-button @click.native.prevent="delModal2Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -78,7 +78,7 @@
                         <p>是否继续删除？</p>
                     </div>
                     <div slot="footer">
-                        <Button type="error" size="large" long :loading="modal_loading3" @click="deleteRow(scope.$index, tableData2)">删除</Button>
+                        <Button type="error" size="large" long :loading="modal_loading2" @click="del2">删除</Button>
                     </div>
                 </Modal>
             </el-tabs>
@@ -169,6 +169,14 @@ export default {
     },
     data() {
         return {
+            isNotice: false,
+            isAssist: false,
+            modal_loading1: false,
+            modal_loading2: false,
+            noticeIndex: '',
+            assistIndex: '',
+            rowNotice: '', //公司公告
+            rowAssist: '', //系统消息
             delModal1: false,
             delModal2: false,
             viewModal: false,
@@ -214,6 +222,47 @@ export default {
         }
     },
     methods: {
+        delModal1Btn(index, row) {
+            this.isNotice = true;
+            this.isAssist = false;
+            this.noticeIndex = index;
+            this.rowNotice = row;
+            console.log(this.rowNotice);
+            this.delModal1 = true;
+            this.modal_loading1 = false;
+        },
+        delModal2Btn(index, row) {
+            this.isAssist = true;
+            this.isNotice = false;
+            this.assistIndex = index;
+            this.rowAssist = row;
+            console.log(this.rowAssist);
+            this.delModal2 = true;
+            this.modal_loading2 = false;
+        },
+        del1() {
+            console.log(this.rowNotice);
+            this.modal_loading1 = true;
+            this.deleteNotice(this.rowNotice.id);
+            setTimeout(() => {
+                this.tableData1.splice(this.noticeIndex, 1);
+                this.modal_loading3 = false;
+                this.delModal1 = false;
+                this.$Message.success('删除成功');
+            }, 2000);
+        },
+        del2() {
+            console.log(this.rowAssist);
+            this.modal_loading2 = true;
+            this.deleteAssistMsgUser(this.rowAssist.id);
+            setTimeout(() => {
+                this.tableData2.splice(this.assistIndex, 1);
+                this.modal_loading3 = false;
+                this.delModal2 = false;
+                this.$Message.success('删除成功');
+            }, 2000);
+        },
+
         /************公告 Start***************/
         getNoticeUserList1(pages, pageSize) { //获取公司公告列表数据
             // alert(1);
@@ -355,15 +404,33 @@ export default {
             this.viewModal = true;
 
         },
-        deleteNotice(row) { //删除公告列表
-            // console.log(row);
+        deleteNotice(id) { //删除公告列表
             this.$http.post(this.api + '/work/deleteNotice', {
-                id: row.id
+                id: id
             })
                 .then(res => {
                     if (res.status == '200') {
                         console.log(res.data.message);
-                        this.getNoticeUserList1(1);
+                        this.getNoticeUserList1(this.pages, this.pageSize);
+                        if (res.data.status == '49996') { //数据为空
+                            console.log('传入参数非法');
+                        }
+                    } else if (res.data.status == '403') {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                })
+        },
+        deleteAssistMsgUser(id) { //删除系统消息
+            this.$http.post(this.api + '/work/deleteAssistMsgUser', {
+                id: id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        console.log(res.data.message);
+                        this.getMessageList(this.pages, this.pageSize);
                         if (res.data.status == '49996') { //数据为空
                             console.log('传入参数非法');
                         }
@@ -460,8 +527,8 @@ export default {
         getMessageList(page, pageSize) { //获取系统消息 api
             this.$http.post(this.api + '/work/getMessageList', {
                 "userId": this.userId,
-                "page": page,
-                "pageSize": pageSize,
+                "page": this.pages,
+                "pageSize": this.pageSize,
             })
                 .then(res => {
                     if (res.status == '200') {

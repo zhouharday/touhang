@@ -588,7 +588,7 @@ export default {
                                 },
                                 on: {
                                     click: () => {
-                                        this.viewTask1()
+                                        this.viewTask1(params)
                                     }
                                 }
                             }, '查看'),
@@ -760,8 +760,16 @@ export default {
                 this.$Message.success('删除成功');
             }, 2000);
         },
-        viewTask1() { //查看指派任务详情
-           this.viewDialog1 = true;
+        viewTask1(params) { //查看指派任务详情
+            console.log(params.row);
+            this.viewDialog1 = true;
+            this.viewTaskForm1.taskName = params.row.taskName;
+            this.viewTaskForm1.createDate = params.row.createDate;
+            this.viewTaskForm1.endTime = params.row.endTime;
+            this.viewTaskForm1.receiveUserName = params.row.receiveUserName;
+            this.viewTaskForm1.seedUserName = params.row.seedUserName;
+            this.viewTaskForm1.taskInfo = params.row.taskInfo;
+            this.viewTaskForm1.assistTaskRecords = params.row.assistTaskRecords;
         },
         removeTask1(row) { //删除指派任务列表
             this.params1 = row;
@@ -848,7 +856,6 @@ export default {
                 this.addTaskForm1.createDate = startDate;
         },
         show(data) { //处理任务
-            alert(999);
             console.log(data.row);
             this.getTaskList4(data.row.id);
             this.dialogFormVisible2 = true;
@@ -892,7 +899,7 @@ export default {
                     }
                 })
                 .catch(error => {
-                    this.$Message.error(res.data.message);
+                    console.log(error);
                 })
         },
         getReceiveUserId(val) {
