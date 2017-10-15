@@ -13,6 +13,7 @@
                         <p>
                             <span>{{item.username}}</span>
                             <span>{{item.createDate}}</span>
+                            <span>{{item.createDate}}</span>
                         </p>
                         <p>{{item.seedInfo}}</p>
                         <p>

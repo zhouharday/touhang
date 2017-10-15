@@ -29,16 +29,16 @@
 
             <!-- 添加经营数据表头 对话框-->
             <el-dialog title="添加经营数据表头" :visible.sync="operatingModal1" :close-on-click-modal="false">
-                <el-form :model="operatingForm1" :label-width="formLabelWidth">
+                <el-form :model="operatingForm1" :rules="rules1" ref="operatingForm1" :label-width="formLabelWidth">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="基准日">
+                            <el-form-item label="基准日" prop="baseDate">
                                 <el-date-picker type="date" placeholder="选择日期" v-model="operatingForm1.baseDate" style="width:100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="类型">
+                            <el-form-item label="类型" prop="sort">
                                 <el-select v-model="operatingForm1.sort" placeholder="请选择类型" style="width:100%;">
                                     <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
@@ -46,18 +46,18 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报人">
-                                <el-input placeholder="默认登录用户" v-model="operatingForm1.informant" auto-complete="off" disabled></el-input>
+                            <el-form-item label="填报人" prop="informant">
+                                <el-input placeholder="默认登录用户" v-model="operatingForm1.informant" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报日期">
+                            <el-form-item label="填报日期" prop="date">
                                 <el-input placeholder="当前默认日期" v-model="operatingForm1.date" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="备注">
+                            <el-form-item label="备注" prop="remark">
                                 <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="operatingForm1.remark">
                                 </el-input>
                             </el-form-item>
@@ -133,16 +133,16 @@
             </el-table>
             <!--  添加财务数据表头  对话框-->
             <el-dialog title="添加财务数据表头" :visible.sync="financialModal1" :close-on-click-modal="false">
-                <el-form :model="financialForm1" :label-width="formLabelWidth">
+                <el-form :model="financialForm1" :rules="rules2" ref="financialForm1" :label-width="formLabelWidth">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="基准日">
+                            <el-form-item label="基准日" prop="baseDate">
                                 <el-date-picker type="date" placeholder="选择日期" v-model="financialForm1.baseDate" style="width:100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="类型">
+                            <el-form-item label="类型" prop="sort">
                                 <el-select v-model="financialForm1.sort" placeholder="请选择类型" style="width:100%;">
                                     <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
@@ -150,18 +150,18 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报人">
+                            <el-form-item label="填报人" prop="informant">
                                 <el-input placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报日期">
+                            <el-form-item label="填报日期" prop="date">
                                 <el-input placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="备注">
+                            <el-form-item label="备注" prop="remark">
                                 <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="financialForm1.remark">
                                 </el-input>
                             </el-form-item>
@@ -305,6 +305,14 @@ export default {
                 remark: '',
                 appendix: ''
             },
+            rules1: {
+                baseDate: [
+                    { required: true, message: '请选择基准日', trigger: 'change' }
+                ], 
+                sort: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
+                ]
+            },
             sortOptions: [
                 { //数据类型列表
                     value: '选项1',
@@ -390,6 +398,14 @@ export default {
                 remark: '',
                 appendix: ''
             },
+            rules2: {
+                baseDate: [
+                    { required: true, message: '请选择基准日', trigger: 'change' }
+                ], 
+                sort: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
+                ]
+            },
             // 财务数据-添加数据  资产负债表
             balanceSheet: [
                 {
@@ -415,7 +431,7 @@ export default {
                     debt: '应付票据',
                     endingDBalance: '',
                     beginningDBalance: ''
-                },  {
+                }, {
                     capital: '应收票据',
                     endingCBalance: '',
                     beginningCBalance: '',
@@ -447,7 +463,7 @@ export default {
                     debt: ' 应交税费',
                     endingDBalance: '',
                     beginningDBalance: ''
-                },  {
+                }, {
                     capital: '应收利息',
                     endingCBalance: '',
                     beginningCBalance: '',
