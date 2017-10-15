@@ -46,8 +46,19 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
+                         <el-col :span="12">
+                            <el-form-item label="提出人" prop="seedUserId">
+                                <el-input v-model="AddForm.seedUserId" placeholder="当前用户" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="12">
-                            <el-form-item label="处理人">
+                            <el-form-item label="提出时间" prop="createDate">
+                                <el-input type="date" v-model="AddForm.createDate" style="width: 100%;" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="接收人" prop="receivedUserId">
                                 <el-select v-model="AddForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
                                     <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>    
@@ -55,13 +66,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="完成时间">
+                            <el-form-item label="完成时间" prop="completeDate">
                                 <el-date-picker type="date" placeholder="完成时间" v-model="AddForm.completeDate" style="width: 100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="附件">
+                            <el-form-item label="附件" prop="appendix">
                                 <!-- action 上传的地址，必填 -->
                                 <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
@@ -138,7 +149,7 @@
                     </div>
                 </div>
                 <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
-                    <el-form-item label="处理结果" :label-width="formLabelWidth">
+                    <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
                             <el-option v-for="item in resultOptions"
                                 :key="item.value"
@@ -147,7 +158,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="汇报内容" :label-width="formLabelWidth">
+                    <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
                         <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
                         </el-input>
                     </el-form-item>
@@ -247,15 +258,15 @@
                         </p>
                     </div>
                 </div>
-                <el-form :model="alarmForm" style="margin-top:20px;background:#eef1f6;padding:10px;" :label-width="formLabelWidth">
-                    <el-form-item label="处理结果">
-                        <el-select v-model="alarmForm.result" placeholder="请选择处理状态">
+                <el-form :model="alarmForm" :rules="rules3" ref="alarmForm" style="margin-top:20px;background:#eef1f6;padding:10px;" :label-width="formLabelWidth">
+                    <el-form-item label="处理结果" prop="disposeResult">
+                        <el-select v-model="alarmForm.disposeResult" placeholder="请选择处理状态">
                             <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="汇报内容">
-                        <el-input type="textarea" :rows="2" v-model="alarmForm.content" auto-complete="off">
+                    <el-form-item label="汇报内容" prop="recordDetails">
+                        <el-input type="textarea" :rows="2" v-model="alarmForm.recordDetails" auto-complete="off">
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案">
@@ -318,17 +329,17 @@ export default {
                 completeDate: ''
             },
             rules1: {
-                riskTheme: [
-                    { required: true, message: '请输入风险主题', trigger: 'blur' }
+               riskTheme: [
+                    { required: true, message: '请输入风险主题', trigger: 'change' }
                 ],
                 riskDescribe: [
-                    { required: true, message: '请输入风险描述', trigger: 'blur' }
+                    { required: true, message: '请输入风险描述', trigger: 'change' }
                 ],
                 receivedUserId: [
-                    { required: true, message: '请选择处理人', trigger: 'blur' }
+                    { required: true, message: '请选择接收人', trigger: 'change' }
                 ],
                 completeDate: [
-                    { type: 'date', required: true, message: '请选择完成时间', trigger: 'blur' }
+                    { required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
             recipientOptions: [
@@ -369,11 +380,11 @@ export default {
             },
             rules2: {
                 disposeResult: [
-                    { required: true, message: '请选择处理结果', trigger: 'blur' }
+                    { required: true, message: '请选择处理结果', trigger: 'change' }
                 ],
-                content: [
-                    { required: true, message: '请输入汇报内容', trigger: 'blur' }
-                ],
+                recordDetails: [
+                    { required: true, message: '请输入汇报内容', trigger: 'change' }
+                ]
             },
             //处理结果列表
             resultOptions: [
@@ -431,6 +442,14 @@ export default {
                 result: '',
                 content: '',
                 appendix: ''
+            },
+            rules3: {
+                disposeResult: [
+                    { required: true, message: '请选择处理结果', trigger: 'change' }
+                ],
+                recordDetails: [
+                    { required: true, message: '请输入汇报内容', trigger: 'change' }
+                ] 
             },
             alarmData: [
                 {

@@ -10,8 +10,8 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                    <el-button type="text"  @click="editMonitor(scope.row)">编辑</el-button>
-                    <el-button type="text"  @click="handleDelete(scope.$index,monitorData)">删除</el-button>
+                    <el-button type="text" @click="editMonitor(scope.row)">编辑</el-button>
+                    <el-button type="text" @click="handleDelete(scope.$index,monitorData)">删除</el-button>
                     <el-button type="text">关闭</el-button>
                     <el-button type="text">开启</el-button>
                 </template>
@@ -19,18 +19,18 @@
         </el-table>
         <!--添加监控设置 对话框 -->
         <el-dialog title="添加监控设置" :visible.sync="monitorSetting">
-            <el-form :model="monitorForm" :label-width="formLabelWidth">
+            <el-form :model="monitorForm" :rules="rules1" ref="monitorForm" :label-width="formLabelWidth">
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="数据来源" :label-width="formLabelWidth">
+                        <el-form-item label="数据来源" prop="dataSources" :label-width="formLabelWidth">
                             <el-select v-model="monitorForm.dataSources" placeholder="请选择数据来源" style="width:100%;">
-                                  <el-option v-for="item in dataSourcesOptions" :key="item.value" :label="item.label" :value="item.value">
+                                <el-option v-for="item in dataSourcesOptions" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="类型">
+                        <el-form-item label="类型" prop="sort">
                             <el-select v-model="monitorForm.sort" placeholder="请选择类型" style="width:100%;">
                                 <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
@@ -176,6 +176,14 @@ export default {
             monitorForm: {
                 dataSources: '',
                 sort: ''
+            },
+            rules1: {
+                dataSources: [
+                    { required: true, message: '请选择数据来源', trigger: 'change' }
+                ], 
+                sort: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
+                ]
             },
             dataSourcesOptions: [
                 { //数据来源列表
