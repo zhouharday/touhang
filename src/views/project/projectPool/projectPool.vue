@@ -266,10 +266,13 @@ export default {
             let addProjectUserId = this.addProjectUserId;
             transPro(projectId)
             .then(resp => {
+                console.log(resp.data);
                 let data = resp.data;
-                if (!data.message) {
+                if (data.status == '200') {
+                    // alert(333);
                     this.addTab('投前项目', '/home/preProject', 'preProject');
                     this.$router.push({ name: 'preProject' });
+                    this.dialogVisible = false;
                 } else {
                     this.dialogVisible = false; // 隐藏弹框
                 }
