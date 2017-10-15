@@ -235,8 +235,9 @@
                     </el-row>
                     <el-row :gutter="20">
                         <el-col :span="24">
-                            <el-form-item label="处理记录" prop="recording" :label-width="formLabelWidth">
-                                <el-input :disabled="true" v-model="form1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="">
+                            <el-form-item v-for="(item,index) in form1.recording" :key="item" label="处理记录" prop="recording" :label-width="formLabelWidth">
+                                <el-input :disabled="true" v-model="item.recordDetails" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="">
+                                    {{item.recordDetails}}
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -547,7 +548,9 @@ export default {
                 peopele1: '', //接收人
                 peopele1_1: this.$store.state.login.userInfor.name, //指派人
                 textContent: '', //任务说明
-                recording: '', //处理记录
+                recording: {
+                    recordDetails: ''
+                }, //处理记录
                 reportContent: '' //汇报内容
             },
             doneTaskForm1: {  //已办任务-查看任务表单
@@ -1169,8 +1172,12 @@ export default {
                             this.taskInfo = res.data.record; //任务数据列表
                             console.log(res.data);
                             res.data.record.assistTaskRecords.forEach((ele, index) => {
-                                this.form1.recording = ele.recordDetails;
+                                // ele.recordDetails+= ele.recordDetails;
+                                // this.form1.recording = ele.recordDetails;
+                                // this.form1.recording = res.data.record.assistTaskRecords[index].recordDetails;
+                                console.log(res.data.record.assistTaskRecords[index].recordDetails);
                             }, this);
+                            console.log(this.form1.recording);
                             this.form1.taskId = res.data.record.id;
                             this.form1.taskName = this.taskInfo.taskName; //任务名称
                             this.form1.startDate = this.taskInfo.createDate; //指派时间
