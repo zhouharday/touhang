@@ -20,11 +20,14 @@
                     <span class="actives">Sat</span>
                 </div>
                 <div>
-                    <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
-                        <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
-                            {{list.day}}
+                    <!-- <span> -->
+                        <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
+                            <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
+                                {{list.day}}
+                            </span>
                         </span>
-                    </span>
+                        <div v-show="have">dddd</div>
+                    <!-- </span> -->
                 </div>
             </div>
         </div>
@@ -77,7 +80,8 @@ export default {
     },
     data: function() {
         return {
-            objarr:[],
+            have: false,
+            objarr: [],
             arr: [],
             obj: {},
             dateMoveOver: false,
@@ -201,7 +205,7 @@ export default {
                     obj.week = new Date(year, month - 1, x).getDay();
                     obj.empt = true;
                     obj.have = false;
-                    obj.time = year+'-'+month+'-'+x;
+                    obj.time = year + '-' + month + '-' + x;
                     arr.push(obj);
                     x++;
                 }
@@ -212,16 +216,27 @@ export default {
             this.$emit("readyfun", arr, this.date);
         },
         getDate(have, time) { //moveOver Date
-            if(!have){
+            if (!have) {
+                this.have = false;
                 return;
-            }
+            };
             var arr = [];
-            this.monthDate.map(item=>{
-                if(time == item.time){
-                    console.log(item)
+            const h = this.$createElement;
+            this.monthDate.map(item => {
+                if (time == item.time) {
+                    console.log(item);
+                    item.item.forEach(ele => {
+                        this.have = true;
+                        // this.$msgbox({
+                        //     title: '任务详情',
+                        //     message: h('p', null, [
+                        //         h('span', null, ele.startTime + ' '),
+                        //         h('i', { style: 'color: teal' }, ele.scheduleTitle)
+                        //     ]),
+                        // });
+                    });
                 }
-            })
-
+            });
         },
         //点击日期
         clickDate: function(index, n) {
@@ -241,7 +256,7 @@ export default {
             this.scheduleDialog = !this.scheduleDialog;
 
         },
-        
+
         getScheduleListBtn() {
             this.scheduleForm.time = this.checkTime + " " + this.scheduleForm.time;
             this.addSchedule();
