@@ -1,4 +1,4 @@
-(function () {
+// (function () {
   var LPB = window.LPB = window.LPB || {
     plugins: [],
     genSource: function () {
@@ -21,7 +21,6 @@
       });
       $("#source").val($temptxt.html().replace(/\n\ \ \ \ \ \ \ \ \ \ \ \ /g, "\n"));
     }
-
   };
   /* 表单名称控件 form_name
   acc  是 class="component" 的DIV 
@@ -54,8 +53,9 @@
     });
 
   }
-})();
-$(document).ready(function () {
+// })();
+
+// $(document).ready(function () {
   $("#navtab").delegate("#sourcetab", "click", function (e) {
     LPB.genSource();
   });
@@ -156,7 +156,6 @@ $(document).ready(function () {
           "border-top": "1px solid white",
           "border-bottom": "none"
         });
-
         // acting only if mouse is in right place
         if (mu_mouseX + half_box_width > tar_pos.left &&
           mu_mouseX - half_box_width < tar_pos.left + $target.width() &&
@@ -178,7 +177,6 @@ $(document).ready(function () {
           });
           tops = [];
         }
-
         //clean up & add popover
         $target.css("background-color", "#fff");
         $(document).undelegate("body", "mousemove");
@@ -201,7 +199,7 @@ $(document).ready(function () {
     });
   });
 
-  //activate legend popover
+  // activate legend popover
   $("#target .component").popover({
     trigger: "manual"
   });
@@ -224,6 +222,5 @@ $(document).ready(function () {
     } else {
       alert("控件有误或不存在，请与我们联系！");
     }
-
   });
-});
+// });

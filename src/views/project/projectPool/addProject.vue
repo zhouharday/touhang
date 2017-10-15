@@ -299,8 +299,6 @@ export default {
                     return false;
                 }
             });
-            // this.addTab('项目池', '/home/projectPool', 'projectPool');
-            this.$router.push({ name: 'projectPool' });
         },
         changeBasicForm(basicForm) {
             let obj = {

@@ -35,7 +35,7 @@
                     </el-table-column>
                     <el-table-column prop="number" label="账号" width="180" align="center">
                     </el-table-column>
-                    <el-table-column prop="dept" label="部门" width="180" align="center">
+                    <el-table-column prop="deptName" label="部门" width="180" align="center">
                     </el-table-column>
                     <!--<el-table-column  prop="role"  label="所属角色"  width="180">-->
                     <!--</el-table-column>-->

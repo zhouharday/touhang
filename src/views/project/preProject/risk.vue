@@ -207,9 +207,9 @@ export default {
                 theme: '',
                 description: '',
                 proposer: '',
-                startingDate: '',
+                createDate: '',
                 recipient: '',
-                endingDate: '',
+                completeDate: '',
                 appendix: '',
                 Records: ''
             },
@@ -222,7 +222,7 @@ export default {
             tableData: [],
             recordList: [],
             trackingForm: {
-                result: '',
+                disposeResult: '',
                 content: '',
                 appendix: ''
             },

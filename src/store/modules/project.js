@@ -1,6 +1,7 @@
 import * as types from '../mutations-type'
 import { getDicChildren, getDicChildrenII } from '../../common/js/dictionary'
 import { getDeptListByMid } from '../../api/project'
+import { slectAllStageIndex } from '../../api/projectPre'
 import { getAllNormalFund } from '../../api/investor'
 
 const state = {
@@ -15,6 +16,7 @@ const state = {
     stageOptionsII: [],     // 项目阶段
     departmentOptions: [],  // 业务部门
     costSortOptions: [],    // 项目费用类型
+    outingSortOptions: [],    // 项目退出类型
     myFundOptions: []       // 项目中可签约基金列表(本商户)
 }
 
@@ -34,6 +36,7 @@ const getters = {
     getDepartmentOptions: state => state.departmentOptions,
 
     getCostSortOptions: state => state.costSortOptions,
+    getOutingSortOptions: state => state.outingSortOptions,
     getMyFundOptions: state => state.myFundOptions
 }
 
@@ -70,6 +73,9 @@ const mutations = {
     },
     [types.GET_COSTSORTOPTIONS](state, costSortOptions) {
         state.costSortOptions = costSortOptions;
+    },
+    [types.GET_OUTINGSORTOPTIONS](state, outingSortOptions) {
+        state.outingSortOptions = outingSortOptions;
     },
     [types.GET_MYFUNDOPTIONS](state, myFundOptions) {
         state.myFundOptions = myFundOptions;
@@ -142,7 +148,7 @@ const actions = {
         })
     },
     getAddressOptions({commit, dispatch}) {
-        return getDicChildren('3').
+        return getDicChildren('501').
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_ADDRESSOPTIONS, res.data.result)
@@ -152,7 +158,7 @@ const actions = {
         })
     },
     getStageOptionsII({commit, dispatch}) {
-        return getDicChildrenII('203').
+        return slectAllStageIndex().
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_STAGEOPTIONSII, res.data.result)
@@ -176,6 +182,16 @@ const actions = {
         then((res) => {
             if (res.status == '200') {
                 commit(types.GET_COSTSORTOPTIONS, res.data.result)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    getOutingSortOptions({commit, dispatch}) {
+        return getDicChildren('205').
+        then((res) => {
+            if (res.status == '200') {
+                commit(types.GET_OUTINGSORTOPTIONS, res.data.result)
             }
         }).catch(err => {
             console.log(err)

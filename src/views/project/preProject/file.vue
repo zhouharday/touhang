@@ -32,38 +32,30 @@
                     </el-table-column>
                     <el-table-column align="center">
                         <template scope="scope">
-                            <el-button v-if="index != 0" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
-                            <a v-if="id != '' && id != null" href="documentUrl" style="font-size:12px;" download="xxxxx文档">下载</a>
-                            <el-button v-if="id != '' && id != null" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                            <el-button v-if="id != '' && id != null" type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
+                            <el-button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
+                            <a v-if="scope.row.id != '' && scope.row.id != undefined" href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text" size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
-                </v-for>
                 </el-table>
             </template>
             <!-- 上传文档 对话框-->
             <el-dialog title="上传文档" :visible.sync="modalAdd3" :close-on-click-modal="false">
                 <el-form :model="projectForm" :label-width="formLabelWidth">
-                    <el-form-item label="上传人">
-                        <el-input v-model="projectForm.user" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="上传时间">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="projectForm.date" style="width: 100%;">
-                        </el-date-picker>
-                    </el-form-item>
                     <el-form-item label="上传文件">
                         <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
+                        <!-- <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
                             <div style="padding: 20px 0">
                                 <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
-                        </Upload>
+                        </Upload> -->
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="default"  @click="modalAdd3 = false">取 消</el-button>
-                    <el-button type="danger"  @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+                    <el-button type="default" @click="modalAdd3 = false">取 消</el-button>
+                    <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -82,11 +74,11 @@
 
 <script>
 import {
-    getProjectDoc
+    getProjectDoc, delDocument
 } from 'api/projectPre';
-    
+
 export default {
-    props:{
+    props: {
         proId: {
             type: String,
             default: ''
@@ -116,32 +108,10 @@ export default {
                 user: '张三',
                 date: '2017-09-09'
             }],
-            inspectionForm: {
-                user: '',
-                date: ''
-            },
-            inspectionData: [{
-                stageFile: 'AAAAAAAAA.PDF',
-                inspectionName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            }],
             projectForm: {
                 user: '',
                 date: ''
-            },
-            projectData: [{
-                stageFile: 'AAAAAAAAA.PDF',
-                projectName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            },
-            {
-                stageFile: 'AAAAAAAAA.PDF',
-                projectName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            }]
+            }
         }
     },
     created() {
@@ -156,7 +126,7 @@ export default {
             getProjectDoc(this.projectId).then(resp => {
                 this.projectDocList = resp.data.result || [];
             }).catch(e => {
-                console.log('getPreDetail() exists error: ', e);
+                console.log('getProjectDoc() exists error: ', e);
             });
         },
         inspectionDialog() {
@@ -186,8 +156,15 @@ export default {
             this.isShow = true,
                 this.isHide = false
         },
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        handleDelete(index, row) {
+            console.log('删除文档ID: '+JSON.stringify(row.id));
+            delDocument(row.id).then((res) => {
+                console.log('删除文档: '+JSON.stringify(res.data));
+                if (res.data.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    this.getProjectDocument();
+                }
+            });
         }
     }
 }

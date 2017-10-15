@@ -43,26 +43,26 @@
             </el-col>
         </el-row>
         <!--所在地ul-->
-        <div class="common">
-            <el-row>
-                <el-col :span="1">
-                    <div class="tag_s">所在地：</div>
-                </el-col>
-                <el-col :span="23">
-                    <div class="location-ul">
-                        <ul ref="location" :class="{ changeList: !btnObject2.downtriangle }" style="width:100%;">
-                            <li v-for="(item,index) in locationList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex3}" @click="changeActive(index,3,item)">
-                                {{item.dicName}}
-                            </li>
-                            <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
-                                <span :class="btnObject2"></span>
-                                {{collapseBtn2}}
-                            </button>
-                        </ul>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+        <!-- <div class="common"> -->
+        <el-row class="common">
+            <el-col :span="1">
+                <div class="tag_s">所在地：</div>
+            </el-col>
+            <el-col :span="23">
+                <div class="location-ul">
+                    <ul ref="location" :class="{ changeList: !btnObject2.downtriangle }" style="width:100%;">
+                        <li v-for="(item,index) in locationList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex3}" @click="changeActive(index,3,item)">
+                            {{item.dicName}}
+                        </li>
+                        <button :class="{ collapseBtnk: !btnObject2.downtriangle }" class="collapse-btn" @click="changeList(2)">
+                            <span :class="btnObject2"></span>
+                            {{collapseBtn2}}
+                        </button>
+                    </ul>
+                </div>
+            </el-col>
+        </el-row>
+        <!-- </div> -->
         <!--搜索结果-->
         <el-row class="common">
             <el-col :span="24">
@@ -152,7 +152,7 @@ export default {
                 console.log(res.data.result);
             }
         });
-        this.selectCompany();
+        this.selectCompany('','','','');
         this.location();
         this.rounds();
     },
@@ -164,6 +164,8 @@ export default {
     },
     data() {
         return {
+            pages: 1, //当前页码
+            pageSize: 10, //每页条数
             row: '',
             no: '',
             num: 1, // 数据字典传值
@@ -171,7 +173,7 @@ export default {
             dialogVisible: false,
             search: '',
             collapseBtn1: '收起',
-            collapseBtn2: '下拉',
+            collapseBtn2: '收起',
             currentIndex1: '',
             currentIndex2: '',
             currentIndex3: '',
@@ -252,8 +254,8 @@ export default {
                 this.currentIndex1 = '';
                 this.currentIndex3 = '';
                 return;
-            } else if (ind == '3') { //所在地
-                this.selectCompany('', '', '', item.id);
+            } else if (ind == 3) { //所在地
+                this.selectCompany('', '', '', item.id, 1, 10);
                 console.log(item);
                 this.currentIndex3 = index;
                 this.currentIndex1 = '';
@@ -301,14 +303,14 @@ export default {
                     return;
                 })
         },
-        selectCompany(name, industry, phase, citystr, pages, pageSize) { //查询云项目列表数据 api
+        selectCompany(name, industry, phase, citystr) { //查询云项目列表数据 api
             this.$http.post(this.api + '/CompanyClieController/selectCompany', {
                 "name": name, //根据项目名模糊查询
                 "industry": industry,  //按照行业查询
                 "phase": phase,  //按照轮次查询
                 "citystr": citystr,  //按照项目所在地查询
-                "page": pages,  //当前页数
-                "pageSize": pageSize  //每页显示条数
+                "page": this.pages,  //当前页数
+                "pageSize": this.pageSize  //每页显示条数
             })
                 .then(res => {
                     if (res.status == '200') {
@@ -330,12 +332,15 @@ export default {
                     this.$Message.error("请求超时");
                 })
         },
-        handleSizeChange(pageSize) {
-            this.selectCompany(pageSize);
+        handleSizeChange(pageSize) { //每页条数切换
+        console.log(pageSize);
+            this.pageSize = pageSize;
+            this.selectCompany();
         },
         handleCurrentChange(pages) { //获取tabList 分页数据
             // console.log(pages);
-            this.selectCompany(pages);
+            this.pages = pages;
+            this.selectCompany();
         },
         location() { //查询省份数据
             this.$http.post(this.api + '/dictionaryController/select2Menu', { //数据字典=>省份

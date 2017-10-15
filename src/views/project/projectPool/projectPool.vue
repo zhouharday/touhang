@@ -37,7 +37,7 @@
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="5">
-                <el-input icon="search" v-model="pName" :on-icon-click="handleIconClick" placeholder="查询关键字：项目名称">
+                <el-input icon="search" v-model="pName" @keyup.enter.native="getDatas" :on-icon-click="handleIconClick" placeholder="查询关键字：项目名称">
                 </el-input>
             </el-col>
             <el-col :span="4" class="addProject">
