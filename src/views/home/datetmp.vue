@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
-                        <span @mouseover="getDate(index,list.day)" :class="{active:list.yd,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
+                        <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
                             {{list.day}}
                         </span>
                     </span>
@@ -73,10 +73,11 @@ export default {
     },
     created: function() {
         this.creattimetmp(new Date());
-        this.getData();
+        // this.getData();
     },
     data: function() {
         return {
+            objarr:[],
             arr: [],
             obj: {},
             dateMoveOver: false,
@@ -196,29 +197,30 @@ export default {
                     obj.day = x;
                     obj.month = month;
                     obj.year = year;
-                    obj.item = {};
+                    obj.item = [];
                     obj.week = new Date(year, month - 1, x).getDay();
                     obj.empt = true;
-                    obj.yd = false;
-                    obj.wd = false;
+                    obj.have = false;
+                    obj.time = year+'-'+month+'-'+x;
                     arr.push(obj);
                     x++;
                 }
 
             }
             // console.log(arr);
+            this.objarr = arr;
             this.$emit("readyfun", arr, this.date);
         },
-        getDate(index, n) { //moveOver Date
-            if (!n) {
+        getDate(have, time) { //moveOver Date
+            if(!have){
                 return;
-            };
-            var self = this;
-            this.clickN = index;
-            this.changeDate = this.date.year + "-" + (this.date.month + 1) + "-" + n;
-            console.log(this.changeDate);
-            this.getData(this.changeDate);
-            return this.changeDate;
+            }
+            var arr = [];
+            this.monthDate.map(item=>{
+                if(time == item.time){
+                    console.log(item)
+                }
+            })
 
         },
         //点击日期
@@ -237,46 +239,9 @@ export default {
             this.$emit("changetime", self.changeDate);
             this.checkTime = this.changeDate;
             this.scheduleDialog = !this.scheduleDialog;
-            console.log(this.changeDate);
+
         },
-        getData(time) { //获取日程列表 api
-            this.$http.post(this.api + '/work/getScheduleList', {
-                "userId": this.user.userInfor.id,
-                "merchantId": this.user.merchants[0].id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-                            console.log('////////////////////////');
-                            console.log(res.data);
-                            res.data.result.map((item, index) => {
-                                this.arr = [];
-                                let start_Time = item.startTime.substr(0, 10)
-                                console.log('???????????????????????');
-                                console.log(start_Time);
-                                // console.log(item.startTime);
-                                if (start_Time == time) {
-                                    // alert(999);
-                                    this.arr.push(res.data.result[index]);
-                                } else {
-                                    return;
-                                }
-                            });
-                            console.log(this.arr);
-                            // this.getScheduleList = res.data.result;
-                            // this.scheduleList = res.data.result;
-                            this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        } else if (res.data.status == '49999') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
+        
         getScheduleListBtn() {
             this.scheduleForm.time = this.checkTime + " " + this.scheduleForm.time;
             this.addSchedule();
@@ -292,8 +257,9 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
-                            this.getData();
+                            // this.getData();
                             console.log(res.data);
+                            this.$emit("readyfun", this.objarr, this.date);
                             this.$Message.success(res.data.message);
                         } else if (res.data.status == '403') {
                             this.$Message.error(res.data.message);

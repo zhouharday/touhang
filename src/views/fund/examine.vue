@@ -2,15 +2,15 @@
 <div class="examine">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
     <el-table :data="teamData" border style="width: 100%">
-        <el-table-column label="审批主题" prop="theme">
+        <el-table-column label="审批主题" prop="theme" align="center">
         </el-table-column>
-        <el-table-column label="申请人" prop="applicant">
+        <el-table-column label="申请人" prop="applicant" align="center">
         </el-table-column>
-        <el-table-column label="申请时间" prop="apply">
+        <el-table-column label="申请时间" prop="apply" align="center">
         </el-table-column>
-        <el-table-column label="审批时间" prop="approval">
+        <el-table-column label="审批时间" prop="approval" align="center">
         </el-table-column>
-        <el-table-column label="审批状态" prop="status">
+        <el-table-column label="审批状态" prop="status" align="center">
         </el-table-column>
         <!-- <el-table-column label="操作">
             <template scope="scope">

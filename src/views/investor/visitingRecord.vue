@@ -1,10 +1,16 @@
 <template>
     <div class="visitingRecord">
-        <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader>
+        <div style="text-align:right;margin-bottom:10px">
+            <el-button type="danger" style="background-color:#fff;padding:8px 15px;" @click="showVisiting">添加</el-button>
+        </div>
+        <!-- <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader> -->
         <el-table :data="visitingRecord" border style="width: 100%">
             <el-table-column prop="manageName" label="拜访人" align="center">
             </el-table-column>
-            <el-table-column prop="seeDate" label="拜访时间" align="center">
+            <el-table-column label="拜访时间" align="center">
+                <template scope="scope">
+                    <div>{{scope.row.seeDate | formatDateDetails}}</div>
+                </template>
             </el-table-column>
             <el-table-column prop="seeContent" label="拜访内容" align="center">
             </el-table-column>
@@ -62,6 +68,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import 'common/js/filter'
 import tableHeader from "components/tabelHeader"
 import deleteReminders from "components/deleteReminders"
 import {
@@ -94,7 +101,7 @@ export default {
                 manageName: '',
                 merchantId: '',
                 seeContent: '',
-                seeDate: '',
+                seeDate: new Date(),
             },
             rules1: {
                 seeContent: [

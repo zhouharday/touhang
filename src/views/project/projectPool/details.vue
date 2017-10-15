@@ -149,8 +149,7 @@ export default {
         projectId: {
             type: String,
             default: ''
-        },
-        typeOptions:[]
+        }
     },
     watch: {
         projectData(val, oldVal) {
@@ -188,11 +187,6 @@ export default {
                     explain: '提交'
                 }]
             },
-            typeOptions: [],
-            fromOptions: [],
-            industryOptions: [],
-            addressOptions: [],
-            departmentOptions: []
         }
     },
     created() {

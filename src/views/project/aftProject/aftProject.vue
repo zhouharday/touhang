@@ -14,7 +14,7 @@
             <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
                 <el-table-column label="项目名称" align="center">
                     <template scope="scope">
-                        <a class="project" @click="ShowPreMessage(scope.row,scope.$index)">{{ scope.row.projectName }}</a>
+                        <a class="project" @click="ShowPreMessage(scope.row.projectId, scope.row.id, scope.row.projectName, scope.$index)">{{ scope.row.projectName }}</a>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="mananger" label="项目创建人" align="center">
@@ -52,7 +52,7 @@ export default {
         return {
             total: 0,
             page: 1,
-            pageSize: 2,
+            pageSize: 5,
             projectName: '',
             currentIndex: 0,
             projectTypeId: '',
@@ -134,10 +134,9 @@ export default {
             }
             return '';
         },
-        ShowPreMessage(title, ind) {
-            this.index = ind;
-            this.addTab('投后' + title.projectName + '详情页', '/home/aftProjectMessage/' + ind, 'aftProjectMessage/' + ind);
-            this.$router.push({ name: 'aftProjectMessage', params: { userId: title.id } });
+        ShowPreMessage(projectId, investProjectId, title, idx) {
+            this.addTab('投后项目-' + title, '/home/aftProjectMessage/' + projectId + '/' + investProjectId, 'aftProjectMessage/' + projectId + '/' + investProjectId);
+            this.$router.push({ name: 'aftProjectMessage', params: { projectId: projectId, investProjectId: investProjectId } });
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });

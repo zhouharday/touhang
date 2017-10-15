@@ -2,20 +2,20 @@
 <div class="team">
     <tabel-header :data="headerInfo" @add="addTeam"></tabel-header>
     <el-table :data="teamData" border style="width: 100%">
-        <el-table-column label="姓名" prop="userName">
+        <el-table-column label="姓名" prop="userName" align="center">
         </el-table-column>
-        <el-table-column label="角色" prop="roleName">
+        <el-table-column label="角色" prop="roleName" align="center">
         </el-table-column>
-        <el-table-column label="添加日期" prop="addTime">
+        <el-table-column label="添加日期" prop="addTime" align="center">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" align="center">
             <template scope="scope">
                 <el-button type="text" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
     <!-- 添加成员 对话框-->
-    <el-dialog title="添加成员"
+    <el-dialog title="添加团队成员"
                :visible.sync="modalAdd"
                :close-on-click-modal="false">
         <el-form :model="formTeam">
@@ -47,7 +47,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalAdd = false">取 消</el-button>
-            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+            <el-button type="danger" @click="confirmAdd">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 删出提示框 -->

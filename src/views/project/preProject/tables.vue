@@ -144,7 +144,7 @@ import tabelHeader from 'components/tabelHeader'
 import { addOwer, delOwer, addGu, delGu, owers, gus } from 'api/projectPre';
 export default {
     props: {
-        projectData: {
+        companyForm: {
             type: Object,
             default: {}
         },
@@ -254,7 +254,13 @@ export default {
             this.memberForm = new_memberForm;
             this.modalAdd1 = !this.modalAdd1;
         },
-        confirmAdd1(formName) {1
+        confirmAdd1(formName) {
+            if(this.companyForm == undefined 
+                || this.companyForm.id == undefined 
+                || this.companyForm.id == ''){
+                this.$Message.error("企业信息走丢了，请刷新再试");
+                return;
+            }
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let memberForm = this.memberForm;
@@ -262,7 +268,7 @@ export default {
                     addOwer({
                         id:'',
                         projectId:projectId,
-                        enterpriseId: this.projectData.enterpriseInfo.id,
+                        enterpriseId: this.companyForm.id,
                         name: memberForm.name,
                         nature: memberForm.property,
                         educationalBg: memberForm.edu

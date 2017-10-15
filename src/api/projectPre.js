@@ -21,7 +21,6 @@ export function getPreDetail(projectId = undefined) {
 		id:projectId
 	}
 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
-	//return service({url: '/projectInvestInfo/selectInvestInfo', method: 'post', data});
 }
 
 //投前项目所有阶段 含全部
@@ -74,11 +73,10 @@ export function suspendInvestProject(id = undefined) {
 	return service({url: '/investProject/suspendInvestProject', method: 'post', data});
 }
 
-// TODO: 投前项目详情修改
-export function updatePreDetail(projectId = undefined) {
-	const data = {
-		projectId
-	}
+// TODO: 投前项目-修改投资信息
+export function changeCapitalInfo(params = {}) {
+	const data = params;
+	console.log("投前项目-修改投资信息: "+ JSON.stringify(params));
 	return service({url: '/projectInvestInfo/insertAndUpdate', method: 'post', data});
 }
 

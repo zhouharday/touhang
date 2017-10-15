@@ -151,7 +151,6 @@
                     <div class="formBtn">
                         <el-row>
                             <el-col style="display:flex;justify-content:flex-end;">
-
                                 <el-button type="danger" size="small" @click="submitForm('basicForm')">保存</el-button>
                                 <el-button type="default" size="small" @click="cancleForm">取消</el-button>
                             </el-col>
@@ -287,10 +286,10 @@ export default {
                         basicForm: basicForm,
                         companyForm: basicForm
                     }).then(resp => {
+                        this.addTab('项目池', '/home/projectPool', 'projectPool');
+                        this.$router.push({ name: 'projectPool' });
                         store.isSubmit = false;
                         console.log('resp: ', resp);
-                        // this.addTab('项目池', '/home/projectPool', 'projectPool');
-                        // this.$router.push({ name: 'projectPool' });
                     }).catch(e => {
                         console.log(e);
                     })
