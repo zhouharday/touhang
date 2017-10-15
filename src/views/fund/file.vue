@@ -25,52 +25,57 @@
                             <el-button type="text"
                                     size="small"
                                     class="scopeBtn"
-                                    v-show="!scope.row.id">上传</el-button>
+                                    v-show="!scope.row.id"
+                                    @click="uploadFundDoc(scope.$index, scope.row)">
+                                    上传
+                            </el-button>
                             <el-button type="text"
                                        size="small"
                                        v-show="scope.row.id"
-                                       class="scopeBtn">下载</el-button>
+                                       class="scopeBtn"
+                                       @click="downloadFundDoc(scope.$index, scope.row)">
+                                       下载
+                            </el-button>
                             <el-button type="text"
                                        size="small"
-                                       class="btn_border scopeBtn">预览</el-button>
+                                       class="btn_border scopeBtn" @click="previewFundDoc(scope.$index, scope.row)">
+                                       预览
+                            </el-button>
                             <el-button type="text"
                                        size="small"
-                                       class="scopeBtn">删除</el-button>
-                          </template>
+                                       class="scopeBtn" @click="deleteFundDoc(scope.$index, scope.row)">
+                                       删除
+                            </el-button>
+                    </template>
                 </el-table-column>
             </el-table>
         </el-col>
     </el-row>
     <!-- 上传基金设立报表-->
     <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false">
-        <el-form :model="reportForm">
-            <el-form-item label="用户" :label-width="formLabelWidth">
-                <el-input v-model="reportForm.user" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="上传日期" :label-width="formLabelWidth">
-                <el-date-picker type="date" placeholder="选择日期" v-model="reportForm.date" style="width: 100%;">
-                </el-date-picker>
-            </el-form-item>
-            <el-form-item label="上传文件" :label-width="formLabelWidth">
-                <!-- action需要修改为实际线上地址 -->
-                <Upload multiple type="drag" :before-upload="false" action="//jsonplaceholder.typicode.com/posts/">
-                    <div style="padding: 20px 0">
-                        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
-                        <p>点击或将文件拖拽到这里上传</p>
-                    </div>
-                </Upload>
-                <!-- <div v-if="file !== null">待上传文件：{{ file.name }}</div> -->
-            </el-form-item>
-        </el-form>
+        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" v-show="upload">
+            <div style="padding: 20px 0">
+                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                <p>点击或将文件拖拽到这里上传</p>
+            </div>
+        </Upload>
+        <div class="img_wrapper" v-show="preview">
+            {{previewFundInfo}}
+            <img :src="previewFundInfo" alt="" style="width: 50%; height: auto;">
+        </div>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalAdd = false">取 消</el-button>
-            <el-button type="primary" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
         </div>
     </el-dialog>
+    <delete-reminders @cancel="confirmCancel" @del="confirmDel" :modal_loading="modal_loading" :deleteReminders="reminders">
+    </delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+import deleteReminders from 'components/deleteReminders'
+import {deleteDocument,selectProjectOrFundDocument} from 'api/fund'
+import {API_ROOT} from '../../config'
 export default {
     props: {
         fileListData: {
@@ -89,71 +94,83 @@ export default {
                 }]
             },
             modalAdd: false,
-            formLabelWidth: '80px',
-            reportForm: {
-                uesr: '',
-                date: ''
-            },
             file: null, // 上传
             loadingStatus: false, // 上传
-            fileData: [{
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }, {
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }, {
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }, {
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }],
-            registrationData: [{
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }, {
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }, {
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }, {
-                name: 'aaa.doc',
-                user: '安红',
-                date: '2017-09-01'
-            }]
+            fileData: [],
+            registrationData: [],
+            deleteId: '',
+            preview: false, // 预览
+            upload: false, // 上传
+            previewFundInfo: '', //预览信息
+            reminders: false, // 确认删除模态框
+            modal_loading: false, // 确认删除loading效果
+            actionUrl: API_ROOT + '/files/uploadProjectDocument',
+            uploadInfo: {
+                file: '',
+                stageId: '',
+                uploadTypeId: this.$route.params.id,
+                fileId: '',
+                type: 1,
+                userId: JSON.parse(sessionStorage.getItem('userInfor')).id
+            },
         }
     },
     methods: {
-        reportDialog() {
+        uploadFundDoc(index, row) {
             this.modalAdd = true
+            this.upload = true
+            this.uploadInfo.stageId = row.stageId
+            this.uploadInfo.fileId = row.fileId
         },
-        handleUpload(file) {
-            this.file = file;
-            return false;
+        handleSuccess(res, file) {
+            if(res.status == '200') {
+                this.$Message.success(res.message || '上传成功！')
+                this.modalAdd = false
+                this._getFundDoc()
+            }
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
+        deleteFundDoc(index, row) {
+            this.reminders = true
+            this.deleteId = row.id
+        },
+        confirmDel() {
+            console.log(this.deleteId)
+            if (this.deleteId == '') {
+                this.$Message.info('请上传文档！')
+                this.reminders = false
+            } else {
+                deleteDocument(this.deleteId).then((res) => {
+                    if (res.status == '200') {
+                        this.$Message.success(res.data.message || '删除成功！')
+                        this.reminders = false
+                        this._getFundDoc()
+                    }
+                }).catch(err => {
+                    this.$Message.success(err.data.message || '删除失败！')
+                    this.reminders = false
+                })
+            }
+        },
+        previewFundDoc(index, row) {
+            this.modalAdd = true
+            this.preview = true
+            this.previewFundInfo = row.documentUrl.split('?')[0]
+            console.log(row.documentUrl.split('?')[0])
+        },
+        confirmCancel() {
+            this.reminders = false
+        },
+        _getFundDoc() {
+            selectProjectOrFundDocument(this.$route.params.id, 2).then((res) => {
+                if (res.status == '200') {
+                    this.fileListData = res.data.result
+                }
+            })
         }
     },
-    // created() {
-    //     this.fileListData.map((x, index) => {
-    //         this.headerInfo.desc = x[index].title
-    //     })
-    // },
+    components: {
+        deleteReminders
+    }
 }
 </script>
 
@@ -162,11 +179,11 @@ export default {
 .file {
     width: 100%;
     height: 100%;
-    .listHeader{
+    .listHeader {
         width: 100%;
         height: 42px;
         display: flex;
-        .list{
+        .list {
             flex: 1;
             color: @color-base;
             font-size: 16px;
@@ -177,17 +194,17 @@ export default {
     }
     .el-table {
         .border-right,
-        .scopeBtn{
+        .scopeBtn {
             padding: 0 12px;
             margin-left: 0;
             border-radius: 0;
         }
-        .btn_border{
+        .btn_border {
             border-left: 1px solid #ddd;
             border-right: 1px solid #ddd;
         }
     }
-    .title{
+    .title {
         width: 100%;
         height: 42px;
         padding-right: 24px;
@@ -200,6 +217,9 @@ export default {
             font-weight: bold;
             line-height: 42px;
         }
+    }
+    .img_wrapper{
+        text-align: center;
     }
 }
 </style>

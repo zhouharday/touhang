@@ -3,45 +3,46 @@
     <div class="mytabel_wrapper">
         <div class="list">
             <div class="list_title default">最新估值（元）</div>
-            <div class="list_content default">{{data.newAppra}}</div>
+            <div class="list_content default">{{data.newAppra | toMoney}}</div>
             <div class="list_title default">最新浮盈（元）</div>
-            <div class="list_content default">{{data.newFuy}}</div>
+            <div class="list_content default">{{data.newFuy | toMoney}}</div>
         </div>
         <div class="list">
             <div class="list_title default">估值日期</div>
-            <div class="list_content default">{{data.appraisementDate}}</div>
+            <div class="list_content default">{{data.appraisementDate | formatDate}}</div>
             <div class="list_title default">基金规模（元）</div>
-            <div class="list_content default">{{data.fundScale}}</div>
+            <div class="list_content default">{{data.fundScale | toMoney}}</div>
         </div>
         <div class="list">
             <div class="list_title default">募集总额（元）</div>
-            <div class="list_content default">{{data.placementSum}}</div>
+            <div class="list_content default">{{data.placementSum | toMoney}}</div>
             <div class="list_title default">投资总额（元）</div>
-            <div class="list_content default">{{data.investAmount}}</div>
+            <div class="list_content default">{{data.investAmount | toMoney}}</div>
         </div>
         <div class="list">
             <div class="list_title default">剩余额度（元）</div>
-            <div class="list_content default">{{data.remain}}</div>
+            <div class="list_content default">{{data.remain | toMoney}}</div>
             <div class="list_title default">待分配总额（元）</div>
-            <div class="list_content default">{{data.waitAmount}}</div>
+            <div class="list_content default">{{data.waitAmount | toMoney}}</div>
         </div>
         <div class="list">
             <div class="list_title default">基金负责人</div>
             <div class="list_content default">{{data.roleName}}</div>
             <div class="list_title default">成立日期</div>
-            <div class="list_content default">{{data.startDate}}</div>
+            <div class="list_content default">{{data.startDate | formatDate}}</div>
         </div>
     </div>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+import '../common/js/filter'
 export default {
     props: {
         data: {
             type: Object,
             default: {}
-        }
+        },
     }
 }
 </script>

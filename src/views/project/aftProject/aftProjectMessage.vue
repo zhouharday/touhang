@@ -9,7 +9,7 @@
             <el-row :gutter="40">
                 <el-col :span="12">
                     <div class="tableTitle">出资主体</div>
-                    <el-table :data="fundTable" style="width:100%;height:260px;overflow:hidden" :row-class-name="tableRowClassName">
+                    <el-table :data="fundTable" style="width:100%;overflow:hidden;" :row-class-name="tableRowClassName">
                         <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investAmount" label="投资金额（元）" align="center">
@@ -28,7 +28,7 @@
         <div class="secondLayer">
             <el-row :gutter="40">
                 <el-col :span="12">
-                    <table-info :data="tableData"></table-info>
+                    <table-show :data="tableData"></table-show>
                 </el-col>
                 <el-col :span="12">
                     <div class="prompt_message">
@@ -87,7 +87,7 @@
     
 
 <script>
-import tableInfo from '../../../components/tableInfo'
+import tableShow from '../../../components/tableShow'
 import echarts from '../../../components/echarts'
 import detailForm from './details'
 import tableForm from './tables'
@@ -107,7 +107,7 @@ import { getWarnMessageList, getInvestSubject, getAppraisementRep } from 'api/pr
 export default {
     components: {
         echarts,
-        tableInfo,
+        tableShow,
         detailForm,
         tableForm,
         approveTable,
@@ -138,40 +138,18 @@ export default {
                     state: false
                 }
             ],
-            tableData: [
-                {
-                    rmb: '83,000,000',
-                    name: '最新估值（元）',
-                    updown: '3'
-                }, {
-                    rmb: '32,000,000,000',
-                    name: '最新浮盈（元）'
-                }, {
-                    date: '',
-                    name: '估值日期'
-                }, {
-                    rmb: '',
-                    name: '基金规模（元）'
-                }, {
-                    rmb: '',
-                    name: '募集总额（元）'
-                }, {
-                    rmb: '',
-                    name: '投资总额（元）'
-                }, {
-                    rmb: '',
-                    name: '剩余额度（元）'
-                }, {
-                    rmb: '',
-                    name: '待分配总额（元）',
-                }, {
-                    manager: '',
-                    name: '基金负责人'
-                }, {
-                    date: '',
-                    name: '成立日期'
-                }
-            ],
+            tableData: {
+                "appraisementValue": 0,
+                "projectCost": "248002",
+                "incomeRatio": "-69%",
+                "newFuying": 0,
+                "investAmount": "4000000",
+                "appraisementChange": 0,
+                "stock": "15",
+                "exitAmount": 1460271,
+                "shareAmount": 1460000,
+                "exitIncome": -2787731
+            },
             basicForm: {}, // 基本信息
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
@@ -206,6 +184,7 @@ export default {
             this.merchantId = merchants[0].id;
             this.getWarnMessageList();
             this.getInvestSubject();
+            this.getAppraisementRep();
             this.getProUsers();
         },
         /**
@@ -254,9 +233,11 @@ export default {
         //获取预警提醒
         getWarnMessageList() {
             getWarnMessageList(this.projectId).then(resp => {
-                console.log("获取预警提醒: "+ JSON.stringify(resp.data));
+                // console.log("获取预警提醒: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.message = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    this.message = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -265,9 +246,10 @@ export default {
         //获取投资主体
         getInvestSubject() {
             getInvestSubject(this.projectId).then(resp => {
-                console.log("获取投资主体: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.fundTable = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    this.fundTable = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -275,10 +257,11 @@ export default {
         },
         //获取投后项目的估值信息
         getAppraisementRep() {
+            console.log("获取估值 参数: "+ this.projectId);
             getAppraisementRep(this.projectId).then(resp => {
-                console.log("获取投资主体: "+ JSON.stringify(resp.data));
+                console.log("获取估值 结果: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
-                    // this.fundTable = resp.data.result;
+                    this.tableData = resp.data.appraisement;
                 }else{
                     this.$message.error(resp.data.message);
                 }

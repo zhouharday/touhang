@@ -83,7 +83,7 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="添加日期" prop="date">
-                        <el-input placeholder="默认当前日期" v-model="teamForm.date" style="width: 100%;">
+                        <el-input placeholder="默认当前日期" v-model="teamForm.date" disabled style="width: 100%;">
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -164,6 +164,11 @@ export default {
         });
         this.init();
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
+    },
     methods: {
         init() {
             this.initInfo();
@@ -186,6 +191,8 @@ export default {
                 pageSize: this.pageSize
             };
             getPres(params).then(resp => {
+                // alert(123);
+                console.log(resp.data);
                 let data = resp.data;
                 let result = data.result;
                 let list = result.list;

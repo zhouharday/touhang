@@ -7,17 +7,17 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="基金名称" prop="fundName">
-                            <el-input v-model="formDetails.fundName" :disabled="formDetails.flag"></el-input>
+                            <el-input v-model="formDetails.fundName" :disabled="formDetails.flag" placeholder="选择输入基金名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="基金编号" prop="fundNo">
-                            <el-input v-model="formDetails.fundNo" :disabled="formDetails.flag"></el-input>
+                            <el-input v-model="formDetails.fundNo" :disabled="formDetails.flag" placeholder="选择输入基金编号"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="基金规模(元)" prop="fundScale">
-                            <el-input v-model="formDetails.fundScale" :disabled="formDetails.flag"></el-input>
+                            <el-input type="number" v-model="formDetails.fundScale" :disabled="formDetails.flag" placeholder="请输入基金规模"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -81,7 +81,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="基金期限" prop="fundTerm">
-                            <el-input v-model="formDetails.fundTerm" :disabled="formDetails.flag"></el-input>
+                            <el-input type="number" v-model="formDetails.fundTerm" :disabled="formDetails.flag" placeholder="选择输入数字"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -285,17 +285,17 @@ export default {
         return {
             headerInfo_details: {
                 desc: '基本信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
+//                btnGroup: [{
+//                    icon: 'edit',
+//                    explain: '编辑'
+//                }]
             },
             headerInfo_MIS: {
                 desc: '管理信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
+//                btnGroup: [{
+//                    icon: 'edit',
+//                    explain: '编辑'
+//                }]
             },
             headerInfo_Registration: {
                 desc: '备案注册',
@@ -306,10 +306,10 @@ export default {
             },
             headerInfo_Accountinfo: {
                 desc: '账户信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
+//                btnGroup: [{
+//                    icon: 'edit',
+//                    explain: '编辑'
+//                }]
             },
             managementCompany: [],
             options: [{
@@ -438,7 +438,7 @@ export default {
         this.$store.dispatch('getFundInvestment')
         this.$store.dispatch('getManagementCompany')
         this.$store.dispatch('getAllOrg')
-        this.$store.dispatch('getAllOrg')
+        // this.$store.dispatch('getAllOrg')
         selectAllManageCompany().then((res) => {
             if (res.status == '200') {
                 this.managementCompany = res.data.result

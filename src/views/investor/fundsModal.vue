@@ -3,7 +3,7 @@
         <el-form :model="fundsInfo" :rules="rules1" ref="fundsInfo" label-position="left" label-width="120px">
             <el-row :gutter="10">
                 <el-col :span="24">
-                    <el-form-item label="协议名称" prop="agreementName"> 
+                    <el-form-item label="协议名称" prop="agreementName">
                         <el-select v-model="fundsInfo.agreementName" @change="getItemData" style="width:100%">
                             <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.agreementName" :value="item.id">
                             </el-option>
@@ -52,10 +52,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人" prop="managerId">
-                        <el-select v-model="fundsInfo.managerId" style="width:100%">
+                        <el-input v-model="fundsInfo.managerId" placeholder="当前用户" disabled style="width:100%">
+                        </el-input>
+                        <!-- <el-select v-model="fundsInfo.managerId" style="width:100%">
                             <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.managerId">
                             </el-option>
-                        </el-select>
+                        </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -102,7 +104,7 @@ export default {
                     { required: true, message: '请选择协议名称', trigger: 'change' }
                 ],
                 paidAmount: [
-                    {  required: true, message: '请输入实缴金额', trigger: 'change' }
+                    { required: true, message: '请输入实缴金额', trigger: 'change' }
                 ],
                 paidDate: [
                     { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
@@ -121,6 +123,7 @@ export default {
     created() {
         GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
             if (res.status == '200') {
+                console.log(res)
                 this.allAgreement = res.data.result.list
             }
         }).catch(err => {

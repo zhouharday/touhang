@@ -1,21 +1,21 @@
 <template>
     <div class="eventBox">
-        <el-form :model="eventForm" label-width="80px" class="eventForm">
-            <el-form-item label="汇报事项">
+        <el-form :model="eventForm" rules="rules1" :ref="eventForm" label-width="80px" class="eventForm">
+            <el-form-item label="汇报事项" prop="issuesType">
                 <el-select v-model="eventForm.issuesType" placeholder="请选择汇报事项" style="width: 100%;">
                     <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key">
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="事项日期">
+            <el-form-item label="事项日期" prop="issuesDate">
                 <el-date-picker type="date" placeholder="选择日期" v-model="eventForm.issuesDate" style="width:100%;"></el-date-picker>
             </el-form-item>
-            <el-form-item label="事项内容">
+            <el-form-item label="事项内容" prop="issuesContent">
                 <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="eventForm.issuesContent">
                 </el-input>
             </el-form-item>
             <el-form-item label="相关文档">
-                <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
+                <Upload multiple type="drag" v-model="eventForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52"></Icon>
                         <p>点击或将文件拖拽到这里上传</p>
@@ -27,11 +27,11 @@
         <div class="recordArea">
             <Timeline>
                 <TimelineItem v-for="(item,index) in recordList" :key="item.index" class="recordContent">
-                    <b>{{item.issuesDate}}</b>
+                    <b>{{item.year}}</b>
                     <div class="recordText">
                         <p>
                             <span>{{item.issuesType | key2value(eventOptions, item.issuesType)}}</span>
-                            <span style="margin-right:50px">{{item.issuesDate}}</span>
+                            <span style="margin-right:50px">{{item.issuesDate | formatDate}}</span>
                             <span>{{item.doc}}</span>
                             <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
                         </p>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import '../../../common/js/filter'
+import { changeDate } from '../../../common/js/config'
 import {
     getEventList, addEvent, delEvent
 } from 'api/projectAfter';
@@ -68,8 +70,20 @@ export default {
                 issuesDate: '',
                 issuesContent: ''
             },
+            rules1: {
+                issuesType: [
+                    { required: true, message: '请选择汇报事项', trigger: 'blur' }
+                ],
+                issuesDate: [
+                    { required: true, message: '请选择事项日期', trigger: 'blur' }
+                ],
+                issuesContent: [
+                    { required: true, message: '请输入事项内容', trigger: 'blur' }
+                ]
+            },
+            recordList: [],
             eventOptions: [
-                 { //汇报事项列表
+                { //汇报事项列表
                     key: '1',
                     value: '上市进展'
                 }, {
@@ -100,41 +114,51 @@ export default {
                     key: '9',
                     value: '其他'
                 }
-            ],
-            recordList: []
+            ]
         }
     },
     created() {
         this.init();
     },
     methods: {
-        init(){
+        init() {
             this.getEventList();
         },
         getEventList() {
             //查询重大事项列表
             getEventList(this.projectId).then(resp => {
-                if(resp.data.status == '200'){
-                    this.recordList = resp.data.result || [];
-                }else{
+                if (resp.data.status == '200') {
+                    let data = resp.data.result;
+                    this.recordList=this.handleDatas(data);
+                    this.recordList.push();
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('查询重大事项列表 error: ', e);
             });
         },
+        handleDatas(data = []) {
+            let _data = data;
+            _data.forEach(item => {
+                let date = new Date(item.issuesDate);
+                item.year = date.getFullYear();
+            });
+            return _data;
+        },
         //添加重大事件
         submitEvent() {
             let params = {
                 projectId: this.projectId,
                 issuesType: this.eventForm.issuesType,
-                issuesDate: this.eventForm.issuesDate,
-                issuesContent: this.eventForm.issuesContent
+                issuesDate: changeDate(this.eventForm.issuesDate),
+                issuesContent: this.eventForm.issuesContent,
+                documentInfo: []
             };
             addEvent(params).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getEventList();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -144,9 +168,9 @@ export default {
         //删除重大事件
         delEvent(id) {
             delEvent(id).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getEventList();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {

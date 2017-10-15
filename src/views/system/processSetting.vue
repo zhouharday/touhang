@@ -60,10 +60,9 @@
                                         </div>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="表单模型" align="center" class="model">
+                                <el-table-column label="表单模型" align="center">
                                     <template scope="scope">
-                                        <span v-if="!scope.row.editFlag" @click="handleRouter(scope.row,scope.$index)">{{ scope.row.model
-                                            }}</span>
+                                        <span  class="model" v-if="!scope.row.editFlag" @click="handleRouter(scope.row,scope.$index)">{{ scope.row.model }}</span>
                                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                                             <el-input v-model="scope.row.model"></el-input>
                                         </span>
@@ -495,6 +494,7 @@ export default {
         //     text-align: right;
         // }
     }
+    //表单模型
     .formModel {
         .searchHeader {
             height: 30px;
@@ -505,6 +505,11 @@ export default {
         }
         .addProject {
             float: right;
+        }
+        span.model{
+            text-decoration: underline;
+            cursor: pointer;
+            color: #F05E5E;
         }
     } // 阶段配置
     .phaseConfigure {

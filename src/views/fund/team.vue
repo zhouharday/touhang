@@ -15,7 +15,7 @@
         </el-table-column>
     </el-table>
     <!-- 添加成员 对话框-->
-    <el-dialog title="添加成员"
+    <el-dialog title="添加团队成员"
                :visible.sync="modalAdd"
                :close-on-click-modal="false">
         <el-form :model="formTeam">
