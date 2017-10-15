@@ -4,13 +4,13 @@
             <el-row>
                 <el-col>
                     <el-form-item label="标题">
-                        <el-input v-model="outingForm.exitTitle" auto-complete="off"></el-input>
+                        <el-input v-model="outingForm.exitTitle" auto-complete="off" :disabled="controlEdit"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出类型">
-                        <el-select v-model="outingForm.exitType" placeholder="请选择退出类型" style="width:100%;">
-                            <el-option v-for="item in outingSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                        <el-select v-model="outingForm.exitType" placeholder="请选择退出类型"  :disabled="controlEdit" style="width:100%;">
+                            <el-option v-for="item in outingSortOptions" :key="item.id" :label="item.dicName" :value="item.id" :disabled="controlEdit">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -23,7 +23,7 @@
                 <el-col>
                     <el-form-item label="相关附件">
                         <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="outingForm.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
+                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="outingForm.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/" :disabled="controlEdit">
                             <div style="padding: 20px 0">
                                 <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
@@ -33,12 +33,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人">
-                        <el-input placeholder="默认当前登陆用户" v-model="userName" auto-complete="off"></el-input>
+                        <el-input placeholder="默认当前登陆用户" v-model="userName" auto-complete="off" :disabled="controlEdit"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="outingForm.exitDate" style="width: 100%;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="outingForm.exitDate" :disabled="controlEdit" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -53,13 +53,13 @@
             </el-table-column>
             <el-table-column label="回款金额（元）" prop="exitAmount" align="center">
                 <template scope="scope">
-                    <el-input v-model="scope.row.exitAmount" @input="sumExit" placeholder="请输入回款金额">{{ scope.row.exitAmount | 0}}</el-input>
+                    <el-input v-model="scope.row.exitAmount" @input="sumExit" placeholder="请输入回款金额" :disabled="controlEdit">{{ scope.row.exitAmount | 0}}</el-input>
                 </template>
             </el-table-column>
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button type="default"  v-show="isShow">编 辑</el-button>
+                <el-button type="default"  v-show="isShow" @click="editForm">编 辑</el-button>
                 <el-button type="danger"  v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
@@ -85,6 +85,7 @@ export default {
     },
     data() {
         return {
+            controlEdit: true,
             isShow: true,
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             outingForm: {
@@ -131,6 +132,10 @@ export default {
                 console.log('获取退出单 error: ', e);
             })
         },
+        // 编辑退出单
+        editForm() {
+          this.controlEdit = !this.controlEdit;
+        },
         // 保存退出单
         confirmSave() {
             this.isShow = !this.isShow;
@@ -147,6 +152,7 @@ export default {
             saveExit(this.outingForm, this.outingData2).then(resp => {
                 if (resp.data.status == '200') {
                     this.getExitDetail();
+                    this.controlEdit = true;
                 }
             }).catch(e => {
                 console.log('保存退出单 error: ', e);
