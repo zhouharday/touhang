@@ -94,9 +94,6 @@ export default {
                 recordType: 1 // TODO: 提交记录类型，此处为项目池记录，具体值未知
             };
             addRecord(record).then(resp => {
-                //console.log('resp: ', resp);
-                // TODO: 动态添加的话，需要返回当前保存的信息,目前暂时做刷新列表
-                //this.recordList.push(value);
                 this.resetInput();
                 this.getDatas();
             }).catch(e => {

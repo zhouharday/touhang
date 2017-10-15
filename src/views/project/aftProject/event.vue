@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import '../../../common/js/filter'
 import {
     getEventList, addEvent, delEvent
 } from 'api/projectAfter';
