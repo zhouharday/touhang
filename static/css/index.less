@@ -23,6 +23,18 @@
     }
 }
 
+//全局输入框 边框色
+//.el-input input:focus,
+//.el-input input:hover {
+//    border-color: #8391a5;
+//}
+.el-input__inner:focus,
+.el-input__inner:hover,
+.el-select .el-input__inner:focus,
+.el-textarea__inner:focus{
+    border-color: #8391a5;
+}
+
 .pagination { //分页样式
     margin-top: 20px;
     float: right;
@@ -191,9 +203,9 @@
         background-color: #2A3142;
         color: #fff;
     }
-    .el-input__inner:focus, .el-input__inner:hover {
-        border-color: #F05E5E;
-    }
+    //.el-input__inner:focus, .el-input__inner:hover {
+    //    border-color: #F05E5E;
+    //}
 }
 
 // 业务配置
@@ -223,6 +235,13 @@
     .el-button--danger {
         background-color: #F05E5E;
         border-color: #F05E5E;
+    }
+    .ivu-icon {
+        color:#F05E5E;
+    }
+    .el-input__inner:focus {
+        outline: 0;
+        border-color: #8391a5;
     }
 }
 
@@ -333,11 +352,6 @@
     .el-table .el-table__body-wrapper .el-button > span{
             color: #F05E5E;
     }
-    .el-table_1_column_2 >.cell>span {
-        text-decoration:underline;
-        cursor: pointer;
-        color:#F05E5E;
-    }
 }
 //表单模型详情
 .createForm{
@@ -366,9 +380,9 @@
 //我的基金
 .fund {
     .addPadding {
-        .el-input__inner:hover, .el-input__inner:focus {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:hover, .el-input__inner:focus {
+        //    border-color: #F05E5E;
+        //}
     }
     .cell > .el-button > span {
         color: #F05E5E;
@@ -408,9 +422,9 @@
         color: #F05E5E;
     }
     .addPadding {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
     }
 }
 
@@ -418,9 +432,9 @@
 //项目库
 .proLibrary {
     .addPadding {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
     }
     // row-table的css style
     .el-table th {
@@ -445,9 +459,9 @@
 //基金库
 .fundLibrary {
     .addPadding {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
     }
     td > .cell > .el-button--text {
         color: #F05E5E;
@@ -469,9 +483,9 @@
 //投资者库
 .investorLibrary {
     .addPadding {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
     }
     // row-table的css style
     .el-table th {
@@ -488,9 +502,9 @@
 //项目文档
 .projectsDoc {
     .search {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
     }
     td > .cell > .el-button--text {
         color: #F05E5E;
@@ -500,9 +514,9 @@
 //基金文档
 .fundDoc {
     .search {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
     }
     td > .cell > .el-button--text {
         color: #F05E5E;
@@ -539,9 +553,9 @@
 //出资统计表
 .customerMang {
     .grid-content {
-        .el-input__inner:focus, .el-input__inner:hover {
-            border-color: #F05E5E;
-        }
+        //.el-input__inner:focus, .el-input__inner:hover {
+        //    border-color: #F05E5E;
+        //}
         .el-button--danger {
             color: #fff;
             background-color: #F05E5E;
@@ -695,10 +709,10 @@
         border-color: #F05E5E;
         color: #F05E5E;
     }
-    .el-input input:focus,
-    .el-input input:hover {
-        border-color: #F05E5E;
-    }
+    //.el-input input:focus,
+    //.el-input input:hover {
+    //    border-color: #F05E5E;
+    //}
     .cell>.el-button>span{
         color:#F05E5E;
     }
@@ -708,11 +722,6 @@
 //项目管理下
 //项目池
 .poolContent {
-    .el-input input:focus,
-    .el-input input:hover {
-        border-color: #F05E5E;
-    }
-
     .el-input i:hover {
         border-color: #F05E5E;
     }
@@ -773,10 +782,10 @@
 //投资项目
 .preContent {
     // 搜索框的颜色样式
-    .el-input input:focus,
-    .el-input input:hover {
-        border-color: #F05E5E;
-    }
+    //.el-input input:focus,
+    //.el-input input:hover {
+    //    border-color: #F05E5E;
+    //}
 }
 .recordBox{
     .el-button--danger {
@@ -828,10 +837,10 @@
 }
 //投后项目
 .aftProject {
-    .el-input input:focus,
-    .el-input input:hover {
-        border-color: #F05E5E;
-    }
+    //.el-input input:focus,
+    //.el-input input:hover {
+    //    border-color: #F05E5E;
+    //}
     // .el-button--default {
     //     border: 1px solid #F05E5E;
     //     color: #F05E5E;
@@ -855,26 +864,26 @@
 
 //项目估值
 .projectValue {
-    .el-input input:focus,
-    .el-input input:hover {
-        border-color: #F05E5E;
-    }
+    //.el-input input:focus,
+    //.el-input input:hover {
+    //    border-color: #F05E5E;
+    //}
 }
 
 //估值查看
 .valueView {
-    .el-input input:focus,
-    .el-input input:hover {
-        border-color: #F05E5E;
-    }
+    //s,
+    //.el-input input:hover {
+    //    border-color: #F05E5E;
+    //}
 }
 
 //云项目
 .assistantContent {
-    input.el-input__inner:focus,
-    input.el-input__inner:hover {
-        border-color: #F05E5E;
-    }
+    //input.el-input__inner:focus,
+    //input.el-input__inner:hover {
+    //    border-color: #8391a5;
+    //}
     .el-input__icon:hover {
         border-color: #F05E5E;
     }
