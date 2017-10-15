@@ -27,11 +27,11 @@
         <div class="recordArea">
             <Timeline>
                 <TimelineItem v-for="(item,index) in recordList" :key="item.index" class="recordContent">
-                    <b>{{item.issuesDate}}</b>
+                    <b>{{item.year}}</b>
                     <div class="recordText">
                         <p>
                             <span>{{item.issuesType | key2value(eventOptions, item.issuesType)}}</span>
-                            <span style="margin-right:50px">{{item.issuesDate}}</span>
+                            <span style="margin-right:50px">{{item.issuesDate | formatDate}}</span>
                             <span>{{item.doc}}</span>
                             <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
                         </p>
@@ -49,6 +49,7 @@
 
 <script>
 import '../../../common/js/filter'
+import { changeDate } from '../../../common/js/config'
 import {
     getEventList, addEvent, delEvent
 } from 'api/projectAfter';
@@ -80,6 +81,7 @@ export default {
                     { required: true, message: '请输入事项内容', trigger: 'blur' }
                 ]
             },
+            recordList: [],
             eventOptions: [
                 { //汇报事项列表
                     key: '1',
@@ -124,11 +126,11 @@ export default {
         },
         getEventList() {
             //查询重大事项列表
-            console.log("添加重大事件 参数：" + JSON.stringify(this.projectId));
             getEventList(this.projectId).then(resp => {
-            console.log("查询重大事项列表 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    this.recordList = resp.data.result;
+                    let data = resp.data.result;
+                    this.recordList=this.handleDatas(data);
+                    this.recordList.push();
                 } else {
                     this.$message.error(resp.data.message);
                 }
@@ -136,18 +138,24 @@ export default {
                 console.log('查询重大事项列表 error: ', e);
             });
         },
+        handleDatas(data = []) {
+            let _data = data;
+            _data.forEach(item => {
+                let date = new Date(item.issuesDate);
+                item.year = date.getFullYear();
+            });
+            return _data;
+        },
         //添加重大事件
         submitEvent() {
             let params = {
                 projectId: this.projectId,
                 issuesType: this.eventForm.issuesType,
-                issuesDate: this.eventForm.issuesDate,
+                issuesDate: changeDate(this.eventForm.issuesDate),
                 issuesContent: this.eventForm.issuesContent,
                 documentInfo: []
             };
-            console.log("添加重大事件 参数：" + JSON.stringify(params));
             addEvent(params).then(resp => {
-            console.log("添加重大事件 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.getEventList();
                 } else {

@@ -287,17 +287,11 @@ export default {
             let merchantId = this.merchantId;
             let projectId = _data.id;
             let addProjectUserId = this.addProjectUserId;
-            transPro(projectId)
-            .then(resp => {
-                console.log(resp.data);
-                let data = resp.data;
-                if (data.status == '200') {
-                    // alert(333);
+            transPro(projectId).then(resp => {
+                this.dialogVisible = false; // 隐藏弹框
+                if (resp.data.status == '200') {
                     this.addTab('投前项目', '/home/preProject', 'preProject');
                     this.$router.push({ name: 'preProject' });
-                    this.dialogVisible = false;
-                } else {
-                    this.dialogVisible = false; // 隐藏弹框
                 }
             }).catch(e => {
                 console.log('jumpPre exists error: ', e);
