@@ -61,14 +61,14 @@ export default {
     watch: {
         '$route'(to, from) {
             // 对路由变化作出响应...
-            console.log(to);
-            // alert(666);
-            let href = location.href;
-            let index = href.indexOf('#');
-            let url = href.substr(0, index);
-            window.location.href = url + '#' + to.fullPath;
-            console.log(window.location.href);
-            // this.$router.push({ name: to.name });
+            // console.log(to);
+            // // alert(666);
+            // let href = location.href;
+            // let index = href.indexOf('#');
+            // let url = href.substr(0, index);
+            // window.location.href = url + '#' + to.fullPath;
+            // console.log(window.location.href);
+            // // this.$router.push({ name: to.name });
         }
     },
     computed: {

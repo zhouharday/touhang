@@ -21,7 +21,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="operatingModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
                         <el-button type="text" @click="operatingDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
@@ -126,7 +126,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="financialModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '2')">添加数据</el-button>
                         <el-button type="text" @click="financialDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
@@ -539,6 +539,56 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
+        goAddData(subjectId, dataType){
+
+            getDataFormBody(subjectId).then(resp => {
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos | [];
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length - 1; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }
+                    }
+                    if(dataType == '1'){
+                        this.operatingModal2 = true;
+                    }else{
+                        this.financialModal2 =true;
+                    }
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+
+        },
+        //填充经营数据表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充资产负债表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充现金流量表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充利润表单
+        fillBalanceSheet(){
+            // 
+        },
         // 切换 经营/财务 的显示隐藏
         changeData1() {
             this.f_show = true;
@@ -606,23 +656,6 @@ export default {
         operatingEdit() {
             this.operatingModal2 = false;
             // console.log(this.operatingData1);
-        },
-        // 财务数据-添加 的方法
-        financialAdd(formName) {
-             this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    alert('submit!');
-                    this.financialModal1  = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-            // this.financialForm1.date = changeDate(this.financialForm1.date);
-            // this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
-            // this.financialData.push(this.financialForm1);
-            // this.financialForm1 = {};
-            // this.financialModal1 = false;
         },
         // 财务数据-添加数据 的方法
         financialEdit() {

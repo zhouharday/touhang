@@ -78,11 +78,14 @@ export default {
             stateList: { //筛选选项
                 title: '状态：',
                 details: [{
+                    id: '',
                     dicName: '全部'
                 }, {
-                    dicName: '未提交'
+                    id: '1',
+                    dicName: '已估值'
                 }, {
-                    dicName: '已提交'
+                    id: '2',
+                    dicName: '未估值'
                 }]
             },
             tableData: [
