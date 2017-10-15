@@ -28,7 +28,7 @@ export function getEventList(projectId = undefined) {
 	const data = {
 		projectId
 	};
-	return service({url: '/bigIssues/selectBigIssues', method: 'post', data});
+	return service({url: '/bigIssuesclie/selectBigIssues', method: 'post', data});
 }
 
 //添加投后重大事项
@@ -76,14 +76,153 @@ export function getAppraisementRep(projectId = undefined) {
 	};
 	return service({url: '/appraisement/appraisementDetails', method: 'post', data});
 }
-// // 投后 重大事项详情
-// export function getPreDetail(projectId = undefined) {
-// 	const data = {
-// 		id:projectId
-// 	}
-// 	return service({url: '/projectPool/selectProjectPool', method: 'post', data});
+
+//监控设置-监控主体列表
+export function getDataMonitorList(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/formLabel/queryDataMonitorByData', method: 'post', data});
+}
+
+//监控设置-监控主体详情及科目
+export function getDataMonitorDetail(dataMonitorId = undefined) {
+	const data = {
+		dataMonitorId
+	};
+	return service({url: '/formLabel/queryDataMonitorByid', method: 'post', data});
+}
+
+//监控设置-监控开启关闭
+export function updateDataMonitor(id = undefined, isOpen) {
+	const data = {
+		id,
+		isOpen
+	};
+	return service({url: '/formLabel/updateDataMonitor', method: 'post', data});
+}
+
+//监控设置-数据源查询对应科目列表
+export function getFormByType(formType = undefined) {
+	const data = {
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+		formType
+	};
+	return service({url: '/formLabel/findFormByType', method: 'post', data});
+}
+
+//监控设置-新增、编辑监控科目
+export function saveDataMonitor(dataMonitor = {}, monitorInfos = []) {
+	const data = {
+		dataMonitor,
+		monitorInfos
+	};
+	return service({url: '/formLabel/saveMonitorInFo', method: 'post', data});
+}
+
+
+//运营数据-运营数据科目列表
+export function getOperateForm() {
+	const data = {
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id
+	};
+	return service({url: '/formLabel/queryOperateFrom', method: 'post', data});
+}
+
+//运营数据-新增、编辑运营数据科目
+export function saveOperateForm(id = undefined, formId = undefined, fieldName = '') {
+	const data = {
+		formId,
+		id,
+		fieldName
+	};
+	return service({url: '/formLabel/editFrom', method: 'post', data});
+}
+
+//运营数据-删除运营表单标签
+export function delFormLabel(formLabelId = undefined) {
+	const data = {
+		formLabelId
+	};
+	return service({url: '/formLabel/deletFromLabel', method: 'post', data});
+}
+
+//数据填报--excel导入三大表
+export function importFinancialData(dataInfoid = undefined, file) {
+	const data = {
+		dataInfoid,
+		file
+	};
+	return service({url: '/excel/financial', method: 'post', data});
+}
+
+//数据填报--查询填报数据主体
+export function getDataSubjectList(projectId = undefined, dataType) {
+	const data = {
+		projectId,
+		dataCat : dataType
+	};
+	return service({url: '/projectData/listObject', method: 'post', data});
+}
+
+//数据填报--数据填报主体添加
+export function saveDataSubject(projectData = {}) {
+// 	"projectId":"1255863654", //项目id
+// "baseDate":"2013-14-15", //基准日
+// "dataType":1, //1年报、2半年报、3季报、4月报
+// "operator":"张三", //填报人id
+// "currentDeta":"2013-14-15",// 填报日期
+// "operatorName":"张三", //填报人姓名
+// "dataCat":1 //0:经营数据;1:财务数据
+	const data = {
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+		projectData : projectData
+	};
+	return service({url: '/projectData/saveObject', method: 'post', data});
+}
+
+//数据填报--数据填报主体编辑
+export function updDataSubject(params = {}) {
+// 	{
+// "id":"e8d93b8781bd4f068ee17e5f5857969e", //id 必须
+// "baseDate":"2013-14-15", //基准日
+// "dataType":1, //1年报、2半年报、3季报、4月报
+// "operator":"张三", //填报人id
+// "currentDeta":"2013-14-15",// 填报日期
+// "operatorName":"张三", //填报人姓名
 // }
+	let {id, baseDate, dataType, operator, currentDeta,operatorName } = params;
+	const data = {
+		id, baseDate, dataType, operator, currentDeta,operatorName
+	};
+	return service({url: '/projectData/updeat', method: 'post', data});
+}
+
+//数据填报--数据填报主体详情
+export function getDataSubjectDetail(projectDataId = undefined) {
+	const data = {
+		projectDataId: projectDataId
+	};
+	return service({url: '/projectData/objectInfo', method: 'post', data});
+}
+
+//数据填报--数据填报表单查询
+export function getDataFormBody(projectDataId = undefined) {
+	const data = {
+		projectDataId: projectDataId
+	};
+	return service({url: '/projectData/queryFormBody', method: 'post', data});
+}
+
+//数据填报--填充表单数据
+export function fillDataForm(params = {}) {
+	let {dataInfos } = params;
+	const data = {
+		dataInfos: dataInfos
+	};
+	return service({url: '/projectData/fillDataForm', method: 'post', data});
+}
 
 
-
-	// let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
+// let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
+// let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //当前商户id

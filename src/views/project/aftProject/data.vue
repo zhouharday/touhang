@@ -76,7 +76,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="operatingAdd">保 存</el-button>
+                    <el-button type="danger" @click="operatingAdd('operatingForm1')">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 添加经营数据明细 对话框 -->
@@ -180,7 +180,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="financialAdd">保 存</el-button>
+                    <el-button type="danger" @click="financialAdd('financialForm1')">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加财务数据明细 对话框-->
@@ -307,8 +307,8 @@ export default {
             },
             rules1: {
                 baseDate: [
-                    { required: true, message: '请选择基准日', trigger: 'change' }
-                ], 
+                    { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
+                ],
                 sort: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
@@ -400,8 +400,8 @@ export default {
             },
             rules2: {
                 baseDate: [
-                    { required: true, message: '请选择基准日', trigger: 'change' }
-                ], 
+                    { type:'date', required: true, message: '请选择基准日', trigger: 'change' }
+                ],
                 sort: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
@@ -525,27 +525,44 @@ export default {
             }
         },
         // 经营数据-添加  保存按钮的方法
-        operatingAdd() {
-            this.operatingForm1.date = changeDate(this.operatingForm1.date);
-            this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
-            this.operatingData.push(this.operatingForm1);
-            this.operatingForm1 = {};
-            this.operatingModal1 = false;
+        operatingAdd(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    alert('submit!');
+                    this.operatingModal1 = false;
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+
+            // this.operatingForm1.date = changeDate(this.operatingForm1.date);
+            // this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
+            // this.operatingData.push(this.operatingForm1);
+            // this.operatingForm1 = {};
+            // this.operatingModal1 = false;
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
             this.operatingModal2 = false;
             // console.log(this.operatingData1);
         },
-
-
         // 财务数据-添加 的方法
-        financialAdd() {
-            this.financialForm1.date = changeDate(this.financialForm1.date);
-            this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
-            this.financialData.push(this.financialForm1);
-            this.financialForm1 = {};
-            this.financialModal1 = false;
+        financialAdd(formName) {
+             this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    alert('submit!');
+                    this.financialModal1  = false;
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+            // this.financialForm1.date = changeDate(this.financialForm1.date);
+            // this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
+            // this.financialData.push(this.financialForm1);
+            // this.financialForm1 = {};
+            // this.financialModal1 = false;
         },
         // 财务数据-添加数据 的方法
         financialEdit() {

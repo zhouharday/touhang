@@ -84,7 +84,7 @@
             </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="monitorSetting = false">取 消</el-button>
-                <el-button type="danger" @click="monitorSettingAdd">确 定</el-button>
+                <el-button type="danger" @click="monitorSettingAdd('monitorForm')">确 定</el-button>
             </div>
         </el-dialog>
         <!--编辑监控设置 对话框 -->
@@ -180,7 +180,7 @@ export default {
             rules1: {
                 dataSources: [
                     { required: true, message: '请选择数据来源', trigger: 'change' }
-                ], 
+                ],
                 sort: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
@@ -251,14 +251,23 @@ export default {
     },
     methods: {
         // 添加 监控设置 的方法
-        monitorSettingAdd() {
+        monitorSettingAdd(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    alert('submit!');
+                    this.monitorData.push(this.monitorForm);
+                    this.monitorSetting = !this.monitorSetting;
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+
             // let new_monitorForm = {
             //     dataSources: '',
             //     sort: ''
             // };
             // this.monitorForm = new_monitorForm;
-            this.monitorData.push(this.monitorForm);
-            this.monitorSetting = !this.monitorSetting;
         },
         // 编辑 监控设置 的方法
         editMonitor(row) {

@@ -1,6 +1,6 @@
 <template>
     <div class="eventBox">
-        <el-form :model="eventForm" :rules="rules1" :ref="eventForm" label-width="80px" class="eventForm">
+        <el-form :model="eventForm" rules="rules1" :ref="eventForm" label-width="80px" class="eventForm">
             <el-form-item label="汇报事项" prop="issuesType">
                 <el-select v-model="eventForm.issuesType" placeholder="请选择汇报事项" style="width: 100%;">
                     <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key">
@@ -15,7 +15,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item label="相关文档">
-                <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
+                <Upload multiple type="drag" v-model="eventForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52"></Icon>
                         <p>点击或将文件拖拽到这里上传</p>
@@ -71,13 +71,13 @@ export default {
             },
             rules1: {
                 issuesType: [
-                    { required: true, message: '请选择汇报事项', trigger: 'change' }
+                    { required: true, message: '请选择汇报事项', trigger: 'blur' }
                 ],
                 issuesDate: [
-                    { required: true, message: '请选择事项日期', trigger: 'change' }
+                    { required: true, message: '请选择事项日期', trigger: 'blur' }
                 ],
                 issuesContent: [
-                    { required: true, message: '请输入事项内容', trigger: 'change' }
+                    { required: true, message: '请输入事项内容', trigger: 'blur' }
                 ]
             },
             eventOptions: [
@@ -112,8 +112,7 @@ export default {
                     key: '9',
                     value: '其他'
                 }
-            ],
-            recordList: []
+            ]
         }
     },
     created() {
@@ -125,9 +124,11 @@ export default {
         },
         getEventList() {
             //查询重大事项列表
+            console.log("添加重大事件 参数：" + JSON.stringify(this.projectId));
             getEventList(this.projectId).then(resp => {
+            console.log("查询重大事项列表 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    this.recordList = resp.data.result || [];
+                    this.recordList = resp.data.result;
                 } else {
                     this.$message.error(resp.data.message);
                 }
@@ -141,9 +142,12 @@ export default {
                 projectId: this.projectId,
                 issuesType: this.eventForm.issuesType,
                 issuesDate: this.eventForm.issuesDate,
-                issuesContent: this.eventForm.issuesContent
+                issuesContent: this.eventForm.issuesContent,
+                documentInfo: []
             };
+            console.log("添加重大事件 参数：" + JSON.stringify(params));
             addEvent(params).then(resp => {
+            console.log("添加重大事件 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.getEventList();
                 } else {
