@@ -9,7 +9,7 @@
             <el-row :gutter="40">
                 <el-col :span="12">
                     <div class="tableTitle">出资主体</div>
-                    <el-table :data="fundTable" style="width:100%;height:260px;overflow:hidden" :row-class-name="tableRowClassName">
+                    <el-table :data="fundTable" style="width:100%;overflow:hidden;" :row-class-name="tableRowClassName">
                         <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investAmount" label="投资金额（元）" align="center">
@@ -28,7 +28,7 @@
         <div class="secondLayer">
             <el-row :gutter="40">
                 <el-col :span="12">
-                    <table-info :data="tableData"></table-info>
+                    <table-show :data="tableData"></table-show>
                 </el-col>
                 <el-col :span="12">
                     <div class="prompt_message">
@@ -87,7 +87,7 @@
     
 
 <script>
-import tableInfo from '../../../components/tableInfo'
+import tableShow from '../../../components/tableShow'
 import echarts from '../../../components/echarts'
 import detailForm from './details'
 import tableForm from './tables'
@@ -107,7 +107,7 @@ import { getWarnMessageList, getInvestSubject, getAppraisementRep } from 'api/pr
 export default {
     components: {
         echarts,
-        tableInfo,
+        tableShow,
         detailForm,
         tableForm,
         approveTable,
@@ -257,6 +257,8 @@ export default {
                 console.log("获取预警提醒: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.message = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    this.message = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -268,6 +270,8 @@ export default {
                 console.log("获取投资主体: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.fundTable = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    this.fundTable = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -279,6 +283,8 @@ export default {
                 console.log("获取投资主体: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     // this.fundTable = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    // this.fundTable = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
