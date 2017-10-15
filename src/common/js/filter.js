@@ -17,8 +17,12 @@ Vue.filter('toMoney', (num) => {
     return num //返回的是字符串23,245.12保留2位小数
 })
 
+//根据key转换value，无匹配项返回原Key值
+//value: ''
+//options: [{key: '',value:'',...},
+//			{key: '',value:'',...},...]
 Vue.filter('key2value', (value, options = []) => {
-	let res='未知'
+	let res = value
 	options.forEach((item = {}) => {
 		if(item.key == value){
 			res = item.value;

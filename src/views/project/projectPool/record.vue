@@ -25,7 +25,6 @@
     </div>
 </template>
 <script>
-// import { mapState } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getRecords, addRecord, delRecord } from 'api/project';
 

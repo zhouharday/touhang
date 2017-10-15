@@ -64,26 +64,31 @@ export function addPro(params = {}) {
 
 	let addProjectUserId = JSON.parse(sessionStorage.getItem('userInfor')).id;	//当前登录用户id
     let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id;	//商户id必传"
-	let projectName = basicForm.projectName; //项目名
-    let projectShortName = basicForm.projectShortName; //项目简称
-    let addressId = basicForm.addressId; //项目所在地
     let createPersonId = addProjectUserId; //项目创建人
-    let projectTypeId = basicForm.projectTypeId; //项目类型ID
-    let industryId = basicForm.industryId; //行业ID
-    let projectFromId = basicForm.projectFromId; //项目来源
-    let departmentId = basicForm.departmentId; //业务部门ID
-    let projectLogo = basicForm.projectLogo
 
-    let	enterpriseName = companyForm.enterpriseName;		//企业名称
-    let	legalPerson = companyForm.enterpriseName;			//法人
-    let	registeredCapital = companyForm.registeredCapital;	//注册资本
-    let	paiclCapital = companyForm.paiclCapital;			//实收资本
-    let	registerDate = companyForm.registerDate;			//注册登记时间
-    let	creditCode = companyForm.creditCode;				//统一信用代码
-    let	registerAddress = companyForm.registerAddress;		//注册地址
-    let	workAddress = companyForm.workAddress;				//办公地址
-    let	mainBusiness = companyForm.mainBusiness;			//主营业务
-    let	remark = companyForm.remark;						//备注
+	let {
+		projectName, //项目名
+    	projectShortName, //项目简称
+    	addressId, //项目所在地
+    	projectTypeId, //项目类型ID
+    	industryId, //行业ID
+    	projectFromId, //项目来源
+    	departmentId, //业务部门ID
+    	projectLogo
+    } = basicForm;
+
+    let {
+    	enterpriseName,		//企业名称
+    	legalPerson,			//法人
+    	registeredCapital,	//注册资本
+    	paiclCapital,			//实收资本
+    	registerDate,			//注册登记时间
+    	creditCode,				//统一信用代码
+    	registerAddress,		//注册地址
+    	workAddress,			//办公地址
+    	mainBusiness,		//主营业务
+    	remark						//备注
+    } = companyForm;
 
 	let projectInfo = { 
 		merchantId,
