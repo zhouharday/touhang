@@ -33,7 +33,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人">
-                        <el-input placeholder="默认当前登陆用户" v-model="userName" auto-complete="off" :disabled="controlEdit"></el-input>
+                        <el-input placeholder="默认当前登陆用户" v-model="userName" auto-complete="off" disabled></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -138,7 +138,6 @@ export default {
         },
         // 保存退出单
         confirmSave() {
-            this.isShow = !this.isShow;
             this.outingForm.projectId = this.proId;
             this.outingForm.investBeforeId = this.$route.params.investProjectId;
             this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
