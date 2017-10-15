@@ -151,13 +151,12 @@ export default {
             addNewDepartment(this.departmentData.department, this.departmentData.superior).then((res) => {
                 console.log(res)
                 getDepartmentList().then((res) => {
-                    var dataList = addEdit(res.data.result)
-
-                    var treeList = getNodes(dataList)
-                    this.currentData = treeList
-                    this._getDepartmentName(this.currentData)
-
-                    //            this.myFund = res.data.result.list
+                    var dataList = addEdit(res.data.result);
+                    var treeList = getNodes(dataList);
+                    this.currentData = treeList;
+                    this._getDepartmentName(this.currentData);
+                    this.departmentData.department = '';
+                    this.departmentData.superior = '';
                 })
             })
         },

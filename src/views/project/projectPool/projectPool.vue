@@ -79,10 +79,10 @@
                         </template>
                     </el-table-column>
                     <!-- <el-table-column label="创建人" align="center">
-                                        <template scope="scope">
-                                            <div class="fow">{{ scope.row.manager }}</div>
-                                        </template>
-                                    </el-table-column> -->
+                                                    <template scope="scope">
+                                                        <div class="fow">{{ scope.row.manager }}</div>
+                                                    </template>
+                                                </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
                             <div class="fow">{{ scope.row.create_date}}</div>
@@ -123,7 +123,7 @@ import { getPros, transPro, delPro } from 'api/project';
 export default {
     name: 'projectPool',
     computed: mapGetters({
-        industryOptionsII:'getindustryOptionsII',   // 获取项目所属行业
+        industryOptionsII: 'getindustryOptionsII',   // 获取项目所属行业
     }),
     data() {
         return {
@@ -141,19 +141,27 @@ export default {
                 downtriangle: false
             },
             stateList: [
-                { states: "全部" , value: ''},
-                { states: "正常" , value: '1'},
-                { states: "观察" , value: '2'},
-                { states: "中止" , value: '3'},
-                { states: "淘汰" , value: '4'}
+                { states: "全部", value: '' },
+                { states: "正常", value: '1' },
+                { states: "观察", value: '2' },
+                { states: "中止", value: '3' },
+                { states: "淘汰", value: '4' }
             ],
             tableData: [],
             industryOptionsII: []
         }
     },
     created() {
-        this.init();
-        this.$store.dispatch('getIndustryOptionsII')
+        this.initInfo();
+        this.getDatas();
+        // this.refresh();
+        this.$store.dispatch('getIndustryOptionsII');
+    },
+    mounted() {
+        // this.refresh();
+    },
+    beforeCreate() {
+        // this.refresh();
     },
     watch: {
         '$route'(to, from) {
@@ -165,6 +173,7 @@ export default {
         init() {
             this.initInfo();
             this.getDatas();
+            // this.refresh();
         },
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
@@ -176,15 +185,13 @@ export default {
             let projectName = this.pName;
             let projectType = this.state;
             let industryId = this.industry;
-
             if (projectType == '全部') projectType = '';
             if (industryId == '0') industryId = '';
-
             let params = {
                 merchantId: this.merchantId,
                 pageSize: this.pageSize,
                 page: this.page,
-                identification:'12'
+                identification: '12'
             };
 
             if (projectName) params.projectName = projectName;
@@ -221,13 +228,13 @@ export default {
                 item.createPerson = item.createPerson;
                 item.industry = item.industry;
                 item.projectTurn = item.projectTurn;
-                if (item.project_type === '1'){
+                if (item.project_type === '1') {
                     item.project_type = '正常'
-                }else if(item.project_type === '2'){
+                } else if (item.project_type === '2') {
                     item.project_type = '观察'
-                }else if(item.project_type === '3'){
+                } else if (item.project_type === '3') {
                     item.project_type = '中止'
-                }else if(item.project_type === '4'){
+                } else if (item.project_type === '4') {
                     item.project_type = '淘汰'
                 }
                 item.create_date = item.create_date;
@@ -267,6 +274,12 @@ export default {
         goJumpPref(index, data) {
             this.dialogVisible = true;
             this.jumpData = data[index] || {};
+        },
+        refresh() {
+            let href = location.href;
+            let index = href.indexOf('#');
+            let url = href.substr(0, index);
+            window.location.href = url + '#/home/projectPool';
         },
         jumpPre() {
             let _data = this.jumpData;
@@ -321,7 +334,7 @@ export default {
             this.industry = id;
             this.currentIndex2 = id;
             this.getDatas();
-            
+
         }
     }
 }

@@ -39,10 +39,10 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办人" prop="managerId">
-                        <el-select v-model="quitApplyInfo.managerId" style="width:100%">
-                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.managerId">
-                            </el-option>
-                        </el-select>
+                        <el-input v-model="quitApplyInfo.managerId" placeholder="当前用户" disabled style="width:100%">
+                            <!-- <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.managerId">
+                            </el-option> -->
+                        </el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">

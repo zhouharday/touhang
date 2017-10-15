@@ -77,7 +77,9 @@
                         <div v-if="newOrChange == true">
                         <el-input placeholder="请输入账号" v-model="addSubscriber.account" type = 'number'></el-input>
                         </div>
-                        <div v-if="newOrChange == false">{{addSubscriber.account}}</div>
+                        <div v-if="newOrChange == false">
+                            <el-input :disabled="1" placeholder="请输入账号" v-model="addSubscriber.account" type = 'number'></el-input>
+                        </div>
                     </el-form-item>
                 </el-col>
 

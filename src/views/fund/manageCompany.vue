@@ -43,10 +43,7 @@
                 <el-button type="danger" @click="confirmIncome">确 定</el-button>
             </div>
         </el-dialog>
-        <delete-reminders :deleteReminders="deleteReminders"
-                          :modal_loading="modal_loading"
-                          @del="confirmDel"
-                          @cancel="confirmCancel">
+        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @del="confirmDel" @cancel="confirmCancel">
         </delete-reminders>
     </div>
 </template>
@@ -54,7 +51,7 @@
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import deleteReminders from 'components/deleteReminders'
-import {selectManageCompany, addOrUpdateManagerCompany, deleteManagerCompany} from 'api/fund'
+import { selectManageCompany, addOrUpdateManagerCompany, deleteManagerCompany } from 'api/fund'
 
 export default {
     data() {
@@ -101,8 +98,13 @@ export default {
     },
     methods: {
         alertModle() {
-            this.manageCompany = true
-            this.addOrEdit == true
+            let new_companyInfo = {
+                companyName: '',
+                companyDescribe: ''
+            };
+            this.companyInfo = new_companyInfo;
+            this.manageCompany = true;
+            this.addOrEdit = true;
         },
         companyEdit(index, row) {
             this.addOrEdit = false
@@ -111,14 +113,14 @@ export default {
             this.companyInfo = row
         },
         confirmIncome() {
-            if(this.addOrEdit == true) {
+            if (this.addOrEdit == true) {
                 this.$refs.companyInfo.validate((valid) => {
                     if (valid) {
                         addOrUpdateManagerCompany(this.managerId, this.companyInfo.companyName, this.companyInfo.companyDescribe).then((res) => {
-                            if(res.status == '200') {
+                            if (res.status == '200') {
                                 this.addOrEdit = false
                                 selectManageCompany(this.page, this.pageSize).then((res) => {
-                                    if(res.status == '200') {
+                                    if (res.status == '200') {
                                         this.companyData = res.data.result.list
                                         this.totalPage = res.data.result.total
                                         this.$Message.success(res.data.message || '添加成功！')
@@ -137,7 +139,7 @@ export default {
                 this.$refs.companyInfo.validate((valid) => {
                     if (valid) {
                         addOrUpdateManagerCompany(this.managerId, this.companyInfo.companyName, this.companyInfo.companyDescribe).then((res) => {
-                            if(res.status == '200') {
+                            if (res.status == '200') {
                                 this.$Message.success(res.data.message || '添加成功！')
                                 this.manageCompany = false
                                 this.addOrEdit = false
@@ -158,10 +160,10 @@ export default {
         },
         confirmDel() {
             deleteManagerCompany(this.deleteId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功')
                     selectManageCompany(this.page, this.pageSize).then((res) => {
-                        if(res.status == '200') {
+                        if (res.status == '200') {
                             this.companyData = res.data.result.list
                             this.totalPage = res.data.result.total
                             this.deleteReminders = false
@@ -176,7 +178,7 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val
             selectManageCompany(this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.companyData = res.data.result.list
                     this.totalPage = res.data.result.total
                 }
@@ -185,7 +187,7 @@ export default {
         handleCurrentChange(val) {
             this.page = val
             selectManageCompany(this.page, this.pageSize).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.companyData = res.data.result.list
                     this.totalPage = res.data.result.total
                 }
@@ -194,7 +196,7 @@ export default {
     },
     created() {
         selectManageCompany(this.page, this.pageSize).then((res) => {
-            if(res.status == '200') {
+            if (res.status == '200') {
                 this.companyData = res.data.result.list
                 this.totalPage = res.data.result.total
             }
