@@ -33,7 +33,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="认缴金额（元）" prop="subscribeAmount" width="100">
-                        <el-input v-model="AgreementInfo.subscribeAmount" auto-complete="off"></el-input>
+                        <el-input v-model.number="AgreementInfo.subscribeAmount" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -44,11 +44,11 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="投资经理" prop="managerName">
-                        <el-input v-model="AgreementInfo.managerName" disabled auto-complete="off"></el-input>
-                        <!-- <el-select v-model="AgreementInfo.managerName" style="width:100%">
-                                <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
-                                </el-option>
-                            </el-select> -->
+                        <el-input v-model="AgreementInfo.managerName" placeholder="当前用户" disabled></el-input>
+                        <!-- <el-select v-model="AgreementInfo.managerName" disabled style="width:100%">
+                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
+                            </el-option>
+                        </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -112,19 +112,20 @@ export default {
                     { required: true, message: '请输入协议名称', trigger: 'blur' }
                 ],
                 structuralLevelId: [
-                    { required: true, message: '请选择结构级', trigger: 'blur' }
+                    { required: true, message: '请选择结构级', trigger: 'change' }
                 ],
                 inverstorId: [
-                    { required: true, message: '请选择投资者', trigger: 'blur' }
+                    { required: true, message: '请选择投资者', trigger: 'change' }
                 ],
                 fundId: [
-                    { required: true, message: '请选择基金名称', trigger: 'blur' }
+                    { required: true, message: '请选择基金名称', trigger: 'change' }
                 ],
                 subscribeAmount: [
-                    { required: true, message: '请输入认缴金额', trigger: 'blur' }
+                    { required: true, message: '请输入认缴金额'},
+                    { type:'number', message: '认缴金额应为数字'}
                 ],
                 signDate: [
-                    { type:'date', required: true, message: '请选择签订日期', trigger: 'blur' }
+                    { type: 'date', required: true, message: '请选择签订日期', trigger: 'change' }
                 ]
             }
         }

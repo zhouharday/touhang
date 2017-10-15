@@ -114,14 +114,14 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row :gutter="20">
+                    <!-- <el-row :gutter="20">
                         <el-col :span="24">
                             <el-form-item prop="recording" label="处理记录" :label-width="formLabelWidth">
                                 <el-input v-model="addTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="dialogFormVisible1 = 0">取 消</el-button>
