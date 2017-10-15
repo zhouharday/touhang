@@ -155,6 +155,12 @@ export default {
         this.init();
         this.$store.dispatch('getIndustryOptionsII')
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+            // this.$router.push({ name: to.name });
+        }
+    },
     methods: {
         init() {
             this.initInfo();
@@ -186,10 +192,13 @@ export default {
             if (industryId) params.industryId = industryId;
 
             getPros(params).then(resp => {
+                // alert(888);
                 let info = resp.data.listMapProjectInfo;
                 let data = info.list;
+                this.tableData = [];
                 this.tableData = this.handleDatas(data);
                 this.total = info.total || 0;
+                // this.tableData.push();
             })
         },
         handleCurrentChange(page) {
