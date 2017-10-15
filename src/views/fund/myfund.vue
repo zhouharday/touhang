@@ -92,7 +92,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalAdd = false">取 消</el-button>
-            <el-button type="primary" @click="confirmAdd">确 定</el-button>
+            <el-button type="danger" @click="confirmAdd">确 定</el-button>
         </div>
     </el-dialog>
 </div>
