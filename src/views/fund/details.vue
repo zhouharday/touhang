@@ -285,17 +285,17 @@ export default {
         return {
             headerInfo_details: {
                 desc: '基本信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
+//                btnGroup: [{
+//                    icon: 'edit',
+//                    explain: '编辑'
+//                }]
             },
             headerInfo_MIS: {
                 desc: '管理信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
+//                btnGroup: [{
+//                    icon: 'edit',
+//                    explain: '编辑'
+//                }]
             },
             headerInfo_Registration: {
                 desc: '备案注册',
@@ -306,10 +306,10 @@ export default {
             },
             headerInfo_Accountinfo: {
                 desc: '账户信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
+//                btnGroup: [{
+//                    icon: 'edit',
+//                    explain: '编辑'
+//                }]
             },
             managementCompany: [],
             options: [{
