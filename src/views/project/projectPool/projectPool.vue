@@ -154,7 +154,7 @@ export default {
     created() {
         this.initInfo();
         this.getDatas();
-        this.refresh();
+        // this.refresh();
         this.$store.dispatch('getIndustryOptionsII');
     },
     mounted() {
@@ -171,8 +171,8 @@ export default {
     },
     methods: {
         init() {
-            // this.initInfo();
-            // this.getDatas();
+            this.initInfo();
+            this.getDatas();
             // this.refresh();
         },
         initInfo() {
@@ -276,7 +276,6 @@ export default {
             this.jumpData = data[index] || {};
         },
         refresh() {
-            alert(777)
             let href = location.href;
             let index = href.indexOf('#');
             let url = href.substr(0, index);
