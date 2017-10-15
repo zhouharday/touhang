@@ -76,7 +76,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="operatingAdd('operatingForm1')">保 存</el-button>
+                    <el-button type="danger" @click="saveSubject('operatingForm1', '1')">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 添加经营数据明细 对话框 -->
@@ -166,7 +166,7 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col>
+<!--                         <el-col>
                             <el-form-item label="财务情况附件">
                                 <Upload multiple type="drag" v-model="financialForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
@@ -175,12 +175,12 @@
                                     </div>
                                 </Upload>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="financialAdd('financialForm1')">保 存</el-button>
+                    <el-button type="danger" @click="saveSubject('financialForm1', '2')">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加财务数据明细 对话框-->
@@ -556,33 +556,34 @@ export default {
                 this.financialModal1 = true;
             }
         },
-        // 经营数据-添加  保存按钮的方法
-        operatingAdd(formName, dataType) {
+        // 数据表头-添加  保存按钮的方法
+        saveSubject(formName, dataType) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let dataForm = dataType == '1' ? this.operatingForm1 : this.financialForm1;
                     let data = {
-                        //  "projectId":"1255863654", //项目id
-                        // "baseDate":"2013-14-15", //基准日
-                        // "dataType":1, //1年报、2半年报、3季报、4月报
-                        // "operator":"张三", //填报人id
-                        // "currentDeta":"2013-14-15",// 填报日期
-                        // "operatorName":"张三", //填报人姓名
-                        // "dataCat":1 //0:经营数据;1:财务数据
                         projectId: this.projectId,
-                        baseDate: this.operatingForm1.baseDate,
-                        dataType: this.operatingForm1.dataType,
+                        baseDate: changeDate(dataForm.baseDate),
+                        dataType: dataForm.dataType,
                         operator: JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        currentDeta: this.operatingForm1.currentDeta,
+                        currentDeta: dataForm.currentDeta,
                         operatorName: this.userName,
-                        remark: this.operatingForm1.remark,
+                        remark: dataForm.remark,
                         dataCat: 0
                     };
+                    console.log("添加数据表头 参数："+JSON.stringify(data));
                     saveDataSubject(data).then(resp => {
+                    console.log("添加数据表头 结果："+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
-                            this.operatingForm1 = {};
-                            this.operatingModal1 = false;
-                            this.getOperateSubject();
+                            if(dataType == '1'){
+                                this.operatingForm1 = {};
+                                this.getOperateSubject();
+                                this.operatingModal1 = false;
+                            }else{
+                                this.financialForm1 = {};
+                                this.getFinancialSubject();
+                                this.financialModal1  = false;
+                            }
                         }else{
                             this.$message.error(resp.data.message);
                         }
