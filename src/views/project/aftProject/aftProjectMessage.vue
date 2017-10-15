@@ -257,6 +257,8 @@ export default {
                 console.log("获取预警提醒: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.message = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    this.message = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -268,6 +270,8 @@ export default {
                 console.log("获取投资主体: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.fundTable = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    this.fundTable = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -279,6 +283,8 @@ export default {
                 console.log("获取投资主体: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     // this.fundTable = resp.data.result;
+                }else if (resp.data.status === '49999') {
+                    // this.fundTable = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }

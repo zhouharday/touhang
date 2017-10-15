@@ -164,6 +164,11 @@ export default {
         });
         this.init();
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
+    },
     methods: {
         init() {
             this.initInfo();
@@ -186,6 +191,8 @@ export default {
                 pageSize: this.pageSize
             };
             getPres(params).then(resp => {
+                // alert(123);
+                console.log(resp.data);
                 let data = resp.data;
                 let result = data.result;
                 let list = result.list;

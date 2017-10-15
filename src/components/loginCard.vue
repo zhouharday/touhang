@@ -177,7 +177,7 @@ export default {
                 this.isSendCode = !this.isSendCode;
                 this.valueData = false;
                 var self = this;
-                var sec = 10;
+                var sec = 60;
                 var timer1 = setInterval(
                     function() {
                         // self.isSendCode = true;
@@ -195,7 +195,7 @@ export default {
         },
         sendVerificationCode() { //发送验证码 Ajax
             this.$http.post(this.api + '/user/seedCode', {
-                contactPhone: this.form1.phone
+                inputPhone: this.form1.phone
             })
                 .then(res => {
                     if (res.data.status == '200') {
@@ -240,6 +240,8 @@ export default {
                 if (valid) {
                     console.log('验证通过');
                     console.log(this.form1);
+                    this.form1.checkPwd = this.md5(this.form1.checkPwd);
+                    console.log(this.form1.checkPwd);
                     this.forgetPassword();
                     this.findDialog = !this.findDialog;
                 } else {

@@ -163,6 +163,12 @@ export default {
     beforeCreate() {
         // this.refresh();
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+            // this.$router.push({ name: to.name });
+        }
+    },
     methods: {
         init() {
             // this.initInfo();
@@ -194,16 +200,24 @@ export default {
 
             getPros(params).then(resp => {
                 // alert(888);
+<<<<<<< HEAD
                 if (resp.data.status == '200') {
 
                 };
                 console.log('//////////////////////////////////////');
                 console.log(resp.data);
+=======
+>>>>>>> b15232594e9b60d89e8356d1c1b94bf514f96b52
                 let info = resp.data.listMapProjectInfo;
                 let data = info.list;
+                this.tableData = [];
                 this.tableData = this.handleDatas(data);
                 this.total = info.total || 0;
+<<<<<<< HEAD
                 this.refresh();
+=======
+                // this.tableData.push();
+>>>>>>> b15232594e9b60d89e8356d1c1b94bf514f96b52
             })
         },
         handleCurrentChange(page) {
@@ -286,6 +300,7 @@ export default {
             let projectId = _data.id;
             let addProjectUserId = this.addProjectUserId;
             transPro(projectId)
+<<<<<<< HEAD
                 .then(resp => {
                     let data = resp.data;
                     if (!data.message) {
@@ -297,6 +312,22 @@ export default {
                 }).catch(e => {
                     console.log('jumpPre exists error: ', e);
                 });
+=======
+            .then(resp => {
+                console.log(resp.data);
+                let data = resp.data;
+                if (data.status == '200') {
+                    // alert(333);
+                    this.addTab('投前项目', '/home/preProject', 'preProject');
+                    this.$router.push({ name: 'preProject' });
+                    this.dialogVisible = false;
+                } else {
+                    this.dialogVisible = false; // 隐藏弹框
+                }
+            }).catch(e => {
+                console.log('jumpPre exists error: ', e);
+            });
+>>>>>>> b15232594e9b60d89e8356d1c1b94bf514f96b52
         },
         addProject() {
             this.addTab('添加项目', '/home/addProject', 'addProject');

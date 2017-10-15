@@ -20,13 +20,17 @@
                     <span class="actives">Sat</span>
                 </div>
                 <div>
-                    <span>
+                    <span class="monthDateSpan">
                         <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
                             <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
                                 {{list.day}}
                             </span>
                         </span>
-                        <div v-show="have">dddd</div>
+                        <div class="haveDate" v-show="have">
+                            <div v-for="(item,index) in spanScheduleTitle" :key="item">
+                                <p>{{item.startTime}}&nbsp;&nbsp;{{item.scheduleTitle}}</p>
+                            </div>
+                        </div>
                     </span>
                 </div>
             </div>
@@ -80,6 +84,7 @@ export default {
     },
     data: function() {
         return {
+            spanScheduleTitle: [],
             have: false,
             objarr: [],
             arr: [],
@@ -220,13 +225,18 @@ export default {
                 this.have = false;
                 return;
             };
+            let self = this;
             var arr = [];
             const h = this.$createElement;
             this.monthDate.map(item => {
                 if (time == item.time) {
                     console.log(item);
+                    setTimeout(function(){
+                        self.have = true;
+                    }, 2000);
+                    this.spanScheduleTitle = item.item;
+                    console.log(this.spanScheduleTitle);
                     item.item.forEach(ele => {
-                        this.have = true;
                         // this.$msgbox({
                         //     title: '任务详情',
                         //     message: h('p', null, [
@@ -240,6 +250,7 @@ export default {
         },
         //点击日期
         clickDate: function(index, n) {
+            this.have = false;
             let new_scheduleForm = {
                 title: '',
                 time: ''
@@ -289,3 +300,18 @@ export default {
     }
 }
 </script>
+<style scoped lang="less">
+.monthDateSpan {
+    position: relative;
+    overflow: hidden;
+    .haveDate {
+        border-radius: 10px;
+        z-index: 999;
+        padding: 10px;
+        position: absolute;
+        width: 300px;
+        height: auto;
+        background: #faf;
+    }
+}
+</style>
