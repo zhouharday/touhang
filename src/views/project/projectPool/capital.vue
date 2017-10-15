@@ -32,7 +32,7 @@
                 </el-table-column>
                 <el-table-column label="融资日期" prop="financingDate" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.financingDate }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.financingDate | formatDate}}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-date-picker type="date" placeholder="选择融资日期" v-model="scope.row.financingDate" style="width: 100%;">
                             </el-date-picker>
@@ -78,6 +78,7 @@
     </div>
 </template>
 <script style="text/ecmascript-6">
+import '../../../common/js/filter'
 import { mapGetters } from 'vuex'
 import { Message } from 'iview'
 

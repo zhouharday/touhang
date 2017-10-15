@@ -1,16 +1,16 @@
 <template>
     <div class="eventBox">
-        <el-form :model="eventForm" label-width="80px" class="eventForm">
-            <el-form-item label="汇报事项">
+        <el-form :model="eventForm" :rules="rules1" :ref="eventForm" label-width="80px" class="eventForm">
+            <el-form-item label="汇报事项" prop="issuesType">
                 <el-select v-model="eventForm.issuesType" placeholder="请选择汇报事项" style="width: 100%;">
                     <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key">
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="事项日期">
+            <el-form-item label="事项日期" prop="issuesDate">
                 <el-date-picker type="date" placeholder="选择日期" v-model="eventForm.issuesDate" style="width:100%;"></el-date-picker>
             </el-form-item>
-            <el-form-item label="事项内容">
+            <el-form-item label="事项内容" prop="issuesContent">
                 <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="eventForm.issuesContent">
                 </el-input>
             </el-form-item>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import '../../../common/js/filter'
 import {
     getEventList, addEvent, delEvent
 } from 'api/projectAfter';
@@ -68,8 +69,19 @@ export default {
                 issuesDate: '',
                 issuesContent: ''
             },
+            rules1: {
+                issuesType: [
+                    { required: true, message: '请选择汇报事项', trigger: 'change' }
+                ],
+                issuesDate: [
+                    { required: true, message: '请选择事项日期', trigger: 'change' }
+                ],
+                issuesContent: [
+                    { required: true, message: '请输入事项内容', trigger: 'change' }
+                ]
+            },
             eventOptions: [
-                 { //汇报事项列表
+                { //汇报事项列表
                     key: '1',
                     value: '上市进展'
                 }, {
@@ -108,15 +120,15 @@ export default {
         this.init();
     },
     methods: {
-        init(){
+        init() {
             this.getEventList();
         },
         getEventList() {
             //查询重大事项列表
             getEventList(this.projectId).then(resp => {
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.recordList = resp.data.result || [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -132,9 +144,9 @@ export default {
                 issuesContent: this.eventForm.issuesContent
             };
             addEvent(params).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getEventList();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -144,9 +156,9 @@ export default {
         //删除重大事件
         delEvent(id) {
             delEvent(id).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getEventList();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {

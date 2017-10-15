@@ -18,7 +18,7 @@
                     </el-table>
                     <!-- 添加项目费用 对话框-->
                     <el-dialog title="添加项目费用" :visible.sync="costAdd1" :close-on-click-modal="false">
-                        <el-form :model="costForm1" label-width="100px">
+                        <el-form :model="costForm1" label-position="left" label-width="100px">
                             <el-form-item label="费用类型">
                                 <el-select v-model="costForm1.costTypeId" placeholder="请选择费用类型" style="width: 100%;">
                                     <el-option v-for="item in costSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
@@ -36,7 +36,7 @@
                     </el-dialog>
                     <!-- 编辑项目费用 对话框-->
                     <el-dialog title="编辑项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
-                        <el-form :model="costForm2" label-width="100px">
+                        <el-form :model="costForm2" label-position="left" label-width="100px">
                             <el-form-item label="费用类型">
                                 <el-select v-model="costForm2.costTypeId" placeholder="请选择费用类型" style="width: 100%;">
                                     <el-option v-for="item in costSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
@@ -72,21 +72,21 @@
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
                                 <el-button v-if="scope.row.status == 1" type="text" @click="goEditContract(scope.row.id)">编辑</el-button>
-                                <el-button v-if="scope.row.status == 1" type="text"  @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
+                                <el-button v-if="scope.row.status == 1" type="text" @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
                     <!-- 添加项目合同 对话框-->
                     <el-dialog title="添加项目合同" :visible.sync="contractAdd1" :close-on-click-modal="false">
-                        <el-form :model="contractForm1" label-width="110px">
+                        <el-form :model="contractForm1" :rules="rules1" ref="contractForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
-                                    <el-form-item label="合同名称">
+                                    <el-form-item label="合同名称" prop="contractName">
                                         <el-input v-model="contractForm1.contractName" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="签约日期">
+                                    <el-form-item label="签约日期" prop="signDate">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -176,18 +176,18 @@
                     </el-dialog>
                     <!-- 添加 出资主体dialog -->
                     <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
-                        <el-form :model="fundForm1" label-width="110px">
-                            <el-form-item label="基金名称">
+                        <el-form :model="fundForm1" :rules="rules2" ref="fundForm1" label-position="left" label-width="120px">
+                            <el-form-item label="基金名称" prop="fund">
                                 <el-select value-key="id" v-model="fundForm1.fund" placeholder="请选择基金" style="width: 100%">
                                     <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
-                            <el-form-item label="投资金额（元）">
-                                <el-input v-model="fundForm1.investAmount" auto-complete="off"></el-input>
+                            <el-form-item label="投资金额（元）" prop="investAmount">
+                                <el-input v-model.number="fundForm1.investAmount" auto-complete="off"></el-input>
                             </el-form-item>
-                            <el-form-item label="股权占比（%）">
-                                <el-input v-model="fundForm1.stockRatio" auto-complete="off"></el-input>
+                            <el-form-item label="股权占比（%）" prop="stockRatio">
+                                <el-input v-model.number="fundForm1.stockRatio" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
@@ -197,7 +197,7 @@
                     </el-dialog>
                     <!-- 编辑项目合同 对话框-->
                     <el-dialog title="编辑项目合同" :visible.sync="contractAdd2" :close-on-click-modal="false">
-                        <el-form :model="contractForm2" label-width="110px">
+                        <el-form :model="contractForm2" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="合同名称">
@@ -222,7 +222,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户"  disabled></el-input>
+                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -307,7 +307,9 @@
                         <el-table-column label="支付金额（元）" prop="paidInMoney" align="center">
                         </el-table-column>
                         <el-table-column label="支付日期" prop="payDate" align="center">
-                            <template scope="scope"><div>{{scope.row.payDate | formatDate}}</div></template>
+                            <template scope="scope">
+                                <div>{{scope.row.payDate | formatDate}}</div>
+                            </template>
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
@@ -318,7 +320,7 @@
                     </el-table>
                     <!-- 添加投资支付 对话框-->
                     <el-dialog title="添加投资支付" :visible.sync="paidAdd1" :close-on-click-modal="false" style="width：65%;">
-                        <el-form :model="paidForm1" label-width="110px">
+                        <el-form :model="paidForm1" :rules="rules3" ref="paidForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
@@ -326,7 +328,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目合同">
+                                    <el-form-item label="项目合同" prop="contract">
                                         <el-select @change="selContract" value-key="id" v-model="paidForm1.contract" placeholder="请选择合同" style="width: 100%;">
                                             <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item">
                                             </el-option>
@@ -388,9 +390,9 @@
                             </el-table-column>
                             <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                                 <template scope="scope">
-                                        <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
+                                    <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
                                 </template>
-                            </el-table-column> 
+                            </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default" @click="paidAdd1 = false">取 消</el-button>
@@ -399,7 +401,7 @@
                     </el-dialog>
                     <!-- 编辑投资支付 对话框-->
                     <el-dialog title="编辑投资支付" :visible.sync="paidAdd2" :close-on-click-modal="false" style="width：65%;">
-                        <el-form :model="paidForm1" label-width="110px">
+                        <el-form :model="paidForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
@@ -469,12 +471,12 @@
                             </el-table-column>
                             <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                                 <template scope="scope">
-                                        <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
+                                    <el-input v-model="scope.row.payAmount" placeholder="0" @input="sumPay">{{ scope.row.payAmount }}</el-input>
                                 </template>
-                            </el-table-column> 
+                            </el-table-column>
                         </el-table>
                         <div slot="footer" class="dialog-footer">
-                            <el-button type="default"  @click="paidAdd2 = false">取 消</el-button>
+                            <el-button type="default" @click="paidAdd2 = false">取 消</el-button>
                             <el-button type="danger" @click="confirmPaidAdd2(paidForm1.id)">确 定</el-button>
                         </div>
                     </el-dialog>
@@ -502,15 +504,15 @@
                     </el-table>
                     <!-- 添加项目分红 对话框-->
                     <el-dialog title="添加项目分红" :visible.sync="sharingAdd1" :close-on-click-modal="false">
-                        <el-form :model="sharingForm1" label-width="110px">
+                        <el-form :model="sharingForm1" :rules="rules4" ref="sharingForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
-                                    <el-form-item label="标题">
+                                    <el-form-item label="标题" prop="shareTitle">
                                         <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目合同">
+                                    <el-form-item label="项目合同" prop="contract">
                                         <el-select @change="selShareContract" value-key="id" v-model="sharingForm1.contract" placeholder="请选择合同" style="width: 100%;">
                                             <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item" :disabled="item.status == 1">
                                             </el-option>
@@ -518,12 +520,12 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="合同金额（元）">
+                                    <el-form-item label="合同金额（元）" prop="contractAmount">
                                         <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="分红金额（元）">
+                                    <el-form-item label="分红金额（元）" prop="shareAmount">
                                         <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -533,7 +535,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="分红日期">
+                                    <el-form-item label="分红日期" prop="shareDate">
                                         <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
@@ -565,7 +567,7 @@
                     </el-dialog>
                     <!-- 编辑项目分红 对话框-->
                     <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
-                        <el-form :model="sharingForm1" label-width="110px">
+                        <el-form :model="sharingForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
@@ -623,7 +625,7 @@
                         </el-table>
                         <div slot="footer" class="dialog-footer">
                             <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
-                            <el-button type="danger"  @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
+                            <el-button type="danger" @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -637,8 +639,8 @@ import '../../../common/js/filter'
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'
-import {changeDate} from 'common/js/config'
-import { 
+import { changeDate } from 'common/js/config'
+import {
     delGu, delContract, delFee, addFee, editFee, fees,
     addContract, contracts, getContractDetail, editContract,
     getContractPay, addContractPay, getContractPayDetail, editContractPay, delPay,
@@ -671,10 +673,10 @@ export default {
             sharingAdd2: false,
             //项目费用
             costForm1: {
-                costTypeId:''
+                costTypeId: ''
             },
             costForm2: {
-                costTypeId:''
+                costTypeId: ''
             },
             costData: [],
             headerInfo_cost: {
@@ -686,8 +688,16 @@ export default {
             },
             // 项目合同
             contractForm1: {
-                signDate:'',
-                handlerDate:''
+                signDate: '',
+                handlerDate: ''
+            },
+            rules1: {
+                contractName: [
+                    { required: true, message: '请输入合同名称', trigger: 'change' }
+                ],
+                signDate: [
+                    { required: true, message: '请选择签约日期', trigger: 'change' }
+                ]
             },
             contractForm2: {},
             contractData: [],
@@ -701,11 +711,25 @@ export default {
             // 添加 项目合同时 的基金table
             table_title: '出资主体',
             fundForm1: {
-                fund:'',
+                fund: '',
                 fundName: '',
                 investAmount: '',
                 stockRatio: '',
                 editFlag: false
+            },
+            rules2: {
+                fund: [
+                    { required: true, message: '请选择基金名称', trigger: 'change' }
+                ],
+                investAmount: [
+                    { required: true, message: '请输入投资金额', trigger: 'change' },
+                    { type: 'number', message: '投资金额必须为数字' }
+
+                ],
+                stockRatio: [
+                    { required: true, message: '请输入股权占比', trigger: 'change' },
+                    { type: 'number', message: '股权占比必须为数字' }
+                ]
             },
             fundData1: [],
             // 添加 投资支付时 的基金table
@@ -726,6 +750,11 @@ export default {
                 payDate: '',
                 paidInMoney: 0
             },
+            rules3: {
+                contract: [
+                    { required: true, message: '请选择项目合同', trigger: 'change' }
+                ]
+            },
             paidData: [],
             headerInfo_paid: {
                 desc: '投资支付',
@@ -736,12 +765,20 @@ export default {
             },
             // 项目分红
             sharingForm1: {
-                id:'',
-                contract:'',
+                id: '',
+                contract: '',
                 shareTitle: '',
                 shareAmount: 0,
                 handlerUserId: '',
                 shareDate: ''
+            },
+            rules4: {
+                contract: [
+                    { required: true, message: '请选择项目合同', trigger: 'change' }
+                ],
+                shareDate: [
+                    { required: true, message: '请选择分红日期', trigger: 'change' }
+                ]    
             },
             sharingData: [],
             headerInfo_sharing: {
@@ -770,9 +807,9 @@ export default {
             fees(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.costData = resp.data.result;
-                }else if(resp.data.status === '49999'){
+                } else if (resp.data.status === '49999') {
                     this.costData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -790,7 +827,7 @@ export default {
                 if (resp.data.status === '200') {
                     this.getFee();
                     this.costAdd2 = !this.costAdd2;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -811,14 +848,14 @@ export default {
             console.log("addFee params:" + JSON.stringify(params));
             addFee(params).then(resp => {
                 console.log('addFee resp: ', resp.data);
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.getFee();
                     this.costForm1 = {
                         costTypeId: '',
                         amountMoney: ''
                     };
                     this.costAdd1 = !this.costAdd1;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -829,11 +866,11 @@ export default {
         getContractPay() {
             getContractPay(this.proId).then(resp => {
                 // console.log('获取投资支付列表: '+ JSON.stringify( resp.data));
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.paidData = resp.data.result.list;
-                }else if(resp.data.status === '49999'){
+                } else if (resp.data.status === '49999') {
                     this.paidData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -846,9 +883,9 @@ export default {
                 // console.log('getParticipationList resp: '+ JSON.stringify( resp.data));
                 if (resp.data.status === '200') {
                     this.sharingData = resp.data.result.list;
-                }else if(resp.data.status === '49999'){
+                } else if (resp.data.status === '49999') {
                     this.sharingData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -860,9 +897,9 @@ export default {
             contracts(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.contractData = resp.data.result;
-                }else if(resp.data.status === '49999'){
+                } else if (resp.data.status === '49999') {
                     this.contractData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -872,14 +909,14 @@ export default {
         // 添加 项目合同 确定按钮
         confirmContractAdd1() {
             let projectContract = {
-                projectId : this.proId,
-                contractName : this.contractForm1.contractName,
-                signDate : this.contractForm1.signDate,
-                contractAmount : this.contractForm1.contractAmount,
-                stockRatio : this.contractForm1.stockRatio,
-                handlerUserId : (this.contractForm1.handlerUserId != '' && this.contractForm1.handlerUserId != undefined)
-                                ? this.contractForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                handlerDate : this.contractForm1.handlerDate
+                projectId: this.proId,
+                contractName: this.contractForm1.contractName,
+                signDate: this.contractForm1.signDate,
+                contractAmount: this.contractForm1.contractAmount,
+                stockRatio: this.contractForm1.stockRatio,
+                handlerUserId: (this.contractForm1.handlerUserId != '' && this.contractForm1.handlerUserId != undefined)
+                    ? this.contractForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                handlerDate: this.contractForm1.handlerDate
             };
             let data = {
                 projectContract: projectContract,
@@ -894,7 +931,7 @@ export default {
                     this.fundData1.push();
                     this.contractAdd1 = false;
                     this.getContract();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -921,14 +958,14 @@ export default {
         goEditContract(id) {
             this.contractAdd2 = !this.contractAdd2;
             getContractDetail(id).then(resp => {
-                if(resp.data.status == '200'){
-                    console.log('goEditContract合同详情: '+JSON.stringify(resp.data.result));
+                if (resp.data.status == '200') {
+                    console.log('goEditContract合同详情: ' + JSON.stringify(resp.data.result));
                     this.contractForm2 = resp.data.result.projectContract;
                     this.fundData1 = resp.data.result.fundInfo;
-                    this.fundData1.forEach(function(item, index){
+                    this.fundData1.forEach(function(item, index) {
                         let fund = {
-                            id:item.fundId,
-                            fundName:item.fundName
+                            id: item.fundId,
+                            fundName: item.fundName
                         };
 
                         item.fund = fund;
@@ -942,14 +979,14 @@ export default {
         // 编辑 项目合同  确定按钮
         confirmContractAdd2(id) {
             let projectContract = {
-                id : id,
-                contractName : this.contractForm2.contractName,
-                signDate : this.contractForm2.signDate,
-                contractAmount : this.contractForm2.contractAmount,
-                stockRatio : this.contractForm2.stockRatio,
-                handlerUserId : (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
-                                ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                handlerDate : this.contractForm2.handlerDate
+                id: id,
+                contractName: this.contractForm2.contractName,
+                signDate: this.contractForm2.signDate,
+                contractAmount: this.contractForm2.contractAmount,
+                stockRatio: this.contractForm2.stockRatio,
+                handlerUserId: (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
+                    ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                handlerDate: this.contractForm2.handlerDate
             };
             let data = {
                 projectContract: projectContract,
@@ -964,7 +1001,7 @@ export default {
                     this.fundData1.push();
                     this.contractAdd2 = !this.contractAdd2;
                     this.getContract();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1002,21 +1039,21 @@ export default {
         },
         //选择投资支付的合同
         selContract(value) {
-            if(!value) return;
+            if (!value) return;
             this.paidForm1.payTitle = "投资支付-" + value.contractName;
             this.paidForm1.contractAmount = value.contractAmount;
             this.paidForm1.contractId = value.id;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value.id).then(resp => {
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.fundData2 = resp.data.result.fundInfo;
 
-                    this.fundData2.forEach(function(item, index){
+                    this.fundData2.forEach(function(item, index) {
                         item.contractFundId = item.id;
                         item.id = '';
                     });
                     this.calcSurplusAmount();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1029,19 +1066,19 @@ export default {
             let projectInvestPay = {
                 projectId: this.proId,
                 investBeforeId: this.$route.params.investProjectId,
-                paidInMoney : this.paidForm1.payAmount, 
-                contractId : this.paidForm1.contractId,
-                payTitle : this.paidForm1.payTitle,
-                surplusAmount : this.paidForm1.surplusAmount,
-                handlerUserId : (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
-                                ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                payDate : this.paidForm1.payDate
+                paidInMoney: this.paidForm1.payAmount,
+                contractId: this.paidForm1.contractId,
+                payTitle: this.paidForm1.payTitle,
+                surplusAmount: this.paidForm1.surplusAmount,
+                handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
+                    ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                payDate: this.paidForm1.payDate
             };
             let data = {
                 projectInvestPay: projectInvestPay,
                 payDetails: this.fundData2
             }
-            console.log("添加投资支付  :: "+JSON.stringify(data));
+            console.log("添加投资支付  :: " + JSON.stringify(data));
             addContractPay(projectInvestPay, this.fundData2).then(resp => {
                 console.log('addContractPay resp: ', resp.data);
                 if (resp.data.status == '200') {
@@ -1049,7 +1086,7 @@ export default {
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd1 = false;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1059,43 +1096,43 @@ export default {
         //打开编辑投资支付
         goEditPay(id) {
             getContractPayDetail(id).then(resp => {
-                console.log('打开编辑投资支付: '+JSON.stringify(resp.data));
-                if(resp.data.status == '200'){
+                console.log('打开编辑投资支付: ' + JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidAdd2 = !this.paidAdd2;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getContractPayDetail() exists error: ', e);
             })
         },
-        
+
         // 编辑 投资支付 确定按钮
         confirmPaidAdd2(id) {
-            console.log("合同ID"+this.paidForm1.contractId);
+            console.log("合同ID" + this.paidForm1.contractId);
             let projectInvestPay = {
-                id : id,
-                paidInMoney : 0, 
-                payTitle : this.paidForm1.payTitle,
-                surplusAmount : this.paidForm1.surplusAmount,
-                handlerUserId : (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
-                                ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                payDate : this.paidForm1.payDate
+                id: id,
+                paidInMoney: 0,
+                payTitle: this.paidForm1.payTitle,
+                surplusAmount: this.paidForm1.surplusAmount,
+                handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
+                    ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                payDate: this.paidForm1.payDate
             };
             let data = {
-                projectInvestPay : projectInvestPay,
-                payDetails : this.fundData2
+                projectInvestPay: projectInvestPay,
+                payDetails: this.fundData2
             }
             editContractPay(projectInvestPay, this.fundData2).then(resp => {
                 console.log('editContractPay resp: ', resp.data);
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.getContractPay();
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd2 = !this.paidAdd2;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1107,7 +1144,7 @@ export default {
             let sum = 0.0, sumSurplus = 0.0;
             for (let i = 0; i < this.fundData2.length; i++) {
                 sum += (parseFloat(this.fundData2[i].payAmount | 0));
-                if(this.fundData2[i].surplusAmount == undefined || this.fundData2[i].surplusAmount ==''){
+                if (this.fundData2[i].surplusAmount == undefined || this.fundData2[i].surplusAmount == '') {
                     this.fundData2[i].surplusAmount = this.fundData2[i].investAmount;
                 }
                 sumSurplus += this.fundData2[i].surplusAmount - this.fundData2[i].payAmount;
@@ -1124,22 +1161,22 @@ export default {
         },
         //选择项目分红的合同
         selShareContract(value) {
-            if(!value) return;
+            if (!value) return;
             this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             this.sharingForm1.contractAmount = value.contractAmount;
             this.sharingForm1.contractId = value.id;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value.id).then(resp => {
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.fundData3 = resp.data.result.fundInfo;
 
-                    this.fundData3.forEach(function(item, index){
+                    this.fundData3.forEach(function(item, index) {
                         item.contractFundId = item.id;
                         item.id = '';
-                        console.log('合同中投资主体详情: '+JSON.stringify(item));
+                        console.log('合同中投资主体详情: ' + JSON.stringify(item));
                     });
                     this.valueSum();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1149,26 +1186,26 @@ export default {
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
             let projectParticipation = {
-                projectId : this.proId,
-                shareDate : this.sharingForm1.shareDate,
+                projectId: this.proId,
+                shareDate: this.sharingForm1.shareDate,
                 shareTitle: this.sharingForm1.shareTitle,
-                contractId : this.sharingForm1.contractId, 
-                shareAmount : this.sharingForm1.shareAmount,
-                handlerUserId : (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
-                                ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id
+                contractId: this.sharingForm1.contractId,
+                shareAmount: this.sharingForm1.shareAmount,
+                handlerUserId: (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
+                    ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id
             };
             let data = {
-                projectParticipation : projectParticipation,
-                participationDetails : this.fundData3
+                projectParticipation: projectParticipation,
+                participationDetails: this.fundData3
             }
-            console.log("添加项目分红  :: "+JSON.stringify(data));
+            console.log("添加项目分红  :: " + JSON.stringify(data));
             addParticipation(projectParticipation, this.fundData3).then(resp => {
                 console.log('addParticipation resp: ', resp.data);
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.getParticipation();
                     this.sharingForm1 = {};
                     this.sharingAdd1 = false;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1178,12 +1215,12 @@ export default {
         //打开编辑 项目分红
         goEditShare(id) {
             getParticipationDetail(id).then(resp => {
-                console.log('打开编辑项目分红: '+JSON.stringify(resp.data));
-                if(resp.data.status == '200'){
+                console.log('打开编辑项目分红: ' + JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
                     this.sharingAdd2 = !this.sharingAdd2;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1193,26 +1230,26 @@ export default {
         // 编辑 项目分红 确定按钮
         confirmSharingAdd2(id) {
             let projectParticipation = {
-                id : id,
-                shareTitle : this.sharingForm1.shareTitle,
-                shareAmount : this.sharingForm1.shareAmount,
-                handlerUserId : (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
-                                ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                shareDate : this.sharingForm1.shareDate
+                id: id,
+                shareTitle: this.sharingForm1.shareTitle,
+                shareAmount: this.sharingForm1.shareAmount,
+                handlerUserId: (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
+                    ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                shareDate: this.sharingForm1.shareDate
             };
             let data = {
-                projectParticipation : projectParticipation,
-                participationDetails : this.fundData3
+                projectParticipation: projectParticipation,
+                participationDetails: this.fundData3
             }
-            console.log("编辑 项目分红  :: "+JSON.stringify(data));
+            console.log("编辑 项目分红  :: " + JSON.stringify(data));
             editParticipation(projectParticipation, this.fundData3).then(resp => {
                 console.log('editParticipation resp: ', resp.data);
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.getParticipation();
                     this.sharingForm1 = {};
                     this.fundData3 = [];
                     this.sharingAdd2 = !this.sharingAdd2;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -1241,9 +1278,9 @@ export default {
                 case 'fee': // 删除费用
                     delFee(id).then(resp => {
                         console.log('delFee resp: ', resp);
-                        if(resp.data.status == '200'){
+                        if (resp.data.status == '200') {
                             this.getFee();
-                        }else{
+                        } else {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
@@ -1253,9 +1290,9 @@ export default {
                 case 'contract': // 删除合同
                     delContract(id).then(resp => {
                         console.log('delContract resp: ', resp);
-                        if(resp.data.status == '200'){
+                        if (resp.data.status == '200') {
                             this.getContract();
-                        }else{
+                        } else {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
@@ -1268,9 +1305,9 @@ export default {
                 case 'pay':      // 删除投资支付
                     delPay(id).then(resp => {
                         console.log('delPay resp: ', resp);
-                        if(resp.data.status == '200'){
+                        if (resp.data.status == '200') {
                             this.getContractPay();
-                        }else{
+                        } else {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
@@ -1280,9 +1317,9 @@ export default {
                 case 'share':    // 删除项目分红
                     delShare(id).then(resp => {
                         console.log('delShare resp: ', resp);
-                        if(resp.data.status == '200'){
+                        if (resp.data.status == '200') {
                             this.getParticipation();
-                        }else{
+                        } else {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {

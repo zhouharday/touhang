@@ -284,11 +284,14 @@ export default {
                     store.isSubmit = true;
                     addPro({
                         basicForm: basicForm,
-                        companyForm: basicForm
+                        companyForm: companyForm
                     }).then(resp => {
-                        this.addTab('项目池', '/home/projectPool', 'projectPool');
-                        this.$router.push({ name: 'projectPool' });
-                        store.isSubmit = false;
+                        if(resp.data.status == '200'){
+                            
+                            this.addTab('项目池', '/home/projectPool', 'projectPool');
+                            this.$router.push({ name: 'projectPool' });
+                            store.isSubmit = false;
+                        }
                         console.log('resp: ', resp);
                     }).catch(e => {
                         console.log(e);
