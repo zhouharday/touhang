@@ -20,14 +20,14 @@
                     <span class="actives">Sat</span>
                 </div>
                 <div>
-                    <!-- <span> -->
+                    <span>
                         <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.day)">
                             <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
                                 {{list.day}}
                             </span>
                         </span>
                         <div v-show="have">dddd</div>
-                    <!-- </span> -->
+                    </span>
                 </div>
             </div>
         </div>
