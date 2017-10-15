@@ -264,10 +264,9 @@ export default {
             let merchantId = this.merchantId;
             let projectId = _data.id;
             let addProjectUserId = this.addProjectUserId;
-            transPro(projectId)
-            .then(resp => {
-                let data = resp.data;
-                if (!data.message) {
+            transPro(projectId).then(resp => {
+                if (resp.data.status == '200') {
+                    this.dialogVisible = false; // 隐藏弹框
                     this.addTab('投前项目', '/home/preProject', 'preProject');
                     this.$router.push({ name: 'preProject' });
                 } else {

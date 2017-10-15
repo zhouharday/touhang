@@ -3,27 +3,27 @@
     <div class="mytabel_wrapper">
         <div class="list">
             <div class="list_title default">最新估值（元）</div>
-            <div class="list_content default">{{data.newAppra | toMoney}}</div>
+            <div class="list_content default">{{data.appraisementValue | toMoney}}</div>
             <div class="list_title default">最新浮盈（元）</div>
-            <div class="list_content default">{{data.newFuy | toMoney}}</div>
+            <div class="list_content default">{{data.newFuying | toMoney}}</div>
         </div>
         <div class="list">
             <div class="list_title default">投资金额（元）</div>
-            <div class="list_content default">{{data.appraisementDate | formatDate}}</div>
+            <div class="list_content default">{{data.investAmount | toMoney}}</div>
             <div class="list_title default">股权占比（%）</div>
-            <div class="list_content default">{{data.fundScale | toMoney}}</div>
+            <div class="list_content default">{{data.stock }}</div>
         </div>
         <div class="list">
             <div class="list_title default">退出金额（元）</div>
-            <div class="list_content default">{{data.placementSum | toMoney}}</div>
+            <div class="list_content default">{{data.exitAmount | toMoney}}</div>
             <div class="list_title default">退出收益（元）</div>
-            <div class="list_content default">{{data.investAmount | toMoney}}</div>
+            <div class="list_content default">{{data.exitIncome | toMoney}}</div>
         </div>
         <div class="list">
             <div class="list_title default">收益率（%）</div>
-            <div class="list_content default">{{data.remain | toMoney}}</div>
+            <div class="list_content default">{{data.incomeRatio }}</div>
             <div class="list_title default">项目费用（元）</div>
-            <div class="list_content default">{{data.waitAmount | toMoney}}</div>
+            <div class="list_content default">{{data.projectCost | toMoney}}</div>
         </div>
     </div>
 </div>
