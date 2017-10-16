@@ -145,15 +145,17 @@ export default {
             var self = this;
             self.date.month++;
             if (self.date.month > 11) {
+                // alert()
                 self.date.month = 0;
                 self.date.year++;
             };
             self.creattimetmp(+new Date(self.date.year, self.date.month, 1));
             this.changeDate = "";
             this.clickN = null;
-            this.$emit("changetime", self.changeDate)
+            this.$emit("changetime", self.changeDate);
         },
         creattimetmp: function(datas) {
+            
             datas = datas ? datas : new Date();
             var date = new Date(datas)
 
@@ -163,8 +165,8 @@ export default {
 
             month++;
             if (month > 11) {
-                year++;
-                month = 0;
+                // year++;
+                // month = 0;
             }
             var new_date = new Date(year, month, 1); //取下月中的第一天
 
@@ -220,6 +222,15 @@ export default {
             this.objarr = arr;
             this.$emit("readyfun", arr, this.date);
         },
+        removeDuplicatedItem(ar) { //数组去重
+            this.spanScheduleTitle = [];
+            for (var i = 0, j = ar.length; i < j; i++) {
+                if (this.spanScheduleTitle.indexOf(ar[i]) === -1) {
+                    this.spanScheduleTitle.push(ar[i]);
+                }
+            }
+            return this.spanScheduleTitle;
+        },
         getDate(have, time) { //moveOver Date
             if (!have) {
                 this.have = false;
@@ -229,12 +240,13 @@ export default {
                 this.have = false;
                 return;
             };
-            // this.$emit("readyfun", this.objarr, this.date);
             let self = this;
             var arr = [];
             const h = this.$createElement;
-            // this.spanScheduleTitle = [];
-            this.monthDate.map(item => {
+            this.spanScheduleTitle = [];
+            let arrM = this.removeDuplicatedItem(this.monthDate);
+            // this.monthDate.map(item => {
+            arrM.map(item => {
                 // item.item = [];
                 if (time == item.time) {
                     console.log(item);
@@ -242,8 +254,9 @@ export default {
                         self.have = true;
                         this.spanScheduleTitle = [];
                     }, 2000);
-                    this.spanScheduleTitle = [];
-                    this.spanScheduleTitle = item.item;
+                    // this.spanScheduleTitle = [];
+                    // this.spanScheduleTitle = item.item;
+                    this.spanScheduleTitle = this.removeDuplicatedItem(item.item);
                     console.log(this.spanScheduleTitle);
                     item.item.forEach(ele => {
                         // this.$msgbox({
@@ -259,6 +272,7 @@ export default {
         },
         //点击日期
         clickDate: function(index, n) {
+            this.spanScheduleTitle = [];
             this.have = false;
             let new_scheduleForm = {
                 title: '',
@@ -270,7 +284,13 @@ export default {
             };
             var self = this;
             this.clickN = index;
-            this.changeDate = this.date.year + "-" + (this.date.month + 1) + "-" + n;
+            if(this.date.month < 10){
+                // alert(111);
+                console.log(this.date.month);
+                // this.date.month = this.date.month;
+            };
+            this.changeDate = this.date.year + "-" + (this.date.month + 0 + 1) + "-" + n;
+            // this.changeDate = this.date.year + "-" + ('0' + 1) + "-" + n;
             this.$emit("changetime", self.changeDate);
             this.checkTime = this.changeDate;
             this.scheduleDialog = !this.scheduleDialog;
@@ -278,6 +298,7 @@ export default {
         },
 
         getScheduleListBtn() {
+            // this.spanScheduleTitle = [];
             this.scheduleForm.time = this.checkTime + " " + this.scheduleForm.time;
             this.addSchedule();
             this.scheduleDialog = false;
@@ -295,42 +316,12 @@ export default {
                         if (res.data.status == '200') {
                             // this.getData();
                             // console.log(res.data);
+                            // this.spanScheduleTitle = [];
                             this.$emit("readyfun", this.objarr, this.date);
-                            this.$route.push({name : 'homeContent'});
+                            // this.$route.push({name : 'homeContent'});
                             // this.getData();
                             this.$Message.success(res.data.message);
                         } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                    console.log('请求超时');
-                })
-        },
-         getData() { //获取日程列表 api
-            this.$http.post(this.api + '/work/getScheduleList', {
-                "userId": this.user.userInfor.id,
-                "merchantId": this.user.merchants[0].id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-                            console.log('*******************************')
-                            console.log(res.data)
-                            // console.log(this.monthDate)
-                            res.data.result.forEach(item => {
-                                this.monthDate.map(list => {
-                                    if (item.startTime.split(" ")[0] == list.time) {
-                                        list.have = true;
-                                        list.item.push(item);
-                                    }
-                                })
-                            })
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        } else if (res.data.status == '49999') {
                             this.$Message.error(res.data.message);
                         }
                     }
