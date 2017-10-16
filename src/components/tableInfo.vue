@@ -11,7 +11,7 @@
             <div class="list_title default">估值日期</div>
             <div class="list_content default">{{data.appraisementDate | formatDate}}</div>
             <div class="list_title default">基金规模（元）</div>
-            <div class="list_content default">{{data.fundScale | toMoney}}</div>
+            <div class="list_content default">{{data.fundScale | toMoney | toBillion}}</div>
         </div>
         <div class="list">
             <div class="list_title default">募集总额（元）</div>
@@ -64,10 +64,18 @@ export default {
             }
             .list_title {
                 background: #eef0f4;
-                flex: 1 22%;
+                display: flex;
+                align-items: center;
+                flex: 1 18%;
+                flex-shrink: 0;
+                justify-content: center;
+                text-align: center;
             }
             .list_content{
-                flex: 1 28%;
+                flex: 1 32%;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
             }
         }
     }

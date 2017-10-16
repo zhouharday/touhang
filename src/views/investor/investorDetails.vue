@@ -50,7 +50,9 @@ import {
     getVisitingRecordList,
     getAgreementAmountList
 } from 'api/investor'
-import {selectProjectOrFundDocument} from 'api/fund'
+import {
+    selectProjectOrFundDocument
+} from 'api/fund'
 export default {
     data() {
         return {
@@ -114,9 +116,18 @@ export default {
             }
         },
         investorDetailsInfo(value) {
+            console.log(value)
             this.titleInfo.name = value.investorName
-            this.titleInfo.total[0].amount = value.investAmountSum
-            this.titleInfo.total[1].amount = value.earningsAmountSum
+            if (value.investAmountSum === null) {
+                this.titleInfo.total[0].amount = 0
+            } else {
+                this.titleInfo.total[0].amount = value.investAmountSum
+            }
+            if (value.investAmountSum === null) {
+                this.titleInfo.total[1].amount = 0
+            } else {
+                this.titleInfo.total[1].amount = value.earningsAmountSum
+            }
         }
     },
     components: {

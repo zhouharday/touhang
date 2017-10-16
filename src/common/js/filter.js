@@ -12,17 +12,22 @@ Vue.filter('formatDateDetails', (value, formatString) => { // 年月日
 })
 
 Vue.filter('toMoney', (num) => {
-    num = parseFloat(num).toFixed(2)
-    num = Number(num.split('.')[0]).toLocaleString() + '.' +num.split('.')[1]
-    return num //返回的是字符串23,245.12保留2位小数
+    console.log(num)
+    if (num === 'null' || num === null || num === '' || num === undefined) {
+        return 0
+    } else {
+        num = parseFloat(num).toFixed(2)
+        num = Number(num.split('.')[0]).toLocaleString() + '.' + num.split('.')[1]
+        return num //返回的是字符串23,245.12保留2位小数
+    }
 })
 
 Vue.filter('key2value', (value, options = []) => {
-	let res='未知'
-	options.forEach((item = {}) => {
-		if(item.key == value){
-			res = item.value;
-		}
-	});
-	return res;
+    let res = '未知'
+    options.forEach((item = {}) => {
+        if (item.key == value) {
+            res = item.value;
+        }
+    });
+    return res;
 });
