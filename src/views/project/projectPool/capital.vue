@@ -208,8 +208,19 @@ export default {
                         financingDate: capitalForm.financingDate,
                         merchantId: this.merchantId
                     }).then(resp => {
-                        this.modalAdd = !this.modalAdd;
-                        this.getData()
+                        if(resp.data.status == '200'){
+                            this.capitalForm = {
+                                projectTurnId: '',
+                                financingWay: '',
+                                financingMoney: '',
+                                financingDate: '',
+                                editFlag: false
+                            };
+                            this.modalAdd = !this.modalAdd;
+                            this.getData();
+                        }else{
+                            this.$Message.error(resp.data.message);
+                        }
                     }).catch(e => {
                         console.log('addFinance exists error: ', e);
                     })
@@ -218,9 +229,9 @@ export default {
                 }
             });
         },
-        checkEdit(index, row, type) { 
+        checkEdit(index, row, type) {
             row.editFlag = !row.editFlag;
-            if (type === 'save') { // 编辑
+            if (type == 'save') { // 编辑
                 let projectData = this.projectData;
                 editFinance({
                     id: row.id,
