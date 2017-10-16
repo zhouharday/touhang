@@ -31,22 +31,13 @@ module.exports = {
             '/api': {
                 // target:'http://192.168.0.109:9091',//平台
                 // target:'http://192.168.0.191:9092',//平台
-<<<<<<< HEAD
-                // target:'http://192.168.0.198:9091',
-=======
-                target: 'http://192.168.0.198:9091',
->>>>>>> a5f0e920fd6723432c33d2f7ec546479085d9e75
+                // target: 'http://192.168.0.198:9091',
                 // target: 'http://18f46963j4.iok.la',
                 // target:'http://192.168.0.131:9092',// 文军凡IP
                 // target:'http://192.168.0.113:9091',// 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
-<<<<<<< HEAD
                 target:'http://sdwlyxgs.imwork.net:16380',
                 changeOrigin:true,
-=======
-                // target:'http://zhqwjmw.eicp.net',
-                changeOrigin: true,
->>>>>>> a5f0e920fd6723432c33d2f7ec546479085d9e75
                 secure: false,
                 pathRewrite: {
                     '^/api/': ''
