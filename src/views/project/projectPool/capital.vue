@@ -51,7 +51,7 @@
             </el-table>
             <!-- 添加融资信息 对话框-->
             <el-dialog title="添加融资信息" :visible.sync="modalAdd" :close-on-click-modal="false">
-                <el-form :model="capitalForm" :rules="rules" ref="capitalForm" label-width="140px">
+                <el-form :model="capitalForm" :rules="rules" ref="capitalForm" label-position="left" label-width="150px">
                     <el-form-item label="融资轮次" prop="projectTurnId">
                         <el-select v-model="capitalForm.projectTurnId" placeholder="请选择融资轮次" style="width:100%">
                             <el-option v-for="item in projectTurnType" :key="item.id" :label="item.dicName" :value="item.id">

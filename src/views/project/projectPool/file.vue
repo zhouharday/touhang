@@ -18,8 +18,8 @@
                 </el-table-column>
             </el-table>
             <!-- 上传文档 对话框-->
-            <el-dialog title="上传文档" :visible.sync="modalAdd" :close-on-click-modal="false">
-                <el-form :model="fileForm" :label-width="formLabelWidth">
+            <el-dialog title="上传文档" :visible.sync="modalAdd">
+                <el-form :model="fileForm" label-position="left" label-width="80px">
                     <el-form-item label="用户">
                         <el-input v-model="fileForm.user" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                     </el-form-item>
@@ -64,7 +64,6 @@ export default {
             isHide: false,
             file: null,
             loadingStatus: false,
-            formLabelWidth: '80px',
             modalAdd: false,
             fileForm: {
                 user: '',

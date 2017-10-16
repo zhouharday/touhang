@@ -39,7 +39,7 @@
             </el-table>
             <!-- 添加董事会成员 对话框-->
             <el-dialog title="添加董事会成员" :visible.sync="modalAdd1" :close-on-click-modal="false">
-                <el-form :model="memberForm" :rules="rules1" ref="memberForm" label-width="80px">
+                <el-form :model="memberForm" :rules="rules1" ref="memberForm" label-position="left" label-width="80px">
                     <el-form-item label="姓名" prop="name">
                         <el-input v-model="memberForm.name" auto-complete="off"></el-input>
                     </el-form-item>
@@ -112,7 +112,7 @@
             </el-table>
             <!-- 添加股权结构 对话框-->
             <el-dialog title="添加股权结构" :visible.sync="modalAdd2" :close-on-click-modal="false">
-                <el-form :model="structureForm" :rules="rules2" ref="structureForm" label-width="120px">
+                <el-form :model="structureForm" :rules="rules2" ref="structureForm" label-position="left" label-width="120px">
                     <el-form-item label="股东姓名" prop="name">
                         <el-input v-model="structureForm.name" auto-complete="off"></el-input>
                     </el-form-item>

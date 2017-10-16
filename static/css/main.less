@@ -239,10 +239,6 @@ ul li {
         border: 1px solid #ddd;
         border-radius: 10px;
     }
-    .el-dialog__body span {
-        width: 100%;
-        margin: 0 auto;
-    }
     // 转项目池弹框 的按钮样式
     .el-button--default {
         border: 1px solid #F05E5E;
@@ -265,6 +261,28 @@ ul li {
     .el-tabs__item.is-active {
         color: #F05E5E;
     }
+    // 转项目池弹框 的样式
+    .el-dialog--tiny {
+        width: 300px;
+    }
+    .el-dialog {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+    .el-dialog__body span {
+        width: 100%;
+        margin: 0 auto;
+    }
+    // 转投资弹框 的按钮样式
+    .el-button--default {
+        border: 1px solid #F05E5E;
+        color: #F05E5E;
+    }
+    .el-button--danger {
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
+
 }
 
 
@@ -308,10 +326,6 @@ ul li {
     .el-dialog {
         border: 1px solid #ddd;
         border-radius: 10px;
-    }
-    .el-dialog__body span {
-        width: 100%;
-        margin: 0 auto;
     }
     // 转投资弹框 的按钮样式
     .el-button--default {
@@ -388,9 +402,9 @@ ul li {
             border: 1px solid #ddd;
             border-radius: 10px;
         }
-        .el-dialog__body span {
-            width: 100%;
-            margin: 0 auto;
+        .el-dialog__header,
+        .el-dialog__body {
+            text-align: center;
         }
         // 转项目池弹框 的按钮样式
         .el-button--default {

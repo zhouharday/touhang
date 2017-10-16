@@ -13,27 +13,27 @@
             </div>
             <!-- 确认转项目池 dialog -->
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
-                <span>确认将该项目转投资？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="investDialog=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpPre">确 定</el-button>
-                </span>
+                    <span>确认将该项目转投资？</span>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button type="default" @click="investDialog=false">取 消</el-button>
+                        <el-button type="danger" @click="jumpPre">确 定</el-button>
+                    </span>
             </el-dialog>
             <!-- 确认转观察 dialog -->
             <el-dialog title="转观察" :visible.sync="observeDialog" size="tiny">
-                <span>确认将该项目转观察？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="observeDialog=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpObserve">确 定</el-button>
-                </span>
+                    <span>确认将该项目转观察？</span>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button type="default" @click="observeDialog=false">取 消</el-button>
+                        <el-button type="danger" @click="jumpObserve">确 定</el-button>
+                    </span>
             </el-dialog>
             <!-- 确认转淘汰 dialog -->
             <el-dialog title="转淘汰" :visible.sync="eliminateDialog" size="tiny">
-                <span>确认将该项目转淘汰？</span>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
-                    <el-button type="danger" @click="jumpEliminate">确 定</el-button>
-                </span>
+                    <span>确认将该项目转淘汰？</span>
+                    <span slot="footer" class="dialog-footer">
+                        <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
+                        <el-button type="danger" @click="jumpEliminate">确 定</el-button>
+                    </span>
             </el-dialog>
         </div>
         <div class="tabs">

@@ -5,11 +5,11 @@
                 <h3>新增项目</h3>
                 <div class="addForm">
                     <div class="basicForm">
-                        <el-form ref="basicForm" :rules="rules1" :model="basicForm" label-width="120px">
-                            <el-row>
-                                <el-col class="title">
-                                    <div>基本信息</div>
-                                </el-col>
+                         <div class="title">
+                             <div>基本信息</div>
+                        </div>
+                        <el-form ref="basicForm" :rules="rules1" :model="basicForm" label-position="left" label-width="100px">
+                            <el-row :gutter="15">
                                 <el-col :span="12">
                                     <el-form-item label="项目名称" prop="projectName">
                                         <el-input v-model="basicForm.projectName"></el-input>
@@ -89,11 +89,11 @@
                         </el-form>
                     </div>
                     <div class="companyForm">
-                        <el-form ref="form" :model="companyForm" label-width="120px">
-                            <el-row>
-                                <el-col class="title">
-                                    <div>企业信息</div>
-                                </el-col>
+                         <div class="title">
+                            <div>企业信息</div>
+                         </div>
+                        <el-form ref="form" :model="companyForm" label-position="left" label-width="120px">
+                            <el-row :gutter="15">
                                 <el-col :span="12">
                                     <el-form-item label="企业名称" prop="enterpriseName">
                                         <el-input v-model="companyForm.enterpriseName"></el-input>
