@@ -105,8 +105,8 @@ export default {
                     trigger: 'blur'
                 }],
                 date: [{
-                    required: true,
                     type: 'date',
+                    required: true,
                     message: '请选择日期',
                     trigger: 'change'
                 }]

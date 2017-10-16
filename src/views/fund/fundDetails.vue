@@ -286,10 +286,13 @@ export default {
                 if (res.status == '200') {
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
-                    this.stepId = this.module[this.listIndex].id
+                    if(res.data.result[0] === undefined) {
+                        return
+                    } else {
+                        this.stepId = this.module[this.listIndex].id
+                    }
                     sessionStorage.setItem('stepId', this.stepId)
                     sessionStorage.setItem('currentStep', res.data.stageId)
-                    console.log(res)
                 }
             })
             slectStageAllocation().then((res) => {

@@ -99,11 +99,8 @@ const actions = {
         const LIST_DATA = null
         return getMyFund(1, 10, LIST_DATA, LIST_DATA, LIST_DATA, LIST_DATA, LIST_DATA).then((res) => {
             if (res.status == '200') {
-                console.log(res)
                 commit(types.GET_MYFUNDLIDT, res.data.result)
             }
-        }).catch(err => {
-            console.log(err)
         })
     },
     getFundStage({commit, dispatch}) {
@@ -111,26 +108,13 @@ const actions = {
             if (res.status == '200') {
                 commit(types.GET_FUNDSTAGE, res.data.result)
             }
-        }).catch(err => {
-            console.log(err)
         })
     },
-    // getFundStatus({commit, dispatch}) {
-    //     return fundStatus().then((res) => {
-    //         if (res.status == '200') {
-    //             commit(types.GET_FUNDSTATUS, res.data.result)
-    //         }
-    //     }).catch(err => {
-    //         console.log(err)
-    //     })
-    // },
     getAllOrg({commit, dispatch}) {
         return getAllOrgList().then((res) => {
             if (res.status == '200') {
                 commit(types.GET_ALLORGLIST, res.data.result)
             }
-        }).catch(err => {
-            console.log(err)
         })
     }
 }
