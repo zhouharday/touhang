@@ -9,22 +9,22 @@
             </tableHeader>
         </div>
         <el-table :data="proLibrary" border style="width: 100%">
-            <el-table-column prop="projectName" label="项目名称" align="center">
+            <el-table-column prop="projectName" label="项目名称">
                 <template scope = "scope">
                     <a @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="createUserName" label="项目创建人" align="center">
+            <el-table-column prop="createUserName" label="项目创建人">
             </el-table-column>
-            <el-table-column prop="industryId" label="所属行业" align="center">
+            <el-table-column prop="industryId" label="所属行业">
             </el-table-column>
-            <el-table-column prop="projectTypeId" label="项目类型" align="center">
+            <el-table-column prop="projectTypeId" label="项目类型">
             </el-table-column>
-            <el-table-column prop="projectStageId" label="项目阶段" align="center">
+            <el-table-column prop="projectStage" label="项目阶段">
             </el-table-column>
-            <el-table-column prop="payDate" label="投资日期" align="center">
+            <el-table-column prop="payDate" label="投资日期">
             </el-table-column>
-            <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
+            <el-table-column prop="paySumAmount" label="投资金额（元）">
             </el-table-column>
         </el-table>
 
@@ -85,6 +85,10 @@
                 this.seartext = this.input
                 getProjectList('',this.type,this.seartext,this.page).then((res)=>{
                     this.proLibrary = res.data.result.list
+                    this.proLibrary.forEach(function (item) {
+                        if (item.payDate)
+                            item.payDate = item.payDate.substring(0,10)
+                    })
                 })
             },
 
@@ -95,6 +99,10 @@
                 }
                 getProjectList('',this.type,this.seartext,this.page).then((res)=>{
                     this.proLibrary = res.data.result.list
+                    this.proLibrary.forEach(function (item) {
+                        if (item.payDate)
+                            item.payDate = item.payDate.substring(0,10)
+                    })
                     this.page.pageNum = res.data.result.pageNum; //当前页码
                     this.page.total = res.data.result.total; //数据总数
                     this.page.pageSize = res.data.result.pageSize; //每页条数
@@ -108,6 +116,10 @@
                 getProjectList('',this.type,this.seartext,this.page).then((res)=>{
                     console.log(res.data)
                     this.proLibrary = res.data.result.list
+                    this.proLibrary.forEach(function (item) {
+                        if (item.payDate)
+                            item.payDate = item.payDate.substring(0,10)
+                    })
                 })
             },
             handleCurrentChange(x){
@@ -115,6 +127,10 @@
                 getProjectList('',this.type,this.seartext,this.page).then((res)=>{
                     console.log(res.data)
                     this.proLibrary = res.data.result.list
+                    this.proLibrary.forEach(function (item) {
+                        if (item.payDate)
+                            item.payDate = item.payDate.substring(0,10)
+                    })
                 })
             },
 
@@ -125,11 +141,15 @@
         created(){
 
             getProjectList('',this.type,this.seartext,this.page).then((res)=>{
-                console.log(res.data)
+
                 this.proLibrary = res.data.result.list
+                this.proLibrary.forEach(function (item) {
+                    if (item.payDate)
+                        item.payDate = item.payDate.substring(0,10)
+                })
             })
             getSelectIndex('202').then((res)=>{
-                console.log(res.data)
+
                 this.chooseInfo.details = res.data.result
             })
 
@@ -158,10 +178,6 @@
         .page {
             padding: 24px 0;
             text-align: right;
-        }
-        a{
-            color:@color-theme-red;
-            text-decoration: underline;
         }
     }
 </style>

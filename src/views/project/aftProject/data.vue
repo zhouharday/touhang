@@ -62,16 +62,6 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-<!--                         <el-col>
-                            <el-form-item label="经营情况附件">
-                                <Upload multiple type="drag" v-model="operatingForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
-                            </el-form-item>
-                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -142,21 +132,21 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="类型" prop="sort">
-                                <el-select v-model="financialForm1.sort" placeholder="请选择类型" style="width:100%;">
+                            <el-form-item label="类型" prop="dataType">
+                                <el-select v-model="financialForm1.dataType" placeholder="请选择类型" style="width:100%;">
                                     <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报人" prop="informant">
-                                <el-input placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
+                            <el-form-item label="填报人" prop="userName">
+                                <el-input placeholder="默认登录用户" v-model="userName" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报日期" prop="date">
-                                <el-input placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
+                            <el-form-item label="填报日期" prop="currentDeta">
+                                <el-input placeholder="当前默认日期" v-model="currentDeta" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -166,16 +156,6 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-<!--                         <el-col>
-                            <el-form-item label="财务情况附件">
-                                <Upload multiple type="drag" v-model="financialForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
-                            </el-form-item>
-                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -266,7 +246,6 @@
     </div>
 </template>
 
-
 <script >
 import deleteReminders from 'components/deleteReminders'
 import { changeDate } from 'common/js/config'
@@ -297,7 +276,20 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             // 经营数据表头
-            operatingData: [],
+            operatingData: [
+                {
+                    baseDate: '2017-1-1',
+                    dataType: '半年报',
+                    operatorName: '张三',
+                    currentDeta: '2017-10-11',
+                },
+                {
+                    baseDate: '2017-9-1',
+                    dataType: '月报',
+                    operatorName: '李四',
+                    currentDeta: '2017-10-12',
+                }
+            ],
             // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
@@ -317,16 +309,16 @@ export default {
             },
             sortOptions: [
                 { //数据类型列表
-                    value: '1',
+                    value: 1,
                     label: '年报'
                 }, {
-                    value: '2',
+                    value: 2,
                     label: '半年报'
                 }, {
-                    value: '3',
+                    value: 3,
                     label: '季报'
                 }, {
-                    value: '4',
+                    value: 4,
                     label: '月报'
                 }
             ],
@@ -383,11 +375,24 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [],
+            financialData: [
+                {
+                    baseDate: '2017-1-1',
+                    dataType: '半年报',
+                    operatorName: '张三',
+                    currentDeta: '2017-10-11',
+                },
+                {
+                    baseDate: '2017-9-1',
+                    dataType: '月报',
+                    operatorName: '李四',
+                    currentDeta: '2017-10-12',
+                }
+            ],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
-                sort: '',
+                dataType: '',
                 informant: '',
                 date: '',
                 remark: '',
@@ -514,6 +519,7 @@ export default {
         //获取经营数据主体
         getOperateSubject(){
             getDataSubjectList(this.projectId, 0).then(resp => {
+                console.log("获取经营数据表头 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.operatingData = resp.data.result;
                 } else if (resp.data.status == '49999') {
@@ -528,6 +534,7 @@ export default {
         //获取财务数据主体
         getFinancialSubject(){
             getDataSubjectList(this.projectId, 1).then(resp => {
+                console.log("获取财务数据表头 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.financialData = resp.data.result;
                 } else if (resp.data.status == '49999') {
@@ -539,9 +546,11 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
+        //打开添加数据明细表单
         goAddData(subjectId, dataType){
 
             getDataFormBody(subjectId).then(resp => {
+                console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let formBody = resp.data.result.dataInfos | [];
                     //填充表单
@@ -549,22 +558,25 @@ export default {
                         var _dataType = formBody[idx].dataInfo.dataType;
                         if(_dataType == 1){
                             //填充经营数据表单
+                            this.fillOperateSheet(formBody[idx].operations);
                         }else if(_dataType == 2){
                             //填充资产负债表单
                             this.fillBalanceSheet(formBody[idx].operations);
                         }else if(_dataType == 3){
                             //填充现金流量表单
-                            this.fillBalanceSheet(formBody[idx].operations);
+                            this.fillCashFlowStatements(formBody[idx].operations);
                         }else if(_dataType == 4){
                             //填充利润表单
-                            this.fillBalanceSheet(formBody[idx].operations);
+                            this.fillIncomeStatement(formBody[idx].operations);
                         }
                     }
+
                     if(dataType == '1'){
                         this.operatingModal2 = true;
                     }else{
                         this.financialModal2 =true;
                     }
+
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -574,7 +586,7 @@ export default {
 
         },
         //填充经营数据表单
-        fillBalanceSheet(){
+        fillOperateSheet(){
             // 
         },
         //填充资产负债表单
@@ -582,11 +594,12 @@ export default {
             // 
         },
         //填充现金流量表单
-        fillBalanceSheet(){
+        fillCashFlowStatements(formBody){
             // 
+            this.cashFlowStatements = formBody;
         },
         //填充利润表单
-        fillBalanceSheet(){
+        fillIncomeStatement(){
             // 
         },
         // 切换 经营/财务 的显示隐藏
@@ -616,21 +629,20 @@ export default {
                         baseDate: changeDate(dataForm.baseDate),
                         dataType: dataForm.dataType,
                         operator: JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        currentDeta: dataForm.currentDeta,
+                        currentDeta: changeDate(new Date()),
                         operatorName: this.userName,
                         remark: dataForm.remark,
-                        dataCat: 0
+                        dataCat: dataType == '1' ? 0: 1
                     };
-                    console.log("添加数据表头 参数："+JSON.stringify(data));
                     saveDataSubject(data).then(resp => {
                     console.log("添加数据表头 结果："+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             if(dataType == '1'){
-                                this.operatingForm1 = {};
+                                this.operatingForm1 = { baseDate: '', dataType: ''};
                                 this.getOperateSubject();
                                 this.operatingModal1 = false;
                             }else{
-                                this.financialForm1 = {};
+                                this.financialForm1 = { baseDate: '', dataType: ''};
                                 this.getFinancialSubject();
                                 this.financialModal1  = false;
                             }
@@ -645,12 +657,6 @@ export default {
                     return false;
                 }
             });
-
-            // this.operatingForm1.date = changeDate(this.operatingForm1.date);
-            // this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
-            // this.operatingData.push(this.operatingForm1);
-            // this.operatingForm1 = {};
-            // this.operatingModal1 = false;
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {

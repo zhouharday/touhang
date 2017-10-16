@@ -11,13 +11,3 @@ export function getProjectUsers(params) {
     }
     return service({url: '/user/queryUserList', method: 'post', data})
 }
-
-// 项目角色列表
-export function getProjectRoles(params) {
-	let { merchantId, roleType } = params;
-    const data = {
-        merchantId, // :"1aeea800334a4d7a9d367914edb16250"
-    	roleType	// type是0，是项目角色 1是基金角色
-    }
-    return service({url: '/appraisement/likeAppraisement', method: 'post', data})
-}

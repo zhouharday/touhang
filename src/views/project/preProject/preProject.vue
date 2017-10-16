@@ -10,15 +10,6 @@
                 <el-input icon="search" v-model="projectName" @keyup.enter.native="getDatas" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
-            <!-- 后期所做导入和下载模板功能 -->
-            <!-- <el-col :span="19" class="imdo">
-                <div class="importProject">
-                    <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
-                        <el-button type="text">导入</el-button>
-                    </el-upload>
-                    <a href="/static/img/templet.txt" download="xxxxx模板">下载模板</a>
-                </div>
-            </el-col> -->
         </el-row>
 
         <!--项目table -->
@@ -51,12 +42,7 @@
                 </el-table-column>
                 <el-table-column label="操作" min-width="100" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="modalAdd=true">
-                            项目团队
-                        </el-button>
-                        <!-- <el-button type="text" size="small" @click="deleteReminders=true">
-                            删除
-                        </el-button> -->
+                        <el-button type="text" size="small" @click="goAddTeam(scope.row.id)">项目团队</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -70,26 +56,22 @@
         <div class="teamBox">
             <el-dialog title="添加项目成员" :visible.sync="modalAdd" size="tiny" :close-on-click-modal="false">
                 <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
-                    <el-form-item label="姓名" prop="name">
-                        <el-select v-model="teamForm.name" placeholder="请选择姓名" style="width:100%">
-                            <el-option v-for="item in nameOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-form-item label="姓名" prop="userId">
+                        <el-select v-model="teamForm.userId" placeholder="请选择姓名" style="width:100%">
+                            <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="角色" prop="role">
-                        <el-select v-model="teamForm.role" placeholder="请选择角色" style="width:100%">
-                            <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-form-item label="角色" prop="roleId">
+                        <el-select v-model="teamForm.roleId" placeholder="请选择角色" style="width:100%">
+                            <el-option v-for="item in proRoles" :key="item.id" :label="item.roleName" :value="item.id">
                             </el-option>
                         </el-select>
-                    </el-form-item>
-                    <el-form-item label="添加日期" prop="date">
-                        <el-input placeholder="默认当前日期" v-model="teamForm.date" disabled style="width: 100%;">
-                        </el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="default" @click="modalAdd = false">取 消</el-button>
-                    <el-button type="danger" @click="modalAdd = false">保 存</el-button>
+                    <el-button type="danger" @click="confirmAdd('teamForm')">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -102,10 +84,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getDicChildrenII } from 'common/js/dictionary'
-import myFilter from 'components/myFilter'
-import { getPres } from 'api/projectPre';
-import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+import {changeDate} from 'common/js/config'
+import { getPres, addInsertProjectTeam } from 'api/projectPre';
+import { getProjectUsers } from 'api/projectSys';
+import { queryList } from 'api/fund'
 import deleteReminders from 'components/deleteReminders'
+import myFilter from 'components/myFilter'
+
+const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 export default {
     name: 'preProject',
     computed: mapGetters({
@@ -136,23 +122,24 @@ export default {
             },
             tableData: [],
             teamForm: { //项目团队表单
-                name: '',
-                role: '',
-                date: '',
+                userId: '',
+                roleId: '',
                 editFlag: false
             },
-            nameOptions: [
-                { //姓名列表
-                    value: '选项1',
-                    label: '王二'
-                }
-            ],
-            roleOptions: [
-                { //角色列表
-                    value: '选项1',
-                    label: '角色一'
-                }
-            ]
+            proUsers: [], // 项目用户列表
+            proRoles: [], // 项目角色列表
+            rules: {
+                userId: [{
+                    required: true,
+                    message: '请输入姓名',
+                    trigger: 'blur'
+                }],
+                roleId: [{
+                    required: true,
+                    message: '请选择角色',
+                    trigger: 'blur'
+                }]
+            },
         }
     },
     created() {
@@ -179,6 +166,8 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
+            this.getProUsers();
+            this.getProRoles();
         },
         getDatas() {
             let params = {
@@ -248,37 +237,63 @@ export default {
                 name: name
             });
         },
-        deleteRow(index = 0, rows = []) {
-            let row = rows[index];
-            console.log('row: ', JSON.stringify(row));
-            // rows.splice(index, 1);
-        }
-        // ,
-        // /**
-        //  * [changeActive 搜索查询]
-        //  * @param  {[type]} index [description]
-        //  * @param  {[type]} ind   [description]
-        //  * @return {[type]}       [description]
-        //  */
-        // changeActive(index, ind) {
-        //     let data = [];
-        //     let currentData;
-        //     let object;
-        //     if (ind == 1) { // 项目阶段
-        //         data = this.stageList;
-        //         currentData = data[index];
-        //         object = currentData.stages;
-        //         this.stageId = object;
-        //         this.currentIndex1 = index;
-        //     } else {        // 项目类型
-        //         data = this.sortList;
-        //         currentData = data[index];
-        //         object = currentData.sorts;
-        //         this.projectType = object;
-        //         this.currentIndex2 = index;
-        //     }
-        //     this.getDatas();
-        // }
+        /**
+         * [getProUsers 获取项目用户列表]
+         * @return {[type]} [description]
+         */
+        getProUsers() {
+            getProjectUsers({
+                merchantId: this.merchantId
+            }).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proUsers = data.result;
+                }
+            }).catch(e => {
+                console.log('getProjectUsers() exists error: ', e);
+            });
+        },
+        /**
+         * [getProRoles 获取项目角色列表]
+         * @return {[type]} [description]
+         */
+        getProRoles() {
+            queryList(PROJECT_TYPE).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proRoles = data.result;
+                }
+            }).catch(e => {
+                console.log('获取项目角色列表 error: ', e);
+            });
+        },
+        goAddTeam(investId){
+            this.teamForm.investProjectId = investId
+            this.modalAdd=true;
+        },
+        confirmAdd(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.teamForm.createDate= changeDate(new Date());
+                    addInsertProjectTeam(this.teamForm).then((res) => {
+                        if(res.status == '200') {
+                            this.$Message.success(res.data.message || '添加成功！')
+                            this.modalAdd = !this.modalAdd;
+                            this.teamForm = {
+                                userId: '',
+                                roleId: '',
+                                editFlag: false
+                            };
+                            this.getDatas();
+                        }
+                    }).catch(err => {
+                        this.$Message.error(err.data.message || '添加失败！')
+                    })
+                } else {
+                    return false
+                }
+            });
+        },
     },
     components: {
         deleteReminders,

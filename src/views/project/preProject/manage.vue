@@ -699,10 +699,10 @@ export default {
             },
             rules1: {
                 contractName: [
-                    { required: true, message: '请输入合同名称', trigger: 'change' }
+                    { required: true, message: '请输入合同名称', trigger: 'blur' }
                 ],
                 signDate: [
-                    { required: true, message: '请选择签约日期', trigger: 'change' }
+                    { type: "date", required: true, message: '请选择签约日期', trigger: 'blur' }
                 ]
             },
             contractForm2: {},

@@ -36,10 +36,6 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="添加日期" prop="createDate">
-                        <el-input v-model="teamForm.createDate"  placeholder="当前时间" disabled style="width: 100%;">
-                        </el-input>
-                    </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd = false">取 消</el-button>
@@ -81,19 +77,14 @@ export default {
                 editFlag: false
             },
             rules: {
-                name: [{
+                userId: [{
                     required: true,
                     message: '请输入姓名',
                     trigger: 'blur'
                 }],
-                role: [{
+                roleId: [{
                     required: true,
                     message: '请选择角色',
-                    trigger: 'blur'
-                }],
-                date: [{
-                    required: true,
-                    message: '添加日期',
                     trigger: 'blur'
                 }]
             },
@@ -127,13 +118,12 @@ export default {
                 userId: '',
                 roleId: '',
                 investProjectId: this.$route.params.investProjectId,
-                createDate: new Date(),
                 editFlag: false
             }
             this.modalAdd = !this.modalAdd;
         },
         confirmAdd(formName) {
-            this.teamForm.createDate = changeDate(this.teamForm.createDate)
+            this.teamForm.createDate= changeDate(new Date());
             this.teamForm.investProjectId = this.$route.params.investProjectId
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -141,6 +131,7 @@ export default {
                         if (res.status == '200') {
                             this.$Message.success(res.data.message || '添加成功！')
                             this.modalAdd = !this.modalAdd;
+                            this.teamForm = {};
                             this.getDatas();
                         }
                     }).catch(err => {

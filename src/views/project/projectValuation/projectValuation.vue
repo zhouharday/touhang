@@ -1,7 +1,7 @@
 <template>
     <section class="projectValue">
         <!-- 状态ul -->
-        <my-filter :chooseInfo="stateList"></my-filter>
+        <my-filter :chooseInfo="stateList" ></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
@@ -24,7 +24,7 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="valuationParameter" label="估值参数" align="center" width="400px">
+            <el-table-column prop="appraisementParamer" label="估值参数" align="center" width="400px">
                 <template scope="scope">
                     <span v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
@@ -41,13 +41,14 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="valuation" label="估值（元）" align="center" width="200px">
+            <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="200px">
             </el-table-column>
-            <el-table-column prop="valuationDate" label="估值日期" align="center" width="200px">
+            <el-table-column prop="appraisementDate" label="估值日期" align="center" width="200px">
             </el-table-column>
-            <el-table-column prop="valuationOfficer" label="估值人员" align="center" width="200px">
+            <el-table-column prop="appraisementUserName" label="估值人员" align="center" width="200px">
             </el-table-column>
-            <el-table-column prop="state" label="状态" align="center" width="200px">
+            <el-table-column prop="appraisementStatus" label="状态" align="center" width="200px">
+                <template scope="scope">{{scope.row.appraisementStatus == '1' ? '已估值' : '未估值'}}</template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" align="center" width="200px">
                 <template scope="scope">
@@ -59,7 +60,7 @@
             </el-table-column>
         </el-table>
         <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
     </section>
@@ -67,7 +68,7 @@
 
 <script>
 import myFilter from 'components/myFilter'
-import { getAppraisementList, updAppraisement } from 'api/project';
+import { getAppraisementList, updAppraisement } from 'api/projectAfter';
 export default {
     data() {
         return {
@@ -89,28 +90,28 @@ export default {
                 }]
             },
             tableData: [
+                {
+                    projectName: 'AAAAAAAA',
+                    algorithmType: '选项1',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
+                    appraisementValue: '0.00',
+                    appraisementDate: '',
+                    appraisementUserName: '',
+                    appraisementStatus: '1',
+                    editFlag: false
+                },
                 // {
-                //     project: 'AAAAAAAA',
-                //     algorithmType: '',
-                //     parameter1: '400',
-                //     parameter2: '500',
+                //     projectName: 'BBBBBB',
+                //     algorithmType: '选项1',
+                //     parameter1: '0',
+                //     parameter2: '0',
                 //     parameter3: '0.3',
-                //     valuation: '0.00',
-                //     valuationDate: '',
-                //     valuationOfficer: '',
-                //     state: '',
-                //     editFlag: false
-                // },
-                // {
-                //     project: 'AAAAAAAA',
-                //     algorithmType: '',
-                //     parameter1: '400',
-                //     parameter2: '500',
-                //     parameter3: '0.4',
-                //     valuation: '0.00',
-                //     valuationDate: '',
-                //     valuationOfficer: '',
-                //     state: '',
+                //     appraisementValue: '0.00',
+                //     appraisementDate: '',
+                //     appraisementUserName: '',
+                //     appraisementStatus: '2',
                 //     editFlag: false
                 // }
             ],
@@ -145,14 +146,14 @@ export default {
             };
             getAppraisementList(params).then(resp => {
                 if(resp.data.result == '200'){
-                    this.tableData = result.data.result.list || [];
+                    // this.tableData = result.data.result.list || [];
                 }
                 this.total = result.total || 0;
             }).catch(e => {
                 console.log('getProjectValuation() exists error: ', e);
             });
         },
-        pageChanged(page) {
+        handleCurrentChange(page) {
             this.page = page;
             this.getDatas();
         },

@@ -18,9 +18,9 @@
             </el-table-column>
             <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="orgTypeId" label="组织类型" width="200" align="center">
+            <el-table-column prop="orgType" label="组织类型" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="manageTypeId" label="管理类型" width="200" align="center">
+            <el-table-column prop="manageType" label="管理类型" width="200" align="center">
             </el-table-column>
             <el-table-column prop="fundScale" label="基金规模（元）" width="200" align="center">
             </el-table-column>
@@ -32,7 +32,7 @@
             </el-table-column>
             <el-table-column prop="createDate" label="成立日期" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="fundStageId" label="状态" width="200" align="center">
+            <el-table-column prop="fundStatus" label="状态" width="200" align="center">
             </el-table-column>
 
         </el-table>
@@ -94,6 +94,10 @@
                 getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
                     console.log(res.data)
                     this.myFund = res.data.result.list
+                    this.myFund.forEach(function (item) {
+                        item.createDate = item.createDate.substring(0,10)
+                    })
+
                     this.page.pageNum = res.data.result.pageNum; //当前页码
                     this.page.total = res.data.result.total; //数据总数
                     this.page.pageSize = res.data.result.pageSize; //每页条数
@@ -106,6 +110,10 @@
                 getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
                     console.log(res.data)
                     this.myFund = res.data.result.list
+                    this.myFund.forEach(function (item) {
+                        item.createDate = item.createDate.substring(0,10)
+                    })
+
                     this.page.pageNum = res.data.result.pageNum; //当前页码
                     this.page.total = res.data.result.total; //数据总数
                     this.page.pageSize = res.data.result.pageSize; //每页条数
@@ -155,6 +163,10 @@
                 getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
                     console.log(res.data)
                     this.myFund = res.data.result.list
+                    this.myFund.forEach(function (item) {
+                        item.createDate = item.createDate.substring(0,10)
+                    })
+
                 })
             },
             ...mapMutations([
@@ -178,8 +190,14 @@
             })
 
             getFundLibrary(this.chooseId,this.chooseId2,this.chooseId3,this.input,this.page).then((res) => {
-                console.log(res.data)
+
                 this.myFund = res.data.result.list
+
+                this.myFund.forEach(function (item) {
+                    item.createDate = item.createDate.substring(0,10)
+                })
+
+
                 this.page.pageNum = res.data.result.pageNum; //当前页码
                 this.page.total = res.data.result.total; //数据总数
                 this.page.pageSize = res.data.result.pageSize; //每页条数
@@ -209,10 +227,6 @@
     .page {
         padding: 24px 0;
         text-align: right;
-    }
-    a{
-        color:@color-theme-red;
-        text-decoration: underline;
     }
 }
 </style>

@@ -2,16 +2,16 @@
 <div class="companyInfo">
     <el-row style="width: 100%;" class="row" >
         <el-col :span="16" :offset="4" class="col">
-            <el-form :model="companyInfo" label-position="left" label-width="120px">
+            <el-form :model="companyInfo"  label-position="left" label-width="120px">
                 <el-form-item label="企业名称:">
-                    <!--<el-input v-model="companyInfo.name"></el-input>-->
-                    <div>{{companyInfo.name}}</div>
+                    <el-input v-model="companyInfo.name" disabled></el-input>
+                    <!--<div>{{companyInfo.name}}</div>-->
                 </el-form-item>
                 <el-form-item label="企业logo:">
                     <div>
                         <div class="el-upload__text">
                       <span>
-                          <img style="width: 200px;height: 200px;background-color: red" :src=companyInfo.image></img>
+                          <img style="width: 200px;height: 200px;" :src=companyInfo.image></img>
                       </span>
                             <form>
                                 <el-button class="changeWidth" type="default" @click="getFile($event)">点击选择上传文件</el-button>
