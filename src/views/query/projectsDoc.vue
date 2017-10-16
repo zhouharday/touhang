@@ -49,8 +49,9 @@
                         </el-table-column>
                         <el-table-column align="center">
                             <template scope="scope">
-                                <a href="/static/img/templet.txt" style="font-size:12px;" download="xxxxx文档">下载</a>
-                                <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                                <a :href=scope.row.documentUrl style="font-size:12px;" download="xxxxx文档">下载</a>
+
+                                <el-button v-if="scope.row.type == 1"  type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
 
                             </template>
                         </el-table-column>
@@ -64,7 +65,8 @@
                         <img src="/static/img/close.png">
                     </div>
                     <div class="fileArea">
-                        不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。 v-show 是简单地切换元素的 CSS 属性 display 。 注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在 切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。 惰性的：如果在初始渲染时条件为假，则什么也不做 ——直到条件第一次变为真时，才会开始渲染条件块。 相比之下， v-show 就简单得多——不管初始条件是什么，元素总是 会被渲染，并且只是简单地基于 CSS 进行切换。 一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。 因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。 v-if 与 v-for 一起使用 当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。 请查阅 列表渲染指南 以获取详细信息。 ← Class 与 Style 绑定 列表渲染 → 发现错误？想参与编辑？ 在 Github 上编辑此页！
+                        <iframe :src=fileData width="800" height="600"></iframe>
+                        <img :src=fileData >
                     </div>
                 </div>
             </div>
@@ -99,6 +101,8 @@ export default {
                 }]
             },
             chooseInfo:[],
+            fileData:[],
+            fileType:'',
         }
 
     },
@@ -134,7 +138,8 @@ export default {
         preview(row) {
             this.isShow = false,
                 this.isHide = true,
-                console.log(row.fileName)
+                this.fileData = row.documentUrl.split('?')[0],
+                console.log(this.fileData)
         },
         closeView() {
             this.isShow = true,
@@ -156,13 +161,22 @@ export default {
     },
     created(){
 
-        getLeftList('1').then((res)=>{
+        getLeftList('').then((res)=>{
             console.log(res.data)
             this.projectMenu = res.data.result
         })
         getRightList('').then((res)=>{
             console.log(res.data.result)
             this.dataArr = res.data.result
+            this.dataArr.forEach(function (item) {
+                item.dataDocumentResult.forEach(function (data) {
+                    var type =  data.documentName.substring(data.documentName.length-3)
+                    if (type == 'png' || type == 'PNG' || type == 'jpg' || type == 'JPG' || type == 'peg' || type == 'PEG'){
+                        data.type = 1
+                    }else
+                        data.type = 0
+                })
+            })
 //                this.projectMenu = res.data.result
         })
         //暂时不用选项卡
