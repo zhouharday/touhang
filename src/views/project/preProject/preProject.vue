@@ -84,11 +84,14 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getDicChildrenII } from 'common/js/dictionary'
-import myFilter from 'components/myFilter'
 import {changeDate} from 'common/js/config'
-import { getPres } from 'api/projectPre';
-import { getProjectUsers, getProjectRoles } from 'api/projectSys';
+import { getPres, addInsertProjectTeam } from 'api/projectPre';
+import { getProjectUsers } from 'api/projectSys';
+import { queryList } from 'api/fund'
 import deleteReminders from 'components/deleteReminders'
+import myFilter from 'components/myFilter'
+
+const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基金角色
 export default {
     name: 'preProject',
     computed: mapGetters({
@@ -119,23 +122,12 @@ export default {
             },
             tableData: [],
             teamForm: { //项目团队表单
-                name: '',
-                role: '',
-                date: '',
+                userId: '',
+                roleId: '',
                 editFlag: false
             },
-            nameOptions: [
-                { //姓名列表
-                    value: '选项1',
-                    label: '王二'
-                }
-            ],
-            roleOptions: [
-                { //角色列表
-                    value: '选项1',
-                    label: '角色一'
-                }
-            ],
+            proUsers: [], // 项目用户列表
+            proRoles: [], // 项目角色列表
             rules: {
                 userId: [{
                     required: true,
@@ -174,6 +166,8 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
+            this.getProUsers();
+            this.getProRoles();
         },
         getDatas() {
             let params = {
@@ -243,20 +237,53 @@ export default {
                 name: name
             });
         },
+        /**
+         * [getProUsers 获取项目用户列表]
+         * @return {[type]} [description]
+         */
+        getProUsers() {
+            getProjectUsers({
+                merchantId: this.merchantId
+            }).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proUsers = data.result;
+                }
+            }).catch(e => {
+                console.log('getProjectUsers() exists error: ', e);
+            });
+        },
+        /**
+         * [getProRoles 获取项目角色列表]
+         * @return {[type]} [description]
+         */
+        getProRoles() {
+            queryList(PROJECT_TYPE).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.proRoles = data.result;
+                }
+            }).catch(e => {
+                console.log('获取项目角色列表 error: ', e);
+            });
+        },
         goAddTeam(investId){
             this.teamForm.investProjectId = investId
             this.modalAdd=true;
         },
         confirmAdd(formName) {
-            this.teamForm.createDate= changeDate(new Date());
-            this.teamForm.investProjectId = this.$route.params.investProjectId
             this.$refs[formName].validate((valid) => {
                 if (valid) {
+                    this.teamForm.createDate= changeDate(new Date());
                     addInsertProjectTeam(this.teamForm).then((res) => {
                         if(res.status == '200') {
                             this.$Message.success(res.data.message || '添加成功！')
                             this.modalAdd = !this.modalAdd;
-                            this.teamForm = {};
+                            this.teamForm = {
+                                userId: '',
+                                roleId: '',
+                                editFlag: false
+                            };
                             this.getDatas();
                         }
                     }).catch(err => {

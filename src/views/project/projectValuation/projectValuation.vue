@@ -1,7 +1,7 @@
 <template>
     <section class="projectValue">
         <!-- 状态ul -->
-        <my-filter :chooseInfo="stateList"></my-filter>
+        <my-filter :chooseInfo="stateList" ></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
@@ -60,7 +60,7 @@
             </el-table-column>
         </el-table>
         <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
     </section>
@@ -89,32 +89,32 @@ export default {
                     dicName: '未估值'
                 }]
             },
-            // tableData: [
-            //     {
-            //         project: 'AAAAAAAA',
-            //         algorithmType: '',
-            //         parameter1: '400',
-            //         parameter2: '500',
-            //         parameter3: '0.3',
-            //         valuation: '0.00',
-            //         valuationDate: '',
-            //         valuationOfficer: '',
-            //         state: '',
-            //         editFlag: false
-            //     },
-            //     {
-            //         project: 'AAAAAAAA',
-            //         algorithmType: '',
-            //         parameter1: '400',
-            //         parameter2: '500',
-            //         parameter3: '0.4',
-            //         valuation: '0.00',
-            //         valuationDate: '',
-            //         valuationOfficer: '',
-            //         state: '',
-            //         editFlag: false
-            //     }
-            // ],
+            tableData: [
+                {
+                    projectName: 'AAAAAAAA',
+                    algorithmType: '选项1',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
+                    appraisementValue: '0.00',
+                    appraisementDate: '',
+                    appraisementUserName: '',
+                    appraisementStatus: '1',
+                    editFlag: false
+                },
+                // {
+                //     projectName: 'BBBBBB',
+                //     algorithmType: '选项1',
+                //     parameter1: '0',
+                //     parameter2: '0',
+                //     parameter3: '0.3',
+                //     appraisementValue: '0.00',
+                //     appraisementDate: '',
+                //     appraisementUserName: '',
+                //     appraisementStatus: '2',
+                //     editFlag: false
+                // }
+            ],
             options: [{
                 value: '选项1',
                 label: '市净率法'
@@ -146,14 +146,14 @@ export default {
             };
             getAppraisementList(params).then(resp => {
                 if(resp.data.result == '200'){
-                    this.tableData = result.data.result.list || [];
+                    // this.tableData = result.data.result.list || [];
                 }
                 this.total = result.total || 0;
             }).catch(e => {
                 console.log('getProjectValuation() exists error: ', e);
             });
         },
-        pageChanged(page) {
+        handleCurrentChange(page) {
             this.page = page;
             this.getDatas();
         },

@@ -175,6 +175,14 @@
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="资产负债表" name="first">
+                       
+                        <el-form :inline="true">
+                             <el-form-item style="width:48%;text-align:center" v-for="(item,index) in list">
+                                <span >{{item.filed}}</span>
+                                <el-input style="width:40%" v-model="item.user1" placeholder="审批人1"></el-input>
+                                <el-input style="width:40%" v-model="item.user2" placeholder="审批人2"></el-input>
+                             </el-form-item>
+                        </el-form>
                         <el-table :data="balanceSheet" border style="width: 100%" align="center">
                             <el-table-column label="资产" prop="capital" align="center">
                             </el-table-column>
@@ -276,7 +284,20 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             // 经营数据表头
-            operatingData: [],
+            operatingData: [
+                {
+                    baseDate: '2017-1-1',
+                    dataType: '半年报',
+                    operatorName: '张三',
+                    currentDeta: '2017-10-11',
+                },
+                {
+                    baseDate: '2017-9-1',
+                    dataType: '月报',
+                    operatorName: '李四',
+                    currentDeta: '2017-10-12',
+                }
+            ],
             // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
@@ -362,11 +383,24 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [],
+            financialData: [
+                {
+                    baseDate: '2017-1-1',
+                    dataType: '半年报',
+                    operatorName: '张三',
+                    currentDeta: '2017-10-11',
+                },
+                {
+                    baseDate: '2017-9-1',
+                    dataType: '月报',
+                    operatorName: '李四',
+                    currentDeta: '2017-10-12',
+                }
+            ],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
-                sort: '',
+                dataType: '',
                 informant: '',
                 date: '',
                 remark: '',
@@ -409,6 +443,7 @@ export default {
                     capital: '应收票据',
                     endingCBalance: '',
                     beginningCBalance: '',
+                },{
                     debt: ' 应付账款',
                     endingDBalance: '',
                     beginningDBalance: ''
@@ -477,6 +512,29 @@ export default {
                     monthCounts: '',
                     yearCounts: ''
                 }
+            ],
+            list: [
+            {
+                 filed: '营业收入1',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },
             ]
         }
     },
@@ -493,6 +551,7 @@ export default {
         //获取经营数据主体
         getOperateSubject(){
             getDataSubjectList(this.projectId, 0).then(resp => {
+                console.log("获取经营数据表头 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.operatingData = resp.data.result;
                 } else if (resp.data.status == '49999') {
@@ -507,6 +566,7 @@ export default {
         //获取财务数据主体
         getFinancialSubject(){
             getDataSubjectList(this.projectId, 1).then(resp => {
+                console.log("获取财务数据表头 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.financialData = resp.data.result;
                 } else if (resp.data.status == '49999') {
@@ -518,42 +578,52 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
+        //打开添加数据明细表单
         goAddData(subjectId, dataType){
 
-            getDataFormBody(subjectId).then(resp => {
-                if (resp.data.status == '200') {
-                    let formBody = resp.data.result.dataInfos | [];
-                    //填充表单
-                    for(var idx = 0; idx < formBody.length - 1; idx ++){
-                        var _dataType = formBody[idx].dataInfo.dataType;
-                        if(_dataType == 1){
-                            //填充经营数据表单
-                        }else if(_dataType == 2){
-                            //填充资产负债表单
-                            this.fillBalanceSheet(formBody[idx].operations);
-                        }else if(_dataType == 3){
-                            //填充现金流量表单
-                            this.fillBalanceSheet(formBody[idx].operations);
-                        }else if(_dataType == 4){
-                            //填充利润表单
-                            this.fillBalanceSheet(formBody[idx].operations);
-                        }
-                    }
-                    if(dataType == '1'){
+            // getDataFormBody(subjectId).then(resp => {
+            //     console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+            //     if (resp.data.status == '200') {
+            //         let formBody = resp.data.result.dataInfos | [];
+            //         //填充表单
+            //         for(var idx = 0; idx < formBody.length - 1; idx ++){
+            //             var _dataType = formBody[idx].dataInfo.dataType;
+            //             if(_dataType == 1){
+            //                 //填充经营数据表单
+            //                 this.fillOperateSheet(formBody[idx].operations);
+            //             }else if(_dataType == 2){
+            //                 //填充资产负债表单
+            //                 this.fillBalanceSheet(formBody[idx].operations);
+            //             }else if(_dataType == 3){
+            //                 //填充现金流量表单
+            //                 this.fillCashFlowStatements(formBody[idx].operations);
+            //             }else if(_dataType == 4){
+            //                 //填充利润表单
+            //                 this.fillIncomeStatement(formBody[idx].operations);
+            //             }
+            //         }
+
+            //         if(dataType == '1'){
+            //             this.operatingModal2 = true;
+            //         }else{
+            //             this.financialModal2 =true;
+            //         }
+
+            //     }else{
+            //         this.$message.error(resp.data.message);
+            //     }
+            // }).catch(e => {
+            //     console.log('getFee() exists error: ', e);
+            // })
+            if(dataType == '1'){
                         this.operatingModal2 = true;
                     }else{
                         this.financialModal2 =true;
                     }
-                }else{
-                    this.$message.error(resp.data.message);
-                }
-            }).catch(e => {
-                console.log('getFee() exists error: ', e);
-            })
 
         },
         //填充经营数据表单
-        fillBalanceSheet(){
+        fillOperateSheet(){
             // 
         },
         //填充资产负债表单
@@ -561,11 +631,12 @@ export default {
             // 
         },
         //填充现金流量表单
-        fillBalanceSheet(){
+        fillCashFlowStatements(formBody){
             // 
+            this.cashFlowStatements = formBody;
         },
         //填充利润表单
-        fillBalanceSheet(){
+        fillIncomeStatement(){
             // 
         },
         // 切换 经营/财务 的显示隐藏
@@ -598,17 +669,17 @@ export default {
                         currentDeta: changeDate(new Date()),
                         operatorName: this.userName,
                         remark: dataForm.remark,
-                        dataCat: 0
+                        dataCat: dataType == '1' ? 0: 1
                     };
                     saveDataSubject(data).then(resp => {
                     console.log("添加数据表头 结果："+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             if(dataType == '1'){
-                                this.operatingForm1 = {};
+                                this.operatingForm1 = { baseDate: '', dataType: ''};
                                 this.getOperateSubject();
                                 this.operatingModal1 = false;
                             }else{
-                                this.financialForm1 = {};
+                                this.financialForm1 = { baseDate: '', dataType: ''};
                                 this.getFinancialSubject();
                                 this.financialModal1  = false;
                             }
@@ -623,12 +694,6 @@ export default {
                     return false;
                 }
             });
-
-            // this.operatingForm1.date = changeDate(this.operatingForm1.date);
-            // this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
-            // this.operatingData.push(this.operatingForm1);
-            // this.operatingForm1 = {};
-            // this.operatingModal1 = false;
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {

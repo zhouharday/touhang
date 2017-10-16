@@ -56,10 +56,10 @@ export default {
                 {
                     project: 'AAAAAAAA',
                     valuationParameter: '市净率1000*20*5%',
-                    valuation: '',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: ''
+                    valuation: '35000.00',
+                    valuationDate: '2017-09-30',
+                    valuationOfficer: '张三',
+                    state: '已估值'
                 }
             ]
         }
@@ -84,8 +84,8 @@ export default {
 
             getProjectBySelect(params).then(resp => {
                 let result = resp.data.result;
-                this.tableData = result.data || [];
-                this.total = result.total || [];
+                // this.tableData = result.data || [];
+                // this.total = result.total || [];
             }).catch(e => {
                 console.log('getProjectBySelect() exists error: ', e);
             });

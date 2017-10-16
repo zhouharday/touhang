@@ -1,16 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 import {Message} from 'iview'
+import {API_ROOT} from '../../config'
 
 const service = axios.create({
     timeout: 8000,
-    // baseURL: 'http://192.168.0.88:9091',
-    // baseURL:'http://192.168.0.154:9091',
-    // baseURL: 'http://18f46963j4.iok.la',
-    // baseURL:'http://192.168.0.107:9091',
-    // baseURL: 'http://192.168.0.198:9091',
-    // baseURL:'http://192.168.0.127:9091',
-    baseURL: 'http://sdwlyxgs.imwork.net:16380',
+    baseURL: API_ROOT,
     headers: {
         'Content-Type': 'application/json'
     }

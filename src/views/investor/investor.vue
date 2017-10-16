@@ -177,7 +177,7 @@ export default {
             this.signInfo.investorName = row.investorName
         },
         confirmIncome(formName) {
-            console.log(this.$refs.addInvestor.$refs.addInvestor)
+            // console.log(this.$refs.addInvestor.$refs.addInvestor)
             this.$refs.addInvestor.$refs.addInvestor.validate((valid) => {
                 if (valid) {
                     addInvestor(this.addInvestor).then((res) => {
@@ -190,12 +190,6 @@ export default {
                     return false
                 }
             })
-            // addInvestor(this.addInvestor).then((res) => {
-            //     if (res.data.status == '200') {
-            //         this.modelInvestor = false
-            //         this.getInvList()
-            //     }
-            // })
         },
         comfirmDel() {
             deleteInvestor(this.id).then((res) => {
