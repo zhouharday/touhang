@@ -75,7 +75,7 @@ export default {
                     { required: true, message: '请选择汇报事项', trigger: 'blur' }
                 ],
                 issuesDate: [
-                    { required: true, message: '请选择事项日期', trigger: 'blur' }
+                    { type: "date", required: true, message: '请选择事项日期', trigger: 'blur' }
                 ],
                 issuesContent: [
                     { required: true, message: '请输入事项内容', trigger: 'blur' }

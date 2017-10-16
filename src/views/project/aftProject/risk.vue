@@ -339,7 +339,7 @@ export default {
                     { required: true, message: '请选择接收人', trigger: 'change' }
                 ],
                 completeDate: [
-                    { required: true, message: '请选择完成时间', trigger: 'change' }
+                    { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
             recipientOptions: [

@@ -32,8 +32,9 @@
                     </el-table-column>
                     <el-table-column align="center">
                         <template scope="scope">
-                            <a v-if="id != '' && id != null" href="documentUrl" style="font-size:12px;" download="xxxxx文档">下载</a>
-                            <el-button v-if="id != '' && id != null" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <a v-if="scope.row.id != '' && scope.row.id != undefined" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <!-- <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   @click="handleDelete(scope.row.id)">删除</el-button> -->
                         </template>
                     </el-table-column>
 
