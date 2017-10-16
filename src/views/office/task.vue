@@ -462,168 +462,6 @@
         created() {
             this.getTaskList1(1);
         },
-
-<<<<<<< HEAD
-    data() {
-        return {
-            params1: '',
-            params3: '',
-            modal1: false,
-            modal3: false,
-            modal_loading1: false,
-            modal_loading3: false,
-            value8: '',
-            isAddTask: true,
-            taskState: {//任务状态
-                start1: '未完成',
-                start2: '已完成',
-            },
-            // radio: '1',
-            value1: '',//完成时间的值
-            labelPosition: "left",
-            dialogFormVisible1: false, //指派任务-添加任务Diglog
-            viewDialog1: false, //指派任务-查看任务Diglog
-            dialogFormVisible2: false,
-            dialogFormVisible3: false,
-            doneDialog: false, //已办任务-查看任务 dialog
-            formLabelWidth: '80px',
-            userOptions: [], //企业用户列表
-            addTaskForm1: { //添加任务表单
-                createDate: '', //指派时间
-                taskName: '', //任务名称
-                receiveUserName: '', //接收人
-                seedUserName: this.$store.state.login.userInfor.name, //指派人
-                endTime: '', //完成时间
-                taskState: '', //任务状态
-                taskInfo: '', //任务说明
-                recording: '',
-                receiveUserId: '' //处理记录
-            },
-            viewTaskForm1: { //指派任务-查看任务表单
-                createDate: '', //指派时间
-                taskName: '', //任务名称
-                receiveUserName: '', //接收人
-                seedUserName: this.$store.state.login.userInfor.name, //指派人
-                endTime: '', //完成时间
-                taskState: '', //任务状态
-                taskInfo: '', //任务说明
-                recording: '',
-                receiveUserId: '' //处理记录
-            },
-            rules1: {
-                taskName: [
-                    { required: true, message: '请输入任务名称', trigger: 'blur' },
-                    { min: 1, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-                ],
-                createDate: [
-                    { required: true, message: '请输入开始时间', trigger: 'blur' },
-                    // { min: 1, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
-                ],
-                endTime: [
-                    { required: true, message: '请输入完成时间', trigger: 'blur' },
-                    // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
-                ],
-                receiveUserName: [
-                    { required: true, message: '请输入接收人', trigger: 'blur' },
-                    // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
-                ],
-                seedUserName: [
-                    { required: true, message: '请输入指派人', trigger: 'blur' },
-                    // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
-                ],
-                taskInfo: [
-                    { required: true, message: '请输入任务说明', trigger: 'blur' },
-                    { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
-                ],
-                recording: [
-                    { required: true, message: '请输入处理记录', trigger: 'blur' },
-                    { min: 3, max: 500, message: '长度在 3 到 500 个字符', trigger: 'blur' }
-                ],
-            },
-            form1: {
-                taskId: '', //taskId
-                radio: '0', //任务进展
-                taskName: '', //任务名称
-                startDate: this.getDate(), //开始时间
-                switchDate: '', //完成时间
-                peopele1: '', //接收人
-                peopele1_1: this.$store.state.login.userInfor.name, //指派人
-                textContent: '', //任务说明
-                recording: {
-                    recordDetails: ''
-                }, //处理记录
-                reportContent: '' //汇报内容
-            },
-            doneTaskForm1: {  //已办任务-查看任务表单
-                createDate: '', //指派时间
-                taskName: '', //任务名称
-                receiveUserName: '', //接收人
-                seedUserName: this.$store.state.login.userInfor.name, //指派人
-                endTime: '', //完成时间
-                taskState: '', //任务状态
-                taskInfo: '', //任务说明
-                recording: '',
-                receiveUserId: '' //处理记录
-            },
-            rules2: {
-                radio: [
-                    { required: true, message: '请选择任务进展', trigger: 'blur' }
-                ],
-                reportContent: [
-                    { required: true, message: '请输入汇报内容', trigger: 'blur' }
-                ]
-            },
-            taskInfo: {}, //任务详情
-            page1: {
-                pageNum: '', //当前页码
-                total: '', //数据总数
-                pageSize: '', //每页条数
-                navigatepageNums: '', //页数
-                current: '', //当前页码
-            },
-            page2: {
-                pageNum: '', //当前页码
-                total: '', //数据总数
-                pageSize: '', //每页条数
-                navigatepageNums: '', //页数
-                current: '', //当前页码
-            },
-            page3: {
-                pageNum: '', //当前页码
-                total: '', //数据总数
-                pageSize: '', //每页条数
-                navigatepageNums: '', //页数
-                current: '', //当前页码
-            },
-            pickerOptions1: {
-                shortcuts: [{
-                    text: '今天',
-                    onClick(picker) {
-                        picker.$emit('pick', new Date());
-                    }
-                }, {
-                    text: '昨天',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24);
-                        picker.$emit('pick', date);
-                    }
-                }, {
-                    text: '一周前',
-                    onClick(picker) {
-                        const date = new Date();
-                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit('pick', date);
-                    }
-                }]
-            },
-            data1: [],
-            columns1: [
-                {
-                    title: '指派时间',
-                    key: 'createDate',
-                    align: 'center'
-=======
         data() {
             return {
                 arr: [],
@@ -639,7 +477,6 @@
                 taskState: {//任务状态
                     start1: '未完成',
                     start2: '已完成',
->>>>>>> 96707bc9df29ee60b292c5f65b63d133d80fd31d
                 },
                 // radio: '1',
                 value1: '',//完成时间的值
@@ -1195,22 +1032,6 @@
                     .then(res => {
                         if (res.status == '200') {
                             console.log(res.data);
-<<<<<<< HEAD
-                            res.data.record.assistTaskRecords.forEach((ele, index) => {
-                                // ele.recordDetails+= ele.recordDetails;
-                                // this.form1.recording = ele.recordDetails;
-                                // this.form1.recording = res.data.record.assistTaskRecords[index].recordDetails;
-                                console.log(res.data.record.assistTaskRecords[index].recordDetails);
-                            }, this);
-                            console.log(this.form1.recording);
-                            this.form1.taskId = res.data.record.id;
-                            this.form1.taskName = this.taskInfo.taskName; //任务名称
-                            this.form1.startDate = this.taskInfo.createDate; //指派时间
-                            this.form1.switchDate = this.taskInfo.endTime; //完成时间
-                            this.form1.peopele1 = this.taskInfo.seedUserName; //指派人
-                            this.form1.peopele1_1 = this.taskInfo.receiveUserName; //接收人
-                            this.form1.textContent = this.taskInfo.taskInfo; //任务详情
-=======
                             this.getTaskList1(1);
                         } else if (res.status == '403') {
                             alert(res.message);
@@ -1271,7 +1092,6 @@
                             if (res.data.status == '49999') { //数据为空
                                 console.log(res.data.message);
                             }
->>>>>>> 96707bc9df29ee60b292c5f65b63d133d80fd31d
                         } else if (res.status == '403') {
                             alert(res.data.message);
                         }
