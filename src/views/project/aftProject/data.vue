@@ -175,40 +175,61 @@
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="资产负债表" name="first">
-                       
+                        <div class="title_f">
+                            <div class="desc">
+                                <span>资产</span>
+                            </div>
+                            <div class="desc">
+                                <span>期末余额</span>
+                            </div>
+                            <div class="desc">
+                                <span>年初余额</span>
+                            </div>
+                            <div class="desc">
+                                <span>负债和所有者权益</span>
+                            </div>
+                            <div class="desc">
+                                <span>期末余额</span>
+                            </div>
+                            <div class="desc">
+                                <span>年初余额</span>
+                            </div>
+                        </div>
                         <el-form :inline="true">
-                             <el-form-item style="width:48%;text-align:center" v-for="(item,index) in list">
-                                <span >{{item.filed}}</span>
-                                <el-input style="width:40%" v-model="item.user1" placeholder="审批人1"></el-input>
-                                <el-input style="width:40%" v-model="item.user2" placeholder="审批人2"></el-input>
-                             </el-form-item>
+                            <el-form-item style="width:48%;text-align:center;margin-right:15px" v-for="(item,index) in list" :key="item.index">
+                                <div style="display:flex;justify-content:space-between;padding:0 0 0 25px">
+                                    <span style="width:40%;">{{item.filed}}</span>
+                                    <el-input style="width:30%;margin-left:50px" v-model="item.user1" placeholder="审批人1"></el-input>
+                                    <el-input style="width:30%;margin-left:80px" v-model="item.user2" placeholder="审批人2"></el-input>
+                                </div>
+                            </el-form-item>
                         </el-form>
-                        <el-table :data="balanceSheet" border style="width: 100%" align="center">
-                            <el-table-column label="资产" prop="capital" align="center">
-                            </el-table-column>
-                            <el-table-column label="期末余额" prop="endingCBalance" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="年初余额" prop="beginningCBalance" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="负债和所有者权益" prop="debt" align="center">
-                            </el-table-column>
-                            <el-table-column label="期末余额" prop="endingDBalance" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="年初余额" prop="beginningDBalance" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
-                                </template>
-                            </el-table-column>
-                        </el-table>
+                        <!-- <el-table :data="balanceSheet" border style="width: 100%" align="center">
+                                            <el-table-column label="资产" prop="capital" align="center">
+                                            </el-table-column>
+                                            <el-table-column label="期末余额" prop="endingCBalance" align="center">
+                                                <template scope="scope">
+                                                    <el-input v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column label="年初余额" prop="beginningCBalance" align="center">
+                                                <template scope="scope">
+                                                    <el-input v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column label="负债和所有者权益" prop="debt" align="center">
+                                            </el-table-column>
+                                            <el-table-column label="期末余额" prop="endingDBalance" align="center">
+                                                <template scope="scope">
+                                                    <el-input v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column label="年初余额" prop="beginningDBalance" align="center">
+                                                <template scope="scope">
+                                                    <el-input v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table> -->
                     </el-tab-pane>
                     <el-tab-pane label="利润表" name="second">
                         <el-table :data="incomeStatement" border style="width: 100%" align="center">
@@ -408,7 +429,7 @@ export default {
             },
             rules2: {
                 baseDate: [
-                    { type:'date', required: true, message: '请选择基准日', trigger: 'change' }
+                    { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
                 sort: [
                     { required: true, message: '请选择类型', trigger: 'change' }
@@ -443,7 +464,7 @@ export default {
                     capital: '应收票据',
                     endingCBalance: '',
                     beginningCBalance: '',
-                },{
+                }, {
                     debt: ' 应付账款',
                     endingDBalance: '',
                     beginningDBalance: ''
@@ -514,27 +535,27 @@ export default {
                 }
             ],
             list: [
-            {
-                 filed: '营业收入1',
+                {
+                    filed: '营业收入1',
                     users1: '',
                     users2: ''
-            },{
-                 filed: '营业收入2',
+                }, {
+                    filed: '营业收入2',
                     users1: '',
                     users2: ''
-            },{
-                 filed: '营业收入2',
+                }, {
+                    filed: '营业收入2',
                     users1: '',
                     users2: ''
-            },{
-                 filed: '营业收入2',
+                }, {
+                    filed: '营业收入2',
                     users1: '',
                     users2: ''
-            },{
-                 filed: '营业收入2',
+                }, {
+                    filed: '营业收入2',
                     users1: '',
                     users2: ''
-            },
+                },
             ]
         }
     },
@@ -542,21 +563,21 @@ export default {
         this.init();
     },
     methods: {
-        init(){
+        init() {
             //获取经营数据主体
             this.getOperateSubject();
             //获取财务数据主体
             this.getFinancialSubject();
         },
         //获取经营数据主体
-        getOperateSubject(){
+        getOperateSubject() {
             getDataSubjectList(this.projectId, 0).then(resp => {
-                console.log("获取经营数据表头 结果："+JSON.stringify(resp.data));
+                console.log("获取经营数据表头 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.operatingData = resp.data.result;
                 } else if (resp.data.status == '49999') {
                     this.operatingData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -564,14 +585,14 @@ export default {
             })
         },
         //获取财务数据主体
-        getFinancialSubject(){
+        getFinancialSubject() {
             getDataSubjectList(this.projectId, 1).then(resp => {
-                console.log("获取财务数据表头 结果："+JSON.stringify(resp.data));
+                console.log("获取财务数据表头 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.financialData = resp.data.result;
                 } else if (resp.data.status == '49999') {
                     this.financialData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -579,7 +600,7 @@ export default {
             })
         },
         //打开添加数据明细表单
-        goAddData(subjectId, dataType){
+        goAddData(subjectId, dataType) {
 
             // getDataFormBody(subjectId).then(resp => {
             //     console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
@@ -615,28 +636,28 @@ export default {
             // }).catch(e => {
             //     console.log('getFee() exists error: ', e);
             // })
-            if(dataType == '1'){
-                        this.operatingModal2 = true;
-                    }else{
-                        this.financialModal2 =true;
-                    }
+            if (dataType == '1') {
+                this.operatingModal2 = true;
+            } else {
+                this.financialModal2 = true;
+            }
 
         },
         //填充经营数据表单
-        fillOperateSheet(){
+        fillOperateSheet() {
             // 
         },
         //填充资产负债表单
-        fillBalanceSheet(){
+        fillBalanceSheet() {
             // 
         },
         //填充现金流量表单
-        fillCashFlowStatements(formBody){
+        fillCashFlowStatements(formBody) {
             // 
             this.cashFlowStatements = formBody;
         },
         //填充利润表单
-        fillIncomeStatement(){
+        fillIncomeStatement() {
             // 
         },
         // 切换 经营/财务 的显示隐藏
@@ -669,21 +690,21 @@ export default {
                         currentDeta: changeDate(new Date()),
                         operatorName: this.userName,
                         remark: dataForm.remark,
-                        dataCat: dataType == '1' ? 0: 1
+                        dataCat: dataType == '1' ? 0 : 1
                     };
                     saveDataSubject(data).then(resp => {
-                    console.log("添加数据表头 结果："+JSON.stringify(resp.data));
+                        console.log("添加数据表头 结果：" + JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
-                            if(dataType == '1'){
-                                this.operatingForm1 = { baseDate: '', dataType: ''};
+                            if (dataType == '1') {
+                                this.operatingForm1 = { baseDate: '', dataType: '' };
                                 this.getOperateSubject();
                                 this.operatingModal1 = false;
-                            }else{
-                                this.financialForm1 = { baseDate: '', dataType: ''};
+                            } else {
+                                this.financialForm1 = { baseDate: '', dataType: '' };
                                 this.getFinancialSubject();
-                                this.financialModal1  = false;
+                                this.financialModal1 = false;
                             }
-                        }else{
+                        } else {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
@@ -781,6 +802,23 @@ export default {
             border-color: #bbbec4;
             &:hover {
                 border-color: #20a0ff;
+            }
+        }
+    }
+    .title_f {
+        margin: 10px 0;
+        width: 100%;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        background:#eef1f6;
+        border: 1px solid #dfe6ec;
+        .desc {
+            flex: 1;
+            text-align: center;
+            span {
+                color:#1f2d3d;
+                font-weight: 700;
             }
         }
     }
