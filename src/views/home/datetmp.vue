@@ -233,12 +233,14 @@ export default {
             let self = this;
             var arr = [];
             const h = this.$createElement;
+            // this.spanScheduleTitle = [];
             this.monthDate.map(item => {
                 // item.item = [];
                 if (time == item.time) {
                     console.log(item);
                     setTimeout(function() {
                         self.have = true;
+                        this.spanScheduleTitle = [];
                     }, 2000);
                     this.spanScheduleTitle = [];
                     this.spanScheduleTitle = item.item;
