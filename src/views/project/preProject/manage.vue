@@ -8,6 +8,7 @@
                         <el-table-column label="费用类型" prop="costType" align="center">
                         </el-table-column>
                         <el-table-column label="金额（元）" prop="amountMoney" align="center">
+                            <template scope="scope">{{scope.row.amountMoney | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
@@ -64,6 +65,7 @@
                         <el-table-column label="签约日期" prop="signDate" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
+                            <template scope="scope">{{scope.row.contractAmount | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                         </el-table-column>
@@ -266,7 +268,7 @@
                             </el-table-column>
                             <el-table-column label="投资金额（元）" prop="investAmount" align="center">
                                 <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.investAmount }}</span>
+                                    <span v-if="!scope.row.editFlag">{{ scope.row.investAmount | toMoney}}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
                                         <el-input v-model="scope.row.investAmount" placeholder=""></el-input>
                                     </span>
@@ -303,8 +305,10 @@
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
+                            <template scope="scope">{{scope.row.contractAmount | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="支付金额（元）" prop="paidInMoney" align="center">
+                            <template scope="scope">{{scope.row.paidInMoney | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="支付日期" prop="payDate" align="center">
                             <template scope="scope">
@@ -490,8 +494,10 @@
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
+                            <template scope="scope">{{scope.row.contractAmount | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                            <template scope="scope">{{scope.row.shareAmount | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="分红日期" prop="shareDate" align="center">
                         </el-table-column>
@@ -635,7 +641,7 @@
 </template>
 
 <script>
-import '../../../common/js/filter'
+import 'common/js/filter'
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'

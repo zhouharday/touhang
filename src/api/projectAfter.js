@@ -223,6 +223,28 @@ export function fillDataForm(params = {}) {
 	return service({url: '/projectData/fillDataForm', method: 'post', data});
 }
 
+//项目估值 - 添加或者修改项目估值
+export function updAppraisement(params = {}) {
+	let { id, projectId, appraisementValue, appraisementParamer } = params;
+	const data = {
+		id: id,
+		projectId: projectId,
+		appraisementValue: appraisementValue,
+		appraisementParamer: appraisementParamer,
+		appraisementUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+		appraisementStatus: '1',
+	};
+	return service({url: '/appraisement/updaAppraisement', method: 'post', data});
+}
+
+//项目估值 - 项目估值列表查询
+export function getAppraisementList(projectName = undefined, appraisementStatus) {
+	const data = {
+		projectName: projectName,
+		appraisementStatus : appraisementStatus
+	};
+	return service({url: 'appraisement/selectAppraisement', method: 'post', data});
+}
 
 // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 // let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //当前商户id

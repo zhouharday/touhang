@@ -12,6 +12,9 @@ Vue.filter('formatDateDetails', (value, formatString) => { // 年月日
 })
 
 Vue.filter('toMoney', (num) => {
+	if(num == null || num == undefined || num == '' ){
+		return '--';
+	}
     num = parseFloat(num).toFixed(2)
     num = Number(num.split('.')[0]).toLocaleString() + '.' +num.split('.')[1]
     return num //返回的是字符串23,245.12保留2位小数

@@ -13,10 +13,12 @@
                         <el-table-column prop="fundName" label="基金名称" align="center">
                         </el-table-column>
                         <el-table-column prop="investAmount" label="投资金额（元）" align="center">
+                            <template scope="scope">{{scope.row.investAmount | toMoney}}</template>
                         </el-table-column>
                         <el-table-column prop="stockRatio" label="股权占比（%）" align="center">
                         </el-table-column>
                         <el-table-column prop="sumPayAmount" label="支付金额（元）" align="center">
+                            <template scope="scope">{{scope.row.sumPayAmount | toMoney}}</template>
                         </el-table-column>
                     </el-table>
                 </el-col>
@@ -87,6 +89,7 @@
     
 
 <script>
+import 'common/js/filter'
 import tableShow from '../../../components/tableShow'
 import echarts from '../../../components/echarts'
 import detailForm from './details'
@@ -257,9 +260,7 @@ export default {
         },
         //获取投后项目的估值信息
         getAppraisementRep() {
-            console.log("获取估值 参数: "+ this.projectId);
             getAppraisementRep(this.projectId).then(resp => {
-                console.log("获取估值 结果: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
                     this.tableData = resp.data.appraisement;
                 }else{

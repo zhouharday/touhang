@@ -21,7 +21,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="operatingModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
                         <el-button type="text" @click="operatingDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
@@ -76,7 +76,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="operatingAdd('operatingForm1')">保 存</el-button>
+                    <el-button type="danger" @click="saveSubject('operatingForm1', '1')">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 添加经营数据明细 对话框 -->
@@ -126,7 +126,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="financialModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '2')">添加数据</el-button>
                         <el-button type="text" @click="financialDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
@@ -166,7 +166,7 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col>
+<!--                         <el-col>
                             <el-form-item label="财务情况附件">
                                 <Upload multiple type="drag" v-model="financialForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
@@ -175,12 +175,12 @@
                                     </div>
                                 </Upload>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="financialAdd('financialForm1')">保 存</el-button>
+                    <el-button type="danger" @click="saveSubject('financialForm1', '2')">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加财务数据明细 对话框-->
@@ -539,6 +539,56 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
+        goAddData(subjectId, dataType){
+
+            getDataFormBody(subjectId).then(resp => {
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos | [];
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length - 1; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }
+                    }
+                    if(dataType == '1'){
+                        this.operatingModal2 = true;
+                    }else{
+                        this.financialModal2 =true;
+                    }
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+
+        },
+        //填充经营数据表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充资产负债表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充现金流量表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充利润表单
+        fillBalanceSheet(){
+            // 
+        },
         // 切换 经营/财务 的显示隐藏
         changeData1() {
             this.f_show = true;
@@ -556,33 +606,34 @@ export default {
                 this.financialModal1 = true;
             }
         },
-        // 经营数据-添加  保存按钮的方法
-        operatingAdd(formName, dataType) {
+        // 数据表头-添加  保存按钮的方法
+        saveSubject(formName, dataType) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let dataForm = dataType == '1' ? this.operatingForm1 : this.financialForm1;
                     let data = {
-                        //  "projectId":"1255863654", //项目id
-                        // "baseDate":"2013-14-15", //基准日
-                        // "dataType":1, //1年报、2半年报、3季报、4月报
-                        // "operator":"张三", //填报人id
-                        // "currentDeta":"2013-14-15",// 填报日期
-                        // "operatorName":"张三", //填报人姓名
-                        // "dataCat":1 //0:经营数据;1:财务数据
                         projectId: this.projectId,
-                        baseDate: this.operatingForm1.baseDate,
-                        dataType: this.operatingForm1.dataType,
+                        baseDate: changeDate(dataForm.baseDate),
+                        dataType: dataForm.dataType,
                         operator: JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        currentDeta: this.operatingForm1.currentDeta,
+                        currentDeta: dataForm.currentDeta,
                         operatorName: this.userName,
-                        remark: this.operatingForm1.remark,
+                        remark: dataForm.remark,
                         dataCat: 0
                     };
+                    console.log("添加数据表头 参数："+JSON.stringify(data));
                     saveDataSubject(data).then(resp => {
+                    console.log("添加数据表头 结果："+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
-                            this.operatingForm1 = {};
-                            this.operatingModal1 = false;
-                            this.getOperateSubject();
+                            if(dataType == '1'){
+                                this.operatingForm1 = {};
+                                this.getOperateSubject();
+                                this.operatingModal1 = false;
+                            }else{
+                                this.financialForm1 = {};
+                                this.getFinancialSubject();
+                                this.financialModal1  = false;
+                            }
                         }else{
                             this.$message.error(resp.data.message);
                         }
@@ -605,23 +656,6 @@ export default {
         operatingEdit() {
             this.operatingModal2 = false;
             // console.log(this.operatingData1);
-        },
-        // 财务数据-添加 的方法
-        financialAdd(formName) {
-             this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    alert('submit!');
-                    this.financialModal1  = false;
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-            // this.financialForm1.date = changeDate(this.financialForm1.date);
-            // this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
-            // this.financialData.push(this.financialForm1);
-            // this.financialForm1 = {};
-            // this.financialModal1 = false;
         },
         // 财务数据-添加数据 的方法
         financialEdit() {
