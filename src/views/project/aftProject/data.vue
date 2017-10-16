@@ -175,6 +175,14 @@
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="资产负债表" name="first">
+                       
+                        <el-form :inline="true">
+                             <el-form-item style="width:48%;text-align:center" v-for="(item,index) in list">
+                                <span >{{item.filed}}</span>
+                                <el-input style="width:40%" v-model="item.user1" placeholder="审批人1"></el-input>
+                                <el-input style="width:40%" v-model="item.user2" placeholder="审批人2"></el-input>
+                             </el-form-item>
+                        </el-form>
                         <el-table :data="balanceSheet" border style="width: 100%" align="center">
                             <el-table-column label="资产" prop="capital" align="center">
                             </el-table-column>
@@ -435,6 +443,7 @@ export default {
                     capital: '应收票据',
                     endingCBalance: '',
                     beginningCBalance: '',
+                },{
                     debt: ' 应付账款',
                     endingDBalance: '',
                     beginningDBalance: ''
@@ -503,6 +512,29 @@ export default {
                     monthCounts: '',
                     yearCounts: ''
                 }
+            ],
+            list: [
+            {
+                 filed: '营业收入1',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },{
+                 filed: '营业收入2',
+                    users1: '',
+                    users2: ''
+            },
             ]
         }
     },
@@ -549,40 +581,45 @@ export default {
         //打开添加数据明细表单
         goAddData(subjectId, dataType){
 
-            getDataFormBody(subjectId).then(resp => {
-                console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
-                if (resp.data.status == '200') {
-                    let formBody = resp.data.result.dataInfos | [];
-                    //填充表单
-                    for(var idx = 0; idx < formBody.length - 1; idx ++){
-                        var _dataType = formBody[idx].dataInfo.dataType;
-                        if(_dataType == 1){
-                            //填充经营数据表单
-                            this.fillOperateSheet(formBody[idx].operations);
-                        }else if(_dataType == 2){
-                            //填充资产负债表单
-                            this.fillBalanceSheet(formBody[idx].operations);
-                        }else if(_dataType == 3){
-                            //填充现金流量表单
-                            this.fillCashFlowStatements(formBody[idx].operations);
-                        }else if(_dataType == 4){
-                            //填充利润表单
-                            this.fillIncomeStatement(formBody[idx].operations);
-                        }
-                    }
+            // getDataFormBody(subjectId).then(resp => {
+            //     console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+            //     if (resp.data.status == '200') {
+            //         let formBody = resp.data.result.dataInfos | [];
+            //         //填充表单
+            //         for(var idx = 0; idx < formBody.length - 1; idx ++){
+            //             var _dataType = formBody[idx].dataInfo.dataType;
+            //             if(_dataType == 1){
+            //                 //填充经营数据表单
+            //                 this.fillOperateSheet(formBody[idx].operations);
+            //             }else if(_dataType == 2){
+            //                 //填充资产负债表单
+            //                 this.fillBalanceSheet(formBody[idx].operations);
+            //             }else if(_dataType == 3){
+            //                 //填充现金流量表单
+            //                 this.fillCashFlowStatements(formBody[idx].operations);
+            //             }else if(_dataType == 4){
+            //                 //填充利润表单
+            //                 this.fillIncomeStatement(formBody[idx].operations);
+            //             }
+            //         }
 
-                    if(dataType == '1'){
+            //         if(dataType == '1'){
+            //             this.operatingModal2 = true;
+            //         }else{
+            //             this.financialModal2 =true;
+            //         }
+
+            //     }else{
+            //         this.$message.error(resp.data.message);
+            //     }
+            // }).catch(e => {
+            //     console.log('getFee() exists error: ', e);
+            // })
+            if(dataType == '1'){
                         this.operatingModal2 = true;
                     }else{
                         this.financialModal2 =true;
                     }
-
-                }else{
-                    this.$message.error(resp.data.message);
-                }
-            }).catch(e => {
-                console.log('getFee() exists error: ', e);
-            })
 
         },
         //填充经营数据表单
