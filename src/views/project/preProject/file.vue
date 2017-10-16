@@ -32,10 +32,13 @@
                     </el-table-column>
                     <el-table-column align="center">
                         <template scope="scope">
-                            <el-button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button>
-                            <a v-if="scope.row.id != '' && scope.row.id != undefined" href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
-                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text" size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+                                <Upload action="//jsonplaceholder.typicode.com/posts/">
+                                    <Button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="ghost" class="border_right">上传</Button>
+                                </Upload>
+                                <!-- <el-button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button> -->
+                                <a v-if="scope.row.id != '' && scope.row.id != undefined" href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
+                                <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"  size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                                <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"  size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -46,11 +49,11 @@
                     <el-form-item label="上传文件">
                         <!-- action 上传的地址，必填 -->
                         <!-- <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload> -->
+                                <div style="padding: 20px 0">
+                                    <Icon type="ios-cloud-upload" size="52"></Icon>
+                                    <p>点击或将文件拖拽到这里上传</p>
+                                </div>
+                            </Upload> -->
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -159,9 +162,9 @@ export default {
                 this.isHide = false
         },
         handleDelete(index, row) {
-            console.log('删除文档ID: '+JSON.stringify(row.id));
+            console.log('删除文档ID: ' + JSON.stringify(row.id));
             delDocument(row.id).then((res) => {
-                console.log('删除文档: '+JSON.stringify(res.data));
+                console.log('删除文档: ' + JSON.stringify(res.data));
                 if (res.data.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！');
                     this.getProjectDocument();
@@ -205,6 +208,7 @@ export default {
         .border_right {
             border-right: 1px solid #ddd;
             padding: 0 12px;
+            font-size: 12px;
         }
         .btn_border {
             border-right: 1px solid #ddd;

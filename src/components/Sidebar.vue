@@ -610,6 +610,7 @@ export default {
 
 .el-menu-vertical-demo {
     background: #2E363F;
+    width: 100%;
 }
 
 </style>
