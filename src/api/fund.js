@@ -325,5 +325,10 @@ export function nextStage(fundId, num, currentStepId) {
 // 上传文档接口 /files/uploadProjectDocument
 export function uploadProjectDocument(uploadData) {
     const data = uploadData
-    return service({url: '/files/uploadProjectDocument', method: 'post', data})
+    return service({
+        url: '/files/uploadProjectDocument',
+        method: 'post',
+        headers: {'Content-Type': 'multipart/form-data; boundary=${bound}'},
+        data
+    })
 }
