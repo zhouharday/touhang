@@ -8,9 +8,9 @@ const service = axios.create({
     // baseURL:'http://192.168.0.154:9091',
     // baseURL: 'http://18f46963j4.iok.la',
     // baseURL:'http://192.168.0.107:9091',
-    baseURL: 'http://192.168.0.198:9091',
+    // baseURL: 'http://192.168.0.198:9091',
     // baseURL:'http://192.168.0.127:9091',
-    // baseURL: 'http://sdwlyxgs.imwork.net:16380',
+    baseURL: 'http://sdwlyxgs.imwork.net:16380',
     headers: {
         'Content-Type': 'application/json'
     }
@@ -28,7 +28,7 @@ service.interceptors.request.use(config => {
     return Promise.reject(error)
 })
 service.interceptors.response.use(response => {
-    Message.success(response.data.message || '数据请求成功')
+    // Message.success(response.data.message || '数据请求成功')
     return response
 }, error => {
     // console.log(error)

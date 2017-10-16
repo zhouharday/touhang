@@ -1,55 +1,55 @@
 <template>
-<div class="table">
-    <div class="teamTable">
-        <tabel-header :data="headerInfo_team" @add="addTeam"></tabel-header>
-        <el-table :data="teamData" border style="width: 100%">
-            <el-table-column label="姓名" prop="userName" align="center">
-                <template scope="scope">
+    <div class="table">
+        <div class="teamTable">
+            <tabel-header :data="headerInfo_team" @add="addTeam"></tabel-header>
+            <el-table :data="teamData" border style="width: 100%">
+                <el-table-column label="姓名" prop="userName" align="center">
+                    <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.userName }}</span>
                     </template>
-            </el-table-column>
-            <el-table-column label="角色" prop="roleName" align="center">
-                <template scope="scope">
+                </el-table-column>
+                <el-table-column label="角色" prop="roleName" align="center">
+                    <template scope="scope">
                         <span v-if="!scope.row.editFlag">{{ scope.row.roleName }}</span>
                     </template>
-            </el-table-column>
-            <el-table-column label="添加日期" prop="createDate" align="center">
-            </el-table-column>
-            <el-table-column label="操作" align="center">
-                <template scope="scope">
+                </el-table-column>
+                <el-table-column label="添加日期" prop="createDate" align="center">
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template scope="scope">
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,teamData)">删除</el-button>
                     </template>
-            </el-table-column>
-        </el-table>
-        <!-- 添加项目成员 对话框-->
-        <el-dialog title="添加项目成员" :visible.sync="modalAdd" :close-on-click-modal="false">
-            <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
-                <el-form-item label="姓名" prop="userId">
-                    <el-select v-model="teamForm.userId" placeholder="请选择姓名" style="width:100%">
-                        <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="角色" prop="roleId">
-                    <el-select v-model="teamForm.roleId" placeholder="请选择角色" style="width:100%">
-                        <el-option v-for="item in proRoles" :key="item.id" :label="item.roleName" :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="modalAdd = false">取 消</el-button>
-                <el-button type="danger" @click="confirmAdd('teamForm')">保 存</el-button>
-            </div>
-        </el-dialog>
+                </el-table-column>
+            </el-table>
+            <!-- 添加项目成员 对话框-->
+            <el-dialog title="添加项目成员" :visible.sync="modalAdd" :close-on-click-modal="false">
+                <el-form :model="teamForm" :rules="rules" ref="teamForm" label-width="80px">
+                    <el-form-item label="姓名" prop="userId">
+                        <el-select v-model="teamForm.userId" placeholder="请选择姓名" style="width:100%">
+                            <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="角色" prop="roleId">
+                        <el-select v-model="teamForm.roleId" placeholder="请选择角色" style="width:100%">
+                            <el-option v-for="item in proRoles" :key="item.id" :label="item.roleName" :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="modalAdd = false">取 消</el-button>
+                    <el-button type="danger" @click="confirmAdd('teamForm')">保 存</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
-</div>
 </template>
 
 <script>
 import tabelHeader from 'components/tabelHeader'
-import {changeDate} from 'common/js/config'
-import {getTeams, addInsertProjectTeam, delTeam} from 'api/projectPre'
+import { changeDate } from 'common/js/config'
+import { getTeams, addInsertProjectTeam, delTeam } from 'api/projectPre'
 
 export default {
     props: {
@@ -128,7 +128,7 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     addInsertProjectTeam(this.teamForm).then((res) => {
-                        if(res.status == '200') {
+                        if (res.status == '200') {
                             this.$Message.success(res.data.message || '添加成功！')
                             this.modalAdd = !this.modalAdd;
                             this.teamForm = {};

@@ -49,8 +49,8 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="投资经理" :label-width="formLabelWidth" prop="investmentManagerId">
-                    <el-input v-model="investorForm.investmentManagerId" placeholder="当前登录用户" disabled style="width:100%" >
+                <el-form-item label="投资经理" :label-width="formLabelWidth" prop="investmentManagerName">
+                    <el-input v-model="investorForm.investmentManagerName" placeholder="当前登录用户" disabled style="width:100%" >
                     </el-input>
                 </el-form-item>
             </el-col>

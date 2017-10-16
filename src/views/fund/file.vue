@@ -38,6 +38,7 @@
                             </el-button>
                             <el-button type="text"
                                        size="small"
+                                       v-show="scope.row.id"
                                        class="btn_border scopeBtn" @click="previewFundDoc(scope.$index, scope.row)">
                                        预览
                             </el-button>
@@ -52,19 +53,19 @@
         </el-col>
     </el-row>
     <!-- 上传基金设立报表-->
-    <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false">
-        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" v-show="upload">
+    <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false" :show-close="false">
+        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" v-if="upload == true && preview == false">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
             </div>
         </Upload>
-        <div class="img_wrapper" v-show="preview">
+        <div class="img_wrapper" v-if="preview == true && upload == false">
             {{previewFundInfo}}
             <img :src="previewFundInfo" alt="" style="width: 50%; height: auto;">
         </div>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalAdd = false">取 消</el-button>
+            <el-button @click="modalCancel">取 消</el-button>
         </div>
     </el-dialog>
     <delete-reminders @cancel="confirmCancel" @del="confirmDel" :modal_loading="modal_loading" :deleteReminders="reminders">
@@ -126,6 +127,8 @@ export default {
             if(res.status == '200') {
                 this.$Message.success(res.message || '上传成功！')
                 this.modalAdd = false
+                this.upload = false
+                this.preview = false
                 this._getFundDoc()
             }
         },
@@ -156,6 +159,11 @@ export default {
             this.preview = true
             this.previewFundInfo = row.documentUrl.split('?')[0]
             console.log(row.documentUrl.split('?')[0])
+        },
+        modalCancel() {
+            this.modalAdd = false
+            this.preview = false
+            this.upload = false
         },
         confirmCancel() {
             this.reminders = false

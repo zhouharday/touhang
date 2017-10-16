@@ -33,7 +33,7 @@
                     <p class="desc" v-if="item.type == 3">{{item.title}}</p>
                     <span v-if="item.status == 1" class="state">已完成</span>
                     <!-- 立即上传 -->
-                    <div v-if="item.type == 1 && item.status == 0" style="position:relative">
+                    <div v-if="item.type == 1 && item.status == 0" style="float: left;position:relative;">
                         <el-button type="text" style="color:#f05e5e">立即上传</el-button>
                         <input type="file" class="fileInput" @change="changeFile($event, item.id)" ref="avatarInput">
                     </div>
@@ -736,9 +736,9 @@ export default {
         }
          .fileInput {
             opacity:0;
-            position:absolute;
-            left:135px;
-            top:0;
+            position: absolute;
+            left:0px;
+            top:0px;
             width:80px;
             height:25px;
             line-height:25px;
@@ -770,10 +770,12 @@ export default {
                 height: 36px;
                 margin-left: 24px;
                 line-height: 36px;
+                overflow: auto;
                 .count,
                 .desc,
                 .state {
-                    float: left; // line-height: 36px;
+                    float: left;
+                     // line-height: 36px;
                 }
                 .count {
                     width: 20px;
