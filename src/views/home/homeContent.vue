@@ -838,12 +838,14 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
+                            console.log('*******************************')
                             console.log(res.data)
-                            console.log(this.monthDate)
+                            // console.log(this.monthDate)
                             res.data.result.forEach(item => {
                                 this.monthDate.map(list => {
                                     if (item.startTime.split(" ")[0] == list.time) {
                                         list.have = true;
+                                        // list.item = [];
                                         list.item.push(item);
                                     }
                                 })

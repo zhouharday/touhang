@@ -225,15 +225,22 @@ export default {
                 this.have = false;
                 return;
             };
+            if (this.scheduleDialog) {
+                this.have = false;
+                return;
+            };
+            // this.$emit("readyfun", this.objarr, this.date);
             let self = this;
             var arr = [];
             const h = this.$createElement;
             this.monthDate.map(item => {
+                // item.item = [];
                 if (time == item.time) {
                     console.log(item);
-                    setTimeout(function(){
+                    setTimeout(function() {
                         self.have = true;
                     }, 2000);
+                    this.spanScheduleTitle = [];
                     this.spanScheduleTitle = item.item;
                     console.log(this.spanScheduleTitle);
                     item.item.forEach(ele => {
@@ -265,13 +272,14 @@ export default {
             this.$emit("changetime", self.changeDate);
             this.checkTime = this.changeDate;
             this.scheduleDialog = !this.scheduleDialog;
-
+            // this.have = !this.have;
         },
 
         getScheduleListBtn() {
             this.scheduleForm.time = this.checkTime + " " + this.scheduleForm.time;
             this.addSchedule();
             this.scheduleDialog = false;
+            this.have = false;
         },
         addSchedule(title, time) { //添加日程 api
             this.$http.post(this.api + '/work/addSchedule', {
@@ -284,8 +292,10 @@ export default {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
                             // this.getData();
-                            console.log(res.data);
+                            // console.log(res.data);
                             this.$emit("readyfun", this.objarr, this.date);
+                            this.$route.push({name : 'homeContent'});
+                            // this.getData();
                             this.$Message.success(res.data.message);
                         } else if (res.data.status == '403') {
                             this.$Message.error(res.data.message);
@@ -295,6 +305,36 @@ export default {
                 .catch(error => {
                     this.$Message.error("请求超时");
                     console.log('请求超时');
+                })
+        },
+         getData() { //获取日程列表 api
+            this.$http.post(this.api + '/work/getScheduleList', {
+                "userId": this.user.userInfor.id,
+                "merchantId": this.user.merchants[0].id
+            })
+                .then(res => {
+                    if (res.status == '200') {
+                        if (res.data.status == '200') {
+                            console.log('*******************************')
+                            console.log(res.data)
+                            // console.log(this.monthDate)
+                            res.data.result.forEach(item => {
+                                this.monthDate.map(list => {
+                                    if (item.startTime.split(" ")[0] == list.time) {
+                                        list.have = true;
+                                        list.item.push(item);
+                                    }
+                                })
+                            })
+                        } else if (res.data.status == '403') {
+                            this.$Message.error(res.data.message);
+                        } else if (res.data.status == '49999') {
+                            this.$Message.error(res.data.message);
+                        }
+                    }
+                })
+                .catch(error => {
+                    this.$Message.error("请求超时");
                 })
         },
     }
