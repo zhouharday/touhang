@@ -238,12 +238,15 @@ export function updAppraisement(params = {}) {
 }
 
 //项目估值 - 项目估值列表查询
-export function getAppraisementList(projectName = undefined, appraisementStatus) {
+export function getAppraisementList(params = {}) {
+	let {projectName, appraisementStatus, page, pageSize } = params;
 	const data = {
-		projectName: projectName,
-		appraisementStatus : appraisementStatus
+		projectName,
+		appraisementStatus,
+		page,
+		pageSize
 	};
-	return service({url: 'appraisement/selectAppraisement', method: 'post', data});
+	return service({url: '/appraisement/likeSelectAppraisementPage', method: 'post', data});
 }
 
 // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id

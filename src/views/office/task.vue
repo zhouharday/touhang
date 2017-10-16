@@ -1032,6 +1032,20 @@
                     .then(res => {
                         if (res.status == '200') {
                             console.log(res.data);
+                            res.data.record.assistTaskRecords.forEach((ele, index) => {
+                                // ele.recordDetails+= ele.recordDetails;
+                                // this.form1.recording = ele.recordDetails;
+                                // this.form1.recording = res.data.record.assistTaskRecords[index].recordDetails;
+                                console.log(res.data.record.assistTaskRecords[index].recordDetails);
+                            }, this);
+                            console.log(this.form1.recording);
+                            this.form1.taskId = res.data.record.id;
+                            this.form1.taskName = this.taskInfo.taskName; //任务名称
+                            this.form1.startDate = this.taskInfo.createDate; //指派时间
+                            this.form1.switchDate = this.taskInfo.endTime; //完成时间
+                            this.form1.peopele1 = this.taskInfo.seedUserName; //指派人
+                            this.form1.peopele1_1 = this.taskInfo.receiveUserName; //接收人
+                            this.form1.textContent = this.taskInfo.taskInfo; //任务详情
                             this.getTaskList1(1);
                         } else if (res.status == '403') {
                             alert(res.message);
