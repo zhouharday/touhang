@@ -37,9 +37,9 @@
                         <el-button type="text" style="color:#f05e5e">立即上传</el-button>
                         <input type="file" class="fileInput" @change="changeFile($event, item.id)" ref="avatarInput">
                     </div>
-                    <!-- 发起申请对话框 -->
+                    <!-- 发起申请 -->
                     <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
-                    <!-- 查看进度对话框 -->
+                    <!-- 查看进度 -->
                     <el-button v-if="item.type == 3 && item.status == 0" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
                 </div>
             </div>
@@ -81,7 +81,7 @@
     </delete-reminders>
     <!-- 发起申请 对话框-->
 
-    <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms>
+    <!-- <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms> -->
     <div class="applyBox">
         <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
             <el-form :model="applyForm" ref="applyForm" label-width="100px">

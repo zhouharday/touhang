@@ -276,8 +276,6 @@ export default {
         submitForm(formName) {
             let basicForm = this.basicForm;
             let companyForm = this.companyForm;
-            // basicForm = this.changeBasicForm(basicForm);
-            // companyForm = this.changeCompanyForm(companyForm);
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     if (store.isSubmit) return;
@@ -287,7 +285,28 @@ export default {
                         companyForm: companyForm
                     }).then(resp => {
                         if(resp.data.status == '200'){
-                            
+                            this.basicForm = {
+                                projectName: '',
+                                projectShortName: '',
+                                projectTypeId: '',
+                                industryId: '',
+                                projectFromId: '',
+                                addressId: '',
+                                departmentId: '',
+                                projectLogo: ''
+                            },
+                            this.companyForm = {
+                                enterpriseName: '',
+                                legalPerson: '',
+                                registeredCapital: '',
+                                paiclCapital: '',
+                                registerDate: '',
+                                creditCode: '',
+                                registerAddress: '',
+                                workAddress: '',
+                                mainBusiness: '',
+                                remark: ''
+                            },
                             this.addTab('项目池', '/home/projectPool', 'projectPool');
                             this.$router.push({ name: 'projectPool' });
                             store.isSubmit = false;
@@ -301,38 +320,6 @@ export default {
                     return false;
                 }
             });
-        },
-        changeBasicForm(basicForm) {
-            let obj = {
-                projectName: basicForm.projectName,
-                projectShortName: basicForm.projectShortName,
-                addressId: basicForm.addressId,
-                createPersonId: basicForm.createPersonId, // TODO: 此处应为项目负责人，而非创建者
-                projectTypeId: basicForm.projectTypeId,
-                industryId: basicForm.industryId,
-                projectFromId: basicForm.projectFromId,
-                departmentId: basicForm.departmentId,
-                merchantId: this.merchantId
-            }
-            return obj;
-        },
-        changeCompanyForm(companyForm) {
-            let obj = {
-                page: 1,
-                pageSize: 10,
-                projectId: '',
-                enterpriseName: companyForm.enterpriseName,
-                legalPerson: companyForm.legalPerson,
-                registeredCapital: companyForm.registeredCapital,
-                paiclCapital: companyForm.paiclCapital,
-                registerDate: companyForm.registerDate,
-                creditCode: companyForm.creditCode,
-                registerAddress: companyForm.registerAddress,
-                workAddress: companyForm.workAddress,
-                mainBusiness: companyForm.mainBusiness,
-                remark: companyForm.remark
-            }
-            return obj;
         },
         cancleForm() {
             this.isShow = true;

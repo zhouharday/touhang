@@ -9,7 +9,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="退出类型">
-                        <el-select v-model="outingForm.exitType" placeholder="请选择退出类型"  :disabled="controlEdit" style="width:100%;">
+                        <el-select v-model="outingForm.exitType" placeholder="请选择退出类型" :disabled="controlEdit" style="width:100%;">
                             <el-option v-for="item in outingSortOptions" :key="item.id" :label="item.dicName" :value="item.id" :disabled="controlEdit">
                             </el-option>
                         </el-select>
@@ -59,10 +59,15 @@
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button type="default"  v-show="isShow" @click="editForm">编 辑</el-button>
-                <el-button type="danger"  v-show="isShow" @click="confirmSave">保 存</el-button>
+                <el-button type="default" v-show="isShow" @click="editForm">编 辑</el-button>
+                <el-button type="danger" v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
+
+        <Upload action="//jsonplaceholder.typicode.com/posts/">
+            <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
+        </Upload>
+        
     </section>
 </template>
 
@@ -89,9 +94,9 @@ export default {
             isShow: true,
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             outingForm: {
-                id:'',
-                projectId:'',
-                investBeforeId:'',
+                id: '',
+                projectId: '',
+                investBeforeId: '',
                 exitType: '',
                 exitAmount: '',
                 relativedAppendix: '',
@@ -122,7 +127,7 @@ export default {
             this.getExitDetail();
         },
         //获取退出单
-        getExitDetail(){
+        getExitDetail() {
             getExitDetail(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.outingForm = resp.data.result.projectExit;
@@ -134,20 +139,20 @@ export default {
         },
         // 编辑退出单
         editForm() {
-          this.controlEdit = !this.controlEdit;
+            this.controlEdit = !this.controlEdit;
         },
         // 保存退出单
         confirmSave() {
             this.outingForm.projectId = this.proId;
             this.outingForm.investBeforeId = this.$route.params.investProjectId;
             this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
-                                ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
+                ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
             let data = {
                 projectExit: this.outingForm,
                 projectExitList: this.outingData2
             };
 
-            console.log('保存退出单: '+ JSON.stringify(data));
+            console.log('保存退出单: ' + JSON.stringify(data));
             saveExit(this.outingForm, this.outingData2).then(resp => {
                 if (resp.data.status == '200') {
                     this.getExitDetail();
