@@ -114,7 +114,7 @@ export default {
         //     }))
     },
     computed: mapState({
-        register(state) {
+        registers(state) {
             state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
             return state.register.register;
         }
@@ -129,14 +129,24 @@ export default {
         },
         submitForm() { //最后一步提交所有注册数据
             if (this.valueData) {
+                console.log(this.register);
                 this.$store.state.login.loading = true;
-                this.$store.state.register.register.merchantName = this.register.merchantName;
-                this.$store.state.register.register.industry = this.register.industry;
-                this.$store.state.register.register.province = this.register.province;
-                this.$store.state.register.register.contactUser = this.register.contactUser;
-                window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
-                this.$store.state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
-                this.$http.post(this.api + '/merchant/register', this.$store.state.register.register)
+                // this.$store.state.register.register.merchantName = this.register.merchantName;
+                // this.$store.state.register.register.industry = this.register.industry;
+                // this.$store.state.register.register.province = this.register.province;
+                // this.$store.state.register.register.contactUser = this.register.contactUser;
+                // // window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
+                // this.$store.state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
+                console.log(this.$store.state.register.register);
+                this.$http.post(this.api + '/merchant/register', {
+                    validationCode: this.registers.validationCode,
+                    contactPhone: this.registers.contactPhone,
+                    industry: this.register.industry,
+                    province: this.register.province,
+                    contactUser: this.contactUser,
+                    merchantName: this.register.merchantName,
+
+                })
                     .then(res => {
                         if (res.data.status == '200') { //注册数据验证通过
                             // this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页

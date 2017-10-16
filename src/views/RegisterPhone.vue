@@ -119,7 +119,7 @@ export default {
                 // alert(565);
                 this.$store.state.register.register.contactPhone = this.phonecontactPhone;
                 this.$store.state.register.register.validationCode = this.validationCode;
-                window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
+                this.$store.state.register.register = window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
                 this.$router.push({ name: 'register' }); //进入下一步页面
                 console.log(this.$store.state.register.register);
             }

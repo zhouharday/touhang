@@ -843,9 +843,9 @@ export default {
                             // console.log(this.monthDate)
                             res.data.result.forEach(item => {
                                 this.monthDate.map(list => {
+                                    // list.item = [];
                                     if (item.startTime.split(" ")[0] == list.time) {
                                         list.have = true;
-                                        // list.item = [];
                                         list.item.push(item);
                                     }
                                 })

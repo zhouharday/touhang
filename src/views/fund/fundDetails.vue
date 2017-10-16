@@ -11,10 +11,7 @@
         </div>
     </div>
     <el-row class="step">
-        <div class="step_lists"
-             v-for="(step, index) of steps"
-             :key="index"
-             :class="{step_one: index == '0',
+        <div class="step_lists" v-for="(step, index) of steps" :key="index" :class="{step_one: index == '0',
                      step_third: index == steps.length-1,
                      step_second:index > 0 && index < steps.length-1,
                      current_border: step.id == currentStep}">
@@ -189,7 +186,9 @@ export default {
             investorData: [], // 投资者列表
             fileListData: [], // 文档列表
             projectsData: [], // 投资项目
-            costData: [] // 基金费用
+            costData: [], // 基金费用
+            file: null,
+            loadingStatus: false
         }
     },
     methods: {
@@ -275,6 +274,7 @@ export default {
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
             if (res.status == '200') {
+                console.log(res)
                 this.tableData = res.data.result
             }
         })
@@ -478,8 +478,8 @@ export default {
             vertical-align: middle;
         }
         .prompt_message {
-            width: 48%;
-            height: 140px;
+            min-width: 48%;
+            min-height: 140px;
             display: inline-block;
             vertical-align: middle;
             background: #eef0f4;

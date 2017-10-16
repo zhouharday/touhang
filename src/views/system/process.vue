@@ -1,24 +1,24 @@
 <template>
 <div class="process">
     <div class="searchBox">
-        <el-input placeholder="查询条件（标题、流程类别、申请人 、申请时间）" icon="search" v-model="input2" :on-icon-click="handleIconClick" style="width:35%">
+        <el-input placeholder="查询条件（标题、流程类别、申请人 、申请时间）" icon="search" v-model="input2" :on-icon-click="handleIconClick">
         </el-input>
     </div>
     <div class="table">
         <el-table :data="processData" border style="width: 100%">
-            <el-table-column prop="title" label="标题" width="240" align="center">
+            <el-table-column prop="title" label="标题" width="240">
             </el-table-column>
-            <el-table-column prop="type" label="流程类别" align="center">
+            <el-table-column prop="type" label="流程类别">
             </el-table-column>
-            <el-table-column prop="applicant" label="申请人" align="center">
+            <el-table-column prop="applicant" label="申请人">
             </el-table-column>
-            <el-table-column prop="startDate" label="申请时间" width="240" align="center">
+            <el-table-column prop="startDate" label="申请时间" width="240">
             </el-table-column>
-            <el-table-column prop="endDate" label="完成时间" width="240" align="center">
+            <el-table-column prop="endDate" label="完成时间" width="240">
             </el-table-column>
-            <el-table-column prop="state" label="状态" align="center">
+            <el-table-column prop="state" label="状态">
             </el-table-column>
-            <el-table-column prop="address" label="用时" align="center">
+            <el-table-column prop="address" label="用时">
             </el-table-column>
         </el-table>
         <!-- <el-row>

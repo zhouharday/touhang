@@ -24,13 +24,16 @@
         <TabPane label="收益分配" name="income">
             <tabel-header :data="incomeInfo" @add="methodIncome"></tabel-header>
             <el-table :data="incomeData" border style="width: 100%">
-                <el-table-column label="分配日期" prop="shareDate" align="center">
+                <el-table-column label="分配日期" align="center">
+                    <template scope="scope">
+                        <div>{{scope.row.shareDate | formatDate}}</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="分配总额" prop="allocationMoney" align="center">
                 </el-table-column>
                 <el-table-column label="经办人" prop="handleName" align="center">
                 </el-table-column>
-                <el-table-column label="经办日期">
+                <el-table-column label="经办日期" align="center">
                     <template scope="scope">
                         <div>{{scope.row.handleDate | formatDate}}</div>
                     </template>
@@ -190,14 +193,14 @@ export default {
             profit: true,
             fundValue: this.$route.params.id,
             formIncome: {
-                allocationName: this.fundName + '收益分配申请表', //分配标题
+                fundName: '',
+                allocationName: '', //分配标题
                 shareDate: '', //分配日期
                 allocationMoney: '', //分配金额
                 handleUserId: JSON.parse(sessionStorage.getItem('userInfor')).id, //经办人ID 当前登录用户ID
                 documentInfo: [],
                 handleUser: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 fundId: this.$route.params.id, //基金id
-                fundName: this.fundName,
                 handleDate: ''
             },
             params: [],
@@ -214,6 +217,9 @@ export default {
         methodIncome() {
             this.modalIncome = true
             this.profit = true
+            this.formIncome.allocationName = this.fundName + '收益分配申请表'
+            this.formIncome.fundName = this.fundName
+            console.log(this.fundName)
         },
         editIncomeDis(index, row) {
             this.modalIncome = true
@@ -263,6 +269,7 @@ export default {
         },
         changeTabs(name) {
             if (name == 'income') {
+                // console.log(this.fundName)
                 this._getAllocationList()
                 getInvestorByFund(this.$route.params.id).then((res) => {
                     if (res.status == '200') {

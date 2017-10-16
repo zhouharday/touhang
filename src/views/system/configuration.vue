@@ -1,21 +1,21 @@
 <template>
     <section class="configuratin">
         <el-row :gutter="30">
-            <el-col :span="6" style="height:  650px;border-right:  1px  solid  #ddd;padding:  0">
-                <!--  项目阶段  配置-->
-                <!--<div  class="rightAdd_btn">-->
-                <!--<el-button  type="danger"  style="width:80px"  @click="openProject">添加</el-button>-->
+            <el-col :span="6" style="height: 650px;border-right: 1px solid #ddd;padding: 0">
+                <!-- 项目阶段 配置-->
+                <!--<div class="rightAdd_btn">-->
+                <!--<el-button type="danger" style="width:80px" @click="openProject">添加</el-button>-->
                 <!--</div>-->
-                <!--<b  style="padding-left:15px;">项目阶段配置</b>-->
-                <div v-for="item  in  leftList" :key="item.index">
+                <!--<b style="padding-left:15px;">项目阶段配置</b>-->
+                <div v-for="item in leftList">
                     <div class="project_config">
                         <div class="menu_title">
                             <div style="justify-content: space-between;flex-direction: row;display: flex">
                                 <div>{{item.title}}</div>
-                                <div v-if="!item.showOne" style="color: red;padding-right: 20px">
+                                <div v-if="!item.showOne" style="color: red; padding-right: 20px">
                                     <el-button type="text" class="leftBtn" @click="changeSomeThing(item)">操作</el-button>
                                 </div>
-                                <div v-if="item.showOne" style="color:  red;  padding-right:  20px">
+                                <div v-if="item.showOne" style="color: red; padding-right: 20px">
                                     <el-button type="text" class="leftBtn" @click="openProject(item)">添加</el-button>
                                     <el-button type="text" class="leftBtn" @click="changeSomeThing(item)">完成</el-button>
                                 </div>
@@ -23,15 +23,15 @@
 
                         </div>
                         <div class="menu_box">
-                            <div class="menu_list" v-for="(detailsitem,index)  in  item.data" :key="detailsitem.index" @click="refreshList(detailsitem)">
-                                <div style="height:  35px  ;width:  100px;overflow:  hidden">
-                                    <span v-if="!detailsitem.editFlag" style="line-height:  35px;width:  100px;width:  200px;overflow:  hidden;white-space:  nowrap;text-overflow:  ellipsis;">{{detailsitem.stageName}}</span>
+                            <div class="menu_list" v-for="(detailsitem,index) in item.data" :key="detailsitem.index" @click="refreshList(detailsitem)">
+                                <div style="height: 35px ;width: 100px;overflow: hidden">
+                                    <span v-if="!detailsitem.editFlag" style="line-height: 35px;width: 100px;width: 200px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">{{detailsitem.stageName}}</span>
                                     <span v-if="detailsitem.editFlag" class="cell-edit-input">
-                                        <el-input v-model="detailsitem.stageName" style="width:  100px"></el-input>
+                                        <el-input v-model="detailsitem.stageName" style="width: 100px"></el-input>
                                     </span>
                                 </div>
-                                <div v-if="detailsitem.stageStatus  ==  1">
-                                    <div v-if="item.showOne" style="justify-content:  space-between">
+                                <div v-if="detailsitem.stageStatus == 1">
+                                    <div v-if="item.showOne" style="justify-content: space-between">
                                         <Icon type="arrow-up-c" class="mgr"></Icon>
                                         <Icon type="arrow-down-c" class="mgr"></Icon>
                                         <el-button v-if="!detailsitem.editFlag" type="text" class="leftBtn" @click="edit(index,detailsitem)">编辑</el-button>
@@ -50,7 +50,7 @@
                 <el-row>
                     <el-col>
                         <div class="leftAdd_btn">
-                            <el-button type="danger"  @click="openFile" v-if="this.nowId">添加</el-button>
+                            <el-button type="danger" style="width:80px" @click="openFile" v-if="this.nowId">添加</el-button>
                         </div>
                     </el-col>
                     <el-col>
@@ -91,92 +91,91 @@
                     </el-col>
                 </el-row>
             </el-col>
+
         </el-row>
         <!-- 添加 项目阶段 对话框-->
-        <div class="fileDialog">
-            <el-dialog title="项目阶段名称" :visible.sync="projectDialog">
-                <el-form :model="projectForm">
-                    <el-row>
-                        <el-col>
-                            <i class="bottomLine"></i>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-form-item label="阶段名称：" prop="stageName" label-width="100px">
-                                <el-input v-model="projectForm.stageName" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button class="dialogBtn_active" @click="addProject">保存</el-button>
-                    <el-button class="dialogBtn" @click="projectDialog = false">取消</el-button>
-                </div>
-            </el-dialog>
-            <!-- 添加 基金阶段 对话框-->
-            <el-dialog title="基金名称" :visible.sync="fundDialog">
-                <el-form :model="fundForm">
-                    <el-row>
-                        <el-col>
-                            <i class="bottomLine"></i>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-form-item label="基金名称：" prop="fundName" label-width="100px">
-                                <el-input v-model="fundForm.fundName" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button class="dialogBtn_active" @click="addFund">保存</el-button>
-                    <el-button class="dialogBtn" @click="fundDialog = false">取消</el-button>
-                </div>
-            </el-dialog>
-            <!-- 添加 投资者阶段 对话框-->
-            <el-dialog title="阶段名称" :visible.sync="investDialog">
-                <el-form :model="fundForm">
-                    <el-row>
-                        <el-col>
-                            <i class="bottomLine"></i>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-form-item label="阶段名称：" prop="investName" label-width="100px">
-                                <el-input v-model="investForm.investName" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button class="dialogBtn_active" @click="addInvest">保存</el-button>
-                    <el-button class="dialogBtn" @click="investDialog = false">取消</el-button>
-                </div>
-            </el-dialog>
-            <!-- 添加  文档 对话框-->
-            <el-dialog title="文档名称" :visible.sync="fileDialog">
-                <el-form :model="fileForm">
-                    <el-row>
-                        <el-col>
-                            <i class="bottomLine"></i>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-form-item label="文档名称：" prop="fileName" label-width="100px">
-                                <el-input v-model="fileForm.documentName" auto-complete="off"></el-input>
-                            </el-form-item>
-                            <el-form-item label="是否必传：" prop="fileName" label-width="100px">
-                                <!--<el-input v-model="fileForm.needUpload" auto-complete="off"></el-input>-->
-                                <el-select v-model="value2" placeholder="请选择" style="width:100%">
-                                    <el-option v-for="item in options" :key="item.lable" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button class="dialogBtn_active" @click="addFile">保存</el-button>
-                    <el-button class="dialogBtn" @click="fileDialog = false">取消</el-button>
-                </div>
-            </el-dialog>
-        </div>
+        <el-dialog title="项目阶段名称" :visible.sync="projectDialog" class="fileDialog">
+            <el-form :model="projectForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="阶段名称：" prop="stageName" label-width="100px">
+                            <el-input v-model="projectForm.stageName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addProject">保存</el-button>
+                <el-button class="dialogBtn" @click="projectDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加 基金阶段 对话框-->
+        <el-dialog title="基金名称" :visible.sync="fundDialog" class="fileDialog">
+            <el-form :model="fundForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="基金名称：" prop="fundName" label-width="100px">
+                            <el-input v-model="fundForm.fundName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addFund">保存</el-button>
+                <el-button class="dialogBtn" @click="fundDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加 投资者阶段 对话框-->
+        <el-dialog title="阶段名称" :visible.sync="investDialog" class="fileDialog">
+            <el-form :model="fundForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="阶段名称：" prop="investName" label-width="100px">
+                            <el-input v-model="investForm.investName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addInvest">保存</el-button>
+                <el-button class="dialogBtn" @click="investDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加  文档 对话框-->
+        <el-dialog title="文档名称" :visible.sync="fileDialog" class="fileDialog">
+            <el-form :model="fileForm">
+                <el-row>
+                    <el-col>
+                        <i class="bottomLine"></i>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="文档名称：" prop="fileName" label-width="100px">
+                            <el-input v-model="fileForm.documentName" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="是否必传：" prop="fileName" label-width="100px">
+                            <!--<el-input v-model="fileForm.needUpload" auto-complete="off"></el-input>-->
+                            <el-select v-model="value2" placeholder="请选择">
+                                <el-option v-for="item in options" :key="item.lable" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button class="dialogBtn_active" @click="addFile">保存</el-button>
+                <el-button class="dialogBtn" @click="fileDialog = false">取消</el-button>
+            </div>
+        </el-dialog>
     </section>
 </template>
 
@@ -199,15 +198,15 @@ export default {
             //            showOne:false,
             deleteList: [],
             leftList: [],
-            value2: '',
-            value3: '',
+            value2:'',
+            value3:'',
             options: [
                 {
-                    lable: '2',
-                    value: '是'
-                }, {
-                    lable: '1',
-                    value: '否'
+                    lable:'2',
+                    value:'是'
+                },{
+                    lable:'1',
+                    value:'否'
                 }
             ],
             fileData: [
@@ -256,11 +255,11 @@ export default {
             nowId: '',
             options: [
                 {
-                    lable: '1',
-                    value: '是'
-                }, {
-                    lable: '2',
-                    value: '否'
+                    lable:'1',
+                    value:'是'
+                },{
+                    lable:'2',
+                    value:'否'
                 }
             ],
         }
@@ -280,7 +279,6 @@ export default {
             item.showOne = !item.showOne
             if (!item.showOne) {
                 this.changeList = []
-
                 SetConfig(item.data, this.deleteList).then((res) => {
                     if (res.data.status == '9024') {
                         alert(res.data.message)
@@ -290,10 +288,7 @@ export default {
                         })
                     }
                 })
-                //                getConfigLeftList().then((res) => {
-                //                    this.leftList = reloadData(res.data.result)
-                //                    console.log(this.leftList)
-                //                })
+
             } else {
                 this.deleteList = []
                 this.changeList = item.data
@@ -311,12 +306,12 @@ export default {
         },
         addProject() {
             console.log(this.changeList)
-            var stageType;
-            if (!this.changeList[0]) {
+            var stageType ;
+            if (!this.changeList[0]){
                 stageType = '3';
-            } else
+            }else
                 stageType = this.changeList[0].stageType
-            var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id }];
+            var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id}];
             var b = this.changeList;
             var newList = a.concat(b)
             console.log(newList)
@@ -378,9 +373,9 @@ export default {
         },
         addFile() {
 
-            if (this.value2 == '是') {
+            if(this.value2 == '是'){
                 this.fileForm.needUpload = '1';
-            } else
+            }else
                 this.fileForm.needUpload = '2';
 
             changeRightList(this.nowId, this.fileForm).then((res) => {
@@ -426,6 +421,7 @@ export default {
         handleDeleteLeft(index, rows) {
             this.deleteList.push(rows[index])
             rows.splice(index, 1);
+            console.log(this.deleteList)
         },
         //右边删除当前行
         handleDelete(index, rows) {
@@ -531,7 +527,7 @@ export default {
     }
     .dialog-footer {
         text-align: center;
-        margin-top: 40px;
+        margin-top: 75px;
     }
     .dialogBtn_active {
         width: 150px;

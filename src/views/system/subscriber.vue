@@ -1,67 +1,67 @@
 <template>
-<div  class="subscriber">
-        <el-row  :gutter="20">
-                <!--  树形控件  -->
-                <el-col  :span="4">
-                        <el-tree  :data="structure"  :props="defaultProps"  accordion  :default-expand-all="true"  class="tree"  @node-click="handleNodeClick">
-                        </el-tree>
-                </el-col>
-                <!--  table页面  -->
-                <el-col  :span="20">
-                        <div  class="title">
-                                <div  class="filter">
-                                        <el-form  :inline="true"  class="demo-form-inline">
-                                                <el-form-item>
-                                                        <el-input  placeholder="请输入搜索内容"  icon="search"  v-model="input2"  :on-icon-click="handleIconClick">
-                                                        </el-input>
-                                                </el-form-item>
-                                                <el-form-item>
+<div class="subscriber">
+    <el-row :gutter="20">
+        <!-- 树形控件 -->
+        <el-col :span="4">
+            <el-tree :data="structure" :props="defaultProps" accordion :default-expand-all="true" class="tree" @node-click="handleNodeClick">
+            </el-tree>
+        </el-col>
+        <!-- table页面 -->
+        <el-col :span="20">
+            <div class="title">
+                <div class="filter">
+                    <el-form :inline="true" class="demo-form-inline">
+                        <el-form-item>
+                            <el-input placeholder="请输入搜索内容" icon="search" v-model="input2" :on-icon-click="handleIconClick">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item>
 
-                                                        <el-select  v-model="value2"  placeholder="请选择">
-                                                                <el-option  v-for="item  in  options"  :key="item.value"  :label="item.label"  :value="item.value">
-                                                                </el-option>
-                                                        </el-select>
-                                                </el-form-item>
-                                        </el-form>
-                                </div>
-                                <div  class="btn">
-                                        <el-button  type="danger"  size="small"  @click="showSubscriber">添加</el-button>
-                                </div>
-                        </div>
-                        <el-table  :data="subscriberData"  border  style="width:  100%">
-                                <el-table-column  prop="name"  label="姓名"  width="180">
-                                        <template  scope="scope">
-                                                {{scope.row.name}}
-                                        </template>
-                                </el-table-column>
-                                <el-table-column  prop="number"  label="账号"  width="180">
-                                </el-table-column>
-                                <el-table-column  prop="deptName"  label="部门"  width="180">
-                                </el-table-column>
-                                <!--<el-table-column  prop="role"  label="所属角色"  width="180">-->
-                                <!--</el-table-column>-->
-                                <el-table-column  prop="umdisables"  label="状态"  width="180">
-                                        <template  scope="scope">
-                                                <div  v-if="scope.row.umdisables  ==  1">启用</div>
-                                                <div  v-if="scope.row.umdisables  ==  0">锁定</div>
-                                        </template>
-                                </el-table-column>
-                                <el-table-column  label="操作">
-                                        <template  scope="scope">
-                                                <el-button
-                                                    @click.native.prevent="editRow(scope.$index,  scope.row)"
-                                                    type="text"
-                                                    size="small">
-                                                    编辑
-                                                </el-button>
-                                                <el-button
-                                                    @click.native.prevent="deleteRow(scope.$index,  scope.row)"
-                                                    type="text"
-                                                    size="small">
+                            <el-select v-model="value2" placeholder="请选择">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                </div>
+                <div class="btn">
+                    <el-button type="danger" size="small" @click="showSubscriber">添加</el-button>
+                </div>
+            </div>
+            <el-table :data="subscriberData" border style="width: 100%">
+                <el-table-column prop="name" label="姓名" width="180">
+                    <template scope="scope">
+                        {{scope.row.name}}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="number" label="账号" width="180">
+                </el-table-column>
+                <el-table-column prop="deptName" label="部门" width="180">
+                </el-table-column>
+                <!--<el-table-column prop="role" label="所属角色" width="180">-->
+                <!--</el-table-column>-->
+                <el-table-column prop="umdisables" label="状态" width="180">
+                    <template scope="scope">
+                        <div v-if="scope.row.umdisables == 1">启用</div>
+                        <div v-if="scope.row.umdisables == 0">锁定</div>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template scope="scope">
+                        <el-button
+                          @click.native.prevent="editRow(scope.$index, scope.row)"
+                          type="text"
+                          size="small">
+                          编辑
+                        </el-button>
+                        <el-button
+                          @click.native.prevent="deleteRow(scope.$index, scope.row)"
+                          type="text"
+                          size="small">
 
-                                                        <div  v-if="scope.row.umdisables  ==  1">锁定</div>
-                                                        <div  v-if="scope.row.umdisables  ==  0">启用</div>
-                                       </el-button>
+                            <div v-if="scope.row.umdisables == 1">锁定</div>
+                            <div v-if="scope.row.umdisables == 0">启用</div>
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -77,9 +77,7 @@
                         <div v-if="newOrChange == true">
                         <el-input placeholder="请输入账号" v-model="addSubscriber.account" type = 'number'></el-input>
                         </div>
-                        <div v-if="newOrChange == false">
-                            <el-input :disabled="1" placeholder="请输入账号" v-model="addSubscriber.account" type = 'number'></el-input>
-                        </div>
+                        <div v-if="newOrChange == false">{{addSubscriber.account}}</div>
                     </el-form-item>
                 </el-col>
 

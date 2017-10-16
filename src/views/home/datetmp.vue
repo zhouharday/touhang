@@ -147,7 +147,7 @@ export default {
             if (self.date.month > 11) {
                 self.date.month = 0;
                 self.date.year++;
-            }
+            };
             self.creattimetmp(+new Date(self.date.year, self.date.month, 1));
             this.changeDate = "";
             this.clickN = null;

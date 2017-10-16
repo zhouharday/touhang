@@ -159,9 +159,5 @@ export default {
         text-align: right;
         padding: @font-size-large-x 0;
     }
-    a{
-        color: @color-theme-red;
-        text-decoration: underline;
-    }
 }
 </style>
