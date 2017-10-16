@@ -16,11 +16,13 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="投资者" prop="inverstorId">
-                        <el-select v-model="AgreementInfo.inverstorId" style="width: 100%">
+                    <el-form-item label="投资者" prop="investorName">
+                        <el-input  v-model="AgreementInfo.investorName" disabled>
+                        </el-input>
+                        <!-- <el-select v-model="AgreementInfo.inverstorId" style="width: 100%">
                             <el-option :key="AgreementInfo.inverstorId" :label="AgreementInfo.investorName" :value="AgreementInfo.inverstorId">
                             </el-option>
-                        </el-select>
+                        </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -46,9 +48,9 @@
                     <el-form-item label="投资经理" prop="managerName">
                         <el-input v-model="AgreementInfo.managerName" placeholder="当前用户" disabled></el-input>
                         <!-- <el-select v-model="AgreementInfo.managerName" disabled style="width:100%">
-                            <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
-                            </el-option>
-                        </el-select> -->
+                                <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
+                                </el-option>
+                            </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -121,8 +123,8 @@ export default {
                     { required: true, message: '请选择基金名称', trigger: 'change' }
                 ],
                 subscribeAmount: [
-                    { required: true, message: '请输入认缴金额'},
-                    { type:'number', message: '认缴金额应为数字'}
+                    { required: true, message: '请输入认缴金额' },
+                    { type: 'number', message: '认缴金额应为数字' }
                 ],
                 signDate: [
                     { type: 'date', required: true, message: '请选择签订日期', trigger: 'change' }
