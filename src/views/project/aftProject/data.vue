@@ -62,16 +62,6 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-<!--                         <el-col>
-                            <el-form-item label="经营情况附件">
-                                <Upload multiple type="drag" v-model="operatingForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
-                            </el-form-item>
-                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -142,21 +132,21 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="类型" prop="sort">
-                                <el-select v-model="financialForm1.sort" placeholder="请选择类型" style="width:100%;">
+                            <el-form-item label="类型" prop="dataType">
+                                <el-select v-model="financialForm1.dataType" placeholder="请选择类型" style="width:100%;">
                                     <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报人" prop="informant">
-                                <el-input placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
+                            <el-form-item label="填报人" prop="userName">
+                                <el-input placeholder="默认登录用户" v-model="userName" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报日期" prop="date">
-                                <el-input placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
+                            <el-form-item label="填报日期" prop="currentDeta">
+                                <el-input placeholder="当前默认日期" v-model="currentDeta" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -166,16 +156,6 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-<!--                         <el-col>
-                            <el-form-item label="财务情况附件">
-                                <Upload multiple type="drag" v-model="financialForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
-                            </el-form-item>
-                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -266,7 +246,6 @@
     </div>
 </template>
 
-
 <script >
 import deleteReminders from 'components/deleteReminders'
 import { changeDate } from 'common/js/config'
@@ -317,16 +296,16 @@ export default {
             },
             sortOptions: [
                 { //数据类型列表
-                    value: '1',
+                    value: 1,
                     label: '年报'
                 }, {
-                    value: '2',
+                    value: 2,
                     label: '半年报'
                 }, {
-                    value: '3',
+                    value: 3,
                     label: '季报'
                 }, {
-                    value: '4',
+                    value: 4,
                     label: '月报'
                 }
             ],
@@ -616,12 +595,11 @@ export default {
                         baseDate: changeDate(dataForm.baseDate),
                         dataType: dataForm.dataType,
                         operator: JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        currentDeta: dataForm.currentDeta,
+                        currentDeta: changeDate(new Date()),
                         operatorName: this.userName,
                         remark: dataForm.remark,
                         dataCat: 0
                     };
-                    console.log("添加数据表头 参数："+JSON.stringify(data));
                     saveDataSubject(data).then(resp => {
                     console.log("添加数据表头 结果："+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {

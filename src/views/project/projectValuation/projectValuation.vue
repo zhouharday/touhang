@@ -24,7 +24,7 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="valuationParameter" label="估值参数" align="center" width="400px">
+            <el-table-column prop="appraisementParamer" label="估值参数" align="center" width="400px">
                 <template scope="scope">
                     <span v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
@@ -41,13 +41,14 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="valuation" label="估值（元）" align="center" width="200px">
+            <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="200px">
             </el-table-column>
-            <el-table-column prop="valuationDate" label="估值日期" align="center" width="200px">
+            <el-table-column prop="appraisementDate" label="估值日期" align="center" width="200px">
             </el-table-column>
-            <el-table-column prop="valuationOfficer" label="估值人员" align="center" width="200px">
+            <el-table-column prop="appraisementUserName" label="估值人员" align="center" width="200px">
             </el-table-column>
-            <el-table-column prop="state" label="状态" align="center" width="200px">
+            <el-table-column prop="appraisementStatus" label="状态" align="center" width="200px">
+                <template scope="scope">{{scope.row.appraisementStatus == '1' ? '已估值' : '未估值'}}</template>
             </el-table-column>
             <el-table-column fixed="right" label="操作" align="center" width="200px">
                 <template scope="scope">
@@ -67,7 +68,7 @@
 
 <script>
 import myFilter from 'components/myFilter'
-import { getAppraisementList, updAppraisement } from 'api/project';
+import { getAppraisementList, updAppraisement } from 'api/projectAfter';
 export default {
     data() {
         return {
@@ -88,32 +89,32 @@ export default {
                     dicName: '未估值'
                 }]
             },
-            tableData: [
-                // {
-                //     project: 'AAAAAAAA',
-                //     algorithmType: '',
-                //     parameter1: '400',
-                //     parameter2: '500',
-                //     parameter3: '0.3',
-                //     valuation: '0.00',
-                //     valuationDate: '',
-                //     valuationOfficer: '',
-                //     state: '',
-                //     editFlag: false
-                // },
-                // {
-                //     project: 'AAAAAAAA',
-                //     algorithmType: '',
-                //     parameter1: '400',
-                //     parameter2: '500',
-                //     parameter3: '0.4',
-                //     valuation: '0.00',
-                //     valuationDate: '',
-                //     valuationOfficer: '',
-                //     state: '',
-                //     editFlag: false
-                // }
-            ],
+            // tableData: [
+            //     {
+            //         project: 'AAAAAAAA',
+            //         algorithmType: '',
+            //         parameter1: '400',
+            //         parameter2: '500',
+            //         parameter3: '0.3',
+            //         valuation: '0.00',
+            //         valuationDate: '',
+            //         valuationOfficer: '',
+            //         state: '',
+            //         editFlag: false
+            //     },
+            //     {
+            //         project: 'AAAAAAAA',
+            //         algorithmType: '',
+            //         parameter1: '400',
+            //         parameter2: '500',
+            //         parameter3: '0.4',
+            //         valuation: '0.00',
+            //         valuationDate: '',
+            //         valuationOfficer: '',
+            //         state: '',
+            //         editFlag: false
+            //     }
+            // ],
             options: [{
                 value: '选项1',
                 label: '市净率法'

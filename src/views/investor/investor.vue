@@ -39,10 +39,10 @@
         <!-- 添加投资者 -->
         <!-- :ref="addInvestor" -->
         <el-dialog title="新增投资者" :visible.sync="modelInvestor" :close-on-click-modal="false">
-            <investor-form :investorForm="addInvestor"></investor-form>
+            <investor-form :investorForm="addInvestor" ref="addInvestor"></investor-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="modelInvestor = false">取 消</el-button>
-                <el-button type="danger" @click="confirmIncome('addInvestor')">确 定</el-button>
+                <el-button type="danger" @click="confirmIncome(addInvestor)">确 定</el-button>
             </div>
         </el-dialog>
         <!-- 确认删除模态框 -->
@@ -152,7 +152,8 @@ export default {
                 personalAssets: '',
                 regionId: '',
                 regionName: '',
-                investmentManagerId: '',
+                investmentManagerId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+                investmentManagerName: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 contacts: '',
                 contactNumber: '',
                 addUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
@@ -176,31 +177,32 @@ export default {
             this.signInfo.investorName = row.investorName
         },
         confirmIncome(formName) {
-            // this.$refs[formName].validate((valid) => {
-            //     if (valid) {
-            //         alert('submit!');
-            //         addInvestor(this.addInvestor).then((res) => {
-            //             if (res.data.status == '200') {
-            //                 this.modelInvestor = false
-            //                 this.getInvList()
-            //             }
-            //         })
-            //     } else {
-            //         return false;
-            //     }
-            // });
-            addInvestor(this.addInvestor).then((res) => {
-                if (res.data.status == '200') {
-                    this.modelInvestor = false
-                    this.getInvList()
+            console.log(this.$refs.addInvestor.$refs.addInvestor)
+            this.$refs.addInvestor.$refs.addInvestor.validate((valid) => {
+                if (valid) {
+                    addInvestor(this.addInvestor).then((res) => {
+                        if (res.data.status == '200') {
+                            this.modelInvestor = false
+                            this.getInvList()
+                        }
+                    })
+                } else {
+                    return false
                 }
             })
+            // addInvestor(this.addInvestor).then((res) => {
+            //     if (res.data.status == '200') {
+            //         this.modelInvestor = false
+            //         this.getInvList()
+            //     }
+            // })
         },
         comfirmDel() {
             deleteInvestor(this.id).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除投资者成功！')
                     this.deleteReminders = false
+                    this.getInvList()
                 }
             })
         },
