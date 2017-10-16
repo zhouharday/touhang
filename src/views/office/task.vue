@@ -449,6 +449,7 @@ export default {
             // console.log(JSON.parse(sessionStorage.getItem('merchants'))[0].id);
             return this.$store.state.login.userInfor.id;
         },
+<<<<<<< HEAD
     },
     created() {
         this.getTaskList1(this.page,this.pageSize);
@@ -615,6 +616,23 @@ export default {
                     title: '指派时间',
                     key: 'createDate',
                     align: 'center'
+=======
+        data() {
+            return {
+                arr: [],
+                arr1: '',
+                params1: '',
+                params3: '',
+                modal1: false,
+                modal3: false,
+                modal_loading1: false,
+                modal_loading3: false,
+                value8: '',
+                isAddTask: true,
+                taskState: {//任务状态
+                    start1: '未完成',
+                    start2: '已完成',
+>>>>>>> 9369f6cf9bdc529da521bc2496dbcb29ed52de4b
                 },
                 {
                     title: '任务名称',
