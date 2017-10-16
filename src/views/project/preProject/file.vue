@@ -124,7 +124,9 @@ export default {
         },
         getProjectDocument() {
             getProjectDoc(this.projectId).then(resp => {
-                this.projectDocList = resp.data.result || [];
+                if(resp.data.status == '200'){
+                    this.projectDocList = resp.data.result || [];
+                }
             }).catch(e => {
                 console.log('getProjectDoc() exists error: ', e);
             });

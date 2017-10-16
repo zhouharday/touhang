@@ -178,6 +178,7 @@ export function saveDataSubject(projectData = {}) {
 		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id,
 		projectData : projectData
 	};
+    console.log("添加数据表头 参数："+JSON.stringify(data));
 	return service({url: '/projectData/saveObject', method: 'post', data});
 }
 

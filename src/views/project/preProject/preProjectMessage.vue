@@ -571,7 +571,7 @@ export default {
                 if (res.status == '200') {
                     if (res.data.status == '200') {
                         this.getStageUploadDocument();
-                    } else if (res.data.status == '403') {;
+                    } else {
                         this.$Message.error(res.data.message);
                         //loadingInstance.close();
                     }
