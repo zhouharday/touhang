@@ -33,8 +33,7 @@
                     <el-table-column align="center">
                         <template scope="scope">
                                 <Upload action="//jsonplaceholder.typicode.com/posts/">
-                                <!-- v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" -->
-                                    <Button  type="ghost" class="border_right">上传</Button>
+                                    <Button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="ghost" class="border_right">上传</Button>
                                 </Upload>
                                 <!-- <el-button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button> -->
                                 <a v-if="scope.row.id != '' && scope.row.id != undefined" href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
