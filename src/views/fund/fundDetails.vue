@@ -28,11 +28,24 @@
                 <div v-for="(item, index) in module" class="item" :key="item.index">
                     <span class="count">{{index + 1}}</span>
                     <p class="desc">{{item.title}}</p>
-                    <span class="state" v-if="item.type == '1'">立即上传</span>
-                    <span class="state" v-if="item.type == '2'">立即申请</span>
-                    <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">查看进度</span>
+                    <span class="state" v-if="item.type == '1'">
+                        <span @click="showModalUpload(index)"
+                              v-if="item.status == '0'">
+                              立即上传
+                        </span>
+                        <span v-else="item.status !== '0'">已完成</span>
+                    </span>
+                    <span class="state" v-if="item.type == '2'">
+                        <span v-if="item.status == '0'">立即申请</span>
+                        <span v-else="item.status !== '0'">已完成</span>
+                    </span>
+                    <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
+                        <span v-if="item.status == '0'">查看进度</span>
+                        <span v-else="item.status !== '0'">已完成</span>
+                    </span>
                 </div>
             </div>
+            <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
         </div>
     </div>
     <div class="chart">
@@ -88,6 +101,7 @@ import File from './file'
 import Manage from './manage'
 import echarts from '../../components/echarts'
 import deleteReminders from 'components/deleteReminders'
+import MyUpload from 'components/upload'
 import {
     getMyFundDetails,
     getFundTeamList,
@@ -107,6 +121,7 @@ export default {
         return {
             steps: [],
             currentStep: '' || sessionStorage.getItem('currentStep'),
+            stepId: '', // 当前显示列表id
             deleteReminders: false,
             message_title: '确认中止',
             message: '是否确认中止该项目？',
@@ -188,7 +203,17 @@ export default {
             projectsData: [], // 投资项目
             costData: [], // 基金费用
             file: null,
-            loadingStatus: false
+            listIndex: 0, // 当前点击id
+            loadingStatus: false,
+            modalUpload: false, // 显示或隐藏模态框
+            uploadInfo: {
+                file: null,
+                stageId: this.currentStep || sessionStorage.getItem('currentStep'),
+                uploadTypeId: this.$route.params.id,
+                fileId: this.stepId || sessionStorage.getItem('stepId'),
+                type: 1,
+                userId: JSON.parse(sessionStorage.getItem('userInfor')).id
+            }
         }
     },
     methods: {
@@ -203,28 +228,28 @@ export default {
             } else if (this.activeName == 'Investor') {
                 getInvestorByFund(this.$route.params.id).then((res) => {
                     if (res.status == '200') {
-                        console.log(res.data.result) // 投资者数据为空
+                        // console.log(res.data.result) // 投资者数据为空
                         this.investorData = res.data.result
                     }
                 })
             } else if (this.activeName == 'project') {
                 getProjectContractByFund(this.$route.params.id).then((res) => {
                     if (res.status == '200') {
-                        console.log(res) // 投资项目数据为空
+                        // console.log(res) // 投资项目数据为空
                         this.projectsData = res.data.result
                     }
                 })
             } else if (this.activeName == 'file') {
                 selectProjectOrFundDocument(this.$route.params.id, 2).then((res) => {
                     if (res.status == '200') {
-                        console.log(res.data.result)
+                        // console.log(res.data.result)
                         this.fileListData = res.data.result
                     }
                 })
             } else if (this.activeName == 'manage') {
                 getFundFeeList(this.$route.params.id).then((res) => {
                     if (res.status == '200') {
-                        console.log(res)
+                        // console.log(res)
                         this.costData = res.data.result
                     }
                 })
@@ -244,19 +269,32 @@ export default {
                 }
             })
         },
+        showModalUpload(index) { // 显示上传模态框
+            this.listIndex = index
+            this.modalUpload = true
+        },
+        cancelModal() { //隐藏上传模态框
+            this.modalUpload = false
+            // console.log(this.modalUpload)
+        },
+        uploadSuccess() { // 上传成功隐藏模态框
+            this.modalUpload = false
+            this.getDataStageAddUpload()
+        },
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
                     this.module = res.data.result
-                    // console.log('小双' + res)
                     this.currentStep = res.data.stageId
+                    this.stepId = this.module[this.listIndex].id
+                    sessionStorage.setItem('stepId', this.stepId)
                     sessionStorage.setItem('currentStep', res.data.stageId)
+                    console.log(res)
                 }
             })
             slectStageAllocation().then((res) => {
                 if (res.status == '200') {
                     this.steps = res.data.result
-                    // console.log('阶段' + res)
                 }
             })
         }
@@ -270,11 +308,12 @@ export default {
             })
         })
         this.getDataStageAddUpload()
+        console.log(this.uploadInfo)
     },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
             if (res.status == '200') {
-                console.log(res)
+                // console.log(res)
                 this.tableData = res.data.result
             }
         })
@@ -317,7 +356,8 @@ export default {
         Projects,
         myFile: File,
         Manage,
-        deleteReminders
+        deleteReminders,
+        MyUpload
     }
 }
 </script>
