@@ -37,10 +37,10 @@
             border-radius: 10px 11px 0 0;
             &.active {
                 background-color: #fff;
-                min-width:130px;
+                min-width: 130px;
                 box-sizing: border-box;
             }
-            .ivu-icon{
+            .ivu-icon {
                 line-height: 35px;
             }
             .close {
@@ -61,7 +61,14 @@ export default {
     watch: {
         '$route'(to, from) {
             // 对路由变化作出响应...
-            //   console.log(from,to);
+            // console.log(to);
+            // // alert(666);
+            // let href = location.href;
+            // let index = href.indexOf('#');
+            // let url = href.substr(0, index);
+            // window.location.href = url + '#' + to.fullPath;
+            // console.log(window.location.href);
+            // // this.$router.push({ name: to.name });
         }
     },
     computed: {

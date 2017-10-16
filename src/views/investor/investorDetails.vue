@@ -116,7 +116,7 @@ export default {
             }
         },
         investorDetailsInfo(value) {
-            console.log(value)
+            // console.log(value)
             this.titleInfo.name = value.investorName
             if (value.investAmountSum === null) {
                 this.titleInfo.total[0].amount = 0

@@ -41,7 +41,7 @@
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="submitForm('form1')" :class="{ active:valueData }">保 存</el-button>
+                <el-button type="danger" @click="submitForm('form1')" :class="{ active:valueData }">完 成</el-button>
             </div>
         </el-dialog>
     </div>
@@ -177,7 +177,7 @@ export default {
                 this.isSendCode = !this.isSendCode;
                 this.valueData = false;
                 var self = this;
-                var sec = 10;
+                var sec = 60;
                 var timer1 = setInterval(
                     function() {
                         // self.isSendCode = true;
@@ -195,7 +195,7 @@ export default {
         },
         sendVerificationCode() { //发送验证码 Ajax
             this.$http.post(this.api + '/user/seedCode', {
-                contactPhone: this.form1.phone
+                inputPhone: this.form1.phone
             })
                 .then(res => {
                     if (res.data.status == '200') {
@@ -240,6 +240,8 @@ export default {
                 if (valid) {
                     console.log('验证通过');
                     console.log(this.form1);
+                    this.form1.checkPwd = this.md5(this.form1.checkPwd);
+                    console.log(this.form1.checkPwd);
                     this.forgetPassword();
                     this.findDialog = !this.findDialog;
                 } else {

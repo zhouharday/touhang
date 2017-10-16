@@ -26,35 +26,46 @@
 
             <!-- 添加风险 对话框-->
             <el-dialog title="添加风险" :visible.sync="modalAdd" :close-on-click-modal="false">
-                <el-form :model="AddForm" :label-width="formLabelWidth">
+                <el-form :model="AddForm" :rules="rules1" ref="AddForm" :label-width="formLabelWidth">
                     <el-row>
                         <el-col>
-                            <el-form-item label="风险主题">
+                            <el-form-item label="风险主题" prop="riskTheme">
                                 <el-input v-model="AddForm.riskTheme" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="风险描述">
+                            <el-form-item label="风险描述" prop="riskDescribe">
                                 <el-input type="textarea" :rows="3" v-model="AddForm.riskDescribe" auto-complete="off">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="处理人">
-                                <el-select v-model="AddForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
+                            <el-form-item label="提出人" prop="seedUserId">
+                                <el-input v-model="AddForm.seedUserId" placeholder="当前用户" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="提出时间" prop="createDate">
+                                <el-input type="date" v-model="AddForm.createDate" style="width: 100%;" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="接收人" prop="receivedUserId">
+                                <el-select v-model="AddForm.receivedUserId" placeholder="请选择接收人" style="width:100%">
                                     <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
-                                    </el-option>    
+                                    </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="完成时间">
+                            <el-form-item label="完成时间" prop="completeDate">
                                 <el-date-picker type="date" placeholder="完成时间" v-model="AddForm.completeDate" style="width: 100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="附件">
+                            <el-form-item label="附件" prop="appendix">
                                 <!-- action 上传的地址，必填 -->
                                 <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
@@ -130,17 +141,14 @@
                         </p>
                     </div>
                 </div>
-                <el-form :model="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
-                    <el-form-item label="处理结果" :label-width="formLabelWidth">
+                <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
+                    <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                            <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="汇报内容" :label-width="formLabelWidth">
+                    <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
                         <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
                         </el-input>
                     </el-form-item>
@@ -155,8 +163,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button  @click="modalTracking= false">取 消</el-button>
-                    <el-button type="danger" @click="confirmTracking()">保 存</el-button>
+                    <el-button @click="modalTracking= false">取 消</el-button>
+                    <el-button type="danger" @click="confirmTracking('trackingForm')">保 存</el-button>
                 </div>
             </el-dialog>
         </section>
@@ -188,8 +196,8 @@ export default {
     },
     data() {
         return {
-            riskId:'',
-            projectId:'',
+            riskId: '',
+            projectId: '',
             modalAdd: false,
             modalRiskView: false,
             modalTracking: false,
@@ -213,6 +221,20 @@ export default {
                 appendix: '',
                 Records: ''
             },
+            rules1: {
+                riskTheme: [
+                    { required: true, message: '请输入风险主题', trigger: 'change' }
+                ],
+                riskDescribe: [
+                    { required: true, message: '请输入风险描述', trigger: 'change' }
+                ],
+                receivedUserId: [
+                    { required: true, message: '请选择接收人', trigger: 'change' }
+                ],
+                completeDate: [
+                    { required: true, message: '请选择完成时间', trigger: 'change' }
+                ]
+            },
             recipientOptions: [
                 { //接收人列表
                     value: '选项1',
@@ -225,6 +247,14 @@ export default {
                 disposeResult: '',
                 content: '',
                 appendix: ''
+            },
+            rules2: {
+                disposeResult: [
+                    { required: true, message: '请选择处理结果', trigger: 'change' }
+                ],
+                recordDetails: [
+                    { required: true, message: '请输入汇报内容', trigger: 'change' }
+                ]
             },
             resultOptions: [
                 { //处理结果列表
@@ -270,7 +300,7 @@ export default {
             return datas;
         },
         //查看风险详情
-        getRiskInfo(riskId,optType) {
+        getRiskInfo(riskId, optType) {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
@@ -279,13 +309,13 @@ export default {
                 this.tableData.push(resp.data.result);
                 this.recordList = resp.data.result.record;
                 this.recordList.push();
-                if(optType == '1'){
+                if (optType == '1') {
                     //跟踪风险
-                    this.modalTracking=true;
+                    this.modalTracking = true;
                 }
-                else{
+                else {
                     //查看风险
-                    this.modalRiskView=true;
+                    this.modalRiskView = true;
                 }
             }).catch(e => {
                 console.log('dangers exists error: ', e);
@@ -301,9 +331,9 @@ export default {
         // 删除当前行
         handleDelete(id) {
             delDanger(id).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getDatas();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -323,10 +353,10 @@ export default {
                 riskDescribe: this.AddForm.riskDescribe
             };
             addDanger(risk).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getDatas();
                     this.modalAdd = false;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -335,25 +365,49 @@ export default {
 
         },
         //添加风险跟踪
-        confirmTracking() {
-            let riskRegisterId = this.riskId,
-                disposeResult = this.trackingForm.disposeResult,
-                recordDetails = this.trackingForm.recordDetails;
-            let params = {
-                riskRegisterId,
-                disposeResult,
-                recordDetails
-            };
-            insertRiskFollower(params).then(resp => {
-                if(resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalTracking = false;
-                }else{
-                    this.$message.error(resp.data.message);
+        confirmTracking(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    let riskRegisterId = this.riskId,
+                        disposeResult = this.trackingForm.disposeResult,
+                        recordDetails = this.trackingForm.recordDetails;
+                    let params = {
+                        riskRegisterId,
+                        disposeResult,
+                        recordDetails
+                    };
+                    insertRiskFollower(params).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalTracking = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('confirmTracking() exists error: ', e);
+                    })
+                } else {
+                    return false;
                 }
-            }).catch(e => {
-                console.log('confirmTracking() exists error: ', e);
-            })
+            });
+            // let riskRegisterId = this.riskId,
+            //     disposeResult = this.trackingForm.disposeResult,
+            //     recordDetails = this.trackingForm.recordDetails;
+            // let params = {
+            //     riskRegisterId,
+            //     disposeResult,
+            //     recordDetails
+            // };
+            // insertRiskFollower(params).then(resp => {
+            //     if (resp.data.status == '200') {
+            //         this.getDatas();
+            //         this.modalTracking = false;
+            //     } else {
+            //         this.$message.error(resp.data.message);
+            //     }
+            // }).catch(e => {
+            //     console.log('confirmTracking() exists error: ', e);
+            // })
         },
         // 上传附件的方法
         handleUpload(file) {

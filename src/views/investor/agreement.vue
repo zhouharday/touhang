@@ -88,8 +88,22 @@ export default {
     },
     methods: {
         showAgreement() {
-            this.modelAgreement = true
-            this.addOrModify = true
+            let new_AgreementInfo = {
+                id: '',
+                agreementName: '',
+                structuralLevelId: '',
+                investorName: this.$store.state.investor.investorName || sessionStorage.getItem('INVESTORNAME'),
+                inverstorId: this.$route.params.userId,
+                fundId: '',
+                subscribeAmount: '',
+                signDate: '',
+                managerName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+                registerDate: new Date()
+            };
+            this.AgreementInfo = new_AgreementInfo;
+            this.modelAgreement = true;
+            this.addOrModify = true;
         },
         handleEdit(index, row) {
             console.log(row)

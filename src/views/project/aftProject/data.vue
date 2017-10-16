@@ -13,15 +13,15 @@
             <el-table :data="operatingData" border style="width: 100%">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                 </el-table-column>
-                <el-table-column label="类型" prop="sort" align="center">
+                <el-table-column label="类型" prop="dataType" align="center">
                 </el-table-column>
-                <el-table-column label="填报人" prop="informant" align="center">
+                <el-table-column label="填报人" prop="operatorName" align="center">
                 </el-table-column>
-                <el-table-column label="填报日期" prop="date" align="center">
+                <el-table-column label="填报日期" prop="currentDeta" align="center">
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="operatingModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
                         <el-button type="text" @click="operatingDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
@@ -29,40 +29,40 @@
 
             <!-- 添加经营数据表头 对话框-->
             <el-dialog title="添加经营数据表头" :visible.sync="operatingModal1" :close-on-click-modal="false">
-                <el-form :model="operatingForm1" :label-width="formLabelWidth">
+                <el-form :model="operatingForm1" :rules="rules1" ref="operatingForm1" :label-width="formLabelWidth">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="基准日">
+                            <el-form-item label="基准日" prop="baseDate">
                                 <el-date-picker type="date" placeholder="选择日期" v-model="operatingForm1.baseDate" style="width:100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="类型">
-                                <el-select v-model="operatingForm1.sort" placeholder="请选择类型" style="width:100%;">
+                            <el-form-item label="类型" prop="dataType">
+                                <el-select v-model="operatingForm1.dataType" placeholder="请选择类型" style="width:100%;">
                                     <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报人">
-                                <el-input placeholder="默认登录用户" v-model="operatingForm1.informant" auto-complete="off" disabled></el-input>
+                            <el-form-item label="填报人" prop="userName">
+                                <el-input placeholder="默认登录用户" v-model="userName" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报日期">
-                                <el-input placeholder="当前默认日期" v-model="operatingForm1.date" style="width:100%;" disabled>
+                            <el-form-item label="填报日期" prop="currentDeta">
+                                <el-input placeholder="当前默认日期" v-model="currentDeta" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="备注">
+                            <el-form-item label="备注" prop="remark">
                                 <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="operatingForm1.remark">
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col>
+<!--                         <el-col>
                             <el-form-item label="经营情况附件">
                                 <Upload multiple type="drag" v-model="operatingForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
@@ -71,12 +71,12 @@
                                     </div>
                                 </Upload>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="operatingModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="operatingAdd">保 存</el-button>
+                    <el-button type="danger" @click="saveSubject('operatingForm1', '1')">保 存</el-button>
                 </div>
             </el-dialog>
             <!-- 添加经营数据明细 对话框 -->
@@ -118,31 +118,31 @@
             <el-table :data="financialData" border style="width: 100%" align="center">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                 </el-table-column>
-                <el-table-column label="类型" prop="sort" align="center">
+                <el-table-column label="类型" prop="dataType" align="center">
                 </el-table-column>
-                <el-table-column label="填报人" prop="informant" align="center">
+                <el-table-column label="填报人" prop="operatorName" align="center">
                 </el-table-column>
-                <el-table-column label="填报日期" prop="date" align="center">
+                <el-table-column label="填报日期" prop="currentDeta" align="center">
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="financialModal2 =true">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '2')">添加数据</el-button>
                         <el-button type="text" @click="financialDelete=true">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
             <!--  添加财务数据表头  对话框-->
             <el-dialog title="添加财务数据表头" :visible.sync="financialModal1" :close-on-click-modal="false">
-                <el-form :model="financialForm1" :label-width="formLabelWidth">
+                <el-form :model="financialForm1" :rules="rules2" ref="financialForm1" :label-width="formLabelWidth">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="基准日">
+                            <el-form-item label="基准日" prop="baseDate">
                                 <el-date-picker type="date" placeholder="选择日期" v-model="financialForm1.baseDate" style="width:100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="类型">
+                            <el-form-item label="类型" prop="sort">
                                 <el-select v-model="financialForm1.sort" placeholder="请选择类型" style="width:100%;">
                                     <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
@@ -150,23 +150,23 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报人">
+                            <el-form-item label="填报人" prop="informant">
                                 <el-input placeholder="默认登录用户" v-model="financialForm1.informant" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="填报日期">
+                            <el-form-item label="填报日期" prop="date">
                                 <el-input placeholder="当前默认日期" v-model="financialForm1.date" style="width:100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="备注">
+                            <el-form-item label="备注" prop="remark">
                                 <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="financialForm1.remark">
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col>
+<!--                         <el-col>
                             <el-form-item label="财务情况附件">
                                 <Upload multiple type="drag" v-model="financialForm1.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
@@ -175,12 +175,12 @@
                                     </div>
                                 </Upload>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                     </el-row>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="financialModal1 = false">取 消</el-button>
-                    <el-button type="danger" @click="financialAdd">保 存</el-button>
+                    <el-button type="danger" @click="saveSubject('financialForm1', '2')">保 存</el-button>
                 </div>
             </el-dialog>
             <!--  添加财务数据明细 对话框-->
@@ -267,12 +267,21 @@
 </template>
 
 
-<script type="text/ecmascript-6">
+<script >
 import deleteReminders from 'components/deleteReminders'
 import { changeDate } from 'common/js/config'
+import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm } from 'api/projectAfter';
 export default {
+    props: {
+        projectId: {
+            type: String,
+            default: ''
+        }
+    },
     data() {
         return {
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name, //当前用户
+            currentDeta: changeDate(new Date()), //当前日期
             f_show: true,
             s_show: false,
             operatingDelete: false,
@@ -287,36 +296,37 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
-            // 经营数据
-            operatingData: [
-                {
-                    baseDate: '2017-9-9',
-                    sort: '年报',
-                    informant: '',
-                    date: ''
-                }
-            ],
+            // 经营数据表头
+            operatingData: [],
             // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
-                sort: '',
+                dataType: '',
                 informant: '',
                 date: '',
                 remark: '',
                 appendix: ''
             },
+            rules1: {
+                baseDate: [
+                    { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
+                ],
+                sort: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
+                ]
+            },
             sortOptions: [
                 { //数据类型列表
-                    value: '选项1',
+                    value: '1',
                     label: '年报'
                 }, {
-                    value: '选项2',
+                    value: '2',
                     label: '半年报'
                 }, {
-                    value: '选项1',
+                    value: '3',
                     label: '季报'
                 }, {
-                    value: '选项2',
+                    value: '4',
                     label: '月报'
                 }
             ],
@@ -373,14 +383,7 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [
-                {
-                    baseDate: '2017-9-9',
-                    sort: '',
-                    informant: '',
-                    date: ''
-                }
-            ],
+            financialData: [],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -389,6 +392,14 @@ export default {
                 date: '',
                 remark: '',
                 appendix: ''
+            },
+            rules2: {
+                baseDate: [
+                    { type:'date', required: true, message: '请选择基准日', trigger: 'change' }
+                ],
+                sort: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
+                ]
             },
             // 财务数据-添加数据  资产负债表
             balanceSheet: [
@@ -415,7 +426,7 @@ export default {
                     debt: '应付票据',
                     endingDBalance: '',
                     beginningDBalance: ''
-                },  {
+                }, {
                     capital: '应收票据',
                     endingCBalance: '',
                     beginningCBalance: '',
@@ -447,7 +458,7 @@ export default {
                     debt: ' 应交税费',
                     endingDBalance: '',
                     beginningDBalance: ''
-                },  {
+                }, {
                     capital: '应收利息',
                     endingCBalance: '',
                     beginningCBalance: '',
@@ -490,7 +501,94 @@ export default {
             ]
         }
     },
+    created() {
+        this.init();
+    },
     methods: {
+        init(){
+            //获取经营数据主体
+            this.getOperateSubject();
+            //获取财务数据主体
+            this.getFinancialSubject();
+        },
+        //获取经营数据主体
+        getOperateSubject(){
+            getDataSubjectList(this.projectId, 0).then(resp => {
+                if (resp.data.status == '200') {
+                    this.operatingData = resp.data.result;
+                } else if (resp.data.status == '49999') {
+                    this.operatingData = [];
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+        },
+        //获取财务数据主体
+        getFinancialSubject(){
+            getDataSubjectList(this.projectId, 1).then(resp => {
+                if (resp.data.status == '200') {
+                    this.financialData = resp.data.result;
+                } else if (resp.data.status == '49999') {
+                    this.financialData = [];
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+        },
+        goAddData(subjectId, dataType){
+
+            getDataFormBody(subjectId).then(resp => {
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos | [];
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length - 1; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.fillBalanceSheet(formBody[idx].operations);
+                        }
+                    }
+                    if(dataType == '1'){
+                        this.operatingModal2 = true;
+                    }else{
+                        this.financialModal2 =true;
+                    }
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+
+        },
+        //填充经营数据表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充资产负债表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充现金流量表单
+        fillBalanceSheet(){
+            // 
+        },
+        //填充利润表单
+        fillBalanceSheet(){
+            // 
+        },
         // 切换 经营/财务 的显示隐藏
         changeData1() {
             this.f_show = true;
@@ -508,28 +606,56 @@ export default {
                 this.financialModal1 = true;
             }
         },
-        // 经营数据-添加  保存按钮的方法
-        operatingAdd() {
-            this.operatingForm1.date = changeDate(this.operatingForm1.date);
-            this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
-            this.operatingData.push(this.operatingForm1);
-            this.operatingForm1 = {};
-            this.operatingModal1 = false;
+        // 数据表头-添加  保存按钮的方法
+        saveSubject(formName, dataType) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    let dataForm = dataType == '1' ? this.operatingForm1 : this.financialForm1;
+                    let data = {
+                        projectId: this.projectId,
+                        baseDate: changeDate(dataForm.baseDate),
+                        dataType: dataForm.dataType,
+                        operator: JSON.parse(sessionStorage.getItem('userInfor')).id,
+                        currentDeta: dataForm.currentDeta,
+                        operatorName: this.userName,
+                        remark: dataForm.remark,
+                        dataCat: 0
+                    };
+                    console.log("添加数据表头 参数："+JSON.stringify(data));
+                    saveDataSubject(data).then(resp => {
+                    console.log("添加数据表头 结果："+JSON.stringify(resp.data));
+                        if (resp.data.status == '200') {
+                            if(dataType == '1'){
+                                this.operatingForm1 = {};
+                                this.getOperateSubject();
+                                this.operatingModal1 = false;
+                            }else{
+                                this.financialForm1 = {};
+                                this.getFinancialSubject();
+                                this.financialModal1  = false;
+                            }
+                        }else{
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('getFee() exists error: ', e);
+                    });
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+
+            // this.operatingForm1.date = changeDate(this.operatingForm1.date);
+            // this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
+            // this.operatingData.push(this.operatingForm1);
+            // this.operatingForm1 = {};
+            // this.operatingModal1 = false;
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
             this.operatingModal2 = false;
             // console.log(this.operatingData1);
-        },
-
-
-        // 财务数据-添加 的方法
-        financialAdd() {
-            this.financialForm1.date = changeDate(this.financialForm1.date);
-            this.financialForm1.baseDate = changeDate(this.financialForm1.baseDate);
-            this.financialData.push(this.financialForm1);
-            this.financialForm1 = {};
-            this.financialModal1 = false;
         },
         // 财务数据-添加数据 的方法
         financialEdit() {

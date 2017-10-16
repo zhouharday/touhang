@@ -293,8 +293,11 @@ export default {
     },
     computed: {
         user(){
-            this.$store.state.login.logoSrc = JSON.parse(sessionStorage.getItem('logoSrc')) || {};
-            return this.$store.state.login.logoSrc;
+            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
+            return {
+                merchants: this.$store.state.login.merchants,
+                userInfor: this.$store.state.login.userInfor
+                }
         },
         typeText() {
             if (JSON.parse(sessionStorage.getItem('saveApprovalStatus')) == null) {
@@ -323,15 +326,15 @@ export default {
             contacts_list: [
                 {
                     src: "/static/img/my_tuxiang.png",
-                    name: this.$store.state.login.userInfor.name,
+                    name: '',
                     name_bot: '',
                     time: ""
                 },
             ],
             srcContent: {
                 src: "",
-                name: this.$store.state.login.userInfor.name,
-                title: this.$store.state.login.logoSrc.merchantName,
+                name: '',
+                title: '',
             },
             form: {
                 creditCode: '', //统一社会信用代码
@@ -369,10 +372,15 @@ export default {
             if(minuts <= 9){
                 minuts = '0' + minuts;
             };
-            this.contacts_list.forEach(function(item) {
+            this.srcContent.name = this.user.merchants[0].contact_user;
+            this.srcContent.title = this.user.merchants[0].merchant_name;
+            this.contacts_list.forEach(item=> {
+                // alert(888);
                 item.time = hour + ':' + minuts;
-                item.name_bot = this.user.merchantName
-            }, this);
+                console.log(this.user.merchants);
+                item.name = this.user.merchants[0].contact_user;
+                item.name_bot = this.user.merchants[0].merchant_name;
+            });
         },
         active(index, item) {
             // console.log(item);

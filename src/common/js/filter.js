@@ -22,6 +22,10 @@ Vue.filter('toMoney', (num) => {
     }
 })
 
+//根据key转换value，无匹配项返回原Key值
+//value: ''
+//options: [{key: '',value:'',...},
+//			{key: '',value:'',...},...]
 Vue.filter('key2value', (value, options = []) => {
     let res = '未知'
     options.forEach((item = {}) => {

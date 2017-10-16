@@ -11,7 +11,7 @@
         </el-row>
         <!--项目table -->
         <el-table :data="tableData" style="width:100%" border class="table-item">
-            <el-table-column prop="project" fixed label="项目名称" align="center" width="200px">
+            <el-table-column prop="projectName" fixed label="项目名称" align="center" width="200px">
             </el-table-column>
             <el-table-column label="算法类型" align="center" width="215px">
                 <template scope="scope">
@@ -59,7 +59,7 @@
             </el-table-column>
         </el-table>
         <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
     </section>
@@ -67,7 +67,7 @@
 
 <script>
 import myFilter from 'components/myFilter'
-import { getProjectValuation } from 'api/project';
+import { getAppraisementList, updAppraisement } from 'api/project';
 export default {
     data() {
         return {
@@ -78,38 +78,41 @@ export default {
             stateList: { //筛选选项
                 title: '状态：',
                 details: [{
+                    id: '',
                     dicName: '全部'
                 }, {
-                    dicName: '未提交'
+                    id: '1',
+                    dicName: '已估值'
                 }, {
-                    dicName: '已提交'
+                    id: '2',
+                    dicName: '未估值'
                 }]
             },
             tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    algorithmType: '',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.3',
-                    valuation: '0.00',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: '',
-                    editFlag: false
-                },
-                {
-                    project: 'AAAAAAAA',
-                    algorithmType: '',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.4',
-                    valuation: '0.00',
-                    valuationDate: '',
-                    valuationOfficer: '',
-                    state: '',
-                    editFlag: false
-                }
+                // {
+                //     project: 'AAAAAAAA',
+                //     algorithmType: '',
+                //     parameter1: '400',
+                //     parameter2: '500',
+                //     parameter3: '0.3',
+                //     valuation: '0.00',
+                //     valuationDate: '',
+                //     valuationOfficer: '',
+                //     state: '',
+                //     editFlag: false
+                // },
+                // {
+                //     project: 'AAAAAAAA',
+                //     algorithmType: '',
+                //     parameter1: '400',
+                //     parameter2: '500',
+                //     parameter3: '0.4',
+                //     valuation: '0.00',
+                //     valuationDate: '',
+                //     valuationOfficer: '',
+                //     state: '',
+                //     editFlag: false
+                // }
             ],
             options: [{
                 value: '选项1',
@@ -134,33 +137,34 @@ export default {
             this.getDatas();
         },
         getDatas() {
-            let appraisementStatus = this.appraisementStatus;
             let params = {
+                appraisementStatus:this.appraisementStatus,
                 projectName: this.projectName,
                 page: this.page,
                 pageSize: this.pageSize
             };
-            // getProjectValuation(params).then(resp => {
-            //     let result = resp.data.result;
-            //     this.tableData = result.data || [];
-            //     this.total = result.total || 0;
-            // }).catch(e => {
-            //     console.log('getProjectValuation() exists error: ', e);
-            // });
+            getAppraisementList(params).then(resp => {
+                if(resp.data.result == '200'){
+                    this.tableData = result.data.result.list || [];
+                }
+                this.total = result.total || 0;
+            }).catch(e => {
+                console.log('getProjectValuation() exists error: ', e);
+            });
         },
         pageChanged(page) {
             this.page = page;
             this.getDatas();
         },
-        pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
+        handleSizeChange(pageSize) {
+            this.pageSize = pageSize;
+            this.getDatas();
         },
         checkEdit(index, row) { //编辑
             // console.log(row)
             row.editFlag = !row.editFlag;
         },
         handleIconClick(ev) {
-            // console.log(ev);
             this.getDatas();
         },
         changeActive(index, item) {

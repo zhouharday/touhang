@@ -149,6 +149,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { getSysDate } from 'common/js/config'
 export default {
     computed: {
         userId(state) {
@@ -496,12 +497,13 @@ export default {
         },
         realseBtn() { //发布新公告Dialog btn 方法
             // alert(111);
+            let sysDate = getSysDate();
             this.edit = false;
             let new_sendNoticeform = {
                 noticeTitle: "", //主题
                 noticeContent: '', //内容
                 seedUserId: this.$store.state.login.userInfor.name, //发布人
-                seedNoticeDate: '', //发布日期
+                seedNoticeDate: sysDate, //发布日期
                 noticeType: "" //发布状态
             };
             this.sendNoticeform = new_sendNoticeform;
@@ -553,4 +555,3 @@ export default {
     },
 }
 </script>
-

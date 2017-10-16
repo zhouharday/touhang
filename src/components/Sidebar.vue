@@ -8,7 +8,7 @@
                 <div class="user">
                     <div style="margin-top:55px;">
                         <div>你好,{{userName.name}} !</div>
-                        <div>Administor</div>
+                        <!--<div>Administor</div>-->
                     </div>
                 </div>
             </div>

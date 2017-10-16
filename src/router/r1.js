@@ -31,7 +31,7 @@ const r1 = [{
     {
         path: 'projectPool', //home/项目池页
         name: 'projectPool',
-        component: resolve => require(['../views/project/projectPool/projectPool.vue'], resolve)
+        component: resolve => require(['../views/project/projectPool/projectPool.vue'], resolve),
     },
     {
         path: 'zprojectPoolMessage/:userId', //home/入项目池的项目详情页

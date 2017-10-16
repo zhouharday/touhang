@@ -1,6 +1,7 @@
 <template>
 <div class="investorForm">
-    <el-form :model="investorForm" :rules="rules" label-position="left">
+    <!-- :ref="ref" -->
+    <el-form :model="investorForm" :rules="rules" ref="addInvestor" label-position="left">
         <el-row :gutter="10">
             <el-col :span="12">
                 <el-form-item label="投资者名称" :label-width="formLabelWidth" prop="investorName">
@@ -48,11 +49,9 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="投资经理" :label-width="formLabelWidth" prop="investmentManagerId">
-                    <el-select v-model="investorForm.investmentManagerId" :disabled="variable" style="width:100%">
-                        <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="投资经理" :label-width="formLabelWidth" prop="investmentManagerName">
+                    <el-input v-model="investorForm.investmentManagerName" placeholder="当前登录用户" disabled style="width:100%" >
+                    </el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -131,13 +130,11 @@ export default {
                     type: 'string',
                     required: true,
                     message: '证件号不能为空',
-                    trigger: 'change'
+                    trigger: 'blur'
                 }],
-                investmentManagerId: [{
-                    required: true,
-                    message: '请选择投资经理',
-                    trigger: 'change'
-                }]
+                // investmentManagerId: [{
+                //     required: true
+                // }]
             }
         }
     },
