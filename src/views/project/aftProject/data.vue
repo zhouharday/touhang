@@ -392,7 +392,7 @@ export default {
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
-                sort: '',
+                dataType: '',
                 informant: '',
                 date: '',
                 remark: '',
@@ -519,10 +519,11 @@ export default {
         //获取经营数据主体
         getOperateSubject(){
             getDataSubjectList(this.projectId, 0).then(resp => {
+                console.log("获取经营数据表头 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    // this.operatingData = resp.data.result;
+                    this.operatingData = resp.data.result;
                 } else if (resp.data.status == '49999') {
-                    // this.operatingData = [];
+                    this.operatingData = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -533,10 +534,11 @@ export default {
         //获取财务数据主体
         getFinancialSubject(){
             getDataSubjectList(this.projectId, 1).then(resp => {
+                console.log("获取财务数据表头 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    // this.financialData = resp.data.result;
+                    this.financialData = resp.data.result;
                 } else if (resp.data.status == '49999') {
-                    // this.financialData = [];
+                    this.financialData = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -544,9 +546,11 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
+        //打开添加数据明细表单
         goAddData(subjectId, dataType){
 
             getDataFormBody(subjectId).then(resp => {
+                console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let formBody = resp.data.result.dataInfos | [];
                     //填充表单
@@ -554,22 +558,25 @@ export default {
                         var _dataType = formBody[idx].dataInfo.dataType;
                         if(_dataType == 1){
                             //填充经营数据表单
+                            this.fillOperateSheet(formBody[idx].operations);
                         }else if(_dataType == 2){
                             //填充资产负债表单
                             this.fillBalanceSheet(formBody[idx].operations);
                         }else if(_dataType == 3){
                             //填充现金流量表单
-                            this.fillBalanceSheet(formBody[idx].operations);
+                            this.fillCashFlowStatements(formBody[idx].operations);
                         }else if(_dataType == 4){
                             //填充利润表单
-                            this.fillBalanceSheet(formBody[idx].operations);
+                            this.fillIncomeStatement(formBody[idx].operations);
                         }
                     }
+
                     if(dataType == '1'){
                         this.operatingModal2 = true;
                     }else{
                         this.financialModal2 =true;
                     }
+
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -579,7 +586,7 @@ export default {
 
         },
         //填充经营数据表单
-        fillBalanceSheet(){
+        fillOperateSheet(){
             // 
         },
         //填充资产负债表单
@@ -587,11 +594,12 @@ export default {
             // 
         },
         //填充现金流量表单
-        fillBalanceSheet(){
+        fillCashFlowStatements(formBody){
             // 
+            this.cashFlowStatements = formBody;
         },
         //填充利润表单
-        fillBalanceSheet(){
+        fillIncomeStatement(){
             // 
         },
         // 切换 经营/财务 的显示隐藏
@@ -624,17 +632,17 @@ export default {
                         currentDeta: changeDate(new Date()),
                         operatorName: this.userName,
                         remark: dataForm.remark,
-                        dataCat: 0
+                        dataCat: dataType == '1' ? 0: 1
                     };
                     saveDataSubject(data).then(resp => {
                     console.log("添加数据表头 结果："+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             if(dataType == '1'){
-                                this.operatingForm1 = {};
+                                this.operatingForm1 = { baseDate: '', dataType: ''};
                                 this.getOperateSubject();
                                 this.operatingModal1 = false;
                             }else{
-                                this.financialForm1 = {};
+                                this.financialForm1 = { baseDate: '', dataType: ''};
                                 this.getFinancialSubject();
                                 this.financialModal1  = false;
                             }
@@ -649,12 +657,6 @@ export default {
                     return false;
                 }
             });
-
-            // this.operatingForm1.date = changeDate(this.operatingForm1.date);
-            // this.operatingForm1.baseDate = changeDate(this.operatingForm1.baseDate);
-            // this.operatingData.push(this.operatingForm1);
-            // this.operatingForm1 = {};
-            // this.operatingModal1 = false;
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {

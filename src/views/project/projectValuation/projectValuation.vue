@@ -1,7 +1,7 @@
 <template>
     <section class="projectValue">
         <!-- 状态ul -->
-        <my-filter :chooseInfo="stateList"></my-filter>
+        <my-filter :chooseInfo="stateList" ></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
@@ -60,7 +60,7 @@
             </el-table-column>
         </el-table>
         <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
     </section>
@@ -153,7 +153,7 @@ export default {
                 console.log('getProjectValuation() exists error: ', e);
             });
         },
-        pageChanged(page) {
+        handleCurrentChange(page) {
             this.page = page;
             this.getDatas();
         },
