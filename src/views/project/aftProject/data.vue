@@ -276,7 +276,20 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             // 经营数据表头
-            operatingData: [],
+            operatingData: [
+                {
+                    baseDate: '2017-1-1',
+                    dataType: '半年报',
+                    operatorName: '张三',
+                    currentDeta: '2017-10-11',
+                },
+                {
+                    baseDate: '2017-9-1',
+                    dataType: '月报',
+                    operatorName: '李四',
+                    currentDeta: '2017-10-12',
+                }
+            ],
             // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
@@ -362,7 +375,20 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [],
+            financialData: [
+                {
+                    baseDate: '2017-1-1',
+                    dataType: '半年报',
+                    operatorName: '张三',
+                    currentDeta: '2017-10-11',
+                },
+                {
+                    baseDate: '2017-9-1',
+                    dataType: '月报',
+                    operatorName: '李四',
+                    currentDeta: '2017-10-12',
+                }
+            ],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -494,9 +520,9 @@ export default {
         getOperateSubject(){
             getDataSubjectList(this.projectId, 0).then(resp => {
                 if (resp.data.status == '200') {
-                    this.operatingData = resp.data.result;
+                    // this.operatingData = resp.data.result;
                 } else if (resp.data.status == '49999') {
-                    this.operatingData = [];
+                    // this.operatingData = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -508,9 +534,9 @@ export default {
         getFinancialSubject(){
             getDataSubjectList(this.projectId, 1).then(resp => {
                 if (resp.data.status == '200') {
-                    this.financialData = resp.data.result;
+                    // this.financialData = resp.data.result;
                 } else if (resp.data.status == '49999') {
-                    this.financialData = [];
+                    // this.financialData = [];
                 }else{
                     this.$message.error(resp.data.message);
                 }

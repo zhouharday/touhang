@@ -89,32 +89,32 @@ export default {
                     dicName: '未估值'
                 }]
             },
-            // tableData: [
-            //     {
-            //         project: 'AAAAAAAA',
-            //         algorithmType: '',
-            //         parameter1: '400',
-            //         parameter2: '500',
-            //         parameter3: '0.3',
-            //         valuation: '0.00',
-            //         valuationDate: '',
-            //         valuationOfficer: '',
-            //         state: '',
-            //         editFlag: false
-            //     },
-            //     {
-            //         project: 'AAAAAAAA',
-            //         algorithmType: '',
-            //         parameter1: '400',
-            //         parameter2: '500',
-            //         parameter3: '0.4',
-            //         valuation: '0.00',
-            //         valuationDate: '',
-            //         valuationOfficer: '',
-            //         state: '',
-            //         editFlag: false
-            //     }
-            // ],
+            tableData: [
+                {
+                    projectName: 'AAAAAAAA',
+                    algorithmType: '选项1',
+                    parameter1: '400',
+                    parameter2: '500',
+                    parameter3: '0.3',
+                    appraisementValue: '0.00',
+                    appraisementDate: '',
+                    appraisementUserName: '',
+                    appraisementStatus: '1',
+                    editFlag: false
+                },
+                // {
+                //     projectName: 'BBBBBB',
+                //     algorithmType: '选项1',
+                //     parameter1: '0',
+                //     parameter2: '0',
+                //     parameter3: '0.3',
+                //     appraisementValue: '0.00',
+                //     appraisementDate: '',
+                //     appraisementUserName: '',
+                //     appraisementStatus: '2',
+                //     editFlag: false
+                // }
+            ],
             options: [{
                 value: '选项1',
                 label: '市净率法'
@@ -146,7 +146,7 @@ export default {
             };
             getAppraisementList(params).then(resp => {
                 if(resp.data.result == '200'){
-                    this.tableData = result.data.result.list || [];
+                    // this.tableData = result.data.result.list || [];
                 }
                 this.total = result.total || 0;
             }).catch(e => {

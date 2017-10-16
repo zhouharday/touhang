@@ -12,7 +12,6 @@ Vue.filter('formatDateDetails', (value, formatString) => { // 年月日
 })
 
 Vue.filter('toMoney', (num) => {
-    console.log(num)
     if (num === 'null' || num === null || num === '' || num === undefined) {
         return 0
     } else {
