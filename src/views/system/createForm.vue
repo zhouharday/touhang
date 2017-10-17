@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-group">
                         <label>单行文本 :
-                            <input type="text" class="form-control" placeholder="单行文本">
+                            <input @click="active" type="text" class="form-control" placeholder="单行文本">
                         </label>
                     </div>
 
@@ -48,7 +48,7 @@
                 <div class="box clearfix">
                     <form class="blue" id="dropArea">
                         <div class=""></div>
-                        <div class="form-group">
+                        <div class="form-group" @click="active" id="formGroup">
                         </div>
                     </form>
                 </div>
@@ -124,6 +124,9 @@ export default {
         }
     },
     methods: {
+        active(){
+            // console.log(this);
+        },
         saveFrom() { //保存
             console.log(this.required);
         },
