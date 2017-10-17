@@ -15,13 +15,13 @@
         <!--项目table -->
         <el-table :data="tableData" style="width:100%" max-height="700" class="table-item">
             <el-table-column prop="project" label="项目名称" align="center">
+                <template scope="scope">
+                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row,scope.$index)">{{ scope.row.project }}</el-button>
+                </template>
             </el-table-column>
             <el-table-column prop="valuationParameter" label="估值参数" align="center">
             </el-table-column>
             <el-table-column prop="valuation" label="估值（元）" align="center">
-                <template scope="scope">
-                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row,scope.$index)">{{ scope.row.valuation }}</el-button>
-                </template>
             </el-table-column>
             <el-table-column prop="valuationDate" label="估值日期" align="center">
             </el-table-column>
@@ -59,6 +59,12 @@
                     <el-table-column prop="valuationOfficer" label="估值人员" align="center">
                     </el-table-column>
                 </el-table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div class="pagination">
+                        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="2" :page-sizes="[10, 20, 30, 40]" :page-size="50" layout="total, sizes, prev, pager, next, jumper" :total="150">
+                        </el-pagination>
+                    </div>
+                </div>
             </el-dialog>
         </div>
     </section>
@@ -153,7 +159,7 @@ export default {
         resetValue() { //估值重置 确定按钮的方法
             this.resetDialog = false;
         },
-        viewHistory(row,index) {
+        viewHistory(row, index) {
             this.historyDialog = true;
         }
     },

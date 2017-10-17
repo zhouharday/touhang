@@ -1,7 +1,7 @@
 <template>
     <section class="projectValue">
         <!-- 状态ul -->
-        <my-filter :chooseInfo="stateList" ></my-filter>
+        <my-filter :chooseInfo="stateList"></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
@@ -10,8 +10,61 @@
             </el-col>
         </el-row>
         <!--项目table -->
+        <!-- <el-table :data="tableData" style="width:100%" border class="table-item">
+                    <el-table-column prop="projectName"  label="项目名称" align="center">
+                    </el-table-column>
+                    <el-table-column label="算法类型" align="center" width="215px">
+                        <template scope="scope">
+                            <span v-if="!scope.row.editFlag">{{scope.row.algorithmType}}</span>
+                            <span v-if="scope.row.editFlag" class="cell-edit-input">
+                                <el-select v-model="scope.row.algorithmType" placeholder="请选择算法类型">
+                                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
+                                    </el-option>
+                                </el-select>
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementParamer" label="估值参数" align="center">
+                        <template scope="scope">
+                            <span v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
+                            <span v-if="scope.row.editFlag" class="cell-edit-input">
+                                <el-row width="100%">
+                                    <el-col style="line-height:47px">
+                                        {{note1}}
+                                        <el-input v-model="scope.row.parameter1" auto-complete="off" style="width:50px;height:47px"></el-input>
+                                        *{{note2}}
+                                        <el-input v-model="scope.row.parameter2" auto-complete="off" style="width:50px;height:47px"></el-input>
+                                        *股权占比
+                                        <el-input v-model="scope.row.parameter3" disabled auto-complete="off" style="width:50px;height:47px"></el-input>
+                                    </el-col>
+                                </el-row>
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementValue" label="估值（元）" align="center" >
+                    </el-table-column>
+                    <el-table-column prop="appraisementDate" label="估值日期" align="center" >
+                    </el-table-column>
+                    <el-table-column prop="appraisementUserName" label="估值人员" align="center" >
+                    </el-table-column>
+                    <el-table-column prop="appraisementStatus" label="状态" align="center" >
+                        <template scope="scope">{{scope.row.appraisementStatus == '1' ? '已估值' : '未估值'}}</template>
+                    </el-table-column>
+                    <el-table-column  label="操作" align="center" >
+                        <template scope="scope">
+                            <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
+                            </el-button>
+                            <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="saveEdit(scope.$index,scope.row)">保存
+                            </el-button>
+                            <el-button  type="text" size="small" style="color: #f05e5e" @click="submitEdit(scope.$index,scope.row)">提交</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table> -->
         <el-table :data="tableData" style="width:100%" border class="table-item">
             <el-table-column prop="projectName" fixed label="项目名称" align="center" width="200px">
+                <template scope="scope">
+                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row,scope.$index)">{{ scope.row.projectName }}</el-button>
+                </template>
             </el-table-column>
             <el-table-column label="算法类型" align="center" width="215px">
                 <template scope="scope">
@@ -56,13 +109,36 @@
                     </el-button>
                     <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="saveEdit(scope.$index,scope.row)">保存
                     </el-button>
-                    <el-button  type="text" size="small" style="color: #f05e5e" @click="submitEdit(scope.$index,scope.row)">提交</el-button>
+                    <el-button type="text" size="small" style="color: #f05e5e" @click="submitEdit(scope.$index,scope.row)">提交</el-button>
                 </template>
             </el-table-column>
         </el-table>
         <div class="page">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
+        </div>
+        <!-- 估值历史 dialog -->
+        <div class="history">
+            <el-dialog :visible.sync="historyDialog">
+                <el-table :data="historyData" border style="width: 100%">
+                    <el-table-column prop="sort" label="算法类型" align="center">
+                    </el-table-column>
+                    <el-table-column prop="valuationParameter" label="估值参数" align="center">
+                    </el-table-column>
+                    <el-table-column prop="value" label="估值（元）" align="center">
+                    </el-table-column>
+                    <el-table-column prop="valuationDate" label="估值日期" align="center">
+                    </el-table-column>
+                    <el-table-column prop="valuationOfficer" label="估值人员" align="center">
+                    </el-table-column>
+                </el-table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div class="pagination">
+                        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="2" :page-sizes="[10, 20, 30, 40]" :page-size="50" layout="total, sizes, prev, pager, next, jumper" :total="150">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-dialog>
         </div>
     </section>
 </template>
@@ -73,6 +149,7 @@ import { getAppraisementList, updAppraisement } from 'api/projectAfter';
 export default {
     data() {
         return {
+            historyDialog: false,
             currentIndex: 0,
             projectName: '',
             note1: '净资产',
@@ -128,7 +205,8 @@ export default {
             }, {
                 value: '选项4',
                 label: '市场率'
-            }]
+            }],
+            historyData:[]
         }
     },
     created() {
@@ -140,13 +218,13 @@ export default {
         },
         getDatas() {
             let params = {
-                appraisementStatus:this.appraisementStatus,
+                appraisementStatus: this.appraisementStatus,
                 projectName: this.projectName,
                 page: this.page,
                 pageSize: this.pageSize
             };
             getAppraisementList(params).then(resp => {
-                if(resp.data.result == '200'){
+                if (resp.data.result == '200') {
                     // this.tableData = result.data.result.list || [];
                 }
                 this.total = result.total || 0;
@@ -167,7 +245,7 @@ export default {
             row.editFlag = !row.editFlag;
         },
         saveEdit(index, row) { //保存
-           row.editFlag = !row.editFlag;
+            row.editFlag = !row.editFlag;
         },
         submitEdit(index, row) { //提交
 
@@ -178,6 +256,9 @@ export default {
         changeActive(index, item) {
             this.currentIndex = index;
             console.log(item);
+        },
+        viewHistory(row, index) {
+            this.historyDialog = true;
         }
     },
     components: {
