@@ -3,9 +3,9 @@
         <el-row class="elRow">
             <el-col :span="24">
                 <div class="button">
-                    <el-button type="danger" size="small">保存</el-button>
-                    <el-button type="danger" size="small">预览</el-button>
-                    <el-button type="danger" size="small">取消</el-button>
+                    <el-button @click="saveFrom" type="danger" size="small">保 存</el-button>
+                    <el-button @click="preview" type="danger" size="small">预 览</el-button>
+                    <el-button @click="cancel" type="danger" size="small">取 消</el-button>
                 </div>
             </el-col>
         </el-row>
@@ -58,7 +58,7 @@
                 <span>组件设置</span>
                 <ul>
                     <li prop="标题">
-                        标题
+                        标题 : 
                         <el-input></el-input>
                     </li>
                     <li>
@@ -66,15 +66,6 @@
                     </li>
                     <li>
                         <el-checkbox v-model="required">这个是必填项</el-checkbox>
-                    </li>
-                    <li>
-                        <span>显示设置</span>
-                    </li>
-                    <li>
-                        <el-checkbox v-model="defaultVal">默认值</el-checkbox>
-                    </li>
-                    <li>
-                        <el-checkbox v-model="readOnly">只读</el-checkbox>
                     </li>
                 </ul>
             </div>
@@ -101,6 +92,7 @@ export default {
     // components: {jquery,core,plugins},
     data() {
         return {
+            required: false, //必填
             labelPosition: 'top',
             formLabelAlign: {
                 name: '',
@@ -132,7 +124,15 @@ export default {
         }
     },
     methods: {
+        saveFrom() { //保存
+            console.log(this.required);
+        },
+        preview() { //预览
 
+        },
+        cancel() { //保存
+
+        },
     }
 }
 </script>
@@ -174,9 +174,9 @@ export default {
         background-color: #fff;
         padding: 15px;
         text-align: right;
-        margin-top: 5px;
     }
     .form-components {
+        min-height: 340px;
         width: 30%;
         text-align: left;
         padding-top: 10px;
@@ -194,6 +194,7 @@ export default {
     .rightForm {
         position: inherit;
         width: 30%;
+        min-height: 340px;
         background: #fff;
         margin-top: 20px;
         .form-group {
@@ -204,6 +205,7 @@ export default {
         }
     }
     .leftForm {
+        min-height: 340px;
         width: 38%;
         background: #cccccc;
         margin-top: 20px;
