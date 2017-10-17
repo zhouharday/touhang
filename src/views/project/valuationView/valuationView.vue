@@ -8,6 +8,9 @@
                 <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
+            <el-col :span="18" style="text-align:right">
+                <el-button type="danger" style="width:80px;padding: 10px 11px;" @click="resetDialog=true">估值重置</el-button>
+            </el-col>
         </el-row>
         <!--项目table -->
         <el-table :data="tableData" style="width:100%" max-height="700" class="table-item">
@@ -28,6 +31,14 @@
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
             </el-pagination>
         </div>
+        <!-- 估值重置 dialog -->
+        <el-dialog title="估值重置" :visible.sync="resetDialog" size="tiny">
+            <span>确认将所有项目的估值清空重置？</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="default" @click="resetDialog=false">取 消</el-button>
+                <el-button type="danger" @click="resetValue">确 定</el-button>
+            </span>
+        </el-dialog>
     </section>
 </template>
 
@@ -42,9 +53,10 @@ export default {
             pageSize: 5,
             projectName: '',
             currentIndex: 0,
+            resetDialog: false,
             stateList: { //筛选选项
-               title: '状态：',
-               details: [{
+                title: '状态：',
+                details: [{
                     dicName: '全部'
                 }, {
                     dicName: '未估值'
@@ -105,8 +117,11 @@ export default {
             this.currentIndex = index;
             console.log(item);
             this.appraisementStatus = item.state;
+        },
+        resetValue() { //估值重置 确定按钮的方法
+            this.resetDialog = false;
         }
-    }, 
+    },
     components: {
         myFilter
     }
