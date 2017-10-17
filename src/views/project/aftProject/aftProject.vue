@@ -78,6 +78,11 @@ export default {
         });
         this.init();
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
+    },
     methods: {
         init() {
             this.initInfo();

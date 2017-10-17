@@ -192,6 +192,9 @@ export default {
     watch: {
         proUsers(val, oldVal) {
             this.initInfo();
+        },
+        '$route'(to, from) {
+            this.init();
         }
     },
     data() {
