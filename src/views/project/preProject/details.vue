@@ -190,6 +190,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
+import { changeDate } from 'common/js/config'
 import { getDicChildren } from 'common/js/dictionary'
 import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
 import { changeCapitalInfo } from 'api/projectPre';
@@ -280,6 +281,12 @@ export default {
         this.$store.dispatch('getCurrencyOptions');   // 获取币种类型
         this.projectId = this.proId;
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+            this.projectId = this.proId;
+        }
+    },
     methods: {
         disable(name) {
             return name.flag = !name.flag;
@@ -296,8 +303,11 @@ export default {
         changeEnterpriseInfo() {
             let companyForm = this.companyForm;
             companyForm.projectId = this.projectId;
+            companyForm.registerDate = changeDate(companyForm.registerDate);
             changeEnterpriseInfo(companyForm).then(resp => {
-                this.disable(companyForm);
+                if(resp.data.result == '200'){
+                    this.disable(companyForm);
+                }
                 console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
             }).catch(e => {
                 console.log('changeEnterpriseInfo exists error: ', e);
@@ -306,6 +316,8 @@ export default {
         changeCapitalInfo() {
             let capitalForm = this.capitalForm;
             capitalForm.projectId = this.projectId;
+            capitalForm.startInvestDate = changeDate(capitalForm.startInvestDate);
+            capitalForm.exitDate = changeDate(capitalForm.exitDate);
             let {
              id, 
              projectTurnId, 

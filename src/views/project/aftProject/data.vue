@@ -14,6 +14,7 @@
                 <el-table-column label="基准日" prop="baseDate" align="center">
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
+                    <template scope="scope">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</template>
                 </el-table-column>
                 <el-table-column label="填报人" prop="operatorName" align="center">
                 </el-table-column>
@@ -40,7 +41,7 @@
                         <el-col :span="12">
                             <el-form-item label="类型" prop="dataType">
                                 <el-select v-model="operatingForm1.dataType" placeholder="请选择类型" style="width:100%;">
-                                    <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    <el-option v-for="item in sortOptions" :key="item.key" :label="item.value" :value="item.key">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -109,6 +110,7 @@
                 <el-table-column label="基准日" prop="baseDate" align="center">
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
+                    <template scope="scope">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</template>
                 </el-table-column>
                 <el-table-column label="填报人" prop="operatorName" align="center">
                 </el-table-column>
@@ -134,7 +136,7 @@
                         <el-col :span="12">
                             <el-form-item label="类型" prop="dataType">
                                 <el-select v-model="financialForm1.dataType" placeholder="请选择类型" style="width:100%;">
-                                    <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                    <el-option v-for="item in sortOptions" :key="item.key" :label="item.value" :value="item.key">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -277,6 +279,7 @@
 
 <script >
 import deleteReminders from 'components/deleteReminders'
+import 'common/js/filter'
 import { changeDate } from 'common/js/config'
 import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm } from 'api/projectAfter';
 export default {
@@ -338,17 +341,17 @@ export default {
             },
             sortOptions: [
                 { //数据类型列表
-                    value: 1,
-                    label: '年报'
+                    key: 1,
+                    value: '年报'
                 }, {
-                    value: 2,
-                    label: '半年报'
+                    key: 2,
+                    value: '半年报'
                 }, {
-                    value: 3,
-                    label: '季报'
+                    key: 3,
+                    value: '季报'
                 }, {
-                    value: 4,
-                    label: '月报'
+                    key: 4,
+                    value: '月报'
                 }
             ],
             // 经营数据-添加数据 table
@@ -561,6 +564,11 @@ export default {
     },
     created() {
         this.init();
+    },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
     },
     methods: {
         init() {

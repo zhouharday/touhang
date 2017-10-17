@@ -79,7 +79,7 @@
             </el-table-column>
             <el-table-column label="投资金额（元）" prop="investmentAmount" align="center">
                 <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.investmentAmount }}</span>
+                        <span v-if="!scope.row.editFlag">{{ scope.row.investmentAmount | toMoney}}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-input v-model="scope.row.investmentAmount"></el-input>
                         </span>
@@ -141,6 +141,7 @@
 
 <script style="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
+import 'common/js/filter'
 import { addOwer, delOwer, addGu, delGu, owers, gus } from 'api/projectPre';
 export default {
     props: {
@@ -241,6 +242,11 @@ export default {
     },
     created() {
         this.projectId = this.$route.params.userId;
+    },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
     },
     methods: {
         //添加 董事会成员的方法
