@@ -45,31 +45,35 @@
             <el-table :data="dataMonitorTable" border style="width:100%">
                 <el-table-column label="指标名称" prop="fieldName" align="center">
                 </el-table-column>
-                <el-table-column label="是否监控" prop="isMust" align="center" width="250">
+                <el-table-column label="是否监控" prop="isMust" align="center">
                     <template scope="scope">
-                        <span v-if="scope.row.editFlag" >
-                                <el-radio class="radio" v-model="scope.row.isMust" label="1">是</el-radio>
-                                <el-radio class="radio" v-model="scope.row.isMust" label="0">否</el-radio>
+                        <!-- <span v-if="!scope.row.editFlag">{{ scope.row.isMonitor | key2value(isMonitorOptions, scope.row.isMonitor)}}</span> -->
+                        <!-- <span v-if="scope.row.editFlag" > -->
+                        <span>
+                                <el-radio class="radio" v-model="scope.row.isMonitor" label="1">是</el-radio>
+                                <el-radio class="radio" v-model="scope.row.isMonitor" label="0">否</el-radio>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="预警规则" prop="rule" align="center"  width="250">
+                <el-table-column label="预警规则" prop="rule" align="center">
                     <template scope="scope">
-                        <span v-if="scope.row.editFlag" >
-                                <el-radio class="radio" v-model="scope.row.isMust" label="1">是</el-radio>
-                                <el-radio class="radio" v-model="scope.row.isMust" label="0">否</el-radio>
+                        <!-- <span v-if="!scope.row.editFlag && scope.row.isMonitor == '1'">{{scope.row.rule | key2value(ruleOptions, scope.row.rule)}}</span> -->
+                        <span v-if="scope.row.isMonitor == '1'" >
+                            <el-radio-group v-model="scope.row.rule">
+                                <el-radio class="radio" v-for="item in ruleOptions" :label="item.key">{{item.value}}</el-radio>
+                            </el-radio-group>
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="阈值" prop="threshold" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.threshold }}</span>
-                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                        <!-- <span v-if="!scope.row.editFlag && scope.row.isMonitor == '1'">{{scope.row.threshold }}</span> -->
+                        <span v-if="scope.row.isMonitor == '1'" class="cell-edit-input">
                             <el-input v-model="scope.row.threshold" placeholder=""></el-input>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" min-width="100" align="center">
+<!--                 <el-table-column label="操作" min-width="100" align="center">
                     <template scope="scope">
                         <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row)">编辑
                         </el-button>
@@ -77,7 +81,7 @@
                         </el-button>
                         <el-button type="text" size="small" @click="handleDelete(scope.$index,dataMonitorTable)">删除</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="monitorSetting = false">取 消</el-button>
@@ -186,6 +190,16 @@ export default {
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
+            ruleOptions: [
+                {//开关选项
+                    key: '1',
+                    value: '大于'
+                },
+                {
+                    key: '0',
+                    value: '小于'
+                }
+            ],
             isMonitorOptions:[
                 {//开关选项
                     key: '1',
@@ -284,14 +298,16 @@ export default {
             getFormByType(val).then(resp => {
                 // console.log("获取监控数据源相应的指标列表 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    console.log('/////////////////////////');
-                    console.log(resp.data);
-                    this.dataMonitorTable = resp.data.result;
-                    // this.dataMonitorTable.forEach(function(item, index){
-                    //     item.isMonitor = 0;
-                    //     item.rule = 0;
-                    // });
-                    // this.dataMonitorTable.push(resp.data.result);
+                    var _data = resp.data.result;
+                    _data.forEach(function(item, index){
+                        item.isMonitor = '0';
+                        item.rule = '0';
+                        item.threshold = '0';
+                        item.formLabelId = item.id;
+                        item.id = '';
+                        item.monitorId = '';
+                    });
+                    this.dataMonitorTable = _data;
                 } else if (resp.data.status == '49999') {
                     this.dataMonitorTable = [];
                     this.dataMonitorTable.push();
@@ -308,8 +324,9 @@ export default {
                 if (valid) {
                     // dataMonitor = {}, monitorInfos = []
                     let dataMonitor = this.monitorForm;
-                    let monitorInfos = this.dataMonitorTable | [];
-                    saveDataMonitor().then(resp => {
+                    let monitorInfos = this.dataMonitorTable;
+                    console.log("hola datevid ::" + JSON.stringify({dataMonitor: dataMonitor, monitorInfos: monitorInfos}));
+                    saveDataMonitor(dataMonitor, monitorInfos).then(resp => {
                         console.log("添加 监控设置结果：" + JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             this.getDataMonitorList();
@@ -349,7 +366,6 @@ export default {
         checkEdit(index, row) { //编辑
             console.log("编辑监控设置明细行");
             row.editFlag = !row.editFlag;
-            console.log(row.editFlag);
             this.dataMonitorTable.push();
         },
         // 删除当前行

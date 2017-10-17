@@ -19,6 +19,9 @@
             <el-table-column prop="valuationParameter" label="估值参数" align="center">
             </el-table-column>
             <el-table-column prop="valuation" label="估值（元）" align="center">
+                <template scope="scope">
+                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row,scope.$index)">{{ scope.row.valuation }}</el-button>
+                </template>
             </el-table-column>
             <el-table-column prop="valuationDate" label="估值日期" align="center">
             </el-table-column>
@@ -32,13 +35,32 @@
             </el-pagination>
         </div>
         <!-- 估值重置 dialog -->
-        <el-dialog title="估值重置" :visible.sync="resetDialog" size="tiny">
-            <span>确认将所有项目的估值清空重置？</span>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="default" @click="resetDialog=false">取 消</el-button>
-                <el-button type="danger" @click="resetValue">确 定</el-button>
-            </span>
-        </el-dialog>
+        <div class="reset">
+            <el-dialog title="估值重置" :visible.sync="resetDialog" size="tiny">
+                <span>确认将所有项目的估值清空重置？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="resetDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="resetValue">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <!-- 估值历史 dialog -->
+        <div class="history">
+            <el-dialog :visible.sync="historyDialog">
+                <el-table :data="historyData" border style="width: 100%">
+                    <el-table-column prop="sort" label="算法类型" align="center">
+                    </el-table-column>
+                    <el-table-column prop="valuationParameter" label="估值参数" align="center">
+                    </el-table-column>
+                    <el-table-column prop="value" label="估值（元）" align="center">
+                    </el-table-column>
+                    <el-table-column prop="valuationDate" label="估值日期" align="center">
+                    </el-table-column>
+                    <el-table-column prop="valuationOfficer" label="估值人员" align="center">
+                    </el-table-column>
+                </el-table>
+            </el-dialog>
+        </div>
     </section>
 </template>
 
@@ -54,6 +76,7 @@ export default {
             projectName: '',
             currentIndex: 0,
             resetDialog: false,
+            historyDialog: false,
             stateList: { //筛选选项
                 title: '状态：',
                 details: [{
@@ -72,6 +95,15 @@ export default {
                     valuationDate: '2017-09-30',
                     valuationOfficer: '张三',
                     state: '已估值'
+                }
+            ],
+            historyData: [
+                {
+                    sort: '算法类型一',
+                    valuationParameter: '',
+                    value: '',
+                    valuationDate: '',
+                    valuationOfficer: ''
                 }
             ]
         }
@@ -120,6 +152,9 @@ export default {
         },
         resetValue() { //估值重置 确定按钮的方法
             this.resetDialog = false;
+        },
+        viewHistory(row,index) {
+            this.historyDialog = true;
         }
     },
     components: {
