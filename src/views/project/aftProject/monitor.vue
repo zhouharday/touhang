@@ -45,25 +45,19 @@
             <el-table :data="dataMonitorTable" border style="width:100%">
                 <el-table-column label="指标名称" prop="fieldName" align="center">
                 </el-table-column>
-                <el-table-column label="是否监控" prop="isMonitor" align="center">
+                <el-table-column label="是否监控" prop="isMust" align="center" width="250">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.isMonitor }}</span>
                         <span v-if="scope.row.editFlag" >
-                            <el-radio-group @change="changeRadio" v-model="scope.row.isMonitor">
-                                <el-radio :label="1">是</el-radio>
-                                <el-radio :label="0">否</el-radio>
-                            </el-radio-group>
+                                <el-radio class="radio" v-model="scope.row.isMust" label="1">是</el-radio>
+                                <el-radio class="radio" v-model="scope.row.isMust" label="0">否</el-radio>
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="预警规则" prop="rule" align="center">
+                <el-table-column label="预警规则" prop="rule" align="center"  width="250">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag">{{ scope.row.rule }}</span>
-                        <span v-if="scope.row.editFlag" class="cell-edit-input">
-                            <el-radio-group v-model="scope.row.rule">
-                                <el-radio :label="0">小于</el-radio>
-                                <el-radio :label="1">大于</el-radio>
-                            </el-radio-group>
+                        <span v-if="scope.row.editFlag" >
+                                <el-radio class="radio" v-model="scope.row.isMust" label="1">是</el-radio>
+                                <el-radio class="radio" v-model="scope.row.isMust" label="0">否</el-radio>
                         </span>
                     </template>
                 </el-table-column>
@@ -233,23 +227,7 @@ export default {
                     value: '月报'
                 }
             ],
-            dataMonitorTable: [
-                {
-                    fieldName: '指标一',
-                    isMonitor: '',
-                    rule: '0',
-                    threshold: '',
-                    editFlag: false
-                },
-                {
-                    fieldName: '指标二',
-                    isMonitor: '',
-                    rule: '',
-                    threshold: '',
-                    editFlag: false
-                }
-
-            ],
+            dataMonitorTable: [],
             monitorData: [
                 {
                     dataSource: '4',
@@ -306,11 +284,13 @@ export default {
             getFormByType(val).then(resp => {
                 // console.log("获取监控数据源相应的指标列表 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
+                    console.log('/////////////////////////');
+                    console.log(resp.data);
                     this.dataMonitorTable = resp.data.result;
-                    this.dataMonitorTable.forEach(function(item, index){
-                        item.isMonitor = 0;
-                        item.rule = 0;
-                    });
+                    // this.dataMonitorTable.forEach(function(item, index){
+                    //     item.isMonitor = 0;
+                    //     item.rule = 0;
+                    // });
                     // this.dataMonitorTable.push(resp.data.result);
                 } else if (resp.data.status == '49999') {
                     this.dataMonitorTable = [];
@@ -369,7 +349,8 @@ export default {
         checkEdit(index, row) { //编辑
             console.log("编辑监控设置明细行");
             row.editFlag = !row.editFlag;
-            //this.dataMonitorTable.push();
+            console.log(row.editFlag);
+            this.dataMonitorTable.push();
         },
         // 删除当前行
         handleDelete(index, rows) {
