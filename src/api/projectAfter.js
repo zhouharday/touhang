@@ -252,3 +252,79 @@ export function getAppraisementList(params = {}) {
 
 // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 // let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //当前商户id
+
+
+
+export function transform(data = []){
+            let _data = [];
+            _data = data;
+            var newData = new Array();
+            for(var i = 0; i < _data.length - 1; i++){
+                //当前元素 行列
+                let item = _data[i];
+                let colNo = item.location.charAt(item.location.length - 1); //1或者2
+                let rowNo = item.location.substring(0,item.location.indexOf('-')); //1或者2
+                //下个元素 行列
+                let nextItem = _data[i + 1];
+                let nextRowNo = nextItem.location.substring(0,nextItem.location.indexOf('-'));
+                let nextcolNo = nextItem.location.charAt(nextItem.location.length - 1);
+
+                // console.log("行号"+rowNo);
+                // console.log("下行号"+nextRowNo);
+                //当前元素在左
+                if(colNo == '1'){
+                    let newItem = item;
+
+                    //判断下个元素是否在本行
+                    if(rowNo == nextRowNo){
+                        //合并下个元素到本行
+                        newItem._id = nextItem.id;
+                        newItem._field_name = nextItem.field_name;
+                        newItem._location = nextItem.location;
+                        newItem._simple_value = nextItem.simple_value;
+                        newItem._complex_value = nextItem.complex_value;
+                        newItem._value1 = nextItem.value1;
+                        newItem._value2 = nextItem.value2;
+
+                        newData.push(newItem);
+                        i++;
+                    }else{
+                        //下个元素不在本行，填充空元素到本行
+                        newItem._id = '';
+                        newItem._field_name = '';
+                        newItem._location = '';
+                        newItem._simple_value = '';
+                        newItem._complex_value = '';
+                        newItem._value1 = '';
+                        newItem._value2 = '';
+                        
+                        newData.push(newItem);
+                        continue;
+                    }
+                }else {
+                //当前元素在右
+                    let newItem = {};
+                    newItem.id = '';
+                    newItem.field_name = '';
+                    newItem.location = '';
+                    newItem.simple_value = '';
+                    newItem.complex_value = '';
+                    newItem.value1 = '';
+                    newItem.value2 = '';
+
+                    newItem._id = item.id;
+                    newItem._field_name = item.field_name;
+                    newItem._location = item.location;
+                    newItem._simple_value = item.simple_value;
+                    newItem._complex_value = item.complex_value;
+                    newItem._value1 = item.value1;
+                    newItem._value2 = item.value2;
+
+                    newData.push(newItem);
+                }
+            }
+
+            // console.log("转换结果："+JSON.stringify(newData));
+
+            return newData;
+}

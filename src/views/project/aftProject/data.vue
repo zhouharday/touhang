@@ -177,7 +177,7 @@
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="资产负债表" name="first">
-                        <div class="title_f">
+<!--                         <div class="title_f">
                             <div class="desc">
                                 <span>资产</span>
                             </div>
@@ -205,33 +205,33 @@
                                     <el-input style="width:30%;margin-left:80px" v-model="item.user2" placeholder="审批人2"></el-input>
                                 </div>
                             </el-form-item>
-                        </el-form>
-                        <!-- <el-table :data="balanceSheet" border style="width: 100%" align="center">
-                                            <el-table-column label="资产" prop="capital" align="center">
+                        </el-form> -->
+                        <el-table :data="balanceSheet" border style="width: 100%" align="center">
+                                            <el-table-column label="资产" prop="field_name" align="center">
                                             </el-table-column>
                                             <el-table-column label="期末余额" prop="endingCBalance" align="center">
                                                 <template scope="scope">
-                                                    <el-input v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
+                                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
                                                 </template>
                                             </el-table-column>
                                             <el-table-column label="年初余额" prop="beginningCBalance" align="center">
                                                 <template scope="scope">
-                                                    <el-input v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
+                                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
                                                 </template>
                                             </el-table-column>
-                                            <el-table-column label="负债和所有者权益" prop="debt" align="center">
+                                            <el-table-column label="负债和所有者权益" prop="_field_name" align="center">
                                             </el-table-column>
                                             <el-table-column label="期末余额" prop="endingDBalance" align="center">
                                                 <template scope="scope">
-                                                    <el-input v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
+                                                    <el-input v-if="scope.row._id != ''" v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
                                                 </template>
                                             </el-table-column>
                                             <el-table-column label="年初余额" prop="beginningDBalance" align="center">
                                                 <template scope="scope">
-                                                    <el-input v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
+                                                    <el-input v-if="scope.row._id != ''" v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
                                                 </template>
                                             </el-table-column>
-                                        </el-table> -->
+                                        </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="利润表" name="second">
                         <el-table :data="incomeStatement" border style="width: 100%" align="center">
@@ -281,7 +281,8 @@
 import deleteReminders from 'components/deleteReminders'
 import 'common/js/filter'
 import { changeDate } from 'common/js/config'
-import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm } from 'api/projectAfter';
+import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm, transform
+} from 'api/projectAfter';
 export default {
     props: {
         projectId: {
@@ -440,86 +441,85 @@ export default {
             },
             // 财务数据-添加数据  资产负债表
             balanceSheet: [
-                {
-                    capital: '流动资产：',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '流动负债：',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                },
-                {
-                    capital: '货币资金',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '短期借款',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                },
-                {
-                    capital: '短期投资',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '应付票据',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                }, {
-                    capital: '应收票据',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                }, {
-                    debt: ' 应付账款',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                },
-                {
-                    capital: '应收账款',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '预收账款',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                },
-                {
-                    capital: '预付账款',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '应付职工薪酬',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                }
-                ,
-                {
-                    capital: '应收股利',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: ' 应交税费',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                }, {
-                    capital: '应收利息',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '应付利息',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                },
-                {
-                    capital: '其他应收款',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '应付利润',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                },
-                {
-                    capital: '存货',
-                    endingCBalance: '',
-                    beginningCBalance: '',
-                    debt: '其他应付款',
-                    endingDBalance: '',
-                    beginningDBalance: ''
-                }
+                // {
+                //     capital: '流动资产：',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '流动负债：',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // },
+                // {
+                //     capital: '货币资金',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '短期借款',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // },
+                // {
+                //     capital: '短期投资',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '应付票据',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // }, {
+                //     capital: '应收票据',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: ' 应付账款',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // },
+                // {
+                //     capital: '应收账款',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '预收账款',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // },
+                // {
+                //     capital: '预付账款',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '应付职工薪酬',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // }
+                // ,
+                // {
+                //     capital: '应收股利',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: ' 应交税费',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // }, {
+                //     capital: '应收利息',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '应付利息',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // },
+                // {
+                //     capital: '其他应收款',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '应付利润',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // },
+                // {
+                //     capital: '存货',
+                //     endingCBalance: '',
+                //     beginningCBalance: '',
+                //     debt: '其他应付款',
+                //     endingDBalance: '',
+                //     beginningDBalance: ''
+                // }
             ],
             // 财务数据-添加数据  利润表
             incomeStatement: [
@@ -577,10 +577,68 @@ export default {
             //获取财务数据主体
             this.getFinancialSubject();
         },
+        // transform(){
+        //     let _operations = [
+        //         {
+        //             id: '05fbc5fd646f4e24b33c1c898b65fe41',
+        //             field_name: '支付其他与经营活动有关的现金',
+        //             location: '1-1',
+        //             simple_value: '',
+        //             complex_value: '',
+        //             value1: '',
+        //             value2: ''
+        //         },
+        //         {
+        //             id: '232f675e07e34b568957e5779556f05c',
+        //             field_name: '偿还借款利息支付的现金',
+        //             location: '1-2',
+        //             simple_value: '',
+        //             complex_value: '',
+        //             value1: '',
+        //             value2: ''
+        //         },
+        //         {
+        //             id: '3f608bfab7824be882cbd5bba567f7a7',
+        //             field_name: '偿还借款本金支付的现金',
+        //             location: '2-1',
+        //             simple_value: '',
+        //             complex_value: '',
+        //             value1: '',
+        //             value2: ''
+        //         },
+        //         {
+        //             id: '48419576a58741a4a594a81e124534f9',
+        //             field_name: '销售产成品、商品、提供劳务收到的现金',
+        //             location: '3-1',
+        //             simple_value: '',
+        //             complex_value: '',
+        //             value1: '',
+        //             value2: ''
+        //         },
+        //         {
+        //             id: '6a47e0408f064a6f843c7c9d30905b2c',
+        //             field_name: '支付的税费',
+        //             location: '4-1',
+        //             simple_value: '',
+        //             complex_value: '',
+        //             value1: '',
+        //             value2: ''
+        //         },
+        //         {
+        //             id: '788976896af748ba9ddbf04bf2b198eb',
+        //             field_name: '五、期末现金余额',
+        //             location: '4-2',
+        //             simple_value: '',
+        //             complex_value: '',
+        //             value1: '',
+        //             value2: ''
+        //         }
+        //     ];
+        //     transform(_operations);
+        // },
         //获取经营数据主体
         getOperateSubject() {
             getDataSubjectList(this.projectId, 0).then(resp => {
-                console.log("获取经营数据表头 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.operatingData = resp.data.result;
                 } else if (resp.data.status == '49999') {
@@ -595,7 +653,6 @@ export default {
         //获取财务数据主体
         getFinancialSubject() {
             getDataSubjectList(this.projectId, 1).then(resp => {
-                console.log("获取财务数据表头 结果：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.financialData = resp.data.result;
                 } else if (resp.data.status == '49999') {
@@ -610,40 +667,43 @@ export default {
         //打开添加数据明细表单
         goAddData(subjectId, dataType) {
 
-            // getDataFormBody(subjectId).then(resp => {
-            //     console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
-            //     if (resp.data.status == '200') {
-            //         let formBody = resp.data.result.dataInfos | [];
-            //         //填充表单
-            //         for(var idx = 0; idx < formBody.length - 1; idx ++){
-            //             var _dataType = formBody[idx].dataInfo.dataType;
-            //             if(_dataType == 1){
-            //                 //填充经营数据表单
-            //                 this.fillOperateSheet(formBody[idx].operations);
-            //             }else if(_dataType == 2){
-            //                 //填充资产负债表单
-            //                 this.fillBalanceSheet(formBody[idx].operations);
-            //             }else if(_dataType == 3){
-            //                 //填充现金流量表单
-            //                 this.fillCashFlowStatements(formBody[idx].operations);
-            //             }else if(_dataType == 4){
-            //                 //填充利润表单
-            //                 this.fillIncomeStatement(formBody[idx].operations);
-            //             }
-            //         }
+            getDataFormBody(subjectId).then(resp => {
+                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos;
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
 
-            //         if(dataType == '1'){
-            //             this.operatingModal2 = true;
-            //         }else{
-            //             this.financialModal2 =true;
-            //         }
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                            this.fillOperateSheet(formBody[idx].operations);
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            //
+                            // console.log("打开数据明细表单 结果："+JSON.stringify(formBody[idx].operations));
+                            this.balanceSheet = transform(formBody[idx].operations);
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.fillCashFlowStatements(formBody[idx].operations);
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.fillIncomeStatement(formBody[idx].operations);
+                        }
+                    }
 
-            //     }else{
-            //         this.$message.error(resp.data.message);
-            //     }
-            // }).catch(e => {
-            //     console.log('getFee() exists error: ', e);
-            // })
+                    if(dataType == '1'){
+                        this.operatingModal2 = true;
+                    }else{
+                        this.financialModal2 =true;
+                    }
+
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
             if (dataType == '1') {
                 this.operatingModal2 = true;
             } else {
@@ -657,7 +717,7 @@ export default {
         },
         //填充资产负债表单
         fillBalanceSheet() {
-            // 
+            
         },
         //填充现金流量表单
         fillCashFlowStatements(formBody) {
