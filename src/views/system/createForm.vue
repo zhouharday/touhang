@@ -13,6 +13,7 @@
             <div class="rightForm">
                 <form id="dragArea">
                     <div class="form-group">
+                        <img src="/static/img/component.svg" alt="">
                         <span class="form-control">表单组件</span>
                     </div>
                     <div class="form-group">
@@ -22,9 +23,9 @@
                     </div>
 
                     <div class="form-group textMany">
-                        <label >多行文本 : &nbsp;
+                        <label>多行文本 : &nbsp;
                         </label>
-                            <textarea class="form-control" rows="3" placeholder="多行文本"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="多行文本"></textarea>
                     </div>
                     <div class="form-group">
                         <label>时间 :
@@ -51,11 +52,9 @@
                         </div>
                     </form>
                 </div>
-                <div class="operate">
-
-                </div>
             </div>
             <div class="form-components">
+                <img src="/static/img/settings.svg" alt="">
                 <span>组件设置</span>
                 <ul>
                     <li prop="标题">
@@ -65,17 +64,17 @@
                     <li>
                         <span>必填项目</span>
                     </li>
-                    <li prop="必填项目">
-                        <el-checkbox>这个是必填项</el-checkbox>
+                    <li>
+                        <el-checkbox v-model="required">这个是必填项</el-checkbox>
                     </li>
                     <li>
                         <span>显示设置</span>
                     </li>
-                    <li prop="默认值">
-                        <el-checkbox>默认值</el-checkbox>
+                    <li>
+                        <el-checkbox v-model="defaultVal">默认值</el-checkbox>
                     </li>
-                    <li prop="只读">
-                        <el-checkbox>只读</el-checkbox>
+                    <li>
+                        <el-checkbox v-model="readOnly">只读</el-checkbox>
                     </li>
                 </ul>
             </div>
@@ -154,19 +153,20 @@ export default {
     position: relative; // padding: 24px;
     // background: #fff;
     .form-group {
-        input,textarea {
+        input,
+        textarea {
             background: #eef0f4;
             border: none;
             margin: 10px 0;
         }
     }
-    .textMany{
+    .textMany {
         overflow: hidden;
-        >label{
+        >label {
             float: left;
             margin-left: 90px;
         }
-        >textarea{
+        >textarea {
             float: left;
         }
     }
@@ -178,23 +178,30 @@ export default {
     }
     .form-components {
         width: 30%;
-        text-align: center;
+        text-align: left;
         padding-top: 10px;
         margin-top: 20px;
         background: #fff;
     }
     ul {
         margin-top: 30px;
-        text-align: center;
+        text-align: left;
     }
     ul>li {
         margin-bottom: 10px;
+        text-align: left;
     }
     .rightForm {
         position: inherit;
         width: 30%;
         background: #fff;
         margin-top: 20px;
+        .form-group {
+            text-align: left;
+            label {
+                margin-left: 0;
+            }
+        }
     }
     .leftForm {
         width: 38%;
@@ -202,6 +209,13 @@ export default {
         margin-top: 20px;
         margin-left: 10px;
         margin-right: 10px;
+        text-align: left;
+        .form-group {
+            // margin-left: 0;
+            label {
+                margin-left: 0;
+            }
+        }
     }
 }
 </style>
