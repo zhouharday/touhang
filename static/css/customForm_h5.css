@@ -59,14 +59,14 @@ body
 
 .box form
 {
-	width:90%;
-	border-left: 2px solid;
-	padding:10px;
-    height: auto;
+	/* width:90%; */
+	/* border-left: 2px solid; */
+	/* padding:10px; */
+    /* height: auto; */
     min-height:300px;
     /*position: absolute;*/
     /*right: 0;*/
-   float: right;
+   /* float: right; */
   
 }
 
