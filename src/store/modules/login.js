@@ -107,6 +107,15 @@ const actions = {
                 // this.$Message.error('用户名或密码不正确，请重新输入');
                 return;
             } else if (data.status == '200') { //登录成功
+                // console.log(data);
+                if(data.data.result.userInfo.disables == '1'){
+                    commit('Notification', {
+                        title: '',
+                        message: '该用户已被禁用',
+                        type: 'warning'
+                    });
+                    return;
+                };
                 // alert('success');
                 state.approvelType.isLogged = true;
                 // console.log(user);

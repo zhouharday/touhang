@@ -21,7 +21,6 @@
                             <input @click="active" type="text" class="form-control" placeholder="单行文本">
                         </label>
                     </div>
-
                     <div class="form-group textMany">
                         <label>多行文本 : &nbsp;
                         </label>
