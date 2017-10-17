@@ -20,7 +20,7 @@
             </el-table-column>
             <el-table-column prop="valuation" label="估值（元）" align="center">
                 <template scope="scope">
-                    <el-button type="text" style="color:#f05e5e" @click="historyDialog=true">{{ scope.row.valuation }}</el-button>
+                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row,scope.$index)">{{ scope.row.valuation }}</el-button>
                 </template>
             </el-table-column>
             <el-table-column prop="valuationDate" label="估值日期" align="center">
@@ -152,6 +152,9 @@ export default {
         },
         resetValue() { //估值重置 确定按钮的方法
             this.resetDialog = false;
+        },
+        viewHistory(row,index) {
+            this.historyDialog = true;
         }
     },
     components: {
