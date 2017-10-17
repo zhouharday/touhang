@@ -54,8 +54,9 @@
                 <template scope="scope">
                     <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
                     </el-button>
-                    <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">保存
+                    <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="saveEdit(scope.$index,scope.row)">保存
                     </el-button>
+                    <el-button  type="text" size="small" style="color: #f05e5e" @click="submitEdit(scope.$index,scope.row)">提交</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -164,6 +165,12 @@ export default {
         checkEdit(index, row) { //编辑
             // console.log(row)
             row.editFlag = !row.editFlag;
+        },
+        saveEdit(index, row) { //保存
+           row.editFlag = !row.editFlag;
+        },
+        submitEdit(index, row) { //提交
+
         },
         handleIconClick(ev) {
             this.getDatas();
