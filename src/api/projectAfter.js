@@ -23,6 +23,22 @@ export function getAfterDetail(params) {
 	return service({url: '', method: 'post', data});
 }
 
+//数据预警列表
+export function getWarningList(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/WarnRecords/selectWarning', method: 'post', data});
+}
+
+//预警详情
+export function getWarningDetail(id = undefined) {
+	const data = {
+		id
+	};
+	return service({url: '/WarnRecords/warnRecords', method: 'post', data});
+}
+
 //投后重大事项列表
 export function getEventList(projectId = undefined) {
 	const data = {
@@ -117,6 +133,7 @@ export function saveDataMonitor(dataMonitor = {}, monitorInfos = []) {
 		dataMonitor,
 		monitorInfos
 	};
+	// console.log("监控设置-新增 AAA编辑"+JSON.stringify(data));
 	return service({url: '/formLabel/saveMonitorInFo', method: 'post', data});
 }
 
