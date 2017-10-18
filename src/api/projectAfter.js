@@ -225,17 +225,20 @@ export function fillDataForm(params = {}) {
 }
 
 //项目估值 - 添加或者修改项目估值
-export function updAppraisement(params = {}) {
-	let { id, projectId, appraisementValue, appraisementParamer } = params;
+export function updAppraisement(params = {}, optType = 1) {
+	let { id, projectId, appraisementValue, appraisementParamer, appraisementParamerTwo, stockRatio, arithmeticType } = params;
 	const data = {
-		id: id,
-		projectId: projectId,
-		appraisementValue: appraisementValue,
-		appraisementParamer: appraisementParamer,
+		id,
+		projectId,
+		appraisementValue,
+		appraisementParamer,
+		appraisementParamerTwo,
+		stockRatio,
+		arithmeticType,
 		appraisementUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
-		appraisementStatus: '1',
+		appraisementStatus: optType
 	};
-	return service({url: '/appraisement/updaAppraisement', method: 'post', data});
+	return service({url: '/appraisement/updateAppraisement', method: 'post', data});
 }
 
 //项目估值 - 项目估值列表查询
@@ -251,8 +254,29 @@ export function getAppraisementList(params = {}) {
 		page,
 		pageSize
 	};
-            console.log("getDatas() 参数"+JSON.stringify(data));
 	return service({url: '/appraisement/likeSelectAppraisementPage', method: 'post', data});
+}
+
+
+//项目估值 - 项目估值历史记录查询
+export function getAppraisementRec(params = {}) {
+	let {projectId, page, pageSize } = params;
+	const data = {
+		projectId,
+		page,
+		pageSize
+	};
+	return service({url: '/appraisementDetails/selectAppraisementDetailsPage', method: 'post', data});
+}
+
+//估值查看 - 重置估值或者全部重置估值
+export function resetAppraisement(id = undefined) {
+	const data = {
+		id,
+		userId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id
+	};
+	return service({url: '/appraisement/resetProjectAppraisement', method: 'post', data});
 }
 
 // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
