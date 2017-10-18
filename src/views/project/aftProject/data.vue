@@ -517,7 +517,11 @@ export default {
         getOperateSubject() {
             getDataSubjectList(this.projectId, 0).then(resp => {
                 if (resp.data.status == '200') {
-                    this.operatingData = resp.data.result;
+                    let dataList = resp.data.result;
+                    dataList.forEach(function(item, index){
+                        item.editFlag = false;
+                    });
+                    this.operatingData = dataList;
                 } else if (resp.data.status == '49999') {
                     this.operatingData = [];
                 } else {
