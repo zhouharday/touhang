@@ -108,7 +108,7 @@ const actions = {
                 return;
             } else if (data.status == '200') { //登录成功
                 // console.log(data);
-                if(data.data.result.userInfo.disables == '1'){
+                if(data.data.result.userInfo.disables == '0'){
                     commit('Notification', {
                         title: '',
                         message: '该用户已被禁用',
