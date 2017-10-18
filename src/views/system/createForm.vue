@@ -17,12 +17,12 @@
                         <span class="form-control">表单组件</span>
                     </div>
                     <div class="form-group">
-                        <label>单行文本 :
-                            <input @click="active" type="text" class="form-control" placeholder="单行文本">
+                        <label>{{label}} :
                         </label>
+                        <input @click="active" type="text" class="form-control" placeholder="单行文本">
                     </div>
                     <div class="form-group textMany">
-                        <label>多行文本 : &nbsp;
+                        <label>多行文本 :
                         </label>
                         <textarea class="form-control" rows="3" placeholder="多行文本"></textarea>
                     </div>
@@ -38,16 +38,15 @@
                     </div>
                     <div class="form-group">
                         <label>上传 :
-                            <input type="file" placeholder="日期">
+                            <input type="file" placeholder="上传">
                         </label>
                     </div>
                 </form>
             </div>
             <div class="leftForm">
                 <div class="box clearfix">
-                    <form class="blue" id="dropArea">
-                        <div class=""></div>
-                        <div class="form-group" @click="active" id="formGroup">
+                    <form class="blue" id="dropArea" ref="dropArea" @click="activeGroup($event)">
+                        <div class="form-group" id="formGroup">
                         </div>
                     </form>
                 </div>
@@ -57,8 +56,8 @@
                 <span>组件设置</span>
                 <ul>
                     <li prop="标题">
-                        标题 : 
-                        <el-input></el-input>
+                        标题 :
+                        <el-input @change="getVal"></el-input>
                     </li>
                     <li>
                         <span>必填项目</span>
@@ -80,6 +79,11 @@
 // let dom = 0;
 export default {
     created() {
+        // this.activeGroup();
+    },
+    mounted() {
+        // let ele = $('#formGroup');
+        // console.log(ele);
     },
     mounted() {
         drag
@@ -91,6 +95,9 @@ export default {
     // components: {jquery,core,plugins},
     data() {
         return {
+            ev: '',
+            label: '单行文本', //label value
+            labelVal: '单行文本', //label value
             required: false, //必填
             labelPosition: 'top',
             formLabelAlign: {
@@ -123,8 +130,41 @@ export default {
         }
     },
     methods: {
-        active(){
-            // console.log(this);
+        active() {
+            console.log(this);
+        },
+        getVal(val) {
+            console.log(val);
+            // this.$refs.dropArea.click();
+            this.labelVal = val;
+            console.log(this.ev);
+            // this.ev.target.textContent = val;
+            // this.ev.target.innerHTML = val;
+        },
+        activeGroup(e) {
+            // alert();
+            var ev = ev || window.event;
+            var target = ev.target || ev.srcElement;
+            this.ev = e;
+            console.log(e);
+            if (e.target.nodeName.toLowerCase() == 'label') {
+                console.log(target.innerHTML);
+                // this.labelVal = target.innerHTML;
+                target.innerHTML = this.labelVal;
+                alert(1);
+                console.log(this.labelVal);
+            };
+            var dropArea = $("#dropArea");
+            // console.log(dropArea);
+            $("#dropArea").onClick = function(ev) {
+                alert();
+                var ev = ev || window.event;
+                var target = ev.target || ev.srcElement;
+                if (target.nodeName.toLowerCase() == 'input') {
+                    alert(111);
+                    alert(target.innerHTML);
+                }
+            }
         },
         saveFrom() { //保存
             console.log(this.required);
