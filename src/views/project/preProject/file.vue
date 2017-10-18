@@ -75,7 +75,6 @@
     </div>
 </template>
 
-
 <script>
 import {
     getProjectDoc, delDocument
@@ -120,6 +119,11 @@ export default {
     },
     created() {
         this.init();
+    },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
     },
     methods: {
         init() {

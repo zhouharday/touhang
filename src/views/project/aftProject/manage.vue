@@ -322,6 +322,11 @@ export default {
         this.$store.dispatch('getMyFundOptions')
         this.init();
     },
+    watch: {
+        '$route'(to, from) {
+            this.init();
+        }
+    },
     methods: {
         init() {
             this.getFee();
