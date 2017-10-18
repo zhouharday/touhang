@@ -12,8 +12,25 @@
         <div class="f_data" v-show="f_show">
             <el-table :data="operatingData" border style="width: 100%">
                 <el-table-column label="基准日" prop="baseDate" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="openDetails(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
+                            </el-date-picker>
+                        </span>
+                        <!-- <el-button v-if="!scope.row.editFlag" type="text" @click="operatingDelete=true">{{ scope.row.baseDate }}</el-button> -->
+                    </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.dataType }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-select v-model="scope.row.dataType" placeholder="请选择类型">
+                                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="填报人" prop="operatorName" align="center">
                 </el-table-column>
@@ -21,12 +38,64 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
-                        <el-button type="text" @click="operatingDelete=true">删除</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
+                        </el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
+                        <!-- <el-button type="text" @click="operatingDelete=true">删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
 
+            <!-- 查看经营数据详情 对话框-->
+            <el-dialog title="查看经营数据详情" :visible.sync="detailsDialog" :close-on-click-modal="false">
+                <el-form :model="operatingForm1" label-position="left" :label-width="formLabelWidth">
+                    <el-row :gutter="10">
+                        <el-col :span="12">
+                            <el-form-item label="基准日" prop="baseDate">
+                                <el-input v-model="operatingForm1.baseDate" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="类型" prop="dataType">
+                                <el-input v-model="operatingForm1.dataType" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="填报人" prop="userName">
+                                <el-input  v-model="userName" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="填报日期" prop="currentDeta">
+                                <el-input  v-model="currentDeta"  disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="备注" prop="remark">
+                                <el-input type="textarea" :rows="3"  v-model="operatingForm1.remark" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <el-table :data="operatingData1" border style="width:100%">
+                    <el-table-column label="项目" prop="project" align="center">
+                    </el-table-column>
+                    <el-table-column label="经营目标" prop="operatingGoal" align="center">
+                    </el-table-column>
+                    <el-table-column label="截止基准日实际情况" prop="realSituation" align="center">
+                    </el-table-column>
+                    <el-table-column label="完成率" prop="completionRate" align="center">
+                    </el-table-column>
+                    <el-table-column label="下半年计划" prop="secondPlan" align="center">
+                    </el-table-column>
+                </el-table>
+            </el-dialog>
             <!-- 添加经营数据表头 对话框-->
             <el-dialog title="添加经营数据表头" :visible.sync="operatingModal1" :close-on-click-modal="false">
                 <el-form :model="operatingForm1" :rules="rules1" ref="operatingForm1" :label-width="formLabelWidth">
@@ -205,31 +274,31 @@
                             </el-form-item>
                         </el-form>
                         <!-- <el-table :data="balanceSheet" border style="width: 100%" align="center">
-                                            <el-table-column label="资产" prop="capital" align="center">
-                                            </el-table-column>
-                                            <el-table-column label="期末余额" prop="endingCBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="年初余额" prop="beginningCBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="负债和所有者权益" prop="debt" align="center">
-                                            </el-table-column>
-                                            <el-table-column label="期末余额" prop="endingDBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="年初余额" prop="beginningDBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                        </el-table> -->
+                                                                            <el-table-column label="资产" prop="capital" align="center">
+                                                                            </el-table-column>
+                                                                            <el-table-column label="期末余额" prop="endingCBalance" align="center">
+                                                                                <template scope="scope">
+                                                                                    <el-input v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
+                                                                                </template>
+                                                                            </el-table-column>
+                                                                            <el-table-column label="年初余额" prop="beginningCBalance" align="center">
+                                                                                <template scope="scope">
+                                                                                    <el-input v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
+                                                                                </template>
+                                                                            </el-table-column>
+                                                                            <el-table-column label="负债和所有者权益" prop="debt" align="center">
+                                                                            </el-table-column>
+                                                                            <el-table-column label="期末余额" prop="endingDBalance" align="center">
+                                                                                <template scope="scope">
+                                                                                    <el-input v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
+                                                                                </template>
+                                                                            </el-table-column>
+                                                                            <el-table-column label="年初余额" prop="beginningDBalance" align="center">
+                                                                                <template scope="scope">
+                                                                                    <el-input v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
+                                                                                </template>
+                                                                            </el-table-column>
+                                                                        </el-table> -->
                     </el-tab-pane>
                     <el-tab-pane label="利润表" name="second">
                         <el-table :data="incomeStatement" border style="width: 100%" align="center">
@@ -298,6 +367,7 @@ export default {
             financialMessage: '是否确认删除该条财务数据？',
             operatingModal1: false,
             operatingModal2: false,
+            detailsDialog: false,
             financialModal1: false,
             financialModal2: false,
             formLabelWidth: '100px',
@@ -311,12 +381,14 @@ export default {
                     dataType: '半年报',
                     operatorName: '张三',
                     currentDeta: '2017-10-11',
+                    editFlag: false
                 },
                 {
                     baseDate: '2017-9-1',
                     dataType: '月报',
                     operatorName: '李四',
                     currentDeta: '2017-10-12',
+                    editFlag: false
                 }
             ],
             // 经营数据-添加 表单
@@ -584,6 +656,14 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
+        // 查看经营数据详情
+        openDetails(index) {
+            this.detailsDialog = true;
+        },
+        // 编辑经营数据
+        EditOperating(row) {
+            row.editFlag = !row.editFlag;
+        },
         //获取财务数据主体
         getFinancialSubject() {
             getDataSubjectList(this.projectId, 1).then(resp => {
@@ -811,13 +891,13 @@ export default {
         height: 42px;
         display: flex;
         align-items: center;
-        background:#eef1f6;
+        background: #eef1f6;
         border: 1px solid #dfe6ec;
         .desc {
             flex: 1;
             text-align: center;
             span {
-                color:#1f2d3d;
+                color: #1f2d3d;
                 font-weight: 700;
             }
         }
