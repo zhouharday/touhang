@@ -240,13 +240,18 @@ export function updAppraisement(params = {}) {
 
 //项目估值 - 项目估值列表查询
 export function getAppraisementList(params = {}) {
-	let {projectName, appraisementStatus, page, pageSize } = params;
+	let {projectName, appraisementStatus, type, page, pageSize } = params;
+
 	const data = {
+		userId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id,
 		projectName,
 		appraisementStatus,
+		type,
 		page,
 		pageSize
 	};
+            console.log("getDatas() 参数"+JSON.stringify(data));
 	return service({url: '/appraisement/likeSelectAppraisementPage', method: 'post', data});
 }
 
@@ -256,75 +261,111 @@ export function getAppraisementList(params = {}) {
 
 
 export function transform(data = []){
-            let _data = [];
-            _data = data;
-            var newData = new Array();
-            for(var i = 0; i < _data.length - 1; i++){
-                //当前元素 行列
-                let item = _data[i];
-                let colNo = item.location.charAt(item.location.length - 1); //1或者2
-                let rowNo = item.location.substring(0,item.location.indexOf('-')); //1或者2
-                //下个元素 行列
-                let nextItem = _data[i + 1];
-                let nextRowNo = nextItem.location.substring(0,nextItem.location.indexOf('-'));
-                let nextcolNo = nextItem.location.charAt(nextItem.location.length - 1);
+    let _data = data;
+    var newData = new Array();
+    for(var i = 0; i < _data.length - 1; i++){
+        //当前元素 行列
+        let item = _data[i];
+        // let colNo = item.location.charAt(item.location.length - 1); //1或者2
+        // let rowNo = item.location.substring(0,item.location.indexOf('-')); //1或者2
+        let rowNo = item.locationx;
+        let colNo = item.locationy;
+        //下个元素 行列
+        let nextItem = _data[i + 1];
+        let nextRowNo = nextItem.locationx;
+        let nextcolNo = nextItem.locationy;
+        // let nextRowNo = nextItem.location.substring(0,nextItem.location.indexOf('-'));
+        // let nextcolNo = nextItem.location.charAt(nextItem.location.length - 1);
 
-                // console.log("行号"+rowNo);
-                // console.log("下行号"+nextRowNo);
-                //当前元素在左
-                if(colNo == '1'){
-                    let newItem = item;
+        //当前元素在左
+        if(colNo == '1'){
+            let newItem = item;
+            //判断下个元素是否在本行
+            if(rowNo == nextRowNo){
+                //合并下个元素到本行
+                newItem._id = nextItem.id;
+                newItem._field_name = nextItem.field_name;
+                newItem._location = nextItem.location;
+                newItem._simple_value = nextItem.simple_value;
+                newItem._complex_value = nextItem.complex_value;
+                newItem._value1 = nextItem.value1;
+                newItem._value2 = nextItem.value2;
 
-                    //判断下个元素是否在本行
-                    if(rowNo == nextRowNo){
-                        //合并下个元素到本行
-                        newItem._id = nextItem.id;
-                        newItem._field_name = nextItem.field_name;
-                        newItem._location = nextItem.location;
-                        newItem._simple_value = nextItem.simple_value;
-                        newItem._complex_value = nextItem.complex_value;
-                        newItem._value1 = nextItem.value1;
-                        newItem._value2 = nextItem.value2;
-
-                        newData.push(newItem);
-                        i++;
-                    }else{
-                        //下个元素不在本行，填充空元素到本行
-                        newItem._id = '';
-                        newItem._field_name = '';
-                        newItem._location = '';
-                        newItem._simple_value = '';
-                        newItem._complex_value = '';
-                        newItem._value1 = '';
-                        newItem._value2 = '';
-                        
-                        newData.push(newItem);
-                        continue;
-                    }
-                }else {
-                //当前元素在右
-                    let newItem = {};
-                    newItem.id = '';
-                    newItem.field_name = '';
-                    newItem.location = '';
-                    newItem.simple_value = '';
-                    newItem.complex_value = '';
-                    newItem.value1 = '';
-                    newItem.value2 = '';
-
-                    newItem._id = item.id;
-                    newItem._field_name = item.field_name;
-                    newItem._location = item.location;
-                    newItem._simple_value = item.simple_value;
-                    newItem._complex_value = item.complex_value;
-                    newItem._value1 = item.value1;
-                    newItem._value2 = item.value2;
-
-                    newData.push(newItem);
-                }
+                newData.push(newItem);
+                i++;
+            }else{
+                //下个元素不在本行，填充空元素到本行
+                newItem._id = '';
+                newItem._field_name = '';
+                newItem._location = '';
+                newItem._simple_value = '';
+                newItem._complex_value = '';
+                newItem._value1 = '';
+                newItem._value2 = '';
+                
+                newData.push(newItem);
+                continue;
             }
+        }else {
+        //当前元素在右
+            let newItem = {};
+            newItem.id = '';
+            newItem.field_name = '';
+            newItem.location = '';
+            newItem.simple_value = '';
+            newItem.complex_value = '';
+            newItem.value1 = '';
+            newItem.value2 = '';
 
-            // console.log("转换结果："+JSON.stringify(newData));
+            newItem._id = item.id;
+            newItem._field_name = item.field_name;
+            newItem._location = item.location;
+            newItem._simple_value = item.simple_value;
+            newItem._complex_value = item.complex_value;
+            newItem._value1 = item.value1;
+            newItem._value2 = item.value2;
 
-            return newData;
+            newData.push(newItem);
+        }
+    }
+
+    // console.log("转换结果："+JSON.stringify(newData));
+
+    return newData;
+}
+
+
+export function deTransform(data = []){
+	let _data = data;
+    var newData = new Array();
+	for(var i = 0; i < _data.length; i++){
+		let item = _data[i];
+
+		if(item.id != ''){
+			let leftData = {
+				id: item.id,
+				field_name: item.field_name,
+				location: item.location,
+				simple_value: item.simple_value,
+				complex_value: item.complex_value,
+				value1: item.value1,
+				value2: item.value2,
+			};
+			newData.push(leftData);
+		}
+		if(item._id != ''){
+			let rightData = {
+				id: item._id,
+				field_name: item._field_name,
+				location: item._location,
+				simple_value: item._simple_value,
+				complex_value: item._complex_value,
+				value1: item._value1,
+				value2: item._value2,
+			};
+			newData.push(rightData);
+		}
+	}
+
+	return newData;
 }

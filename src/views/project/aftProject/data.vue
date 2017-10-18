@@ -12,9 +12,25 @@
         <div class="f_data" v-show="f_show">
             <el-table :data="operatingData" border style="width: 100%">
                 <el-table-column label="基准日" prop="baseDate" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="openDetails(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
+                            </el-date-picker>
+                        </span>
+                        <!-- <el-button v-if="!scope.row.editFlag" type="text" @click="operatingDelete=true">{{ scope.row.baseDate }}</el-button> -->
+                    </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
-                    <template scope="scope">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</template>
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-select v-model="scope.row.dataType" placeholder="请选择类型">
+                                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="填报人" prop="operatorName" align="center">
                 </el-table-column>
@@ -22,12 +38,64 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
-                        <el-button type="text" @click="operatingDelete=true">删除</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
+                        </el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
+                        </el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">添加数据</el-button>
+                        <!-- <el-button type="text" @click="operatingDelete=true">删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
 
+            <!-- 查看经营数据详情 对话框-->
+            <el-dialog title="查看经营数据详情" :visible.sync="detailsDialog" :close-on-click-modal="false">
+                <el-form :model="operatingForm1" label-position="left" :label-width="formLabelWidth">
+                    <el-row :gutter="10">
+                        <el-col :span="12">
+                            <el-form-item label="基准日" prop="baseDate">
+                                <el-input v-model="operatingForm1.baseDate" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="类型" prop="dataType">
+                                <el-input v-model="operatingForm1.dataType" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="填报人" prop="userName">
+                                <el-input  v-model="userName" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="填报日期" prop="currentDeta">
+                                <el-input  v-model="currentDeta"  disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="备注" prop="remark">
+                                <el-input type="textarea" :rows="3"  v-model="operatingForm1.remark" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <el-table :data="operatingData1" border style="width:100%">
+                    <el-table-column label="项目" prop="project" align="center">
+                    </el-table-column>
+                    <el-table-column label="经营目标" prop="operatingGoal" align="center">
+                    </el-table-column>
+                    <el-table-column label="截止基准日实际情况" prop="realSituation" align="center">
+                    </el-table-column>
+                    <el-table-column label="完成率" prop="completionRate" align="center">
+                    </el-table-column>
+                    <el-table-column label="下半年计划" prop="secondPlan" align="center">
+                    </el-table-column>
+                </el-table>
+            </el-dialog>
             <!-- 添加经营数据表头 对话框-->
             <el-dialog title="添加经营数据表头" :visible.sync="operatingModal1" :close-on-click-modal="false">
                 <el-form :model="operatingForm1" :rules="rules1" ref="operatingForm1" :label-width="formLabelWidth">
@@ -177,97 +245,68 @@
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <el-tab-pane label="资产负债表" name="first">
-<!--                         <div class="title_f">
-                            <div class="desc">
-                                <span>资产</span>
-                            </div>
-                            <div class="desc">
-                                <span>期末余额</span>
-                            </div>
-                            <div class="desc">
-                                <span>年初余额</span>
-                            </div>
-                            <div class="desc">
-                                <span>负债和所有者权益</span>
-                            </div>
-                            <div class="desc">
-                                <span>期末余额</span>
-                            </div>
-                            <div class="desc">
-                                <span>年初余额</span>
-                            </div>
-                        </div>
-                        <el-form :inline="true">
-                            <el-form-item style="width:48%;text-align:center;margin-right:15px" v-for="(item,index) in list" :key="item.index">
-                                <div style="display:flex;justify-content:space-between;padding:0 0 0 25px">
-                                    <span style="width:40%;">{{item.filed}}</span>
-                                    <el-input style="width:30%;margin-left:50px" v-model="item.user1" placeholder="审批人1"></el-input>
-                                    <el-input style="width:30%;margin-left:80px" v-model="item.user2" placeholder="审批人2"></el-input>
-                                </div>
-                            </el-form-item>
-                        </el-form> -->
                         <el-table :data="balanceSheet" border style="width: 100%" align="center">
-                                            <el-table-column label="资产" prop="field_name" align="center">
-                                            </el-table-column>
-                                            <el-table-column label="期末余额" prop="endingCBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.endingCBalance" placeholder="">{{ scope.row.endingCBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="年初余额" prop="beginningCBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.beginningCBalance" placeholder="">{{ scope.row.beginningCBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="负债和所有者权益" prop="_field_name" align="center">
-                                            </el-table-column>
-                                            <el-table-column label="期末余额" prop="endingDBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-if="scope.row._id != ''" v-model="scope.row.endingDBalance" placeholder="">{{ scope.row.endingDBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                            <el-table-column label="年初余额" prop="beginningDBalance" align="center">
-                                                <template scope="scope">
-                                                    <el-input v-if="scope.row._id != ''" v-model="scope.row.beginningDBalance" placeholder="">{{ scope.row.beginningDBalance }}</el-input>
-                                                </template>
-                                            </el-table-column>
-                                        </el-table>
+                            <el-table-column label="资产" prop="field_name" align="center">
+                            </el-table-column>
+                            <el-table-column label="期末余额" prop="simple_value" align="center">
+                                <template scope="scope">
+                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="年初余额" prop="complex_value" align="center">
+                                <template scope="scope">
+                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="负债和所有者权益" prop="_field_name" align="center">
+                            </el-table-column>
+                            <el-table-column label="期末余额" prop="_simple_value" align="center">
+                                <template scope="scope">
+                                    <el-input v-if="scope.row._id != ''" v-model="scope.row._simple_value" placeholder="">{{ scope.row._simple_value }}</el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="年初余额" prop="_complex_value" align="center">
+                                <template scope="scope">
+                                    <el-input v-if="scope.row._id != ''" v-model="scope.row._complex_value" placeholder="">{{ scope.row._complex_value }}</el-input>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="利润表" name="second">
                         <el-table :data="incomeStatement" border style="width: 100%" align="center">
-                            <el-table-column label="项目" prop="project" align="center">
+                            <el-table-column label="项目" prop="field_name" align="center">
                             </el-table-column>
-                            <el-table-column label="本月金额" prop="monthCounts" align="center">
+                            <el-table-column label="本月金额" prop="simple_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.monthCounts" placeholder="">{{ scope.row.monthCounts }}</el-input>
+                                    <el-input v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="本年累计金额" prop="yearCounts" align="center">
+                            <el-table-column label="本年累计金额" prop="complex_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.yearCounts" placeholder="">{{ scope.row.yearCounts }}</el-input>
+                                    <el-input v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                     <el-tab-pane label="现金流量表" name="third">
-                        <el-table :data="cashFlowStatements" border style="width: 100%" align="center">
-                            <el-table-column label="项目" prop="project" align="center">
+                        <el-table :data="cashFlowStatement" border style="width: 100%" align="center">
+                            <el-table-column label="项目" prop="field_name" align="center">
                             </el-table-column>
-                            <el-table-column label="本月金额" prop="monthCounts" align="center">
+                            <el-table-column label="本月金额" prop="simple_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.monthCounts" placeholder="">{{ scope.row.monthCounts }}</el-input>
+                                    <el-input v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="本年累计金额" prop="yearCounts" align="center">
+                            <el-table-column label="本年累计金额" prop="complex_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.yearCounts" placeholder="">{{ scope.row.yearCounts }}</el-input>
+                                    <el-input v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                 </el-tabs>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="financialModal2 = false">取 消</el-button>
+                    <el-button @click="cancelFinancial">取 消</el-button>
                     <el-button type="danger" @click="financialEdit">保 存</el-button>
                 </div>
             </el-dialog>
@@ -281,7 +320,8 @@
 import deleteReminders from 'components/deleteReminders'
 import 'common/js/filter'
 import { changeDate } from 'common/js/config'
-import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm, transform
+import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm,
+    transform, deTransform
 } from 'api/projectAfter';
 export default {
     props: {
@@ -302,6 +342,7 @@ export default {
             financialMessage: '是否确认删除该条财务数据？',
             operatingModal1: false,
             operatingModal2: false,
+            detailsDialog: false,
             financialModal1: false,
             financialModal2: false,
             formLabelWidth: '100px',
@@ -315,12 +356,14 @@ export default {
                     dataType: '半年报',
                     operatorName: '张三',
                     currentDeta: '2017-10-11',
+                    editFlag: false
                 },
                 {
                     baseDate: '2017-9-1',
                     dataType: '月报',
                     operatorName: '李四',
                     currentDeta: '2017-10-12',
+                    editFlag: false
                 }
             ],
             // 经营数据-添加 表单
@@ -440,126 +483,14 @@ export default {
                 ]
             },
             // 财务数据-添加数据  资产负债表
-            balanceSheet: [
-                // {
-                //     capital: '流动资产：',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '流动负债：',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // },
-                // {
-                //     capital: '货币资金',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '短期借款',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // },
-                // {
-                //     capital: '短期投资',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '应付票据',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // }, {
-                //     capital: '应收票据',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: ' 应付账款',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // },
-                // {
-                //     capital: '应收账款',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '预收账款',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // },
-                // {
-                //     capital: '预付账款',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '应付职工薪酬',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // }
-                // ,
-                // {
-                //     capital: '应收股利',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: ' 应交税费',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // }, {
-                //     capital: '应收利息',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '应付利息',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // },
-                // {
-                //     capital: '其他应收款',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '应付利润',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // },
-                // {
-                //     capital: '存货',
-                //     endingCBalance: '',
-                //     beginningCBalance: '',
-                //     debt: '其他应付款',
-                //     endingDBalance: '',
-                //     beginningDBalance: ''
-                // }
-            ],
+            balanceSheet: [],
+            balanceInfo:{},
             // 财务数据-添加数据  利润表
-            incomeStatement: [
-                {
-                    project: '一、营业收入',
-                    monthCounts: '',
-                    yearCounts: ''
-                }
-            ],
+            incomeStatement: [],
+            incomeInfo: {},
             // 财务数据-添加数据  现金流量表
-            cashFlowStatements: [
-                {
-                    project: '一、经营活动产生的现金流量：',
-                    monthCounts: '',
-                    yearCounts: ''
-                }
-            ],
-            list: [
-                {
-                    filed: '营业收入1',
-                    users1: '',
-                    users2: ''
-                }, {
-                    filed: '营业收入2',
-                    users1: '',
-                    users2: ''
-                }, {
-                    filed: '营业收入2',
-                    users1: '',
-                    users2: ''
-                }, {
-                    filed: '营业收入2',
-                    users1: '',
-                    users2: ''
-                }, {
-                    filed: '营业收入2',
-                    users1: '',
-                    users2: ''
-                },
-            ]
+            cashFlowStatement: [],
+            cashFlowInfo: {}
         }
     },
     created() {
@@ -577,65 +508,6 @@ export default {
             //获取财务数据主体
             this.getFinancialSubject();
         },
-        // transform(){
-        //     let _operations = [
-        //         {
-        //             id: '05fbc5fd646f4e24b33c1c898b65fe41',
-        //             field_name: '支付其他与经营活动有关的现金',
-        //             location: '1-1',
-        //             simple_value: '',
-        //             complex_value: '',
-        //             value1: '',
-        //             value2: ''
-        //         },
-        //         {
-        //             id: '232f675e07e34b568957e5779556f05c',
-        //             field_name: '偿还借款利息支付的现金',
-        //             location: '1-2',
-        //             simple_value: '',
-        //             complex_value: '',
-        //             value1: '',
-        //             value2: ''
-        //         },
-        //         {
-        //             id: '3f608bfab7824be882cbd5bba567f7a7',
-        //             field_name: '偿还借款本金支付的现金',
-        //             location: '2-1',
-        //             simple_value: '',
-        //             complex_value: '',
-        //             value1: '',
-        //             value2: ''
-        //         },
-        //         {
-        //             id: '48419576a58741a4a594a81e124534f9',
-        //             field_name: '销售产成品、商品、提供劳务收到的现金',
-        //             location: '3-1',
-        //             simple_value: '',
-        //             complex_value: '',
-        //             value1: '',
-        //             value2: ''
-        //         },
-        //         {
-        //             id: '6a47e0408f064a6f843c7c9d30905b2c',
-        //             field_name: '支付的税费',
-        //             location: '4-1',
-        //             simple_value: '',
-        //             complex_value: '',
-        //             value1: '',
-        //             value2: ''
-        //         },
-        //         {
-        //             id: '788976896af748ba9ddbf04bf2b198eb',
-        //             field_name: '五、期末现金余额',
-        //             location: '4-2',
-        //             simple_value: '',
-        //             complex_value: '',
-        //             value1: '',
-        //             value2: ''
-        //         }
-        //     ];
-        //     transform(_operations);
-        // },
         //获取经营数据主体
         getOperateSubject() {
             getDataSubjectList(this.projectId, 0).then(resp => {
@@ -649,6 +521,14 @@ export default {
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
             })
+        },
+        // 查看经营数据详情
+        openDetails(index) {
+            this.detailsDialog = true;
+        },
+        // 编辑经营数据
+        EditOperating(row) {
+            row.editFlag = !row.editFlag;
         },
         //获取财务数据主体
         getFinancialSubject() {
@@ -666,7 +546,6 @@ export default {
         },
         //打开添加数据明细表单
         goAddData(subjectId, dataType) {
-
             getDataFormBody(subjectId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
@@ -678,17 +557,20 @@ export default {
                         if(_dataType == 1){
                             //填充经营数据表单
                             this.fillOperateSheet(formBody[idx].operations);
+                            this.operateInfo = formBody[idx].dataInfo;
                         }else if(_dataType == 2){
                             //填充资产负债表单
-                            //
-                            // console.log("打开数据明细表单 结果："+JSON.stringify(formBody[idx].operations));
+                            // console.log("资产负债表："+JSON.stringify(formBody[idx].operations));
                             this.balanceSheet = transform(formBody[idx].operations);
+                            this.balanceInfo = formBody[idx].dataInfo;
                         }else if(_dataType == 3){
                             //填充现金流量表单
-                            this.fillCashFlowStatements(formBody[idx].operations);
+                            this.cashFlowStatement = formBody[idx].operations;
+                            this.cashFlowInfo = formBody[idx].dataInfo;
                         }else if(_dataType == 4){
                             //填充利润表单
-                            this.fillIncomeStatement(formBody[idx].operations);
+                            this.incomeStatement = formBody[idx].operations;
+                            this.incomeInfo = formBody[idx].dataInfo;
                         }
                     }
 
@@ -711,22 +593,55 @@ export default {
             }
 
         },
-        //填充经营数据表单
-        fillOperateSheet() {
-            // 
+        // 经营数据-添加数据 保存按钮的方法
+        operatingEdit() {
+            this.operatingModal2 = false;
         },
-        //填充资产负债表单
-        fillBalanceSheet() {
-            
+        // 财务数据-保存数据 的方法
+        financialEdit() {
+
+            let balanceSheet = deTransform(this.balanceSheet);
+
+            let balanceData = {
+                dataInfo: this.balanceInfo,
+                operations: balanceSheet
+            };
+            let incomeData = {
+                dataInfo: this.incomeInfo,
+                operations: this.incomeStatement
+            };
+            let cashFlowData = {
+                dataInfo: this.cashFlowInfo,
+                operations: this.cashFlowStatement
+            };
+            let dataInfos = [balanceData, incomeData, cashFlowData];
+            let params = {
+                dataInfos: dataInfos
+            };
+            console.log("财务数据-保存数据 参数："+JSON.stringify(params));
+            fillDataForm(params).then(resp => {
+                console.log("财务数据-保存数据 结果："+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.financialModal2 = false;
+                    this.clearData();
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            });
         },
-        //填充现金流量表单
-        fillCashFlowStatements(formBody) {
-            // 
-            this.cashFlowStatements = formBody;
+        cancelFinancial(){
+            this.financialModal2 = false;
+            this.clearData();
         },
-        //填充利润表单
-        fillIncomeStatement() {
-            // 
+        clearData(){
+            this.balanceInfo = {};
+            this.balanceSheet = [];
+            this.incomeInfo = {};
+            this.incomeStatement = [];
+            this.cashFlowInfo = {};
+            this.cashFlowStatement = [];
         },
         // 切换 经营/财务 的显示隐藏
         changeData1() {
@@ -784,35 +699,6 @@ export default {
                 }
             });
         },
-        // 经营数据-添加数据 保存按钮的方法
-        operatingEdit() {
-            this.operatingModal2 = false;
-            // console.log(this.operatingData1);
-        },
-        // 财务数据-添加数据 的方法
-        financialEdit() {
-            this.financialModal2 = false;
-        },
-
-        // 添加资产负债表数据 的方法
-        balanceAdd() {
-            this.balanceSheet.push(this.balanceForm);
-            this.balanceForm = {};
-            this.balanceModal = false;
-        },
-        // 添加利润表数据 的方法
-        incomeAdd() {
-            this.incomeStatement.push(this.incomeForm);
-            this.incomeForm = {};
-            this.incomeModal = false;
-        },
-        // 添加现金流量表数据 的方法
-        cashFlowAdd() {
-            this.cashFlowStatements.push(this.cashFlowForm);
-            this.cashFlowForm = {};
-            this.cashFlowModal = false;
-        },
-
         checkEdit(index, row) { //编辑
             row.editFlag = !row.editFlag;
         },
@@ -879,13 +765,13 @@ export default {
         height: 42px;
         display: flex;
         align-items: center;
-        background:#eef1f6;
+        background: #eef1f6;
         border: 1px solid #dfe6ec;
         .desc {
             flex: 1;
             text-align: center;
             span {
-                color:#1f2d3d;
+                color: #1f2d3d;
                 font-weight: 700;
             }
         }
