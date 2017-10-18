@@ -13,7 +13,7 @@
             <el-table :data="operatingData" border style="width: 100%">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="openDetails(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
+                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="openDetails1(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
                             </el-date-picker>
@@ -176,6 +176,9 @@
         <div class="s_data" v-show="s_show">
             <el-table :data="financialData" border style="width: 100%" align="center">
                 <el-table-column label="基准日" prop="baseDate" align="center">
+                    <template scope="scope">
+                         <span style="color:#f05e5e;cursor:pointer" @click="openDetails2(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
                     <template scope="scope">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</template>
@@ -234,8 +237,8 @@
                 </div>
             </el-dialog>
             <!--  添加财务数据明细 对话框-->
-            <el-dialog title="添加财务数据明细" :visible.sync="financialModal2" :close-on-click-modal="false">
-                <div class="importModal">
+            <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
+                <div class="importModal" v-show="!readControl">
                     <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
                         <el-button type="text">导入</el-button>
                     </el-upload>
@@ -250,24 +253,24 @@
                             </el-table-column>
                             <el-table-column label="期末余额" prop="simple_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
+                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.simple_value" placeholder="" :disabled="readControl">{{ scope.row.simple_value }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="年初余额" prop="complex_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
+                                    <el-input v-if="scope.row.id != ''" v-model="scope.row.complex_value" placeholder=""  :disabled="readControl">{{ scope.row.complex_value }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="负债和所有者权益" prop="_field_name" align="center">
                             </el-table-column>
                             <el-table-column label="期末余额" prop="_simple_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-if="scope.row._id != ''" v-model="scope.row._simple_value" placeholder="">{{ scope.row._simple_value }}</el-input>
+                                    <el-input v-if="scope.row._id != ''" v-model="scope.row._simple_value" placeholder=""  :disabled="readControl">{{ scope.row._simple_value }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="年初余额" prop="_complex_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-if="scope.row._id != ''" v-model="scope.row._complex_value" placeholder="">{{ scope.row._complex_value }}</el-input>
+                                    <el-input v-if="scope.row._id != ''" v-model="scope.row._complex_value" placeholder=""  :disabled="readControl">{{ scope.row._complex_value }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -278,12 +281,12 @@
                             </el-table-column>
                             <el-table-column label="本月金额" prop="simple_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
+                                    <el-input v-model="scope.row.simple_value" placeholder=""  :disabled="readControl">{{ scope.row.simple_value }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="本年累计金额" prop="complex_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
+                                    <el-input v-model="scope.row.complex_value" placeholder=""  :disabled="readControl">{{ scope.row.complex_value }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -294,20 +297,20 @@
                             </el-table-column>
                             <el-table-column label="本月金额" prop="simple_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
+                                    <el-input v-model="scope.row.simple_value" placeholder="" :disabled="readControl">{{ scope.row.simple_value }}</el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column label="本年累计金额" prop="complex_value" align="center">
                                 <template scope="scope">
-                                    <el-input v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
+                                    <el-input v-model="scope.row.complex_value" placeholder=""  :disabled="readControl">{{ scope.row.complex_value }}</el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
                     </el-tab-pane>
                 </el-tabs>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="cancelFinancial">取 消</el-button>
-                    <el-button type="danger" @click="financialEdit">保 存</el-button>
+                    <el-button @click="cancelFinancial" v-show="!readControl">取 消</el-button>
+                    <el-button type="danger" @click="financialEdit" v-show="!readControl">保 存</el-button>
                 </div>
             </el-dialog>
             <delete-reminders :deleteReminders="financialDelete" :message="financialMessage" :modal_loading="modal_loading" @del="financialDelete=false" @cancel="financialDelete=false">
@@ -343,8 +346,10 @@ export default {
             operatingModal1: false,
             operatingModal2: false,
             detailsDialog: false,
+            finacial_title: '添加财务数据明细',
             financialModal1: false,
             financialModal2: false,
+            readControl: false,
             formLabelWidth: '100px',
             file: null,
             loadingStatus: false,
@@ -523,7 +528,7 @@ export default {
             })
         },
         // 查看经营数据详情
-        openDetails(index) {
+        openDetails1(index) {
             this.detailsDialog = true;
         },
         // 编辑经营数据
@@ -546,6 +551,8 @@ export default {
         },
         //打开添加数据明细表单
         goAddData(subjectId, dataType) {
+            this.readControl = false;
+            this.finacial_title = '添加财务数据明细';
             getDataFormBody(subjectId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
@@ -596,6 +603,12 @@ export default {
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
             this.operatingModal2 = false;
+        },
+        // 查看财务数据详情
+        openDetails2(row,index) {
+            this.financialModal2 = true;
+            this.finacial_title = '查看财务数据详情';
+            this.readControl = true;
         },
         // 财务数据-保存数据 的方法
         financialEdit() {
