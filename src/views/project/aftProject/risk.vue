@@ -190,13 +190,14 @@
                 <el-table-column label="基准日" prop="baseDay" align="center">
                 </el-table-column>
                 <el-table-column label="状态" prop="warningStatus" align="center">
+                    <template scope="scope">{{scope.row.warningStatus | key2value(resultOptions, scope.row.warningStatus)}}</template>
                 </el-table-column>
                 <el-table-column label="预警" prop="alarm" align="center">
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" @click="modalAlarmView=true">查看详情</el-button>
-                        <el-button type="text" @click="modalAlarm=true">立即处理</el-button>
+                        <el-button type="text" @click="getWarningDetail(scope.row.id, '2')">查看详情</el-button>
+                        <el-button type="text" @click="getWarningDetail(scope.row.id, '1')">立即处理</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -283,7 +284,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAlarm = false">取 消</el-button>
-                    <el-button type="danger" @click="confirmAlarm">保 存</el-button>
+                    <el-button type="danger" @click="confirmAlarm()">保 存</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -312,13 +313,6 @@ export default {
         proUsers: {
             type: Array,
             default: []
-        }
-    },
-    watch: {
-        'tabs':function (to,from){
-            if(to.tabList[5]){
-                this.init();
-            }
         }
     },
     data() {
@@ -483,12 +477,21 @@ export default {
                 ] 
             },
             alarmData: [{
-                dataSourceType:1
+                dataSourceType:1,
+                projectManagerId: 1,
+                warningStatus: '2',
+                baseDay: '2017-10-15'
             }],
         }
     },
     created() {
-        // this.init();
+    },
+    watch: {
+        'tabs':function (to,from){
+            if(to.tabList[5]){
+                this.init();
+            }
+        }
     },
     methods: {
         init() {
@@ -510,10 +513,16 @@ export default {
             })
         },
         //查看预警详情
-        getWarningDetail(id){
+        getWarningDetail(id, optType){
             getWarningDetail(id).then(resp => {
                 if(resp.data.status == '200'){
                     this.alarmData = resp.data.result.list;
+
+                    if(optType == '1'){
+                        this.modalAlarm = true;
+                    }else{
+                        this.modalAlarmView = true;
+                    }
                 }else {
                     this.$message.error(resp.data.message);
                 }
@@ -526,18 +535,23 @@ export default {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
-                this.tableData = [];
-                this.recordList = [];
-                this.tableData.push(resp.data.result);
-                this.recordList = resp.data.result.record;
-                this.recordList.push();
-                if(optType == '1'){
-                    //跟踪风险
-                    this.modalTracking=true;
-                }
-                else{
-                    //查看风险
-                    this.modalRiskView=true;
+                if(resp.data.status == '200'){
+
+                    this.tableData = [];
+                    this.recordList = [];
+                    this.tableData.push(resp.data.result);
+                    this.recordList = resp.data.result.record;
+                    this.recordList.push();
+                    if(optType == '1'){
+                        //跟踪风险
+                        this.modalTracking=true;
+                    }
+                    else{
+                        //查看风险
+                        this.modalRiskView=true;
+                    }
+                }else {
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('查看风险详情 error: ', e);

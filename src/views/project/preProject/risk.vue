@@ -312,18 +312,23 @@ export default {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
-                this.tableData = [];
-                this.recordList = [];
-                this.tableData.push(resp.data.result);
-                this.recordList = resp.data.result.record;
-                this.recordList.push();
-                if (optType == '1') {
-                    //跟踪风险
-                    this.modalTracking = true;
-                }
-                else {
-                    //查看风险
-                    this.modalRiskView = true;
+                if(resp.data.status == '200'){
+                    
+                    this.tableData = [];
+                    this.recordList = [];
+                    this.tableData.push(resp.data.result);
+                    this.recordList = resp.data.result.record;
+                    this.recordList.push();
+                    if(optType == '1'){
+                        //跟踪风险
+                        this.modalTracking=true;
+                    }
+                    else{
+                        //查看风险
+                        this.modalRiskView=true;
+                    }
+                }else {
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('dangers exists error: ', e);
