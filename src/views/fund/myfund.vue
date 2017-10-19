@@ -293,9 +293,6 @@ export default {
         this.$store.dispatch('getFundStage').then(() => {
             this.allFundStage.details = this.fundStage
         })
-        // this.$store.dispatch('getFundStatus').then(() => {
-        //     this.allFundStatus.details = this.fundStatus
-        // })
         getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
             if (res.status == '200') {
                 this.pageTotal = res.data.result.total
