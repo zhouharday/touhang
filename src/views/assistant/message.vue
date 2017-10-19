@@ -12,7 +12,7 @@
                     <el-col :span="18">
                         <div class="messageIntro">
                             <div class="introText">
-                                <p>{{company.name}} &nbsp;&nbsp;&nbsp;({{productInfo.brief}})</p>
+                                <p>项目名称 : {{company.name}} &nbsp;&nbsp;&nbsp;({{productInfo.brief}})</p>
                                 <div>
                                     <p>行业：
                                         <span>{{company.industryName}}</span>
@@ -461,15 +461,13 @@ export default {
         },
         messageList(id) { //获取项目详情
             this.$http.post(this.api + '/productClieController/selectMessage', {
-                // id: id
-                id: '10'
+                id: id
+                // id: '10'
             })
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
                             console.log(res.data.result);
-                            this.productInfo = res.data.result.productInfo;
-                            this.basicInfo = res.data.result.basicInfo;
                             this.company = res.data.result.company;
                             this.company.name = res.data.result.company.name;
                             this.finance = res.data.result.finance;
@@ -477,8 +475,30 @@ export default {
                             this.product = res.data.result.product;
                             this.story = res.data.result.story;
 
+
+                            if(res.data.result.productInfo != null){
+                                this.productInfo = res.data.result.productInfo;
+                            };
+                            if(res.data.result.basicInfo != null){
+                                this.basicInfo = res.data.result.basicInfo;
+                            };
+                            if (res.data.result.company.name != null){
+                                this.company.name = res.data.result.company.name;
+                            };
+                            if (res.data.result.company != null){
+                                this.company = res.data.result.company;
+                            };
+                            if (res.data.result.finance != null){
+                                this.finance = res.data.result.finance;
+                            };
+                            if (res.data.result.product != null){
+                                this.product = res.data.result.product;
+                            };
+                            if (res.data.result.story != null){
+                                this.story = res.data.result.story;
+                            };
                             this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
+                        } else {
                             this.$Message.error(res.data.message);
                         }
                     }
