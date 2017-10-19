@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="login-box">
-                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval">
+                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval" @keyup.enter.native="submitForm">
                 </component>
                 <div class="login_btn">
                     <Button type="button" :loading="loading" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</Button>
