@@ -47,9 +47,9 @@ export default {
         this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
-        }
+        // '$route'(to, from) {
+        //     this.init();
+        // }
     },
     methods: {
         init() {

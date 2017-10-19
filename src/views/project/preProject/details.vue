@@ -282,10 +282,10 @@ export default {
         this.projectId = this.proId;
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
-            this.projectId = this.proId;
-        }
+        // '$route'(to, from) {
+        //     this.init();
+        //     this.projectId = this.proId;
+        // }
     },
     methods: {
         disable(name) {
