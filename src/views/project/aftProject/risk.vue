@@ -301,6 +301,10 @@ import {
 import { getWarningList, getWarningDetail } from 'api/projectAfter';
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
@@ -311,8 +315,10 @@ export default {
         }
     },
     watch: {
-        proUsers(val, oldVal) {
-            this.initInfo();
+        'tabs':function (to,from){
+            if(to.tabList[5]){
+                this.init();
+            }
         }
     },
     data() {
@@ -482,12 +488,7 @@ export default {
         }
     },
     created() {
-        this.init();
-    },
-    watch: {
-        // '$route'(to, from) {
-        //     this.init();
-        // }
+        // this.init();
     },
     methods: {
         init() {

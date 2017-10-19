@@ -92,16 +92,15 @@ export default {
         projectTurnType:'getProjectTurnType',
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectData: {
             type: Object,
             default: {}
         },
         projectTurnType:[]
-    },
-    watch: {
-        projectData(val, oldVal) {
-            this.init();
-        }
     },
     data() {
         return {
@@ -153,6 +152,16 @@ export default {
     created() {
         this.$store.dispatch('getProjectTurnType')
     },
+    watch: {
+        'tabs':function (to,from){
+            if(to.tabList[1]){
+                this.init();
+            }
+        },
+        projectData(val, oldVal) {
+            this.init();
+        }
+    },
     methods: {
         init() {
             this.initInfo();
@@ -163,10 +172,6 @@ export default {
             let info = JSON.parse(sessionStorage.getItem('userInfor') || '{}');
             // console.log('info: ', info);
             this.merchantId = merchants[0].id;
-            this.addProjectUserId = info.id;
-
-            this.enterpriseInfo = this.projectData.enterpriseInfo || {};
-            // console.log('projectData: ', this.projectData);
         },
         getData() {
             getFinances(this.projectData.projectInfo.id)

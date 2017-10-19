@@ -153,8 +153,10 @@ export default {
     },
     watch: {
         '$route'(to, from) {
-            if(to.name == 'preProject')
-            this.init();
+            if(to.name == 'preProject'){
+                this.init();
+                console.log("投资列表页");
+            }
         }
     },
     methods: {

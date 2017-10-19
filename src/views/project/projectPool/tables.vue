@@ -148,12 +148,21 @@ export default {
         projectData: 'getProjectData'    // 获取项目详情数据
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectData: {
             type: Object,
             default: {}
         }
     },
     watch: {
+        'tabs':function (to,from){
+            if(to.tabList[0]){
+                this.init();
+            }
+        },
         projectData(val, oldVal) {
             this.init();
         }

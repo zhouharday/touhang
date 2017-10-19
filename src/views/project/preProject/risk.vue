@@ -180,6 +180,10 @@ import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRi
 
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         proId: {
             type: String,
             default: ''
@@ -187,14 +191,6 @@ export default {
         proUsers: {
             type: Array,
             default: []
-        }
-    },
-    watch: {
-        proUsers(val, oldVal) {
-            this.initInfo();
-        },
-        '$route'(to, from) {
-            this.init();
         }
     },
     data() {
@@ -282,7 +278,16 @@ export default {
         }
     },
     created() {
-        this.init();
+    },
+    watch:{
+        proUsers(val, oldVal) {
+            this.initInfo();
+        },
+        'tabs':function (to,from){
+            if(to.tabList[5]){
+                this.init();
+            }
+        }
     },
     methods: {
         init() {

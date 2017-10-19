@@ -100,6 +100,19 @@ export default {
             },
         }
     },
+    props: {
+        tabs: {
+            type: Object,
+            default: {}
+        }
+    },
+    watch: {
+        'tabs':function (to,from){
+            if(to.tabList[3]){
+                // this.init();
+            }
+        }
+    },
     methods: {
         fileDialog() {
             this.modalAdd = true

@@ -152,9 +152,8 @@ export default {
         }
     },
     created() {
-        this.initInfo();
-        this.getDatas();
         this.$store.dispatch('getIndustryOptionsII');
+        this.init();
     },
     mounted() {
     },
@@ -162,6 +161,7 @@ export default {
     },
     watch: {
         '$route'(to, from) {
+            console.log(to.name);
             if(to.name == 'projectPool')
             this.init();
         }
