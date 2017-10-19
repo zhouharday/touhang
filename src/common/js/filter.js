@@ -26,7 +26,10 @@ Vue.filter('toMoney', (num) => {
 //options: [{key: '',value:'',...},
 //			{key: '',value:'',...},...]
 Vue.filter('key2value', (value, options = []) => {
-    let res = '未知'
+    let res = '未知';
+    if (value == null){
+        return res;
+    }
     options.forEach((item = {}) => {
         if (item.key == value) {
             res = item.value;

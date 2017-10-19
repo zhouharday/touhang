@@ -46,23 +46,23 @@
                                 </el-input>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="12">
+                        <el-col :span="12">
                             <el-form-item label="提出人" prop="userName">
                                 <el-input v-model="userName" placeholder="当前用户" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出时间" prop="createDate">
-                                <el-input v-model="addForm.createDate" style="width: 100%;" disabled>
+                                <el-input v-model="addForm.createDate" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接收人" prop="receivedUserId">
-                                <el-select v-model="addForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
-                                    <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
-                                    </el-option>    
-                                </el-select>
+                                    <el-select v-model="addForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
+                                        <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
+                                        </el-option>
+                                    </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -151,10 +151,7 @@
                 <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                            <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -173,7 +170,7 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button  @click="modalTracking= false">取 消</el-button>
+                    <el-button @click="modalTracking= false">取 消</el-button>
                     <el-button type="danger" @click="confirmTracking()">保 存</el-button>
                 </div>
             </el-dialog>
@@ -204,20 +201,40 @@
 
             <!-- 查看风险预警详情 对话框-->
             <el-dialog title="查看风险预警详情" :visible.sync="modalAlarmView" :close-on-click-modal="false">
+                <el-form :model="Form1" label-position="left" :label-width="formLabelWidth">
+                    <el-row :gutter="15">
+                        <el-col :span="12">
+                            <el-form-item label="数据来源" prop="dataSourceType">
+                                <el-select v-model="Form1.dataSourceType" style="width: 100%" disabled>
+                                    <el-option v-for="item in dataSourcesOptions" :key="item.key" :label="item.value" :value="item.key">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="类型" prop="projectManagerId">
+                                <el-select v-model="Form1.projectManagerId" style="width: 100%" disabled>
+                                    <el-option v-for="item in sortOptions" :key="item.key" :label="item.value" :value="item.key">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="基准日" prop="baseDay">
+                                <el-input v-model="Form1.baseDay" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
                 <el-table :data="alarmDetail" border style="width: 100%">
-                    <el-table-column prop="dataSources" label="数据来源" width="147px" align="center">
+                    <el-table-column prop="indexName" label="指标名称" align="center">
                     </el-table-column>
-                    <el-table-column prop="dataSort" label="类型" align="center">
+                    <el-table-column prop="riskRule" label="预警规则" align="center">
+                        <template scope="scope">{{scope.row.riskRule | key2value(ruleOptions, scope.row.riskRule)}}</template>
                     </el-table-column>
-                    <el-table-column prop="date" label="基准日" align="center">
+                    <el-table-column prop="thresholdValue" label="阈值" align="center">
                     </el-table-column>
-                    <el-table-column prop="targetName" label="指标名称" align="center">
-                    </el-table-column>
-                    <el-table-column prop="alarmRule" label="预警规则" align="center">
-                    </el-table-column>
-                    <el-table-column prop="threshold" label="阈值" align="center">
-                    </el-table-column>
-                    <el-table-column prop="realValue" label="实际值" align="center">
+                    <el-table-column prop="actualValue" label="实际值" align="center">
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -226,28 +243,52 @@
                     </div>
                     <div class="right">
                         <p v-for="(item,index) in  alarmRecords" :key="item.index">
-                            <span>{{item.record}}</span>
-                            <span>{{item.file}}</span>
+                            <!-- <span>{{item.disposeDate | formatDate}}</span> -->
+                            <span>{{item.disposeResult == 1 ? '处理中' : '已完成'}}</span>
+                            <span>{{item.disposeDescribe}}</span>
+                            <span v-for="doc in item.documentInfo">{{doc.fileNmae}}  </span>
                         </p>
                     </div>
                 </div>
             </el-dialog>
-            <!-- 风险处理 对话框-->
+            <!-- 风险预警处理 对话框-->
+
             <el-dialog title="风险预警处理" :visible.sync="modalAlarm" :close-on-click-modal="false">
+                <el-form :model="Form1" label-position="left" :label-width="formLabelWidth">
+                    <el-row :gutter="15">
+                        <el-col :span="12">
+                            <el-form-item label="数据来源" prop="dataSourceType">
+                                <el-select v-model="Form1.dataSourceType" style="width: 100%" disabled>
+                                    <el-option v-for="item in dataSourcesOptions" :key="item.key" :label="item.value" :value="item.key">
+                                    </el-option>
+                                </el-select>
+                            </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="类型" prop="projectManagerId">
+                                <el-select v-model="Form1.projectManagerId" style="width: 100%" disabled>
+                                    <el-option v-for="item in sortOptions" :key="item.key" :label="item.value" :value="item.key">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="基准日" prop="baseDay">
+                                <el-input v-model="Form1.baseDay" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
                 <el-table :data="alarmDetail" border style="width: 100%">
-                    <el-table-column prop="dataSources" label="数据来源" width="147px" align="center">
+                    <el-table-column prop="indexName" label="指标名称" align="center">
                     </el-table-column>
-                    <el-table-column prop="dataSort" label="类型" align="center">
+                    <el-table-column prop="riskRule" label="预警规则" align="center">
+                        <template scope="scope">{{scope.row.riskRule | key2value(ruleOptions, scope.row.riskRule)}}</template>
                     </el-table-column>
-                    <el-table-column prop="date" label="基准日" align="center">
+                    <el-table-column prop="thresholdValue" label="阈值" align="center">
                     </el-table-column>
-                    <el-table-column prop="targetName" label="指标名称" align="center">
-                    </el-table-column>
-                    <el-table-column prop="alarmRule" label="预警规则" align="center">
-                    </el-table-column>
-                    <el-table-column prop="threshold" label="阈值" align="center">
-                    </el-table-column>
-                    <el-table-column prop="realValue" label="实际值" align="center">
+                    <el-table-column prop="actualValue" label="实际值" align="center">
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -256,20 +297,22 @@
                     </div>
                     <div class="right">
                         <p v-for="(item,index) in  alarmRecords" :key="item.index">
-                            <span>{{item.record}}</span>
-                            <span>{{item.file}}</span>
+                            <!-- <span>{{item.disposeDate | formatDate}}</span> -->
+                            <span>{{item.disposeResult == 1 ? '处理中' : '已完成'}}</span>
+                            <span>{{item.disposeDescribe}}</span>
+                            <span v-for="doc in item.documentInfo">{{doc.fileNmae}}  </span>
                         </p>
                     </div>
                 </div>
                 <el-form :model="alarmForm" :rules="rules3" ref="alarmForm" style="margin-top:20px;background:#eef1f6;padding:10px;" :label-width="formLabelWidth">
                     <el-form-item label="处理结果" prop="disposeResult">
                         <el-select v-model="alarmForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="汇报内容" prop="recordDetails">
-                        <el-input type="textarea" :rows="2" v-model="alarmForm.recordDetails" auto-complete="off">
+                    <el-form-item label="汇报内容" prop="disposeDescribe">
+                        <el-input type="textarea" :rows="2" v-model="alarmForm.disposeDescribe" auto-complete="off">
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案">
@@ -299,7 +342,7 @@ import { changeDate } from 'common/js/config'
 import {
     dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister
 } from 'api/projectPre'
-import { getWarningList, getWarningDetail } from 'api/projectAfter';
+import { getWarningList, getWarningDetail, insertwarnRecords } from 'api/projectAfter';
 export default {
     props: {
         tabs: {
@@ -313,6 +356,13 @@ export default {
         proUsers: {
             type: Array,
             default: []
+        }
+    },
+    watch: {
+        'tabs': function(to, from) {
+            if (to.tabList[5]) {
+                this.init();
+            }
         }
     },
     data() {
@@ -333,10 +383,10 @@ export default {
                 receivedUserId: '',
                 completeDate: ''
             },
-            userName : JSON.parse(sessionStorage.getItem('userInfor')).name,
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             createDate: changeDate(new Date()),
             rules1: {
-               riskTheme: [
+                riskTheme: [
                     { required: true, message: '请输入风险主题', trigger: 'change' }
                 ],
                 riskDescribe: [
@@ -398,28 +448,39 @@ export default {
             ],
             sortOptions: [
                 { //数据类型列表
-                    key: 1,
+                    key: '1',
                     value: '年报'
                 }, {
-                    key: 2,
+                    key: '2',
                     value: '半年报'
                 }, {
-                    key: 3,
+                    key: '3',
                     value: '季报'
                 }, {
-                    key: 4,
+                    key: '4',
                     value: '月报'
+                }
+            ],
+            //预警规则列表
+            ruleOptions: [
+                {
+                    key: 1,
+                    value: '小于'
+                },
+                {
+                    key: 2,
+                    value: '大于'
                 }
             ],
             //处理结果列表
             resultOptions: [
                 {
-                    value: '1',
-                    label: '处理中'
+                    key: '1',
+                    value: '处理中'
                 },
                 {
-                    value: '2',
-                    label: '已完成'
+                    key: '2',
+                    value: '已完成'
                 }
             ],
             riskData: [
@@ -442,15 +503,18 @@ export default {
             // 风险预警 立即处理table
             alarmDetail: [
                 {
-                    dataSources: '',
-                    dataSort: '',
-                    date: '',
                     targetName: '',
                     alarmRule: '',
                     threshold: '',
                     realValue: ''
                 }
             ],
+            // 风险预警查看表单
+            Form1: {
+                dataSources: '',
+                dataSort: '',
+                date: ''
+            },
             // 风险预警 处理记录
             alarmRecords: [
                 {
@@ -464,8 +528,8 @@ export default {
             ],
             // 风险预警 立即处理表单
             alarmForm: {
-                result: '',
-                content: '',
+                disposeResult: '',
+                disposeDescribe: '',
                 appendix: ''
             },
             rules3: {
@@ -474,14 +538,16 @@ export default {
                 ],
                 recordDetails: [
                     { required: true, message: '请输入汇报内容', trigger: 'change' }
-                ] 
+                ]
             },
-            alarmData: [{
-                dataSourceType:1,
-                projectManagerId: 1,
-                warningStatus: '2',
-                baseDay: '2017-10-15'
-            }],
+            alarmData: [
+                {
+                    dataSourceType:1,
+                    projectManagerId: 1,
+                    warningStatus: '2',
+                    baseDay: '2017-10-15'
+                }
+            ],
         }
     },
     created() {
@@ -499,10 +565,11 @@ export default {
             this.getWarningList();
         },
         //查询预警列表
-        getWarningList(){
+        getWarningList() {
             getWarningList(this.projectId).then(resp => {
-                if(resp.data.status == '200'){
-                    // this.alarmData = resp.data.result.list;
+                // console.log("warningList:"+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.alarmData = resp.data.result;
                 } else if (resp.data.status == '49999') {
                     this.alarmData = [];
                 } else {
@@ -515,23 +582,56 @@ export default {
         //查看预警详情
         getWarningDetail(id, optType){
             getWarningDetail(id).then(resp => {
-                if(resp.data.status == '200'){
-                    this.alarmData = resp.data.result.list;
-
+                // console.log("warning:"+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    let result = resp.data.result;
+                    this.Form1 = result.warning;
+                    // this.Form1.dataSourceType = this.Form1.dataSourceType;
+                    // this.Form1.projectManagerId = this.Form1.projectManagerId;
+                    this.alarmDetail = result.warnDetails;
+                    this.alarmRecords = result.warnRecords;
                     if(optType == '1'){
                         this.modalAlarm = true;
+                        this.alarmForm = {
+                            disposeResult: '',
+                            disposeDescribe: '',
+                            appendix: ''
+                        };
                     }else{
                         this.modalAlarmView = true;
                     }
-                }else {
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('查看预警详情 error: ', e);
             })
         },
+        // 预警处理 的保存按钮
+        confirmAlarm() {
+            let documentInfo = [];
+            let params = {
+                riskWarnId: this.Form1.id,
+                disposeResult : this.alarmForm.disposeResult,
+                disposeDescribe : this.alarmForm.disposeDescribe,
+                documentInfo : documentInfo
+            }
+            insertwarnRecords(params).then(resp => {
+                if (resp.data.status == '200') {
+                    this.getWarningList();
+                    this.modalTracking = false;
+                    this.alarmRecords = [];
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('confirmTracking() exists error: ', e);
+            })
+
+            this.modalAlarm = false;
+        },
         //查看风险详情
-        getRiskInfo(riskId,optType) {
+        getRiskInfo(riskId, optType) {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
@@ -560,7 +660,7 @@ export default {
         //查询风险列表
         getDatas() {
             dangers(this.projectId).then(resp => {
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.riskData = resp.data.result.list;
                 } else if (resp.data.status == '49999') {
                     this.riskData = [];
@@ -574,9 +674,9 @@ export default {
         //删除风险
         handleDelete(id) {
             delDanger(id).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getDatas();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -596,10 +696,10 @@ export default {
                 riskDescribe: this.addForm.riskDescribe
             };
             addDanger(risk).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getDatas();
                     this.modalAdd = false;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -617,19 +717,15 @@ export default {
                 recordDetails
             };
             insertRiskFollower(params).then(resp => {
-                if(resp.data.status == '200') {
+                if (resp.data.status == '200') {
                     this.getDatas();
                     this.modalTracking = false;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('confirmTracking() exists error: ', e);
             })
-        },
-        // 添加预警 的保存按钮
-        confirmAlarm() {
-            this.modalAlarm = false;
         },
         // 切换 上报/预警 的显示隐藏
         changeRisk1() {
@@ -659,7 +755,7 @@ export default {
         },
         // 风险跟踪的 保存按钮方法
         submitTracking(formName) {
-             this.$refs[formName].validate((valid) => {
+            this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.modalTracking = false;
                 } else {

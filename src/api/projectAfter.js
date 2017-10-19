@@ -39,6 +39,19 @@ export function getWarningDetail(id = undefined) {
 	return service({url: '/WarnRecords/warnRecords', method: 'post', data});
 }
 
+//预警处理
+export function insertwarnRecords(params = {}) {
+	let { riskWarnId, disposeResult, disposeDescribe, documentInfo } = params;
+	const data = {
+		riskWarnId, 
+		disposeResult, 
+		disposeDescribe, 
+		disposeUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+		documentInfo: documentInfo
+	}
+	return service({url: '/WarnRecords/insertwarnRecords', method: 'post', data});
+}
+
 //投后重大事项列表
 export function getEventList(projectId = undefined) {
 	const data = {

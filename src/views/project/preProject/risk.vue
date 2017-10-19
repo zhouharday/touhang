@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="riskTable">
-            <tabel-header :data="headerInfo_risk" @add="modalAdd = true"></tabel-header>
+            <tabel-header :data="headerInfo_risk" @add="openAddModal"></tabel-header>
             <el-table :data="riskData" border style="width: 100%" align="center">
                 <el-table-column label="主题" prop="riskTheme" align="center">
                 </el-table-column>
@@ -40,13 +40,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="提出人" prop="seedUserId">
-                                <el-input v-model="AddForm.seedUserId" placeholder="当前用户" disabled></el-input>
+                            <el-form-item label="提出人" prop="userName">
+                                <el-input v-model="userName" placeholder="当前用户" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出时间" prop="createDate">
-                                <el-input type="date" v-model="AddForm.createDate" style="width: 100%;" disabled>
+                                <el-input v-model="AddForm.createDate" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -195,6 +195,8 @@ export default {
     },
     data() {
         return {
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+            createDate: changeDate(new Date()),
             riskId: '',
             projectId: '',
             modalAdd: false,
@@ -306,6 +308,20 @@ export default {
                 item.label = item.name;
             })
             return datas;
+        },
+        openAddModal() {
+            let new_addForm = {
+                riskTheme: '',
+                description: '',
+                proposer: '',
+                createDate: this.createDate,
+                recipient: '',
+                endingDate: '',
+                appendix: '',
+                Records: ''
+            };
+            this.AddForm = new_addForm;
+            this.modalAdd = true;
         },
         //查看风险详情
         getRiskInfo(riskId, optType) {
