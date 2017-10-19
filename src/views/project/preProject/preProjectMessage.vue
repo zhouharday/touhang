@@ -350,11 +350,13 @@ export default {
         this.init();
     },
     watch: {
-        '$route' (to, from) {
-            this.investProjectId = this.$route.params.investProjectId;
-            this.projectId = this.$route.params.userId;
-            this.init()      //再次调起我要执行的函数
-         }
+        // '$route' (to, from) {
+        //     this.investProjectId = this.$route.params.investProjectId;
+        //     this.projectId = this.$route.params.userId;
+        //     this.init(),      //再次调起我要执行的函数
+        //     console.log("详情页"+to.name);
+
+        //  }
     },
     methods: {
         init() {

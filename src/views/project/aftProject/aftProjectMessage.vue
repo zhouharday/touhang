@@ -166,9 +166,9 @@ export default {
         }
     },
     created() {
-        this.investProjectId = this.$route.params.investProjectId;
-        this.projectId = this.$route.params.projectId;
-        this.init();
+        // this.investProjectId = this.$route.params.investProjectId;
+        // this.projectId = this.$route.params.projectId;
+        // this.init();
     },
     watch: {
         '$route' (to, from) {

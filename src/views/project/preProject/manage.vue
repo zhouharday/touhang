@@ -804,7 +804,16 @@ export default {
         this.init();
     },
     watch: {
-        '$route'(to, from) {
+        // '$route'(to, from) {
+        //     this.init();
+        // },
+        'contractData'(to, from) {
+            this.init();
+        },
+        'paidData'(to, from) {
+            this.init();
+        },
+        'sharingData'(to, from) {
             this.init();
         }
     },
