@@ -129,7 +129,7 @@ export function getInvestorList(id, name, num, total) {
         }
         return service({url: '/investor/deleteVisitingRecord', method: 'post', data})
     }
-    // 获取出资协议列表
+    // 获取出资协议列表 /investor/getAgreementAmountList
     export function getAgreementAmountList(invId, merId) {
         const data = {
             inverstorId: invId,
@@ -147,7 +147,7 @@ export function getInvestorList(id, name, num, total) {
         const data = {
             id: deleteId
         }
-        return service({url: '/investor/updateAgreementAmount', method: 'post', data})
+        return service({url: '/investor/deleteAgreementAmount', method: 'post', data})
     }
     // 添加出资协议 /investor/addAgreementAmount
     export function addAgreementAmount(addInfo) {

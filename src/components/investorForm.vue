@@ -30,12 +30,12 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="机构净资产 (元)" :label-width="formLabelWidth" width="100">
+                <el-form-item label="机构净资产 (元)" :label-width="formLabelWidth" width="100" prop="organizationProperty">
                     <el-input v-model="investorForm.organizationProperty" :disabled="variable" auto-complete="off"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="年收入 (元)" :label-width="formLabelWidth">
+                <el-form-item label="年收入 (元)" :label-width="formLabelWidth" prop="personalAssets">
                     <el-input placeholder="请输入内容" v-model="investorForm.personalAssets" :disabled="variable">
                     </el-input>
                 </el-form-item>
@@ -50,7 +50,7 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="投资经理" :label-width="formLabelWidth" prop="investmentManagerName">
-                    <el-input v-model="investorForm.investmentManagerName" placeholder="当前登录用户" disabled style="width:100%" >
+                    <el-input v-model="investorForm.investmentManagerName" placeholder="当前登录用户" disabled style="width:100%">
                     </el-input>
                 </el-form-item>
             </el-col>
@@ -81,7 +81,11 @@
 </div>
 </template>
 <script type="text/ecmascript-6">
-import {getInvestorType, getIdType, getSubArea} from 'api/investor'
+import {
+    getInvestorType,
+    getIdType,
+    getSubArea
+} from 'api/investor'
 export default {
     props: {
         investorForm: {
@@ -94,6 +98,13 @@ export default {
         }
     },
     data() {
+        const validateNumber = (rule, value, callback) => {
+            if (!parseFloat(value)) {
+                callback(new Error('请输入数字！'))
+            } else {
+                callback()
+            }
+        }
         return {
             formLabelWidth: '120px',
             investmentManager: [{
@@ -132,27 +143,32 @@ export default {
                     message: '证件号不能为空',
                     trigger: 'blur'
                 }],
-                // investmentManagerId: [{
-                //     required: true
-                // }]
+                organizationProperty: [{
+                    validator: validateNumber,
+                    trigger: 'change'
+                }],
+                personalAssets: [{
+                    validator: validateNumber,
+                    trigger: 'change'
+                }]
             }
         }
     },
     created() {
         this.$http.all([getInvestorType(), getIdType(), getSubArea()])
-        .then(this.$http.spread((getInvestor, getId, getArea) => {
-            this.typeInvestor = getInvestor.data.result
-            this.typeId = getId.data.result
-            this.area = getArea.data.result
-        })).catch(err => {
-            this.$Message.error('获取下拉选项失败！')
-        })
+            .then(this.$http.spread((getInvestor, getId, getArea) => {
+                this.typeInvestor = getInvestor.data.result
+                this.typeId = getId.data.result
+                this.area = getArea.data.result
+            })).catch(err => {
+                this.$Message.error('获取下拉选项失败！')
+            })
     }
 }
 </script>
 
 <style lang="less" scoped>
-.investorForm{
+.investorForm {
     width: 100%;
     height: 100%;
     background: #fff;
