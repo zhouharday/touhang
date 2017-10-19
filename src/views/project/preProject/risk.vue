@@ -192,6 +192,9 @@ export default {
     watch: {
         proUsers(val, oldVal) {
             this.initInfo();
+        },
+        '$route'(to, from) {
+            this.init();
         }
     },
     data() {
@@ -232,7 +235,7 @@ export default {
                     { required: true, message: '请选择接收人', trigger: 'change' }
                 ],
                 completeDate: [
-                    { required: true, message: '请选择完成时间', trigger: 'change' }
+                    { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
             recipientOptions: [

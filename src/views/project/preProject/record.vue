@@ -55,6 +55,11 @@ export default {
     created() {
         this.init();
     },
+    watch: {
+        // '$route'(to, from) {
+        //     this.init();
+        // }
+    },
     methods: {
         init() {
             this.initInfo();

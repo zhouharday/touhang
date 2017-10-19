@@ -1,49 +1,54 @@
 <template>
     <section class="projectValue">
         <!-- 状态ul -->
-        <my-filter :chooseInfo="stateList" ></my-filter>
+        <my-filter :chooseInfo="stateList" @getIdInfo="clickState"></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
-                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
+                <el-input icon="search" v-model="projectName" @keyup.enter.native="getDatas" :on-icon-click="handleIconClick" placeholder="关键字：项目名称">
                 </el-input>
             </el-col>
         </el-row>
-        <!--项目table -->
         <el-table :data="tableData" style="width:100%" border class="table-item">
             <el-table-column prop="projectName" fixed label="项目名称" align="center" width="200px">
+                <template scope="scope">
+                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row.projectId)">{{ scope.row.projectName }}</el-button>
+                </template>
             </el-table-column>
             <el-table-column label="算法类型" align="center" width="215px">
                 <template scope="scope">
-                    <span v-if="!scope.row.editFlag">{{scope.row.algorithmType}}</span>
+                    <span v-if="!scope.row.editFlag">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                        <el-select v-model="scope.row.algorithmType" placeholder="请选择算法类型">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label">
+                        <el-select @change="changeType" v-model="scope.row.arithmeticType" placeholder="请选择算法类型">
+                            <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key">
                             </el-option>
                         </el-select>
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="appraisementParamer" label="估值参数" align="center" width="400px">
+            <el-table-column label="估值参数" align="center" width="400px">
                 <template scope="scope">
-                    <span v-if="!scope.row.editFlag">{{ scope.row.parameter1}}*{{scope.row.parameter2}}*{{scope.row.parameter3}}</span>
+                    <span v-if="!scope.row.editFlag">{{note1}}： {{ scope.row.appraisementParamer}}　X　{{note2}}： {{scope.row.appraisementParamerTwo}}　X　{{note3}}： {{scope.row.stockRatio}}%</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
                         <el-row width="100%">
                             <el-col style="line-height:47px">
                                 {{note1}}
-                                <el-input v-model="scope.row.parameter1" auto-complete="off" style="width:50px;height:47px"></el-input>
-                                *{{note2}}
-                                <el-input v-model="scope.row.parameter2" auto-complete="off" style="width:50px;height:47px"></el-input>
-                                *股权占比
-                                <el-input v-model="scope.row.parameter3" disabled auto-complete="off" style="width:50px;height:47px"></el-input>
+                                <el-input @change="changeParam(scope.$index, scope.row)" v-model="scope.row.appraisementParamer" auto-complete="off" style="width:50px;height:47px"></el-input>
+                                X {{note2}}
+                                <el-input @change="changeParam(scope.$index, scope.row)" v-model="scope.row.appraisementParamerTwo" auto-complete="off" style="width:50px;height:47px"></el-input>
+                                X {{note3}}
+                                <el-input :value="scope.row.stockRatio/100" disabled auto-complete="off" style="width:50px;height:47px">
+                                </el-input>
                             </el-col>
                         </el-row>
                     </span>
                 </template>
             </el-table-column>
             <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="200px">
+                <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
             </el-table-column>
             <el-table-column prop="appraisementDate" label="估值日期" align="center" width="200px">
+                <template scope="scope">{{scope.row.appraisementDate | formatDate}}</template>
             </el-table-column>
             <el-table-column prop="appraisementUserName" label="估值人员" align="center" width="200px">
             </el-table-column>
@@ -52,10 +57,11 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" align="center" width="200px">
                 <template scope="scope">
-                    <el-button v-if="!scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
+                    <el-button v-if="!scope.row.editFlag && scope.row.appraisementStatus != 1" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
                     </el-button>
-                    <el-button v-if="scope.row.editFlag" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">保存
+                    <el-button v-if="scope.row.editFlag && scope.row.appraisementStatus != 1" type="text" size="small" style="color: #f05e5e" @click="saveEdit(scope.$index,scope.row)">保存
                     </el-button>
+                    <el-button v-if="scope.row.appraisementStatus != 1" type="text" size="small" style="color: #f05e5e" @click="submitEdit(scope.$index,scope.row)">提交</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -63,19 +69,56 @@
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
+        <!-- 估值历史 dialog -->
+        <div class="history">
+            <el-dialog :visible.sync="historyDialog">
+                <el-table :data="historyData" border style="width: 100%">
+                    <el-table-column prop="arithmeticType" label="算法类型" align="center">
+                        <template scope="scope">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}</template>
+                    </el-table-column>
+                    <el-table-column label="估值参数" align="center">
+                        <template scope="scope">{{ scope.row.appraisementParamer}}　X　{{scope.row.appraisementParamerTwo}}　X　{{scope.row.stockRatio}}%</template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementValue" label="估值（元）" align="center">
+                        <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementDate" label="估值日期" align="center">
+                        <template scope="scope">{{scope.row.appraisementDate | formatDate}}</template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementUser" label="估值人员" align="center">
+                    </el-table-column>
+                </el-table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div class="pagination">
+                        <el-pagination @size-change="handleSizeChangeRec" @current-change="handleCurrentChangeRec" :current-page="page2" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize2" layout="total, sizes, prev, pager, next, jumper" :total="total2">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-dialog>
+        </div>
     </section>
 </template>
 
 <script>
+import 'common/js/filter'
 import myFilter from 'components/myFilter'
-import { getAppraisementList, updAppraisement } from 'api/projectAfter';
+import { getAppraisementList, updAppraisement, getAppraisementRec } from 'api/projectAfter';
 export default {
     data() {
         return {
-            currentIndex: 0,
+            projectId: '',
+            historyDialog: false,
+            appraisementStatus:'',
             projectName: '',
-            note1: '净资产',
-            note2: 'PB',
+            note1: '',
+            note2: '',
+            note3: '股权占比',
+            page: 1,
+            pageSize: 5,
+            total: 0,
+            page2: 1,
+            pageSize2: 5,
+            total2: 0,
             stateList: { //筛选选项
                 title: '状态：',
                 details: [{
@@ -89,45 +132,29 @@ export default {
                     dicName: '未估值'
                 }]
             },
-            tableData: [
-                {
-                    projectName: 'AAAAAAAA',
-                    algorithmType: '选项1',
-                    parameter1: '400',
-                    parameter2: '500',
-                    parameter3: '0.3',
-                    appraisementValue: '0.00',
-                    appraisementDate: '',
-                    appraisementUserName: '',
-                    appraisementStatus: '1',
-                    editFlag: false
-                },
-                // {
-                //     projectName: 'BBBBBB',
-                //     algorithmType: '选项1',
-                //     parameter1: '0',
-                //     parameter2: '0',
-                //     parameter3: '0.3',
-                //     appraisementValue: '0.00',
-                //     appraisementDate: '',
-                //     appraisementUserName: '',
-                //     appraisementStatus: '2',
-                //     editFlag: false
-                // }
-            ],
-            options: [{
-                value: '选项1',
-                label: '市净率法'
+            tableData: [],
+            typeOptions: [{
+                key: 1,
+                value: '市净率法',
+                note1: '净资产',
+                note2: 'PB'
             }, {
-                value: '选项2',
-                label: '市盈率法'
+                key: 2,
+                value: '市盈率法',
+                note1: '净利润',
+                note2: 'PE'
             }, {
-                value: '选项3',
-                label: '市销售法'
+                key: 3,
+                value: '市销售法',
+                note1: '收入',
+                note2: 'PS'
             }, {
-                value: '选项4',
-                label: '市场率'
-            }]
+                key: 4,
+                value: '市场率',
+                note1: '市现率',
+                note2: 'EDITDA'
+            }],
+            historyData:[]
         }
     },
     created() {
@@ -139,19 +166,39 @@ export default {
         },
         getDatas() {
             let params = {
-                appraisementStatus:this.appraisementStatus,
+                appraisementStatus: this.appraisementStatus,
                 projectName: this.projectName,
+                type: 1,
                 page: this.page,
                 pageSize: this.pageSize
             };
             getAppraisementList(params).then(resp => {
-                if(resp.data.result == '200'){
-                    // this.tableData = result.data.result.list || [];
+                if (resp.data.status == '200') {
+                    let dataList = resp.data.result.list.forEach(function(item, index){
+                        item.editFlag = false;
+                    });
+                    this.tableData = resp.data.result.list || [];
+                    this.total = resp.data.result.total || 0;
+                } else if (resp.data.status == '49999') {
+                    this.operatingData = [];
+                    this.total = 0;
+                } else {
+                    this.$message.error(resp.data.message);
                 }
-                this.total = result.total || 0;
             }).catch(e => {
                 console.log('getProjectValuation() exists error: ', e);
             });
+        },
+        changeType(val){
+            this.note1 = this.typeOptions[val-1].note1;
+            this.note2 = this.typeOptions[val-1].note2;
+        },
+        changeParam(index, row){
+            row.appraisementValue = row.appraisementParamer*row.appraisementParamerTwo*row.stockRatio/100;
+        },
+        clickState(index, id){
+            this.appraisementStatus = index == 0 ? '' : id;
+            this.getDatas();
         },
         handleCurrentChange(page) {
             this.page = page;
@@ -162,15 +209,67 @@ export default {
             this.getDatas();
         },
         checkEdit(index, row) { //编辑
-            // console.log(row)
             row.editFlag = !row.editFlag;
+        },
+        saveEdit(index, row) { //保存
+            updAppraisement(row, 2).then(resp => {
+                if (resp.data.status == '200') {
+                    this.getDatas();
+                }else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('updAppraisement 保存 error: ', e);
+            });
+        },
+        submitEdit(index, row) { //提交
+            updAppraisement(row, 1).then(resp => {
+                if (resp.data.status == '200') {
+                    this.getDatas();
+                }else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('updAppraisement 提交 error: ', e);
+            });
         },
         handleIconClick(ev) {
             this.getDatas();
         },
-        changeActive(index, item) {
-            this.currentIndex = index;
-            console.log(item);
+        //查看估值历史
+        viewHistory(projectId) {
+            this.projectId = projectId;
+            this.historyDialog = true;
+            this.getHistory();
+        },
+        getHistory(){
+            let params = {
+                projectId: this.projectId,
+                page: this.page2,
+                pageSize: this.pageSize2
+            }
+            getAppraisementRec(params).then(resp => {
+                console.log("历史数据"+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.historyData = resp.data.result.list || [];
+                    this.total2 = resp.data.result.total || 0;
+                } else if (resp.data.status == '49999') {
+                    this.historyData = [];
+                    this.total2 = 0;
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('查看估值历史 error: ', e);
+            });
+        },
+        handleCurrentChangeRec(page) {
+            this.page2 = page;
+            this.getHistory();
+        },
+        handleSizeChangeRec(pageSize) {
+            this.pageSize2 = pageSize;
+            this.getHistory();
         }
     },
     components: {

@@ -33,48 +33,48 @@
             </el-table>
             <!-- 添加风险 对话框-->
             <el-dialog title="添加风险" :visible.sync="modalAdd" :close-on-click-modal="false">
-                <el-form :model="AddForm" :rules="rules1" ref="AddForm" :label-width="formLabelWidth">
+                <el-form :model="addForm" :rules="rules1" ref="addForm" :label-width="formLabelWidth">
                     <el-row>
                         <el-col>
                             <el-form-item label="风险主题" prop="riskTheme">
-                                <el-input v-model="AddForm.riskTheme" auto-complete="off"></el-input>
+                                <el-input v-model="addForm.riskTheme" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="风险描述" prop="riskDescribe">
-                                <el-input type="textarea" :rows="3" v-model="AddForm.riskDescribe" auto-complete="off">
+                                <el-input type="textarea" :rows="3" v-model="addForm.riskDescribe" auto-complete="off">
                                 </el-input>
                             </el-form-item>
                         </el-col>
                          <el-col :span="12">
-                            <el-form-item label="提出人" prop="seedUserId">
-                                <el-input v-model="AddForm.seedUserId" placeholder="当前用户" disabled></el-input>
+                            <el-form-item label="提出人" prop="userName">
+                                <el-input v-model="userName" placeholder="当前用户" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出时间" prop="createDate">
-                                <el-input type="date" v-model="AddForm.createDate" style="width: 100%;" disabled>
+                                <el-input v-model="addForm.createDate" style="width: 100%;" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="接收人" prop="receivedUserId">
-                                <el-select v-model="AddForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
-                                    <el-option v-for="item in recipientOptions" :key="item.value" :label="item.label" :value="item.value">
+                                <el-select v-model="addForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
+                                    <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
                                     </el-option>    
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="完成时间" prop="completeDate">
-                                <el-date-picker type="date" placeholder="完成时间" v-model="AddForm.completeDate" style="width: 100%;">
+                                <el-date-picker type="date" placeholder="完成时间" v-model="addForm.completeDate" style="width: 100%;">
                                 </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="appendix">
                                 <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="addForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
                                     <div style="padding: 20px 0">
                                         <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
@@ -181,13 +181,15 @@
 
         <div class="s_risk" v-show="s_show">
             <el-table :data="alarmData" border style="width: 100%" align="center">
-                <el-table-column label="数据名称" prop="dataName" align="center">
+                <el-table-column label="数据名称" prop="dataSourceType" align="center">
+                    <template scope="scope">{{scope.row.dataSourceType | key2value(dataSourcesOptions, scope.row.dataSourceType)}}</template>
                 </el-table-column>
-                <el-table-column label="类型" prop="dataSort" align="center">
+                <el-table-column label="类型" prop="projectManagerId" align="center">
+                    <template scope="scope">{{scope.row.projectManagerId | key2value(sortOptions, scope.row.projectManagerId)}}</template>
                 </el-table-column>
-                <el-table-column label="基准日" prop="date" align="center">
+                <el-table-column label="基准日" prop="baseDay" align="center">
                 </el-table-column>
-                <el-table-column label="状态" prop="state" align="center">
+                <el-table-column label="状态" prop="warningStatus" align="center">
                 </el-table-column>
                 <el-table-column label="预警" prop="alarm" align="center">
                 </el-table-column>
@@ -201,7 +203,7 @@
 
             <!-- 查看风险预警详情 对话框-->
             <el-dialog title="查看风险预警详情" :visible.sync="modalAlarmView" :close-on-click-modal="false">
-                <el-table :data="alarmData1" border style="width: 100%">
+                <el-table :data="alarmDetail" border style="width: 100%">
                     <el-table-column prop="dataSources" label="数据来源" width="147px" align="center">
                     </el-table-column>
                     <el-table-column prop="dataSort" label="类型" align="center">
@@ -230,8 +232,8 @@
                 </div>
             </el-dialog>
             <!-- 风险处理 对话框-->
-            <el-dialog title="风险处理" :visible.sync="modalAlarm" :close-on-click-modal="false">
-                <el-table :data="alarmData1" border style="width: 100%">
+            <el-dialog title="风险预警处理" :visible.sync="modalAlarm" :close-on-click-modal="false">
+                <el-table :data="alarmDetail" border style="width: 100%">
                     <el-table-column prop="dataSources" label="数据来源" width="147px" align="center">
                     </el-table-column>
                     <el-table-column prop="dataSort" label="类型" align="center">
@@ -290,10 +292,13 @@
 
 <script>
 import tabelHeader from 'components/tabelHeader'
+import 'common/js/filter'
 import { changeDate } from 'common/js/config'
 
-import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister } from 'api/projectPre'
-
+import {
+    dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister
+} from 'api/projectPre'
+import { getWarningList, getWarningDetail } from 'api/projectAfter';
 export default {
     props: {
         projectId: {
@@ -324,10 +329,12 @@ export default {
             file: null,
             loadingStatus: false,
             // 风险上报 添加表单
-            AddForm: {
+            addForm: {
                 receivedUserId: '',
                 completeDate: ''
             },
+            userName : JSON.parse(sessionStorage.getItem('userInfor')).name,
+            createDate: changeDate(new Date()),
             rules1: {
                riskTheme: [
                     { required: true, message: '请输入风险主题', trigger: 'change' }
@@ -339,18 +346,9 @@ export default {
                     { required: true, message: '请选择接收人', trigger: 'change' }
                 ],
                 completeDate: [
-                    { required: true, message: '请选择完成时间', trigger: 'change' }
+                    { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
-            recipientOptions: [
-                { //接收人列表
-                    value: '选项1',
-                    label: '研发李一'
-                }, {
-                    value: '选项2',
-                    label: '研发张三'
-                }
-            ],
             // 风险跟踪 table
             riskData1: [
                 {
@@ -368,10 +366,6 @@ export default {
                 {
                     record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
                     file: 'AAA.doc'
-                },
-                {
-                    record: '2017-06-28 18:42:55   刘备  【已完成】 已经完成处理',
-                    file: 'AAA.PDF'
                 }
             ],
             // 风险跟踪 处理表单
@@ -386,6 +380,37 @@ export default {
                     { required: true, message: '请输入汇报内容', trigger: 'change' }
                 ]
             },
+            dataSourcesOptions: [
+                { //数据来源列表
+                    key: 1,
+                    value: '运营数据'
+                },
+                {
+                    key: 2,
+                    value: '资产负债表'
+                }, {
+                    key: 3,
+                    value: '利润表'
+                }, {
+                    key: 4,
+                    value: '现金流量表'
+                }
+            ],
+            sortOptions: [
+                { //数据类型列表
+                    key: 1,
+                    value: '年报'
+                }, {
+                    key: 2,
+                    value: '半年报'
+                }, {
+                    key: 3,
+                    value: '季报'
+                }, {
+                    key: 4,
+                    value: '月报'
+                }
+            ],
             //处理结果列表
             resultOptions: [
                 {
@@ -415,7 +440,7 @@ export default {
                 }
             ],
             // 风险预警 立即处理table
-            alarmData1: [
+            alarmDetail: [
                 {
                     dataSources: '',
                     dataSort: '',
@@ -451,36 +476,49 @@ export default {
                     { required: true, message: '请输入汇报内容', trigger: 'change' }
                 ] 
             },
-            alarmData: [
-                {
-                    dataName: '资产负债表',
-                    dataSort: '年报',
-                    date: '2017',
-                    state: '已处理',
-                    alarm: '正常'
-                }
-            ],
+            alarmData: [{
+                dataSourceType:1
+            }],
         }
     },
     created() {
         this.init();
     },
+    watch: {
+        // '$route'(to, from) {
+        //     this.init();
+        // }
+    },
     methods: {
         init() {
-            this.initInfo();
             this.getDatas();
+            this.getWarningList();
         },
-        initInfo() {
-            let proUsers = this.proUsers;
-            this.handleToOptions(proUsers);
-            this.recipientOptions = proUsers;
-        },
-        handleToOptions(datas = []) {
-            datas.forEach(item => {
-                item.value = item.id;
-                item.label = item.name;
+        //查询预警列表
+        getWarningList(){
+            getWarningList(this.projectId).then(resp => {
+                if(resp.data.status == '200'){
+                    // this.alarmData = resp.data.result.list;
+                } else if (resp.data.status == '49999') {
+                    this.alarmData = [];
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('查询预警列表 error: ', e);
             })
-            return datas;
+        },
+        //查看预警详情
+        getWarningDetail(id){
+            getWarningDetail(id).then(resp => {
+                if(resp.data.status == '200'){
+                    this.alarmData = resp.data.result.list;
+                }else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('查看预警详情 error: ', e);
+            })
         },
         //查看风险详情
         getRiskInfo(riskId,optType) {
@@ -501,17 +539,24 @@ export default {
                     this.modalRiskView=true;
                 }
             }).catch(e => {
-                console.log('dangers exists error: ', e);
+                console.log('查看风险详情 error: ', e);
             })
         },
+        //查询风险列表
         getDatas() {
             dangers(this.projectId).then(resp => {
-                this.riskData = resp.data.result.list;
+                if(resp.data.status == '200'){
+                    this.riskData = resp.data.result.list;
+                } else if (resp.data.status == '49999') {
+                    this.riskData = [];
+                } else {
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
-                console.log('dangers exists error: ', e);
+                console.log('查询风险列表 error: ', e);
             })
         },
-        // 删除当前行
+        //删除风险
         handleDelete(id) {
             delDanger(id).then(resp => {
                 if(resp.data.status == '200') {
@@ -520,20 +565,20 @@ export default {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('delDanger() exists error: ', e);
+                console.log('删除风险 error: ', e);
             })
         },
         //添加风险
         confirmAdd() {
-            this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
+            this.addForm.completeDate = changeDate(this.addForm.completeDate);
             let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
             let risk = {
                 projectId: this.projectId,
-                riskTheme: this.AddForm.riskTheme,
+                riskTheme: this.addForm.riskTheme,
                 seedUserId: userId,
-                receivedUserId: this.AddForm.receivedUserId,
-                completeDate: this.AddForm.completeDate,
-                riskDescribe: this.AddForm.riskDescribe
+                receivedUserId: this.addForm.receivedUserId,
+                completeDate: this.addForm.completeDate,
+                riskDescribe: this.addForm.riskDescribe
             };
             addDanger(risk).then(resp => {
                 if(resp.data.status == '200') {
@@ -545,7 +590,6 @@ export default {
             }).catch(e => {
                 console.log('addRecord exists error: ', e)
             });
-
         },
         //添加风险跟踪
         confirmTracking() {
@@ -589,7 +633,7 @@ export default {
                 riskTheme: '',
                 description: '',
                 proposer: '',
-                startingDate: '',
+                createDate: this.createDate,
                 recipient: '',
                 endingDate: '',
                 appendix: '',
@@ -597,17 +641,6 @@ export default {
             };
             this.addForm = new_addForm;
             this.modalAdd = true;
-        },
-        // 添加风险的 保存按钮方法
-        submitaddForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    // this.addForm.endingDate = changeDate(this.addForm.endingDate);
-                    this.modalAdd = false;
-                } else {
-                    return false;
-                }
-            });
         },
         // 风险跟踪的 保存按钮方法
         submitTracking(formName) {

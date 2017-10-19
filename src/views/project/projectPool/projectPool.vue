@@ -154,19 +154,16 @@ export default {
     created() {
         this.initInfo();
         this.getDatas();
-        // this.refresh();
         this.$store.dispatch('getIndustryOptionsII');
     },
     mounted() {
-        // this.refresh();
     },
     beforeCreate() {
-        // this.refresh();
     },
     watch: {
         '$route'(to, from) {
+            if(to.name == 'projectPool')
             this.init();
-            // this.$router.push({ name: to.name });
         }
     },
     methods: {

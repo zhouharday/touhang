@@ -32,13 +32,14 @@
                     </el-table-column>
                     <el-table-column align="center">
                         <template scope="scope">
-                                <Upload action="//jsonplaceholder.typicode.com/posts/">
-                                    <Button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="ghost" class="border_right">上传</Button>
-                                </Upload>
-                                <!-- <el-button v-if="index != 0 && (scope.row.id == '' || scope.row.id == undefined)" type="text" size="small" class="border_right" @click="projectDialog">上传</el-button> -->
-                                <a v-if="scope.row.id != '' && scope.row.id != undefined" href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
-                                <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"  size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                                <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"  size="small" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
+                            <!-- 上传 -->
+                            <div v-if="index != 0 && (scope.row.id == null || scope.row.id == undefined || scope.row.id == '')" style=" position:relative;">
+                                <el-button type="text">上传</el-button>
+                                <input type="file" class="fileInput" @change="changeFile($event, scope.row.fileId, scope.row.stageId)" ref="avatarInput">
+                            </div>
+                            <a v-if="scope.row.id != '' && scope.row.id != undefined" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   @click="handleDelete(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -73,7 +74,6 @@
         </div>
     </div>
 </template>
-
 
 <script>
 import {
@@ -120,6 +120,11 @@ export default {
     created() {
         this.init();
     },
+    watch: {
+        // '$route'(to, from) {
+        //     this.init();
+        // }
+    },
     methods: {
         init() {
             this.projectId = this.proId;
@@ -161,15 +166,47 @@ export default {
             this.isShow = true,
                 this.isHide = false
         },
-        handleDelete(index, row) {
-            console.log('删除文档ID: ' + JSON.stringify(row.id));
-            delDocument(row.id).then((res) => {
+        handleDelete(docId) {
+            console.log('删除文档ID: ' + JSON.stringify(docId));
+            delDocument(docId).then((res) => {
                 console.log('删除文档: ' + JSON.stringify(res.data));
                 if (res.data.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！');
                     this.getProjectDocument();
                 }
             });
+        },
+        changeFile(event, fileId, stageId) { //上传文件input
+            event.preventDefault();
+            console.log("fileId"+fileId);
+            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+            let formData = new FormData();
+            formData.append('file', event.target.files[0]);
+            formData.append('stageId', stageId);
+            formData.append('userId', userId);
+            formData.append('type', 3);
+            formData.append('uploadTypeId', this.projectId);
+            // formData.append('fileId', '');
+            formData.append('fileId', fileId);
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+            this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+            .then((res)=> {
+                console.log("上传文件结果:"+ JSON.stringify(res.data));
+                if (res.data.status == '200') {
+                    this.getProjectDocument();
+                } else {
+                    this.$Message.error(res.data.message);
+                }
+            })
+            .catch(e => {
+                this.$Message.error("上传错误");
+                console.log('上传错误: ', e);
+               // loadingInstance.close();
+            })
         }
     }
 }
@@ -217,7 +254,15 @@ export default {
         }
     }
 }
-
+ .fileInput {
+    opacity:0;
+    position: absolute;
+    left:10%;
+    top:0px;
+    width:80%;
+    height:25px;
+    line-height:25px;
+}
 
 .viewFiles {
     position: relative;

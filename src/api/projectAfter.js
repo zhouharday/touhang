@@ -23,6 +23,22 @@ export function getAfterDetail(params) {
 	return service({url: '', method: 'post', data});
 }
 
+//数据预警列表
+export function getWarningList(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/WarnRecords/selectWarning', method: 'post', data});
+}
+
+//预警详情
+export function getWarningDetail(id = undefined) {
+	const data = {
+		id
+	};
+	return service({url: '/WarnRecords/warnRecords', method: 'post', data});
+}
+
 //投后重大事项列表
 export function getEventList(projectId = undefined) {
 	const data = {
@@ -117,6 +133,7 @@ export function saveDataMonitor(dataMonitor = {}, monitorInfos = []) {
 		dataMonitor,
 		monitorInfos
 	};
+	// console.log("监控设置-新增 AAA编辑"+JSON.stringify(data));
 	return service({url: '/formLabel/saveMonitorInFo', method: 'post', data});
 }
 
@@ -225,30 +242,171 @@ export function fillDataForm(params = {}) {
 }
 
 //项目估值 - 添加或者修改项目估值
-export function updAppraisement(params = {}) {
-	let { id, projectId, appraisementValue, appraisementParamer } = params;
+export function updAppraisement(params = {}, optType = 1) {
+	let { id, projectId, appraisementValue, appraisementParamer, appraisementParamerTwo, stockRatio, arithmeticType } = params;
 	const data = {
-		id: id,
-		projectId: projectId,
-		appraisementValue: appraisementValue,
-		appraisementParamer: appraisementParamer,
+		id,
+		projectId,
+		appraisementValue,
+		appraisementParamer,
+		appraisementParamerTwo,
+		stockRatio,
+		arithmeticType,
 		appraisementUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
-		appraisementStatus: '1',
+		appraisementStatus: optType
 	};
-	return service({url: '/appraisement/updaAppraisement', method: 'post', data});
+	return service({url: '/appraisement/updateAppraisement', method: 'post', data});
 }
 
 //项目估值 - 项目估值列表查询
 export function getAppraisementList(params = {}) {
-	let {projectName, appraisementStatus, page, pageSize } = params;
+	let {projectName, appraisementStatus, type, page, pageSize } = params;
+
 	const data = {
+		userId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id,
 		projectName,
 		appraisementStatus,
+		type,
 		page,
 		pageSize
 	};
 	return service({url: '/appraisement/likeSelectAppraisementPage', method: 'post', data});
 }
 
+
+//项目估值 - 项目估值历史记录查询
+export function getAppraisementRec(params = {}) {
+	let {projectId, page, pageSize } = params;
+	const data = {
+		projectId,
+		page,
+		pageSize
+	};
+	return service({url: '/appraisementDetails/selectAppraisementDetailsPage', method: 'post', data});
+}
+
+//估值查看 - 重置估值或者全部重置估值
+export function resetAppraisement(id = undefined) {
+	const data = {
+		id,
+		userId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id
+	};
+	return service({url: '/appraisement/resetProjectAppraisement', method: 'post', data});
+}
+
 // let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 // let merchantId = JSON.parse(sessionStorage.getItem('merchants'))[0].id; //当前商户id
+
+
+
+export function transform(data = []){
+    let _data = data;
+    var newData = new Array();
+    for(var i = 0; i < _data.length - 1; i++){
+        //当前元素 行列
+        let item = _data[i];
+        // let colNo = item.location.charAt(item.location.length - 1); //1或者2
+        // let rowNo = item.location.substring(0,item.location.indexOf('-')); //1或者2
+        let rowNo = item.locationx;
+        let colNo = item.locationy;
+        //下个元素 行列
+        let nextItem = _data[i + 1];
+        let nextRowNo = nextItem.locationx;
+        let nextcolNo = nextItem.locationy;
+        // let nextRowNo = nextItem.location.substring(0,nextItem.location.indexOf('-'));
+        // let nextcolNo = nextItem.location.charAt(nextItem.location.length - 1);
+
+        //当前元素在左
+        if(colNo == '1'){
+            let newItem = item;
+            //判断下个元素是否在本行
+            if(rowNo == nextRowNo){
+                //合并下个元素到本行
+                newItem._id = nextItem.id;
+                newItem._field_name = nextItem.field_name;
+                newItem._location = nextItem.location;
+                newItem._simple_value = nextItem.simple_value;
+                newItem._complex_value = nextItem.complex_value;
+                newItem._value1 = nextItem.value1;
+                newItem._value2 = nextItem.value2;
+
+                newData.push(newItem);
+                i++;
+            }else{
+                //下个元素不在本行，填充空元素到本行
+                newItem._id = '';
+                newItem._field_name = '';
+                newItem._location = '';
+                newItem._simple_value = '';
+                newItem._complex_value = '';
+                newItem._value1 = '';
+                newItem._value2 = '';
+                
+                newData.push(newItem);
+                continue;
+            }
+        }else {
+        //当前元素在右
+            let newItem = {};
+            newItem.id = '';
+            newItem.field_name = '';
+            newItem.location = '';
+            newItem.simple_value = '';
+            newItem.complex_value = '';
+            newItem.value1 = '';
+            newItem.value2 = '';
+
+            newItem._id = item.id;
+            newItem._field_name = item.field_name;
+            newItem._location = item.location;
+            newItem._simple_value = item.simple_value;
+            newItem._complex_value = item.complex_value;
+            newItem._value1 = item.value1;
+            newItem._value2 = item.value2;
+
+            newData.push(newItem);
+        }
+    }
+
+    // console.log("转换结果："+JSON.stringify(newData));
+
+    return newData;
+}
+
+
+export function deTransform(data = []){
+	let _data = data;
+    var newData = new Array();
+	for(var i = 0; i < _data.length; i++){
+		let item = _data[i];
+
+		if(item.id != ''){
+			let leftData = {
+				id: item.id,
+				field_name: item.field_name,
+				location: item.location,
+				simple_value: item.simple_value,
+				complex_value: item.complex_value,
+				value1: item.value1,
+				value2: item.value2,
+			};
+			newData.push(leftData);
+		}
+		if(item._id != ''){
+			let rightData = {
+				id: item._id,
+				field_name: item._field_name,
+				location: item._location,
+				simple_value: item._simple_value,
+				complex_value: item._complex_value,
+				value1: item._value1,
+				value2: item._value2,
+			};
+			newData.push(rightData);
+		}
+	}
+
+	return newData;
+}

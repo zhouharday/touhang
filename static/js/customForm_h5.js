@@ -3,41 +3,39 @@ function drag(o) {
     var options = {
         dragArea: "dragArea",
         dropArea: "dropArea",
-    }
+    };
     //document.getElementById捕捉到的节点
     var target = {
         dragArea: null,
         dropArea: null,
-    }
+    };
     //后面用于判断鼠标移动的时候是把元素底部的边变蓝还是上部的边变蓝
     var deraction = {
         index: -1,
         deraction: 0,
         flag: -1,
-    }
+    };
 
     //正在拖拽的元素
     var dragTarget;
-
-
     var empty = function (obj) {
-        if (obj == undefined || obj == null || obj == "")
+        if (obj == undefined || obj == null || obj == "") {
             return true;
-
+        }
         return false;
-    }
+    };
 
     var exception = function (tip) {
         console.log("dragErr:" + tip);
         throw new Error(tip);
-    }
+    };
 
     var getTarget = function (id) {
         var target = document.getElementById(id);
         if (empty(target))
             throw new Error("无法找到这个id")
         return target;
-    }
+    };
 
     //  ========== 
     //  = 获取鼠标所在的坐标位置 = 
@@ -48,11 +46,12 @@ function drag(o) {
         var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
         var x = e.pageX || e.clientX + scrollX;
         var y = e.pageY || e.clientY + scrollY;
+        console.log(event);
         return {
             'x': x,
             'y': y
-        };
-    }
+        }
+    };
 
     var insertAfter = function (newElement, targetElement) {
         var parent = targetElement.parentNode;
@@ -63,11 +62,11 @@ function drag(o) {
             //如果不是，则插入在目标元素的下一个兄弟节点的前面。也就是目标元素的后面
             parent.insertBefore(newElement, targetElement.nextSibling);
         }
-    }
+    };
 
     var insertBefore = function (newElement, targetElement) {
         targetElement.parentNode.insertBefore(newElement, targetElement)
-    }
+    };
 
 
     //  ========== 
@@ -79,20 +78,19 @@ function drag(o) {
                 target.dropArea.children[i].style.borderBottom = "";
                 target.dropArea.children[i].style.borderTop = "";
             }
-    }
-
+    };
 
     //  ========== 
     //  = 获取CSS = 
     //  ========== 
     var getCss = function (o, key) {
         return o.currentStyle ? o.currentStyle[key] : document.defaultView.getComputedStyle(o, false)[key];
-    }
+    };
 
 
     var preventDefault = function (e) {
         e.preventDefault();
-    }
+    };
 
     ///  ========== 
     //  = 将表单元素拖拽到右边删掉 = 
@@ -103,10 +101,7 @@ function drag(o) {
             dragTarget.parentNode.removeChild(dragTarget);
             setBorderDefault();
         }
-
-    }
-
-
+    };
     //  ========== 
     //  = 开始拖动 = 
     //  ========== 
@@ -119,7 +114,7 @@ function drag(o) {
             deraction.flag = 2;
             target.dragArea.addEventListener("dragover", preventDefault);
         }
-    }
+    };
 
     //  ========== 
     //  = 拖动经过 = 
@@ -129,11 +124,13 @@ function drag(o) {
         var pageLocation = getPageLocation();
         var index = -1;
         //检测目前鼠标正落在哪个表单元素上面
-        if (target.dropArea.children.length > 0){
-			// alert(111)
+        if (target.dropArea.children.length > 0) {
+            // alert(111)
+            // console.log(target.dropArea.children);
             for (var i = 0; i < target.dropArea.children.length; i++) {
                 var pos = target.dropArea.children[i].getBoundingClientRect();
                 if (pageLocation.y >= pos.bottom)
+                // alert()
                     continue;
                 index = i;
                 break;
@@ -167,18 +164,15 @@ function drag(o) {
             deraction["deraction"] = 0;
             deraction["index"] = -1;
         }
-    }
-
-
+    };
     //  ========== 
     //  = 拖动结束 = 
     //  ========== 
     var dragEnd = function (e) {
+        // alert()
         setBorderDefault();
         target.dragArea.removeEventListener("dragover", preventDefault);
-    }
-
-
+    };
     //  ========== 
     //  = 放置 = 
     //  ========== 

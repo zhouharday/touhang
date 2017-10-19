@@ -1,67 +1,140 @@
 <template>
     <section class="valueView">
         <!-- 状态ul -->
-        <my-filter :chooseInfo="stateList"></my-filter>
+        <my-filter :chooseInfo="stateList" @getIdInfo="clickState"></my-filter>
         <!--搜索框 -->
         <el-row class="search-box">
             <el-col :span="6">
-                <el-input icon="search" v-model="projectName" :on-icon-click="handleIconClick">
+                <el-input icon="search" v-model="projectName" @keyup.enter.native="getDatas" :on-icon-click="handleIconClick">
                 </el-input>
+            </el-col>
+            <el-col :span="18" style="text-align:right">
+                <el-button type="danger" style="width:80px;padding: 10px 11px;" @click="resetDialog=true">估值重置</el-button>
             </el-col>
         </el-row>
         <!--项目table -->
-        <el-table :data="tableData" style="width:100%" max-height="700" class="table-item">
-            <el-table-column prop="project" label="项目名称" align="center">
+        <el-table :data="tableData" highlight-current-row @current-change="handleRowChange" style="width:100%" max-height="700" class="table-item" >
+            <el-table-column prop="projectName" label="项目名称" align="center">
+                <template scope="scope">
+                    <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row.projectId)">{{ scope.row.projectName }}</el-button>
+                </template>
             </el-table-column>
-            <el-table-column prop="valuationParameter" label="估值参数" align="center">
+            <el-table-column label="估值参数" align="center">
+                <template scope="scope">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}  
+                {{ scope.row.appraisementParamer}} X {{scope.row.appraisementParamerTwo}} X {{scope.row.stockRatio}}%</template>
             </el-table-column>
-            <el-table-column prop="valuation" label="估值（元）" align="center">
+            <el-table-column prop="appraisementValue" label="估值（元）" align="center">
+                <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
             </el-table-column>
             <el-table-column prop="valuationDate" label="估值日期" align="center">
+                <template scope="scope">{{scope.row.appraisementDate | formatDate}}</template>
             </el-table-column>
-            <el-table-column prop="valuationOfficer" label="估值人员" align="center">
+            <el-table-column prop="appraisementUserName" label="估值人员" align="center">
             </el-table-column>
-            <el-table-column prop="state" label="状态" align="center">
+            <el-table-column prop="appraisementStatus" label="状态" align="center">
+                <template scope="scope">{{scope.row.appraisementStatus == '1' ? '已估值' : '未估值'}}</template>
             </el-table-column>
         </el-table>
         <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
+        </div>
+        <!-- 估值重置 dialog -->
+        <div class="reset">
+            <el-dialog title="估值重置" :visible.sync="resetDialog" size="tiny">
+                <span>确认将所有项目的估值清空重置？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="resetDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="resetValue">确 定</el-button>
+                </span>
+            </el-dialog>
+        </div>
+        <!-- 估值历史 dialog -->
+        <div class="history">
+            <el-dialog :visible.sync="historyDialog">
+                <el-table :data="historyData" border style="width: 100%">
+                    <el-table-column prop="arithmeticType" label="算法类型" align="center">
+                        <template scope="scope">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}</template>
+                    </el-table-column>
+                    <el-table-column label="估值参数" align="center">
+                        <template scope="scope">{{ scope.row.appraisementParamer}}　X　{{scope.row.appraisementParamerTwo}}　X　{{scope.row.stockRatio}}%</template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementValue" label="估值（元）" align="center">
+                        <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementDate" label="估值日期" align="center">
+                        <template scope="scope">{{scope.row.appraisementDate | formatDate}}</template>
+                    </el-table-column>
+                    <el-table-column prop="appraisementUser" label="估值人员" align="center">
+                    </el-table-column>
+                </el-table>
+                <div style="margin: 10px;overflow: hidden">
+                    <div class="pagination">
+                        <el-pagination @size-change="handleSizeChangeRec" @current-change="handleCurrentChangeRec" :current-page="page2" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize2" layout="total, sizes, prev, pager, next, jumper" :total="total2">
+                        </el-pagination>
+                    </div>
+                </div>
+            </el-dialog>
         </div>
     </section>
 </template>
 
 <script>
+import 'common/js/filter'
 import myFilter from 'components/myFilter'
-import { getProjectBySelect } from 'api/project';
+import { getAppraisementList, updAppraisement, getAppraisementRec, resetAppraisement } from 'api/projectAfter';
 export default {
     data() {
         return {
-            total: 0,
-            page: 1,
-            pageSize: 5,
+            projectId: '',
+            appraisementStatus:'',
             projectName: '',
             currentIndex: 0,
+            resetDialog: false,
+            historyDialog: false,
+            page: 1,
+            pageSize: 5,
+            total: 0,
+            page2: 1,
+            pageSize2: 5,
+            total2: 0,
+            currentId: '',
             stateList: { //筛选选项
-               title: '状态：',
-               details: [{
+                title: '状态：',
+                details: [{
+                    id: '',
                     dicName: '全部'
                 }, {
-                    dicName: '未估值'
-                }, {
+                    id: '1',
                     dicName: '已估值'
+                }, {
+                    id: '2',
+                    dicName: '未估值'
                 }]
             },
-            tableData: [
-                {
-                    project: 'AAAAAAAA',
-                    valuationParameter: '市净率1000*20*5%',
-                    valuation: '35000.00',
-                    valuationDate: '2017-09-30',
-                    valuationOfficer: '张三',
-                    state: '已估值'
-                }
-            ]
+            tableData: [],
+            typeOptions: [{
+                key: 1,
+                value: '市净率法',
+                note1: '净资产',
+                note2: 'PB'
+            }, {
+                key: 2,
+                value: '市盈率法',
+                note1: '净利润',
+                note2: 'PE'
+            }, {
+                key: 3,
+                value: '市销售法',
+                note1: '收入',
+                note2: 'PS'
+            }, {
+                key: 4,
+                value: '市场率',
+                note1: '市现率',
+                note2: 'EDITDA'
+            }],
+            historyData:[]
         }
     },
     created() {
@@ -72,41 +145,101 @@ export default {
             this.getDatas();
         },
         getDatas() {
-            let appraisementStatus = this.appraisementStatus;
-
-            if (appraisementStatus == '全部') appraisementStatus = '';
-
             let params = {
+                appraisementStatus: this.appraisementStatus,
                 projectName: this.projectName,
+                type: 1,
                 page: this.page,
                 pageSize: this.pageSize
             };
-
-            getProjectBySelect(params).then(resp => {
-                let result = resp.data.result;
-                // this.tableData = result.data || [];
-                // this.total = result.total || [];
+            getAppraisementList(params).then(resp => {
+                if (resp.data.status == '200') {
+                    let dataList = resp.data.result.list.forEach(function(item, index){
+                        item.editFlag = false;
+                    });
+                    this.tableData = resp.data.result.list || [];
+                    this.total = resp.data.result.total || 0;
+                } else if (resp.data.status == '49999') {
+                    this.operatingData = [];
+                    this.total = 0;
+                } else {
+                    this.$message.error(resp.data.message);
+                }
             }).catch(e => {
-                console.log('getProjectBySelect() exists error: ', e);
+                console.log('getProjectValuation() exists error: ', e);
             });
         },
-        pageChanged(page) {
+        clickState(index, id){
+            this.appraisementStatus = index == 0 ? '' : id;
+            this.getDatas();
+        },
+        handleCurrentChange(page) {
             this.page = page;
             this.getDatas();
         },
-        pageSizeChanged(pageSize) {
-            console.log('pageSize: ', pageSize);
-        },
-        handleIconClick(ev) {
-            // console.log(ev);
+        handleSizeChange(pageSize) {
+            this.pageSize = pageSize;
             this.getDatas();
         },
-        changeActive(index, item) {
-            this.currentIndex = index;
-            console.log(item);
-            this.appraisementStatus = item.state;
+        handleIconClick(ev) {
+            this.getDatas();
+        },
+        //查看估值历史
+        viewHistory(projectId) {
+            this.projectId = projectId;
+            this.historyDialog = true;
+            this.getHistory();
+        },
+        getHistory(){
+            let params = {
+                projectId: this.projectId,
+                page: this.page2,
+                pageSize: this.pageSize2
+            }
+            getAppraisementRec(params).then(resp => {
+                console.log("历史数据"+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.historyData = resp.data.result.list || [];
+                    this.total2 = resp.data.result.total || 0;
+                } else if (resp.data.status == '49999') {
+                    this.historyData = [];
+                    this.total2 = 0;
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('查看估值历史 error: ', e);
+            });
+        },
+        handleCurrentChangeRec(page) {
+            this.page2 = page;
+            this.getHistory();
+        },
+        handleSizeChangeRec(pageSize) {
+            this.pageSize2 = pageSize;
+            this.getHistory();
+        },
+        handleRowChange(row){
+            if(row){
+                this.currentId = row.id;
+            }else{
+                this.currentId = '';
+            }
+        },
+        resetValue() { //估值重置 确定按钮的方法
+            resetAppraisement(this.currentId).then(resp => {
+                console.log("估值重置 "+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.getDatas();
+                    this.resetDialog = false;
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('估值重置  error: ', e);
+            });
         }
-    }, 
+    },
     components: {
         myFilter
     }

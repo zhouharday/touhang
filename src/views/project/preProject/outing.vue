@@ -122,6 +122,11 @@ export default {
         this.$store.dispatch('getOutingSortOptions');
         this.init();
     },
+    watch: {
+        // '$route'(to, from) {
+        //     this.init();
+        // }
+    },
     methods: {
         init() {
             this.getExitDetail();

@@ -153,6 +153,7 @@ export default {
     },
     watch: {
         '$route'(to, from) {
+            if(to.name == 'preProject')
             this.init();
         }
     },
