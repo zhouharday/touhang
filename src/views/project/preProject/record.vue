@@ -34,6 +34,10 @@ const STATUS_DELETE = 2; // 删除
 
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         proId: {
             type: String,
             default: ''
@@ -53,12 +57,14 @@ export default {
         }
     },
     created() {
-        this.init();
+        // this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
-        }
+        'tabs':function (to,from){
+            if(to.tabList[2]){
+                this.init();
+            }
+        },
     },
     methods: {
         init() {

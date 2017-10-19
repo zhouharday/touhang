@@ -48,31 +48,31 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list">
-                <detail-form :proId="projectId" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                <detail-form :tabs="tabs" :proId="projectId" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                 </detail-form>
-                <table-form :companyForm="companyForm" :memberData="memberData" :structureData="structureData"></table-form>
+                <table-form :tabs="tabs" :companyForm="companyForm" :memberData="memberData" :structureData="structureData"></table-form>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
-                <team-table :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
+                <team-table :tabs="tabs" :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
                 </team-table>
             </el-tab-pane>
             <el-tab-pane label="记录" name="record" class="tab_list">
-                <record-form :proId="projectId"></record-form>
+                <record-form :tabs="tabs" :proId="projectId"></record-form>
             </el-tab-pane>
             <el-tab-pane label="审批" name="approve" class="tab_list">
-                <approve-table></approve-table>
+                <approve-table :tabs="tabs"></approve-table>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
-                <file-table :proId="projectId" ></file-table>
+                <file-table :tabs="tabs" :proId="projectId" ></file-table>
             </el-tab-pane>
             <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                <risk-table :proId="projectId" :proUsers="proUsers"></risk-table>
+                <risk-table :tabs="tabs" :proId="projectId" :proUsers="proUsers"></risk-table>
             </el-tab-pane>
             <el-tab-pane v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
-                <manage-table :proId="projectId"></manage-table>
+                <manage-table :tabs="tabs" :proId="projectId"></manage-table>
             </el-tab-pane>
             <el-tab-pane v-if="isExit" label="退出" name="outing" class="tab_list">
-                <outing-form :proId="projectId"></outing-form>
+                <outing-form :tabs="tabs" :proId="projectId"></outing-form>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -272,6 +272,9 @@ export default {
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
             structureData: [], // 股权结构
+            tabs: {
+                tabList:[true, false, false, false, false, false, false, false]
+            },
             capitalForm: {
                 startInvestDate:'',
                 exitDate:''
@@ -350,11 +353,13 @@ export default {
         this.init();
     },
     watch: {
-        '$route' (to, from) {
-            this.investProjectId = this.$route.params.investProjectId;
-            this.projectId = this.$route.params.userId;
-            this.init()      //再次调起我要执行的函数
-         }
+        // '$route' (to, from) {
+        //     this.investProjectId = this.$route.params.investProjectId;
+        //     this.projectId = this.$route.params.userId;
+        //     this.init(),      //再次调起我要执行的函数
+        //     console.log("详情页"+to.name);
+
+        //  }
     },
     methods: {
         init() {
@@ -362,6 +367,21 @@ export default {
             this.getPreProDetail();
             this.getStageUploadDocument(); //获取当前阶段及任务小助
             this.slectAllStage();
+        },
+        handleClick(val){
+            let idx = val.index;
+            let _tabList = this.tabs.tabList;
+            if(!_tabList[idx]){
+                for(var i = 0; i < _tabList.length; i++){
+                    if(i == idx){
+                        _tabList[i] = true;
+                    }else{
+                        _tabList[i] = false;
+                    }
+                }
+                let _tabs = {tabList:_tabList}
+                this.tabs = _tabs;
+            }
         },
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');

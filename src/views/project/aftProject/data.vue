@@ -328,6 +328,10 @@ import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDeta
 } from 'api/projectAfter';
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
@@ -381,6 +385,14 @@ export default {
                 appendix: ''
             },
             rules1: {
+                baseDate: [
+                    { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
+                ],
+                sort: [
+                    { required: true, message: '请选择类型', trigger: 'change' }
+                ]
+            },
+            rules2: {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
@@ -456,20 +468,7 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [
-                {
-                    baseDate: '2017-1-1',
-                    dataType: '半年报',
-                    operatorName: '张三',
-                    currentDeta: '2017-10-11',
-                },
-                {
-                    baseDate: '2017-9-1',
-                    dataType: '月报',
-                    operatorName: '李四',
-                    currentDeta: '2017-10-12',
-                }
-            ],
+            financialData: [],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -478,14 +477,6 @@ export default {
                 date: '',
                 remark: '',
                 appendix: ''
-            },
-            rules2: {
-                baseDate: [
-                    { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
-                ],
-                sort: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
-                ]
             },
             // 财务数据-添加数据  资产负债表
             balanceSheet: [],
@@ -499,11 +490,14 @@ export default {
         }
     },
     created() {
-        this.init();
+        // this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            console.log("projectId111"+this.projectId);
+            if(to.tabList[7]){
+                this.init();
+            }
         }
     },
     methods: {
@@ -517,7 +511,11 @@ export default {
         getOperateSubject() {
             getDataSubjectList(this.projectId, 0).then(resp => {
                 if (resp.data.status == '200') {
-                    this.operatingData = resp.data.result;
+                    let dataList = resp.data.result;
+                    dataList.forEach(function(item, index){
+                        item.editFlag = false;
+                    });
+                    this.operatingData = dataList;
                 } else if (resp.data.status == '49999') {
                     this.operatingData = [];
                 } else {

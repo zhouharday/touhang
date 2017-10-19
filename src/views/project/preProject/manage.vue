@@ -63,6 +63,7 @@
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="签约日期" prop="signDate" align="center">
+                            <template scope="scope">{{scope.row.signDate | formatDate}}</template>
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
                             <template scope="scope">{{scope.row.contractAmount | toMoney}}</template>
@@ -500,6 +501,7 @@
                             <template scope="scope">{{scope.row.shareAmount | toMoney}}</template>
                         </el-table-column>
                         <el-table-column label="分红日期" prop="shareDate" align="center">
+                            <template scope="scope">{{scope.row.shareDate | formatDate}}</template>
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
@@ -659,6 +661,10 @@ export default {
         myFundOptions: 'getMyFundOptions'    //本商户的可签约基金列表
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         proId: {
             type: String,
             default: ''
@@ -799,11 +805,13 @@ export default {
     created() {
         this.$store.dispatch('getCostSortOptions')
         this.$store.dispatch('getMyFundOptions')
-        this.init();
+        // this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            if(to.tabList[6]){
+                this.init();
+            }
         }
     },
     methods: {
@@ -856,9 +864,7 @@ export default {
                 amountMoney,
                 projectId
             };
-            console.log("addFee params:" + JSON.stringify(params));
             addFee(params).then(resp => {
-                console.log('addFee resp: ', resp.data);
                 if (resp.data.status === '200') {
                     this.getFee();
                     this.costForm1 = {
@@ -922,7 +928,7 @@ export default {
             let projectContract = {
                 projectId: this.proId,
                 contractName: this.contractForm1.contractName,
-                signDate: this.contractForm1.signDate,
+                signDate: changeDate(this.contractForm1.signDate),
                 contractAmount: this.contractForm1.contractAmount,
                 stockRatio: this.contractForm1.stockRatio,
                 handlerUserId: (this.contractForm1.handlerUserId != '' && this.contractForm1.handlerUserId != undefined)
@@ -933,9 +939,7 @@ export default {
                 projectContract: projectContract,
                 fundInfo: this.fundData1
             }
-            console.log("添加项目合同  :: " + JSON.stringify(data));
             addContract(projectContract, this.fundData1).then(resp => {
-                console.log('addContract resp: ', resp.data);
                 if (resp.data.status == '200') {
                     this.contractForm1 = {};
                     this.fundData1 = [];
@@ -957,6 +961,7 @@ export default {
             this.fundData1.push(this.fundForm1);
 
             this.fundForm1 = {
+                fund: '',
                 fundName: '',
                 investAmount: '',
                 stockRatio: '',
@@ -970,7 +975,6 @@ export default {
             this.contractAdd2 = !this.contractAdd2;
             getContractDetail(id).then(resp => {
                 if (resp.data.status == '200') {
-                    console.log('goEditContract合同详情: ' + JSON.stringify(resp.data.result));
                     this.contractForm2 = resp.data.result.projectContract;
                     this.fundData1 = resp.data.result.fundInfo;
                     this.fundData1.forEach(function(item, index) {
@@ -992,7 +996,7 @@ export default {
             let projectContract = {
                 id: id,
                 contractName: this.contractForm2.contractName,
-                signDate: this.contractForm2.signDate,
+                signDate: changeDate(this.contractForm2.signDate),
                 contractAmount: this.contractForm2.contractAmount,
                 stockRatio: this.contractForm2.stockRatio,
                 handlerUserId: (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
@@ -1003,9 +1007,7 @@ export default {
                 projectContract: projectContract,
                 fundInfo: this.fundData1
             }
-            console.log("修改项目合同  :: " + JSON.stringify(data));
             editContract(projectContract, this.fundData1).then(resp => {
-                console.log('editContract resp: ', resp.data);
                 if (resp.data.status == '200') {
                     this.contractForm2 = {};
                     this.fundData1 = [];
@@ -1046,7 +1048,6 @@ export default {
             });
             this.paidForm1.surplusAmount = surplus;
             this.paidForm1.payAmount = payAmount;
-            console.log("总剩余金额：" + this.paidForm1.surplusAmount + ",总支付金额：" + this.paidForm1.payAmount);
         },
         //选择投资支付的合同
         selContract(value) {
@@ -1073,7 +1074,6 @@ export default {
         },
         // 添加 投资支付 确定按钮
         confirmPaidAdd1() {
-            console.log("合同ID" + this.paidForm1.contractId);
             let projectInvestPay = {
                 projectId: this.proId,
                 investBeforeId: this.$route.params.investProjectId,
@@ -1083,17 +1083,15 @@ export default {
                 surplusAmount: this.paidForm1.surplusAmount,
                 handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                     ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                payDate: this.paidForm1.payDate
+                payDate: changeDate(this.paidForm1.payDate)
             };
             let data = {
                 projectInvestPay: projectInvestPay,
                 payDetails: this.fundData2
             }
-            console.log("添加投资支付  :: " + JSON.stringify(data));
             addContractPay(projectInvestPay, this.fundData2).then(resp => {
-                console.log('addContractPay resp: ', resp.data);
                 if (resp.data.status == '200') {
-                    this.getContractPay();
+                    this.init();
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd1 = false;
@@ -1107,7 +1105,6 @@ export default {
         //打开编辑投资支付
         goEditPay(id) {
             getContractPayDetail(id).then(resp => {
-                console.log('打开编辑投资支付: ' + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
                     this.fundData2 = resp.data.result.payDetails;
@@ -1122,7 +1119,6 @@ export default {
 
         // 编辑 投资支付 确定按钮
         confirmPaidAdd2(id) {
-            console.log("合同ID" + this.paidForm1.contractId);
             let projectInvestPay = {
                 id: id,
                 paidInMoney: 0,
@@ -1130,16 +1126,15 @@ export default {
                 surplusAmount: this.paidForm1.surplusAmount,
                 handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                     ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                payDate: this.paidForm1.payDate
+                payDate: changeDate(this.paidForm1.payDate)
             };
             let data = {
                 projectInvestPay: projectInvestPay,
                 payDetails: this.fundData2
             }
             editContractPay(projectInvestPay, this.fundData2).then(resp => {
-                console.log('editContractPay resp: ', resp.data);
                 if (resp.data.status == '200') {
-                    this.getContractPay();
+                    this.init();
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd2 = !this.paidAdd2;
@@ -1184,7 +1179,6 @@ export default {
                     this.fundData3.forEach(function(item, index) {
                         item.contractFundId = item.id;
                         item.id = '';
-                        console.log('合同中投资主体详情: ' + JSON.stringify(item));
                     });
                     this.valueSum();
                 } else {
@@ -1198,7 +1192,7 @@ export default {
         confirmSharingAdd1() {
             let projectParticipation = {
                 projectId: this.proId,
-                shareDate: this.sharingForm1.shareDate,
+                shareDate: changeDate(this.sharingForm1.shareDate),
                 shareTitle: this.sharingForm1.shareTitle,
                 contractId: this.sharingForm1.contractId,
                 shareAmount: this.sharingForm1.shareAmount,
@@ -1209,11 +1203,9 @@ export default {
                 projectParticipation: projectParticipation,
                 participationDetails: this.fundData3
             }
-            console.log("添加项目分红  :: " + JSON.stringify(data));
             addParticipation(projectParticipation, this.fundData3).then(resp => {
-                console.log('addParticipation resp: ', resp.data);
                 if (resp.data.status == '200') {
-                    this.getParticipation();
+                    this.init();
                     this.sharingForm1 = {};
                     this.sharingAdd1 = false;
                 } else {
@@ -1226,7 +1218,6 @@ export default {
         //打开编辑 项目分红
         goEditShare(id) {
             getParticipationDetail(id).then(resp => {
-                console.log('打开编辑项目分红: ' + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
@@ -1246,17 +1237,16 @@ export default {
                 shareAmount: this.sharingForm1.shareAmount,
                 handlerUserId: (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
                     ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                shareDate: this.sharingForm1.shareDate
+                shareDate: changeDate(this.sharingForm1.shareDate)
             };
             let data = {
                 projectParticipation: projectParticipation,
                 participationDetails: this.fundData3
             }
-            console.log("编辑 项目分红  :: " + JSON.stringify(data));
             editParticipation(projectParticipation, this.fundData3).then(resp => {
                 console.log('editParticipation resp: ', resp.data);
                 if (resp.data.status == '200') {
-                    this.getParticipation();
+                    this.init();
                     this.sharingForm1 = {};
                     this.fundData3 = [];
                     this.sharingAdd2 = !this.sharingAdd2;
@@ -1302,7 +1292,7 @@ export default {
                     delContract(id).then(resp => {
                         console.log('delContract resp: ', resp);
                         if (resp.data.status == '200') {
-                            this.getContract();
+                            this.init();
                         } else {
                             this.$message.error(resp.data.message);
                         }
@@ -1317,7 +1307,7 @@ export default {
                     delPay(id).then(resp => {
                         console.log('delPay resp: ', resp);
                         if (resp.data.status == '200') {
-                            this.getContractPay();
+                            this.init();
                         } else {
                             this.$message.error(resp.data.message);
                         }
@@ -1329,7 +1319,7 @@ export default {
                     delShare(id).then(resp => {
                         console.log('delShare resp: ', resp);
                         if (resp.data.status == '200') {
-                            this.getParticipation();
+                            this.init();
                         } else {
                             this.$message.error(resp.data.message);
                         }

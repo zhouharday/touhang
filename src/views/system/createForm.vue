@@ -28,18 +28,18 @@
                     </div>
                     <div class="form-group">
                         <label>时间 :
-                            <input type="text" placeholder="时间">
                         </label>
+                            <input type="text" placeholder="时间">
                     </div>
                     <div class="form-group">
                         <label>日期 :
-                            <input type="text" placeholder="日期">
                         </label>
+                            <input type="text" placeholder="日期">
                     </div>
                     <div class="form-group">
                         <label>上传 :
-                            <input type="file" placeholder="上传">
                         </label>
+                            <input type="file" placeholder="上传">
                     </div>
                 </form>
             </div>
@@ -68,6 +68,7 @@
                 </ul>
             </div>
         </div>
+        
     </section>
 </template>
 
@@ -141,6 +142,21 @@ export default {
             // this.ev.target.textContent = val;
             // this.ev.target.innerHTML = val;
         },
+        changeLabel(e){
+            alert();
+            var ev = ev || window.event;
+            var target = ev.target || ev.srcElement;
+            this.ev = e;
+            console.log(e);
+            if (e.target.nodeName.toLowerCase() == 'input') {
+                console.log(target.innerHTML);
+                // this.labelVal = target.innerHTML;
+                // target.innerHTML = this.labelVal;
+                target.innerHTML = '<label style="width:100px;">target.innerHTML</label>';
+                // alert(1);
+                console.log(this.labelVal);
+            };
+        },
         activeGroup(e) {
             // alert();
             var ev = ev || window.event;
@@ -150,8 +166,9 @@ export default {
             if (e.target.nodeName.toLowerCase() == 'label') {
                 console.log(target.innerHTML);
                 // this.labelVal = target.innerHTML;
-                target.innerHTML = this.labelVal;
-                alert(1);
+                // target.innerHTML = this.labelVal;
+                target.innerHTML = '<input type="text" style="width:100px;" @blur="changeLabel($event)">';
+                // alert(1);
                 console.log(this.labelVal);
             };
             var dropArea = $("#dropArea");

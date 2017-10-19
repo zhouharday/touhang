@@ -237,7 +237,9 @@ export default {
         },
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
+
                 if (valid) {
+                    alert(555);
                     console.log('验证通过');
                     console.log(this.form1);
                     this.form1.checkPwd = this.md5(this.form1.checkPwd);
@@ -245,7 +247,9 @@ export default {
                     this.forgetPassword();
                     this.findDialog = !this.findDialog;
                 } else {
-                    this.$refs[formName].resetFields();
+                    // alert();
+                    // this.validatePwd2();
+                    // this.$refs[formName].resetFields();
                     this.isSendCode = !this.isSendCode;
                     return false;
                 }

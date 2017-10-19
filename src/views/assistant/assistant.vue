@@ -15,7 +15,7 @@
             </el-col>
             <el-col :span="23">
                 <div class="industry-ul">
-                    <ul ref="industry" :class="{ changeList: !btnObject1.uptriangle }">
+                    <ul ref="industry" :class="{ changeList: btnObject1.uptriangle }">
                         <li v-for="(item,index) in industryList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==currentIndex1}" @click="changeActive(index,1,item)">
                             {{item.dicName}}
                         </li>
@@ -176,8 +176,8 @@ export default {
             confirm: false,
             dialogVisible: false,
             search: '',
-            collapseBtn1: '收起',
-            collapseBtn2: '收起',
+            collapseBtn1: '下拉',
+            collapseBtn2: '下拉',
             currentIndex1: '',
             currentIndex2: '',
             currentIndex3: '',
@@ -193,8 +193,8 @@ export default {
                 downtriangle: false
             },
             btnObject2: {
-                uptriangle: false,
-                downtriangle: true
+                uptriangle: true,
+                downtriangle: false
             },
             industryList: [], //行业数据
             roundList: [], //轮次数据
@@ -488,6 +488,7 @@ export default {
     display: inline-block;
     position: relative;
     bottom: 2px;
+    // top: 3px;
     width: 0;
     height: 0;
     border: 6px solid transparent;

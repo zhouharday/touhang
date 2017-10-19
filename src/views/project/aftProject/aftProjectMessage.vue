@@ -59,28 +59,28 @@
                     <table-form :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
                 <el-tab-pane label="审批" name="approve" class="tab_list">
-                    <approve-table></approve-table>
+                    <approve-table :tabs="tabs"></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table :projectId="projectId" ></file-table>
+                    <file-table :tabs="tabs" :projectId="projectId" ></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="管理" name="manage" class="tab_list">
-                    <manage-table :proId="projectId"></manage-table>
+                    <manage-table :tabs="tabs" :proId="projectId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form :projectId="projectId"></record-form>
+                    <record-form :tabs="tabs" :projectId="projectId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="风险管理" name="risk" class="tab_list">
-                    <risk-table :projectId="projectId" :proUsers="proUsers"></risk-table>
+                    <risk-table :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane label="重大事项" name="event" class="tab_list">
-                    <event-table :projectId="projectId"></event-table>
+                    <event-table :tabs="tabs" :projectId="projectId"></event-table>
                 </el-tab-pane>
                 <el-tab-pane label="数据填报" name="data" class="tab_list">
-                    <data-table :projectId="projectId"></data-table>
+                    <data-table :tabs="tabs" :projectId="projectId"></data-table>
                 </el-tab-pane>
                 <el-tab-pane label="监控设置" name="monitor" class="tab_list">
-                    <monitor-table :projectId="projectId"></monitor-table>
+                    <monitor-table :tabs="tabs" :projectId="projectId"></monitor-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -153,6 +153,9 @@ export default {
                 "shareAmount": 1460000,
                 "exitIncome": -2787731
             },
+            tabs: {
+                tabList:[true, false, false, false, false, false, false, false, false]
+            },
             basicForm: {}, // 基本信息
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
@@ -168,7 +171,7 @@ export default {
     created() {
         this.investProjectId = this.$route.params.investProjectId;
         this.projectId = this.$route.params.projectId;
-        this.init();
+        // this.init();
     },
     watch: {
         '$route' (to, from) {
@@ -181,6 +184,21 @@ export default {
         init() {
             this.initInfo();
             this.initData();
+        },
+        handleClick(val){
+            let idx = val.index;
+            let _tabList = this.tabs.tabList;
+            if(!_tabList[idx]){
+                for(var i = 0; i < _tabList.length; i++){
+                    if(i == idx){
+                        _tabList[i] = true;
+                    }else{
+                        _tabList[i] = false;
+                    }
+                }
+                let _tabs = {tabList:_tabList}
+                this.tabs = _tabs;
+            }
         },
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');

@@ -83,6 +83,10 @@ export default {
         outingSortOptions: 'getOutingSortOptions',   // 获取退出类型
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         proId: {
             type: String,
             default: ''
@@ -120,11 +124,13 @@ export default {
     },
     created() {
         this.$store.dispatch('getOutingSortOptions');
-        this.init();
+        // this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            if(to.tabList[7]){
+                this.init();
+            }
         }
     },
     methods: {

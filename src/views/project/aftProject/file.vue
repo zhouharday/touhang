@@ -61,6 +61,10 @@ import {
 
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
@@ -100,11 +104,12 @@ export default {
         }
     },
     created() {
-        this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            if(to.tabList[2]){
+                this.init();
+            }
         }
     },
     methods: {

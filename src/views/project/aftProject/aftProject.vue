@@ -24,8 +24,10 @@
                 <el-table-column prop="projectType" label="项目类型" align="center">
                 </el-table-column>
                 <el-table-column prop="payDate" label="投资日期" align="center">
+                    <template scope="scope">{{scope.row.payDate | formatDate}}</template>
                 </el-table-column>
                 <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
+                    <template scope="scope">{{scope.row.paySumAmount | toMoney}}</template>
                 </el-table-column>
                 <el-table-column prop="warnStatus" label="状态" align="center">
                 </el-table-column>
@@ -43,6 +45,7 @@
 import { mapGetters } from 'vuex'
 import { getDicChildrenII } from 'common/js/dictionary'
 import myFilter from 'components/myFilter'
+import 'common/js/filter'
 import { getAfters } from 'api/projectAfter';
 export default {
     computed: mapGetters({
@@ -80,6 +83,7 @@ export default {
     },
     watch: {
         '$route'(to, from) {
+            if(to.name == '')
             this.init();
         }
     },

@@ -39,7 +39,7 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :projectId="projectPoolId" :projectData="projectData">
+                    <detail-form :tabs="tabs" :basicForm="basicForm" :companyForm="companyForm" :projectId="projectPoolId" :projectData="projectData">
                     </detail-form>
                     <table-form :projectData="projectData"></table-form>
                 </el-tab-pane>
@@ -47,13 +47,13 @@
                                     <industry-form :industryForm="industryForm"></industry-form>
                                 </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
-                    <capital-table :projectData="projectData"></capital-table>
+                    <capital-table :tabs="tabs" :projectData="projectData"></capital-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form></record-form>
+                    <record-form :tabs="tabs"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table></file-table>
+                    <file-table :tabs="tabs"></file-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -77,10 +77,13 @@ export default {
     name: 'zprojectPoolMessage',
     data() {
         return {
-            title: '双子金服投资项目',
+            title: '',
             invest: '投资',
             observe: '观察',
             eliminate: '淘汰',
+            tabs: {
+                tabList:[true, false, false, false]
+            },
             isShow: true,
             show_f: true,
             show_s: true,
@@ -104,12 +107,14 @@ export default {
             projectData: {}     // 项目池详情信息
         }
     },
-    created() {
+    created() { 
         this.init();
     },
     watch: {
         '$route' (to, from) {
-            this.init()      //再次调起我要执行的函数
+            if(to.name == 'zprojectPoolMessage'){
+                this.init()      //再次调起我要执行的函数
+            }
          }
     },
     methods: {
@@ -124,6 +129,21 @@ export default {
             let href = window.location.href;
             let projectPoolId = href.substr(href.lastIndexOf('/') + 1, href.length);
             this.projectPoolId = projectPoolId;
+        },
+        handleClick(val){
+            let idx = val.index;
+            let _tabList = this.tabs.tabList;
+            if(!_tabList[idx]){
+                for(var i = 0; i < _tabList.length; i++){
+                    if(i == idx){
+                        _tabList[i] = true;
+                    }else{
+                        _tabList[i] = false;
+                    }
+                }
+                let _tabs = {tabList:_tabList}
+                this.tabs = _tabs;
+            }
         },
         /**
          * [getPoolDetail 获取项目池详情]

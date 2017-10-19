@@ -1,6 +1,6 @@
 <template>
     <div class="monitorTable">
-        <tabel-header :data="headerInfo_monitor" @add="monitorSetting = true"></tabel-header>
+        <tabel-header :data="headerInfo_monitor" @add="goAddMonitor"></tabel-header>
         <el-table :data="monitorData" border style="width: 100%">
             <el-table-column label="数据来源" prop="dataSource" align="center">
                 <template scope="scope">{{scope.row.dataSource | key2value(dataSourcesOptions, scope.row.dataSource)}}</template>
@@ -25,7 +25,7 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="数据来源" prop="dataSource" :label-width="formLabelWidth">
-                            <el-select @change="changeDataSource" v-model="monitorForm.dataSource" placeholder="请选择数据来源" style="width:100%;">
+                            <el-select @change="changeDataSource" v-model="monitorForm.dataSource" placeholder="请选择数据来源" style="width:100%;" :disabled="monitorEditDisable">
                                 <el-option v-for="item in dataSourcesOptions" :key="item.key" :label="item.value" :value="item.key">
                                 </el-option>
                             </el-select>
@@ -33,7 +33,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="类型" prop="dataType">
-                            <el-select v-model="monitorForm.dataType" placeholder="请选择类型" style="width:100%;">
+                            <el-select v-model="monitorForm.dataType" :disabled="monitorEditDisable" placeholder="请选择类型" style="width:100%;">
                                 <el-option v-for="item in sortOptions" :key="item.key" :label="item.value" :value="item.key">
                                 </el-option>
                             </el-select>
@@ -47,14 +47,14 @@
                 <el-table-column label="是否监控" prop="isMonitor" align="center">
                     <template scope="scope">
                         <span>
-                            <el-radio class="radio" v-model="scope.row.isMonitor" :label="1">是</el-radio>
-                            <el-radio class="radio" v-model="scope.row.isMonitor" :label="0">否</el-radio>
+                            <el-radio class="radio" v-model="scope.row.isMonitor" :label=1>是</el-radio>
+                            <el-radio class="radio" v-model="scope.row.isMonitor" :label=0>否</el-radio>
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="预警规则" prop="rule" align="center">
                     <template scope="scope">
-                        <span v-if="scope.row.isMonitor == '1'" >
+                        <span v-if="scope.row.isMonitor == 1" >
                             <el-radio-group v-model="scope.row.rule">
                                 <el-radio class="radio" v-for="item in ruleOptions" :label="item.key">{{item.value}}</el-radio>
                             </el-radio-group>
@@ -63,7 +63,7 @@
                 </el-table-column>
                 <el-table-column label="阈值" prop="threshold" align="center">
                     <template scope="scope">
-                        <span v-if="scope.row.isMonitor == '1'" class="cell-edit-input">
+                        <span v-if="scope.row.isMonitor == 1" class="cell-edit-input">
                             <el-input v-model="scope.row.threshold" placeholder=""></el-input>
                         </span>
                     </template>
@@ -139,6 +139,10 @@ import { changeDate } from 'common/js/config'
 import { getDataMonitorList, getDataMonitorDetail, updateDataMonitor, getFormByType, saveDataMonitor } from 'api/projectAfter';
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
@@ -149,6 +153,7 @@ export default {
             title:'添加监控设置',
             monitorSetting: false,
             monitorEditing: false,
+            monitorEditDisable: false,
             formLabelWidth: '80px',
             monitorForm: {
                 dataSource: 0,
@@ -236,15 +241,17 @@ export default {
                     icon: 'gear-a',
                     explain: '监控设置'
                 }]
-            }
+            },
+            idEditModel: false
         }
     },
     created() {
-        this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            if(to.tabList[8]){
+                this.init();
+            }
         }
     },
     methods: {
@@ -280,27 +287,31 @@ export default {
         },
         //选择监控数据源，获取相应指标
         changeDataSource(val){
-            getFormByType(val).then(resp => {
-                if (resp.data.status == '200') {
-                    var _data = resp.data.result;
-                    _data.forEach(function(item, index){
-                        item.isMonitor = 0;
-                        item.rule = 0;
-                        item.threshold = 0;
-                        item.formLabelId = item.id;
-                        item.id = '';
-                        item.monitorId = '';
-                    });
-                    this.dataMonitorTable = _data;
-                } else if (resp.data.status == '49999') {
-                    this.dataMonitorTable = [];
-                    this.dataMonitorTable.push();
-                } else {
-                    this.$message.error(resp.data.message);
-                }
-            }).catch(e => {
-                console.log('获取监控数据源相应的指标列表 error: ', e);
-            })
+            console.log("打开编辑时: " + this.idEditModel);
+            if(!this.idEditModel){
+                getFormByType(val).then(resp => {
+                    if (resp.data.status == '200') {
+                        console.log("选择监控数据源" );
+                        var _data = resp.data.result;
+                        _data.forEach(function(item, index){
+                            item.isMonitor = 0;
+                            item.rule = 0;
+                            item.threshold = 0;
+                            item.formLabelId = item.id;
+                            item.id = '';
+                            item.monitorId = '';
+                        });
+                        this.dataMonitorTable = _data;
+                    } else if (resp.data.status == '49999') {
+                        this.dataMonitorTable = [];
+                        this.dataMonitorTable.push();
+                    } else {
+                        this.$message.error(resp.data.message);
+                    }
+                }).catch(e => {
+                    console.log('获取监控数据源相应的指标列表 error: ', e);
+                })
+            }
         },
         // 添加 监控设置 的方法
         saveDataMonitor(formName, id) {
@@ -310,7 +321,7 @@ export default {
                     let dataMonitor = this.monitorForm;
                     let monitorInfos = this.dataMonitorTable;
                     saveDataMonitor(dataMonitor, monitorInfos).then(resp => {
-                        // console.log("添加 监控设置结果：" + JSON.stringify(resp.data));
+                        console.log("添加 监控设置结果：" + JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             this.getDataMonitorList();
                             this.monitorSetting = !this.monitorSetting;
@@ -325,11 +336,22 @@ export default {
                 }
             });
         },
+        goAddMonitor(){
+            this.title = '添加监控设置';
+            this.idEditModel = false;
+            this.monitorForm = {id: '', dataSource:'', dataType: ''};
+            this.dataMonitorTable = [];
+            this.monitorEditDisable = false;
+            this.monitorSetting = !this.monitorSetting;
+        },
         // 打开编辑 监控设置 的方法
         editMonitor(id){
+            this.monitorEditDisable = true;
+            this.idEditModel = true;
             this.monitorSetting = !this.monitorSetting;
             getDataMonitorDetail(id).then(resp => {
                 if (resp.data.status == '200') {
+                    // console.log("打开编辑 监控设置"+JSON.stringify(resp.data.result));
                     this.monitorForm = resp.data.result.dataMonitor;
                     this.dataMonitorTable = resp.data.result.monitorInfos;
                     this.title = '编辑监控设置';
@@ -342,8 +364,8 @@ export default {
         },
         // 取消 监控设置 的取消按钮
         cancleSetting() {
-            this.monitorSetting = false
-            this.monitorForm = {dataSource:'', dataType: ''};
+            this.monitorSetting = !this.monitorSetting;
+            this.monitorForm = {id: '', dataSource:'', dataType: ''};
             this.dataMonitorTable = [];
         }
     },

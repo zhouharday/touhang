@@ -244,9 +244,9 @@ export default {
         this.projectId = this.$route.params.userId;
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
-        }
+        // '$route'(to, from) {
+        //     this.init();
+        // }
     },
     methods: {
         //添加 董事会成员的方法

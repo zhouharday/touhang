@@ -32,6 +32,12 @@ import { getRecords, addRecord, delRecord } from 'api/project';
 const STATUS_NORMAL = 1; // 正常
 const STATUS_DELETE = 2; // 删除
 export default {
+    props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
+    },
     data() {
         return {
             headerInfo_record: {
@@ -44,11 +50,12 @@ export default {
         }
     },
     created() {
-        this.init();
     },
     watch: {
-        '$route'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            if(to.tabList[4]){
+                this.init();
+            }
         }
     },
     methods: {
