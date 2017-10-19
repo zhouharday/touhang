@@ -281,12 +281,7 @@ export default {
         this.$store.dispatch('getCurrencyOptions');   // 获取币种类型
         this.projectId = this.proId;
     },
-    watch: {
-        // '$route'(to, from) {
-        //     this.init();
-        //     this.projectId = this.proId;
-        // }
-    },
+    watch: {},
     methods: {
         disable(name) {
             return name.flag = !name.flag;

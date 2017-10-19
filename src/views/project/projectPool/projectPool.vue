@@ -152,9 +152,8 @@ export default {
         }
     },
     created() {
-        this.initInfo();
-        this.getDatas();
         this.$store.dispatch('getIndustryOptionsII');
+        this.init();
     },
     mounted() {
     },

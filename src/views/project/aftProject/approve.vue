@@ -27,6 +27,12 @@
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 export default {
+    props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
+    },
     data() {
         return {
             approvalData: [{
@@ -48,6 +54,13 @@ export default {
             headerInfo_file: {
                 desc: '审批'
             },
+        }
+    },
+    watch: {
+        'tabs':function (to,from){
+            if(to.tabList[1]){
+                //this.init();
+            }
         }
     },
     methods: {

@@ -55,6 +55,10 @@ import {
 } from 'api/projectAfter';
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
@@ -118,12 +122,14 @@ export default {
         }
     },
     created() {
-        this.init();
+        // this.init();
     },
     watch: {
-        // '$route'(to, from) {
-        //     this.init();
-        // }
+        'tabs':function (to,from){
+            if(to.tabList[6]){
+                this.init();
+            }
+        }
     },
     methods: {
         init() {

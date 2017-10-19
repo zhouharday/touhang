@@ -328,6 +328,10 @@ import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDeta
 } from 'api/projectAfter';
 export default {
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         projectId: {
             type: String,
             default: ''
@@ -486,12 +490,15 @@ export default {
         }
     },
     created() {
-        this.init();
+        // this.init();
     },
     watch: {
-        // '$route'(to, from) {
-        //     this.init();
-        // }
+        'tabs':function (to,from){
+            console.log("projectId111"+this.projectId);
+            if(to.tabList[7]){
+                this.init();
+            }
+        }
     },
     methods: {
         init() {

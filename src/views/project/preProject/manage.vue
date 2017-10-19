@@ -661,6 +661,10 @@ export default {
         myFundOptions: 'getMyFundOptions'    //本商户的可签约基金列表
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         proId: {
             type: String,
             default: ''
@@ -801,20 +805,13 @@ export default {
     created() {
         this.$store.dispatch('getCostSortOptions')
         this.$store.dispatch('getMyFundOptions')
-        this.init();
+        // this.init();
     },
     watch: {
-        // '$route'(to, from) {
-        //     this.init();
-        // },
-        'contractData'(to, from) {
-            this.init();
-        },
-        'paidData'(to, from) {
-            this.init();
-        },
-        'sharingData'(to, from) {
-            this.init();
+        'tabs':function (to,from){
+            if(to.tabList[6]){
+                this.init();
+            }
         }
     },
     methods: {
@@ -1094,7 +1091,7 @@ export default {
             }
             addContractPay(projectInvestPay, this.fundData2).then(resp => {
                 if (resp.data.status == '200') {
-                    this.getContractPay();
+                    this.init();
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd1 = false;
@@ -1137,7 +1134,7 @@ export default {
             }
             editContractPay(projectInvestPay, this.fundData2).then(resp => {
                 if (resp.data.status == '200') {
-                    this.getContractPay();
+                    this.init();
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd2 = !this.paidAdd2;
@@ -1208,7 +1205,7 @@ export default {
             }
             addParticipation(projectParticipation, this.fundData3).then(resp => {
                 if (resp.data.status == '200') {
-                    this.getParticipation();
+                    this.init();
                     this.sharingForm1 = {};
                     this.sharingAdd1 = false;
                 } else {
@@ -1249,7 +1246,7 @@ export default {
             editParticipation(projectParticipation, this.fundData3).then(resp => {
                 console.log('editParticipation resp: ', resp.data);
                 if (resp.data.status == '200') {
-                    this.getParticipation();
+                    this.init();
                     this.sharingForm1 = {};
                     this.fundData3 = [];
                     this.sharingAdd2 = !this.sharingAdd2;
@@ -1295,7 +1292,7 @@ export default {
                     delContract(id).then(resp => {
                         console.log('delContract resp: ', resp);
                         if (resp.data.status == '200') {
-                            this.getContract();
+                            this.init();
                         } else {
                             this.$message.error(resp.data.message);
                         }
@@ -1310,7 +1307,7 @@ export default {
                     delPay(id).then(resp => {
                         console.log('delPay resp: ', resp);
                         if (resp.data.status == '200') {
-                            this.getContractPay();
+                            this.init();
                         } else {
                             this.$message.error(resp.data.message);
                         }
@@ -1322,7 +1319,7 @@ export default {
                     delShare(id).then(resp => {
                         console.log('delShare resp: ', resp);
                         if (resp.data.status == '200') {
-                            this.getParticipation();
+                            this.init();
                         } else {
                             this.$message.error(resp.data.message);
                         }

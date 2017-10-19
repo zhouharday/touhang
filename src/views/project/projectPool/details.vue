@@ -134,6 +134,10 @@ export default {
         departmentOptions:'getDepartmentOptions',   // 获取业务部门
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         basicForm: {
             type: Object,
             default: {}
@@ -149,11 +153,6 @@ export default {
         projectId: {
             type: String,
             default: ''
-        }
-    },
-    watch: {
-        projectData(val, oldVal) {
-            this.init();
         }
     },
     data() {
@@ -195,6 +194,9 @@ export default {
         this.$store.dispatch('getFromOptions')
         this.$store.dispatch('getAddressOptions')
         this.$store.dispatch('getDepartmentOptions')
+        this.init();
+    },
+    watch: {
     },
     methods: {
         init() {

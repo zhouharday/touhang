@@ -277,6 +277,10 @@ export default {
         myFundOptions: 'getMyFundOptions'    //本商户的可签约基金列表
     }),
     props: {
+        tabs: {
+            type: Object,
+            default: {}
+        },
         proId: {
             type: String,
             default: ''
@@ -320,12 +324,13 @@ export default {
     created() {
         this.$store.dispatch('getCostSortOptions')
         this.$store.dispatch('getMyFundOptions')
-        this.init();
     },
     watch: {
-        // '$route'(to, from) {
-        //     this.init();
-        // }
+        'tabs':function (to,from){
+            if(to.tabList[3]){
+                this.init();
+            }
+        }
     },
     methods: {
         init() {
