@@ -32,12 +32,6 @@ const STATUS_NORMAL = 1; // 正常
 const STATUS_DELETE = 2; // 删除
 
 export default {
-    // computed: mapState({
-    //     userName(state) {
-    //         state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-    //         return state.login.userInfor;
-    //     }
-    // }),
     data() {
         return {
             userName: "",
@@ -53,8 +47,20 @@ export default {
             recordList: []
         }
     },
+    props: {
+        tabs: {
+            type: Object,
+            default: {}
+        }
+    },
     created() {
-        this.init();
+    },
+    watch: {
+        'tabs':function (to,from){
+            if(to.tabList[2]){
+                this.init();
+            }
+        }
     },
     methods: {
         init() {
