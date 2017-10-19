@@ -38,10 +38,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="经办人" prop="managerId">
-                        <el-input v-model="quitApplyInfo.managerId" placeholder="当前用户" disabled style="width:100%">
-                            <!-- <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.managerId">
-                            </el-option> -->
+                    <el-form-item label="经办人" prop="managerName">
+                        <el-input v-model="quitApplyInfo.managerName" placeholder="当前用户" disabled style="width:100%">
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -80,14 +78,6 @@ export default {
             allAgreement: [],
             agreementData: [],
             getAgreementValue: '',
-            investmentManager: [{
-                dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
-                managerId: JSON.parse(sessionStorage.getItem('userInfor')).id
-            }],
-            // investor: [{
-            //     investorName: this.$store.state.investor.investorName,
-            //     inverstorId: this.$route.params.userId
-            // }],
             size: 1000,
             rules1: {
                 agreementName: [

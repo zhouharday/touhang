@@ -44,9 +44,14 @@ import quitApply from './quitApply'
 import '../../common/js/filter'
 import {getEarningsAmountList, updateEarningsAmount, deleteEarningsAmount} from 'api/investor'
 export default {
+    props: {
+        quitCapitalData: {
+            type: Array,
+            default: () => []
+        }
+    },
     data() {
         return {
-            quitCapitalData: [],
             quitDetailsModal: false,
             bonusInfo: {
                 investorName: '',

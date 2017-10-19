@@ -253,8 +253,8 @@
         </el-table-column>
     </el-table>
     <div class="btnList">
-        <el-button class="btn success" @click="preservation">保存</el-button>
-        <el-button class="btn danger" @click="cancel">取消</el-button>
+        <el-button class="btn success" :disabled="formDetails.flag" @click="preservation">保存</el-button>
+        <el-button class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
     </div>
 </div>
 </template>

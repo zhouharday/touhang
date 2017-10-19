@@ -1,90 +1,90 @@
 <template>
-    <div class="fund">
-        <!-- 组织类型 -->
-        <my-filter :chooseInfo="organizationType" @getIdInfo="clickOrgType"></my-filter>
-        <!-- 管理类型 -->
-        <my-filter :chooseInfo="managementType" @getIdInfo="clickmanType"></my-filter>
-        <!-- 基金阶段 -->
-        <my-filter :chooseInfo="allFundStage" @getIdInfo="clickStage"></my-filter>
-        <!-- 基金状态 -->
-        <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
-        <div class="tables">
-            <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
-                <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
-                </el-input>
-            </table-header>
-            <el-table :data="myFund" border style="width: 100%">
-                <el-table-column fixed label="基金名称" width="200" align="center">
-                    <template scope="scope">
+<div class="fund">
+    <!-- 组织类型 -->
+    <my-filter :chooseInfo="organizationType" @getIdInfo="clickOrgType"></my-filter>
+    <!-- 管理类型 -->
+    <my-filter :chooseInfo="managementType" @getIdInfo="clickmanType"></my-filter>
+    <!-- 基金阶段 -->
+    <my-filter :chooseInfo="allFundStage" @getIdInfo="clickStage"></my-filter>
+    <!-- 基金状态 -->
+    <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
+    <div class="tables">
+        <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
+            <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
+            </el-input>
+        </table-header>
+        <el-table :data="myFund" border style="width: 100%">
+            <el-table-column fixed label="基金名称" width="200" align="center">
+                <template scope="scope">
                         <div class="name" @click="handleRouter(scope.$index, scope.row)">
                             <span class="investorName">{{ scope.row.fundName }}</span>
                         </div>
                     </template>
-                </el-table-column>
-                <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
-                </el-table-column>
-                <el-table-column prop="orgType" label="组织类型" width="200" align="center">
-                </el-table-column>
-                <el-table-column prop="manageType" label="管理类型" width="200" align="center">
-                </el-table-column>
-                <el-table-column label="基金规模（元）" width="200" align="center">
-                    <template scope="scope">
+            </el-table-column>
+            <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
+            </el-table-column>
+            <el-table-column prop="orgType" label="组织类型" width="200" align="center">
+            </el-table-column>
+            <el-table-column prop="manageType" label="管理类型" width="200" align="center">
+            </el-table-column>
+            <el-table-column label="基金规模（元）" width="200" align="center">
+                <template scope="scope">
                         <div>{{scope.row.fundScale | toMoney}}</div>
                     </template>
-                </el-table-column>
-                <el-table-column prop="placementSum" label="募集总额（元）" width="200" align="center">
-                </el-table-column>
-                <el-table-column prop="investSum" label="投资总额（元）" width="200" align="center">
-                </el-table-column>
-                <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200" align="center">
-                </el-table-column>
-                <el-table-column label="成立日期" width="200" align="center">
-                    <template scope="scope">
+            </el-table-column>
+            <el-table-column prop="placementSum" label="募集总额（元）" width="200" align="center">
+            </el-table-column>
+            <el-table-column prop="investSum" label="投资总额（元）" width="200" align="center">
+            </el-table-column>
+            <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200" align="center">
+            </el-table-column>
+            <el-table-column label="成立日期" width="200" align="center">
+                <template scope="scope">
                         <div style="width: 100%;height: 100%;">{{scope.row.createDate | formatDate}}</div>
                     </template>
-                </el-table-column>
-                <el-table-column prop="fundStage" label="状态" width="200" align="center">
-                </el-table-column>
-                <el-table-column fixed="right" label="操作" width="200" align="center">
-                    <template scope="scope">
+            </el-table-column>
+            <el-table-column prop="fundStage" label="状态" width="200" align="center">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="200" align="center">
+                <template scope="scope">
                         <el-button type="text" size="small" @click="addTeamlist(scope.$index, scope.row)">基金团队</el-button>
                         <el-button type="text" size="small" @click="deleteFundlist(scope.$index, scope.row)">删除</el-button>
                     </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size=pageSize layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
-            </el-pagination>
-        </div>
-        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @cancel="cancelDel" @del="delFundList">
-        </delete-reminders>
-        <!-- 添加团队成员 -->
-        <el-dialog title="添加团队成员" :visible.sync="modalAdd" :close-on-click-modal="false">
-            <el-form :model="formTeam">
-                <el-form-item label="姓名" :label-width="formLabelWidth">
-                    <el-select v-model="formTeam.userId" placeholder="请选择成员" style="width:100%;">
-                        <el-option v-for="list of userNameList" :key="list.id" :label="list.name" :value="list.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="角色" :label-width="formLabelWidth">
-                    <el-select v-model="formTeam.autId" placeholder="请选择成员" style="width:100%;">
-                        <el-option v-for="item of roleList" :key="item.id" :label="item.roleName" :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="添加日期" :label-width="formLabelWidth">
-                    <el-input type="date" placeholder="当前日期" v-model="formTeam.addTime" disabled style="width: 100%;">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="modalAdd = false">取 消</el-button>
-                <el-button type="danger" @click="confirmAdd">确 定</el-button>
-            </div>
-        </el-dialog>
+            </el-table-column>
+        </el-table>
     </div>
+    <div class="page">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size=pageSize layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
+        </el-pagination>
+    </div>
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @cancel="cancelDel" @del="delFundList">
+    </delete-reminders>
+    <!-- 添加团队成员 -->
+    <el-dialog title="添加团队成员" :visible.sync="modalAdd" :close-on-click-modal="false">
+        <el-form :model="formTeam">
+            <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-select v-model="formTeam.userId" placeholder="请选择成员" style="width:100%;">
+                    <el-option v-for="list of userNameList" :key="list.id" :label="list.name" :value="list.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="角色" :label-width="formLabelWidth">
+                <el-select v-model="formTeam.autId" placeholder="请选择成员" style="width:100%;">
+                    <el-option v-for="item of roleList" :key="item.id" :label="item.roleName" :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="添加日期" :label-width="formLabelWidth">
+                <el-date-picker v-model="formTeam.addTime" disabled type="date" placeholder="选择日期" style="width: 100%;">
+                </el-date-picker>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="modalAdd = false">取 消</el-button>
+            <el-button type="danger" @click="confirmAdd">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -93,8 +93,18 @@ import myFilter from 'components/myFilter'
 import deleteReminders from 'components/deleteReminders'
 import Service from 'common/js/fetch'
 import '../../common/js/filter.js' //时间格式过滤器
-import { mapMutations, mapGetters } from 'vuex'
-import { getManagementType, getMyFund, deleteFundInfo, queryUserList, queryList, addFundTeam } from 'api/fund'
+import {
+    mapMutations,
+    mapGetters
+} from 'vuex'
+import {
+    getManagementType,
+    getMyFund,
+    deleteFundInfo,
+    queryUserList,
+    queryList,
+    addFundTeam
+} from 'api/fund'
 export default {
     data() {
         return {
@@ -155,7 +165,7 @@ export default {
                 fundId: '',
                 userId: '',
                 autId: '',
-                addTime: ''
+                addTime: new Date()
             },
             userNameList: [],
             roleList: [],
@@ -293,9 +303,6 @@ export default {
         this.$store.dispatch('getFundStage').then(() => {
             this.allFundStage.details = this.fundStage
         })
-        // this.$store.dispatch('getFundStatus').then(() => {
-        //     this.allFundStatus.details = this.fundStatus
-        // })
         getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
             if (res.status == '200') {
                 this.pageTotal = res.data.result.total
