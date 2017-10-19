@@ -247,6 +247,7 @@
                 deleteOrg(this.id).then((res) => {
                     if (res.status == '200') {
                         this.$Message.success(res.data.message || '删除成功！')
+                        this.getList()
                         this.modal_loading = false
                         this.deleteReminders = false
                     }
