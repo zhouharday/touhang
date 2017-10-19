@@ -155,7 +155,6 @@ export default {
         '$route'(to, from) {
             if(to.name == 'preProject'){
                 this.init();
-                console.log("投资列表页");
             }
         }
     },
