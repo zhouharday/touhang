@@ -4,7 +4,7 @@
         <!--搜索框-->
         <el-row class="search-box">
             <el-col :span="10" class="search">
-                <el-input placeholder="请按项目名称进行查询" icon="search" v-model="name" :on-icon-click="handleIconClick">
+                <el-input placeholder="请按项目名称进行查询" icon="search" v-model="name" @keyup.enter.native="handleIconClick" :on-icon-click="handleIconClick">
                 </el-input>
             </el-col>
         </el-row>
