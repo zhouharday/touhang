@@ -1,6 +1,6 @@
 <template>
 <div class="add">
-    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
+    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :editInfo="editInfo" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
     </my-details>
 </div>
 </template>
@@ -68,7 +68,8 @@ export default {
                 intermediateStage: '',
                 generalLevel: ''
             },
-            formData: {}
+            formData: {},
+            editInfo: false,
         }
     },
     methods: {
