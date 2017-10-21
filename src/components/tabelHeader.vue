@@ -5,7 +5,7 @@
             <slot></slot>
             <span v-show="data.desc" class="defaultcolor" ref="desc">{{data.desc}}</span>
         </div>
-        <div class="btn" ref="btn">
+        <div class="btn" ref="btn" v-if="edit">
             <el-button v-for="(btn, index) in data.btnGroup" :key="btn.index" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="data.btnGroup">
                 <Icon :type="btn.icon" v-show="btn.icon"></Icon>
                 <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
@@ -28,6 +28,10 @@ export default {
         theme: {
             type: String,
             default: '#2a3142'
+        },
+        edit: {
+            type: Boolean,
+            default: true
         }
     },
     methods: {
@@ -62,46 +66,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../common/styles/variable.less";
+@import "../common/styles/mixin.less";
 .tableHeader {
+    .title();
     .title {
-        width: 100%;
-        height: 42px;
-        line-height: 42px;
-        background: @color-base;
-        color: @color-base;
-        display: flex;
-        align-items: center;
-        .desc {
-            flex: 1;
-            text-align: left;
-            .defaultcolor {
-                color: #fff;
-                margin-left: 24px;
-            }
-        }
-        .btn {
-            flex: 1;
-            text-align: right;
-            line-height: 42px;
-            .btnwrapper {
-                transition: 0.3s all;
-                background: transparent;
-                margin-right: @font-size-small;
-                border: none;
-                font-size: 14px;
-                color: #fff;
-                outlione: none;
-                &:hover {
-                    color: @color-base;
-                    background: @color-theme-red;
-                    transform: scale(1.1);
-                }
-                .explain {
-                    margin-right: 6px;
-                }
-            }
-        }
+        background: #fff;
     }
 }
 </style>
