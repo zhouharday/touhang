@@ -124,7 +124,7 @@
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
-                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pages" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
                     </el-pagination>
                 </div>
             </el-col>
@@ -200,6 +200,7 @@ export default {
             roundList: [], //轮次数据
             locationList: [], //所在地数据
             tableData: [], //云项目列表数据
+
         }
     },
     methods: {
