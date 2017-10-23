@@ -16,15 +16,16 @@
                         </el-col>
                         <el-col :span="14">
                             <el-form-item label="企业名称：" prop="companyName">
-                                <el-input v-model="form1.companyName" auto-complete="off"></el-input>
+                                <el-input :disabled="1" v-model="form1.companyName" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="14">
-                            <el-form-item label="部门：" prop="dept">
-                                <el-select v-model="form1.dept" placeholder="请选择" size="120%">
+                            <el-form-item label="部门：" prop="deptName">
+                                <!-- <el-select v-model="form1.dept" placeholder="请选择" size="120%">
                                     <el-option v-for="item in department" :key="item.id" :label="item.deptName" :value="item.id">
                                     </el-option>
-                                </el-select>
+                                </el-select> -->
+                                    <el-input :disabled="1" v-model="form1.deptName" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="14" style="margin-bottom:50px">
@@ -122,7 +123,7 @@ export default {
                 userID: '',
                 userRole: '',
                 companyName: '',
-                dept: '', //部门
+                deptName: '', //部门
                 name: '', //姓名
                 phone: '', //手机
                 telephone: '', //办公电话
@@ -248,13 +249,15 @@ export default {
         /************************提交表单结束********************************/
         selectpersonalInfo() { //个人中心个人详细信息展示 api
             this.$http.post(this.api + '/personalCenter/selectpersonalInfo', {
-                id: this.user.userInfor.id
+                userId: this.user.userInfor.id,
+                merchantId: this.user.merchants[0].id
             })
                 .then(res => {
                     if (res.status == '200') {
                         if (res.data.status == '200') {
                             console.log(res.data);
                             this.form1 = res.data.result;
+                            this.form1.companyName = this.user.merchants[0].merchant_name;
                             this.$Message.success(res.data.message);
                         } else if (res.data.status == '403') {
                             this.$Message.error(res.data.message);
@@ -268,8 +271,11 @@ export default {
         },
         updatePersonalData() { //个人中心个人详细信息更改 api
             this.$http.post(this.api + '/personalCenter/updatePersonalData', {
-                id: this.user.userInfor.id
-
+                id: this.user.userInfor.id,
+                phone: this.form1.name, //手机号
+                emil: this.form1.emil, //邮箱
+                telephone: this.form1.telephone, //办公电话
+                name: this.form1.name //姓名
 
             })
                 .then(res => {
@@ -358,5 +364,15 @@ export default {
     .active {
         background: blue;
     }
+}
+.formComponents{
+    min-height: 300px;
+}
+.formContent{
+    min-height: 300px;
+    background: #fff;
+}
+.formRight{
+    min-height: 300px;
 }
 </style>

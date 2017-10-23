@@ -145,12 +145,14 @@ export default {
         },
         // 添加角色 的方法
         addRole() {
-            projectRoleSave(0,this.roleForm.roleName).then((res)=>{
-                queryList(0).then((res)=>{
-                    this.roleData = reloadQueryData(res.data.result)
-                    this.roleDialog = false;
+            if(this.roleDialog == true){
+                projectRoleSave(0,this.roleForm.roleName).then((res)=>{
+                    queryList(0).then((res)=>{
+                        this.roleData = reloadQueryData(res.data.result)
+                        this.roleDialog = false;
+                    })
                 })
-            })
+            }
         },
         //编辑
         checkEdit(index, row) {

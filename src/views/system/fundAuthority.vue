@@ -65,11 +65,11 @@
                                         <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
                                 </div>
-
                             </div>
                         </el-col>
                         </el-col>
                     </div>
+
                 </el-row>
             </el-col>
         </el-row>
@@ -148,12 +148,14 @@ export default {
         },
         // 添加角色 的方法
         addRole() {
-            projectRoleSave(1,this.roleForm.roleName).then((res)=>{
-                queryList(1).then((res)=>{
-                    this.roleData = reloadQueryData(res.data.result)
-                    this.roleDialog = false;
+            if(this.roleDialog == true){
+                projectRoleSave(1,this.roleForm.roleName).then((res)=>{
+                    queryList(1).then((res)=>{
+                        this.roleData = reloadQueryData(res.data.result)
+                        this.roleDialog = false;
+                    })
                 })
-            })
+            }
         },
         //编辑
         checkEdit(index, row) {

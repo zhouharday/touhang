@@ -32,8 +32,12 @@
                                 </div>
                                 <div v-if="detailsitem.stageStatus == 1">
                                     <div v-if="item.showOne" style="justify-content: space-between">
-                                        <Icon type="arrow-up-c" class="mgr"></Icon>
-                                        <Icon type="arrow-down-c" class="mgr"></Icon>
+                                        <el-button size="mini" @click="moveUp(item,index)"  >
+                                            <Icon type="arrow-up-c"  ></Icon>
+                                        </el-button>
+                                        <el-button size="mini" @click="moveDown(item,index)">
+                                            <Icon type="arrow-down-c"></Icon>
+                                        </el-button>
                                         <el-button v-if="!detailsitem.editFlag" type="text" class="leftBtn" @click="edit(index,detailsitem)">编辑</el-button>
                                         <el-button v-if="detailsitem.editFlag" type="text" class="leftBtn" @click="edit(index,detailsitem)">确定
                                         </el-button>
@@ -187,8 +191,10 @@ import { GetrightList } from 'api/system'
 import { RightListData } from 'api/system'
 import { DeleteRightList } from 'api/system'
 import { changeRightList } from 'api/system'
+import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
 export default {
+    components: {ElButton},
     data() {
         return {
             projectDialog: false,
@@ -265,13 +271,31 @@ export default {
         }
     },
     methods: {
+        moveUp(item,index){
+
+            if (index != 0 ){
+                var dataArr = item.data[index - 1]
+                item.data[index - 1]  = item.data[index]
+                item.data[index] = dataArr
+            }
+
+        },
+        moveDown(item,index){
+            console.log(item)
+            if (index !=   item.data.length - 1 ){
+                var dataArr = item.data[index + 1]
+                item.data[index + 1]  = item.data[index]
+                item.data[index] = dataArr
+            }
+            console.log(item)
+        },
         refreshList(item) {
 
             this.nowId = item.id
             //            alert(this.nowId)
             GetrightList(item.id).then((res) => {
                 this.fileData = RightListData(res.data.result)
-                console.log(this.fileData)
+//                console.log(this.fileData)
             })
         },
         changeSomeThing(item) {
@@ -305,7 +329,7 @@ export default {
             this.projectDialog = !this.projectDialog;
         },
         addProject() {
-            console.log(this.changeList)
+//            console.log(this.changeList)
             var stageType ;
             if (!this.changeList[0]){
                 stageType = '3';
@@ -314,7 +338,7 @@ export default {
             var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id}];
             var b = this.changeList;
             var newList = a.concat(b)
-            console.log(newList)
+//            console.log(newList)
             SetConfig(newList, this.deleteList).then((res) => {
                 if (res.data.status == '9024') {
                     alert(res.data.message)
@@ -421,13 +445,13 @@ export default {
         handleDeleteLeft(index, rows) {
             this.deleteList.push(rows[index])
             rows.splice(index, 1);
-            console.log(this.deleteList)
+//            console.log(this.deleteList)
         },
         //右边删除当前行
         handleDelete(index, rows) {
-            console.log(rows)
+//            console.log(rows)
             DeleteRightList(rows[index]).then((res) => {
-                console.log(res.data)
+//                console.log(res.data)
                 if (res.data.status == '9024') {
                     alert(res.data.message)
                 } else {
@@ -453,9 +477,9 @@ export default {
             this.nowId = this.leftList[0].data[0].id
             GetrightList(this.leftList[0].data[0].id).then((res) => {
                 this.fileData = RightListData(res.data.result)
-                console.log(this.fileData)
+//                console.log(this.fileData)
             })
-            console.log(this.leftList)
+//            console.log(this.leftList)
         })
     }
 }
