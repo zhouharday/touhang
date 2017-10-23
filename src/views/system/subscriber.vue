@@ -220,7 +220,7 @@ export default {
 
             this.addSubscriber.sex = row.six
             this.addSubscriber.birthday = row.age
-            this.addSubscriber.cellphone = row.phone
+            this.addSubscriber.cellphone = row.telephone
             this.addSubscriber.email = row.emil
             this.addSubscriber.account = row.number
             this.modelSubscriber = true

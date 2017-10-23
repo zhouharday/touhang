@@ -5,8 +5,8 @@
         </div>
         <div class="textWrapper">
             <el-row>
-                <el-col :span="24" v-for="menuItem in treeData">
-                    <my-tree :model="menuItem"></my-tree>
+                <el-col :span="24" >
+                    <my-tree :model="treeData"></my-tree>
                 </el-col>
             </el-row>
         </div>
@@ -57,7 +57,6 @@ export default {
         }
     },
     created() {
-
     }
 }
 </script>

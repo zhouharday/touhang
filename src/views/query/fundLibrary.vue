@@ -179,10 +179,10 @@
             myFilter
         },
         created() {
-            getSelectIndex('303').then((res) => {
+            getSelectIndex('302').then((res) => {
                 this.chooseInfo.details = res.data.result
             })
-            getSelectIndex('302').then((res) => {
+            getSelectIndex('303').then((res) => {
                 this.chooseInfo2.details = res.data.result
             })
             getjieduan().then((res) => {
