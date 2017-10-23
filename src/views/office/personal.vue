@@ -365,4 +365,14 @@ export default {
         background: blue;
     }
 }
+.formComponents{
+    min-height: 300px;
+}
+.formContent{
+    min-height: 300px;
+    background: #fff;
+}
+.formRight{
+    min-height: 300px;
+}
 </style>
