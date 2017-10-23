@@ -100,6 +100,7 @@ export default {
             } else if (name == 'invDoc') {
                 selectProjectOrFundDocument(this.$route.params.userId, 3).then((res) => {
                     if (res.status == '200') {
+                        // console.log(res)
                         this.investmentData = res.data.result
                     }
                 })

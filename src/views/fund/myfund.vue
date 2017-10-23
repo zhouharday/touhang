@@ -260,6 +260,7 @@ export default {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
                     this.deleteReminders = false
+                    this.getFundListsData()
                 }
             })
         },

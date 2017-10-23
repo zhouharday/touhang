@@ -82,7 +82,6 @@ export default {
         handleDelete(index, row) {
             this.deleteReminders = true
             this.deleteId = row.id
-            console.log(row)
         },
         confirmDel() { // 确认删除
             this.modal_loading = true
@@ -113,8 +112,8 @@ export default {
             var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getAgreementAmountList(invId, merId).then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     this.investorData = res.data.result.list
-                    console.log(this.investorData.length)
                 }
             }).catch(err => {
                 let response = err.data

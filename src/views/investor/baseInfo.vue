@@ -16,10 +16,7 @@
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import investorForm from 'components/investorForm'
-import {
-    getInvestorDetails,
-    updateInvestor
-} from 'api/investor'
+import {getInvestorDetails, updateInvestor} from 'api/investor'
 export default {
     data() {
         return {
