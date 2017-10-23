@@ -89,8 +89,9 @@ export default {
     },
     created() {
         getEarningsAmountList(this.$route.params.userId, JSON.parse(sessionStorage.getItem('merchants'))[0].id).then((res) => {
-            if(res.status == '200') {
-                this.quitCapitalData = res.data.result.list
+            if(res.status === 200) {
+                this.quitCapitalData = (res.data.status === 200) ? res.data.result.list : []
+                // console.log(this.quitCapitalData)
             }
         })
     },

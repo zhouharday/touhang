@@ -427,12 +427,6 @@ export default {
                 return name.flag = false
             }
         },
-        // disableAccountinfo() {
-        //     this.formAccountInfo.map((x) => {
-        //         x.flag = false
-        //     })
-        //     console.log(this.formAccountInfo)
-        // },
         handlerPreservation() { // 修改基本信息
             this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
             updateFundInfo(this.formDetails).then((res) => {
