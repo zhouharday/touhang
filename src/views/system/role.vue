@@ -37,6 +37,7 @@
             <el-col :span="16">
                 <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="角色权限" name="first">
+
                         <role-limits :treeData="treeData" :nowId = "nowId"></role-limits>
                     </el-tab-pane>
                     <el-tab-pane label="角色用户" name="second">
@@ -45,7 +46,6 @@
                 </el-tabs>
             </el-col>
         </el-row>
-
     </div>
     <el-dialog title="角色名称" :visible.sync="fundDialog" class="fileDialog">
         <el-form :model="fundForm">
@@ -108,17 +108,19 @@ export default {
             },
             //添加角色
             addjuese(){
+                if (this.fundDialog){
+                this.fundDialog = false;
                 saveRole(this.fundForm.fundName).then((res)=>{
                     getRoleList().then((res)=>{
-
+                        this.fundForm.fundName = ''
                         res.data.result.list.forEach(function (item,index) {
                             item.editFlag = false
                         })
                         this.roleInfo = res.data.result.list
 //                        console.log(this.roleInfo)
-                        this.fundDialog = !this.fundDialog;
                     })
                 })
+                }
             },
 
             //刷新角色用户表
@@ -192,9 +194,9 @@ export default {
             }),
 //            所有权限
             getUserAllRole().then((res)=>{
-
-                 this.treeData = getNodes(res.data.result,[])
-
+                console.log(res.data.result)
+                this.treeData = res.data.result
+//                 this.treeData = getNodes(res.data.result,[])
             })
         }
     }

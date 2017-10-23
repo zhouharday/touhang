@@ -366,614 +366,618 @@
 
 <style lang="less" scoped>
 .homeContent_top_L {
-    overflow: hidden;
+  overflow: hidden;
+  margin-right: 24px;
+  position: relative;
+  > div {
+    width: 100%;
+    height: 362px;
+    background: #fff;
+    padding: 16px 24px;
+    float: left;
+  }
+  > div:nth-child(1) {
     margin-right: 24px;
-    position: relative;
-    >div {
-        width: 100%;
-        height: 362px;
-        background: #fff;
-        padding: 16px 24px;
-        float: left;
-    }
-    >div:nth-child(1) {
-        margin-right: 24px;
-    }
+  }
 }
 
 .homeContent_top_R,
 .homeContentBot_r {
-    background: #fff;
-    padding: 16px 24px;
-    height: 362px; // float: left;
-    >div>div>div {
-        position: relative;
-        >img {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-        }
-        >span {
-            margin-left: 30px;
-        }
+  background: #fff;
+  padding: 16px 24px;
+  height: 362px; // float: left;
+  > div > div > div {
+    position: relative;
+    > img {
+      position: absolute;
+      width: 20px;
+      height: 20px;
     }
-    .notice_ul {
-        font-size: 14px;
+    > span {
+      margin-left: 30px;
+    }
+  }
+  .notice_ul {
+    font-size: 14px;
+    overflow: hidden;
+    height: 273px;
+    li {
+      margin-top: 16px;
+      height: 50px;
+      position: relative;
+      .read {
+        width: 52px;
+        height: 24px;
+        border-radius: 10px;
+        background: #f05e5e;
+        line-height: 24px;
+        text-align: center;
+        color: #fff;
+        float: left;
+        cursor: pointer;
+      }
+      > div:nth-child(2) {
+        position: absolute;
+        top: 26px; // left: 3px;
+        // width: 52px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+      }
+      > span {
+        display: block;
+        margin-left: 70px;
         overflow: hidden;
-        height: 273px;
-        li {
-            margin-top: 16px;
-            height: 50px;
-            position: relative;
-            .read {
-                width: 52px;
-                height: 24px;
-                border-radius: 10px;
-                background: #f05e5e;
-                line-height: 24px;
-                text-align: center;
-                color: #fff;
-                float: left;
-                cursor: pointer;
-            }
-            >div:nth-child(2) {
-                position: absolute;
-                top: 26px; // left: 3px;
-                // width: 52px;
-                height: 24px;
-                line-height: 24px;
-                text-align: center;
-            }
-            >span {
-                display: block;
-                margin-left: 70px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-        }
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
-    .page {
-        float: right;
-        font-size: 14px;
-    }
+  }
+  .page {
+    float: right;
+    font-size: 14px;
+  }
 }
 
 .homeContent_botm {
-    overflow: hidden;
-    margin-top: 24px;
-    margin-right: 24px;
-    position: relative;
-    >div {
-        // width: 586px;
-        height: 416px;
-        background: #fff;
-        padding: 16px 24px;
-        float: left;
-    }
-    >div:nth-child(1) {
-        width: 100%;
-        margin-right: 24px; // margin-top: 24px;
-        >div {
-            position: relative;
-            >img {
-                position: absolute;
-                width: 20px;
-                height: 20px;
-            }
-            >span {
-                margin-left: 30px;
-            }
-        }
-        .homeContentBot_a,
-        .homeContentBot_b {
-            overflow: hidden;
-            border-bottom: 2px solid #f2f4f8;
-            padding: 15px 0 15px 0;
-            color: #2a3142;
-            >div:nth-child(1) {
-                position: relative;
-                float: left;
-                width: 60px;
-                height: 23px;
-                line-height: 25px;
-                color: #fff;
-                background: #f05e5e;
-                border-radius: 16px 0 0 16px;
-                font-size: 10px; // margin-top: 16px;
-                >img {
-                    position: relative;
-                    top: 3px;
-                    left: 3px;
-                    width: 16px;
-                    height: 16px;
-                }
-            }
-            >div:nth-child(2) {
-                margin-left: 76px;
-            }
-            >div:nth-child(3),
-            >div:nth-child(4) {
-                font-size: 14px;
-                margin-top: 10px;
-                >span:nth-child(2) {
-                    margin-left: 25px;
-                    color: red;
-                    text-decoration: underline;
-                    cursor: pointer;
-                }
-                >span:nth-child(3) {
-                    float: right;
-                    color: #a7aab0;
-                }
-            }
-        }
-        .homeContentBot_b {
-            >div:first-child {
-                background: #41578c;
-            }
-        }
-    }
-    >div:nth-child(2) {
-        width: 294px;
-    }
-    .page {
-        float: right;
-        font-size: 14px;
-        margin-top: 15px;
+  overflow: hidden;
+  margin-top: 24px;
+  margin-right: 24px;
+  position: relative;
+  > div {
+    // width: 586px;
+    height: 416px;
+    background: #fff;
+    padding: 16px 24px;
+    float: left;
+  }
+  > div:nth-child(1) {
+    width: 100%;
+    margin-right: 24px; // margin-top: 24px;
+    > div {
+      position: relative;
+      > img {
         position: absolute;
-        right: 20px;
-        bottom: 20px;
+        width: 20px;
+        height: 20px;
+      }
+      > span {
+        margin-left: 30px;
+      }
     }
-    .daibanRw {
-        transform: translate3dY(-50%)
+    .homeContentBot_a,
+    .homeContentBot_b {
+      overflow: hidden;
+      border-bottom: 2px solid #f2f4f8;
+      padding: 15px 0 15px 0;
+      color: #2a3142;
+      > div:nth-child(1) {
+        position: relative;
+        float: left;
+        width: 60px;
+        height: 23px;
+        line-height: 25px;
+        color: #fff;
+        background: #f05e5e;
+        border-radius: 16px 0 0 16px;
+        font-size: 10px; // margin-top: 16px;
+        > img {
+          position: relative;
+          top: 3px;
+          left: 3px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+      > div:nth-child(2) {
+        margin-left: 76px;
+      }
+      > div:nth-child(3),
+      > div:nth-child(4) {
+        font-size: 14px;
+        margin-top: 10px;
+        > span:nth-child(2) {
+          margin-left: 25px;
+          color: red;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+        > span:nth-child(3) {
+          float: right;
+          color: #a7aab0;
+        }
+      }
     }
+    .homeContentBot_b {
+      > div:first-child {
+        background: #41578c;
+      }
+    }
+  }
+  > div:nth-child(2) {
+    width: 294px;
+  }
+  .page {
+    float: right;
+    font-size: 14px;
+    margin-top: 15px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+  }
+  .daibanRw {
+    transform: translate3dY(-50%);
+  }
 }
 
 .homeContentBot_r {
-    position: relative;
-    background: #fff;
-    height: 416px;
-    padding: 16px 24px;
-    margin-top: 24px;
-    >div:nth-child(1) {
-        >img {
-            width: 20px;
-            height: 20px;
-            position: relative;
-            top: 3px;
-        }
+  position: relative;
+  background: #fff;
+  height: 416px;
+  padding: 16px 24px;
+  margin-top: 24px;
+  > div:nth-child(1) {
+    > img {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      top: 3px;
     }
-    .sysMessage {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        width: 155px;
-        height: 20px;
-    }
+  }
+  .sysMessage {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 155px;
+    height: 20px;
+  }
 }
 
 //立即对话框中的样式
 .title_f {
-    margin-top: 30px;
-    width: 100%;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    .desc {
-        flex: 1;
-        text-align: left;
-        span {
-            color: #fff;
-            margin-left: 90px;
-        }
+  margin-top: 30px;
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  .desc {
+    flex: 1;
+    text-align: left;
+    span {
+      color: #fff;
+      margin-left: 90px;
     }
+  }
 }
 
 .comment_box {
-    height: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  padding-left: 90px;
+  .comment_left {
+    width: 100px;
+    margin-right: 150px;
+    text-align: center;
+  }
+  .comment_right {
     display: flex;
-    align-items: center;
-    padding-left: 90px;
-    .comment_left {
-        width: 100px;
-        margin-right: 150px;
-        text-align: center
-    }
-    .comment_right {
-        display: flex;
-        flex-direction: column;
-    }
+    flex-direction: column;
+  }
 }
 
 .bgh {
-    background: #fff;
+  background: #fff;
 }
 
 .bgl {
-    background: #EEF0F4;
+  background: #eef0f4;
 }
 
 // 选择用户 弹出框
 .addUser {
-    i {
-        display: inline-block;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    span {
-        margin-left: 23%;
-        font-size: 14px;
-        font-weight: bold;
-    }
-    .dialogBtn_active {
-        width: 150px;
-        font-size: 16px;
-        border-radius: 5px;
-    }
-    .dialogBtn {
-        width: 150px;
-        font-size: 16px;
-        color: #f05e5e;
-        border-radius: 5px;
-        border-color: #f05e5e;
-        background-color: #fff;
-    }
+  i {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  span {
+    margin-left: 23%;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .dialogBtn_active {
+    width: 150px;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  .dialogBtn {
+    width: 150px;
+    font-size: 16px;
+    color: #f05e5e;
+    border-radius: 5px;
+    border-color: #f05e5e;
+    background-color: #fff;
+  }
 }
 
-// 待办任务 
+// 待办任务
 .taskBox {
-    padding: 30px 0;
-    font-size: 14px;
-    >p {
-        padding-left: 15px;
-        margin-bottom: 20px;
-    }
-    >p:nth-child(1) {
-        border-left: 2px solid #f05e5e;
-    }
-    span:nth-child(1) {
-        font-weight: bold;
-    }
+  padding: 30px 0;
+  font-size: 14px;
+  > p {
+    padding-left: 15px;
+    margin-bottom: 20px;
+  }
+  > p:nth-child(1) {
+    border-left: 2px solid #f05e5e;
+  }
+  span:nth-child(1) {
+    font-weight: bold;
+  }
 }
 
 .border_b {
-    border-bottom: 2px solid #f2f4f8;
+  border-bottom: 2px solid #f2f4f8;
 }
 </style>
 
 <script>
-import datatime from './datetmp.vue';
+import datatime from "./datetmp.vue";
 export default {
-    components: { datatime },
-    computed: {
-        user() {
-            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
-            this.$store.state.login.userInfor = JSON.parse(sessionStorage.getItem('userInfor')) || {};
-            return {
-                merchants: this.$store.state.login.merchants,
-                userInfor: this.$store.state.login.userInfor
-            }
-        }
-    },
-    created() {
-        this.getNoticeUserList(1);
-        this.getMessageList(1);
-        this.getTaskList(1);
-        this.findUserTask(1);
-
-    },
-    data() {
-        return {
-            daibanRw: false,
-            activeName: 'first',
-            // applyModal: false,
-            progressModal: false,
-            approvalModal: false,
-            userModal: false,
-            commentMessage: '',
-            loading: false,
-            monthDate: [],
-            RecentNotice: "系统消息 / 公司公告",
-            waitSth: "小双提醒",
-            sysPrompt: "待办任务",
-            sysMessage: true,
-            sysMessageTitle: "暂时没有系统提示哦~",
-            projectList: [],
-            // projectManger: [
-            //     {
-            //         craetProject1: "管理+2",
-            //         projectText2: "一号店",
-            //         projectText3: "1.您有一条xxxx申请需要审批。",
-            //         projectText4: "立即查看",
-            //         projectText5: "2.您有一条c轮出资申请需要审批。",
-            //         projectText6: "立即审批",
-            //         time: "2017-08-16"
-            //     },
-            //     {
-            //         craetProject1: "管理+2",
-            //         projectText2: "六号店",
-            //         projectText3: "1.您有一条xxxx申请需要审批。",
-            //         projectText4: "立即查看",
-            //         projectText5: "2.您有一条c轮出资申请需要审批。",
-            //         projectText6: "立即审批",
-            //         time: "2017-08-16"
-            //     }
-            // ],
-            noRead: "未读",
-            readed: "已读",
-            assistNotice: [], //公司公告列表数据
-            assistMessage: [], //系统消息
-            taskLists: [], //代办任务列表数据
-            // applyForm: { // 立即申请表单
-            //     title: '',
-            //     person: '',
-            //     date: '',
-            //     notes: '',
-            //     appendix: '',
-            //     auditor: ''
-            // },
-            progressTable: [//查看进度表单 节点table
-                {
-                    node: '发起申请',
-                    operator: '管理员 2017/8/15 16:25:14',
-                    conclusion: '同意',
-                    startingTime: '2017/8/15 16:25:14',
-                    time: '4秒'
-                }
-            ],
-            applyForm2: { //查看进度表单 发起申请表单
-                title: '',
-                person: '',
-                date: '',
-                notes: '',
-                appendix: '',
-                auditor: '',
-                reports: ''
-            },
-            auditorOptions: [{ //查看进度表单 发起申请表单 审批人列表
-                value: '选项1',
-                label: '张三'
-            }, {
-                value: '选项2',
-                label: '李四'
-            }, {
-                value: '选项3',
-                label: '王二'
-            }],
-            commentLists: [ //查看进度表单  意见汇总列表
-                {
-                    comment: '法务意见',
-                    num: '2',
-                    note: '【管理员】2017/08/15'
-                },
-                {
-                    comment: '反馈项目负责人',
-                    num: '2',
-                    note: '【管理员】2017/08/15'
-                }
-            ],
-            roleForm: { //选择用户表单
-                department: '',
-                name: '',
-                checkedUser: [],
-                selectUser: [
-                    {
-                        name: '张韶涵1',
-                        phone: '15268792134',
-                        branch: '项目部'
-                    },
-                    {
-                        name: '张韶涵2',
-                        phone: '15268792134',
-                        branch: '项目部'
-                    },
-                    {
-                        name: '张韶涵3',
-                        phone: '15268792134',
-                        branch: '项目部'
-                    }
-                ]
-            },
-            departmentOptions: [
-                {
-                    value: '选项一',
-                    label: '部门一'
-                }
-            ],
-            rules1: {
-                checkedUser: [
-                    { type: 'array', required: true, message: '请选择用户', trigger: 'blur' }
-                ]
-            },
-        }
-    },
-    methods: {
-        assistMsgPages(pageNum) {
-            this.getMessageList(pageNum);
-        },
-        assistNoticPages(pageNum) {
-            this.getNoticeUserList(pageNum);
-        },
-        taskListsPage(pageNum) {
-            this.getTaskList(pageNum);
-        },
-        projectList(pageNum) {
-            this.findUserTask(pageNum);
-        },
-        changetime(data) {
-
-        },
-        openMsg(item, type) {
-            if (type == 'msg') {
-                this.$msgbox({
-                    title: '系统消息',
-                    message: item.assistMessage.msgContent,
-                    confirmButtonClass: 'noticeBtn'
-                });
-            } else {
-                this.$msgbox({
-                    title: '公司公告',
-                    message: item.assistNotice.noticeContent,
-                    confirmButtonClass: 'noticeBtn'
-                });
-            }
-        },
-        readyfun(arr, data) {
-            var arr = arr;
-            //先根据接口返回数据 修改arr
-            //然后再把arr赋值给monthdate
-            this.monthDate = arr;
-            this.getData();
-
-        },
-        removeDuplicatedItem(ar) { //数组去重
-            var ret = [];
-            for (var i = 0, j = ar.length; i < j; i++) {
-                if (ret.indexOf(ar[i]) === -1) {
-                    ret.push(ar[i]);
-                }
-            }
-            return ret;
-        },
-        getData() { //获取日程列表 api
-            this.$http.post(this.api + '/work/getScheduleList', {
-                "userId": this.user.userInfor.id,
-                "merchantId": this.user.merchants[0].id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-                            console.log('*******************************')
-                            console.log(res.data)
-                            // console.log(this.monthDate)
-                            res.data.result.forEach(item => {
-                                let arr = this.removeDuplicatedItem(this.monthDate);
-                                // this.monthDate.map(list => {
-                                arr.map(list => {
-                                    // list.item = [];
-                                    console.log(list.time);
-                                    if (item.startTime.split(" ")[0] == list.time) {
-                                        // alert(222);
-                                        list.have = true;
-                                        // list.item = [];
-                                        list.item.push(item);
-                                    }
-                                })
-                            })
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        } else if (res.data.status == '49999') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
-        submit() { //选择用户 确定按钮方法
-            this.userModal = !this.userModal;
-            this.approvalModal = !this.approvalModal;
-        },
-        cancle() { //选择用户 取消按钮方法
-            this.userModal = !this.userModal;
-            this.approvalModal = !this.approvalModal;
-        },
-        getNoticeUserList(pageNum) { //获取公司公告列表数据 api
-            this.$http.post(this.api + '/work/getNoticeUserList', {
-                "userId": this.user.userInfor.id,
-                "page": pageNum,
-                "pageSize": 4,
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-                            this.assistNotice = res.data.result;
-                            this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
-        getMessageList(pageNum) { //获取系统消息 api
-            this.$http.post(this.api + '/work/getMessageList', {
-                "userId": this.user.userInfor.id,
-                "page": pageNum,
-                "pageSize": 4,
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-
-                            this.assistMessage = res.data.result;
-                            this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
-        getTaskList(page) { //获取代办任务列表数据 api
-            this.$http.post(this.api + '/work/getTaskList', {
-                "userId": this.user.userInfor.id,
-                "merchantId": this.user.merchants[0].id,
-                "type": 2,
-                "page": page,
-                "pageSize": 2,
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-                            this.taskLists = res.data.result;
-                            this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
-        findUserTask(page) { //小双提醒
-            this.$http.post(this.api + '/activitiCommon/findUserTask', {
-                "merchantId": this.user.merchants[0].id,
-                "userId": this.user.userInfor.id,
-                "page": page,
-                "pageSize": 3
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-
-                            this.projectList = res.data.result;
-                            if (res.data.result.result.length == '0') {
-                                this.daibanRw = true;
-                            };
-                            this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
+  components: { datatime },
+  computed: {
+    user() {
+      this.$store.state.login.merchants =
+        JSON.parse(sessionStorage.getItem("merchants")) || {};
+      this.$store.state.login.userInfor =
+        JSON.parse(sessionStorage.getItem("userInfor")) || {};
+      return {
+        merchants: this.$store.state.login.merchants,
+        userInfor: this.$store.state.login.userInfor
+      };
     }
-}
+  },
+  created() {
+    this.getNoticeUserList(1);
+    this.getMessageList(1);
+    this.getTaskList(1);
+    this.findUserTask(1);
+  },
+  data() {
+    return {
+      daibanRw: false,
+      activeName: "first",
+      // applyModal: false,
+      progressModal: false,
+      approvalModal: false,
+      userModal: false,
+      commentMessage: "",
+      loading: false,
+      monthDate: [],
+      RecentNotice: "系统消息 / 公司公告",
+      waitSth: "小双提醒",
+      sysPrompt: "待办任务",
+      sysMessage: true,
+      sysMessageTitle: "暂时没有系统提示哦~",
+      projectList: [],
+      // projectManger: [
+      //     {
+      //         craetProject1: "管理+2",
+      //         projectText2: "一号店",
+      //         projectText3: "1.您有一条xxxx申请需要审批。",
+      //         projectText4: "立即查看",
+      //         projectText5: "2.您有一条c轮出资申请需要审批。",
+      //         projectText6: "立即审批",
+      //         time: "2017-08-16"
+      //     },
+      //     {
+      //         craetProject1: "管理+2",
+      //         projectText2: "六号店",
+      //         projectText3: "1.您有一条xxxx申请需要审批。",
+      //         projectText4: "立即查看",
+      //         projectText5: "2.您有一条c轮出资申请需要审批。",
+      //         projectText6: "立即审批",
+      //         time: "2017-08-16"
+      //     }
+      // ],
+      noRead: "未读",
+      readed: "已读",
+      assistNotice: [], //公司公告列表数据
+      assistMessage: [], //系统消息
+      taskLists: [], //代办任务列表数据
+      // applyForm: { // 立即申请表单
+      //     title: '',
+      //     person: '',
+      //     date: '',
+      //     notes: '',
+      //     appendix: '',
+      //     auditor: ''
+      // },
+      progressTable: [
+        //查看进度表单 节点table
+        {
+          node: "发起申请",
+          operator: "管理员 2017/8/15 16:25:14",
+          conclusion: "同意",
+          startingTime: "2017/8/15 16:25:14",
+          time: "4秒"
+        }
+      ],
+      applyForm2: {
+        //查看进度表单 发起申请表单
+        title: "",
+        person: "",
+        date: "",
+        notes: "",
+        appendix: "",
+        auditor: "",
+        reports: ""
+      },
+      auditorOptions: [
+        {
+          //查看进度表单 发起申请表单 审批人列表
+          value: "选项1",
+          label: "张三"
+        },
+        {
+          value: "选项2",
+          label: "李四"
+        },
+        {
+          value: "选项3",
+          label: "王二"
+        }
+      ],
+      commentLists: [
+        //查看进度表单  意见汇总列表
+        {
+          comment: "法务意见",
+          num: "2",
+          note: "【管理员】2017/08/15"
+        },
+        {
+          comment: "反馈项目负责人",
+          num: "2",
+          note: "【管理员】2017/08/15"
+        }
+      ],
+      roleForm: {
+        //选择用户表单
+        department: "",
+        name: "",
+        checkedUser: [],
+        selectUser: [
+          {
+            name: "张韶涵1",
+            phone: "15268792134",
+            branch: "项目部"
+          },
+          {
+            name: "张韶涵2",
+            phone: "15268792134",
+            branch: "项目部"
+          },
+          {
+            name: "张韶涵3",
+            phone: "15268792134",
+            branch: "项目部"
+          }
+        ]
+      },
+      departmentOptions: [
+        {
+          value: "选项一",
+          label: "部门一"
+        }
+      ],
+      rules1: {
+        checkedUser: [
+          { type: "array", required: true, message: "请选择用户", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  methods: {
+    assistMsgPages(pageNum) {
+      this.getMessageList(pageNum);
+    },
+    assistNoticPages(pageNum) {
+      this.getNoticeUserList(pageNum);
+    },
+    taskListsPage(pageNum) {
+      this.getTaskList(pageNum);
+    },
+    projectList(pageNum) {
+      this.findUserTask(pageNum);
+    },
+    changetime(data) {},
+    openMsg(item, type) {
+      if (type == "msg") {
+        this.$msgbox({
+          title: "系统消息",
+          message: item.assistMessage.msgContent,
+          confirmButtonClass: "noticeBtn"
+        });
+      } else {
+        this.$msgbox({
+          title: "公司公告",
+          message: item.assistNotice.noticeContent,
+          confirmButtonClass: "noticeBtn"
+        });
+      }
+    },
+    readyfun(arr, data) {
+      var arr = arr;
+      //先根据接口返回数据 修改arr
+      //然后再把arr赋值给monthdate
+      this.monthDate = arr;
+      this.getData();
+    },
 
+    getData() {
+      //获取日程列表 api
+      this.$http
+        .post(this.api + "/work/getScheduleList", {
+          userId: this.user.userInfor.id,
+          merchantId: this.user.merchants[0].id
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              this.monthDate.map(list => {
+                return (list.item = []);
+              });
+
+              console.log(this.monthDate)
+              res.data.result.forEach(item => {
+                this.monthDate.map(list => {
+                  if (item.startTime.split(" ")[0] == list.time) {
+                    list.have = true;
+                    list.item.push(item);
+                  }
+                });
+              });
+            } else if (res.data.status == "403") {
+              this.$Message.error(res.data.message);
+            } else if (res.data.status == "49999") {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    },
+    submit() {
+      //选择用户 确定按钮方法
+      this.userModal = !this.userModal;
+      this.approvalModal = !this.approvalModal;
+    },
+    cancle() {
+      //选择用户 取消按钮方法
+      this.userModal = !this.userModal;
+      this.approvalModal = !this.approvalModal;
+    },
+    getNoticeUserList(pageNum) {
+      //获取公司公告列表数据 api
+      this.$http
+        .post(this.api + "/work/getNoticeUserList", {
+          userId: this.user.userInfor.id,
+          page: pageNum,
+          pageSize: 4
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              this.assistNotice = res.data.result;
+              this.$Message.success(res.data.message);
+            } else if (res.data.status == "403") {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    },
+    getMessageList(pageNum) {
+      //获取系统消息 api
+      this.$http
+        .post(this.api + "/work/getMessageList", {
+          userId: this.user.userInfor.id,
+          page: pageNum,
+          pageSize: 4
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              this.assistMessage = res.data.result;
+              this.$Message.success(res.data.message);
+            } else if (res.data.status == "403") {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    },
+    getTaskList(page) {
+      //获取代办任务列表数据 api
+      this.$http
+        .post(this.api + "/work/getTaskList", {
+          userId: this.user.userInfor.id,
+          merchantId: this.user.merchants[0].id,
+          type: 2,
+          page: page,
+          pageSize: 2
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              this.taskLists = res.data.result;
+              this.$Message.success(res.data.message);
+            } else if (res.data.status == "403") {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    },
+    findUserTask(page) {
+      //小双提醒
+      this.$http
+        .post(this.api + "/activitiCommon/findUserTask", {
+          merchantId: this.user.merchants[0].id,
+          userId: this.user.userInfor.id,
+          page: page,
+          pageSize: 3
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              this.projectList = res.data.result;
+              if (res.data.result.result.length == "0") {
+                this.daibanRw = true;
+              }
+              this.$Message.success(res.data.message);
+            } else if (res.data.status == "403") {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    }
+  }
+};
 </script>
 
 

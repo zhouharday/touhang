@@ -60,7 +60,7 @@
                         <el-col :span="12">
                             <el-form-item label="接收人" prop="receivedUserId">
                                     <el-select v-model="addForm.receivedUserId" placeholder="请选择处理人" style="width:100%">
-                                        <el-option v-for="item in proUsers" :key="item.id" :label="item.name" :value="item.id">
+                                        <el-option v-for="item in proTeam" :key="item.userId" :label="item.userName" :value="item.userId">
                                         </el-option>
                                     </el-select>
                             </el-form-item>
@@ -151,7 +151,7 @@
                 <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
+                            <el-option v-for="item in proTeam" :key="item.userId" :label="item.userName" :value="item.userId">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -340,7 +340,7 @@ import 'common/js/filter'
 import { changeDate } from 'common/js/config'
 
 import {
-    dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister
+    dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams
 } from 'api/projectPre'
 import { getWarningList, getWarningDetail, insertwarnRecords } from 'api/projectAfter';
 export default {
@@ -383,20 +383,24 @@ export default {
                 receivedUserId: '',
                 completeDate: ''
             },
+            investProjectId:this.$route.params.investProjectId,
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             createDate: changeDate(new Date()),
+            proTeam: [
+                {
+                    id:'',
+                    name:''
+                },
+            ],
             rules1: {
                 riskTheme: [
                     { required: true, message: '请输入风险主题', trigger: 'change' }
                 ],
-                riskDescribe: [
-                    { required: true, message: '请输入风险描述', trigger: 'change' }
-                ],
                 receivedUserId: [
-                    { required: true, message: '请选择接收人', trigger: 'change' }
+                    { required: true, message: '请选择接收人', trigger: 'blur' }
                 ],
                 completeDate: [
-                    { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
+                    { type: "date", required: true, message: '请选择完成时间', trigger: 'blur' }
                 ]
             },
             // 风险跟踪 table
@@ -563,6 +567,22 @@ export default {
         init() {
             this.getDatas();
             this.getWarningList();
+            this.getProTeam();
+        },
+        //查询项目团队成员
+        getProTeam(){
+            getTeams(this.investProjectId).then(resp => {
+                console.log("项目团队成员:"+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.proTeam = resp.data.result;
+                } else if (resp.data.status == '49999') {
+                    this.proTeam = [];
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('项目团队成员 error: ', e);
+            })
         },
         //查询预警列表
         getWarningList() {
@@ -742,11 +762,11 @@ export default {
         openAddModal() {
             let new_addForm = {
                 riskTheme: '',
-                description: '',
+                riskDescribe: '',
                 proposer: '',
                 createDate: this.createDate,
-                recipient: '',
-                endingDate: '',
+                receivedUserId: '',
+                completeDate: '',
                 appendix: '',
                 Records: ''
             };

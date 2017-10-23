@@ -9,7 +9,7 @@
                     <Table border :data="data1" :columns="columns1" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div class="pagination">
-                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page1.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
+                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
                             </el-pagination>
                         </div>
                     </div>
@@ -18,7 +18,7 @@
                     <Table border :data="data2" :columns="columns2" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div class="pagination">
-                            <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
+                            <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
                             </el-pagination>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                     <Table border :data="data3" :columns="columns3" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div class="pagination">
-                            <el-pagination @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="page3.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page3.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page3.total">
+                            <el-pagination @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page3.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page3.total">
                             </el-pagination>
                         </div>
                     </div>
@@ -456,8 +456,12 @@ export default {
 
     data() {
         return {
-            page: 1, //当前页码
-            pageSize: 10, //每页条数
+            pages1: 1, //当前页码
+            pages2: 1, //当前页码
+            pages3: 1, //当前页码
+            pageSizes1: 10, //每页条数
+            pageSizes2: 10, //每页条数
+            pageSizes3: 10, //每页条数
             arr: [],
             arr1: '',
             params1: '',
@@ -1049,55 +1053,51 @@ export default {
         },
         /*******发送添加任务数据 End************/
         handleCurrentChange1(page) { //获取tabList1 分页数据
-            // console.log(pages);
-            this.page = '';
-            this.page = page;
-            this.getTaskList1(this.page, this.pageSize);
+            // this.page = '';
+            this.pages1 = page;
+            this.getTaskList1(this.pages1, this.pageSizes1);
         },
         handleCurrentChange2(page) { //获取tabList2 分页数据
-            // console.log(pages);
-            this.page = '';
-            this.page = page;
-            this.getTaskList2(this.page, this.pageSize);
+            // this.page = '';
+            this.pages2 = page;
+            this.getTaskList2(this.pages2, this.pageSizes2);
         },
         handleCurrentChange3(page) { //获取tabList3 分页数据
             // console.log(pages);
-            this.page = '';
-            this.page = page;
-            this.getTaskList3(this.page, this.pageSize);
+            // this.page = '';
+            this.page3s = page;
+            this.getTaskList3(this.pages3, this.pageSizes3);
         },
         handleSizeChange1(pageSize) {
-            this.pageSize = '';
-            this.pageSize = pageSize;
-            console.log(this.page);
-            console.log(this.pageSize);
-            this.getTaskList1(this.page, this.pageSize);
+            // this.pageSize = '';
+            this.pageSizes1 = pageSize;
+            this.getTaskList1(this.pages1, this.pageSizes1);
         },
         handleSizeChange2(pageSize) {
-            this.pageSize = '';
-            this.pageSize = pageSize;
-            this.getTaskList2(this.page, this.pageSize);
+            // this.pageSize = '';
+            this.pageSizes2 = pageSize;
+            this.getTaskList2(this.pages2, this.pageSizes2);
         },
         handleSizeChange3(pageSize) {
-            this.pageSize = '';
-            this.pageSize = pageSize;
-            this.getTaskList3(this.page, this.pageSize);
+            // this.pageSize = '';
+            this.pageSizes3 = pageSize;
+            this.getTaskList3(this.pages3, this.pageSizes3);
         },
         getTaskList(tabs) { //获取任务列表数据
             if (tabs == '1') {
                 this.isAddTask = true;
-                this.page = 1;
-                this.pageSize = 10;
+                this.pages1 = 1;
+                this.pageSizes1 = 10;
                 this.getTaskList1(tabs);
             } else if (tabs == '2') {
                 this.isAddTask = false;
-                this.page = 1;
-                this.pageSize = 10;
+                this.pages2 = 1;
+                this.pageSizes2 = 10;
                 this.getTaskList2(tabs);
             } else if (tabs == '3') {
                 this.isAddTask = false;
-                this.page = 1;
-                this.pageSize = 10;
+                this.pages3 = 1;
+                this.pageSizes3 = 10;
                 this.getTaskList3(tabs);
             }
         },

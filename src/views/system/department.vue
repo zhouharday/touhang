@@ -25,10 +25,10 @@
                                 <el-col :span="11" class="item">
                                     <!--<span class="add_margin">{{item.desc}}</span>-->
 
-                                    <el-button size="small">
+                                    <el-button size="small" @click="moveUp(item)">
                                         <Icon type="ios-arrow-thin-up"></Icon>
                                     </el-button>
-                                    <el-button size="small">
+                                    <el-button size="small" @click="moveDown(item)">
                                         <Icon type="ios-arrow-thin-down"></Icon>
                                     </el-button>
                                     <el-button size="small" @click="editClick(item)" v-if="!item.editFlag">
@@ -57,12 +57,12 @@
             <el-table-column label="操作" >
                 <template scope="scope" >
 
-                    <el-button size="small" >
-                        <Icon type="ios-arrow-thin-up"></Icon>
-                    </el-button>
-                    <el-button size="small" >
-                        <Icon type="ios-arrow-thin-down"></Icon>
-                    </el-button>
+                    <!--<el-button size="small" @click="moveUp(scope.row)">-->
+                        <!--<Icon type="ios-arrow-thin-up"></Icon>-->
+                    <!--</el-button>-->
+                    <!--<el-button size="small" @click="moveDown(scope.row)">-->
+                        <!--<Icon type="ios-arrow-thin-down"></Icon>-->
+                    <!--</el-button>-->
                     <el-button size="small" @click="editClick(scope.row)" v-if="!scope.row.editFlag">
                         编辑
                     </el-button>
@@ -113,6 +113,7 @@
     import {addNewDepartment} from 'api/system'
     import {SetDepartment} from 'api/system'
     import {deletDepartment} from 'api/system'
+    import {moveDepartment} from 'api/system'
     import Input from "../../../node_modules/iview/src/components/input/input.vue";
     import ElInput from "../../../node_modules/element-ui/packages/input/src/input.vue";
     import deleteReminders from 'components/deleteReminders'
@@ -141,6 +142,32 @@ export default {
         }
     },
     methods: {
+        moveUp(row){
+            console.log(row)
+            moveDepartment(row.id,'up').then((res)=>{
+                console.log('*****')
+                console.log(res)
+                getDepartmentList().then((res)=>{
+                    var dataList = addEdit(res.data.result)
+                    var treeList = getNodes(dataList)
+                    this.currentData = treeList
+                    this._getDepartmentName(this.currentData)
+                })
+            })
+        },
+        moveDown(row){
+            moveDepartment(row.id,'down').then((res)=>{
+                console.log('*****')
+                console.log(res)
+                getDepartmentList().then((res)=>{
+                    var dataList = addEdit(res.data.result)
+                    var treeList = getNodes(dataList)
+                    this.currentData = treeList
+                    this._getDepartmentName(this.currentData)
+                })
+            })
+        },
+
         addDepartment() {
             this.department = true
         },
@@ -216,7 +243,6 @@ export default {
 
             var dataList = addEdit(res.data.result)
             var treeList = getNodes(dataList)
-            console.log(res.data.result)
             this.currentData = treeList
             this._getDepartmentName(this.currentData)
         })
