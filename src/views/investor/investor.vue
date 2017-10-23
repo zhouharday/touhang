@@ -14,7 +14,7 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="类型" prop="investorTypeId" align="center">
+                <el-table-column label="类型" prop="investorType" align="center">
                 </el-table-column>
                 <el-table-column label="投资经理" prop="investmentManagerName" align="center">
                 </el-table-column>
@@ -73,7 +73,10 @@ export default {
         return {
             chooseInfo: {
                 title: '投资者类型：',
-                details: []
+                details: [{
+                    id: '',
+                    dicName: '全部'
+                }]
             },
             theme: '#fff',
             dataTitle: {
@@ -161,7 +164,7 @@ export default {
                 address: '',
                 remark: ''
             };
-            this.addInvestor = new_addInvestor;
+            this.addInvestor = new_addInvestor
             this.modelInvestor = true;
         },
         handleDelete(index, row) {
@@ -185,6 +188,7 @@ export default {
                             this.modelInvestor = false
                             this.getInvList()
                         }
+                        this.addInvestor = new_addInvestor
                     })
                 } else {
                     return false
@@ -238,6 +242,7 @@ export default {
         getInvList() {
             getInvestorList(this.investorId, this.investorName, this.page, this.pageSize).then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     this.investorData = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }
@@ -255,7 +260,7 @@ export default {
         })
         getInvestorType().then((res) => {
             if (res.status == '200') {
-                this.chooseInfo.details = res.data.result
+                this.chooseInfo.details = this.chooseInfo.details.concat(res.data.result)
             }
         }).catch(err => {
             this.$Message.error(err)

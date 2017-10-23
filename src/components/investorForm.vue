@@ -42,7 +42,7 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="所属区域" :label-width="formLabelWidth">
-                    <el-select v-model="investorForm.regionName" :disabled="variable" style="width:100%">
+                    <el-select v-model="investorForm.regionId" :disabled="variable" style="width:100%">
                         <el-option v-for="(item, index) of area" :key="item.id" :label="item.dicName" :value="item.id">
                         </el-option>
                     </el-select>

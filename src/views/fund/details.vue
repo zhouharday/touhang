@@ -266,18 +266,8 @@
 
 <script type="text/ecmascript-6">
 import fundTitle from './fundTitle'
-import {
-    mapGetters
-} from 'vuex'
-import {
-    selectAllManageCompany,
-    sectorList,
-    updateFundInfo,
-    updateFundManageInfo,
-    updateFundReg,
-    updataFunAccInfo,
-    getMyFundDetails
-} from 'api/fund'
+import {mapGetters} from 'vuex'
+import {selectAllManageCompany, sectorList, updateFundInfo, updateFundManageInfo, updateFundReg, updataFunAccInfo, getMyFundDetails} from 'api/fund'
 export default {
     props: {
         formDetails: {
@@ -437,18 +427,11 @@ export default {
                 return name.flag = false
             }
         },
-        // disableAccountinfo() {
-        //     this.formAccountInfo.map((x) => {
-        //         x.flag = false
-        //     })
-        //     console.log(this.formAccountInfo)
-        // },
         handlerPreservation() { // 修改基本信息
             this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
             updateFundInfo(this.formDetails).then((res) => {
                 if (res.status === 200) {
                     this.$Message.error(res.data.message || '基金名称已存在！')
-                    this.formDetails.flag = true
                     this._getFundList()
                 }
             })
@@ -492,6 +475,9 @@ export default {
                     return false
                 }
             })
+            // return new Promise((resolve, reject) => {
+            //
+            // })
         },
         cancel() {
             this.$emit('confirmCancel') // 确认取消
@@ -547,11 +533,16 @@ export default {
         _getFundList() {
             getMyFundDetails(this.$route.params.id).then((res) => {
                 if (res.status === 200) {
-                    console.log(res)
-                    this.formDetails = res.data.result.fundBaseInfo
-                    this.formMIS = res.data.result.fundManageInfo
+                    this.formDetails = Object.assign({}, {
+                        flag: true
+                    }, res.data.result.fundBaseInfo)
+                    this.formMIS = Object.assign({}, {
+                        flag: true
+                    }, res.data.result.fundManageInfo)
                     this.formAccountInfo = res.data.result.fundAccinfo
-                    this.formRegistration = res.data.result.fundRegistration
+                    this.formRegistration = Object.assign({}, {
+                        flag: true
+                    }, res.data.result.fundRegistration)
                 }
             })
         }

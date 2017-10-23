@@ -33,15 +33,15 @@
                               v-if="item.status == '0'">
                               立即上传
                         </span>
-                        <span v-else="item.status !== '0'">已完成</span>
+                    <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" v-if="item.type == '2'">
                         <span v-if="item.status == '0'">立即申请</span>
-                        <span v-else="item.status !== '0'">已完成</span>
+                    <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
                         <span v-if="item.status == '0'">查看进度</span>
-                        <span v-else="item.status !== '0'">已完成</span>
+                    <span v-else="item.status !== '0'">已完成</span>
                     </span>
                 </div>
             </div>
@@ -286,7 +286,7 @@ export default {
                 if (res.status == '200') {
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
-                    if(res.data.result[0] === undefined) {
+                    if (res.data.result[0] === undefined) {
                         return
                     } else {
                         this.stepId = this.module[this.listIndex].id
@@ -301,6 +301,36 @@ export default {
                     this.steps = res.data.result
                 }
             })
+        },
+        _getFundList(id) {
+            getMyFundDetails(id).then((res) => {
+                if (res.status == '200') {
+                    this.formDetails = Object.assign({}, {
+                        flag: true
+                    }, res.data.result.fundBaseInfo)
+                    window.sessionStorage.setItem('FUNDNAME', JSON.stringify(res.data.result.fundBaseInfo.fundName))
+                    this.formMIS = Object.assign({}, {
+                        flag: true
+                    }, res.data.result.fundManageInfo)
+                    this.formAccountInfo = res.data.result.fundAccinfo
+                    if (res.data.result.fundBaseInfo.fundOrgValue) {
+                        this.fundLevel.priority = res.data.result.fundBaseInfo.fundOrgValue.split(':')[0]
+                        this.fundLevel.intermediateStage = res.data.result.fundBaseInfo.fundOrgValue.split(':')[1]
+                        this.fundLevel.generalLevel = res.data.result.fundBaseInfo.fundOrgValue.split(':')[2]
+                    } else {
+                        this.fundLevel.priority = ''
+                        this.fundLevel.intermediateStage = '',
+                        this.fundLevel.generalLevel = ''
+                    }
+                    if (res.data.result.fundRegistration == null) {
+                        return
+                    } else {
+                        this.formRegistration = Object.assign({}, {
+                            flag: true
+                        }, res.data.result.fundRegistration)
+                    }
+                }
+            })
         }
     },
     mounted() {
@@ -312,7 +342,6 @@ export default {
             })
         })
         this.getDataStageAddUpload()
-        console.log(this.uploadInfo)
     },
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
@@ -321,34 +350,10 @@ export default {
                 this.tableData = res.data.result
             }
         })
-        getMyFundDetails(this.$route.params.id).then((res) => {
-            if (res.status == '200') {
-                this.formDetails = Object.assign({}, {
-                    flag: true
-                }, res.data.result.fundBaseInfo)
-                window.sessionStorage.setItem('FUNDNAME', JSON.stringify(res.data.result.fundBaseInfo.fundName))
-                this.formMIS = Object.assign({}, {
-                    flag: true
-                }, res.data.result.fundManageInfo)
-                this.formAccountInfo = res.data.result.fundAccinfo
-                if (res.data.result.fundBaseInfo.fundOrgValue) {
-                    this.fundLevel.priority = res.data.result.fundBaseInfo.fundOrgValue.split(':')[0]
-                    this.fundLevel.intermediateStage = res.data.result.fundBaseInfo.fundOrgValue.split(':')[1]
-                    this.fundLevel.generalLevel = res.data.result.fundBaseInfo.fundOrgValue.split(':')[2]
-                } else {
-                    this.fundLevel.priority = ''
-                    this.fundLevel.intermediateStage = '',
-                        this.fundLevel.generalLevel = ''
-                }
-                if (res.data.result.fundRegistration == null) {
-                    return
-                } else {
-                    this.formRegistration = Object.assign({}, {
-                        flag: true
-                    }, res.data.result.fundRegistration)
-                }
-            }
-        })
+        this._getFundList(this.$route.params.id)
+    },
+    beforeRouteUpdate(to, from, next) {
+        this._getFundList(to.params.id)
     },
     components: {
         tableInfo,
@@ -579,7 +584,7 @@ export default {
     }
     .tabs {
         width: 100%;
-        padding-top: -50px;
+        padding-top: 20px;
         padding-bottom: 54px;
         .el-tabs__nav {
             width: 100%!important;

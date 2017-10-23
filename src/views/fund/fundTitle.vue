@@ -29,18 +29,21 @@ export default {
         edit: {
             type: Boolean,
             default: true
-        },
-        editOrPre: {
-            type: Boolean,
-            default: true
+        }
+    },
+    data() {
+        return {
+            editOrPre: true
         }
     },
     methods: {
         editFormData() {
             this.$emit('add')
+            this.editOrPre = false
         },
         preservation() {
             this.$emit('confirm')
+            this.editOrPre = true
         }
     }
 }

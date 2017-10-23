@@ -10,6 +10,16 @@ export function companyInfo(url) {
 
 
 /*******************************部门管理******************************************/
+//部门挪动
+export function moveDepartment(id,rollType) {
+    const data = {
+        "deptId":id,
+        "rollType": rollType,
+    }
+    return service({url: '/sysDept/scrolling', method: 'post', data})
+}
+
+
 
 // 部门列表
 export function getDepartmentList() {

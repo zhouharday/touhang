@@ -3,7 +3,7 @@
     <tableHeader :data="dataTitle" @add="editInvestorForm"></tableHeader>
     <div class="form_wrapper">
         <investor-form :investorForm="baseInfo" :variable="variable"></investor-form>
-        <el-row :gutter="10">
+        <el-row :gutter="10" v-show="!variable">
             <el-col :span="24" class="group">
                 <el-button type="default" class="btn" @click="handlerCancel" :disabled="variable">取消</el-button>
                 <el-button type="danger" :disabled="variable" class="btn" @click="handlerConfirm">保存</el-button>
@@ -16,10 +16,7 @@
 <script type="text/ecmascript-6">
 import tableHeader from 'components/tabelHeader'
 import investorForm from 'components/investorForm'
-import {
-    getInvestorDetails,
-    updateInvestor
-} from 'api/investor'
+import {getInvestorDetails, updateInvestor} from 'api/investor'
 export default {
     data() {
         return {
@@ -41,29 +38,35 @@ export default {
     },
     methods: {
         handlerCancel() {
+            this.variable = true
         },
         handlerConfirm() {
             updateInvestor(this.baseInfo).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '提交成功！')
+                    this._getInvDetails()
+                    this.variable = true
                 }
             })
         },
         editInvestorForm() {
             this.variable = !this.variable
+        },
+        _getInvDetails() {
+            getInvestorDetails(this.$route.params.userId).then((res) => {
+                if (res.status == '200') {
+                    // console.log(res)
+                    this.baseInfo = res.data.record
+                    this.$emit('investorDetailsInfo', res.data.record)
+                }
+            }).catch(err => {
+                let response = err.response
+                this.$Message.error(response.data.message)
+            })
         }
     },
     created() {
-        getInvestorDetails(this.$route.params.userId).then((res) => {
-            if (res.status == '200') {
-                // console.log(res)
-                this.baseInfo = res.data.record
-                this.$emit('investorDetailsInfo', res.data.record)
-            }
-        }).catch(err => {
-            let response = err.response
-            this.$Message.error(response.data.message)
-        })
+        this._getInvDetails()
     },
     components: {
         tableHeader,

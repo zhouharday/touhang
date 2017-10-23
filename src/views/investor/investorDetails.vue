@@ -69,18 +69,16 @@ export default {
             if (name == 'agree') {
                 GetProtocolsList(this.$route.params.userId).then((res) => {
                     if (res.status == '200') {
-                        console.log(res)
+                        // console.log(res)
                         this.agreementData = res.data.result.list
                     }
                 }).catch(err => {
                     console.log(err)
-                    // let response = err.data
-                    // this.$Message.error(response.message || '获取结构失败！')
                 })
             } else if (name == 'visiting') {
                 getVisitingRecordList(this.$route.params.userId).then((res) => {
-                    if (res.status == '200') {
-                        this.visitingRecord = res.data.result.list
+                    if (res.status === 200) {
+                        this.visitingRecord = (res.data.status == '200') ? res.data.result.list : []
                     }
                 }).catch(err => {
                     let response = err.data
@@ -100,6 +98,7 @@ export default {
             } else if (name == 'invDoc') {
                 selectProjectOrFundDocument(this.$route.params.userId, 3).then((res) => {
                     if (res.status == '200') {
+                        // console.log(res)
                         this.investmentData = res.data.result
                     }
                 })
