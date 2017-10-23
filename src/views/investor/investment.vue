@@ -5,7 +5,7 @@
             <fundDetails :investorData="investorData"></fundDetails>
         </TabPane>
         <TabPane label="退出" name="secede">
-            <quitCapital></quitCapital>
+            <quitCapital :quitCapitalData="quitCapitalData"></quitCapital>
         </TabPane>
         <Button type="ghost" @click="handleTabsAdd" slot="extra">添加</Button>
     </Tabs>
@@ -27,7 +27,9 @@ import quitApply from './quitApply'
 import quitCapital from './quitCapital'
 import {
     addAgreementAmount,
-    addEarningsAmount
+    addEarningsAmount,
+    getAgreementAmountList,
+    getEarningsAmountList
 } from 'api/investor'
 import {changeDate} from 'common/js/config'
 export default {
@@ -51,7 +53,8 @@ export default {
                 residueAmount: '', //剩余金额
                 contributiveRatio: '', //出资占比
                 paidAmount: '', //实缴金额
-                managerId: '', // 经办人
+                managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, // 经办人id
+                managerName: JSON.parse(sessionStorage.getItem('userInfor')).name, // 经办人
                 handlingDate: new Date()
             },
             bonusInfo: {
@@ -61,8 +64,10 @@ export default {
                 handlingDate: '', // 经办日期v
                 shareMoney: '', //退出金额v
                 shareDate: '', //退出日期v
-                managerId: ''//投资经理ID（当前登录用户ID）v
-            }
+                managerId: JSON.parse(sessionStorage.getItem('userInfor')).id,//投资经理ID（当前登录用户ID）v
+                managerName: JSON.parse(sessionStorage.getItem('userInfor')).name
+            },
+            quitCapitalData: [] //退出详情列表
         }
     },
     methods: {
@@ -78,6 +83,8 @@ export default {
             addAgreementAmount(this.InvInfo).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '添加出资成功！')
+                    this.getContributionDetails()
+                    this.InvDetails = false
                 }
             })
         },
@@ -86,7 +93,29 @@ export default {
             addEarningsAmount(this.bonusInfo).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '添加退出成功！')
+                    var fundId = this.$route.params.userId
+                    var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+                    getEarningsAmountList(fundId, merchantsId).then((res) => {
+                        if(res.status == '200') {
+                            this.quitCapitalData = res.data.result.list
+                        }
+                    })
+                } else {
+                    this.$Message.success(res.data.message || '同一协议不能多次退出！')
                 }
+            })
+        },
+        getContributionDetails() { // 获取出资明细
+            var invId = this.$route.params.userId
+            var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+            getAgreementAmountList(invId, merId).then((res) => {
+                if (res.status == '200') {
+                    this.investorData = res.data.result.list
+                    // console.log(this.investorData)
+                }
+            }).catch(err => {
+                let response = err.data
+                this.$Message.error(response.message || '获取资金明细失败！')
             })
         }
     },

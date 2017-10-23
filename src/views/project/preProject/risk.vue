@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="riskTable">
-            <tabel-header :data="headerInfo_risk" @add="modalAdd = true"></tabel-header>
+            <tabel-header :data="headerInfo_risk" @add="openAddModal"></tabel-header>
             <el-table :data="riskData" border style="width: 100%" align="center">
                 <el-table-column label="主题" prop="riskTheme" align="center">
                 </el-table-column>
@@ -40,13 +40,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="提出人" prop="seedUserId">
-                                <el-input v-model="AddForm.seedUserId" placeholder="当前用户" disabled></el-input>
+                            <el-form-item label="提出人" prop="userName">
+                                <el-input v-model="userName" placeholder="当前用户" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
                             <el-form-item label="提出时间" prop="createDate">
-                                <el-input type="date" v-model="AddForm.createDate" style="width: 100%;" disabled>
+                                <el-input v-model="AddForm.createDate" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -195,6 +195,8 @@ export default {
     },
     data() {
         return {
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+            createDate: changeDate(new Date()),
             riskId: '',
             projectId: '',
             modalAdd: false,
@@ -307,23 +309,42 @@ export default {
             })
             return datas;
         },
+        openAddModal() {
+            let new_addForm = {
+                riskTheme: '',
+                description: '',
+                proposer: '',
+                createDate: this.createDate,
+                recipient: '',
+                endingDate: '',
+                appendix: '',
+                Records: ''
+            };
+            this.AddForm = new_addForm;
+            this.modalAdd = true;
+        },
         //查看风险详情
         getRiskInfo(riskId, optType) {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
-                this.tableData = [];
-                this.recordList = [];
-                this.tableData.push(resp.data.result);
-                this.recordList = resp.data.result.record;
-                this.recordList.push();
-                if (optType == '1') {
-                    //跟踪风险
-                    this.modalTracking = true;
-                }
-                else {
-                    //查看风险
-                    this.modalRiskView = true;
+                if(resp.data.status == '200'){
+                    
+                    this.tableData = [];
+                    this.recordList = [];
+                    this.tableData.push(resp.data.result);
+                    this.recordList = resp.data.result.record;
+                    this.recordList.push();
+                    if(optType == '1'){
+                        //跟踪风险
+                        this.modalTracking=true;
+                    }
+                    else{
+                        //查看风险
+                        this.modalRiskView=true;
+                    }
+                }else {
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('dangers exists error: ', e);

@@ -62,7 +62,7 @@
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 import deleteReminders from 'components/deleteReminders'
-import {queryUserList, queryList, addFundTeam, deleteTeamMembers} from 'api/fund'
+import {queryUserList, queryList, addFundTeam, deleteTeamMembers, getFundTeamList} from 'api/fund'
 const FUND_ROLE = 1 // 基金角色
 export default {
     props: {
@@ -116,18 +116,23 @@ export default {
     methods: {
         addTeam() {
             this.modalAdd = true
+            this.formTeam = {
+                fundId: this.$route.params.id,
+                userId: '',
+                autId: '',
+                addTime: ''
+            }
         },
         confirmAdd() {
-            console.log(this.formTeam)
             addFundTeam(this.formTeam).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '添加成员成功！')
+                    this.getTeamDetails()
                     this.modalAdd = false
                 }
             })
         },
         handleDelete(index, row) {
-            console.log(row)
             this.deleteReminders = true
             this.id = row.id
         },
@@ -136,6 +141,7 @@ export default {
             deleteTeamMembers(this.id).then((res) => {
                 if(res.status == '200') {
                     this.$Message.warning(res.data.message || '删除成员成功！')
+                    this.getTeamDetails()
                     this.modal_loading = false
                     this.deleteReminders = false
                 }
@@ -143,6 +149,14 @@ export default {
         },
         confirmCal() {
             this.deleteReminders = false
+        },
+        getTeamDetails() {
+            getFundTeamList(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    // console.log(res.data.result)
+                    this.teamData = res.data.result
+                }
+            })
         }
     },
     created() {

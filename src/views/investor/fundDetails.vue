@@ -29,16 +29,23 @@
             </template>
         </el-table-column>
     </el-table>
-    <Modal v-model="fundsDetailsModal" title="添加出资明细" @on-ok="confirmModal" @on-cancel="confirmCancel" width="800px">
+    <Modal v-model="fundsDetailsModal" title="修改出资明细" @on-ok="modifyModal" @on-cancel="confirmCancel" width="800px">
         <funds-modal :fundsInfo="fundsInfo"></funds-modal>
     </Modal>
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @cancel="cancelDel" @del="confirmDel">
+    </delete-reminders>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import fundsModal from './fundsModal'
 import '../../common/js/filter'
-import {updateAgreementAmount, deleteAgreementAmount} from 'api/investor'
+import {
+    updateAgreementAmount,
+    deleteAgreementAmount,
+    getAgreementAmountList
+} from 'api/investor'
+import deleteReminders from 'components/deleteReminders'
 export default {
     props: {
         investorData: {
@@ -49,17 +56,20 @@ export default {
     data() {
         return {
             fundsDetailsModal: false,
+            deleteReminders: false,
+            deleteId: '',
+            modal_loading: false,
             fundsInfo: {
                 investorName: '',
                 subscribeAmount: '', //认缴金额
                 fundName: '', //基金
                 paidDate: '', //出资日期
                 agreementName: '', //协议名称
-                residueAmount: '',//剩余金额
+                residueAmount: '', //剩余金额
                 contributiveRatio: '', //出资占比
                 id: '', //本条记录ID
                 paidAmount: '', //实缴金额
-                managerId: '',  // 经办人
+                managerId: '', // 经办人
                 handlingDate: new Date()
             }
         }
@@ -70,25 +80,51 @@ export default {
             this.fundsInfo = row
         },
         handleDelete(index, row) {
-            deleteAgreementAmount(row.id).then((res) => {
-                if(res.status == '200') {
+            this.deleteReminders = true
+            this.deleteId = row.id
+            console.log(row)
+        },
+        confirmDel() { // 确认删除
+            this.modal_loading = true
+            deleteAgreementAmount(this.deleteId).then((res) => {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
+                    this.getConDetails()
+                    this.deleteReminders = false
+                    this.modal_loading = false
                 }
             })
+        },
+        cancelDel() { // 取消删除
+            this.deleteReminders = false
         },
         confirmCancel() {
             this.fundsDetailsModal = false
         },
-        confirmModal() {
+        modifyModal() {
             updateAgreementAmount(this.fundsInfo).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '修改出资成功！')
                 }
+            })
+        },
+        getConDetails() { // 获取出资明细
+            var invId = this.$route.params.userId
+            var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+            getAgreementAmountList(invId, merId).then((res) => {
+                if (res.status == '200') {
+                    this.investorData = res.data.result.list
+                    console.log(this.investorData.length)
+                }
+            }).catch(err => {
+                let response = err.data
+                this.$Message.error(response.message || '获取资金明细失败！')
             })
         }
     },
     components: {
-        fundsModal
+        fundsModal,
+        deleteReminders
     }
 }
 </script>

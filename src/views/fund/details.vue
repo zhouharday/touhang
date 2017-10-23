@@ -1,7 +1,7 @@
 <template>
 <div class="form">
-    <tabel-header :data="headerInfo_details" @add="disable(formDetails)" class="add_padding">
-    </tabel-header>
+    <fund-title :data="headerInfo_details" :edit="editInfo" @add="disable(formDetails)" class="add_margin" @confirm="handlerPreservation">
+    </fund-title>
     <div class="formDetails">
         <el-form ref="formDetails" :model="formDetails" :rules="rules1" label-width="120px">
             <el-row>
@@ -23,7 +23,7 @@
                 <el-col :span="12">
                     <el-form-item label="管理类型" prop="manageTypeId">
                         <el-select v-model="formDetails.manageTypeId" :disabled="formDetails.flag" style="width:100%">
-                            <el-option v-for="(list, index) of getManType" :key="list.id" :label="list.dicName" :value="list.id">
+                            <el-option v-for="(list, index) of managementType" :key="list.id" :label="list.dicName" :value="list.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -31,7 +31,7 @@
                 <el-col :span="12">
                     <el-form-item label="组织类型" prop="orgTypeId">
                         <el-select v-model="formDetails.orgTypeId" :disabled="formDetails.flag" style="width:100%">
-                            <el-option v-for="(item, index) of OrgType" :key="item.id" :label="item.dicName" :value="item.id">
+                            <el-option v-for="(item, index) of OrgTypeList" :key="item.id" :label="item.dicName" :value="item.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -130,7 +130,8 @@
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_MIS" @add="disable(formMIS)" class="add_padding"></tabel-header>
+    <!-- 基本信息 end -->
+    <fund-title :data="headerInfo_MIS" :edit="editInfo" @add="disable(formMIS)" class="add_margin" @confirm="handlerFormMIS"></fund-title>
     <div class="formMIS">
         <el-form ref="formMIS" :model="formMIS" :rules="rules2" label-width="120px">
             <el-row>
@@ -185,8 +186,9 @@
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_Registration" @add="disable(formRegistration)" class="add_padding" v-show="showOrhiddren">
-    </tabel-header>
+    <!-- 管理信息 end -->
+    <fund-title :data="headerInfo_Registration" :edit="editInfo" @add="disable(formRegistration)" class="add_margin" v-show="showOrhiddren" @confirm="editRegistration">
+    </fund-title>
     <div class="formRegistration" v-show="showOrhiddren">
         <el-form ref="formRegistration" :model="formRegistration" label-width="120px">
             <el-row>
@@ -205,8 +207,8 @@
                 <el-col :span="12">
                     <el-form-item label="是否备案" prop="recordStatus">
                         <el-select v-model="formRegistration.recordStatus" :disabled="formRegistration.flag" style="width:100%;">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
+                            <el-option label="未备案" value="1"></el-option>
+                            <el-option label="已备案" value="2"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -225,48 +227,56 @@
             </el-row>
         </el-form>
     </div>
-    <tabel-header :data="headerInfo_Accountinfo" @add="disable(formAccountinfo)" class="add_padding">
-    </tabel-header>
+    <!-- 备案注册 end -->
+    <fund-title :data="headerInfo_Accountinfo" :edit="editInfo" @add="disableAccountinfo" class="add_margin" @confirm="getAccountInfo">
+    </fund-title>
     <el-table :data="formAccountInfo" style="width: 100%">
         <el-table-column prop="accountTypeName" label="账户类型">
         </el-table-column>
         <el-table-column label="户名">
             <template scope="scope">
-                    <input v-model="scope.row.username" placeholder="请输入内容" style="border: none;"></input>
-                </template>
+                <el-input v-model="scope.row.username" placeholder="请输入内容" style="border: none;" :disabled="scope.row.flag"></el-input>
+            </template>
         </el-table-column>
         <el-table-column label="开户行">
             <template scope="scope">
-                    <!-- <input v-model="scope.row.openingBank" placeholder="请输入内容" style="border: none;"></input> -->
-                    <el-autocomplete class="inline-input"
+                <el-autocomplete class="inline-input"
                                      v-model="scope.row.openingBank"
                                      :fetch-suggestions="querySearch"
                                      placeholder="请输入内容"
-                                     @select="handleSelect">
+                                     @select="handleSelect"
+                                     style="width:100%;"
+                                     :disabled="scope.row.flag">
                     </el-autocomplete>
                 </template>
         </el-table-column>
         <el-table-column label="账号">
             <template scope="scope">
-                    <input v-model="scope.row.accountNumber" placeholder="请输入内容" style="border: none;"></input>
-                </template>
+                <el-input v-model="scope.row.accountNumber" placeholder="请输入内容" style="border: none;" :disabled="scope.row.flag"></el-input>
+            </template>
         </el-table-column>
     </el-table>
-    <div class="btnList">
-        <el-button class="btn success" @click="preservation">保存</el-button>
-        <el-button class="btn danger" @click="cancel">取消</el-button>
+    <!-- 账户信息 end -->
+    <div class="btnList" v-if="!showOrhiddren">
+        <el-button class="btn success" :disabled="formDetails.flag" @click="preservation">保存</el-button>
+        <el-button class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
     </div>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
-import tabelHeader from 'components/tabelHeader'
+import fundTitle from './fundTitle'
 import {
     mapGetters
 } from 'vuex'
 import {
     selectAllManageCompany,
-    sectorList
+    sectorList,
+    updateFundInfo,
+    updateFundManageInfo,
+    updateFundReg,
+    updataFunAccInfo,
+    getMyFundDetails
 } from 'api/fund'
 export default {
     props: {
@@ -290,23 +300,33 @@ export default {
             type: Object,
             default: {}
         },
-        showOrhiddren: false
+        editInfo: {
+            type: Boolean,
+            default: true
+        },
+        showOrhiddren: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
             headerInfo_details: {
                 desc: '基本信息',
-//                btnGroup: [{
-//                    icon: 'edit',
-//                    explain: '编辑'
-//                }]
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                }, {
+                    icon: 'upload',
+                    explain: '提交'
+                }]
             },
             headerInfo_MIS: {
                 desc: '管理信息',
-//                btnGroup: [{
-//                    icon: 'edit',
-//                    explain: '编辑'
-//                }]
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                }]
             },
             headerInfo_Registration: {
                 desc: '备案注册',
@@ -317,19 +337,14 @@ export default {
             },
             headerInfo_Accountinfo: {
                 desc: '账户信息',
-//                btnGroup: [{
-//                    icon: 'edit',
-//                    explain: '编辑'
-//                }]
+                btnGroup: [{
+                    icon: 'edit',
+                    explain: '编辑'
+                }]
             },
             managementCompany: [],
-            options: [{
-                id: 0,
-                label: '已备案'
-            }, {
-                id: 1,
-                label: '未备案'
-            }],
+            managementType: [], // 管理类型
+            OrgTypeList: [], // 组织类型
             structure: '',
             businessDepartment: [],
             restaurants: [],
@@ -383,12 +398,12 @@ export default {
                     message: '请输入基金期限',
                     trigger: 'change'
                 }],
-                startDate: [{
-                    type: 'date',
-                    required: true,
-                    message: '请选择时间',
-                    trigger: 'change'
-                }],
+                // startDate: [{
+                //     type: 'date',
+                //     required: true,
+                //     message: '请选择时间',
+                //     trigger: 'change'
+                // }],
                 businessDeptId: [{
                     required: true,
                     message: '请选择业务部门',
@@ -421,6 +436,50 @@ export default {
             } else {
                 return name.flag = false
             }
+        },
+        // disableAccountinfo() {
+        //     this.formAccountInfo.map((x) => {
+        //         x.flag = false
+        //     })
+        //     console.log(this.formAccountInfo)
+        // },
+        handlerPreservation() { // 修改基本信息
+            this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
+            updateFundInfo(this.formDetails).then((res) => {
+                if (res.status === 200) {
+                    this.$Message.error(res.data.message || '基金名称已存在！')
+                    this.formDetails.flag = true
+                    this._getFundList()
+                }
+            })
+        },
+        handlerFormMIS() { // 修改管理信息
+            updateFundManageInfo(this.formMIS).then((res) => {
+                if (res.status === 200) {
+                    this.$Message.success(res.data.message || '修改管理信息成功！')
+                    this._getFundList()
+                }
+            })
+        },
+        editRegistration() { // 修改备案注册
+            this.formRegistration.fundId = this.$route.params.id
+            console.log(this.formRegistration)
+            updateFundReg(this.formRegistration).then((res) => {
+                if (res.status === 200) {
+                    this.$Message.success(res.data.message || '修改备案注册成功！')
+                    this._getFundList()
+                }
+            })
+        },
+        getAccountInfo() { // 修改账户信息
+            console.log(this.formAccountInfo)
+            updataFunAccInfo(this.formAccountInfo).then((res) => {
+                if (res.status === 200) {
+                    console.log(res)
+                    this.$Message.success(res.data.message || '修改账户成功！')
+                    this._getFundList()
+                }
+            })
         },
         selectStructure(value) {
             this.structure = value
@@ -484,10 +543,23 @@ export default {
             }, {
                 "value": "中信银行"
             }]
+        },
+        _getFundList() {
+            getMyFundDetails(this.$route.params.id).then((res) => {
+                if (res.status === 200) {
+                    console.log(res)
+                    this.formDetails = res.data.result.fundBaseInfo
+                    this.formMIS = res.data.result.fundManageInfo
+                    this.formAccountInfo = res.data.result.fundAccinfo
+                    this.formRegistration = res.data.result.fundRegistration
+                }
+            })
         }
     },
     mounted() {
-        this.restaurants = this.loadAll();
+        this.restaurants = this.loadAll()
+        this.managementType = JSON.parse(sessionStorage.getItem('MANTYPE')) || this.getManType
+        this.OrgTypeList = JSON.parse(sessionStorage.getItem('ORGTYPE')) || this.OrgType
     },
     computed: {
         ...mapGetters([
@@ -512,15 +584,15 @@ export default {
                 this.businessDepartment = res.data.result
             }
         })
-        // this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
     },
     components: {
-        tabelHeader
+        fundTitle
     }
 }
 </script>
 
 <style lang="less" scoped>
+@import "../../common/styles/mixin.less";
 .form {
     width: 100%;
     height: 100%;
@@ -529,8 +601,8 @@ export default {
             text-align: center;
         }
     }
-    .add_padding {
-        padding-bottom: 12px;
+    .add_margin {
+        margin-bottom: 12px;
     }
     .el-table tr:hover {
         input {

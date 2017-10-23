@@ -24,3 +24,43 @@
         }
     }
 }
+
+.title {
+    width: 100%;
+    height: 42px;
+    line-height: 42px;
+    background: #2A3142;
+    color: @color-base;
+    display: flex;
+    align-items: center;
+    .desc {
+        flex: 1;
+        text-align: left;
+        .defaultcolor {
+            color: #fff;
+            margin-left: 24px;
+        }
+    }
+    .btn {
+        flex: 1;
+        text-align: right;
+        line-height: 42px;
+        .btnwrapper {
+            transition: 0.3s all;
+            background: transparent;
+            margin-right: @font-size-small;
+            border: none;
+            font-size: 14px;
+            color: #fff;
+            outlione: none;
+            &:hover {
+                color: @color-base;
+                background: @color-theme-red;
+                transform: scale(1.1);
+            }
+            .explain {
+                margin-right: 6px;
+            }
+        }
+    }
+}

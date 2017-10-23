@@ -101,13 +101,7 @@ export function getMyFundDetails(detailsID) {
     }
     return service({url: '/fund/getFundDetails', method: 'post', data})
 }
-// 基金状态
-// export function fundStatus() {
-//     const data = {
-//         "dicParent": "201"
-//     }
-//     return service({url: '/dictionaryController/select2Menu', method: 'post', data})
-// }
+
 // 获取所有的合作机构
 export function getOrgList(name, num, lists) {
     const data = {
@@ -144,6 +138,28 @@ export function getFundTeamList(id) {
         fundId: id
     }
     return service({url: '/fund/getFundTeamList', method: 'post', data})
+}
+// 修改基金信息 /fund/updateFundInfo
+export function updateFundInfo(fundInfo) {
+    const data = fundInfo
+    return service({url: '/fund/updateFundInfo', method: 'post', data})
+}
+// 修改管理信息 /fund/updateFundManageInfo
+export function updateFundManageInfo(manageInfo) {
+    const data = manageInfo
+    return service({url: '/fund/updateFundManageInfo', method: 'post', data})
+}
+// 编辑或添加备案注册信息 /fundReg/updateFundReg
+export function updateFundReg(fundReg) {
+    const data = fundReg
+    return service({url: '/fund/updateFundReg', method: 'post', data})
+}
+// 修改账户信息 /fund/updataFunAccInfo
+export function updataFunAccInfo(updataInfo) {
+    const data = {
+        fundAccinfo: updataInfo
+    }
+    return service({url: '/fund/updataFunAccInfo', method: 'post', data})
 }
 // 添加基金团队成员 /fund/addFundTeam
 export function addFundTeam(team) {

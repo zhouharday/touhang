@@ -1,13 +1,6 @@
 <template>
 <div class="add">
-    <my-details :formDetails="formDetails"
-                :formMIS="formMIS"
-                :formRegistration="formRegistration"
-                :formAccountInfo="formAccountInfo"
-                :fundLevel="fundLevel"
-                :showOrhiddren="showOrhiddren"
-                @confirmSubmission="confirmSubmission"
-                @confirmCancel="confirmCancel">
+    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :editInfo="editInfo" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
     </my-details>
 </div>
 </template>
@@ -75,7 +68,8 @@ export default {
                 intermediateStage: '',
                 generalLevel: ''
             },
-            formData: {}
+            formData: {},
+            editInfo: false,
         }
     },
     methods: {
@@ -89,9 +83,65 @@ export default {
             addFund(this.formData).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '添加成功！')
-                    this.$router.push('/home/myfund')
+                    this.$store.dispatch('getFundLists').then(() => {
+                        this.$router.push('/home/myfund')
+                        this.formDetails = lnitFormDetails,
+                        this.formMIS = lnitformMIS
+                        this.formAccountInfo = lnitformAccountInfo
+                    })
                 }
             })
+        },
+        addFormData() {
+            let lnitFormDetails = {
+                fundName: '',
+                fundNo: '',
+                fundScale: '',
+                manageTypeId: '',
+                orgTypeId: '',
+                fundInvestId: '',
+                fundOrg: '',
+                fundTerm: '',
+                startDate: '',
+                endDate: '',
+                businessDeptId: '',
+                yearsDaynum: '',
+                versionRecord: '',
+                fundStatus: '',
+                fundType: '',
+                mainInvestField: '',
+                incomeDis: '',
+                fundRemarks: '',
+                createUserId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+            }
+            let lnitformMIS = {
+                fundStratorId: '', //基金管理人
+                fundCustodianId: '', //基金托管人
+                fundSupervisorId: '', // 基金监管人
+                fundSuperintId: '', // 基金监理人
+                fundAdvisorId: '', // 基金投资顾问
+                fundOrganizationId: '' // 第三方合作机构
+            }
+            let lnitformAccountInfo = [{
+                    username: '',
+                    openingBank: '',
+                    accountNumber: '',
+                    accountType: 1,
+                    accountTypeName: '基本户'
+                }, {
+                    username: "",
+                    openingBank: "",
+                    accountNumber: "",
+                    accountType: 2,
+                    accountTypeName: "托管户"
+                }, {
+                    username: '',
+                    openingBank: '',
+                    accountNumber: '',
+                    accountType: 3,
+                    accountTypeName: "募集结算账户"
+                }]
         }
     },
     components: {
@@ -106,6 +156,6 @@ export default {
     width: 100%;
     min-height: 100%;
     background: @color-base;
-     padding: 20px;
+    padding: 20px;
 }
 </style>
