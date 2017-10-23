@@ -10,11 +10,11 @@ export function getFinances(projectId) {
 
 // 添加融资信息
 export function addFinance(params = {}) {
-	let { projectId, projectTurnId, financingWayId, financingMoney, financingDate, merchantId } = params;
+	let { projectId, projectTurnId, financingWay, financingMoney, financingDate, merchantId } = params;
     const data = {
         projectId,      // 项目id
         projectTurnId,	// 融资轮次ID
-        financingWayId,	// 融资方式ID
+        financingWay,	// 融资方式ID
         financingMoney, // 本次融资金额
         financingDate,	// 融资日期
         merchantId      // 商户id

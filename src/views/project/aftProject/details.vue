@@ -171,13 +171,6 @@ import tabelHeader from 'components/tabelHeader'
 import { getDicChildren } from 'common/js/dictionary'
 import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
 export default {
-    computed: mapGetters({
-        typeOptions:'getTypeOptions',   // 获取项目类型
-        industryOptions:'getIndustryOptions',   // 获取项目所属行业
-        fromOptions:'getFromOptions',   // 获取项目来源
-        addressOptions:'getAddressOptions',   // 获取项目所在地
-        departmentOptions:'getDepartmentOptions',   // 获取业务部门
-    }),
     props: {
         basicForm: {
             type: Object,
@@ -206,11 +199,6 @@ export default {
         }
     },
     created() {
-        this.$store.dispatch('getTypeOptions')
-        this.$store.dispatch('getIndustryOptions')
-        this.$store.dispatch('getFromOptions')
-        this.$store.dispatch('getAddressOptions')
-        this.$store.dispatch('getDepartmentOptions')
     },
     methods: {
         disable(name) {

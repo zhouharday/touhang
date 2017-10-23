@@ -353,13 +353,14 @@ export default {
         this.init();
     },
     watch: {
-        // '$route' (to, from) {
-        //     this.investProjectId = this.$route.params.investProjectId;
-        //     this.projectId = this.$route.params.userId;
-        //     this.init(),      //再次调起我要执行的函数
-        //     console.log("详情页"+to.name);
+        '$route' (to, from) {
+            this.investProjectId = this.$route.params.investProjectId;
+            this.projectId = this.$route.params.userId;
+            if(to.name == 'preProjectMessage'){
+                this.init();      //再次调起我要执行的函数
+            }
 
-        //  }
+         }
     },
     methods: {
         init() {
@@ -399,7 +400,6 @@ export default {
         //控制当前阶段
         projectStage() {
             if(this.stageId == undefined || this.stageId == '') return;
-            console.log("项目当前阶段ID："+this.stageId);
             let isExit = this.isExit, isManage = this.isManage;
             let stageId = this.stageId;
             //退出阶段，下一阶段按钮不可用
@@ -407,11 +407,11 @@ export default {
             this.stepLists.forEach(function(item,index) {
                 if(item.id == stageId && item.stageKey == 3){
                     nextStageDisabled = true;
-                    console.log("退出阶段, 显示管理、退出标签");
+                    // console.log("退出阶段, 显示管理、退出标签");
                     isExit = true;
                 }
                 if(item.id == stageId && item.stageKey == 2){
-                    console.log("管理阶段，显示管理标签");
+                    // console.log("管理阶段，显示管理标签");
                     isManage = true;
                 }
             });
@@ -426,7 +426,7 @@ export default {
         getPreProDetail() {
             getPreDetail(this.projectId).then(resp => {
                 if(resp.data.result.enterpriseInfo == undefined || resp.data.result.enterpriseInfo == ''){
-                    console.log('项目详情-企业信息为空: '+JSON.stringify(resp.data.result.enterpriseInfo));
+                    // console.log('项目详情-企业信息为空: '+JSON.stringify(resp.data.result.enterpriseInfo));
                 } else {
                     this.companyForm = Object.assign({}, {
                         baseInfo: '企业信息',

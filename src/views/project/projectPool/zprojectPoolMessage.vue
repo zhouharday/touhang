@@ -53,7 +53,7 @@
                     <record-form :tabs="tabs"></record-form>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table :tabs="tabs"></file-table>
+                    <file-table :tabs="tabs" :projectId="projectPoolId"></file-table>
                 </el-tab-pane>
             </el-tabs>
         </div>

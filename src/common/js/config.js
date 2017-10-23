@@ -1,4 +1,5 @@
-export function changeDate(value) {
+export function changeDate(_date) {
+    var value = new Date(_date);
     var year = value.getFullYear()
     var month = value.getMonth() + 1
     var day = value.getDate()

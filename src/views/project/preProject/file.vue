@@ -44,24 +44,6 @@
                     </el-table-column>
                 </el-table>
             </template>
-            <!-- 上传文档 对话框-->
-            <el-dialog title="上传文档" :visible.sync="modalAdd3" :close-on-click-modal="false">
-                <el-form :model="projectForm" :label-width="formLabelWidth">
-                    <el-form-item label="上传文件">
-                        <!-- action 上传的地址，必填 -->
-                        <!-- <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload> -->
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="modalAdd3 = false">取 消</el-button>
-                    <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
-                </div>
-            </el-dialog>
         </div>
         <!-- 文件预览功能 -->
         <div class="viewFiles" v-show="isHide">
@@ -103,8 +85,6 @@ export default {
             file: null,
             loadingStatus: false,
             formLabelWidth: '80px',
-            modalAdd2: false,
-            modalAdd3: false,
             fileForm: {
                 user: '',
                 date: ''
@@ -144,12 +124,6 @@ export default {
             }).catch(e => {
                 console.log('getProjectDoc() exists error: ', e);
             });
-        },
-        inspectionDialog() {
-            this.modalAdd2 = true
-        },
-        projectDialog() {
-            this.modalAdd3 = true
         },
         handleUpload(file) {
             this.file = file;

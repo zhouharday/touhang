@@ -171,13 +171,15 @@ export default {
     created() {
         this.investProjectId = this.$route.params.investProjectId;
         this.projectId = this.$route.params.projectId;
-        // this.init();
+        this.init();
     },
     watch: {
         '$route' (to, from) {
             this.investProjectId = this.$route.params.investProjectId;
             this.projectId = this.$route.params.projectId;
-            this.init()      //再次调起我要执行的函数
+            if(to.name == 'aftProjectMessage'){
+                this.init()      //再次调起我要执行的函数   
+            }
          }
     },
     methods: {

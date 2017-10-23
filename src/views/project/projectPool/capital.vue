@@ -62,7 +62,7 @@
                         <el-input v-model="capitalForm.financingWay" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="本轮融资金额（元）" prop="financingMoney">
-                        <el-input v-model="capitalForm.financingMoney" auto-complete="off"></el-input>
+                        <el-input v-model.number="capitalForm.financingMoney" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="融资日期" prop="financingDate">
                         <el-date-picker type="date" placeholder="融资日期" v-model="capitalForm.financingDate" style="width: 100%;">
@@ -134,7 +134,7 @@ export default {
                     { required: true, message: '请输入融资方式', trigger: 'blur' }
                 ],
                 financingMoney: [
-                    { required: true, message: '请输入融资金额', trigger: 'blur' }
+                    { required: true, type: 'number', message: '请输入数字融资金额', trigger: 'blur' }
                 ],
                 financingDate: [
                     { type: 'date', required: true, message: '请选择日期', trigger: 'blur' }

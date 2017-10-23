@@ -630,9 +630,9 @@ export default {
             let params = {
                 dataInfos: dataInfos
             };
-            console.log("财务数据-保存数据 参数："+JSON.stringify(params));
+            // console.log("财务数据-保存数据 参数："+JSON.stringify(params));
             fillDataForm(params).then(resp => {
-                console.log("财务数据-保存数据 结果："+JSON.stringify(resp.data));
+                // console.log("财务数据-保存数据 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.financialModal2 = false;
                     this.clearData();
