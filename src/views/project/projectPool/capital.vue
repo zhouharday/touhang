@@ -134,7 +134,7 @@ export default {
                     { required: true, message: '请输入融资方式', trigger: 'blur' }
                 ],
                 financingMoney: [
-                    { required: true, type: 'number', message: '请输入数字融资金额', trigger: 'blur' }
+                    { type: 'number', required: true,  message: '请输入数字融资金额', trigger: 'blur' }
                 ],
                 financingDate: [
                     { type: 'date', required: true, message: '请选择日期', trigger: 'blur' }

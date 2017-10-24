@@ -66,13 +66,14 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="appendix">
-                                <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
+                                <Upload multiple type="drag" :before-upload="handleUpload" name="files" :headers="reqHeader" :action="actionUrl" show-upload-list="true" :on-success="handleSuccess" :on-error="handleError">
                                     <div style="padding: 20px 0">
                                         <Icon type="ios-cloud-upload" size="52"></Icon>
                                         <p>点击或将文件拖拽到这里上传</p>
                                     </div>
                                 </Upload>
+                                <Alert type="error" show-icon v-if="showUploadAlert">{{uploadMessage}}</Alert>
+
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -154,8 +155,8 @@
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
                         <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
+                        <Upload ref="upload" type="drag" multiple :before-upload="handleUpload" name="files" :headers="reqHeader" show-upload-list="true" :action="actionUrl">
+                            <div style="padding: 20px 10px">
                                 <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
                             </div>
@@ -197,6 +198,13 @@ export default {
         return {
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             createDate: changeDate(new Date()),
+
+            actionUrl:this.api + '/files/upload',
+            reqHeader:{'Content-Type': 'multipart/form-data'},
+            showUploadAlert: false,
+            uploadMessage: '',
+            uploadData:{file: ''},
+
             riskId: '',
             projectId: '',
             modalAdd: false,
@@ -413,7 +421,6 @@ export default {
             }).catch(e => {
                 console.log('addRecord exists error: ', e)
             });
-
         },
         //添加风险跟踪
         confirmTracking(formName) {
@@ -441,29 +448,28 @@ export default {
                     return false;
                 }
             });
-            // let riskRegisterId = this.riskId,
-            //     disposeResult = this.trackingForm.disposeResult,
-            //     recordDetails = this.trackingForm.recordDetails;
-            // let params = {
-            //     riskRegisterId,
-            //     disposeResult,
-            //     recordDetails
-            // };
-            // insertRiskFollower(params).then(resp => {
-            //     if (resp.data.status == '200') {
-            //         this.getDatas();
-            //         this.modalTracking = false;
-            //     } else {
-            //         this.$message.error(resp.data.message);
-            //     }
-            // }).catch(e => {
-            //     console.log('confirmTracking() exists error: ', e);
-            // })
         },
         // 上传附件的方法
         handleUpload(file) {
-            this.file = file;
-            return false;
+            // this.file = file;
+            this.showUploadAlert = false;
+            
+            // var uploadData = new FormData();
+            // uploadData.append("files", file);
+            // this.uploadData = uploadData;
+            // return false; 取消自动上传
+        },
+        handleSuccess(resp, file, fileList){
+            console.log("上传结果："+JSON.stringify(resp));
+            if(res.status == '200'){
+
+            }
+        },
+        handleError(error, file, fileList){
+            console.log("上传错误："+JSON.stringify(error));
+            // this.$Message.error("上传错误");
+            this.uploadMessage = "文件上传错误";
+            this.showUploadAlert = true;
         },
         upload() {
             this.loadingStatus = true;
@@ -475,7 +481,8 @@ export default {
         },
     },
     components: {
-        tabelHeader
+        tabelHeader,
+        uploadFiles
     }
 }
 </script>

@@ -63,7 +63,7 @@
                 <approve-table :tabs="tabs"></approve-table>
             </el-tab-pane>
             <el-tab-pane label="文档" name="file" class="tab_list">
-                <file-table :tabs="tabs" :proId="projectId" ></file-table>
+                <file-table :tabs="tabs" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId" ></file-table>
             </el-tab-pane>
             <el-tab-pane label="风险登记" name="risk" class="tab_list">
                 <risk-table :tabs="tabs" :proId="projectId" :proUsers="proUsers"></risk-table>
@@ -272,6 +272,7 @@ export default {
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
             structureData: [], // 股权结构
+            uploaded: false,
             tabs: {
                 tabList:[true, false, false, false, false, false, false, false]
             },
@@ -359,10 +360,14 @@ export default {
             if(to.name == 'preProjectMessage'){
                 this.init();      //再次调起我要执行的函数
             }
-
          }
     },
     methods: {
+        listenUploaded(uploaded){
+            if(uploaded){
+                this.getStageUploadDocument(); //获取当前阶段及任务小助
+            }
+        },
         init() {
             this.initInfo();
             this.getPreProDetail();
@@ -415,6 +420,9 @@ export default {
                     isManage = true;
                 }
             });
+            if(isExit || isManage) {
+                this.suspend = true;
+            }
             this.isExit = isExit;
             this.isManage = isManage;
             this.nextStageDisabled = nextStageDisabled;
@@ -591,9 +599,10 @@ export default {
                 if (res.status == '200') {
                     if (res.data.status == '200') {
                         this.getStageUploadDocument();
+                        this.uploaded = true;
                     } else {
                         this.$Message.error(res.data.message);
-                        //loadingInstance.close();
+                        //loadingInstance.close();  
                     }
                 }
             })

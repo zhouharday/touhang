@@ -22,7 +22,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目类型" prop="projectTypeId">
-                                        <el-select v-model="basicForm.projectTypeId" @change="myChange" filterable placeholder="请选择项目类型"  style="width:100%">
+                                        <el-select v-model="basicForm.projectTypeId" filterable placeholder="请选择项目类型"  style="width:100%">
                                             <el-option v-for="item in $store.state.project.typeOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                             </el-option>
                                         </el-select>
@@ -63,26 +63,9 @@
                                 <!-- 上传 企业LOGO -->
                                 <el-col>
                                     <el-form-item label="企业LOGO" prop="projectLogo">
-                                        <div class="demo-upload-list" v-for="item in uploadList" :key="item.index">
-                                            <template v-if="item.status === 'finished'">
-                                                <img :src="item.url">
-                                                <div class="demo-upload-list-cover">
-                                                    <Icon type="ios-eye-outline" @click.native="handleView(item.name)"></Icon>
-                                                    <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
-                                                </div>
-                                            </template>
-                                            <template v-else>
-                                                <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                                            </template>
-                                        </div>
-                                        <Upload ref="upload" v-modeel="basicForm.logo" :show-upload-list="false" :default-file-list="defaultList" :on-success="handleSuccess" :format="['jpg','jpeg','png']" :max-size="2048" :on-format-error="handleFormatError" :on-exceeded-size="handleMaxSize" :before-upload="handleBeforeUpload" multiple type="drag" action="//jsonplaceholder.typicode.com/posts/" style="display: inline-block;width:58px;">
-                                            <div style="width: 58px;height:58px;line-height: 58px;">
-                                                <Icon type="camera" size="20"></Icon>
-                                            </div>
-                                        </Upload>
-                                        <Modal title="查看图片" v-model="visible">
-                                            <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-                                        </Modal>
+                                        <img v-if="basicForm.projectLogo" :src="basicForm.projectLogo" style="width: 58px;height:58px;line-height: 58px;">
+                                        <el-button type="small" @click="getFile($event)">点击选择文件</el-button>
+                                        <input type="file" accept="image/png,image/gif,image/jpg,image/jpeg" style="display:none" @change="changeImage($event)" ref="avatarInput" >
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -166,7 +149,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { addPro, getDeptListByMid } from 'api/project';
-import { getDicChildren } from 'common/js/dictionary'
+import { getDicChildren } from 'common/js/dictionary';
+import { Loading } from 'element-ui';
 const store = {
     isSubmit: false
 }
@@ -183,6 +167,7 @@ export default {
     },
     data() {
         return {
+            uploadUrl: this.api + '/files/upload',
             dataNum: 3,
             basicForm: {
                 projectName: '',
@@ -231,19 +216,27 @@ export default {
             },
             // 上传 企业LOGO
             defaultList: [
+                // {
+                //     'name': 'bc7521e033abdd1e92222d733590f104',
+                //     'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                // },
                 {
-                    'name': 'bc7521e033abdd1e92222d733590f104',
-                    'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
+                    name: '',
+                    url: ''
                 }
             ],
             imgName: '',
             visible: false,
-            uploadList: []
+            uploadList: [],
+            uploadInfo:{
+                files:[]
+            },
+            file: ''
         }
     },
     mounted() {
-        // 上传 企业LOGO
-        this.uploadList = this.$refs.upload.fileList;
+        // // 上传 企业LOGO
+        // this.uploadList = this.$refs.upload.fileList;
     },
     created() {
         this.$store.dispatch('getTypeOptions')
@@ -270,8 +263,40 @@ export default {
             this.merchantId = merchants[0].id;
             this.addProjectUserId = info.id;
         },
-        myChange(val){
-            console.log("改制"+val);
+        getFile(event) { //点击上传文件图像
+            this.$refs.avatarInput.click();
+        },
+        changeImage(e) { //上传文件input
+            this.file = e.target.files[0];
+            this.onSubmit(e);
+        },
+        onSubmit(event) { //提交上传文件到服务器
+            let loadingInstance = Loading.service({ fullscreen: true });
+            event.preventDefault();
+            let formData = new FormData();
+            formData.append('files', this.$refs.avatarInput.files[0]);
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            };
+
+            this.$http.post(API_ROOT + '/files/upload', formData, config)
+            .then((res)=> {
+                if (res.status == '200') {
+                    if (res.data.status == '200') {
+                        this.basicForm.projectLogo = res.data.filePath;
+                        loadingInstance.close();
+                    } else if (res.data.status == '403') {
+                        this.$Message.error(res.data.message);
+                        loadingInstance.close();
+                    }
+                }
+            })
+            .catch(error => {
+                this.$Message.error("请求超时");
+                loadingInstance.close();
+            })
         },
         submitForm(formName) {
             let basicForm = this.basicForm;
@@ -311,7 +336,6 @@ export default {
                             this.$router.push({ name: 'projectPool' });
                             store.isSubmit = false;
                         }
-                        console.log('resp: ', resp);
                     }).catch(e => {
                         console.log(e);
                     })
@@ -327,42 +351,6 @@ export default {
         },
         addTab(th, url, name) {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
-        },
-        // 上传 企业LOGO 的方法
-        handleView(name) {
-            this.imgName = name;
-            this.visible = true;
-        },
-        handleRemove(file) {
-            // 从 upload 实例删除数据
-            const fileList = this.$refs.upload.fileList;
-            this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-        },
-        handleSuccess(res, file) {
-            // 因为上传过程为实例，这里模拟添加 url
-            file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-            file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-        },
-        handleFormatError(file) {
-            this.$Notice.warning({
-                title: '文件格式不正确',
-                desc: '文件 ' + file.name + ' 格式不正确，请上传 jpg 或 png 格式的图片。'
-            });
-        },
-        handleMaxSize(file) {
-            this.$Notice.warning({
-                title: '超出文件大小限制',
-                desc: '文件 ' + file.name + ' 太大，不能超过 2M。'
-            });
-        },
-        handleBeforeUpload() {
-            const check = this.uploadList.length < 5;
-            if (!check) {
-                this.$Notice.warning({
-                    title: '最多只能上传 5 张图片。'
-                });
-            }
-            return check;
         }
     },
 }

@@ -64,6 +64,10 @@ import {
 
 export default {
     props: {
+        uploaded: {
+            type: Boolean,
+            default: false
+        },
         tabs: {
             type: Object,
             default: {}
@@ -109,6 +113,12 @@ export default {
             if(to.tabList[4]){
                 this.init();
             }
+        },
+        'uploaded':function(to,from){
+            if(this.tabs.tabList[4] && to){
+                this.uploaded = false;
+                this.init();
+            }
         }
     },
     methods: {
@@ -152,7 +162,9 @@ export default {
                 console.log('删除文档: ' + JSON.stringify(res.data));
                 if (res.data.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！');
-                    this.getProjectDocument();
+                    
+                    this.uploaded = true;
+                    this.$emit("listenUploaded",true);
                 }
             });
         },
@@ -177,7 +189,10 @@ export default {
             .then((res)=> {
                 console.log("上传文件结果:"+ JSON.stringify(res.data));
                 if (res.data.status == '200') {
-                    this.getProjectDocument();
+                    // this.getProjectDocument();
+
+                    this.uploaded = true;
+                    this.$emit("listenUploaded",true);
                 } else {
                     this.$Message.error(res.data.message);
                 }

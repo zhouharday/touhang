@@ -168,6 +168,8 @@ export default {
                 if (resp.data.status == '200') {
                     this.getExitDetail();
                     this.controlEdit = true;
+                }else{
+                    this.$Message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('保存退出单 error: ', e);
