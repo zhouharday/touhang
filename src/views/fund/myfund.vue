@@ -152,7 +152,7 @@ export default {
                     dicName: '正常'
                 }, {
                     id: 2,
-                    dicName: '终止'
+                    dicName: '中止'
                 }]
             },
             deleteReminders: false,

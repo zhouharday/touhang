@@ -100,7 +100,7 @@ export default {
                 seeContent: [{
                     required: true,
                     message: '请输入拜访内容',
-                    trigger: 'blur'
+                    trigger: 'blur,change'
                 }],
             },
             addOrEdit: true // 用来判断点击了添加还是编辑
@@ -128,23 +128,29 @@ export default {
             this.id = row.id
         },
         confirmVisiting() {
-            if (this.addOrEdit == true) {
-                addVisitingRecord(this.addVisiting).then((res) => {
-                    this.$Message.success(res.data.message || '添加拜访记录成功')
-                    this._visitingRecordList()
-                }).catch(err => {
-                    let res = err.data
-                    this.$Message.success(res.message || '添加拜访记录失败')
-                })
-            } else {
-                updateVisitingRecord(this.addVisiting).then((res) => {
-                    this.$Message.success(res.data.message || '修改拜访记录成功')
-                    this._visitingRecordList()
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.success(res.message || '修改拜访记录失败')
-                })
-            }
+            this.$refs.addVisiting.validate((valid) => {
+                if (valid) {
+                    if (this.addOrEdit == true) {
+                        addVisitingRecord(this.addVisiting).then((res) => {
+                            this.$Message.success(res.data.message || '添加拜访记录成功')
+                            this._visitingRecordList()
+                        }).catch(err => {
+                            let res = err.data
+                            this.$Message.success(res.message || '添加拜访记录失败')
+                        })
+                    } else {
+                        updateVisitingRecord(this.addVisiting).then((res) => {
+                            this.$Message.success(res.data.message || '修改拜访记录成功')
+                            this._visitingRecordList()
+                        }).catch(err => {
+                            console.log(err)
+                            this.$Message.success(res.message || '修改拜访记录失败')
+                        })
+                    }
+                } else {
+                    return false
+                }
+            })
         },
         comfirmDel(el) {
             deleteVisitingRecord(this.id).then((res) => {
