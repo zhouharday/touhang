@@ -194,6 +194,7 @@ export default {
             }),
 //            所有权限
             getUserAllRole().then((res)=>{
+                console.log('**********************')
                 console.log(res.data.result)
                 this.treeData = res.data.result
 //                 this.treeData = getNodes(res.data.result,[])

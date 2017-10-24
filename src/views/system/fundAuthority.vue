@@ -197,6 +197,7 @@ export default {
         //获取所有权限
         permissionqueryList(1).then((res)=>{
             this.allData = res.data.result
+            console.log(res.data.result);
         })
     },
     components: {
