@@ -66,14 +66,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="appendix">
-                                <Upload multiple type="drag" :before-upload="handleUpload" name="files" :headers="reqHeader" :action="actionUrl" show-upload-list="true" :on-success="handleSuccess" :on-error="handleError">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
-                                <Alert type="error" show-icon v-if="showUploadAlert">{{uploadMessage}}</Alert>
-
+                                <upload-files @uploadSuccess="uploadSuccess"></upload-files>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -99,6 +92,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <span v-for="item in scope.row.documentInfo">
+                                <a :href="item.documentUrl" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></span>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -109,6 +106,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.documentUrl" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -129,6 +129,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <span v-for="item in scope.row.documentInfo">
+                                <a :href="item.documentUrl" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></span>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -139,6 +143,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.documentUrl" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -154,13 +161,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload ref="upload" type="drag" multiple :before-upload="handleUpload" name="files" :headers="reqHeader" show-upload-list="true" :action="actionUrl">
-                            <div style="padding: 20px 10px">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadRecordSuccess"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -176,7 +177,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
-
+import uploadFiles from 'components/uploadFiles'
 import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams } from 'api/projectPre'
 
 export default {
@@ -200,10 +201,8 @@ export default {
             createDate: changeDate(new Date()),
 
             actionUrl:this.api + '/files/upload',
-            reqHeader:{'Content-Type': 'multipart/form-data'},
             showUploadAlert: false,
             uploadMessage: '',
-            uploadData:{file: ''},
 
             riskId: '',
             projectId: '',
@@ -291,7 +290,13 @@ export default {
                     state: ''
                 }
             ],
+            documentInfo:[],
+            recordDocInfo:[]
         }
+    },
+    components: {
+        tabelHeader,
+        uploadFiles
     },
     created() {
     },
@@ -358,8 +363,8 @@ export default {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
+                // console.log("hola datevid"+JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
-                    
                     this.tableData = [];
                     this.recordList = [];
                     this.tableData.push(resp.data.result);
@@ -401,26 +406,33 @@ export default {
         },
         //添加风险
         confirmAdd() {
-            this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
-            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
-            let risk = {
-                projectId: this.projectId,
-                riskTheme: this.AddForm.riskTheme,
-                seedUserId: userId,
-                receivedUserId: this.AddForm.receivedUserId,
-                completeDate: this.AddForm.completeDate,
-                riskDescribe: this.AddForm.riskDescribe
-            };
-            addDanger(risk).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalAdd = false;
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs["AddForm"].validate((valid) => {
+                if(valid) {
+                    this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let risk = {
+                        projectId: this.projectId,
+                        riskTheme: this.AddForm.riskTheme,
+                        seedUserId: userId,
+                        receivedUserId: this.AddForm.receivedUserId,
+                        completeDate: this.AddForm.completeDate,
+                        riskDescribe: this.AddForm.riskDescribe,
+                        documentInfo: this.documentInfo
+                    };
+                    console.log("risk::"+JSON.stringify(risk));
+                    addDanger(risk).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalAdd = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('addRecord exists error: ', e)
+                    });
                 }
-            }).catch(e => {
-                console.log('addRecord exists error: ', e)
             });
+            
         },
         //添加风险跟踪
         confirmTracking(formName) {
@@ -428,11 +440,13 @@ export default {
                 if (valid) {
                     let riskRegisterId = this.riskId,
                         disposeResult = this.trackingForm.disposeResult,
-                        recordDetails = this.trackingForm.recordDetails;
+                        recordDetails = this.trackingForm.recordDetails,
+                        documentInfo = this.recordDocInfo;
                     let params = {
                         riskRegisterId,
                         disposeResult,
-                        recordDetails
+                        recordDetails,
+                        documentInfo
                     };
                     insertRiskFollower(params).then(resp => {
                         if (resp.data.status == '200') {
@@ -449,40 +463,20 @@ export default {
                 }
             });
         },
-        // 上传附件的方法
-        handleUpload(file) {
-            // this.file = file;
-            this.showUploadAlert = false;
-            
-            // var uploadData = new FormData();
-            // uploadData.append("files", file);
-            // this.uploadData = uploadData;
-            // return false; 取消自动上传
+        uploadSuccess(resp){
+            let docInfo = {
+                fileName: resp.fileName,
+                filePath: resp.filePath
+            };
+            this.documentInfo.push(docInfo);
         },
-        handleSuccess(resp, file, fileList){
-            console.log("上传结果："+JSON.stringify(resp));
-            if(res.status == '200'){
-
-            }
-        },
-        handleError(error, file, fileList){
-            console.log("上传错误："+JSON.stringify(error));
-            // this.$Message.error("上传错误");
-            this.uploadMessage = "文件上传错误";
-            this.showUploadAlert = true;
-        },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
-    },
-    components: {
-        tabelHeader,
-        uploadFiles
+        uploadRecordSuccess(resp){
+            let docInfo = {
+                fileName: resp.fileName,
+                filePath: resp.filePath
+            };
+            this.recordDocInfo.push(docInfo);
+        }
     }
 }
 </script>

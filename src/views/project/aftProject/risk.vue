@@ -73,13 +73,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="appendix">
-                                <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="addForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
+                                <upload-files @uploadSuccess="uploadSuccess"></upload-files>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -160,13 +154,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadRecordSuccess"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -337,6 +325,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
+import uploadFiles from 'components/uploadFiles'
 import { changeDate } from 'common/js/config'
 
 import {
@@ -364,6 +353,10 @@ export default {
                 this.init();
             }
         }
+    },
+    components: {
+        tabelHeader,
+        uploadFiles
     },
     data() {
         return {
@@ -487,23 +480,7 @@ export default {
                     value: '已完成'
                 }
             ],
-            riskData: [
-                {
-                    riskTheme: '京东',
-                    handlePerson: '刘经理',
-                    assignor: '王二毛',
-                    startingDate: '2017-02-03',
-                    endingDate: '2019-02-02',
-                    state: '立项会'
-                }, {
-                    riskTheme: '一号店',
-                    handlePerson: '王经理',
-                    assignor: '张科',
-                    startingDate: '2017-02-03',
-                    endingDate: '2019-02-02',
-                    state: '管理'
-                }
-            ],
+            riskData: [],
             // 风险预警 立即处理table
             alarmDetail: [
                 {
@@ -520,16 +497,7 @@ export default {
                 date: ''
             },
             // 风险预警 处理记录
-            alarmRecords: [
-                {
-                    record: '2017-06-28 18:42:55   张三  【处理中】已经提交相应处理方案',
-                    file: 'BBB.doc'
-                },
-                {
-                    record: '2017-06-28 18:42:55   张三  【已解决】 已经解决该预警',
-                    file: 'BBB.PDF'
-                }
-            ],
+            alarmRecords: [],
             // 风险预警 立即处理表单
             alarmForm: {
                 disposeResult: '',
@@ -544,14 +512,9 @@ export default {
                     { required: true, message: '请输入汇报内容', trigger: 'change' }
                 ]
             },
-            alarmData: [
-                {
-                    dataSourceType:1,
-                    projectManagerId: 1,
-                    warningStatus: '2',
-                    baseDay: '2017-10-15'
-                }
-            ],
+            alarmData: [],
+            documentInfo:[],
+            recordDocInfo:[]
         }
     },
     created() {
@@ -730,11 +693,13 @@ export default {
         confirmTracking() {
             let riskRegisterId = this.riskId,
                 disposeResult = this.trackingForm.disposeResult,
-                recordDetails = this.trackingForm.recordDetails;
+                recordDetails = this.trackingForm.recordDetails,
+                documentInfo = this.recordDocInfo;
             let params = {
                 riskRegisterId,
                 disposeResult,
-                recordDetails
+                recordDetails,
+                documentInfo
             };
             insertRiskFollower(params).then(resp => {
                 if (resp.data.status == '200') {
@@ -783,19 +748,20 @@ export default {
                 }
             });
         },
-        // 上传附件的方法
-        handleUpload(file) {
-            this.file = file;
-            return false;
+        uploadSuccess(resp){
+            let docInfo = {
+                fileName: resp.fileName,
+                filePath: resp.filePath
+            };
+            this.documentInfo.push(docInfo);
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
+        uploadRecordSuccess(resp){
+            let docInfo = {
+                fileName: resp.fileName,
+                filePath: resp.filePath
+            };
+            this.recordDocInfo.push(docInfo);
+        }
     }
 }
 </script>
