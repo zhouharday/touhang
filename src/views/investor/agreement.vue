@@ -71,19 +71,7 @@ export default {
             modelAgreement: false,
             deleteReminders: false,
             deleteId: '',
-            AgreementInfo: {
-                id: '',
-                agreementName: '',
-                structuralLevelId: '',
-                investorName: this.$store.state.investor.investorName || sessionStorage.getItem('INVESTORNAME'),
-                inverstorId: this.$route.params.userId,
-                fundId: '',
-                subscribeAmount: '',
-                signDate: '',
-                managerName: JSON.parse(sessionStorage.getItem('userInfor')).name,
-                merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id,
-                registerDate: new Date()
-            }
+            AgreementInfo: {}
         }
     },
     methods: {
@@ -110,7 +98,9 @@ export default {
             this.addOrModify = false
             this.deleteReminders = false
             this.AgreementInfo = row
+            this.AgreementInfo.subscribeAmount = parseFloat(this.AgreementInfo.subscribeAmount)
             this.AgreementInfo.registerDate = row.register_date
+            this.AgreementInfo.structuralLevelId = this.AgreementInfo.structuralLevelId.toString()
         },
         handleDelete(index, row) {
             this.deleteReminders = !this.deleteReminders
@@ -155,8 +145,6 @@ export default {
                 }
             }).catch(err => {
                 console.log(err)
-                // let response = err.data
-                // this.$Message.error(response.message || '获取结构失败！')
             })
         }
     },

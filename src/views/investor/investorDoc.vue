@@ -86,7 +86,7 @@ export default {
     },
     data() {
         return {
-            listHeader: ['基金阶段', '文档名称', '用户', '上传日期', '操作'],
+            listHeader: ['投资者文档', '文档名称', '上传人', '上传日期', '操作'],
             modalAdd: false,
             file: null, // 上传
             actionUrl: API_ROOT + '/files/uploadProjectDocument',

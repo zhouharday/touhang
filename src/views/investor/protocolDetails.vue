@@ -111,8 +111,8 @@ export default {
                     { required: true, message: '请选择基金名称', trigger: 'change' }
                 ],
                 subscribeAmount: [
-                    { required: true, message: '请输入认缴金额' },
-                    { type: 'number', message: '认缴金额应为数字' }
+                    { required: true, message: '请输入认缴金额'},
+                    { type: 'number', message: '认缴金额应为数字'}
                 ],
                 signDate: [
                     { type: 'date', required: true, message: '请选择签订日期', trigger: 'change' }
