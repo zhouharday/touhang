@@ -3,17 +3,18 @@
         <section class="fileTable" v-show="isShow">
             <tabel-header :data="headerInfo_file" @add="fileDialog"></tabel-header>
             <el-table :data="fileData" border style="width: 100%" align="center">
-                <el-table-column label="文档名称" prop="fileName" align="center">
+                <el-table-column label="文档名称" prop="documentName" align="center">
                 </el-table-column>
-                <el-table-column label="用户" prop="user" align="center">
+                <el-table-column label="用户" prop="uploadUser" align="center">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="date" align="center">
+                <el-table-column label="上传日期" prop="createDate" align="center">
+                    <template scope="scope">{{scope.row.createDate | formatDate}}</template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <a href="/static/img/templet.txt" download="xxxxx文档">下载</a>
+                        <a v-if="scope.row.id != '' && scope.row.id != undefined" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
                         <el-button type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,fileData)">删除</el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -21,15 +22,15 @@
             <el-dialog title="上传文档" :visible.sync="modalAdd">
                 <el-form :model="fileForm" label-position="left" label-width="80px">
                     <el-form-item label="用户">
-                        <el-input v-model="fileForm.user" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
+                        <el-input v-model="userName" placeholder="默认当前登录用户" auto-complete="off" disabled></el-input>
                     </el-form-item>
                     <el-form-item label="上传日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="fileForm.date" style="width: 100%;" disabled>
+                        <el-date-picker type="date" placeholder="选择日期" v-model="createDate" style="width: 100%;" disabled>
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="上传文件">
                         <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" action="//jsonplaceholder.typicode.com/posts/">
+                        <Upload ref="upload" multiple type="drag":on-success="handleSuccess" :data="uploadInfo" :action="actionUrl">
                             <div style="padding: 20px 0">
                                 <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
@@ -39,7 +40,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="modalAdd = false">取 消</el-button>
-                    <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button>
+                    <!-- <el-button type="danger" @click="upload" :loading="loadingStatus">{{ loadingStatus ? '上传中' : '点击上传' }}</el-button> -->
                 </div>
             </el-dialog>
         </section>
@@ -56,7 +57,13 @@
 
 
 <script>
+
+import {API_ROOT} from 'config'
 import tabelHeader from 'components/tabelHeader'
+import 'common/js/filter'
+import { changeDate } from 'common/js/config'
+import { getEarlierDoc } from 'api/project'
+import { delDocument } from 'api/projectPre'
 export default {
     data() {
         return {
@@ -73,22 +80,6 @@ export default {
                 fileName: 'AAAAAAAAA',
                 user: '张三',
                 date: '2017-09-09'
-            }, {
-                fileName: '',
-                user: '',
-                date: ''
-            }, {
-                fileName: '',
-                user: '',
-                date: ''
-            }, {
-                fileName: '',
-                user: '',
-                date: ''
-            }, {
-                fileName: '',
-                user: '',
-                date: ''
             }
             ],
             headerInfo_file: {
@@ -98,36 +89,64 @@ export default {
                     explain: '上传'
                 }]
             },
+            createDate: changeDate(new Date()),
+            userName: JSON.parse(sessionStorage.getItem('userInfor')).name, //当前用户
+            actionUrl: API_ROOT + '/files/uploadProjectDocument',
+            uploadInfo: {
+                file: '',
+                stageId: '1',
+                uploadTypeId: this.projectId,
+                fileId: '',
+                type: 3,
+                userId: JSON.parse(sessionStorage.getItem('userInfor')).id
+            },
         }
     },
     props: {
         tabs: {
             type: Object,
             default: {}
+        },
+        projectId:{
+            type:String,
+            default: ''
         }
+    },
+    created() { 
+        // this.init();
     },
     watch: {
         'tabs':function (to,from){
             if(to.tabList[3]){
-                // this.init();
+                this.init();
             }
         }
     },
     methods: {
+        init(){
+            getEarlierDoc(this.projectId).then(resp => {
+                if (resp.data.status === '200') {
+                    this.fileData = resp.data.result.dataDocumentResult;
+                } else if (resp.data.status === '49999') {
+                    this.fileData = [];
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('获取前期文档列表error: ', e);
+            })
+            
+        },
         fileDialog() {
             this.modalAdd = true
         },
-        handleUpload(file) {
-            this.file = file;
-            return false;
-        },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
+        handleSuccess(res, file) {
+            if(res.status == '200') {
+                this.$Message.success(res.message || '上传成功！')
+                this.modalAdd = false;
+                this.$refs.upload.clearFiles();
+                this.init();
+            }
         },
         preview(row) {
             this.isShow = false,
@@ -138,8 +157,13 @@ export default {
             this.isShow = true,
                 this.isHide = false
         },
-        handleDelete(index, rows) {
-            rows.splice(index, 1);
+        handleDelete(id) {
+            delDocument(id).then((res) => {
+                if (res.data.status == '200') {
+                    this.$Message.success(res.data.message || '删除成功！');
+                    this.init();
+                }
+            });
         }
     },
     components: {

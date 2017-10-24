@@ -81,7 +81,7 @@
                     </el-table>
                     <!-- 添加项目合同 对话框-->
                     <el-dialog title="添加项目合同" :visible.sync="contractAdd1" :close-on-click-modal="false">
-                        <el-form :model="contractForm1" :rules="rules1" ref="contractForm1" label-position="left" label-width="110px">
+                        <el-form :model="contractForm1" :rules="contractRule1" ref="contractForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="合同名称" prop="contractName">
@@ -90,13 +90,13 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%;">
+                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.signDate">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="contractForm1.contractAmount" auto-complete="off"></el-input>
+                                        <el-input v-model="contractForm1.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -152,7 +152,7 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.investAmount }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.investAmount" placeholder=""></el-input>
+                                        <el-input v-model="scope.row.investAmount" @change="changeInvestAmount" placeholder=""></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -200,7 +200,7 @@
                     </el-dialog>
                     <!-- 编辑项目合同 对话框-->
                     <el-dialog title="编辑项目合同" :visible.sync="contractAdd2" :close-on-click-modal="false">
-                        <el-form :model="contractForm2" label-position="left" label-width="110px">
+                        <el-form :model="contractForm2" :rules="contractRule2" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="合同名称">
@@ -215,7 +215,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="合同金额（元）">
-                                        <el-input v-model="contractForm2.contractAmount" auto-complete="off"></el-input>
+                                        <el-input v-model="contractForm2.contractAmount" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -271,7 +271,7 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.investAmount | toMoney}}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.investAmount" placeholder=""></el-input>
+                                        <el-input v-model="scope.row.investAmount" @change="changeInvestAmount" placeholder=""></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -301,7 +301,7 @@
             <el-collapse-item title="投资支付" name="3">
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
-                    <tabel-header :data="headerInfo_paid" @add="paidAdd1=true"></tabel-header>
+                    <tabel-header :data="headerInfo_paid" @add="goAddPaid"></tabel-header>
                     <el-table :data="paidData" border style="width: 100%" align="center" show-summary>
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
@@ -325,7 +325,7 @@
                     </el-table>
                     <!-- 添加投资支付 对话框-->
                     <el-dialog title="添加投资支付" :visible.sync="paidAdd1" :close-on-click-modal="false" style="width：65%;">
-                        <el-form :model="paidForm1" :rules="rules3" ref="paidForm1" label-position="left" label-width="110px">
+                        <el-form :model="paidForm1" :rules="paidRules" ref="paidForm1" label-position="left" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题">
@@ -335,7 +335,7 @@
                                 <el-col :span="12">
                                     <el-form-item label="项目合同" prop="contract">
                                         <el-select @change="selContract" value-key="id" v-model="paidForm1.contract" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item">
+                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -703,12 +703,33 @@ export default {
                 signDate: '',
                 handlerDate: ''
             },
-            rules1: {
+            contractRule1: {
                 contractName: [
                     { required: true, message: '请输入合同名称', trigger: 'blur' }
                 ],
                 signDate: [
-                    { type: "date", required: true, message: '请选择签约日期', trigger: 'blur' }
+                    { required: true, message: '请选择签约日期', trigger: 'blur' }
+                ],
+                contractAmount: [
+                    { required: true, message: '请输入合同金额', trigger: 'blur' }
+                ],
+                stockRatio: [
+                    { required: true, message: '股权占比必须是数字', trigger: 'blur' }
+                ]
+            },
+            contractRule2: {
+                contractName: [
+                    { required: true, message: '请输入合同名称', trigger: 'blur' }
+                ],
+                signDate: [
+                    { required: true, message: '请选择签约日期', trigger: 'blur' }
+                ],
+                contractAmount: [
+                    { required: true, message: '请输入合同金额', trigger: 'blur' }
+
+                ],
+                stockRatio: [
+                    { required: true, message: '股权占比必须是数字', trigger: 'blur' }
                 ]
             },
             contractForm2: {},
@@ -734,13 +755,11 @@ export default {
                     { required: true, message: '请选择基金名称', trigger: 'change' }
                 ],
                 investAmount: [
-                    { required: true, message: '请输入投资金额', trigger: 'change' },
-                    { type: 'number', message: '投资金额必须为数字' }
-
+                    { required: true, message: '请输入投资金额', trigger: 'change' }
                 ],
                 stockRatio: [
                     { required: true, message: '请输入股权占比', trigger: 'change' },
-                    { type: 'number', message: '股权占比必须为数字' }
+                    { type: 'number', message: '股权占比必须为数字', trigger: 'change' }
                 ]
             },
             fundData1: [],
@@ -762,9 +781,14 @@ export default {
                 payDate: '',
                 paidInMoney: 0
             },
-            rules3: {
+            paidRules: {
                 contract: [
                     { required: true, message: '请选择项目合同', trigger: 'change' }
+                ]
+            },
+            paidDetailRule: {
+                payAmount: [
+                    { type: 'number', message: '支付金额必须是数字', trigger: 'change' }
                 ]
             },
             paidData: [],
@@ -933,7 +957,7 @@ export default {
                 stockRatio: this.contractForm1.stockRatio,
                 handlerUserId: (this.contractForm1.handlerUserId != '' && this.contractForm1.handlerUserId != undefined)
                     ? this.contractForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                handlerDate: this.contractForm1.handlerDate
+                handlerDate: changeDate(this.contractForm1.handlerDate)
             };
             let data = {
                 projectContract: projectContract,
@@ -969,6 +993,7 @@ export default {
             };
             this.fundAdd1 = false;
             //this.contractAdd1 = true;
+            this.changeInvestAmount();
         },
         //打开编辑 项目合同
         goEditContract(id) {
@@ -993,6 +1018,7 @@ export default {
         },
         // 编辑 项目合同  确定按钮
         confirmContractAdd2(id) {
+            console.log("this.contractForm2.signDate"+this.contractForm2.signDate);
             let projectContract = {
                 id: id,
                 contractName: this.contractForm2.contractName,
@@ -1001,13 +1027,15 @@ export default {
                 stockRatio: this.contractForm2.stockRatio,
                 handlerUserId: (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
                     ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                handlerDate: this.contractForm2.handlerDate
+                handlerDate: changeDate(this.contractForm2.handlerDate)
             };
             let data = {
                 projectContract: projectContract,
                 fundInfo: this.fundData1
             }
+            console.log("编辑 项目合同:"+JSON.stringify(data));
             editContract(projectContract, this.fundData1).then(resp => {
+                console.log("编辑 项目合同:"+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.contractForm2 = {};
                     this.fundData1 = [];
@@ -1052,7 +1080,7 @@ export default {
         //选择投资支付的合同
         selContract(value) {
             if (!value) return;
-            this.paidForm1.payTitle = "投资支付-" + value.contractName;
+            // this.paidForm1.payTitle = "投资支付-" + value.contractName;
             this.paidForm1.contractAmount = value.contractAmount;
             this.paidForm1.contractId = value.id;
             //获得合同中的投资主体(基金)列表
@@ -1071,6 +1099,31 @@ export default {
             }).catch(e => {
                 console.log('selContract() exists error: ', e);
             })
+        },
+        //打开添加投资支付
+        goAddPaid(){
+            if(this.contractData.length == 1){
+                let contract = this.contractData[0];
+                this.paidForm1.contractAmount = contract.contractAmount;
+                this.paidForm1.contract = contract.id;
+                //获得合同中的投资主体(基金)列表
+                getContractDetail(contract.id).then(resp => {
+                if (resp.data.status == '200') {
+                    this.fundData2 = resp.data.result.fundInfo;
+
+                    this.fundData2.forEach(function(item, index) {
+                        item.contractFundId = item.id;
+                        item.id = '';
+                    });
+                    this.calcSurplusAmount();
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('selContract() exists error: ', e);
+            })
+            }
+            this.paidAdd1 = true;
         },
         // 添加 投资支付 确定按钮
         confirmPaidAdd1() {
@@ -1144,6 +1197,18 @@ export default {
             }).catch(e => {
                 console.log('editContractPay() exists error: ', e);
             })
+        },
+        changeInvestAmount(){
+            let sum = 0.0;
+            for(let i = 0; i < this.fundData1.length; i++){
+                sum += (parseFloat(this.fundData1[i].investAmount | 0));
+            }
+            this.contractForm1.contractAmount = sum;
+            // sum  = 0.0;
+            // for(let i = 0; i < this.fundData2.length; i++){
+            //     sum += (parseFloat(this.fundData2[i].investAmount | 0));
+            // }
+            this.contractForm2.contractAmount = sum;
         },
         //投资支付金额合计
         sumPay() {

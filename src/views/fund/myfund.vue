@@ -1,13 +1,15 @@
 <template>
 <div class="fund">
-    <!-- 组织类型 -->
-    <my-filter :chooseInfo="organizationType" @getIdInfo="clickOrgType"></my-filter>
-    <!-- 管理类型 -->
-    <my-filter :chooseInfo="managementType" @getIdInfo="clickmanType"></my-filter>
-    <!-- 基金阶段 -->
-    <my-filter :chooseInfo="allFundStage" @getIdInfo="clickStage"></my-filter>
-    <!-- 基金状态 -->
-    <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
+    <div class="filter_list">
+        <!-- 组织类型 -->
+        <my-filter :chooseInfo="organizationType" @getIdInfo="clickOrgType"></my-filter>
+        <!-- 管理类型 -->
+        <my-filter :chooseInfo="managementType" @getIdInfo="clickmanType"></my-filter>
+        <!-- 基金阶段 -->
+        <my-filter :chooseInfo="allFundStage" @getIdInfo="clickStage"></my-filter>
+        <!-- 基金状态 -->
+        <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
+    </div>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
             <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
@@ -260,6 +262,7 @@ export default {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
                     this.deleteReminders = false
+                    this.getFundListsData()
                 }
             })
         },

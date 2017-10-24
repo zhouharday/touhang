@@ -306,7 +306,7 @@ export default {
         //查询项目团队成员
         getProTeam(){
             getTeams(this.investProjectId).then(resp => {
-                console.log("项目团队成员:"+JSON.stringify(resp.data));
+                // console.log("项目团队成员:"+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.proTeam = resp.data.result;
                 } else if (resp.data.status == '49999') {

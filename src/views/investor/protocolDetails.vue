@@ -10,7 +10,7 @@
                 <el-col :span="12">
                     <el-form-item label="结构级" prop="structuralLevelId">
                         <el-select v-model="AgreementInfo.structuralLevelId" placeholder="请选择结构级" style="width:100%;">
-                            <el-option v-for="item in structuralLevel" :key="item.id" :label="item.label" :value="item.id">
+                            <el-option v-for="item in structuralLevel" :key="item.id" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -19,10 +19,6 @@
                     <el-form-item label="投资者" prop="investorName">
                         <el-input  v-model="AgreementInfo.investorName" disabled>
                         </el-input>
-                        <!-- <el-select v-model="AgreementInfo.inverstorId" style="width: 100%">
-                            <el-option :key="AgreementInfo.inverstorId" :label="AgreementInfo.investorName" :value="AgreementInfo.inverstorId">
-                            </el-option>
-                        </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -47,10 +43,6 @@
                 <el-col :span="12">
                     <el-form-item label="投资经理" prop="managerName">
                         <el-input v-model="AgreementInfo.managerName" placeholder="当前用户" disabled></el-input>
-                        <!-- <el-select v-model="AgreementInfo.managerName" disabled style="width:100%">
-                                <el-option v-for="(item, index) of investmentManager" :key="item.id" :label="item.dicName" :value="item.id">
-                                </el-option>
-                            </el-select> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -86,28 +78,24 @@ export default {
     data() {
         return {
             fundNameList: [],
-            // investmentManager: [{
-            //     dicName: JSON.parse(sessionStorage.getItem('userInfor')).name,
-            //     id: JSON.parse(sessionStorage.getItem('userInfor')).id
-            // }],
             structuralLevel: [{
-                id: '0',
-                label: '优先级'
+                label: '优先级',
+                value: '0'
             }, {
-                id: '1',
-                label: '中间级'
+                label: '中间级',
+                value: '1'
             }, {
-                id: '2',
-                label: '一般级'
+                label: '一般级',
+                value: '2'
             }, {
-                id: '3',
-                label: '平层'
+                label: '平层',
+                value: '3'
             }, {
-                id: '4',
-                label: 'GP'
+                label: 'GP',
+                value: '4'
             }, {
-                id: '5',
-                label: 'LP'
+                label: 'LP',
+                value: '5'
             }],
             rules1: {
                 agreementName: [

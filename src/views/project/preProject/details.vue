@@ -298,9 +298,9 @@ export default {
         changeEnterpriseInfo() {
             let companyForm = this.companyForm;
             companyForm.projectId = this.projectId;
-            companyForm.registerDate = changeDate(companyForm.registerDate);
+            companyForm.registerDate = companyForm.registerDate;
             changeEnterpriseInfo(companyForm).then(resp => {
-                if(resp.data.result == '200'){
+                if(resp.data.status == '200'){
                     this.disable(companyForm);
                 }
                 console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
@@ -311,8 +311,8 @@ export default {
         changeCapitalInfo() {
             let capitalForm = this.capitalForm;
             capitalForm.projectId = this.projectId;
-            capitalForm.startInvestDate = changeDate(capitalForm.startInvestDate);
-            capitalForm.exitDate = changeDate(capitalForm.exitDate);
+            capitalForm.startInvestDate = capitalForm.startInvestDate;
+            capitalForm.exitDate = capitalForm.exitDate;
             let {
              id, 
              projectTurnId, 

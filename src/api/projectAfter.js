@@ -242,6 +242,7 @@ export function getDataFormBody(projectDataId = undefined) {
 	const data = {
 		projectDataId: projectDataId
 	};
+	console.log("::"+JSON.stringify(data));
 	return service({url: '/projectData/queryFormBody', method: 'post', data});
 }
 

@@ -106,7 +106,6 @@ export default {
             this.addOrModify = true;
         },
         handleEdit(index, row) {
-            console.log(row)
             this.modelAgreement = true
             this.addOrModify = false
             this.deleteReminders = false
@@ -141,6 +140,8 @@ export default {
             deleteAgreement(this.deleteId).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '删除协议成功！')
+                    this.deleteReminders = false
+                    this.getAgreementList()
                 }
             })
         },

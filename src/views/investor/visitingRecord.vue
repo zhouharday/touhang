@@ -63,7 +63,7 @@
             </el-form>
         </Modal>
         <!-- 确实删除模态框 -->
-        <delete-reminders :deleteReminders="deleteModal" @del="comfirmDel" @cancel="comfirmDelete"></delete-reminders>
+        <delete-reminders :deleteReminders="deleteModal" @del="comfirmDel" @cancel="comfirmCancel"></delete-reminders>
     </div>
 </template>
 
@@ -81,7 +81,7 @@ export default {
     props: {
         visitingRecord: {
             type: Array,
-            default: []
+            default: () => []
         }
     },
     data() {
@@ -134,10 +134,9 @@ export default {
         },
         confirmVisiting() {
             if (this.addOrEdit == true) {
-                console.log(this.$route.params.userId)
                 addVisitingRecord(this.addVisiting).then((res) => {
                     this.$Message.success(res.data.message || '添加拜访记录成功')
-                    this.visitingRecordList()
+                    this._visitingRecordList()
                 }).catch(err => {
                     let res = err.data
                     this.$Message.success(res.message || '添加拜访记录失败')
@@ -145,7 +144,7 @@ export default {
             } else {
                 updateVisitingRecord(this.addVisiting).then((res) => {
                     this.$Message.success(res.data.message || '修改拜访记录成功')
-                    this.visitingRecordList()
+                    this._visitingRecordList()
                 }).catch(err => {
                     console.log(err)
                     this.$Message.success(res.message || '修改拜访记录失败')
@@ -155,15 +154,16 @@ export default {
         comfirmDel(el) {
             deleteVisitingRecord(this.id).then((res) => {
                 if (res.status == '200') {
-                    this.$Message.info(res.data.message || '删除成功！')
+                    this.$Message.success(res.data.message || '删除成功！')
+                    this._visitingRecordList()
                     this.deleteModal = false
                 }
             })
         },
-        comfirmDelete() {
+        comfirmCancel() {
             this.deleteModal = false
         },
-        visitingRecordList() {
+        _visitingRecordList() {
             getVisitingRecordList(this.$route.params.userId).then((res) => {
                 if (res.status == '200') {
                     this.visitingRecord = res.data.result.list

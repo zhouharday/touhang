@@ -239,3 +239,10 @@ export function getDeptListByMid() {
 }
 
 //项目池文档列表
+
+export function getEarlierDoc(projectId = undefined) {
+	const data = {
+		projectId   //商户ID
+	};
+	return service({url: '/dictionaryController/selectEarlierStageDocument', method: 'post', data});
+}

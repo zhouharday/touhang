@@ -5,9 +5,18 @@
         <TabPane label="基金费用" name="fundCost">
             <tabel-header :data="costInfo" @add="methodCost"></tabel-header>
             <el-table :data="costData" border :show-summary="true" style="width: 100%">
-                <el-table-column label="费用类型" prop="feeTypeId" align="center">
+                <el-table-column label="费用类型" align="center">
+                    <template scope="scope">
+                        <div v-if="scope.row.feeTypeId === 31101">管理费</div>
+                        <div v-else-if="scope.row.feeTypeId === 31102">托管费</div>
+                        <div v-else-if="scope.row.feeTypeId === 31103">监理费</div>
+                        <div v-else="scope.row.feeTypeId === 31104">监管费</div>
+                    </template>
                 </el-table-column>
-                <el-table-column label="费率（%）" prop="feeRate" align="center">
+                <el-table-column label="费率（%）" align="center">
+                    <template scope="scope">
+                        <div>{{scope.row.feeRate}}%</div>
+                    </template>
                 </el-table-column>
                 <el-table-column label="金额（元）" prop="feeMoney" align="center">
                 </el-table-column>
