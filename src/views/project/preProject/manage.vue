@@ -548,6 +548,17 @@
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
+                                <el-col>
+                                    <el-form-item label="合同附件">
+                                        <!-- action 上传的地址，必填 -->
+                                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="sharingForm1.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
+                                            <div style="padding: 20px 0">
+                                                <Icon type="ios-cloud-upload" size="52"></Icon>
+                                                <p>点击或将文件拖拽到这里上传</p>
+                                            </div>
+                                        </Upload>
+                                    </el-form-item>
+                                </el-col>
                             </el-row>
                         </el-form>
                         <div class="table_title">
@@ -814,7 +825,7 @@ export default {
                 ],
                 shareDate: [
                     { required: true, message: '请选择分红日期', trigger: 'change' }
-                ]    
+                ]
             },
             sharingData: [],
             headerInfo_sharing: {
@@ -832,8 +843,8 @@ export default {
         // this.init();
     },
     watch: {
-        'tabs':function (to,from){
-            if(to.tabList[6]){
+        'tabs': function(to, from) {
+            if (to.tabList[6]) {
                 this.init();
             }
         }
@@ -1018,7 +1029,7 @@ export default {
         },
         // 编辑 项目合同  确定按钮
         confirmContractAdd2(id) {
-            console.log("this.contractForm2.signDate"+this.contractForm2.signDate);
+            console.log("this.contractForm2.signDate" + this.contractForm2.signDate);
             let projectContract = {
                 id: id,
                 contractName: this.contractForm2.contractName,
@@ -1033,9 +1044,9 @@ export default {
                 projectContract: projectContract,
                 fundInfo: this.fundData1
             }
-            console.log("编辑 项目合同:"+JSON.stringify(data));
+            console.log("编辑 项目合同:" + JSON.stringify(data));
             editContract(projectContract, this.fundData1).then(resp => {
-                console.log("编辑 项目合同:"+JSON.stringify(resp.data));
+                console.log("编辑 项目合同:" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.contractForm2 = {};
                     this.fundData1 = [];
@@ -1101,27 +1112,27 @@ export default {
             })
         },
         //打开添加投资支付
-        goAddPaid(){
-            if(this.contractData.length == 1){
+        goAddPaid() {
+            if (this.contractData.length == 1) {
                 let contract = this.contractData[0];
                 this.paidForm1.contractAmount = contract.contractAmount;
                 this.paidForm1.contract = contract.id;
                 //获得合同中的投资主体(基金)列表
                 getContractDetail(contract.id).then(resp => {
-                if (resp.data.status == '200') {
-                    this.fundData2 = resp.data.result.fundInfo;
+                    if (resp.data.status == '200') {
+                        this.fundData2 = resp.data.result.fundInfo;
 
-                    this.fundData2.forEach(function(item, index) {
-                        item.contractFundId = item.id;
-                        item.id = '';
-                    });
-                    this.calcSurplusAmount();
-                } else {
-                    this.$message.error(resp.data.message);
-                }
-            }).catch(e => {
-                console.log('selContract() exists error: ', e);
-            })
+                        this.fundData2.forEach(function(item, index) {
+                            item.contractFundId = item.id;
+                            item.id = '';
+                        });
+                        this.calcSurplusAmount();
+                    } else {
+                        this.$message.error(resp.data.message);
+                    }
+                }).catch(e => {
+                    console.log('selContract() exists error: ', e);
+                })
             }
             this.paidAdd1 = true;
         },
@@ -1198,9 +1209,9 @@ export default {
                 console.log('editContractPay() exists error: ', e);
             })
         },
-        changeInvestAmount(){
+        changeInvestAmount() {
             let sum = 0.0;
-            for(let i = 0; i < this.fundData1.length; i++){
+            for (let i = 0; i < this.fundData1.length; i++) {
                 sum += (parseFloat(this.fundData1[i].investAmount | 0));
             }
             this.contractForm1.contractAmount = sum;
