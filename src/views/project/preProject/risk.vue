@@ -177,7 +177,6 @@
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
 
-import uploadFiles from 'components/uploadFiles'
 import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams } from 'api/projectPre'
 
 export default {
