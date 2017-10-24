@@ -5,7 +5,7 @@
             <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
             <el-col class="total" :span="21">
                 <el-row :gutter="20">
-                    <el-col :span="5" v-for="(item, index) of titleInfo.total" :key="item.index">
+                    <el-col :span="6" v-for="(item, index) of titleInfo.total" :key="item.index">
                         <p class="desc">{{item.desc}}</p>
                         <p class="amount">{{item.amount}}<span class="unit">元</span></p>
                     </el-col>

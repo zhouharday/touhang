@@ -73,6 +73,7 @@ export default {
             deleteEarningsAmount(row.id).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
+                    this.getAmountList()
                 }
             })
         },
@@ -85,15 +86,16 @@ export default {
                     this.$Message.success(res.data.message || '修改分红成功！')
                 }
             })
+        },
+        getAmountList() {
+            var fundId = this.$route.params.userId
+            var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+            getEarningsAmountList(fundId, merchantsId).then((res) => {
+                if(res.status == '200') {
+                    this.quitCapitalData = res.data.result.list
+                }
+            })
         }
-    },
-    created() {
-        getEarningsAmountList(this.$route.params.userId, JSON.parse(sessionStorage.getItem('merchants'))[0].id).then((res) => {
-            if(res.status === 200) {
-                this.quitCapitalData = (res.data.status === 200) ? res.data.result.list : []
-                // console.log(this.quitCapitalData)
-            }
-        })
     },
     components: {
         quitApply
