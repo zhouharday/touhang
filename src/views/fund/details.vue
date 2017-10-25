@@ -469,16 +469,25 @@ export default {
             this.structure = value
         },
         preservation() {
+            var judgeDetails = false
+            var judgeMis = false
             this.$refs.formDetails.validate((valid) => {
                 if (valid) {
-                    this.$emit('confirmSubmission') // 确认保存
+                    judgeDetails = true // 确认保存
                 } else {
                     return false
                 }
             })
-            // return new Promise((resolve, reject) => {
-            //
-            // })
+            this.$refs.formMIS.validate((valid) => {
+                if (valid) {
+                    judgeMis = true // 确认保存
+                } else {
+                    return false
+                }
+            })
+            if(judgeDetails && judgeMis) {
+                this.$emit('confirmSubmission')
+            }
         },
         cancel() {
             this.$emit('confirmCancel') // 确认取消

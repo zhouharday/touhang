@@ -23,11 +23,13 @@
         <el-table-column label="操作" align="center">
             <template scope="scope">
               <el-button type="text" size="small" style="color:#f05e5e"
-                      @click="handleEdit(scope.$index, scope.row)">
+                      @click="handleEdit(scope.$index, scope.row)"
+                      v-show="scope.row.earningsType !== 2">
                       编辑
               </el-button>
               <el-button type="text" size="small" style="color:#f05e5e"
-                      @click="handleDelete(scope.$index, scope.row)">
+                      @click="handleDelete(scope.$index, scope.row)"
+                      v-show="scope.row.earningsType !== 2">
                       删除
               </el-button>
             </template>

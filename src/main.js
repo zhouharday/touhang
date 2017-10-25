@@ -27,10 +27,17 @@ Vue.use(ElementUI);
 Vue.prototype.md5 = md5;
 Vue.prototype.$http = axios;
 // Vue.prototype.$http = axios.create();
+<<<<<<< HEAD
+Vue.prototype.api = '/api'; //公司IP请求时 URL
+Vue.prototype._ = _  // lodash.js
+// Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
+// Vue.prototype.$http.defaults.baseURL = 'http://sdwlyxgs.imwork.net:16380';
+=======
 // Vue.prototype.api = '/api'; //公司IP请求时 URL
 Vue.prototype._ = _ ; // lodash.js
 Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
 Vue.prototype.$http.defaults.baseURL = 'http://sdwlyxgs.imwork.net:16380';
+>>>>>>> 515a8815211a798faf392f669eded221556b9c88
 // Vue.prototype.api = ''; //上线时 URL
 
 var vm = new Vue({
