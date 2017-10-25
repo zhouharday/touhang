@@ -101,7 +101,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model="contractForm1.stockRatio" auto-complete="off"></el-input>
+                                        <el-input v-model.number="contractForm1.stockRatio" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -117,13 +117,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <!-- action 上传的地址，必填 -->
-                                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="contractForm1.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                                            <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                                <p>点击或将文件拖拽到这里上传</p>
-                                            </div>
-                                        </Upload>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractDocInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -220,7 +214,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model="contractForm2.stockRatio" auto-complete="off"></el-input>
+                                        <el-input v-model.number="contractForm2.stockRatio" auto-complete="off"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -236,13 +230,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <!-- action 上传的地址，必填 -->
-                                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="contractForm2.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                            <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                                <p>点击或将文件拖拽到这里上传</p>
-                                            </div>
-                                        </Upload>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractForm2.documentInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -368,13 +356,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="相关附件">
-                                        <!-- action 上传的地址，必填 -->
-                                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
-                                            <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                                <p>点击或将文件拖拽到这里上传</p>
-                                            </div>
-                                        </Upload>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="payDocInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -449,13 +431,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="相关附件">
-                                        <!-- action 上传的地址，必填 -->
-                                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="paidForm1.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/">
-                                            <div style="padding: 20px 0">
-                                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                                <p>点击或将文件拖拽到这里上传</p>
-                                            </div>
-                                        </Upload>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="paidForm1.documentInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -548,6 +524,11 @@
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
+                                <el-col>
+                                    <el-form-item label="相关附件">
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
+                                    </el-form-item>
+                                </el-col>
                             </el-row>
                         </el-form>
                         <div class="table_title">
@@ -611,6 +592,11 @@
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
+                                <el-col>
+                                    <el-form-item label="相关附件">
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="sharingForm1.documentInfo"></upload-files>
+                                    </el-form-item>
+                                </el-col>
                             </el-row>
                         </el-form>
                         <div class="table_title">
@@ -646,6 +632,7 @@
 import 'common/js/filter'
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
+import uploadFiles from 'components/uploadFiles'
 import { getDicChildren } from 'common/js/dictionary'
 import { changeDate } from 'common/js/config'
 import {
@@ -669,6 +656,10 @@ export default {
             type: String,
             default: ''
         }
+    },
+    components: {
+        tabelHeader,
+        uploadFiles
     },
     data() {
         return {
@@ -805,7 +796,55 @@ export default {
                     icon: 'plus-round',
                     explain: '添加'
                 }]
-            }
+            },
+            contractDocInfo: [
+                {
+                    type: '1',
+                    name: '项目合同.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '项目合同.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '项目合同2.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '项目合同2.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ],
+            payDocInfo:[
+                {
+                    type: '1',
+                    name: '投资支付.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '投资支付2.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '投资支付.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '投资支付2.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ],
+            shareDocInfo:[
+                {
+                    type: '1',
+                    name: '项目分红.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '项目分红2.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '项目分红.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '项目分红2.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ]
         }
     },
     created() {
@@ -941,7 +980,8 @@ export default {
                         stockRatio: this.contractForm1.stockRatio,
                         handlerUserId: (this.contractForm1.handlerUserId != '' && this.contractForm1.handlerUserId != undefined)
                             ? this.contractForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        handlerDate: changeDate(this.contractForm1.handlerDate)
+                        handlerDate: changeDate(this.contractForm1.handlerDate),
+                        documentInfo: this.contractDocInfo
                     };
                     let data = {
                         projectContract: projectContract,
@@ -954,6 +994,7 @@ export default {
                             this.fundData1.push();
                             this.contractAdd1 = false;
                             this.getContract();
+                            this.contractDocInfo = [];
                         } else {
                             this.$message.error(resp.data.message);
                         }
@@ -988,8 +1029,17 @@ export default {
         goEditContract(id) {
             this.contractAdd2 = !this.contractAdd2;
             getContractDetail(id).then(resp => {
+                console.log("打开编辑 项目合同："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.contractForm2 = resp.data.result.projectContract;
+
+                    let documentInfo = resp.data.result.projectContract.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['contractForm2'],'documentInfo',documentInfo);
+
                     this.fundData1 = resp.data.result.fundInfo;
                     this.fundData1.forEach(function(item, index) {
                         let fund = {
@@ -1018,7 +1068,8 @@ export default {
                         stockRatio: this.contractForm2.stockRatio,
                         handlerUserId: (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
                             ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        handlerDate: changeDate(this.contractForm2.handlerDate)
+                        handlerDate: changeDate(this.contractForm2.handlerDate),
+                        documentInfo: this.contractDocInfo
                     };
                     let data = {
                         projectContract: projectContract,
@@ -1121,7 +1172,8 @@ export default {
                         surplusAmount: this.paidForm1.surplusAmount,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate)
+                        payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        documentInfo: this.payDocInfo
                     };
                     let data = {
                         projectInvestPay: projectInvestPay,
@@ -1133,6 +1185,7 @@ export default {
                             this.paidForm1 = {};
                             this.fundData2 = [];
                             this.paidAdd1 = false;
+                            this.payDocInfo = [];
                         } else {
                             this.$message.error(resp.data.message);
                         }
@@ -1147,6 +1200,14 @@ export default {
             getContractPayDetail(id).then(resp => {
                 if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
+
+                    let documentInfo = resp.data.result.projectInvestPay.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['paidForm1'],'documentInfo',documentInfo);
+
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidAdd2 = !this.paidAdd2;
                     this.sumPay();
@@ -1168,7 +1229,8 @@ export default {
                 surplusAmount: this.paidForm1.surplusAmount,
                 handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                     ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate)
+                payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                documentInfo: this.payDocInfo
             };
             let data = {
                 projectInvestPay: projectInvestPay,
@@ -1180,6 +1242,7 @@ export default {
                     this.paidForm1 = {};
                     this.fundData2 = [];
                     this.paidAdd2 = !this.paidAdd2;
+                    this.payDocInfo = [];
                 } else {
                     this.$message.error(resp.data.message);
                 }
@@ -1249,7 +1312,8 @@ export default {
                 contractId: this.sharingForm1.contractId,
                 shareAmount: this.sharingForm1.shareAmount,
                 handlerUserId: (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
-                    ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id
+                    ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                documentInfo: this.shareDocInfo
             };
             let data = {
                 projectParticipation: projectParticipation,
@@ -1260,6 +1324,7 @@ export default {
                     this.init();
                     this.sharingForm1 = {};
                     this.sharingAdd1 = false;
+                    this.shareDocInfo = [];
                 } else {
                     this.$message.error(resp.data.message);
                 }
@@ -1273,6 +1338,14 @@ export default {
                 if (resp.data.status == '200') {
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
+
+                    let documentInfo = resp.data.result.projectParticipation.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['sharingForm1'],'documentInfo',documentInfo);
+                    
                     this.sharingAdd2 = !this.sharingAdd2;
                 } else {
                     this.$message.error(resp.data.message);
@@ -1289,7 +1362,8 @@ export default {
                 shareAmount: this.sharingForm1.shareAmount,
                 handlerUserId: (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
                     ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                shareDate: changeDate(this.sharingForm1.shareDate)
+                shareDate: changeDate(this.sharingForm1.shareDate),
+                documentInfo: this.shareDocInfo
             };
             let data = {
                 projectParticipation: projectParticipation,
@@ -1302,6 +1376,7 @@ export default {
                     this.sharingForm1 = {};
                     this.fundData3 = [];
                     this.sharingAdd2 = !this.sharingAdd2;
+                    this.shareDocInfo = [];
                 } else {
                     this.$message.error(resp.data.message);
                 }
@@ -1380,16 +1455,19 @@ export default {
                     })
                     break;
             }
+        },
+        uploadSuccess(documentInfo, dataName){
+            // console.log("fileList--"+JSON.stringify(documentInfo));
+            this.$set(this.$data, dataName, documentInfo);
+            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
+        },
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         }
-    },
-    components: {
-        tabelHeader
     }
 }
 </script>
-
-
-
 
 <style lang="less" scoped>
 .fileTable {
