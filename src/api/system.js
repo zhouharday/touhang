@@ -560,7 +560,6 @@ export function getUpdataFund(arr, RoleArr) {
 
     var updataString
     updataString = Arr.join(',')
-
     return updataString
 }
 
