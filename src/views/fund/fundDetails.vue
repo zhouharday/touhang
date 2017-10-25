@@ -5,7 +5,7 @@
             <span class="desc">{{formDetails.fundName}}</span>
         </div>
         <div class="right">
-            <el-button type="danger" @click="changeStep">下一阶段</el-button>
+            <el-button type="danger" @click="changeStep" :disabled="judgementFundStage">下一阶段</el-button>
             <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
             </el-button>
         </div>
@@ -119,7 +119,7 @@ const NUM = 2
 export default {
     data() {
         return {
-            steps: [],
+            steps: JSON.parse(sessionStorage.getItem('steps')) || [],
             currentStep: '' || sessionStorage.getItem('currentStep'),
             stepId: '', // 当前显示列表id
             deleteReminders: false,
@@ -284,7 +284,7 @@ export default {
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
                     if (res.data.result[0] === undefined) {
@@ -299,9 +299,20 @@ export default {
             })
             slectStageAllocation().then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     this.steps = res.data.result
+                    sessionStorage.setItem('steps', JSON.stringify(res.data.result))
                 }
             })
+        },
+        judgementFundStage() {
+            var last = this.steps[this.steps.length - 1].id
+            var current = this.currentStep
+            if (last === current) {
+                return false
+            } else {
+                return true
+            }
         },
         _getFundList(id) {
             getMyFundDetails(id).then((res) => {
@@ -309,6 +320,8 @@ export default {
                     this.formDetails = Object.assign({}, {
                         flag: true
                     }, res.data.result.fundBaseInfo)
+                    this.formDetails.fundTerm = parseFloat(this.formDetails.fundTerm)
+                    this.formDetails.fundScale = parseFloat(this.formDetails.fundScale)
                     window.sessionStorage.setItem('FUNDNAME', JSON.stringify(res.data.result.fundBaseInfo.fundName))
                     this.formMIS = Object.assign({}, {
                         flag: true
@@ -321,7 +334,7 @@ export default {
                     } else {
                         this.fundLevel.priority = ''
                         this.fundLevel.intermediateStage = '',
-                        this.fundLevel.generalLevel = ''
+                            this.fundLevel.generalLevel = ''
                     }
                     if (res.data.result.fundRegistration == null) {
                         return

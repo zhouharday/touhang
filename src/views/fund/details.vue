@@ -17,7 +17,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金规模(元)" prop="fundScale">
-                        <el-input type="number" v-model="formDetails.fundScale" :disabled="formDetails.flag" placeholder="请输入基金规模"></el-input>
+                        <el-input v-model.number="formDetails.fundScale" :disabled="formDetails.flag" placeholder="请输入基金规模"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -81,7 +81,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金期限" prop="fundTerm">
-                        <el-input type="number" v-model="formDetails.fundTerm" :disabled="formDetails.flag" placeholder="选择输入数字"></el-input>
+                        <el-input v-model.number="formDetails.fundTerm" :disabled="formDetails.flag" placeholder="选择输入数字"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -235,12 +235,12 @@
         </el-table-column>
         <el-table-column label="户名">
             <template scope="scope">
-                <el-input v-model="scope.row.username" placeholder="请输入内容" style="border: none;" :disabled="scope.row.flag"></el-input>
+                <el-input v-model="scope.row.username" placeholder="请输入内容" class="noBorder" :disabled="scope.row.flag"></el-input>
             </template>
         </el-table-column>
         <el-table-column label="开户行">
             <template scope="scope">
-                <el-autocomplete class="inline-input"
+                <el-autocomplete class="inline-input noBorder"
                                      v-model="scope.row.openingBank"
                                      :fetch-suggestions="querySearch"
                                      placeholder="请输入内容"
@@ -252,7 +252,7 @@
         </el-table-column>
         <el-table-column label="账号">
             <template scope="scope">
-                <el-input v-model="scope.row.accountNumber" placeholder="请输入内容" style="border: none;" :disabled="scope.row.flag"></el-input>
+                <el-input v-model="scope.row.accountNumber" placeholder="请输入内容" class="noBorder" :disabled="scope.row.flag"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -358,7 +358,7 @@ export default {
                     trigger: 'change'
                 }],
                 fundScale: [{
-                    type: 'string',
+                    type: 'number',
                     required: true,
                     message: '基金规模必添',
                     trigger: 'change'
@@ -385,6 +385,7 @@ export default {
                 }],
                 fundTerm: [{
                     required: true,
+                    type: 'number',
                     message: '请输入基金期限',
                     trigger: 'change'
                 }],
@@ -583,7 +584,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../../common/styles/mixin.less";
+/*@import "../../common/styles/mixin.less";*/
+.noBorder /deep/ input.el-input__inner {
+    border: none;
+}
 .form {
     width: 100%;
     height: 100%;
@@ -600,6 +604,7 @@ export default {
             background: #eef1f6;
         }
     }
+
     .itemStyle {
         margin-left: 0;
         margin-right: 0;
