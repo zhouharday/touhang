@@ -94,7 +94,7 @@
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
                         <template scope="scope">
                             <p v-for="item in scope.row.documentInfo">
-                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></p>
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -107,7 +107,7 @@
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
                             <span v-for="doc in item.documentInfo">
-                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
                         </p>
                     </div>
@@ -131,7 +131,7 @@
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
                         <template scope="scope">
                             <p v-for="item in scope.row.documentInfo">
-                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></p>
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -144,7 +144,7 @@
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
                             <span v-for="doc in item.documentInfo">
-                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
                         </p>
                     </div>

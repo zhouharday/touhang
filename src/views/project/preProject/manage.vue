@@ -1200,6 +1200,14 @@ export default {
             getContractPayDetail(id).then(resp => {
                 if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
+
+                    let documentInfo = resp.data.result.projectInvestPay.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['paidForm1'],'documentInfo',documentInfo);
+
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidAdd2 = !this.paidAdd2;
                     this.sumPay();
@@ -1330,6 +1338,14 @@ export default {
                 if (resp.data.status == '200') {
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
+
+                    let documentInfo = resp.data.result.projectParticipation.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['sharingForm1'],'documentInfo',documentInfo);
+                    
                     this.sharingAdd2 = !this.sharingAdd2;
                 } else {
                     this.$message.error(resp.data.message);
