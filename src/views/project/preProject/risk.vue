@@ -65,8 +65,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="附件" prop="appendix">
-                                <upload-files @uploadSuccess="uploadSuccess"></upload-files>
+                            <el-form-item label="附件" prop="documentInfo">
+                                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -93,8 +93,8 @@
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
                         <template scope="scope">
-                            <span v-for="item in scope.row.documentInfo">
-                                <a :href="item.documentUrl" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></span>
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></p>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -107,7 +107,7 @@
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
                             <span v-for="doc in item.documentInfo">
-                                <a :href="doc.documentUrl" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
                         </p>
                     </div>
@@ -130,8 +130,8 @@
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
                         <template scope="scope">
-                            <span v-for="item in scope.row.documentInfo">
-                                <a :href="item.documentUrl" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></span>
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a></p>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -144,7 +144,7 @@
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
                             <span v-for="doc in item.documentInfo">
-                                <a :href="doc.documentUrl" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
                         </p>
                     </div>
@@ -161,7 +161,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadRecordSuccess"></upload-files>
+                        <upload-files @uploadSuccess="uploadSuccess($event, recordDocInfo)" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -189,10 +189,6 @@ export default {
         proId: {
             type: String,
             default: ''
-        },
-        proUsers: {
-            type: Array,
-            default: []
         }
     },
     data() {
@@ -249,12 +245,6 @@ export default {
                     { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
-            recipientOptions: [
-                { //接收人列表
-                    value: '选项1',
-                    label: '研发李一'
-                }
-            ],
             tableData: [],
             recordList: [],
             trackingForm: {
@@ -290,8 +280,45 @@ export default {
                     state: ''
                 }
             ],
-            documentInfo:[],
-            recordDocInfo:[]
+            documentInfo:[
+                {
+                    type: '1',
+                    name: '111.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '111.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '222.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '222.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '333.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '333.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ],
+            recordDocInfo:[
+                {
+                    type: '1',
+                    name: '111.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '111.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '222.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '222.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ]
         }
     },
     components: {
@@ -301,9 +328,6 @@ export default {
     created() {
     },
     watch:{
-        proUsers(val, oldVal) {
-            this.initInfo();
-        },
         'tabs':function (to,from){
             if(to.tabList[5]){
                 this.init();
@@ -318,7 +342,8 @@ export default {
         },
         //查询项目团队成员
         getProTeam(){
-            getTeams(this.investProjectId).then(resp => {
+            console.log(this.$route.params.investProjectId);
+            getTeams(this.$route.params.investProjectId).then(resp => {
                 // console.log("项目团队成员:"+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.proTeam = resp.data.result;
@@ -333,9 +358,6 @@ export default {
         },
         initInfo() {
             this.projectId = this.proId;
-            let proUsers = this.proUsers;
-            this.handleToOptions(proUsers);
-            this.recipientOptions = proUsers;
         },
         handleToOptions(datas = []) {
             datas.forEach(item => {
@@ -419,7 +441,7 @@ export default {
                         riskDescribe: this.AddForm.riskDescribe,
                         documentInfo: this.documentInfo
                     };
-                    console.log("risk::"+JSON.stringify(risk));
+                    console.log("添加风险::"+JSON.stringify(risk));
                     addDanger(risk).then(resp => {
                         if (resp.data.status == '200') {
                             this.getDatas();
@@ -448,6 +470,7 @@ export default {
                         recordDetails,
                         documentInfo
                     };
+                    console.log("添加风险跟踪 params::"+JSON.stringify(params));
                     insertRiskFollower(params).then(resp => {
                         if (resp.data.status == '200') {
                             this.getDatas();
@@ -463,19 +486,14 @@ export default {
                 }
             });
         },
-        uploadSuccess(resp){
-            let docInfo = {
-                fileName: resp.fileName,
-                filePath: resp.filePath
-            };
-            this.documentInfo.push(docInfo);
+        uploadSuccess(documentInfo, dataName){
+            // console.log("fileList--"+JSON.stringify(documentInfo));
+            this.$set(this.$data, dataName, documentInfo);
+            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         },
-        uploadRecordSuccess(resp){
-            let docInfo = {
-                fileName: resp.fileName,
-                filePath: resp.filePath
-            };
-            this.recordDocInfo.push(docInfo);
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         }
     }
 }

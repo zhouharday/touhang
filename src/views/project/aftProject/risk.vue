@@ -73,7 +73,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="appendix">
-                                <upload-files @uploadSuccess="uploadSuccess"></upload-files>
+                                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -99,6 +99,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -109,6 +113,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -129,6 +136,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -139,6 +150,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -154,7 +168,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadRecordSuccess"></upload-files>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -234,7 +248,9 @@
                             <!-- <span>{{item.disposeDate | formatDate}}</span> -->
                             <span>{{item.disposeResult == 1 ? '处理中' : '已完成'}}</span>
                             <span>{{item.disposeDescribe}}</span>
-                            <span v-for="doc in item.documentInfo">{{doc.fileNmae}}  </span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -288,7 +304,9 @@
                             <!-- <span>{{item.disposeDate | formatDate}}</span> -->
                             <span>{{item.disposeResult == 1 ? '处理中' : '已完成'}}</span>
                             <span>{{item.disposeDescribe}}</span>
-                            <span v-for="doc in item.documentInfo">{{doc.fileNmae}}  </span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -304,13 +322,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="alarmForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'alarmRecordDocInfo')" @removeSucess="removeSucess($event, 'alarmRecordDocInfo')" :documentInfo="alarmRecordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -513,8 +525,47 @@ export default {
                 ]
             },
             alarmData: [],
-            documentInfo:[],
-            recordDocInfo:[]
+            documentInfo:[
+                {
+                    type: '1',
+                    name: '添加风险附件.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '添加风险附件.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '添加风险附件222.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '添加风险附件222.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ],
+            recordDocInfo:[
+                {
+                    type: '1',
+                    name: '风险处理附件.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '风险处理附件.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '风险处理附件AAA.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '风险处理附件AAA.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ],
+            alarmRecordDocInfo: [
+                {
+                    type: '1',
+                    name: '预警处理附件.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '预警处理附件1.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ]
         }
     },
     created() {
@@ -597,7 +648,7 @@ export default {
                 riskWarnId: this.Form1.id,
                 disposeResult : this.alarmForm.disposeResult,
                 disposeDescribe : this.alarmForm.disposeDescribe,
-                documentInfo : documentInfo
+                documentInfo : this.alarmRecordDocInfo
             }
             insertwarnRecords(params).then(resp => {
                 if (resp.data.status == '200') {
@@ -608,7 +659,7 @@ export default {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('confirmTracking() exists error: ', e);
+                console.log('预警处理 的保存 error: ', e);
             })
 
             this.modalAlarm = false;
@@ -676,7 +727,8 @@ export default {
                 seedUserId: userId,
                 receivedUserId: this.addForm.receivedUserId,
                 completeDate: this.addForm.completeDate,
-                riskDescribe: this.addForm.riskDescribe
+                riskDescribe: this.addForm.riskDescribe,
+                documentInfo: this.documentInfo
             };
             addDanger(risk).then(resp => {
                 if (resp.data.status == '200') {
@@ -691,26 +743,30 @@ export default {
         },
         //添加风险跟踪
         confirmTracking() {
-            let riskRegisterId = this.riskId,
-                disposeResult = this.trackingForm.disposeResult,
-                recordDetails = this.trackingForm.recordDetails,
-                documentInfo = this.recordDocInfo;
-            let params = {
-                riskRegisterId,
-                disposeResult,
-                recordDetails,
-                documentInfo
-            };
-            insertRiskFollower(params).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalTracking = false;
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs['trackingForm'].validate((valid) => {
+                if (valid) {
+                    let riskRegisterId = this.riskId,
+                        disposeResult = this.trackingForm.disposeResult,
+                        recordDetails = this.trackingForm.recordDetails,
+                        documentInfo = this.recordDocInfo;
+                    let params = {
+                        riskRegisterId,
+                        disposeResult,
+                        recordDetails,
+                        documentInfo
+                    };
+                    insertRiskFollower(params).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalTracking = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('confirmTracking() exists error: ', e);
+                    })
                 }
-            }).catch(e => {
-                console.log('confirmTracking() exists error: ', e);
-            })
+            });
         },
         // 切换 上报/预警 的显示隐藏
         changeRisk1() {
@@ -748,25 +804,15 @@ export default {
                 }
             });
         },
-        uploadSuccess(resp){
-            let docInfo = {
-                fileName: resp.fileName,
-                filePath: resp.filePath
-            };
-            this.documentInfo.push(docInfo);
+        uploadSuccess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
         },
-        uploadRecordSuccess(resp){
-            let docInfo = {
-                fileName: resp.fileName,
-                filePath: resp.filePath
-            };
-            this.recordDocInfo.push(docInfo);
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
         }
     }
 }
 </script>
-
-
 
 <style lang="less" scoped>
 .table {
