@@ -94,10 +94,10 @@ export default {
         this.$store.state.login.loading = true;
         sessionStorage.clear();
         // this.$router.push({ name: 'homeContent' });
-        trimStr(this.userName);
-        trimStr(this.passWord);
-        let number = this.userName;
-        let pass = this.md5(this.passWord, 32);
+        
+        let number = trimStr(this.userName);
+        let pass = trimStr(this.passWord);
+        pass = this.md5(pass, 32);
         // window.setCookie("name",number);
         // window.setCookie("pwd",pass);
         // console.log(pass);
