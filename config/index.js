@@ -34,11 +34,7 @@ module.exports = {
                 // target: 'http://192.168.0.198:9091',
                 // target: 'http://18f46963j4.iok.la',
                 // target:'http://192.168.0.131:9092',// 文军凡IP
-<<<<<<< HEAD
-                target:'http://192.168.0.132:9091',// 蔡永亮 IP
-=======
                 // target:'http://192.168.0.104:9091',// 蔡永亮 IP
->>>>>>> c64957a22624a965d2254269eb24d5f1db09ca80
                 // target:'http://100.64.33.181:9091',
                 target:'http://sdwlyxgs.imwork.net:16380',
                 changeOrigin:true,
