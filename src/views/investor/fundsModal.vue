@@ -38,7 +38,7 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="实缴金额（元）" width="100" prop="paidAmount">
-                    <el-input v-model="fundsInfo.paidAmount" auto-complete="off"></el-input>
+                    <el-input v-model.number="fundsInfo.paidAmount" auto-complete="off"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -97,12 +97,12 @@ export default {
                     trigger: 'change'
                 }],
                 paidAmount: [{
+                    type: 'number',
                     required: true,
-                    message: '请输入实缴金额',
-                    trigger: 'change'
+                    message: '请输入数字',
+                    trigger: 'blue'
                 }],
                 paidDate: [{
-                    type: 'date',
                     required: true,
                     message: '请选择时间',
                     trigger: 'change'
