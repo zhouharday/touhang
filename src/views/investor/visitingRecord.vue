@@ -1,21 +1,20 @@
 <template>
-    <div class="visitingRecord">
-        <div style="text-align:right;margin-bottom:10px">
-            <el-button type="danger" style="background-color:#fff;padding:8px 15px;" @click="showVisiting">添加</el-button>
-        </div>
-        <!-- <tableHeader :theme="theme" :data="headerInfo" @add="showVisiting"></tableHeader> -->
-        <el-table :data="visitingRecord" border style="width: 100%">
-            <el-table-column prop="manageName" label="拜访人" align="center">
-            </el-table-column>
-            <el-table-column label="拜访时间" align="center">
-                <template scope="scope">
+<div class="visitingRecord">
+    <div style="text-align:right;margin-bottom:10px">
+        <el-button type="danger" style="background-color:#fff;padding:8px 15px;" @click="showVisiting">添加</el-button>
+    </div>
+    <el-table :data="visitingRecord" border style="width: 100%">
+        <el-table-column prop="manageName" label="拜访人" align="center">
+        </el-table-column>
+        <el-table-column label="拜访时间" align="center">
+            <template scope="scope">
                     <div>{{scope.row.seeDate | formatDateDetails}}</div>
                 </template>
-            </el-table-column>
-            <el-table-column prop="seeContent" label="拜访内容" align="center">
-            </el-table-column>
-            <el-table-column label="操作" align="center">
-                <template scope="scope">
+        </el-table-column>
+        <el-table-column prop="seeContent" label="拜访内容" align="center">
+        </el-table-column>
+        <el-table-column label="操作" align="center">
+            <template scope="scope">
                     <el-button @click.native.prevent="editRow(scope.$index, scope.row)" type="text" size="small">
                         编辑
                     </el-button>
@@ -23,48 +22,48 @@
                         删除
                     </el-button>
                 </template>
-            </el-table-column>
-        </el-table>
-        <!-- 添加拜访人 -->
-        <Modal v-model="modelVisiting" title="新增拜访人" @on-ok="confirmVisiting" @on-cancel="cancel" width="800">
-            <el-form :model="addVisiting" :rules="rules1" ref="addVisiting" label-position="left" label-width="120px">
-                <el-row :gutter="10">
-                    <el-col :span="12">
-                        <el-form-item label="拜访人" prop="merchantId">
-                            <el-select v-model="addVisiting.merchantId" style="width:100%">
-                                <el-option :key="addVisiting.merchantId" :label="addVisiting.manageName" :value="addVisiting.merchantId">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="拜访时间" prop="seeDate" style="width: 100%;">
-                            <el-date-picker v-model="addVisiting.seeDate" type="date" placeholder="选择日期" style="width: 100%;">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="拜访内容" prop="seeContent">
-                            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="addVisiting.seeContent">
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="拜访记录附件">
-                            <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
-                                <div style="padding: 20px 0">
-                                    <Icon type="ios-cloud-upload" size="52"></Icon>
-                                    <p>点击或将文件拖拽到这里上传</p>
-                                </div>
-                            </Upload>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </Modal>
-        <!-- 确实删除模态框 -->
-        <delete-reminders :deleteReminders="deleteModal" @del="comfirmDel" @cancel="comfirmCancel"></delete-reminders>
-    </div>
+        </el-table-column>
+    </el-table>
+    <!-- 添加拜访人 -->
+    <Modal v-model="modelVisiting" title="新增拜访人" @on-ok="confirmVisiting" @on-cancel="cancel" width="800">
+        <el-form :model="addVisiting" :rules="rules1" ref="addVisiting" label-position="left" label-width="120px">
+            <el-row :gutter="10">
+                <el-col :span="12">
+                    <el-form-item label="拜访人" prop="merchantId">
+                        <el-select v-model="addVisiting.merchantId" style="width:100%">
+                            <el-option :key="addVisiting.merchantId" :label="addVisiting.manageName" :value="addVisiting.merchantId">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="拜访时间" prop="seeDate" style="width: 100%;">
+                        <el-date-picker v-model="addVisiting.seeDate" type="datetime" placeholder="选择日期时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                    <el-form-item label="拜访内容" prop="seeContent">
+                        <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="addVisiting.seeContent">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                    <el-form-item label="拜访记录附件">
+                        <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
+                            <div style="padding: 20px 0">
+                                <Icon type="ios-cloud-upload" size="52"></Icon>
+                                <p>点击或将文件拖拽到这里上传</p>
+                            </div>
+                        </Upload>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+    </Modal>
+    <!-- 确实删除模态框 -->
+    <delete-reminders :deleteReminders="deleteModal" @del="comfirmDel" @cancel="comfirmCancel"></delete-reminders>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -86,12 +85,6 @@ export default {
     },
     data() {
         return {
-            theme: '#fff',
-            headerInfo: {
-                btnGroup: [{
-                    explain: '添加'
-                }]
-            },
             id: '',
             deleteModal: false,
             modelVisiting: false,
@@ -104,9 +97,11 @@ export default {
                 seeDate: new Date(),
             },
             rules1: {
-                seeContent: [
-                    { required: true, message: '请输入拜访内容', trigger: 'blur' }
-                ],
+                seeContent: [{
+                    required: true,
+                    message: '请输入拜访内容',
+                    trigger: 'blur,change'
+                }],
             },
             addOrEdit: true // 用来判断点击了添加还是编辑
         }
@@ -133,23 +128,29 @@ export default {
             this.id = row.id
         },
         confirmVisiting() {
-            if (this.addOrEdit == true) {
-                addVisitingRecord(this.addVisiting).then((res) => {
-                    this.$Message.success(res.data.message || '添加拜访记录成功')
-                    this._visitingRecordList()
-                }).catch(err => {
-                    let res = err.data
-                    this.$Message.success(res.message || '添加拜访记录失败')
-                })
-            } else {
-                updateVisitingRecord(this.addVisiting).then((res) => {
-                    this.$Message.success(res.data.message || '修改拜访记录成功')
-                    this._visitingRecordList()
-                }).catch(err => {
-                    console.log(err)
-                    this.$Message.success(res.message || '修改拜访记录失败')
-                })
-            }
+            this.$refs.addVisiting.validate((valid) => {
+                if (valid) {
+                    if (this.addOrEdit == true) {
+                        addVisitingRecord(this.addVisiting).then((res) => {
+                            this.$Message.success(res.data.message || '添加拜访记录成功')
+                            this._visitingRecordList()
+                        }).catch(err => {
+                            let res = err.data
+                            this.$Message.success(res.message || '添加拜访记录失败')
+                        })
+                    } else {
+                        updateVisitingRecord(this.addVisiting).then((res) => {
+                            this.$Message.success(res.data.message || '修改拜访记录成功')
+                            this._visitingRecordList()
+                        }).catch(err => {
+                            console.log(err)
+                            this.$Message.success(res.message || '修改拜访记录失败')
+                        })
+                    }
+                } else {
+                    return false
+                }
+            })
         },
         comfirmDel(el) {
             deleteVisitingRecord(this.id).then((res) => {
@@ -175,7 +176,6 @@ export default {
         }
     },
     components: {
-        tableHeader,
         deleteReminders
     }
 }

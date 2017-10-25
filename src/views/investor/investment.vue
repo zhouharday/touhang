@@ -71,6 +71,17 @@ export default {
         }
     },
     methods: {
+        changeTabs(name) {
+            if(name === 'secede') {
+                var fundId = this.$route.params.userId
+                var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+                getEarningsAmountList(fundId, merchantsId).then((res) => {
+                    if(res.status == '200') {
+                        this.quitCapitalData = res.data.result.list
+                    }
+                })
+            }
+        },
         handleTabsAdd() {
             if(this.tabsName == 'contribution') {
                 this.InvDetails = true
@@ -79,6 +90,7 @@ export default {
             }
         },
         addInvDetails() {
+            console.log(this.InvInfo)
             this.InvInfo.agreementId = this.InvInfo.agreementName
             addAgreementAmount(this.InvInfo).then((res) => {
                 if (res.status == '200') {

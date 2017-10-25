@@ -284,6 +284,7 @@ export default {
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
                     if (res.data.result[0] === undefined) {
