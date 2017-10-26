@@ -134,11 +134,11 @@
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
-            <!-- <el-row>
-                                                                                                        <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
-                                                                                                            <my-tree :model="menuItem"></my-tree>
-                                                                                                        </el-col>
-                                                                                                    </el-row> -->
+            <el-row>
+                <el-col :span="24" v-for="(menuItem,index) in theModel" :key="index">
+                     <my-tree :model="menuItem"></my-tree>
+                </el-col>
+            </el-row>
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
@@ -238,7 +238,7 @@ export default {
                 this.$store.state.login.showOrHide.isShowSidebar = 0;
                 return this.$store.state.login.showOrHide;
             } else {
-                // this.$store.state.login.showOrHide = JSON.parse(sessionStorage.getItem('showOrHide')) || {};
+                this.$store.state.login.showOrHide = JSON.parse(sessionStorage.getItem('showOrHide')) || {};
                 return this.$store.state.login.showOrHide;
             }
         }
