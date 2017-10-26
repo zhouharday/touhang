@@ -1,6 +1,6 @@
 <template>
     <div class="eventBox">
-        <el-form :model="eventForm" rules="rules1" :ref="eventForm" label-width="80px" class="eventForm">
+        <el-form :model="eventForm" :rules="rules1" ref="eventForm" label-width="120px" class="eventForm">
             <el-form-item label="汇报事项" prop="issuesType">
                 <el-select v-model="eventForm.issuesType" placeholder="请选择汇报事项" style="width: 100%;">
                     <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key">
@@ -27,15 +27,12 @@
                         <p>
                             <span>{{item.issuesType | key2value(eventOptions, item.issuesType)}}</span>
                             <span style="margin-right:50px">{{item.issuesDate | formatDate}}</span>
-                            <span>{{item.doc}}</span>
-                            <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
-                        </p>
-                        <p>{{item.issuesContent}}</p>
-                        <p>
                             <span v-for="doc in item.documentInfo">
                                 <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
+                            <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
                         </p>
+                        <p>{{item.issuesContent}}</p>
                         <p style="text-align:right">
                             <span>{{item.addUserName}}</span>
                             <span>{{item.createDate}}</span>
@@ -124,27 +121,27 @@ export default {
                 }
             ],
             documentInfo:[
-                {
-                    type: '1',
-                    name: '重大事项1.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '重大事项1.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '2重大事项122.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '2重大事项122.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '3重大事项133.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '3重大事项133.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
+                // {
+                //     type: '1',
+                //     name: '重大事项1.jpg',
+                //     url: 'http://www.xxx.com/img1.jpg',
+                //     fileName: '重大事项1.jpg',
+                //     filePath: 'http://www.xxx.com/img1.jpg'
+                // },
+                // {
+                //     type: '1',
+                //     name: '2重大事项122.jpg',
+                //     url: 'http://www.xxx.com/img2.jpg',
+                //     fileName: '2重大事项122.jpg',
+                //     filePath: 'http://www.xxx.com/img1.jpg'
+                // },
+                // {
+                //     type: '1',
+                //     name: '3重大事项133.jpg',
+                //     url: 'http://www.xxx.com/img2.jpg',
+                //     fileName: '3重大事项133.jpg',
+                //     filePath: 'http://www.xxx.com/img1.jpg'
+                // }
             ]
         }
     },
@@ -165,6 +162,7 @@ export default {
         getEventList() {
             //查询重大事项列表
             getEventList(this.projectId).then(resp => {
+                console.log("查询重大事项列表："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let data = resp.data.result;
                     this.recordList=this.handleDatas(data);
@@ -186,21 +184,30 @@ export default {
         },
         //添加重大事件
         submitEvent() {
-            let params = {
-                projectId: this.projectId,
-                issuesType: this.eventForm.issuesType,
-                issuesDate: changeDate(this.eventForm.issuesDate),
-                issuesContent: this.eventForm.issuesContent,
-                documentInfo: this.documentInfo
-            };
-            addEvent(params).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getEventList();
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs["eventForm"].validate((valid) => {
+                if (valid) {
+                    let params = {
+                        projectId: this.projectId,
+                        issuesType: this.eventForm.issuesType,
+                        issuesDate: changeDate(this.eventForm.issuesDate),
+                        issuesContent: this.eventForm.issuesContent,
+                        documentInfo: this.documentInfo
+                    };
+                    console.log("重大事件："+JSON.stringify(params));
+                    addEvent(params).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getEventList();
+                            this.$set(this.$data.eventForm, 'issuesType', '');
+                            this.$set(this.$data.eventForm, 'issuesDate', '');
+                            this.$set(this.$data.eventForm, 'issuesContent', '');
+                            this.documentInfo = [];
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('添加重大事件 error: ', e)
+                    });
                 }
-            }).catch(e => {
-                console.log('添加重大事件 error: ', e)
             });
         },
         //删除重大事件

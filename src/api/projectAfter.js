@@ -197,13 +197,6 @@ export function getDataSubjectList(projectId = undefined, dataType) {
 
 //数据填报--数据填报主体添加
 export function saveDataSubject(projectData = {}) {
-// 	"projectId":"1255863654", //项目id
-// "baseDate":"2013-14-15", //基准日
-// "dataType":1, //1年报、2半年报、3季报、4月报
-// "operator":"张三", //填报人id
-// "currentDeta":"2013-14-15",// 填报日期
-// "operatorName":"张三", //填报人姓名
-// "dataCat":1 //0:经营数据;1:财务数据
 	const data = {
 		merchantId : JSON.parse(sessionStorage.getItem('merchants'))[0].id,
 		projectData : projectData
@@ -214,14 +207,6 @@ export function saveDataSubject(projectData = {}) {
 
 //数据填报--数据填报主体编辑
 export function updDataSubject(params = {}) {
-// 	{
-// "id":"e8d93b8781bd4f068ee17e5f5857969e", //id 必须
-// "baseDate":"2013-14-15", //基准日
-// "dataType":1, //1年报、2半年报、3季报、4月报
-// "operator":"张三", //填报人id
-// "currentDeta":"2013-14-15",// 填报日期
-// "operatorName":"张三", //填报人姓名
-// }
 	let {id, baseDate, dataType, operator, currentDeta,operatorName } = params;
 	const data = {
 		id, baseDate, dataType, operator, currentDeta,operatorName

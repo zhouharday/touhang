@@ -241,7 +241,7 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :action="importUrl" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
@@ -360,6 +360,8 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
+            importUrl:this.api+'/excel//financial',
+            importData:{},
             // 经营数据表头
             operatingData: [
                 {
@@ -719,9 +721,21 @@ export default {
             rows.splice(index, 1);
         },
         // 上传附件的方法
-        handleUpload(file) {
-            this.file = file;
-            return false;
+        handleBeforeUpload(file) {
+            let activeName = this.activeName;
+            let dataInfoid = '';
+            if(activeName == 'first'){
+                dataInfoid = this.balanceInfo.id;
+            }else if(activeName == 'second'){
+                dataInfoid = this.incomeInfo.id;
+            }else if(activeName == 'third'){
+                dataInfoid = this.cashFlowInfo.id;
+            }
+
+            this.importData = {
+                dataInfoid: dataInfoid
+            }
+            console.log("导入数据"+JSON.stringify(this.importData));
         },
         upload() {
             this.loadingStatus = true;

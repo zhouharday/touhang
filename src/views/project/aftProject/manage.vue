@@ -30,8 +30,6 @@
                         </el-table-column>
                         <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                         </el-table-column>
-                        <el-table-column label="合同附件" prop="documentInfo" align="center">
-                        </el-table-column>
                     </el-table>
                     <!-- 项目合同详情 对话框-->
                     <el-dialog title="项目合同详情" :visible.sync="contractDetails">
@@ -69,7 +67,9 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <el-input v-model="contractForm1.documentInfo" disabled></el-input>
+                                        <span v-for="doc in contractForm1.documentInfo">
+                                            <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -155,7 +155,9 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="相关附件">
-                                        <el-input v-model="paidForm1.relativeAppendix" disabled></el-input>
+                                        <span v-for="doc in paidForm1.documentInfo">
+                                            <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -232,6 +234,13 @@
                                     <el-form-item label="分红日期">
                                         <el-input type="date"  v-model="sharingForm1.shareDate" placeholder="选择日期" disabled style="width: 100%;">
                                         </el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col>
+                                    <el-form-item label="相关附件">
+                                        <span v-for="doc in sharingForm1.documentInfo">
+                                            <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                             </el-row>

@@ -159,6 +159,14 @@ export default {
             getExitDetail(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.outingForm = resp.data.result.projectExit;
+
+                    let documentInfo = resp.data.result.projectExit.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['outingForm'],'documentInfo',documentInfo);
+                    
                     this.outingData2 = resp.data.result.projectExitList
                 }
             }).catch(e => {
