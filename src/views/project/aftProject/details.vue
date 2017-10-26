@@ -16,8 +16,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目类型" prop="projectType">
-                             <el-input v-model="basicForm.projectType" disabled></el-input>
+                        <el-form-item label="项目类型" prop="type">
+                             <el-input v-model="basicForm.type" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
