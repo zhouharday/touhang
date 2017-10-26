@@ -25,7 +25,7 @@
         </el-table-column>
     </el-table>
     <!-- 添加拜访人 -->
-    <Modal v-model="modelVisiting" title="新增拜访人" @on-ok="confirmVisiting" @on-cancel="cancel" width="800">
+    <Modal v-model="modelVisiting" title="新增拜访人" width="800">
         <el-form :model="addVisiting" :rules="rules1" ref="addVisiting" label-position="left" label-width="120px">
             <el-row :gutter="10">
                 <el-col :span="12">
@@ -60,6 +60,10 @@
                 </el-col>
             </el-row>
         </el-form>
+        <div slot="footer">
+            <Button type="text" @click="cancel">取消</Button>
+            <Button type="primary" @click="confirmVisiting">确认</Button>
+        </div>
     </Modal>
     <!-- 确实删除模态框 -->
     <delete-reminders :deleteReminders="deleteModal" @del="comfirmDel" @cancel="comfirmCancel"></delete-reminders>
@@ -127,6 +131,10 @@ export default {
             this.deleteModal = !this.deleteModal
             this.id = row.id
         },
+        cancel() {
+            this.$refs.addVisiting.resetFields()
+            this.modelVisiting = false
+        },
         confirmVisiting() {
             this.$refs.addVisiting.validate((valid) => {
                 if (valid) {
@@ -134,6 +142,7 @@ export default {
                         addVisitingRecord(this.addVisiting).then((res) => {
                             this.$Message.success(res.data.message || '添加拜访记录成功')
                             this._visitingRecordList()
+                            this.modelVisiting = false
                         }).catch(err => {
                             let res = err.data
                             this.$Message.success(res.message || '添加拜访记录失败')
@@ -142,6 +151,7 @@ export default {
                         updateVisitingRecord(this.addVisiting).then((res) => {
                             this.$Message.success(res.data.message || '修改拜访记录成功')
                             this._visitingRecordList()
+                            this.modelVisiting = false
                         }).catch(err => {
                             console.log(err)
                             this.$Message.success(res.message || '修改拜访记录失败')

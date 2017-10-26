@@ -277,8 +277,13 @@ export default {
                     this.roleList = res.data.result
                 }
             })
-            this.formTeam.fundId = row.id
             this.modalAdd = true
+            this.formTeam = {
+                fundId: row.id,
+                userId: '',
+                autId: '',
+                addTime: new Date()
+            }
         },
         confirmAdd() {
             addFundTeam(this.formTeam).then((res) => {

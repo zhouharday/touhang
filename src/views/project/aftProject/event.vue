@@ -15,12 +15,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item label="相关文档">
-                <Upload multiple type="drag" v-model="eventForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                    <div style="padding: 20px 0">
-                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                        <p>点击或将文件拖拽到这里上传</p>
-                    </div>
-                </Upload>
+                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
             </el-form-item>
             <el-button type="danger" class="submit-btn" @click="submitEvent">提交</el-button>
         </el-form>
@@ -36,6 +31,11 @@
                             <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
                         </p>
                         <p>{{item.issuesContent}}</p>
+                        <p>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
+                        </p>
                         <p style="text-align:right">
                             <span>{{item.addUserName}}</span>
                             <span>{{item.createDate}}</span>
@@ -49,6 +49,7 @@
 
 <script>
 import '../../../common/js/filter'
+import uploadFiles from 'components/uploadFiles'
 import { changeDate } from '../../../common/js/config'
 import {
     getEventList, addEvent, delEvent
@@ -63,6 +64,9 @@ export default {
             type: String,
             default: ''
         }
+    },
+    components: {
+        uploadFiles
     },
     data() {
         return {
@@ -118,6 +122,29 @@ export default {
                     key: '9',
                     value: '其他'
                 }
+            ],
+            documentInfo:[
+                {
+                    type: '1',
+                    name: '重大事项1.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '重大事项1.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '2重大事项122.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '2重大事项122.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '3重大事项133.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '3重大事项133.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
             ]
         }
     },
@@ -164,7 +191,7 @@ export default {
                 issuesType: this.eventForm.issuesType,
                 issuesDate: changeDate(this.eventForm.issuesDate),
                 issuesContent: this.eventForm.issuesContent,
-                documentInfo: []
+                documentInfo: this.documentInfo
             };
             addEvent(params).then(resp => {
                 if (resp.data.status == '200') {
@@ -187,6 +214,12 @@ export default {
             }).catch(e => {
                 console.log('删除重大事件 error: ', e);
             })
+        },
+        uploadSuccess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+        },
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
         }
 
     }

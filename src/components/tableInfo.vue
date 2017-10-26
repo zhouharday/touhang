@@ -5,7 +5,13 @@
             <div class="list_title default">最新估值（元）</div>
             <div class="list_content default">{{data.newAppra | toMoney}}</div>
             <div class="list_title default">最新浮盈（元）</div>
-            <div class="list_content default">{{data.newFuy | toMoney}}</div>
+            <div class="list_content default">
+                {{data.newFuy | toMoney}}
+                <span v-show="!data.newFuy || data.newFuy == 0">
+                    <Icon type="arrow-up-c" class="up" v-if="data.newFuy > 0"></Icon>
+                    <Icon type="arrow-down-c" class="down" v-else="data.newFuy < 0"></Icon>
+                </span>
+            </div>
         </div>
         <div class="list">
             <div class="list_title default">估值日期</div>
@@ -24,12 +30,6 @@
             <div class="list_content default">{{data.remain | toMoney}}</div>
             <div class="list_title default">待分配总额（元）</div>
             <div class="list_content default">{{data.waitAmount | toMoney}}</div>
-        </div>
-        <div class="list">
-            <div class="list_title default">基金负责人</div>
-            <div class="list_content default">{{data.roleName}}</div>
-            <div class="list_title default">成立日期</div>
-            <div class="list_content default">{{data.startDate | formatDate}}</div>
         </div>
     </div>
 </div>
@@ -76,6 +76,18 @@ export default {
                 flex-shrink: 0;
                 display: flex;
                 align-items: center;
+            }
+            .up{
+                color: #f05e5e;
+                font-size: 20px;
+                font-weight: 500;
+                margin-left: 12px;
+            }
+            .down{
+                color: green;
+                font-size: 20px;
+                font-weight: 500;
+                margin-left: 12px;
             }
         }
     }

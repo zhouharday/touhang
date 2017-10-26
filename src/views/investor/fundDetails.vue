@@ -29,8 +29,12 @@
             </template>
         </el-table-column>
     </el-table>
-    <Modal v-model="fundsDetailsModal" title="修改出资明细" @on-ok="modifyModal" @on-cancel="confirmCancel" width="800px">
-        <funds-modal :fundsInfo="fundsInfo"></funds-modal>
+    <Modal v-model="fundsDetailsModal" title="修改出资明细" width="800px">
+        <funds-modal :fundsInfo="fundsInfo" ref="fundsModal"></funds-modal>
+        <div slot="footer">
+            <Button type="text" @click="confirmCancel">取消</Button>
+            <Button type="primary" @click="modifyModal">确认</Button>
+        </div>
     </Modal>
     <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" @cancel="cancelDel" @del="confirmDel">
     </delete-reminders>
@@ -78,6 +82,8 @@ export default {
         handleEdit(index, row) {
             this.fundsDetailsModal = true
             this.fundsInfo = row
+            row.paidAmount = parseFloat(row.paidAmount)
+            console.log(row)
         },
         handleDelete(index, row) {
             this.deleteReminders = true
@@ -88,7 +94,7 @@ export default {
             deleteAgreementAmount(this.deleteId).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
-                    this.getConDetails()
+                    this._getConDetails()
                     this.deleteReminders = false
                     this.modal_loading = false
                 }
@@ -101,13 +107,22 @@ export default {
             this.fundsDetailsModal = false
         },
         modifyModal() {
-            updateAgreementAmount(this.fundsInfo).then((res) => {
-                if (res.status == '200') {
-                    this.$Message.success(res.data.message || '修改出资成功！')
+            var fundsInfo = this.$refs.fundsModal.$refs.fundsInfo
+            fundsInfo.validate((valid) => {
+                if (valid) {
+                    updateAgreementAmount(this.fundsInfo).then((res) => {
+                        if (res.status == '200') {
+                            this._getConDetails()
+                            this.$Message.success(res.data.message || '修改出资成功！')
+                            this.fundsDetailsModal = false
+                        }
+                    })
+                } else {
+                    return false
                 }
             })
         },
-        getConDetails() { // 获取出资明细
+        _getConDetails() { // 获取出资明细
             var invId = this.$route.params.userId
             var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getAgreementAmountList(invId, merId).then((res) => {

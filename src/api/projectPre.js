@@ -199,14 +199,15 @@ export function selectRiskRegister(id = undefined) {
 
 // 添加风险
 export function addDanger(params = {}) {
-	const { projectId, riskTheme, seedUserId, receivedUserId, riskDescribe, completeDate } = params;
+	const { projectId, riskTheme, seedUserId, receivedUserId, riskDescribe, completeDate, documentInfo } = params;
 	const data = {
 		projectId, //项目ID: "123456",
         riskTheme, //风险主题: "1",
         seedUserId, //提交人ID: null,
         receivedUserId, //接收人ID: null,
         riskDescribe, //风险描述: null
-        completeDate //完成时间: null
+        completeDate, //完成时间: null
+        documentInfo
 	}
 	return service({url: '/riskRegister/insertRiskRegister', method: 'post', data});
 }
@@ -235,13 +236,14 @@ export function delDanger(id = undefined) {
 
 // 添加风险追踪
 export function insertRiskFollower(params = {}) {
-	let { riskRegisterId, disposeResult, recordDetails } = params;
+	let { riskRegisterId, disposeResult, recordDetails, documentInfo } = params;
 	let userId = JSON.parse(sessionStorage.getItem('userInfor')).id; //当前登录用户id
 	const data = {
         riskRegisterId, //风险ID: "727339b17e6c4752a5eea2794e149dfd",
         disposeResult, //1:处理中 2：已完成: 1,
         disposeUserId: userId, //创建人ID: "727339b17e6c4752a5eea2794e149dfd",
-        recordDetails //汇报内容: "测试风险跟踪"
+        recordDetails, //汇报内容: "测试风险跟踪"
+        documentInfo
 	}
 	return service({url: '/riskRegister/insertRiskFollower', method: 'post', data});
 }

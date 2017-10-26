@@ -5,7 +5,8 @@
             <span class="desc">{{formDetails.fundName}}</span>
         </div>
         <div class="right">
-            <el-button type="danger" @click="changeStep" :disabled="judgementFundStage">下一阶段</el-button>
+            <!-- :disabled="judgementFundStage" -->
+            <el-button type="danger" @click="changeStep">下一阶段</el-button>
             <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
             </el-button>
         </div>
@@ -259,6 +260,7 @@ export default {
         changeStep() {
             nextStage(this.$route.params.id, NUM, this.currentStep).then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     if (res.data.status == '9021') {
                         this.$Message.error(res.data.message || '操作失败，有未完成的任务')
                     } else if (res.data.status == '9022') {
@@ -278,8 +280,8 @@ export default {
             // console.log(this.modalUpload)
         },
         uploadSuccess() { // 上传成功隐藏模态框
-            this.modalUpload = false
             this.getDataStageAddUpload()
+            this.modalUpload = false
         },
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
@@ -297,7 +299,7 @@ export default {
                     console.log(res)
                 }
             })
-            slectStageAllocation().then((res) => {
+            slectStageAllocation().then((res) => { // 获取配置项目或者基金的阶段
                 if (res.status == '200') {
                     console.log(res)
                     this.steps = res.data.result
@@ -305,15 +307,15 @@ export default {
                 }
             })
         },
-        judgementFundStage() {
-            var last = this.steps[this.steps.length - 1].id
-            var current = this.currentStep
-            if (last === current) {
-                return false
-            } else {
-                return true
-            }
-        },
+        // judgementFundStage() {
+        //     var last = this.steps[this.steps.length - 1].id
+        //     var current = this.currentStep
+        //     if (last === current) {
+        //         return false
+        //     } else {
+        //         return true
+        //     }
+        // },
         _getFundList(id) {
             getMyFundDetails(id).then((res) => {
                 if (res.status == '200') {

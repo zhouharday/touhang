@@ -235,24 +235,23 @@
         </el-table-column>
         <el-table-column label="户名">
             <template scope="scope">
-                <el-input v-model="scope.row.username" placeholder="请输入内容" class="noBorder" :disabled="scope.row.flag"></el-input>
+                <el-input v-model="scope.row.username" placeholder="请输入内容"></el-input>
             </template>
         </el-table-column>
         <el-table-column label="开户行">
             <template scope="scope">
-                <el-autocomplete class="inline-input noBorder"
-                                     v-model="scope.row.openingBank"
-                                     :fetch-suggestions="querySearch"
-                                     placeholder="请输入内容"
-                                     @select="handleSelect"
-                                     style="width:100%;"
-                                     :disabled="scope.row.flag">
-                    </el-autocomplete>
-                </template>
+                <el-autocomplete class="inline-input"
+                    v-model="scope.row.openingBank"
+                    :fetch-suggestions="querySearch"
+                    placeholder="请输入内容"
+                    @select="handleSelect"
+                    style="width:100%;">
+                </el-autocomplete>
+            </template>
         </el-table-column>
         <el-table-column label="账号">
             <template scope="scope">
-                <el-input v-model="scope.row.accountNumber" placeholder="请输入内容" class="noBorder" :disabled="scope.row.flag"></el-input>
+                <el-input v-model="scope.row.accountNumber" placeholder="请输入内容"></el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -594,9 +593,9 @@ export default {
 
 <style lang="less" scoped>
 /*@import "../../common/styles/mixin.less";*/
-.noBorder /deep/ input.el-input__inner {
+/*.noBorder /deep/ input.el-input__inner {
     border: none;
-}
+}*/
 .form {
     width: 100%;
     height: 100%;
