@@ -84,9 +84,9 @@
                     <el-table-column property="outingIncome" label="退出收益"></el-table-column>
                 </el-table>
                 <div class="pagination">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
-                </el-pagination>
-            </div>
+                    <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+                    </el-pagination>
+                </div>
             </el-dialog>
         </div>
     </section>
@@ -158,7 +158,7 @@ export default {
           this.$Message.error("访问超时");
         });
     },
-    fundStatistics(fundInvestId,fundName) {
+    fundStatistics(fundInvestId, fundName) {
       this.$http
         .post(this.api + "/fund/fundStatistics", {
           merchantId: this.user.merchants[0].id,
