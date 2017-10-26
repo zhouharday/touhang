@@ -18,10 +18,10 @@
         <el-table :data="myFund" border style="width: 100%">
             <el-table-column fixed label="基金名称" width="200" align="center">
                 <template scope="scope">
-                        <div class="name" @click="handleRouter(scope.$index, scope.row)">
-                            <span class="investorName">{{ scope.row.fundName }}</span>
-                        </div>
-                    </template>
+                    <div class="name" @click="handleRouter(scope.$index, scope.row)">
+                        <span class="investorName">{{ scope.row.fundName }}</span>
+                    </div>
+                </template>
             </el-table-column>
             <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
             </el-table-column>
@@ -31,8 +31,8 @@
             </el-table-column>
             <el-table-column label="基金规模（元）" width="200" align="center">
                 <template scope="scope">
-                        <div>{{scope.row.fundScale | toMoney}}</div>
-                    </template>
+                    <div>{{scope.row.fundScale | toMoney}}</div>
+                </template>
             </el-table-column>
             <el-table-column prop="placementSum" label="募集总额（元）" width="200" align="center">
             </el-table-column>
@@ -42,16 +42,16 @@
             </el-table-column>
             <el-table-column label="成立日期" width="200" align="center">
                 <template scope="scope">
-                        <div style="width: 100%;height: 100%;">{{scope.row.createDate | formatDate}}</div>
-                    </template>
+                    <div style="width: 100%;height: 100%;">{{scope.row.createDate | formatDate}}</div>
+                </template>
             </el-table-column>
-            <el-table-column prop="fundStage" label="状态" width="200" align="center">
+            <el-table-column prop="fundStatus" label="状态" width="200" align="center">
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200" align="center">
                 <template scope="scope">
-                        <el-button type="text" size="small" @click="addTeamlist(scope.$index, scope.row)">基金团队</el-button>
-                        <el-button type="text" size="small" @click="deleteFundlist(scope.$index, scope.row)">删除</el-button>
-                    </template>
+                    <el-button type="text" size="small" @click="addTeamlist(scope.$index, scope.row)">基金团队</el-button>
+                    <el-button type="text" size="small" @click="deleteFundlist(scope.$index, scope.row)">删除</el-button>
+                </template>
             </el-table-column>
         </el-table>
     </div>
@@ -95,10 +95,7 @@ import myFilter from 'components/myFilter'
 import deleteReminders from 'components/deleteReminders'
 import Service from 'common/js/fetch'
 import '../../common/js/filter.js' //时间格式过滤器
-import {
-    mapMutations,
-    mapGetters
-} from 'vuex'
+import {mapMutations,mapGetters} from 'vuex'
 import {
     getManagementType,
     getMyFund,
@@ -245,6 +242,7 @@ export default {
         getFundListsData() {
             getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }

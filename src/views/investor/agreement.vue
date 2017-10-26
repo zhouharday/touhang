@@ -39,8 +39,12 @@
             </template>
         </el-table-column>
     </el-table>
-    <Modal v-model="modelAgreement" title="协议信息详情" @on-ok="confirmIncome" @on-cancel="cancel" width="800">
-        <protocol-details :AgreementInfo="AgreementInfo"></protocol-details>
+    <Modal v-model="modelAgreement" title="协议信息详情" width="800">
+        <protocol-details :AgreementInfo="AgreementInfo" ref="agreementDetails"></protocol-details>
+        <div slot="footer">
+            <Button type="text" @click="cancel">取消</Button>
+            <Button type="primary" @click="confirmIncome">确认</Button>
+        </div>
     </Modal>
     <!-- 确认删除模态框 -->
     <delete-reminders :deleteReminders="deleteReminders" @cancel="cancelAgreement" @del="delAgreement"></delete-reminders>
@@ -52,7 +56,12 @@ import tableHeader from 'components/tabelHeader'
 import protocolDetails from './protocolDetails'
 import deleteReminders from 'components/deleteReminders'
 import '../../common/js/filter'
-import {addAgreement, updateAgreement, deleteAgreement, GetProtocolsList} from 'api/investor'
+import {
+    addAgreement,
+    updateAgreement,
+    deleteAgreement,
+    GetProtocolsList
+} from 'api/investor'
 export default {
     props: {
         agreementData: {
@@ -94,6 +103,7 @@ export default {
             this.addOrModify = true;
         },
         handleEdit(index, row) {
+            row.signDate = new Date(row.signDate)
             this.modelAgreement = true
             this.addOrModify = false
             this.deleteReminders = false
@@ -106,29 +116,43 @@ export default {
             this.deleteReminders = !this.deleteReminders
             this.deleteId = row.id
         },
+        cancel() {
+            var agreementInfo = this.$refs.agreementDetails.$refs.AgreementInfo
+            agreementInfo.resetFields()
+            this.modelAgreement = false
+        },
         confirmIncome() {
-            if(this.addOrModify == true) {
-                addAgreement(this.AgreementInfo).then((res) => {
-                    if(res.status == '200') {
-                        this.$Message.success(res.data.message || '签约成功！')
-                        this.modelSign = false
-                        this.getAgreementList()
+            var agreementInfo = this.$refs.agreementDetails.$refs.AgreementInfo
+            agreementInfo.validate((valid) => {
+                if (valid) {
+                    if(this.addOrModify == true) {
+                        addAgreement(this.AgreementInfo).then((res) => {
+                            if(res.status == '200') {
+                                this.$Message.success(res.data.message || '签约成功！')
+                                // this.modelSign = false
+                                this.getAgreementList()
+                                this.modelAgreement = false
+                            }
+                        })
+                    } else {
+                        // console.log(this.AgreementInfo)
+                        updateAgreement(this.AgreementInfo).then((res) => {
+                            if(res.status == '200') {
+                                this.$Message.success(res.data.message || '修改成功！')
+                                // this.modelSign = false
+                                this.getAgreementList()
+                                this.modelAgreement = false
+                            }
+                        })
                     }
-                })
-            } else {
-                console.log(this.AgreementInfo)
-                updateAgreement(this.AgreementInfo).then((res) => {
-                    if(res.status == '200') {
-                        this.$Message.success(res.data.message || '修改成功！')
-                        this.modelSign = false
-                        this.getAgreementList()
-                    }
-                })
-            }
+                } else {
+                    return false
+                }
+            })
         },
         delAgreement() {
             deleteAgreement(this.deleteId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除协议成功！')
                     this.deleteReminders = false
                     this.getAgreementList()

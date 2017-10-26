@@ -143,7 +143,6 @@ export default {
                 }
             })
             sessionStorage.setItem('INVESTORNAME', rowList.investorName)
-            // console.log(this.$store.state.investor.investorName)
         },
         showModel() {
             let new_addInvestor = {
@@ -180,15 +179,15 @@ export default {
             this.signInfo.investorName = row.investorName
         },
         confirmIncome(formName) {
-            // console.log(this.$refs.addInvestor.$refs.addInvestor)
+            // console.log(this.showModel())/
             this.$refs.addInvestor.$refs.addInvestor.validate((valid) => {
                 if (valid) {
                     addInvestor(this.addInvestor).then((res) => {
                         if (res.data.status == '200') {
                             this.modelInvestor = false
                             this.getInvList()
+                            this.addInvestor = {}
                         }
-                        this.addInvestor = new_addInvestor
                     })
                 } else {
                     return false

@@ -6,13 +6,14 @@ import {
     OrganizationType,
     getMyFund,
     fundStage,
-    getAllOrgList
+    getAllOrgList,
+    getFundApprList
 } from 'api/fund'
 const state = {
-    getManType: sessionStorage.getItem('MANTYPE') || [], // 管理类型
+    getManType: JSON.parse(sessionStorage.getItem('MANTYPE')) || [], // 管理类型
     fundInvestment: [],
     managementCompany: [],
-    OrgType: sessionStorage.getItem('ORGTYPE') || [], // 组织类型
+    OrgType: JSON.parse(sessionStorage.getItem('ORGTYPE')) || [], // 组织类型
     myFundList: {},
     // myFundDetails: {},
     fundStage: [
@@ -20,7 +21,8 @@ const state = {
             dicName: '全部'
         }
     ], // 基金阶段
-    getOrgList: {}
+    getOrgList: {},
+    setFundAppData: JSON.parse(sessionStorage.getItem('SET_FUNDAPPRDATA')) || [] // 基金估值图表数据
 }
 
 const getters = {
@@ -30,7 +32,8 @@ const getters = {
     OrgType: state => state.OrgType,
     myFundList: state => state.myFundList,
     fundStage: state => state.fundStage,
-    getOrgList: state => state.getOrgList
+    getOrgList: state => state.getOrgList,
+    setFundAppData: state => state.setFundAppData
 }
 
 const mutations = {
@@ -54,6 +57,9 @@ const mutations = {
     },
     [types.GET_ALLORGLIST](state, getOrgList) {
         state.getOrgList = getOrgList
+    },
+    [types.SET_FUNDAPPRDATA](state, setFundAppData) {
+        state.setFundAppData = setFundAppData
     }
 }
 const actions = {
@@ -114,6 +120,17 @@ const actions = {
         return getAllOrgList().then((res) => {
             if (res.status == '200') {
                 commit(types.GET_ALLORGLIST, res.data.result)
+            }
+        })
+    },
+    getFundAppraisementList({commit, dispatch}, fundId) {
+        return getFundApprList(fundId).then((res) => {
+            if(res.status === 200) {
+                console.log(res)
+                // appraisementDate: "2017-10-26 16:47:32"
+                // appraisementValue:"150000"
+                commit(types.SET_FUNDAPPRDATA, res.data.result)
+                sessionStorage.setItem('SET_FUNDAPPRDATA', JSON.stringify(res.data.result))
             }
         })
     }

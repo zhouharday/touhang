@@ -80,10 +80,12 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
+            // console.log(typeof(row.paidDate))
             this.fundsDetailsModal = true
-            this.fundsInfo = row
             row.paidAmount = parseFloat(row.paidAmount)
-            console.log(row)
+            row.paidDate = new Date(row.paidDate)
+            this.fundsInfo = row
+            // console.log(typeof(this.fundsInfo.paidDate))
         },
         handleDelete(index, row) {
             this.deleteReminders = true

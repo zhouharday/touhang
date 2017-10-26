@@ -362,7 +362,7 @@ export default {
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
             if (res.status == '200') {
-                // console.log(res)
+                // console.log(res.data.result.newFuy < 0)
                 this.tableData = res.data.result
             }
         })
