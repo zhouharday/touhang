@@ -36,7 +36,7 @@ module.exports = {
                 // target:'http://192.168.0.131:9092',// 文军凡IP
                 target:'http://192.168.0.103:9091',// 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
-                // target:'http://sdwlyxgs.imwork.net:16380',
+                target:'http://sdwlyxgs.imwork.net:16380',
                 changeOrigin:true,
                 secure: false,
                 pathRewrite: {

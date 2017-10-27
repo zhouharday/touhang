@@ -39,13 +39,6 @@ export function getSysDate() { //封装获取当前系统时间的方法
     return currentdate;
 }
 
-// 待测试
-export function clearValue(obj) {
-    Object.keys(obj).forEach((val, array) => {
-        obj[val] = ''
-    })
-}
-
 export function getNodes(arr) {
     // console.log(arr);
     var nodes = [];

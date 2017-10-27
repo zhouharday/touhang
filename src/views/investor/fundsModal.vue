@@ -103,9 +103,10 @@ export default {
                     trigger: 'blue'
                 }],
                 paidDate: [{
+                    type: 'date',
                     required: true,
-                    message: '请选择时间',
-                    trigger: 'change'
+                    message: '请选择出资日期',
+                    trigger: 'blur'
                 }]
             }
         }
@@ -128,7 +129,7 @@ export default {
     created() {
         GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
             if (res.status == '200') {
-                console.log(res)
+                // console.log(res)
                 this.allAgreement = res.data.result.list
             }
         }).catch(err => {

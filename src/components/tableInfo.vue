@@ -7,10 +7,8 @@
             <div class="list_title default">最新浮盈（元）</div>
             <div class="list_content default">
                 {{data.newFuy | toMoney}}
-                <span v-show="!data.newFuy || data.newFuy == 0">
-                    <Icon type="arrow-up-c" class="up" v-if="data.newFuy > 0"></Icon>
-                    <Icon type="arrow-down-c" class="down" v-else="data.newFuy < 0"></Icon>
-                </span>
+                <Icon type="arrow-up-c" class="up" v-show="data.newFuy > 0"></Icon>
+                <Icon type="arrow-down-c" class="down" v-show="data.newFuy < 0"></Icon>
             </div>
         </div>
         <div class="list">

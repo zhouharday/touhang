@@ -85,7 +85,7 @@ export default {
                 agreementName: [{
                     required: true,
                     message: '请选择协议名称',
-                    trigger: 'change'
+                    trigger: 'blue'
                 }],
                 shareMoney: [{
                     type: 'number',
@@ -97,7 +97,7 @@ export default {
                     type: 'date',
                     required: true,
                     message: '请选择时间',
-                    trigger: 'change'
+                    trigger: 'blue'
                 }]
             }
         }

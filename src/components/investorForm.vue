@@ -130,12 +130,12 @@ export default {
                 investorTypeId: [{
                     required: true,
                     message: '请选择投资者类型',
-                    trigger: 'change'
+                    trigger: 'blur'
                 }],
                 certificateTypeId: [{
                     required: true,
                     message: '请选择证件类型',
-                    trigger: 'change'
+                    trigger: 'blur'
                 }],
                 certificateNum: [{
                     type: 'string',
@@ -145,11 +145,11 @@ export default {
                 }],
                 organizationProperty: [{
                     validator: validateNumber,
-                    trigger: 'change'
+                    trigger: 'blur'
                 }],
                 personalAssets: [{
                     validator: validateNumber,
-                    trigger: 'change'
+                    trigger: 'blur'
                 }]
             }
         }

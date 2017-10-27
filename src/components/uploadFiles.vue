@@ -11,6 +11,7 @@
 <script>
 export default {
     props: {
+        //默认文件列表 编辑时展示
         documentInfo: {
             type: Array,
             default: []
@@ -37,10 +38,6 @@ export default {
             }
         },
         handleRemove(file, fileList) {
-            // console.log("remove file-"+JSON.stringify(file));
-            // console.log("remove file-"+fileList.indexOf(file));
-            // var _data = this.documentInfo;
-            // console.log("_data ***"+JSON.stringify(_data));
             this.documentInfo.forEach((item) => {
                 if (item.uid === file.uid) {
                     item.type = '2';
