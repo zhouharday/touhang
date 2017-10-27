@@ -361,7 +361,7 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             // importUrl:this.api+'/excel//financial',
-            importUrl:"http://192.168.0.114:9091"+'/excel/financial',
+            importUrl:"http://192.168.0.135:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
             operatingData: [
@@ -402,7 +402,7 @@ export default {
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
                 dataType: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             sortOptions: [
@@ -719,17 +719,9 @@ export default {
         handleBeforeUpload(file) {
             let activeName = this.activeName;
             console.log("activeName"+this.activeName);
-            let dataInfoid = '';
-            if(activeName == 'first'){
-                dataInfoid = this.balanceInfo.id;
-            }else if(activeName == 'second'){
-                dataInfoid = this.incomeInfo.id;
-            }else if(activeName == 'third'){
-                dataInfoid = this.cashFlowInfo.id;
-            }
-
+            let dataInfoid = this.balanceInfo.id+','+this.incomeInfo.id+','+this.cashFlowInfo.id;
             this.importData = {
-                dataInfoid: dataInfoid
+                dataInfoids: dataInfoid
             }
             console.log("导入数据"+JSON.stringify(this.importData));
         },
