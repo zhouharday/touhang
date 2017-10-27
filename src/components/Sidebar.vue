@@ -24,7 +24,7 @@
                 </el-menu>
             </div>
 
-            <el-menu v-if="showOrHide.isShowSidebar" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
+            <el-menu v-show="isShowSidebar" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;
@@ -198,6 +198,7 @@ export default {
   },
   data() {
     return {
+      isShowSidebar: true,
       theModel: [],
       setting: {
         view: {
@@ -352,20 +353,21 @@ export default {
       title32: "客户权限",
       title33: "领头助手",
       title34: "会员管理"
-    }
+    };
   },
   methods: {
     findResourceByUid() {
       this.$http
         .post(this.api + "/user/findResourceByUid", {
           //请求用户权限列表数据
-          um_id: this.user.merchants[0].um_id//用户、机构中间id
+          um_id: this.user.merchants[0].um_id //用户、机构中间id
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data);
-              this.theModel = res.data.result;
+              this.theModel = getNodes(res.data.result);
+              // this.theModel = res.data.result;
               this.$Message.success(res.data.message);
             } else {
               this.$Message.success(res.data.message);
@@ -373,7 +375,7 @@ export default {
           }
         })
         .catch(error => {
-          this.$Message.error('请求超时');
+          this.$Message.error("请求超时");
         });
     },
     handleOpen(key, keyPath) {

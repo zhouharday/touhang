@@ -12,11 +12,6 @@
                 <el-col :span="9">
                     <div class="grid-content bg-purple-dark">
                         <div>
-                            <!--<div class="Quarterly">-->
-                                <!--<span> 01 </span>月-->
-                                <!--<span> 01 </span>季度-->
-                                <!--<span> 2017 </span>年-->
-                            <!--</div>-->
                             <el-table class="invesTabData" :data="invesTabData" border style="width: 100%">
                                 <el-table-column prop="stageName" label="项目阶段" align="center" width="">
                                 </el-table-column>
@@ -67,7 +62,7 @@ export default {
           subtext: ""
         },
         tooltip: {
-          trigger: "item"
+          //   trigger: "item"
           //   formatter: "{a} <br/>{b} : {c}%"
         },
         toolbox: {
@@ -135,16 +130,16 @@ export default {
               // {projectNumber: '50', stageName: 'e'},
               // {projectNumber: '60', stageName: 'f'}
               // {projectNumber: '10', stageName: 'a'},
-              // {value: '20', name: 'b'},
-              // {value: '30', name: 'c'},
-              // {value: '40', name: 'd'},
-              // {value: '50', name: 'e'},
-              // {value: '60', name: 'f'}
+            //   { value: "20", name: "b" },
+            //   { value: "30", name: "c" },
+            //   { value: "40", name: "d" },
+            //   { value: "50", name: "e" },
+            //   { value: "60", name: "f" }
             ]
           }
         ]
       },
-      invesTabData: [],
+      invesTabData: []
     };
   },
   methods: {
@@ -157,17 +152,21 @@ export default {
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
-            //   console.log(res.data);
+              //   console.log(res.data);
               this.invesTabData = res.data.result;
-              res.data.result.forEach(ele => {
-                ele.projectNumber = 'value';
-                ele.stageName = 'name';
+              res.data.result.forEach((ele, index) => {
+                // ele.projectNumber = "value";
+                // ele.stageName = "name";
+                this.option.series.forEach((item, index) => {
+                  item.data.forEach((list, index) => {
+                      list.value = ele.projectNumber;
+                      list.name = ele.stageName;
+                  });
+                  item.data.push(ele[index]);
+                  //   item.data = res.data.result;
+                })
               });
-              this.option.series.forEach((item, index) => {
-                //   console.log(item.data);
-                item.data = res.data.result;
-              });
-              console.log('/////////////////////////////');
+              console.log("/////////////////////////////");
               console.log(res.data.result);
               this.$Message.success(res.data.message);
             } else {
