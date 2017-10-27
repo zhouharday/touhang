@@ -162,6 +162,8 @@ const actions = {
                                 type: 'success'
                             });
                         } else {
+                            commit('showOrHide', { isVshowYe: 1, isShowSidebar: 1 });
+                            window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
                             user.self.$router.push({ //审核已通过
                                 name: 'homeContent'
                             });
