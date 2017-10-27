@@ -82,10 +82,10 @@
                     <el-table-column prop="exitAmount" label="退出金额"></el-table-column>
                     <el-table-column prop="exitIncome" label="退出收益"></el-table-column>
                 </el-table>
-                <!-- <div class="pagination">
+                <div class="pagination"> 
                     <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="pages_2.total">
                     </el-pagination>
-                </div> -->
+                </div>
             </el-dialog>
         </div>
     </section>
@@ -205,12 +205,12 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
-              this.projectData = res.data.result;
-            //   this.pages_2.pageNum = res.data.result.pageNum; //当前页码
-            //   this.pages_2.total = res.data.result.total; //数据总数
-            //   this.pages_2.pageSize = res.data.result.pageSize; //每页条数
-            //   this.pages_2.navigatepageNums =
-            //     res.data.result.navigatepageNums.length;
+              this.projectData = res.data.result.list;
+              this.pages_2.pageNum = res.data.result.pageNum; //当前页码
+              this.pages_2.total = res.data.result.total; //数据总数
+              this.pages_2.pageSize = res.data.result.pageSize; //每页条数
+              this.pages_2.navigatepageNums =
+                res.data.result.navigatepageNums.length;
               this.$Message.success(res.data.message);
             } else {
               this.$Message.error(res.data.message);
