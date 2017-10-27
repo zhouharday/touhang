@@ -404,6 +404,7 @@ export default {
         },
         //控制当前阶段
         projectStage() {
+            console.log("当前阶段："+this.stageId);
             if(this.stageId == undefined || this.stageId == '') return;
             let isExit = this.isExit, isManage = this.isManage;
             let stageId = this.stageId;

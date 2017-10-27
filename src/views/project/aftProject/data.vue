@@ -241,7 +241,7 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :action="importUrl" :data="importData">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" :show-upload-list="false" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
@@ -360,7 +360,8 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
-            importUrl:this.api+'/excel//financial',
+            // importUrl:this.api+'/excel//financial',
+            importUrl:"http://192.168.0.105:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
             operatingData: [
@@ -553,7 +554,7 @@ export default {
         //打开添加数据明细表单
         goAddData(subjectId, dataType) {
             this.readControl = false;
-            this.finacial_title = '添加财务数据明细';
+            this.finacial_title = '财务数据明细';
             getDataFormBody(subjectId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
@@ -594,12 +595,6 @@ export default {
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
             })
-            if (dataType == '1') {
-                this.operatingModal2 = true;
-            } else {
-                this.financialModal2 = true;
-            }
-
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
@@ -723,6 +718,7 @@ export default {
         // 上传附件的方法
         handleBeforeUpload(file) {
             let activeName = this.activeName;
+            console.log("activeName"+this.activeName);
             let dataInfoid = '';
             if(activeName == 'first'){
                 dataInfoid = this.balanceInfo.id;
@@ -737,14 +733,41 @@ export default {
             }
             console.log("导入数据"+JSON.stringify(this.importData));
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
+        handleSuccess(){
+            getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
+                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos;
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
+
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                            this.fillOperateSheet(formBody[idx].operations);
+                            this.operateInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            // console.log("资产负债表："+JSON.stringify(formBody[idx].operations));
+                            this.balanceSheet = transform(formBody[idx].operations);
+                            this.balanceInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.cashFlowStatement = formBody[idx].operations;
+                            this.cashFlowInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.incomeStatement = formBody[idx].operations;
+                            this.incomeInfo = formBody[idx].dataInfo;
+                        }
+                    }
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+        }
     },
     components: {
         deleteReminders
