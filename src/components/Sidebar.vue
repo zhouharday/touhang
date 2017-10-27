@@ -365,7 +365,7 @@ export default {
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
-              console.log(res.data);
+              console.log(res.data.result);
               this.theModel = getNodes(res.data.result);
               // this.theModel = res.data.result;
               this.$Message.success(res.data.message);
