@@ -8,7 +8,6 @@ export const GET_MYFUNDDETAILS = 'GET_MYFUNDDETAILS' // 获取我的基金详情
 export const GET_FUNDSTAGE = 'GET_FUNDSTAGE' // 基金阶段
 // export const GET_FUNDSTATUS = 'GET_FUNDSTATUS' // 基金状态
 export const GET_ALLORGLIST = 'GET_ALLORGLIST' // 下拉获取所有的合作机构
-export const SET_FUNDAPPRDATA = 'SET_FUNDAPPRDATA' // 图表估值信息
 
 //投资者管理
 export const GET_INVESTORLIST = 'GET_INVESTORLIST' // 获取投资者列表

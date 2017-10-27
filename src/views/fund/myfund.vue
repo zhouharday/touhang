@@ -15,7 +15,7 @@
             <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
             </el-input>
         </table-header>
-        <el-table :data="myFund" border style="width: 100%">
+        <el-table :data="myFund"  v-loading="loading" border style="width: 100%">
             <el-table-column fixed label="基金名称" width="200" align="center">
                 <template scope="scope">
                     <div class="name" @click="handleRouter(scope.$index, scope.row)">
@@ -157,6 +157,7 @@ export default {
             fundListId: '', //当前选中的基金id
             fundSearch: '',
             myFund: [],
+            loading: true, // loading
             pageTotal: '',
             page: 1,
             pageSize: 10,
@@ -299,6 +300,7 @@ export default {
     mounted() {
         this.$store.dispatch('getFundLists').then(() => {
             this.myFund = this.myFundList.list
+            this.loading = false
         })
         this.$store.dispatch('getManageType').then(() => {
             this.managementType.details = this.managementType.details.concat(this.getManType)

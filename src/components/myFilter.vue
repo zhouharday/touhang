@@ -44,7 +44,6 @@ export default {
     },
     methods: {
         changeList(index, id) {
-//            console.log(id)
             if (id == 0){
                 id = null
             }

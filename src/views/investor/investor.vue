@@ -6,7 +6,7 @@
             </el-input>
         </tableHeader>
         <div class="tables">
-            <el-table :data="investorData" border style="width: 100%;">
+            <el-table :data="investorData" v-loading="loading" border style="width: 100%;">
                 <el-table-column label="投资者名称" align="center">
                     <template scope="scope">
                         <div class="name" @click="handleRouter(scope.$index, scope.row)">
@@ -103,6 +103,7 @@ export default {
                 registerDate: new Date()
             },
             investorData: [],
+            loading: true,
             addInvestor: {
                 investorName: '',
                 investorTypeId: '',
@@ -256,6 +257,7 @@ export default {
         this.$store.dispatch('getInvestor').then(() => {
             this.investorData = this.investorList.list
             this.pageTotal = this.investorList.total
+            this.loading = false
         })
         getInvestorType().then((res) => {
             if (res.status == '200') {
