@@ -404,7 +404,7 @@ export default {
         },
         //控制当前阶段
         projectStage() {
-            console.log("当前阶段："+this.stageId);
+            // console.log("当前阶段："+this.stageId);
             if(this.stageId == undefined || this.stageId == '') return;
             let isExit = this.isExit, isManage = this.isManage;
             let stageId = this.stageId;
@@ -434,22 +434,23 @@ export default {
          */
         getPreProDetail() {
             getPreDetail(this.projectId).then(resp => {
-                if(resp.data.result.enterpriseInfo == undefined || resp.data.result.enterpriseInfo == ''){
-                    // console.log('项目详情-企业信息为空: '+JSON.stringify(resp.data.result.enterpriseInfo));
+                if(resp.data.result.enterpriseInfo == null){
+                    // console.log('项目详情-企业信息为空 result: '+JSON.stringify(resp.data.result));
+                    console.log('项目详情-企业信息为空');
+                    this.companyForm = {
+                        flag : true
+                    };
                 } else {
                     this.companyForm = Object.assign({}, {
-                        baseInfo: '企业信息',
                         flag: true
                     }, resp.data.result.enterpriseInfo);
                 }
 
                 this.basicForm = Object.assign({}, {
-                    baseInfo: '基本信息',
                     flag: true
                 }, resp.data.result.projectInfo);
 
                 this.capitalForm = Object.assign({}, {
-                    baseInfo: '投资信息',
                     flag: true
                 }, resp.data.result.projectInvestmentInfo);
                 this.memberData = resp.data.result.listBoardMember;
@@ -555,7 +556,7 @@ export default {
         },
         //中止项目
         jumpPool() {
-            console.log("investProjectId" + this.investProjectId);
+            // console.log("investProjectId" + this.investProjectId);
             suspendInvestProject(this.investProjectId).then(resp => {
                 if(resp.data.status === "200"){
                     this.deleteReminders = !this.deleteReminders;
@@ -596,7 +597,7 @@ export default {
             };
             this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
             .then((res)=> {
-                console.log("上传文件结果:"+ JSON.stringify(res.data));
+                // console.log("上传文件结果:"+ JSON.stringify(res.data));
                 if (res.status == '200') {
                     if (res.data.status == '200') {
                         this.getStageUploadDocument();

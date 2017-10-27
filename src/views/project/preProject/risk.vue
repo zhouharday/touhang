@@ -377,6 +377,7 @@ export default {
                 appendix: '',
                 Records: ''
             };
+            this.documentInfo = [];
             this.AddForm = new_addForm;
             this.modalAdd = true;
         },

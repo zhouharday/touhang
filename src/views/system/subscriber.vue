@@ -205,6 +205,14 @@ export default {
             this.newOrChange = true
             this.biaoti = '添加人员'
             this.modelSubscriber = true
+            this.addSubscriber.role = ''
+            this.addSubscriber.name = ''
+            this.addSubscriber.department = ''
+            this.addSubscriber.sex = ''
+            this.addSubscriber.birthday = ''
+            this.addSubscriber.cellphone = ''
+            this.addSubscriber.email = ''
+            this.addSubscriber.account = ''
         },
         editRow(index, row) {
             this.biaoti = '修改信息'
@@ -218,7 +226,7 @@ export default {
             else
                 this.addSubscriber.sex = '男'
 
-            this.addSubscriber.sex = row.six
+//            this.addSubscriber.sex = row.six
             this.addSubscriber.birthday = row.age
             this.addSubscriber.cellphone = row.telephone
             this.addSubscriber.email = row.emil

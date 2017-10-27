@@ -727,12 +727,10 @@ export default {
                     { required: true, message: '请选择基金', trigger: 'blur' }
                 ],
                 investAmount: [
-                    { required: true, message: '请输入投资金额', trigger: 'blur' },
-                    { type: 'number', message: '投资金额必须为数字', trigger: 'blur' }
+                    { type: 'number', required: true, message: '请输入投资金额数值', trigger: 'blur' }
                 ],
                 stockRatio: [
-                    { required: true, message: '请输入股权占比', trigger: 'blur' },
-                    { type: 'number', message: '股权占比必须为数字', trigger: 'blur' }
+                    { type: 'number', required: true, message: '请输入股权占比数值', trigger: 'blur' }
                 ]
             },
             fundData1: [],
@@ -991,14 +989,13 @@ export default {
                     this.fundData1.push(this.fundForm1);
 
                     this.fundForm1 = {
-                        fund: '',
+                        fundId: '',
                         fundName: '',
                         investAmount: '',
                         stockRatio: '',
                         editFlag: false
                     };
                     this.fundAdd1 = false;
-                    //this.contractAdd1 = true;
                     this.changeInvestAmount();
                 }
             });
@@ -1269,7 +1266,7 @@ export default {
             if (!value) return;
             // this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             //获得合同中的投资主体(基金)列表
-            getContractDetail(value.id).then(resp => {
+            getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
                     this.fundData3 = resp.data.result.fundInfo;
                     this.$set(this.$data.sharingForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
