@@ -24,41 +24,33 @@
                 </el-menu>
             </div>
 
-            <el-menu v-show="isShowSidebar" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
+            <el-menu v-show="!isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
-                        <img style="margin-top: 18px;display: block;float: left;
-                                                                                                                margin-right: 7px;" src="/static/img/office.png" />
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
                         <span>{{title_01}}</span>
                     </template>
                     <el-menu-item index="task" @click="addTab(title1,'/home/task','task')">{{title1}}</el-menu-item>
-                    <!-- <el-menu-item index="schedule" @click="addTab(title2,'/home/schedule','schedule')">{{title2}}</el-menu-item> -->
                     <el-menu-item index="contacts" @click="addTab(title2,'/home/contacts','contacts')">{{title2}}</el-menu-item>
                     <el-menu-item index="messageShow" @click="addTab(title3,'/home/messageShow','messageShow')">{{title3}}</el-menu-item>
-                    <!-- <el-menu-item index="personal" @click="addTab(title4,'/home/personal','personal')">{{title4}}</el-menu-item> -->
                 </el-submenu>
                 <div class="div_el-menu-itemel-submenu__title" @click="addTab(title_02,'/home/assistant','assistant')">
-                    <!-- <i style="margin-right:7px;" class="el-icon-menu"></i> -->
                     <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                     <span index="assistant">{{title_02}}</span>
-                    <!-- <router-link to="/home/assistant" index="assistant" @click="addTab(title_02,'/home/assistant','assistant')">{{title_02}}</router-link> -->
                 </div>
                 <el-submenu index="3">
                     <template slot="title">
-                        <!-- <i class="el-icon-date"></i> -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project.png" />
                         <span>{{title_03}}</span>
                     </template>
                     <el-menu-item index="projectPool" @click="addTab(title5,'/home/projectPool','projectPool')">{{title5}}</el-menu-item>
                     <el-menu-item index="preProject" @click="addTab(title6,'/home/preProject','preProject')">{{title6}}</el-menu-item>
                     <el-menu-item index="aftProject" @click="addTab(title7,'/home/aftProject','aftProject')">{{title7}}</el-menu-item>
-                    <!-- <el-menu-item index="projectOut" @click="addTab(title8,'/home/projectOut','projectOut')">{{title8}}</el-menu-item> -->
                     <el-menu-item index="projectValuation" @click="addTab(title9,'/home/projectValuation','projectValuation')">{{title9}}</el-menu-item>
                     <el-menu-item index="valuationView" @click="addTab(title10,'/home/valuationView','valuationView')">{{title10}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="4">
                     <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>基金管理 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/project_manger.png" />
                         <span>{{title_04}}</span>
                     </template>
@@ -68,7 +60,6 @@
                 </el-submenu>
                 <el-submenu index="5">
                     <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>投资者管理 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/touzizhe.png" />
                         <span>{{title_05}}</span>
                     </template>
@@ -76,7 +67,6 @@
                 </el-submenu>
                 <el-submenu index="6">
                     <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>综合查询 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/survey.png" />
                         <span>{{title_06}}</span>
                     </template>
@@ -88,21 +78,17 @@
                 </el-submenu>
                 <el-submenu index="7">
                     <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>统计分析 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
                         <span>{{title_07}}</span>
                     </template>
                     <el-menu-item index="fundedForm" @click="addTab(title_07_1, '/home/fundedForm', 'fundedForm')">{{title_07_1}}</el-menu-item>
                     <el-menu-item index="projectInfor" @click="addTab(title_07_2, '/home/projectInfor', 'projectInfor')">{{title_07_2}}</el-menu-item>
-                    <!-- <el-menu-item index="">{{title21}}</el-menu-item> -->
                     <el-menu-item index="fundInFormation" @click="addTab(title_07_3, '/home/fundInFormation', 'fundInFormation')">{{title_07_3}}</el-menu-item>
                     <el-menu-item index="invesTment" @click="addTab(title_07_4, '/home/invesTment', 'invesTment')">{{title_07_4}}</el-menu-item>
-                    <!-- <el-menu-item index="">{{title24}}</el-menu-item> -->
                     <el-menu-item index="statisticalAnalysis" @click="addTab(title_07_5, '/home/statisticalAnalysis', 'statisticalAnalysis')">{{title_07_5}}</el-menu-item>
                 </el-submenu>
                 <el-submenu index="8">
                     <template slot="title">
-                        <!-- <i class="el-icon-star-on"></i>系统管理 -->
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/sys_mang.png" />
                         <span>{{title_08}}</span>
                     </template>
@@ -135,11 +121,23 @@
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
-            <el-row v-if="showOrHide.isShowSidebar && showOrHide.isVshowYe">
+
+            <!-- 菜单列表 Start -->
+            <el-menu v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
+              <el-submenu :index="index" v-for="(item,index) in menus" :key="item" >
+                    <template slot="title" style="height:50px;line-height:50px;" class="title">
+                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
+                        <span>{{item.menuName}}</span>
+                    </template>
+                    <el-menu-item v-for="(item,index) in item.children" :key="item" :index="item.url" @click="addTab(item.menuName,'/home/' + item.url, item.url)">{{item.menuName}}</el-menu-item>
+                </el-submenu>
+            </el-menu>
+            <!-- 菜单列表 End -->
+            <!-- <el-row v-if="showOrHide.isShowSidebar && showOrHide.isVshowYe">
                 <el-col :span="24" v-for="(menuItem,index) in theModel" :key="menuItem">
                      <my-tree :model="menuItem"></my-tree>
                 </el-col>
-            </el-row>
+            </el-row> -->
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
@@ -198,7 +196,8 @@ export default {
   },
   data() {
     return {
-      isShowSidebar: true,
+      menus: [],
+      isShow: false,
       theModel: [],
       setting: {
         view: {
@@ -366,7 +365,8 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
-              this.theModel = getNodes(res.data.result);
+              this.menus = res.data.result;
+              // this.theModel = getNodes(res.data.result);
               // this.theModel = res.data.result;
               this.$Message.success(res.data.message);
             } else {
