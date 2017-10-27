@@ -380,7 +380,7 @@ export default {
             modalTracking: false,
             modalAlarmView: false,
             modalAlarm: false,
-            formLabelWidth: '80px',
+            formLabelWidth: '120px',
             file: null,
             loadingStatus: false,
             // 风险上报 添加表单
@@ -401,11 +401,14 @@ export default {
                 riskTheme: [
                     { required: true, message: '请输入风险主题', trigger: 'change' }
                 ],
+                riskDescribe: [
+                    { required: true, message: '请输入风险描述', trigger: 'change' }
+                ],
                 receivedUserId: [
-                    { required: true, message: '请选择接收人', trigger: 'blur' }
+                    { required: true, message: '请选择接收人', trigger: 'change' }
                 ],
                 completeDate: [
-                    { type: "date", required: true, message: '请选择完成时间', trigger: 'blur' }
+                    { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
             // 风险跟踪 table
@@ -525,47 +528,9 @@ export default {
                 ]
             },
             alarmData: [],
-            documentInfo:[
-                {
-                    type: '1',
-                    name: '添加风险附件.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '添加风险附件.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '添加风险附件222.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '添加风险附件222.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ],
-            recordDocInfo:[
-                {
-                    type: '1',
-                    name: '风险处理附件.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '风险处理附件.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '风险处理附件AAA.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '风险处理附件AAA.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ],
-            alarmRecordDocInfo: [
-                {
-                    type: '1',
-                    name: '预警处理附件.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '预警处理附件1.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ]
+            documentInfo: [],
+            recordDocInfo: [],
+            alarmRecordDocInfo: []
         }
     },
     created() {
@@ -620,10 +585,9 @@ export default {
                 if (resp.data.status == '200') {
                     let result = resp.data.result;
                     this.Form1 = result.warning;
-                    // this.Form1.dataSourceType = this.Form1.dataSourceType;
-                    // this.Form1.projectManagerId = this.Form1.projectManagerId;
                     this.alarmDetail = result.warnDetails;
                     this.alarmRecords = result.warnRecords;
+                    this.alarmRecordDocInfo = [];
                     if(optType == '1'){
                         this.modalAlarm = true;
                         this.alarmForm = {
@@ -675,6 +639,7 @@ export default {
                     this.recordList = [];
                     this.tableData.push(resp.data.result);
                     this.recordList = resp.data.result.record;
+                    this.recordDocInfo = [];
                     this.recordList.push();
                     if(optType == '1'){
                         //跟踪风险
@@ -719,26 +684,30 @@ export default {
         },
         //添加风险
         confirmAdd() {
-            this.addForm.completeDate = changeDate(this.addForm.completeDate);
-            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
-            let risk = {
-                projectId: this.projectId,
-                riskTheme: this.addForm.riskTheme,
-                seedUserId: userId,
-                receivedUserId: this.addForm.receivedUserId,
-                completeDate: this.addForm.completeDate,
-                riskDescribe: this.addForm.riskDescribe,
-                documentInfo: this.documentInfo
-            };
-            addDanger(risk).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalAdd = false;
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs["addForm"].validate((valid) => {
+                if(valid) {
+                    this.addForm.completeDate = changeDate(this.addForm.completeDate);
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let risk = {
+                        projectId: this.projectId,
+                        riskTheme: this.addForm.riskTheme,
+                        seedUserId: userId,
+                        receivedUserId: this.addForm.receivedUserId,
+                        completeDate: this.addForm.completeDate,
+                        riskDescribe: this.addForm.riskDescribe,
+                        documentInfo: this.documentInfo
+                    };
+                    addDanger(risk).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalAdd = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('addRecord exists error: ', e)
+                    });
                 }
-            }).catch(e => {
-                console.log('addRecord exists error: ', e)
             });
         },
         //添加风险跟踪
@@ -787,22 +756,11 @@ export default {
                 proposer: '',
                 createDate: this.createDate,
                 receivedUserId: '',
-                completeDate: '',
-                appendix: '',
-                Records: ''
+                completeDate: ''
             };
+            this.documentInfo = [];
             this.addForm = new_addForm;
             this.modalAdd = true;
-        },
-        // 风险跟踪的 保存按钮方法
-        submitTracking(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.modalTracking = false;
-                } else {
-                    return false;
-                }
-            });
         },
         uploadSuccess(documentInfo, dataName){
             this.$set(this.$data, dataName, documentInfo);

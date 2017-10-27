@@ -9,7 +9,7 @@
                     <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
 
-                            <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">{{ scope.row.roleName}}</span>
+                            <span v-if="!scope.row.editFlag">{{ scope.row.roleName}}</span>
                             <span v-if="scope.row.editFlag">
                                 <el-input v-model="scope.row.roleName" placeholder=""></el-input>
                             </span>
@@ -197,7 +197,6 @@ export default {
         //获取所有权限
         permissionqueryList(1).then((res)=>{
             this.allData = res.data.result
-            console.log(res.data.result);
         })
     },
     components: {

@@ -361,7 +361,7 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             // importUrl:this.api+'/excel//financial',
-            importUrl:"http://192.168.0.105:9091"+'/excel/financial',
+            importUrl:"http://192.168.0.114:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
             operatingData: [
@@ -393,7 +393,7 @@ export default {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
-                sort: [
+                dataType: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
@@ -401,7 +401,7 @@ export default {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
-                sort: [
+                dataType: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },

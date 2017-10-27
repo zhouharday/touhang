@@ -53,7 +53,7 @@
                                             <div >{{nextItem.permissionName}}</div>
                                             <div style=" margin-left: 20px">
                                                 <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                                    <el-checkbox v-for="(text, index) of nextItem.buttons" :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                                    <el-checkbox v-for="(text, index) of nextItem.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                                 </el-checkbox-group>
                                             </div>
                                         </div>
@@ -61,7 +61,7 @@
                                 </div>
                                 <div v-if="!item.children ">
                                     <el-checkbox-group v-model="clickMenu" @change="a">
-                                        <el-checkbox v-for="(text, index) of item.buttons" :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                        <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
                                 </div>
                             </div>
@@ -134,12 +134,14 @@ export default {
         }
     },
     methods: {
+
         saveRole(){
-            console.log(this.clickMenu);
+
             var String = getUpdataFund(this.clickMenu,this.allData.data )
             roleBindPermission(this.userId,String).then((res)=>{
                 console.log(res)
             })
+
         },
         // 添加角色 的方法
         addRole() {
@@ -170,7 +172,6 @@ export default {
             this.userId = row.id
             permissionlistByRoleId(row.id).then((res)=>{
                 var userRole = res.data.result
-                console.log(res.data.result);
                 userRole.forEach(function (item) {
                     if (this.clickMenu){
                         this.clickMenu.push(item.path)
@@ -179,8 +180,10 @@ export default {
                 },this)
                 permissionqueryList(0).then((res)=>{
                     this.allData = res.data.result
+
                 })
             })
+
         }
     },
     created(){
@@ -192,7 +195,6 @@ export default {
         //获取所有权限
         permissionqueryList(0).then((res)=>{
             this.allData = res.data.result
-            console.log(res.data.result);
         })
     }
     ,
