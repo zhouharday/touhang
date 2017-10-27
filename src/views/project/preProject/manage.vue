@@ -179,10 +179,10 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="投资金额（元）" prop="investAmount">
-                                <el-input v-model="fundForm1.investAmount" auto-complete="off"></el-input>
+                                <el-input v-model.number="fundForm1.investAmount" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="股权占比（%）" prop="stockRatio">
-                                <el-input v-model="fundForm1.stockRatio" auto-complete="off"></el-input>
+                                <el-input v-model.number="fundForm1.stockRatio" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
@@ -1180,10 +1180,10 @@ export default {
                     stockRatio: '',
                     payDate: ''
                 };
-                this.payDocInfo = [];
                 this.fundData2 = [];
                 this.fundData2.push();
             }
+            this.payDocInfo = [];
             this.paidAdd1 = true;
         },
         // 添加 投资支付 确定按钮
