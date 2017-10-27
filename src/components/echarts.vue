@@ -6,15 +6,8 @@
 
 <script type="text/babel">
 import echarts from 'echarts' //这里是你必须的，千万不能忘记！
-import {
-    getFundApprList
-} from 'api/fund'
-import {
-    compare
-} from 'common/js/config'
-import {
-    mapGetters
-} from 'vuex'
+import {getFundApprList} from 'api/fund'
+import {compare} from 'common/js/config'
 export default {
     data() {
         return {
@@ -28,22 +21,11 @@ export default {
             // opinionData: ["4247301.6", "747566.5500", "788066.5500", "788066.5500", "393512.8500", "389458.8000", "389458.8000", "389458.8000", "389458.8000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000"]
         }
     },
-    created() {
-        this.$store.dispatch('getFundAppraisementList', this.$route.params.id)
-    },
     methods: {
         // 绘图
-        drawGraph(id) {
+        drawGraph() {
             // 绘图方法
             // this.chart.dispose()
-            this.chart = echarts.init(document.getElementById(id))
-            // 皮肤添加同一般使用方式
-
-            this.chart.showLoading()
-            this.setFundAppData.map((x) => {
-                this.opinion.push(x.appraisementDate.split(' ')[0])
-                this.opinionData.push(x.appraisementValue)
-            })
             this.chart.setOption({
                 title: {
                     text: '估值走势分析',
@@ -100,17 +82,27 @@ export default {
                 }]
             })
             this.chart.hideLoading()
+        },
+        initChart(id) {
+            this.chart = echarts.init(document.getElementById(id))
+            // 皮肤添加同一般使用方式
+            this.chart.showLoading()
         }
     },
     mounted() {
-        this.$nextTick(function() {
-            this.drawGraph('main')
+        this.initChart('main')
+        getFundApprList(this.$route.params.id).then((res) => {
+            if(res.status === 200) {
+                var setFundAppData = res.data.result || []
+                setFundAppData.map((x) => {
+                    this.opinion.push(x.appraisementDate.split(' ')[0])
+                    this.opinionData.push(x.appraisementValue)
+                })
+                this.$nextTick(function() {
+                    this.drawGraph()
+                })
+            }
         })
-    },
-    computed: {
-        ...mapGetters([
-            'setFundAppData'
-        ])
     }
 }
 </script>
