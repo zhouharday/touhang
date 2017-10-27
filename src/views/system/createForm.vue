@@ -78,6 +78,96 @@
             bottom: 0;
             right: 0;
         }
+@import "../../common/styles/variable.less";
+@import "../../../static/css/customForm_h5.css";
+.elRow {
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 20px;
+}
+.createForm {
+  // float: left;
+  text-align: center;
+  // width: 100%;
+  min-height: 100%;
+//   position: relative; // padding: 24px;
+  // background: #fff;
+  .form-group {
+    input,
+    textarea {
+      background: #eef0f4;
+      border: none;
+      margin: 10px 0;
+    }
+  }
+
+  .textMany {
+    overflow: hidden;
+    > label {
+      float: left;
+      margin-left: 90px;
+    }
+    > textarea {
+      float: left;
+    }
+  }
+  .button {
+    background-color: #fff;
+    padding: 15px;
+    text-align: right;
+  }
+  .formContent{
+      width: 100%;
+  }
+  .form-components {
+    padding: 24px;
+    float: left;
+    min-height: 348px;
+    width: 30%;
+    background: #fff;
+    margin-top: 20px;
+    // margin-left: 10px;
+    margin-right: 10px;
+    text-align: left;
+  }
+  ul {
+    margin-top: 30px;
+    text-align: left;
+  }
+  ul > li {
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .leftForm {
+    padding: 24px;
+    float: left;
+    min-height: 340px;
+    width: 38%;
+    background: #cccccc;
+    margin-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: left;
+    .form-group {
+      // margin-left: 0;
+      label {
+        margin-left: 0;
+      }
+    }
+  }
+  .rightForm {
+    padding: 24px;
+    float: left;
+    position: inherit;
+    width: 30%;
+    min-height: 340px;
+    background: #fff;
+    margin-top: 20px;
+    .form-group {
+      text-align: left;
+      label {
+        margin-left: 0;
+      }
     }
 </style>
 
