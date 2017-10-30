@@ -37,6 +37,7 @@
     "vue-quill-editor": "^1.1.1",
     "vue-router": "^2.2.0",
     "vue-simplemde": "^0.3.2",
+    "vueshowpdf": "^1.1.2",
     "vuex": "^2.3.1",
     "zrender": "^3.6.1"
   },

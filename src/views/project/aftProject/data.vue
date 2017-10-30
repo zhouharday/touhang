@@ -473,7 +473,14 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [],
+            financialData: [
+                {
+                    baseDate: 'asdasd',
+                    dataType: 'lklkjkjk',
+                    operatorName: 'asdsdfs',
+                    currentDeta: '2017-10-30'
+                }
+            ],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
