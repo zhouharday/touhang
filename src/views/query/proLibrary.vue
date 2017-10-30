@@ -72,13 +72,19 @@
         },
         methods:{
             JumpOther(row){
-                this.addTab({
-                    type: 'addTab',
-                    title: row.projectName +'详情',
-                    url: '/home/aftProjectMessage/:' + row.id,
-                    name: 'aftProjectMessage/' + row.id
-                })
-                this.$router.push('/home/aftProjectMessage/:' + row.id)
+                console.log(row)
+//                this.addTab({
+//                    type: 'addTab',
+//                    title: row.projectName +'详情',
+//                    url: '/home/aftProjectMessage/' + row.id + '/' +row.projectId,
+//                    name: 'aftProjectMessage/' + row.id + '/' + row.projectId
+//                })
+//                this.$router.push('/home/aftProjectMessage/' + row.id)
+//
+                this.addTab('投后项目-' + row.projectName,
+                    '/home/aftProjectMessage/' +  row.id + '/' +row.projectId,
+                    'aftProjectMessage/' + row.id + '/' + row.projectId);
+                this.$router.push({ name: 'aftProjectMessage', params: { projectId: row.id, investProjectId: row.projectId } });
             },
 
             handleIconClick(){

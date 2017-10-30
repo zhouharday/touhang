@@ -73,13 +73,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="appendix">
-                                <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="addForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
+                                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -105,6 +99,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -115,6 +113,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -135,6 +136,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -145,6 +150,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -160,13 +168,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -246,7 +248,9 @@
                             <!-- <span>{{item.disposeDate | formatDate}}</span> -->
                             <span>{{item.disposeResult == 1 ? '处理中' : '已完成'}}</span>
                             <span>{{item.disposeDescribe}}</span>
-                            <span v-for="doc in item.documentInfo">{{doc.fileNmae}}  </span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -300,7 +304,9 @@
                             <!-- <span>{{item.disposeDate | formatDate}}</span> -->
                             <span>{{item.disposeResult == 1 ? '处理中' : '已完成'}}</span>
                             <span>{{item.disposeDescribe}}</span>
-                            <span v-for="doc in item.documentInfo">{{doc.fileNmae}}  </span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -316,13 +322,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="alarmForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'alarmRecordDocInfo')" @removeSucess="removeSucess($event, 'alarmRecordDocInfo')" :documentInfo="alarmRecordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -337,6 +337,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
+import uploadFiles from 'components/uploadFiles'
 import { changeDate } from 'common/js/config'
 
 import {
@@ -365,6 +366,10 @@ export default {
             }
         }
     },
+    components: {
+        tabelHeader,
+        uploadFiles
+    },
     data() {
         return {
             addBtn: true,
@@ -375,7 +380,7 @@ export default {
             modalTracking: false,
             modalAlarmView: false,
             modalAlarm: false,
-            formLabelWidth: '80px',
+            formLabelWidth: '120px',
             file: null,
             loadingStatus: false,
             // 风险上报 添加表单
@@ -396,11 +401,14 @@ export default {
                 riskTheme: [
                     { required: true, message: '请输入风险主题', trigger: 'change' }
                 ],
+                riskDescribe: [
+                    { required: true, message: '请输入风险描述', trigger: 'change' }
+                ],
                 receivedUserId: [
-                    { required: true, message: '请选择接收人', trigger: 'blur' }
+                    { required: true, message: '请选择接收人', trigger: 'change' }
                 ],
                 completeDate: [
-                    { type: "date", required: true, message: '请选择完成时间', trigger: 'blur' }
+                    { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
             // 风险跟踪 table
@@ -487,23 +495,7 @@ export default {
                     value: '已完成'
                 }
             ],
-            riskData: [
-                {
-                    riskTheme: '京东',
-                    handlePerson: '刘经理',
-                    assignor: '王二毛',
-                    startingDate: '2017-02-03',
-                    endingDate: '2019-02-02',
-                    state: '立项会'
-                }, {
-                    riskTheme: '一号店',
-                    handlePerson: '王经理',
-                    assignor: '张科',
-                    startingDate: '2017-02-03',
-                    endingDate: '2019-02-02',
-                    state: '管理'
-                }
-            ],
+            riskData: [],
             // 风险预警 立即处理table
             alarmDetail: [
                 {
@@ -520,16 +512,7 @@ export default {
                 date: ''
             },
             // 风险预警 处理记录
-            alarmRecords: [
-                {
-                    record: '2017-06-28 18:42:55   张三  【处理中】已经提交相应处理方案',
-                    file: 'BBB.doc'
-                },
-                {
-                    record: '2017-06-28 18:42:55   张三  【已解决】 已经解决该预警',
-                    file: 'BBB.PDF'
-                }
-            ],
+            alarmRecords: [],
             // 风险预警 立即处理表单
             alarmForm: {
                 disposeResult: '',
@@ -544,14 +527,10 @@ export default {
                     { required: true, message: '请输入汇报内容', trigger: 'change' }
                 ]
             },
-            alarmData: [
-                {
-                    dataSourceType:1,
-                    projectManagerId: 1,
-                    warningStatus: '2',
-                    baseDay: '2017-10-15'
-                }
-            ],
+            alarmData: [],
+            documentInfo: [],
+            recordDocInfo: [],
+            alarmRecordDocInfo: []
         }
     },
     created() {
@@ -606,10 +585,9 @@ export default {
                 if (resp.data.status == '200') {
                     let result = resp.data.result;
                     this.Form1 = result.warning;
-                    // this.Form1.dataSourceType = this.Form1.dataSourceType;
-                    // this.Form1.projectManagerId = this.Form1.projectManagerId;
                     this.alarmDetail = result.warnDetails;
                     this.alarmRecords = result.warnRecords;
+                    this.alarmRecordDocInfo = [];
                     if(optType == '1'){
                         this.modalAlarm = true;
                         this.alarmForm = {
@@ -634,7 +612,7 @@ export default {
                 riskWarnId: this.Form1.id,
                 disposeResult : this.alarmForm.disposeResult,
                 disposeDescribe : this.alarmForm.disposeDescribe,
-                documentInfo : documentInfo
+                documentInfo : this.alarmRecordDocInfo
             }
             insertwarnRecords(params).then(resp => {
                 if (resp.data.status == '200') {
@@ -645,7 +623,7 @@ export default {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('confirmTracking() exists error: ', e);
+                console.log('预警处理 的保存 error: ', e);
             })
 
             this.modalAlarm = false;
@@ -661,6 +639,7 @@ export default {
                     this.recordList = [];
                     this.tableData.push(resp.data.result);
                     this.recordList = resp.data.result.record;
+                    this.recordDocInfo = [];
                     this.recordList.push();
                     if(optType == '1'){
                         //跟踪风险
@@ -705,47 +684,58 @@ export default {
         },
         //添加风险
         confirmAdd() {
-            this.addForm.completeDate = changeDate(this.addForm.completeDate);
-            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
-            let risk = {
-                projectId: this.projectId,
-                riskTheme: this.addForm.riskTheme,
-                seedUserId: userId,
-                receivedUserId: this.addForm.receivedUserId,
-                completeDate: this.addForm.completeDate,
-                riskDescribe: this.addForm.riskDescribe
-            };
-            addDanger(risk).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalAdd = false;
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs["addForm"].validate((valid) => {
+                if(valid) {
+                    this.addForm.completeDate = changeDate(this.addForm.completeDate);
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let risk = {
+                        projectId: this.projectId,
+                        riskTheme: this.addForm.riskTheme,
+                        seedUserId: userId,
+                        receivedUserId: this.addForm.receivedUserId,
+                        completeDate: this.addForm.completeDate,
+                        riskDescribe: this.addForm.riskDescribe,
+                        documentInfo: this.documentInfo
+                    };
+                    addDanger(risk).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalAdd = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('addRecord exists error: ', e)
+                    });
                 }
-            }).catch(e => {
-                console.log('addRecord exists error: ', e)
             });
         },
         //添加风险跟踪
         confirmTracking() {
-            let riskRegisterId = this.riskId,
-                disposeResult = this.trackingForm.disposeResult,
-                recordDetails = this.trackingForm.recordDetails;
-            let params = {
-                riskRegisterId,
-                disposeResult,
-                recordDetails
-            };
-            insertRiskFollower(params).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalTracking = false;
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs['trackingForm'].validate((valid) => {
+                if (valid) {
+                    let riskRegisterId = this.riskId,
+                        disposeResult = this.trackingForm.disposeResult,
+                        recordDetails = this.trackingForm.recordDetails,
+                        documentInfo = this.recordDocInfo;
+                    let params = {
+                        riskRegisterId,
+                        disposeResult,
+                        recordDetails,
+                        documentInfo
+                    };
+                    insertRiskFollower(params).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalTracking = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('confirmTracking() exists error: ', e);
+                    })
                 }
-            }).catch(e => {
-                console.log('confirmTracking() exists error: ', e);
-            })
+            });
         },
         // 切换 上报/预警 的显示隐藏
         changeRisk1() {
@@ -766,41 +756,21 @@ export default {
                 proposer: '',
                 createDate: this.createDate,
                 receivedUserId: '',
-                completeDate: '',
-                appendix: '',
-                Records: ''
+                completeDate: ''
             };
+            this.documentInfo = [];
             this.addForm = new_addForm;
             this.modalAdd = true;
         },
-        // 风险跟踪的 保存按钮方法
-        submitTracking(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.modalTracking = false;
-                } else {
-                    return false;
-                }
-            });
+        uploadSuccess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
         },
-        // 上传附件的方法
-        handleUpload(file) {
-            this.file = file;
-            return false;
-        },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+        }
     }
 }
 </script>
-
-
 
 <style lang="less" scoped>
 .table {

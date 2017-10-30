@@ -302,22 +302,18 @@ export default {
             }
 
         },
-        moveDown(item, index) {
-            console.log(item)
-            if (index != item.data.length - 1) {
+        moveDown(item,index){
+            if (index !=   item.data.length - 1 ){
                 var dataArr = item.data[index + 1]
                 item.data[index + 1] = item.data[index]
                 item.data[index] = dataArr
             }
-            console.log(item)
         },
         refreshList(item) {
 
             this.nowId = item.id
-            //            alert(this.nowId)
             GetrightList(item.id).then((res) => {
                 this.fileData = RightListData(res.data.result)
-                //                console.log(this.fileData)
             })
         },
         changeSomeThing(item) {
@@ -325,20 +321,22 @@ export default {
             item.showOne = !item.showOne
             if (!item.showOne) {
                 this.changeList = []
-                SetConfig(item.data, this.deleteList).then((res) => {
-                    if (res.data.status == '9024') {
-                        alert(res.data.message)
-                    } else {
-                        getConfigLeftList().then((res) => {
-                            this.leftList = reloadData(res.data.result)
-                        })
-                    }
-                })
+                if(item.data.length == 0 && this.deleteList.length == 0){
 
+                }else {
+                    SetConfig(item.data, this.deleteList).then((res) => {
+                        if (res.data.status == '9024') {
+                            alert(res.data.message)
+                        } else {
+                            getConfigLeftList().then((res) => {
+                                this.leftList = reloadData(res.data.result)
+                            })
+                        }
+                    })
+                }
             } else {
                 this.deleteList = []
                 this.changeList = item.data
-                //                console.log (item)
             }
         },
         // 添加 项目配置 的方法
@@ -351,9 +349,9 @@ export default {
             this.projectDialog = !this.projectDialog;
         },
         addProject() {
-            //            console.log(this.changeList)
-            var stageType;
-            if (!this.changeList[0]) {
+            console.log(this.changeList)
+            var stageType ;
+            if (!this.changeList[0]){
                 stageType = '3';
             } else
                 stageType = this.changeList[0].stageType
@@ -483,14 +481,6 @@ export default {
                     })
                 }
             })
-            //            this.deleteList.push(rows[index])
-            //            rows.splice(index, 1);
-
-            //            console.log(rows[index].id)
-
-
-
-            //            console.log(this.deleteList)
         }
     },
     created() {

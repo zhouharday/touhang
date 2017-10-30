@@ -182,8 +182,7 @@ export default {
                 pageSize: this.pageSize
             };
             getPres(params).then(resp => {
-                // alert(123);
-                console.log(resp.data);
+                // console.log(resp.data);
                 let data = resp.data;
                 let result = data.result;
                 let list = result.list;

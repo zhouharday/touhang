@@ -38,13 +38,15 @@
                                 <input type="file" class="fileInput" @change="changeFile($event, scope.row.fileId, scope.row.stageId)" ref="avatarInput">
                             </div>
                             <a v-if="scope.row.id != '' && scope.row.id != undefined" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
-                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   class="btn_border" @click="preview(scope.row)">预览</el-button>
+                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   class="btn_border" @click="preview(scope.row.documentUrl)">预览</el-button>
                             <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   @click="handleDelete(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </template>
         </div>
+        <!-- 47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf?filename=Aaaaaaaaaaaaaaaaaaaaa.pdf -->
+        <vueshowpdf :v-show="isshowpdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></vueshowpdf>
         <!-- 文件预览功能 -->
         <div class="viewFiles" v-show="isHide">
             <div class="closeView" @click="closeView">
@@ -58,12 +60,17 @@
 </template>
 
 <script>
+import vueshowpdf from 'vueshowpdf'
 import {
     getProjectDoc, delDocument
 } from 'api/projectPre';
 
 export default {
     props: {
+        uploaded: {
+            type: Boolean,
+            default: false
+        },
         tabs: {
             type: Object,
             default: {}
@@ -77,8 +84,14 @@ export default {
             default: ''
         }
     },
+    components: {
+        vueshowpdf
+    },
     data() {
         return {
+            pdfurls:'//cdn.mozilla.net/pdfjs/tracemonkey.pdf',
+            isshowpdf:true,
+
             projectDocList: [],
             isShow: true,
             isHide: false,
@@ -109,6 +122,12 @@ export default {
             if(to.tabList[4]){
                 this.init();
             }
+        },
+        'uploaded':function(to,from){
+            if(this.tabs.tabList[4] && to){
+                this.uploaded = false;
+                this.init();
+            }
         }
     },
     methods: {
@@ -137,10 +156,18 @@ export default {
                 this.$Message.success('上传成功')
             }, 1500);
         },
-        preview(row) {
-            this.isShow = false,
-                this.isHide = true,
-                console.log(row.fileName)
+        preview(url) {
+            console.log(url);
+            //this.pdfurls = 'http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf?filename=Aaaaaaaaaaaaaaaaaaaaa.pdf';
+            this.isshowpdf = true;
+        },
+        pdferr(err){
+            console.log("pdferr!! ", err);
+            this.$Message.error('读取预览文件出错！');
+        },
+        closepdf(){
+            console.log("closepdf");
+            this.isshowpdf = false;
         },
         closeView() {
             this.isShow = true,
@@ -152,7 +179,9 @@ export default {
                 console.log('删除文档: ' + JSON.stringify(res.data));
                 if (res.data.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！');
-                    this.getProjectDocument();
+                    
+                    this.uploaded = true;
+                    this.$emit("listenUploaded",true);
                 }
             });
         },
@@ -177,7 +206,10 @@ export default {
             .then((res)=> {
                 console.log("上传文件结果:"+ JSON.stringify(res.data));
                 if (res.data.status == '200') {
-                    this.getProjectDocument();
+                    // this.getProjectDocument();
+
+                    this.uploaded = true;
+                    this.$emit("listenUploaded",true);
                 } else {
                     this.$Message.error(res.data.message);
                 }
@@ -195,6 +227,10 @@ export default {
 
 
 <style lang="less" scoped>
+.showPdf{
+    width: 1000px;
+    height: 1000px;
+}
 .fileTable {
     width: 100%;
     height: 100%;

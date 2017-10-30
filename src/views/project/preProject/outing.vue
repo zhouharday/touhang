@@ -22,13 +22,7 @@
                 </el-col>
                 <el-col>
                     <el-form-item label="相关附件">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="outingForm.relativedAppendix" action="//jsonplaceholder.typicode.com/posts/" :disabled="controlEdit">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="outingForm.documentInfo"></upload-files>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -63,11 +57,6 @@
                 <el-button type="danger" v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
-
-        <Upload action="//jsonplaceholder.typicode.com/posts/">
-            <Button type="ghost" icon="ios-cloud-upload-outline">上传文件</Button>
-        </Upload>
-        
     </section>
 </template>
 
@@ -75,6 +64,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getDicChildren } from 'common/js/dictionary'
+import uploadFiles from 'components/uploadFiles'
+
 import {
     getExitDetail, saveExit
 } from 'api/projectPre';
@@ -91,6 +82,9 @@ export default {
             type: String,
             default: ''
         }
+    },
+    components: {
+        uploadFiles
     },
     data() {
         return {
@@ -119,6 +113,29 @@ export default {
                     detailsStatus: 1,
                     editFlag: false
                 }
+            ],
+            documentInfo:[
+                {
+                    type: '1',
+                    name: '退出附件1.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '退出附件1.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '退出附件2.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '退出附件2.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '退出附件3.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '退出附件3.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
             ]
         }
     },
@@ -142,6 +159,14 @@ export default {
             getExitDetail(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.outingForm = resp.data.result.projectExit;
+
+                    let documentInfo = resp.data.result.projectExit.documentInfo;
+                    documentInfo.forEach(item => {
+                        item.name = item.name == null ? item.fileName : item.name;
+                        item.url = item.url == null ? item.filePath : item.url;
+                    });
+                    this.$set(this.$data['outingForm'],'documentInfo',documentInfo);
+                    
                     this.outingData2 = resp.data.result.projectExitList
                 }
             }).catch(e => {
@@ -158,6 +183,8 @@ export default {
             this.outingForm.investBeforeId = this.$route.params.investProjectId;
             this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
                 ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
+
+            this.outingForm.documentInfo = this.documentInfo;
             let data = {
                 projectExit: this.outingForm,
                 projectExitList: this.outingData2
@@ -168,6 +195,8 @@ export default {
                 if (resp.data.status == '200') {
                     this.getExitDetail();
                     this.controlEdit = true;
+                }else{
+                    this.$Message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('保存退出单 error: ', e);
@@ -179,6 +208,12 @@ export default {
                 sum += (parseFloat(this.outingData2[i].exitAmount | 0));
             }
             this.outingForm.exitAmount = sum;
+        },
+        uploadSuccess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+        },
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="eventBox">
-        <el-form :model="eventForm" rules="rules1" :ref="eventForm" label-width="80px" class="eventForm">
+        <el-form :model="eventForm" :rules="rules1" ref="eventForm" label-width="120px" class="eventForm">
             <el-form-item label="汇报事项" prop="issuesType">
                 <el-select v-model="eventForm.issuesType" placeholder="请选择汇报事项" style="width: 100%;">
                     <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key">
@@ -15,12 +15,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item label="相关文档">
-                <Upload multiple type="drag" v-model="eventForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                    <div style="padding: 20px 0">
-                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                        <p>点击或将文件拖拽到这里上传</p>
-                    </div>
-                </Upload>
+                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
             </el-form-item>
             <el-button type="danger" class="submit-btn" @click="submitEvent">提交</el-button>
         </el-form>
@@ -32,7 +27,9 @@
                         <p>
                             <span>{{item.issuesType | key2value(eventOptions, item.issuesType)}}</span>
                             <span style="margin-right:50px">{{item.issuesDate | formatDate}}</span>
-                            <span>{{item.doc}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                             <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
                         </p>
                         <p>{{item.issuesContent}}</p>
@@ -49,6 +46,7 @@
 
 <script>
 import '../../../common/js/filter'
+import uploadFiles from 'components/uploadFiles'
 import { changeDate } from '../../../common/js/config'
 import {
     getEventList, addEvent, delEvent
@@ -63,6 +61,9 @@ export default {
             type: String,
             default: ''
         }
+    },
+    components: {
+        uploadFiles
     },
     data() {
         return {
@@ -118,6 +119,29 @@ export default {
                     key: '9',
                     value: '其他'
                 }
+            ],
+            documentInfo:[
+                // {
+                //     type: '1',
+                //     name: '重大事项1.jpg',
+                //     url: 'http://www.xxx.com/img1.jpg',
+                //     fileName: '重大事项1.jpg',
+                //     filePath: 'http://www.xxx.com/img1.jpg'
+                // },
+                // {
+                //     type: '1',
+                //     name: '2重大事项122.jpg',
+                //     url: 'http://www.xxx.com/img2.jpg',
+                //     fileName: '2重大事项122.jpg',
+                //     filePath: 'http://www.xxx.com/img1.jpg'
+                // },
+                // {
+                //     type: '1',
+                //     name: '3重大事项133.jpg',
+                //     url: 'http://www.xxx.com/img2.jpg',
+                //     fileName: '3重大事项133.jpg',
+                //     filePath: 'http://www.xxx.com/img1.jpg'
+                // }
             ]
         }
     },
@@ -138,6 +162,7 @@ export default {
         getEventList() {
             //查询重大事项列表
             getEventList(this.projectId).then(resp => {
+                console.log("查询重大事项列表："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let data = resp.data.result;
                     this.recordList=this.handleDatas(data);
@@ -159,21 +184,30 @@ export default {
         },
         //添加重大事件
         submitEvent() {
-            let params = {
-                projectId: this.projectId,
-                issuesType: this.eventForm.issuesType,
-                issuesDate: changeDate(this.eventForm.issuesDate),
-                issuesContent: this.eventForm.issuesContent,
-                documentInfo: []
-            };
-            addEvent(params).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getEventList();
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs["eventForm"].validate((valid) => {
+                if (valid) {
+                    let params = {
+                        projectId: this.projectId,
+                        issuesType: this.eventForm.issuesType,
+                        issuesDate: changeDate(this.eventForm.issuesDate),
+                        issuesContent: this.eventForm.issuesContent,
+                        documentInfo: this.documentInfo
+                    };
+                    console.log("重大事件："+JSON.stringify(params));
+                    addEvent(params).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getEventList();
+                            this.$set(this.$data.eventForm, 'issuesType', '');
+                            this.$set(this.$data.eventForm, 'issuesDate', '');
+                            this.$set(this.$data.eventForm, 'issuesContent', '');
+                            this.documentInfo = [];
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('添加重大事件 error: ', e)
+                    });
                 }
-            }).catch(e => {
-                console.log('添加重大事件 error: ', e)
             });
         },
         //删除重大事件
@@ -187,6 +221,12 @@ export default {
             }).catch(e => {
                 console.log('删除重大事件 error: ', e);
             })
+        },
+        uploadSuccess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+        },
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
         }
 
     }

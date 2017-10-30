@@ -306,7 +306,7 @@ export function sectorList() {
     }
     return service({url: '/sysDept/queryList', method: 'post', data})
 }
-// 获取基金估值图表数据 /appFund/getFundApprList
+// 获取基金估值图表数据 /fund/getFundApprList
 export function getFundApprList(listId) {
     const data = {
         fundId: listId

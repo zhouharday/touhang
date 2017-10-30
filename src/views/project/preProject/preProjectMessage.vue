@@ -12,9 +12,9 @@
         </div>
         <div class="step">
             <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
-                         'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
-                         'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
-                         'step_third':index==(stepLists.length-1)}">
+                                     'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+                                     'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+                                     'step_third':index==(stepLists.length-1)}">
                 <span>{{item.stageName}}</span>
             </div>
         </div>
@@ -63,7 +63,7 @@
                     <approve-table :tabs="tabs"></approve-table>
                 </el-tab-pane>
                 <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table :tabs="tabs" :proId="projectId"></file-table>
+                    <file-table :tabs="tabs" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
                 </el-tab-pane>
                 <el-tab-pane label="风险登记" name="risk" class="tab_list">
                     <risk-table :tabs="tabs" :proId="projectId" :proUsers="proUsers"></risk-table>
@@ -251,6 +251,7 @@ export default {
             companyForm: {}, // 企业信息
             memberData: [], // 董事会成员
             structureData: [], // 股权结构
+            uploaded: false,
             tabs: {
                 tabList: [true, false, false, false, false, false, false, false]
             },
@@ -335,10 +336,14 @@ export default {
             if (to.name == 'preProjectMessage') {
                 this.init();      //再次调起我要执行的函数
             }
-
         }
     },
     methods: {
+        listenUploaded(uploaded) {
+            if (uploaded) {
+                this.getStageUploadDocument(); //获取当前阶段及任务小助
+            }
+        },
         init() {
             this.initInfo();
             this.getPreProDetail();
@@ -375,6 +380,7 @@ export default {
         },
         //控制当前阶段
         projectStage() {
+            // console.log("当前阶段："+this.stageId);
             if (this.stageId == undefined || this.stageId == '') return;
             let isExit = this.isExit, isManage = this.isManage;
             let stageId = this.stageId;
@@ -391,6 +397,9 @@ export default {
                     isManage = true;
                 }
             });
+            if (isExit || isManage) {
+                this.suspend = true;
+            }
             this.isExit = isExit;
             this.isManage = isManage;
             this.nextStageDisabled = nextStageDisabled;
@@ -401,22 +410,23 @@ export default {
          */
         getPreProDetail() {
             getPreDetail(this.projectId).then(resp => {
-                if (resp.data.result.enterpriseInfo == undefined || resp.data.result.enterpriseInfo == '') {
-                    // console.log('项目详情-企业信息为空: '+JSON.stringify(resp.data.result.enterpriseInfo));
+                if (resp.data.result.enterpriseInfo == null) {
+                    // console.log('项目详情-企业信息为空 result: '+JSON.stringify(resp.data.result));
+                    console.log('项目详情-企业信息为空');
+                    this.companyForm = {
+                        flag: true
+                    };
                 } else {
                     this.companyForm = Object.assign({}, {
-                        baseInfo: '企业信息',
                         flag: true
                     }, resp.data.result.enterpriseInfo);
                 }
 
                 this.basicForm = Object.assign({}, {
-                    baseInfo: '基本信息',
                     flag: true
                 }, resp.data.result.projectInfo);
 
                 this.capitalForm = Object.assign({}, {
-                    baseInfo: '投资信息',
                     flag: true
                 }, resp.data.result.projectInvestmentInfo);
                 this.memberData = resp.data.result.listBoardMember;
@@ -522,7 +532,7 @@ export default {
         },
         //中止项目
         jumpPool() {
-            console.log("investProjectId" + this.investProjectId);
+            // console.log("investProjectId" + this.investProjectId);
             suspendInvestProject(this.investProjectId).then(resp => {
                 if (resp.data.status === "200") {
                     this.deleteReminders = !this.deleteReminders;
@@ -563,13 +573,14 @@ export default {
             };
             this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
                 .then((res) => {
-                    console.log("上传文件结果:" + JSON.stringify(res.data));
+                    // console.log("上传文件结果:"+ JSON.stringify(res.data));
                     if (res.status == '200') {
                         if (res.data.status == '200') {
                             this.getStageUploadDocument();
+                            this.uploaded = true;
                         } else {
                             this.$Message.error(res.data.message);
-                            //loadingInstance.close();
+                            //loadingInstance.close();  
                         }
                     }
                 })

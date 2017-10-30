@@ -28,20 +28,17 @@
             </el-col>
             <el-col :span="12">
                 <el-form-item label="认缴金额（元）" prop="subscribeAmount">
-                    <el-select v-model="fundsInfo.subscribeAmount" disabled style="width:100%">
-                        <el-option v-for="(item, index) of allAgreement" :key="item.id" :label="item.subscribeAmount" :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-            </el-col>
-            <el-col :span="12">
-                <el-form-item label="实缴金额（元）" width="100" prop="paidAmount">
-                    <el-input v-model="fundsInfo.paidAmount" auto-complete="off"></el-input>
+                    <el-input v-model="fundsInfo.subscribeAmount" auto-complete="off" disabled></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
                 <el-form-item label="剩余金额（元）" width="100" prop="residueAmount">
-                    <el-input v-model="fundsInfo.residueAmount" auto-complete="off"></el-input>
+                    <el-input v-model="fundsInfo.residueAmount" auto-complete="off" disabled></el-input>
+                </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="实缴金额（元）" width="100" prop="paidAmount">
+                    <el-input v-model.number="fundsInfo.paidAmount" auto-complete="off"></el-input>
                 </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -63,7 +60,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="24">
-                <el-form-item label="投资协议附件">
+                <el-form-item label="出资协议附件">
                     <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
                         <div style="padding: 20px 0">
                             <Icon type="ios-cloud-upload" size="52"></Icon>
@@ -93,46 +90,40 @@ export default {
             allAgreement: [],
             agreementList: '',
             size: 1000,
-            paidAmount: '',
             rules1: {
                 agreementName: [{
                     required: true,
                     message: '请选择协议名称',
                     trigger: 'change'
                 }],
-                paidAmount:[{
+                paidAmount: [{
+                    type: 'number',
                     required: true,
-                    message: '请输入实缴金额',
-                    trigger: 'change'
+                    message: '请输入数字',
+                    trigger: 'blue'
                 }],
                 paidDate: [{
                     type: 'date',
                     required: true,
-                    message: '请选择时间',
-                    trigger: 'change'
+                    message: '请选择出资日期',
+                    trigger: 'blur'
                 }]
             }
         }
     },
     methods: {
         getItemData(val) {
+            var current = ''
             this.agreementList = val
             this.fundsInfo.investorName = val
             this.fundsInfo.fundName = val
-            this.fundsInfo.subscribeAmount = val
-            var subscribeAmount = this.allAgreement.map((x) => {
-                if (x.id == val) {
-                    return x.subscribeAmount
+            this.allAgreement.forEach(elem => {
+                if (elem.id === val) {
+                    current = elem
                 }
-            }) // 认缴金额
-            var residueAmount = this.allAgreement.map((x) => {
-                if (x.id == val) {
-                    return x.residueAmount
-                }
-            }) // 剩余金额
-            this.fundsInfo.residueAmount = residueAmount[0]
-            this.paidAmount = subscribeAmount[0] - residueAmount[0]
-            console.log(this.paidAmount)
+            })
+            this.fundsInfo.subscribeAmount = current.subscribeAmount
+            this.fundsInfo.residueAmount = current.residueAmount
         },
     },
     created() {

@@ -6,7 +6,7 @@
             </el-input>
         </tableHeader>
         <div class="tables">
-            <el-table :data="investorData" border style="width: 100%;">
+            <el-table :data="investorData" v-loading="loading" border style="width: 100%;">
                 <el-table-column label="投资者名称" align="center">
                     <template scope="scope">
                         <div class="name" @click="handleRouter(scope.$index, scope.row)">
@@ -103,6 +103,7 @@ export default {
                 registerDate: new Date()
             },
             investorData: [],
+            loading: true,
             addInvestor: {
                 investorName: '',
                 investorTypeId: '',
@@ -143,7 +144,6 @@ export default {
                 }
             })
             sessionStorage.setItem('INVESTORNAME', rowList.investorName)
-            // console.log(this.$store.state.investor.investorName)
         },
         showModel() {
             let new_addInvestor = {
@@ -180,15 +180,15 @@ export default {
             this.signInfo.investorName = row.investorName
         },
         confirmIncome(formName) {
-            // console.log(this.$refs.addInvestor.$refs.addInvestor)
+            // console.log(this.showModel())/
             this.$refs.addInvestor.$refs.addInvestor.validate((valid) => {
                 if (valid) {
                     addInvestor(this.addInvestor).then((res) => {
                         if (res.data.status == '200') {
                             this.modelInvestor = false
                             this.getInvList()
+                            this.addInvestor = {}
                         }
-                        this.addInvestor = new_addInvestor
                     })
                 } else {
                     return false
@@ -257,6 +257,7 @@ export default {
         this.$store.dispatch('getInvestor').then(() => {
             this.investorData = this.investorList.list
             this.pageTotal = this.investorList.total
+            this.loading = false
         })
         getInvestorType().then((res) => {
             if (res.status == '200') {

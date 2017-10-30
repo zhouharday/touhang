@@ -9,10 +9,10 @@ import {
     getAllOrgList
 } from 'api/fund'
 const state = {
-    getManType: sessionStorage.getItem('MANTYPE') || [], // 管理类型
+    getManType: JSON.parse(sessionStorage.getItem('MANTYPE')) || [], // 管理类型
     fundInvestment: [],
     managementCompany: [],
-    OrgType: sessionStorage.getItem('ORGTYPE') || [], // 组织类型
+    OrgType: JSON.parse(sessionStorage.getItem('ORGTYPE')) || [], // 组织类型
     myFundList: {},
     // myFundDetails: {},
     fundStage: [
@@ -20,7 +20,7 @@ const state = {
             dicName: '全部'
         }
     ], // 基金阶段
-    getOrgList: {}
+    getOrgList: {},
 }
 
 const getters = {

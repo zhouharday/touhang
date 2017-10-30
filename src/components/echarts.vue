@@ -6,12 +6,8 @@
 
 <script type="text/babel">
 import echarts from 'echarts' //这里是你必须的，千万不能忘记！
-import {
-    getFundApprList
-} from 'api/fund'
-import {
-    compare
-} from 'common/js/config'
+import {getFundApprList} from 'api/fund'
+import {compare} from 'common/js/config'
 export default {
     data() {
         return {
@@ -19,30 +15,17 @@ export default {
             chart: null,
             // 初始化图表配置
             echartsData: [],
-            opinion: ["2017-09-06", "2017-08-31", "2017-07-31", "2017-06-30", "2017-05-31", "2017-04-30", "2017-03-31", "2017-02-28", "2017-01-31", "2016-12-31", "2016-11-30", "2016-10-31", "2016-09-30", "2016-08-31", "2016-07-31", "2016-06-30"],
-            opinionData: ["4247301.6", "747566.5500", "788066.5500", "788066.5500", "393512.8500", "389458.8000", "389458.8000", "389458.8000", "389458.8000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000"]
+            opinion: [],
+            opinionData: []
+            // opinion: ["2017-09-06", "2017-08-31", "2017-07-31", "2017-06-30", "2017-05-31", "2017-04-30", "2017-03-31", "2017-02-28", "2017-01-31", "2016-12-31", "2016-11-30", "2016-10-31", "2016-09-30", "2016-08-31", "2016-07-31", "2016-06-30"],
+            // opinionData: ["4247301.6", "747566.5500", "788066.5500", "788066.5500", "393512.8500", "389458.8000", "389458.8000", "389458.8000", "389458.8000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000", "354053.7000"]
         }
     },
     methods: {
         // 绘图
-        drawGraph(id) {
+        drawGraph() {
             // 绘图方法
             // this.chart.dispose()
-            this.chart = echarts.init(document.getElementById(id))
-            // 皮肤添加同一般使用方式
-
-            this.chart.showLoading()
-            // 返回到data中 arr.sort(compare('appraisementDate'))
-            // var that = this
-            getFundApprList('4e92a1b8f24149eeb187cc6096dc00').then((res) => {
-                if (res.status == '200') {
-                    this.echartsData = res.data.result
-                    this.echartsData.map((x) => {
-                        this.opinion.push(x.appraisementDate)
-                        this.opinionData.push(x.appraisementValue)
-                    })
-                }
-            })
             this.chart.setOption({
                 title: {
                     text: '估值走势分析',
@@ -99,11 +82,26 @@ export default {
                 }]
             })
             this.chart.hideLoading()
+        },
+        initChart(id) {
+            this.chart = echarts.init(document.getElementById(id))
+            // 皮肤添加同一般使用方式
+            this.chart.showLoading()
         }
     },
     mounted() {
-        this.$nextTick(function() {
-            this.drawGraph('main')
+        this.initChart('main')
+        getFundApprList(this.$route.params.id).then((res) => {
+            if(res.status === 200) {
+                var setFundAppData = res.data.result || []
+                setFundAppData.map((x) => {
+                    this.opinion.push(x.appraisementDate.split(' ')[0])
+                    this.opinionData.push(x.appraisementValue)
+                })
+                this.$nextTick(function() {
+                    this.drawGraph()
+                })
+            }
         })
     }
 }

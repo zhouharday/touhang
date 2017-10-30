@@ -2,12 +2,16 @@ import Vue from 'vue'
 import moment from 'moment'
 
 Vue.filter('formatDate', (value, formatString) => { // 年月日
-    formatString = formatString || 'YYYY-MM-DD'
-    return moment(value).format(formatString)
+    if(value) {
+        formatString = formatString || 'YYYY-MM-DD'
+        return moment(value).format(formatString)
+    } else {
+        return
+    }
 })
 
 Vue.filter('formatDateDetails', (value, formatString) => { // 年月日
-    formatString = formatString || 'YYYY-MM-DD, h:mm:ss'
+    formatString = formatString || 'YYYY-MM-DD, HH:mm:ss'
     return moment(value).format(formatString)
 })
 

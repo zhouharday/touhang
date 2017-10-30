@@ -180,10 +180,22 @@ export function SetConfig(arr,deleteArr) {
         "stage":arr,
         "deleteStage":deleteArr
     }
-    if (arr[0].stageType == 3){
-        return service({url: '/dictionaryController/addInvestorDocumentCatalog', method: 'post', data})
-    }else
-        return service({url: '/dictionaryController/addStageAllocation', method: 'post', data})
+    if (arr[0]){
+        if (arr[0].stageType == 3){
+            return service({url: '/dictionaryController/addInvestorDocumentCatalog', method: 'post', data})
+        }else
+            return service({url: '/dictionaryController/addStageAllocation', method: 'post', data})
+
+    }else if (deleteArr[0]){
+
+        if (deleteArr[0].stageType == 3){
+            console.log(arr)
+            console.log(deleteArr)
+            return service({url: '/dictionaryController/addInvestorDocumentCatalog', method: 'post', data})
+        }else{
+            return service({url: '/dictionaryController/addStageAllocation', method: 'post', data})
+        }
+    }
 }
 
 
@@ -429,18 +441,18 @@ export function getUpdata(arr) {
     var updata = [];
     arr.forEach(function (item) {
         // console.log(item.children)
-        if (item.children){
-            item.children.forEach(function (target) {
-                if (target.menuContentClick){
-                target.menuContentClick.forEach(function (data) {
-                    var ss = data.split("|");
+        // if (item.children){
+            // item.children.forEach(function (target) {
+                // if (target.menuContentClick){
+                // target.menuContentClick.forEach(function (data) {
+                    var ss = item.split("|");
                     updata = updata.concat(ss)
-                })
-                }
-            })
-        }
+                // })
+                // }
+            // })
+        // }
     })
-
+console.log(updata)
     //祛空
     for(var i = 0;i<updata.length;i++){
         if(updata[i]==''||updata[i]==null||typeof(updata[i])==undefined){
@@ -537,8 +549,8 @@ export function permissionlistByRoleId(id) {
 // 查询项目、基金所有权限
 export function permissionqueryList(type) {
     const data = {
-        // "merchantId":JSON.parse(sessionStorage.getItem('merchants'))[0].id,
-        "merchantId":"68cb50ae78af4821bcccacfa94c8bf0e",
+        "merchantId":JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+        //"merchantId":"68cb50ae78af4821bcccacfa94c8bf0e",
         "permissionType":type
     }
     return service({url:'/permission/queryList', method: 'post', data})
@@ -564,14 +576,14 @@ export function getUpdataFund(arr,RoleArr) {
     updata.shift()
     var Arr = []
     var x;
-    console.log(RoleArr)
+    // console.log(RoleArr)
     RoleArr.forEach(function (item) {
 
         for ( x in updata){
-            console.log(item.falseId +'***'+updata[x])
+            // console.log(item.falseId +'***'+updata[x])
             if (updata[x] == item.falseId){
                 Arr.push(item.id)
-                console.log(1)
+                // console.log(1)
             }
         }
     })

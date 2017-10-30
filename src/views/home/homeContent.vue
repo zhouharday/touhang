@@ -852,7 +852,7 @@ export default {
                 return (list.item = []);
               });
 
-              console.log(this.monthDate)
+              // console.log(this.monthDate)
               res.data.result.forEach(item => {
                 this.monthDate.map(list => {
                   if (item.startTime.split(" ")[0] == list.time) {

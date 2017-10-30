@@ -10,12 +10,20 @@
         <Button type="ghost" @click="handleTabsAdd" slot="extra">添加</Button>
     </Tabs>
     <!-- 添加出资模态框 -->
-    <Modal v-model="InvDetails" title="添加出资明细" @on-ok="addInvDetails" @on-cancel="cancelInvDetails" width="800px">
-        <funds-modal :fundsInfo="InvInfo"></funds-modal>
+    <Modal v-model="InvDetails" title="添加出资明细" width="800px">
+        <funds-modal :fundsInfo="InvInfo" ref="fundsModal"></funds-modal>
+        <div slot="footer">
+            <Button type="text" @click="cancelInvDetails">取消</Button>
+            <Button type="primary" @click="addInvDetails">确认</Button>
+        </div>
     </Modal>
     <!-- 添加退出模态框 -->
-    <Modal v-model="bonusDetails" title="添加退出明细" @on-ok="addInvBonus" @on-cancel="cancelInvBonus" width="800px">
-        <quit-apply :quitApplyInfo="bonusInfo"></quit-apply>
+    <Modal v-model="bonusDetails" title="添加退出明细" width="800px">
+        <quit-apply :quitApplyInfo="bonusInfo" ref="bonusModal"></quit-apply>
+        <div slot="footer">
+            <Button type="text" @click="cancelInvBonus">取消</Button>
+            <Button type="primary" @click="addInvBonus">确认</Button>
+        </div>
     </Modal>
 </div>
 </template>
@@ -31,7 +39,9 @@ import {
     getAgreementAmountList,
     getEarningsAmountList
 } from 'api/investor'
-import {changeDate} from 'common/js/config'
+import {
+    changeDate
+} from 'common/js/config'
 export default {
     props: {
         investorData: {
@@ -64,58 +74,116 @@ export default {
                 handlingDate: '', // 经办日期v
                 shareMoney: '', //退出金额v
                 shareDate: '', //退出日期v
-                managerId: JSON.parse(sessionStorage.getItem('userInfor')).id,//投资经理ID（当前登录用户ID）v
+                managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, //投资经理ID（当前登录用户ID）v
                 managerName: JSON.parse(sessionStorage.getItem('userInfor')).name
             },
             quitCapitalData: [] //退出详情列表
         }
     },
     methods: {
-        handleTabsAdd() {
-            if(this.tabsName == 'contribution') {
-                this.InvDetails = true
-            } else {
-                this.bonusDetails = true
+        changeTabs(name) {
+            if (name === 'secede') {
+                this._getAmountList()
             }
+        },
+        handleTabsAdd() {
+            if (this.tabsName == 'contribution') {
+                let invInfo = {
+                    investorName: '',
+                    subscribeAmount: '', //认缴金额
+                    fundName: '', //基金
+                    paidDate: '', //出资日期
+                    agreementName: '', //协议名称
+                    residueAmount: '', //剩余金额
+                    contributiveRatio: '', //出资占比
+                    paidAmount: '', //实缴金额
+                    managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, // 经办人id
+                    managerName: JSON.parse(sessionStorage.getItem('userInfor')).name, // 经办人
+                    handlingDate: new Date()
+                }
+                this.InvDetails = true
+                this.InvInfo = invInfo
+            } else {
+                let invbonusInfo = {
+                    agreementName: '', // 协议名称v
+                    investorName: '', // 投资者v
+                    fundName: '', // 基金名称v
+                    handlingDate: '', // 经办日期v
+                    shareMoney: '', //退出金额v
+                    shareDate: '', //退出日期v
+                    managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, //投资经理ID（当前登录用户ID）v
+                    managerName: JSON.parse(sessionStorage.getItem('userInfor')).name
+                }
+                this.bonusDetails = true
+                this.bonusInfo = invbonusInfo
+            }
+        },
+        cancelInvDetails() {
+            var fundsInfo = this.$refs.fundsModal.$refs.fundsInfo
+            fundsInfo.resetFields()
+            this.InvDetails = false
         },
         addInvDetails() {
             this.InvInfo.agreementId = this.InvInfo.agreementName
-            addAgreementAmount(this.InvInfo).then((res) => {
-                if (res.status == '200') {
-                    this.$Message.success(res.data.message || '添加出资成功！')
-                    this.getContributionDetails()
-                    this.InvDetails = false
-                }
-            })
-        },
-        addInvBonus() {
-            this.bonusInfo.agreementId = this.bonusInfo.agreementName
-            addEarningsAmount(this.bonusInfo).then((res) => {
-                if (res.status == '200') {
-                    this.$Message.success(res.data.message || '添加退出成功！')
-                    var fundId = this.$route.params.userId
-                    var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
-                    getEarningsAmountList(fundId, merchantsId).then((res) => {
-                        if(res.status == '200') {
-                            this.quitCapitalData = res.data.result.list
+            var fundsInfo = this.$refs.fundsModal.$refs.fundsInfo
+            fundsInfo.validate((valid) => {
+                if (valid) {
+                    addAgreementAmount(this.InvInfo).then((res) => {
+                        if (res.status == '200') {
+                            this.$Message.success(res.data.message || '添加出资成功！')
+                            this._getContributionDetails()
+                            this.InvDetails = false
                         }
                     })
                 } else {
-                    this.$Message.success(res.data.message || '同一协议不能多次退出！')
+                    return false
                 }
             })
         },
-        getContributionDetails() { // 获取出资明细
+        cancelInvBonus() {
+            var quitApplyInfo = this.$refs.bonusModal.$refs.quitApplyInfo
+            quitApplyInfo.resetFields()
+            this.bonusDetails = false
+        },
+        addInvBonus() {
+            var quitApplyInfo = this.$refs.bonusModal.$refs.quitApplyInfo
+            this.bonusInfo.agreementId = this.bonusInfo.agreementName
+            quitApplyInfo.validate((valid) => {
+                if (valid) {
+                    addEarningsAmount(this.bonusInfo).then((res) => {
+                        if (res.status == '200') {
+                            this.$Message.success(res.data.message || '添加退出成功！')
+                            this._getAmountList()
+                            this.bonusDetails = false
+                        } else {
+                            this.$Message.success(res.data.message || '同一协议不能多次退出！')
+                        }
+                    })
+                } else {
+                    return false
+                }
+            })
+        },
+        _getContributionDetails() { // 获取出资明细
             var invId = this.$route.params.userId
             var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getAgreementAmountList(invId, merId).then((res) => {
                 if (res.status == '200') {
                     this.investorData = res.data.result.list
-                    // console.log(this.investorData)
                 }
             }).catch(err => {
                 let response = err.data
                 this.$Message.error(response.message || '获取资金明细失败！')
+            })
+        },
+        _getAmountList() { // 获取退出明细
+            var fundId = this.$route.params.userId
+            var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
+            getEarningsAmountList(fundId, merchantsId).then((res) => {
+                if (res.status == '200') {
+                    console.log(res.data.result.list)
+                    this.quitCapitalData = res.data.result.list
+                }
             })
         }
     },
@@ -132,5 +200,15 @@ export default {
 .investmentDetails {
     width: 100%;
     height: 100%;
+    .cancal {
+        color: #F05E5E;
+        background-color: transparent;
+        border-color: #F05E5E;
+    }
+    .confirm {
+        color: #fff;
+        background-color: #F05E5E;
+        border-color: #F05E5E;
+    }
 }
 </style>

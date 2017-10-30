@@ -17,6 +17,10 @@ export function getDate(value) { //时间戳转换标准时间
     return tt;
 }
 
+export function trimStr(str) { //去空格
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+}
+
 export function getSysDate() { //封装获取当前系统时间的方法
     var date = new Date();
     var seperator1 = "-";
@@ -35,17 +39,10 @@ export function getSysDate() { //封装获取当前系统时间的方法
     return currentdate;
 }
 
-// 待测试
-export function clearValue(obj) {
-    Object.keys(obj).forEach((val, array) => {
-        obj[val] = ''
-    })
-}
-
 export function getNodes(arr) {
     // console.log(arr);
     var nodes = [];
-    arr.map(function(node) {
+    arr.map(function (node) {
         if (node.parentId === '0') {
             node.label = node.deptName
             nodes.push(node)
@@ -60,7 +57,7 @@ export function getNodes(arr) {
 
 function pushNode(node, pNodes) {
     let charlds = [];
-    pNodes.map(function(pNode) {
+    pNodes.map(function (pNode) {
         if (pNode.id == node.parentId) {
 
             if (!pNode.children) {
@@ -82,7 +79,7 @@ function pushNode(node, pNodes) {
 }
 // 根据键值排序  arr.sort(compare('appraisementDate'))
 export function compare(prop) {
-    return function(obj1, obj2) {
+    return function (obj1, obj2) {
         var val1 = obj1[prop]
         var val2 = obj2[prop]
         if (val1 < val2) {

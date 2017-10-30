@@ -65,14 +65,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="附件" prop="appendix">
-                                <!-- action 上传的地址，必填 -->
-                                <Upload multiple type="drag" :before-upload="handleUpload" v-model="AddForm.appendix" action="//jsonplaceholder.typicode.com/posts/">
-                                    <div style="padding: 20px 0">
-                                        <Icon type="ios-cloud-upload" size="52"></Icon>
-                                        <p>点击或将文件拖拽到这里上传</p>
-                                    </div>
-                                </Upload>
+                            <el-form-item label="附件" prop="documentInfo">
+                                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -98,6 +92,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -108,6 +106,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -128,6 +129,10 @@
                     <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
                     </el-table-column>
                     <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                        <template scope="scope">
+                            <p v-for="item in scope.row.documentInfo">
+                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
+                        </template>
                     </el-table-column>
                 </el-table>
                 <div class="operationBox">
@@ -138,6 +143,9 @@
                         <p v-for="item in recordList" :key="item.id">
                             <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
                             <span>{{item.recordDetails}}</span>
+                            <span v-for="doc in item.documentInfo">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -153,13 +161,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <!-- action 上传的地址，必填 -->
-                        <Upload multiple type="drag" :before-upload="handleUpload" v-model="trackingForm.documentInfo" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="uploadSuccess($event, recordDocInfo)" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -175,7 +177,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import { changeDate } from 'common/js/config'
-
+import uploadFiles from 'components/uploadFiles'
 import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams } from 'api/projectPre'
 
 export default {
@@ -187,16 +189,17 @@ export default {
         proId: {
             type: String,
             default: ''
-        },
-        proUsers: {
-            type: Array,
-            default: []
         }
     },
     data() {
         return {
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
             createDate: changeDate(new Date()),
+
+            actionUrl:this.api + '/files/upload',
+            showUploadAlert: false,
+            uploadMessage: '',
+
             riskId: '',
             projectId: '',
             modalAdd: false,
@@ -242,12 +245,6 @@ export default {
                     { type: "date", required: true, message: '请选择完成时间', trigger: 'change' }
                 ]
             },
-            recipientOptions: [
-                { //接收人列表
-                    value: '选项1',
-                    label: '研发李一'
-                }
-            ],
             tableData: [],
             recordList: [],
             trackingForm: {
@@ -283,14 +280,54 @@ export default {
                     state: ''
                 }
             ],
+            documentInfo:[
+                {
+                    type: '1',
+                    name: '111.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '111.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '222.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '222.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '333.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '333.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ],
+            recordDocInfo:[
+                {
+                    type: '1',
+                    name: '111.jpg',
+                    url: 'http://www.xxx.com/img1.jpg',
+                    fileName: '111.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                },
+                {
+                    type: '1',
+                    name: '222.jpg',
+                    url: 'http://www.xxx.com/img2.jpg',
+                    fileName: '222.jpg',
+                    filePath: 'http://www.xxx.com/img1.jpg'
+                }
+            ]
         }
+    },
+    components: {
+        tabelHeader,
+        uploadFiles
     },
     created() {
     },
     watch:{
-        proUsers(val, oldVal) {
-            this.initInfo();
-        },
         'tabs':function (to,from){
             if(to.tabList[5]){
                 this.init();
@@ -305,7 +342,8 @@ export default {
         },
         //查询项目团队成员
         getProTeam(){
-            getTeams(this.investProjectId).then(resp => {
+            console.log(this.$route.params.investProjectId);
+            getTeams(this.$route.params.investProjectId).then(resp => {
                 // console.log("项目团队成员:"+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.proTeam = resp.data.result;
@@ -320,9 +358,6 @@ export default {
         },
         initInfo() {
             this.projectId = this.proId;
-            let proUsers = this.proUsers;
-            this.handleToOptions(proUsers);
-            this.recipientOptions = proUsers;
         },
         handleToOptions(datas = []) {
             datas.forEach(item => {
@@ -342,6 +377,7 @@ export default {
                 appendix: '',
                 Records: ''
             };
+            this.documentInfo = [];
             this.AddForm = new_addForm;
             this.modalAdd = true;
         },
@@ -350,8 +386,8 @@ export default {
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
+                // console.log("hola datevid"+JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
-                    
                     this.tableData = [];
                     this.recordList = [];
                     this.tableData.push(resp.data.result);
@@ -393,27 +429,33 @@ export default {
         },
         //添加风险
         confirmAdd() {
-            this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
-            let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
-            let risk = {
-                projectId: this.projectId,
-                riskTheme: this.AddForm.riskTheme,
-                seedUserId: userId,
-                receivedUserId: this.AddForm.receivedUserId,
-                completeDate: this.AddForm.completeDate,
-                riskDescribe: this.AddForm.riskDescribe
-            };
-            addDanger(risk).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getDatas();
-                    this.modalAdd = false;
-                } else {
-                    this.$message.error(resp.data.message);
+            this.$refs["AddForm"].validate((valid) => {
+                if(valid) {
+                    this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let risk = {
+                        projectId: this.projectId,
+                        riskTheme: this.AddForm.riskTheme,
+                        seedUserId: userId,
+                        receivedUserId: this.AddForm.receivedUserId,
+                        completeDate: this.AddForm.completeDate,
+                        riskDescribe: this.AddForm.riskDescribe,
+                        documentInfo: this.documentInfo
+                    };
+                    console.log("添加风险::"+JSON.stringify(risk));
+                    addDanger(risk).then(resp => {
+                        if (resp.data.status == '200') {
+                            this.getDatas();
+                            this.modalAdd = false;
+                        } else {
+                            this.$message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('addRecord exists error: ', e)
+                    });
                 }
-            }).catch(e => {
-                console.log('addRecord exists error: ', e)
             });
-
+            
         },
         //添加风险跟踪
         confirmTracking(formName) {
@@ -421,12 +463,15 @@ export default {
                 if (valid) {
                     let riskRegisterId = this.riskId,
                         disposeResult = this.trackingForm.disposeResult,
-                        recordDetails = this.trackingForm.recordDetails;
+                        recordDetails = this.trackingForm.recordDetails,
+                        documentInfo = this.recordDocInfo;
                     let params = {
                         riskRegisterId,
                         disposeResult,
-                        recordDetails
+                        recordDetails,
+                        documentInfo
                     };
+                    console.log("添加风险跟踪 params::"+JSON.stringify(params));
                     insertRiskFollower(params).then(resp => {
                         if (resp.data.status == '200') {
                             this.getDatas();
@@ -441,41 +486,16 @@ export default {
                     return false;
                 }
             });
-            // let riskRegisterId = this.riskId,
-            //     disposeResult = this.trackingForm.disposeResult,
-            //     recordDetails = this.trackingForm.recordDetails;
-            // let params = {
-            //     riskRegisterId,
-            //     disposeResult,
-            //     recordDetails
-            // };
-            // insertRiskFollower(params).then(resp => {
-            //     if (resp.data.status == '200') {
-            //         this.getDatas();
-            //         this.modalTracking = false;
-            //     } else {
-            //         this.$message.error(resp.data.message);
-            //     }
-            // }).catch(e => {
-            //     console.log('confirmTracking() exists error: ', e);
-            // })
         },
-        // 上传附件的方法
-        handleUpload(file) {
-            this.file = file;
-            return false;
+        uploadSuccess(documentInfo, dataName){
+            // console.log("fileList--"+JSON.stringify(documentInfo));
+            this.$set(this.$data, dataName, documentInfo);
+            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
-    },
-    components: {
-        tabelHeader
+        removeSucess(documentInfo, dataName){
+            this.$set(this.$data, dataName, documentInfo);
+            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
+        }
     }
 }
 </script>

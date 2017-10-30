@@ -5,7 +5,7 @@
             <el-row class="customerMang">
                 <el-col :span="6">
                     <div class="grid-content bg-purple-dark">
-                        <el-input placeholder="" icon="search" v-model="input2" :on-icon-click="handleIconClick">
+                        <el-input placeholder="请按投资者名称进行查询" icon="search" v-model="input2" @keyup.enter.native="handleIconClick" :on-icon-click="handleIconClick">
                         </el-input>
                     </div>
                 </el-col>
@@ -23,36 +23,23 @@
                 </el-col>
             </el-row>
             <el-table :data="fundedTabData" border style="width: 100%">
-                <el-table-column prop="investor" label="投资者" align="center">
+                <el-table-column prop="investorName" label="投资者" align="center">
                 </el-table-column>
-                <el-table-column prop="type" label="类型" align="center">
+                <el-table-column prop="investorTypeId" label="类型" align="center">
                 </el-table-column>
                 <el-table-column prop="fundName" label="基金名称" align="center">
                 </el-table-column>
-                <el-table-column prop="signingDate" label="签订日期" align="center">
+                <el-table-column prop="signDate" label="签订日期" align="center">
                 </el-table-column>
-                <el-table-column prop="subscriptionMoney" label="认缴金额" align="center">
+                <el-table-column prop="subscribeAmount" label="认缴金额" align="center">
                 </el-table-column>
-                <el-table-column prop="paidMoney" label="实缴金额" align="center">
+                <el-table-column prop="paidAmount" label="实缴金额" align="center">
                 </el-table-column>
-                <el-table-column prop="capitalContribution" label="出资占比" align="center">
+                <el-table-column prop="contributiveRatio" label="出资占比" align="center">
                 </el-table-column>
             </el-table>
-            <!--<el-row class="articlesNumber">-->
-            <!--<el-col :span="24">-->
-            <!--<div class="grid-content bg-purple-dark">-->
-            <!--显示-->
-            <!--<span> {{from}} </span>到-->
-            <!--<span> {{to}} </span>条, 共-->
-            <!--<span> {{altogether}} </span>条记录, 每页显示-->
-            <!--<span> {{every}} </span>条-->
-            <!--</div>-->
-            <!--</el-col>-->
-            <!--</el-row>-->
             <div class="pagination">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                               :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100"
-                               layout="total, sizes, prev, pager, next, jumper" :total="400">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
                 </el-pagination>
             </div>
         </div>
@@ -60,72 +47,124 @@
 </template>
 
 <script>
-    export default {
-        created() {
-            // this.$http.post('api/url', {
-
-            // })
-            //     .then(res => {
-
-            //     })
-            //     .catch(error => {
-
-            //     });
-            if (this.fundedTabData.length == '0') {
-                this.from = '0';
-                this.to = '0';
-                this.altogether = '0';
-            } else if (this.fundedTabData.length > '0') {
-                this.from = 1;
-                this.to = this.fundedTabData.length;
-                this.altogether = this.fundedTabData.length;
-            }
-            // console.log(this.fundedTabData.length);
-        },
-        data() {
-            return {
-                from: 0,
-                to: 0,
-                altogether: 0,
-                every: 10,
-                fundedTabData: [
-                    {
-                        investor: '张三',
-                        type: '',
-                        fundName: '',
-                        signingDate: '',
-                        subscriptionMoney: '',
-                        paidMoney: '',
-                        capitalContribution: '',
-                    }
-                ]
-            }
-        }
+export default {
+  computed: {
+    user() {
+      this.$store.state.login.merchants =
+        JSON.parse(sessionStorage.getItem("merchants")) || {};
+      this.$store.state.login.userInfor =
+        JSON.parse(sessionStorage.getItem("userInfor")) || {};
+      return {
+        merchants: this.$store.state.login.merchants,
+        userInfor: this.$store.state.login.userInfor
+      };
     }
+  },
+  created() {
+    if (this.fundedTabData.length == "0") {
+      this.from = "0";
+      this.to = "0";
+      this.altogether = "0";
+    } else if (this.fundedTabData.length > "0") {
+      this.from = 1;
+      this.to = this.fundedTabData.length;
+      this.altogether = this.fundedTabData.length;
+    }
+    // console.log(this.fundedTabData.length);
+    this.searchInvestorList(this.page, this.pageSize, "");
+  },
+  data() {
+    return {
+      input2: "",
+      page: 1,
+      pageSize: 10,
+      from: 0,
+      to: 0,
+      altogether: 0,
+      every: 10,
+      fundedTabData: [],
+      pages: {
+        pageNum: "", //当前页码
+        total: "", //数据总数
+        pageSize: "", //每页条数
+        navigatepageNums: "", //页数
+        current: "" //当前页码
+      }
+    };
+  },
+  methods: {
+    searchInvestorList(page, pageSize, name) {
+      //出资统计表 api
+      this.$http
+        .post(this.api + "/investor/searchInvestorList", {
+          merchantId: this.user.merchants[0].id,
+          page: this.page,
+          pageSize: this.pageSize,
+          investorName: name
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              console.log(res.data);
+              this.fundedTabData = res.data.result.list;
+              this.pages.pageNum = res.data.result.pageNum; //当前页码
+              this.pages.total = res.data.result.total; //数据总数
+              this.pages.pageSize = res.data.result.pageSize; //每页条数
+              this.pages.navigatepageNums =
+                res.data.result.navigatepageNums.length;
+              this.$Message.success(res.data.message);
+            } else {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+          console.log("请求超时");
+        });
+    },
+    handleCurrentChange(page) { //分页页码切换
+      //获取tabList3 分页数据
+      // console.log(pages);
+      // this.page = '';
+      this.page = page;
+      this.searchInvestorList(this.page, this.pageSize,'');
+    },
+    handleSizeChange(pageSize) { //分页条数切换
+      // this.pageSize = '';
+      this.pageSize = pageSize;
+      this.searchInvestorList(this.page, this.pageSize,'');
+    },
+    handleIconClick() { //模糊查询
+      this.searchInvestorList(this.page, this.pageSize,this.input2);
+    },
+    
+  }
+};
 </script>
 
 <style lang="less" scoped>
-    section {
-        > div {
-            background: #ffffff;
-            padding: 24px;
-            overflow: hidden;
-            .customerMang {
-                margin-bottom: 10px;
-            }
-            .searchIpt_left {
-                float: left;
-            }
-            .searchIpt {
-                float: right;
-                > a {
-                    color: #ffffff;
-                }
-            }
-            .articlesNumber {
-                margin-top: 20px;
-                font-size: 10px;
-            }
-        }
+section {
+  > div {
+    background: #ffffff;
+    padding: 24px;
+    overflow: hidden;
+    .customerMang {
+      margin-bottom: 10px;
     }
+    .searchIpt_left {
+      float: left;
+    }
+    .searchIpt {
+      float: right;
+      > a {
+        color: #ffffff;
+      }
+    }
+    .articlesNumber {
+      margin-top: 20px;
+      font-size: 10px;
+    }
+  }
+}
 </style>

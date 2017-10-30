@@ -5,6 +5,7 @@
             <span class="desc">{{formDetails.fundName}}</span>
         </div>
         <div class="right">
+            <!-- :disabled="judgementFundStage" -->
             <el-button type="danger" @click="changeStep">下一阶段</el-button>
             <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
             </el-button>
@@ -119,7 +120,7 @@ const NUM = 2
 export default {
     data() {
         return {
-            steps: [],
+            steps: JSON.parse(sessionStorage.getItem('steps')) || [],
             currentStep: '' || sessionStorage.getItem('currentStep'),
             stepId: '', // 当前显示列表id
             deleteReminders: false,
@@ -259,6 +260,7 @@ export default {
         changeStep() {
             nextStage(this.$route.params.id, NUM, this.currentStep).then((res) => {
                 if (res.status == '200') {
+                    console.log(res)
                     if (res.data.status == '9021') {
                         this.$Message.error(res.data.message || '操作失败，有未完成的任务')
                     } else if (res.data.status == '9022') {
@@ -278,12 +280,13 @@ export default {
             // console.log(this.modalUpload)
         },
         uploadSuccess() { // 上传成功隐藏模态框
-            this.modalUpload = false
             this.getDataStageAddUpload()
+            this.modalUpload = false
         },
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
+                    // console.log(res)
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
                     if (res.data.result[0] === undefined) {
@@ -296,18 +299,31 @@ export default {
                     console.log(res)
                 }
             })
-            slectStageAllocation().then((res) => {
+            slectStageAllocation().then((res) => { // 获取配置项目或者基金的阶段
                 if (res.status == '200') {
+                    console.log(res)
                     this.steps = res.data.result
+                    sessionStorage.setItem('steps', JSON.stringify(res.data.result))
                 }
             })
         },
+        // judgementFundStage() {
+        //     var last = this.steps[this.steps.length - 1].id
+        //     var current = this.currentStep
+        //     if (last === current) {
+        //         return false
+        //     } else {
+        //         return true
+        //     }
+        // },
         _getFundList(id) {
             getMyFundDetails(id).then((res) => {
                 if (res.status == '200') {
                     this.formDetails = Object.assign({}, {
                         flag: true
                     }, res.data.result.fundBaseInfo)
+                    this.formDetails.fundTerm = parseFloat(this.formDetails.fundTerm)
+                    this.formDetails.fundScale = parseFloat(this.formDetails.fundScale)
                     window.sessionStorage.setItem('FUNDNAME', JSON.stringify(res.data.result.fundBaseInfo.fundName))
                     this.formMIS = Object.assign({}, {
                         flag: true
@@ -320,7 +336,7 @@ export default {
                     } else {
                         this.fundLevel.priority = ''
                         this.fundLevel.intermediateStage = '',
-                        this.fundLevel.generalLevel = ''
+                            this.fundLevel.generalLevel = ''
                     }
                     if (res.data.result.fundRegistration == null) {
                         return
@@ -346,7 +362,7 @@ export default {
     created() {
         getFunAppraisement(this.$route.params.id).then((res) => {
             if (res.status == '200') {
-                // console.log(res)
+                // console.log(res.data.result.newFuy < 0)
                 this.tableData = res.data.result
             }
         })

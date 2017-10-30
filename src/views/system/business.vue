@@ -8,7 +8,7 @@
                 <el-table :data="roleData" border style="width: 100%"  highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
-                            <span v-if="!scope.row.editFlag" @click="handleRole(scope.$index, scope.row)">{{ scope.row.roleName}}</span>
+                            <span v-if="!scope.row.editFlag">{{ scope.row.roleName}}</span>
                             <span v-if="scope.row.editFlag">
                                 <el-input v-model="scope.row.roleName" placeholder=""></el-input>
                             </span>

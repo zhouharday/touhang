@@ -35,4 +35,3 @@ export const GET_MYFUNDOPTIONS = 'GET_MYFUNDOPTIONS' // 可签项目基金选择
 
 export const GET_STAGEOPTIONSII = 'GET_STAGEOPTIONSII' // 业务阶段 含全部
 export const GET_CURRENCYOPTIONS = 'GET_CURRENCYOPTIONS' // 币种
-

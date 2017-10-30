@@ -241,11 +241,11 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" ref="upload" action="" :auto-upload="false">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" show-upload-list="false" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
-                        <a href="/static/img/sheet.txt" download="资产负债表">模板下载</a>
+                        <a href="http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls" download="资产负债表">模板下载</a>
                     </el-button>
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -360,6 +360,9 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
+            importUrl:this.api+'/excel//financial',
+            // importUrl:"http://192.168.0.124:9091"+'/excel/financial',
+            importData:{},
             // 经营数据表头
             operatingData: [
                 {
@@ -390,7 +393,7 @@ export default {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
-                sort: [
+                dataType: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
@@ -398,8 +401,8 @@ export default {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
-                sort: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                dataType: [
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             sortOptions: [
@@ -470,7 +473,14 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [],
+            financialData: [
+                {
+                    baseDate: 'asdasd',
+                    dataType: 'lklkjkjk',
+                    operatorName: 'asdsdfs',
+                    currentDeta: '2017-10-30'
+                }
+            ],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -551,7 +561,7 @@ export default {
         //打开添加数据明细表单
         goAddData(subjectId, dataType) {
             this.readControl = false;
-            this.finacial_title = '添加财务数据明细';
+            this.finacial_title = '财务数据明细';
             getDataFormBody(subjectId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
@@ -592,12 +602,6 @@ export default {
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
             })
-            if (dataType == '1') {
-                this.operatingModal2 = true;
-            } else {
-                this.financialModal2 = true;
-            }
-
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
@@ -719,18 +723,50 @@ export default {
             rows.splice(index, 1);
         },
         // 上传附件的方法
-        handleUpload(file) {
-            this.file = file;
-            return false;
+        handleBeforeUpload(file) {
+            let activeName = this.activeName;
+            console.log("activeName"+this.activeName);
+            let dataInfoid = this.balanceInfo.id+','+this.incomeInfo.id+','+this.cashFlowInfo.id;
+            this.importData = {
+                dataInfoids: dataInfoid
+            }
+            console.log("导入数据"+JSON.stringify(this.importData));
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
+        handleSuccess(){
+            getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
+                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos;
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
+
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                            this.fillOperateSheet(formBody[idx].operations);
+                            this.operateInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            // console.log("资产负债表："+JSON.stringify(formBody[idx].operations));
+                            this.balanceSheet = transform(formBody[idx].operations);
+                            this.balanceInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.cashFlowStatement = formBody[idx].operations;
+                            this.cashFlowInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.incomeStatement = formBody[idx].operations;
+                            this.incomeInfo = formBody[idx].dataInfo;
+                        }
+                    }
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+        }
     },
     components: {
         deleteReminders
