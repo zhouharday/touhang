@@ -163,7 +163,7 @@ export default {
       return {
         merchants: this.$store.state.login.merchants,
         userInfor: this.$store.state.login.userInfor
-      };
+      }
     },
     onRoutes(state) {
       // alert(111);
