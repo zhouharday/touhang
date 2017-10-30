@@ -32,8 +32,8 @@
                                 </div>
                                 <div v-if="detailsitem.stageStatus == 1">
                                     <div v-if="item.showOne" style="justify-content: space-between">
-                                        <el-button size="mini" @click="moveUp(item,index)"  >
-                                            <Icon type="arrow-up-c"  ></Icon>
+                                        <el-button size="mini" @click="moveUp(item,index)">
+                                            <Icon type="arrow-up-c"></Icon>
                                         </el-button>
                                         <el-button size="mini" @click="moveDown(item,index)">
                                             <Icon type="arrow-down-c"></Icon>
@@ -104,15 +104,34 @@
                     <el-col>
                         <i class="bottomLine"></i>
                     </el-col>
-                    <el-col :span="16">
+                    <el-col :span="23">
                         <el-form-item label="阶段名称：" prop="stageName" label-width="100px">
                             <el-input v-model="projectForm.stageName" auto-complete="off"></el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="审批节点：" label-width="100px">
+                            <el-select v-model="projectForm.nodeName1" style="width:30%;margin-right:5px">
+                                <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="projectForm.nodeName2" style="width:30%;margin-right:5px">
+                                <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                            <el-select v-model="projectForm.nodeName3" style="width:30%">
+                                <el-option v-for="item in roleOptions" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="23" style="text-align:right">
+                        <p>此处添加的审批角色为项目角色，最高三级审批。</p>
+                    </el-col>
                 </el-row>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button class="dialogBtn_active" @click="addProject">保存</el-button>
+                <el-button class="dialogBtn_active" @click="addProject">提交</el-button>
                 <el-button class="dialogBtn" @click="projectDialog = false">取消</el-button>
             </div>
         </el-dialog>
@@ -194,7 +213,7 @@ import { changeRightList } from 'api/system'
 import ElButton from "../../../node_modules/element-ui/packages/button/src/button.vue";
 
 export default {
-    components: {ElButton},
+    components: { ElButton },
     data() {
         return {
             projectDialog: false,
@@ -204,15 +223,15 @@ export default {
             //            showOne:false,
             deleteList: [],
             leftList: [],
-            value2:'',
-            value3:'',
+            value2: '',
+            value3: '',
             options: [
                 {
-                    lable:'2',
-                    value:'是'
-                },{
-                    lable:'1',
-                    value:'否'
+                    lable: '2',
+                    value: '是'
+                }, {
+                    lable: '1',
+                    value: '否'
                 }
             ],
             fileData: [
@@ -224,6 +243,9 @@ export default {
             },
             projectForm: {
                 stageName: '',
+                nodeName1: '',
+                nodeName2: '',
+                nodeName3: '',
                 editFlag: false
             },
             projectMenu: [
@@ -261,30 +283,30 @@ export default {
             nowId: '',
             options: [
                 {
-                    lable:'1',
-                    value:'是'
-                },{
-                    lable:'2',
-                    value:'否'
+                    lable: '1',
+                    value: '是'
+                }, {
+                    lable: '2',
+                    value: '否'
                 }
             ],
         }
     },
     methods: {
-        moveUp(item,index){
+        moveUp(item, index) {
 
-            if (index != 0 ){
+            if (index != 0) {
                 var dataArr = item.data[index - 1]
-                item.data[index - 1]  = item.data[index]
+                item.data[index - 1] = item.data[index]
                 item.data[index] = dataArr
             }
 
         },
-        moveDown(item,index){
+        moveDown(item, index) {
             console.log(item)
-            if (index !=   item.data.length - 1 ){
+            if (index != item.data.length - 1) {
                 var dataArr = item.data[index + 1]
-                item.data[index + 1]  = item.data[index]
+                item.data[index + 1] = item.data[index]
                 item.data[index] = dataArr
             }
             console.log(item)
@@ -295,7 +317,7 @@ export default {
             //            alert(this.nowId)
             GetrightList(item.id).then((res) => {
                 this.fileData = RightListData(res.data.result)
-//                console.log(this.fileData)
+                //                console.log(this.fileData)
             })
         },
         changeSomeThing(item) {
@@ -329,16 +351,16 @@ export default {
             this.projectDialog = !this.projectDialog;
         },
         addProject() {
-//            console.log(this.changeList)
-            var stageType ;
-            if (!this.changeList[0]){
+            //            console.log(this.changeList)
+            var stageType;
+            if (!this.changeList[0]) {
                 stageType = '3';
-            }else
+            } else
                 stageType = this.changeList[0].stageType
-            var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id}];
+            var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id }];
             var b = this.changeList;
             var newList = a.concat(b)
-//            console.log(newList)
+            //            console.log(newList)
             SetConfig(newList, this.deleteList).then((res) => {
                 if (res.data.status == '9024') {
                     alert(res.data.message)
@@ -397,9 +419,9 @@ export default {
         },
         addFile() {
 
-            if(this.value2 == '是'){
+            if (this.value2 == '是') {
                 this.fileForm.needUpload = '1';
-            }else
+            } else
                 this.fileForm.needUpload = '2';
 
             changeRightList(this.nowId, this.fileForm).then((res) => {
@@ -445,13 +467,13 @@ export default {
         handleDeleteLeft(index, rows) {
             this.deleteList.push(rows[index])
             rows.splice(index, 1);
-//            console.log(this.deleteList)
+            //            console.log(this.deleteList)
         },
         //右边删除当前行
         handleDelete(index, rows) {
-//            console.log(rows)
+            //            console.log(rows)
             DeleteRightList(rows[index]).then((res) => {
-//                console.log(res.data)
+                //                console.log(res.data)
                 if (res.data.status == '9024') {
                     alert(res.data.message)
                 } else {
@@ -477,9 +499,9 @@ export default {
             this.nowId = this.leftList[0].data[0].id
             GetrightList(this.leftList[0].data[0].id).then((res) => {
                 this.fileData = RightListData(res.data.result)
-//                console.log(this.fileData)
+                //                console.log(this.fileData)
             })
-//            console.log(this.leftList)
+            //            console.log(this.leftList)
         })
     }
 }
@@ -551,7 +573,7 @@ export default {
     }
     .dialog-footer {
         text-align: center;
-        margin-top: 75px;
+        margin-top: 40px;
     }
     .dialogBtn_active {
         width: 150px;
