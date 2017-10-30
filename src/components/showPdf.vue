@@ -15,14 +15,20 @@
   </div>
 </template>
 <script>
-import PDFJS from '../../../static/pdf/pdf.js'
+import PDFJS from '../../static/js/pdf/pdf.js'
+// import PDFJS from 'pdfjs'
  import {
   mapActions,
   mapGetters
  } from 'vuex';
  export default {
   name: 'c-pdf',
-  props: ['pdfurl'],
+  props: {
+    'pdfurl':{
+      type: String,
+      default:''
+    }
+  },
   data() {
     return {
      pdfDoc: null, //pdfjs 生成的对象
@@ -36,7 +42,23 @@ import PDFJS from '../../../static/pdf/pdf.js'
      minscale: 0.8//最小放大倍数
     }
   },
+  watch: {
+        'pdfurl':function (to,from){
+            if(to != from){
+                this.init();
+            }
+        }
+    },
   methods: {
+    init(){
+        let vm = this;
+        console.log("地址：a"+vm.pdfurl);
+        PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
+           vm.pdfDoc = pdfDoc_;
+           vm.page_count = vm.pdfDoc.numPages;
+           vm.renderPage(vm.pageNum);
+        });
+    },
     renderPage(num) { //渲染pdf
      let vm = this
      this.pageRendering = true;
@@ -116,12 +138,7 @@ import PDFJS from '../../../static/pdf/pdf.js'
     }
   },
   mounted() {
-    let vm = this
-    PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
-     vm.pdfDoc = pdfDoc_;
-     vm.page_count = vm.pdfDoc.numPages
-     vm.renderPage(vm.pageNum);
-    });
+    this.init();
   }
  }
 </script>

@@ -46,7 +46,7 @@
             </template>
         </div>
         <!-- 47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf?filename=Aaaaaaaaaaaaaaaaaaaaa.pdf -->
-        <vueshowpdf :v-show="isshowpdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></vueshowpdf>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></show-pdf>
         <!-- 文件预览功能 -->
         <div class="viewFiles" v-show="isHide">
             <div class="closeView" @click="closeView">
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import vueshowpdf from 'vueshowpdf'
+import showPdf from 'components/showPdf'
 import {
     getProjectDoc, delDocument
 } from 'api/projectPre';
@@ -85,12 +85,12 @@ export default {
         }
     },
     components: {
-        vueshowpdf
+        showPdf
     },
     data() {
         return {
-            pdfurls:'//cdn.mozilla.net/pdfjs/tracemonkey.pdf',
-            isshowpdf:true,
+            pdfurls:'',
+            isshowpdf:false,
 
             projectDocList: [],
             isShow: true,
@@ -158,7 +158,9 @@ export default {
         },
         preview(url) {
             console.log(url);
-            //this.pdfurls = 'http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf?filename=Aaaaaaaaaaaaaaaaaaaaa.pdf';
+            // this.pdfurls = '//47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf';
+            // this.pdfurls = '//cdn.mozilla.net/pdfjs/tracemonkey.pdf'
+            this.pdfurls = url.replaceAll('http://47.90.120.190:8086', '/file');
             this.isshowpdf = true;
         },
         pdferr(err){
@@ -202,7 +204,8 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             };
-            this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+            // this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
+            this.$http.post('http://192.168.0.136:9091' + '/files/uploadProjectDocument', formData, config)
             .then((res)=> {
                 console.log("上传文件结果:"+ JSON.stringify(res.data));
                 if (res.data.status == '200') {
