@@ -12,14 +12,14 @@
         </div>
         <div class="step">
             <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
-                                     'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
-                                     'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
-                                     'step_third':index==(stepLists.length-1)}">
+                                             'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+                                             'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+                                             'step_third':index==(stepLists.length-1)}">
                 <span>{{item.stageName}}</span>
             </div>
         </div>
         <div class="picture">
-            <div class="img_wrapper" @click="applyModal=true">
+            <div class="img_wrapper" @click="progressModal=true">
                 <img src="/static/img/double.png">
             </div>
             <!-- 小双助手 -->
@@ -80,115 +80,9 @@
         <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
         </delete-reminders>
         <!-- 发起申请 对话框-->
-
-        <!-- <apply-forms :applyModal="applyModal1" :applyForm="applyForm" @submit="submitForm"></apply-forms> -->
-        <div class="applyBox">
-            <el-dialog title="发起申请" :visible.sync="applyModal" :close-on-click-modal="false">
-                <el-form :model="applyForm" ref="applyForm" label-width="60px">
-                    <el-row>
-                        <el-col :span="13">
-                            <el-form-item label="标题" prop="name">
-                                <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="24">
-                            <el-form-item label="审批人" prop="auditor">
-                                <el-select v-model="applyForm.auditor" filterable placeholder="请选择" style="width: 50%">
-                                    <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="24">
-                            <el-form-item label="备注" prop="notes">
-                                <el-input type="textarea" v-model="applyForm.notes" :rows="4"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <div slot="footer" class="dialog-footer" style="text-align:center">
-                    <el-button size="large" type="danger" class="footer-btn" @click="applyModal= false">提交</el-button>
-                    <el-button size="large" type="default" class="footer-btn" @click="applyModal= false">取消</el-button>
-                </div>
-            </el-dialog>
-        </div>
+        <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
-        <div class="progressBox">
-            <el-dialog title="查看进度" :visible.sync="progressModal" :close-on-click-modal="false">
-                <div style="height:2px;border-bottom: 1px solid #f05e5e"></div>
-                <el-table :data="progressTable" style="margin:15px 0;" :row-class-name="tableRowClassName">
-                    <el-table-column prop="node" label="节点" align="center">
-                    </el-table-column>
-                    <el-table-column prop="operator" label="处理人" align="center">
-                    </el-table-column>
-                    <el-table-column prop="conclusion" label="结论" align="center">
-                    </el-table-column>
-                    <el-table-column prop="startingTime" label="开始日期" align="center">
-                    </el-table-column>
-                    <el-table-column prop="time" label="用时" align="center">
-                    </el-table-column>
-                </el-table>
-                <div>
-                    <div class="title_f" style="background:#2a3142;color:#fff">
-                        <div class="desc">
-                            <span>申请详情</span>
-                        </div>
-                    </div>
-                    <el-form :model="applyForm2" ref="applyForm" style="margin-top:20px" label-width="100px">
-                        <el-row>
-                            <el-col>
-                                <el-form-item label="标题" prop="name">
-                                    <el-input v-model="applyForm2.title" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="申请人" prop="person">
-                                    <el-input v-model="applyForm2.person" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="申请日期" prop="date">
-                                    <el-input v-model="applyForm2.date" placeholder="数据展示" auto-complete="off" disabled></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col>
-                                <el-form-item label="备注" prop="notes">
-                                    <el-input type="textarea" :rows="2" v-model="applyForm2.notes" placeholder="数据展示" auto-complete="off" disabled>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="考察报告" prop="reports" style="margin-bottom:10px">
-                                    <el-input v-model="applyForm2.reports" placeholder="数据展示" auto-complete="off" disabled>
-                                    </el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="1">
-                                <div style="text-align:center;line-height:35px;">
-                                    <a href="/static/img/plan.txt" download="xxxxx" style="color:#f05e5e">下载</a>
-                                </div>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </div>
-                <div>
-                    <div class="title_f" style="background:#2a3142;color:#fff">
-                        <div class="desc">
-                            <span>意见汇总</span>
-                        </div>
-                    </div>
-                    <div class="comment_box" :class="{bgh: (index%2 == 0),bgl: (index%2 != 0)}" v-for="(item,index) in commentLists" :key="item.index">
-                        <p class="comment_left">
-                            <span>{{item.comment}}</span>
-                        </p>
-                        <p class="comment_right">
-                            <span style="margin: 0px 0px 15px 8px">{{item.num}}</span>
-                            <span>{{item.note}}</span>
-                        </p>
-                    </div>
-                </div>
-            </el-dialog>
-        </div>
+        <progress-forms :progressModal="progressModal" :table="progressTable"></progress-forms>
     </div>
 </template>
 
@@ -205,6 +99,8 @@ import manageTable from './manage'
 import outingForm from './outing'
 import Loading from 'element-ui'
 import deleteReminders from 'components/deleteReminders'
+import applyForms from 'components/applyDialog'
+import progressForms from 'components/progressDialog'
 import {
     getPreDetail,
     slectAllStage,
@@ -271,11 +167,10 @@ export default {
             },
             progressTable: [ //查看进度表单 节点table
                 {
-                    node: '发起申请',
-                    operator: '管理员 2017/8/15 16:25:14',
-                    conclusion: '同意',
-                    startingTime: '2017/8/15 16:25:14',
-                    time: '4秒'
+                    node: '发起人',
+                    operator: '杨军',
+                    startingTime: '2017-10-30 16:25:14',
+                    conclusion: '同意'
                 }
             ],
             applyForm2: { // 发起申请表单
@@ -322,7 +217,9 @@ export default {
         fileTable,
         riskTable,
         manageTable,
-        outingForm
+        outingForm,
+        applyForms,
+        progressForms 
     },
     created() {
         this.investProjectId = this.$route.params.investProjectId;
@@ -589,7 +486,15 @@ export default {
                     console.log('上传错误: ', e);
                     // loadingInstance.close();
                 })
-        }
+        },
+        // 发起申请表单
+        submitApply() {
+           this.applyModal = false;
+        },
+        cancleApply() {
+          this.applyModal = false;
+        },
+        // 查看进度表单
     }
 }
 </script>
@@ -804,22 +709,7 @@ export default {
                 }
             }
         }
-    } // 小双助手 查看进度对话框中的样式
-    .title_f {
-        margin-top: 30px;
-        width: 100%;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        .desc {
-            flex: 1;
-            text-align: left;
-            span {
-                color: #fff;
-                margin-left: 90px;
-            }
-        }
-    }
+    } 
     .comment_box {
         height: 80px;
         display: flex;
@@ -850,11 +740,6 @@ export default {
                 width: 12.5% !important;
             }
         }
-    }
-    .footer-btn {
-        width: 125px;
-        padding: 10px 15px;
-        border-radius: 8px;
     }
 }
 </style>
