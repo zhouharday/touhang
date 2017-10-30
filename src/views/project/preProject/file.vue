@@ -160,7 +160,7 @@ export default {
             console.log(url);
             // this.pdfurls = '//47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf';
             // this.pdfurls = '//cdn.mozilla.net/pdfjs/tracemonkey.pdf'
-            this.pdfurls = url.replaceAll('http://47.90.120.190:8086', '/file');
+            this.pdfurls = url.replace('http://47.90.120.190:8086', '/file');
             this.isshowpdf = true;
         },
         pdferr(err){
