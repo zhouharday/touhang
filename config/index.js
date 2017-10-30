@@ -29,12 +29,12 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api': {
-                target: 'http://192.168.0.109:9091', //平台
+                // target: 'http://192.168.0.109:9091', //平台
                 // target:'http://192.168.0.191:9092',//平台
                 // target: 'http://192.168.0.198:9091',
                 // target: 'http://18f46963j4.iok.la',
                 // target:'http://192.168.0.135:9092',// 文军凡IP
-                // target:'http://192.168.0.103:9091',// 蔡永亮 IP
+                target:'http://192.168.0.118:9091',// 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
                 // target:'http://sdwlyxgs.imwork.net:16380',
                 changeOrigin: true,
