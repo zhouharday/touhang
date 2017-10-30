@@ -807,8 +807,8 @@ export default {
         // this.init();
     },
     watch: {
-        'tabs':function (to,from){
-            if(to.tabList[6]){
+        'tabs': function(to, from) {
+            if (to.tabList[6]) {
                 this.init();
             }
         }
@@ -1027,7 +1027,6 @@ export default {
         },
         // 编辑 项目合同  确定按钮
         confirmContractAdd2(id) {
-
             this.$refs["contractForm2"].validate((valid) => {
                 if (valid) {
                     let projectContract = this.contractForm2;
@@ -1100,8 +1099,8 @@ export default {
             })
         },
         //打开添加投资支付
-        goAddPaid(){
-            if(this.contractData.length == 1){
+        goAddPaid() {
+            if (this.contractData.length == 1) {
                 let contract = this.contractData[0];
                 this.paidForm1.contractAmount = contract.contractAmount;
                 this.paidForm1.contractId = contract.id;
@@ -1235,9 +1234,9 @@ export default {
                 }
             });
         },
-        changeInvestAmount(){
+        changeInvestAmount() {
             let sum = 0.0;
-            for(let i = 0; i < this.fundData1.length; i++){
+            for (let i = 0; i < this.fundData1.length; i++) {
                 sum += (parseFloat(this.fundData1[i].investAmount | 0));
             }
             this.$set(this.$data.contractForm1, 'contractAmount', sum);
