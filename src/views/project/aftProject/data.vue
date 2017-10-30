@@ -360,8 +360,8 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
-            importUrl:this.api+'/excel//financial',
-            // importUrl:"http://192.168.0.124:9091"+'/excel/financial',
+            // importUrl:this.api+'/excel//financial',
+            importUrl:"http://192.168.0.136:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
             operatingData: [
