@@ -241,11 +241,11 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" :show-upload-list="false" :data="importData">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" show-upload-list="false" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
-                        <a href="/static/img/sheet.txt" download="资产负债表">模板下载</a>
+                        <a href="http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls" download="资产负债表">模板下载</a>
                     </el-button>
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -360,8 +360,8 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
-            // importUrl:this.api+'/excel//financial',
-            importUrl:"http://192.168.0.114:9091"+'/excel/financial',
+            importUrl:this.api+'/excel//financial',
+            // importUrl:"http://192.168.0.124:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
             operatingData: [
@@ -402,7 +402,7 @@ export default {
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
                 dataType: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             sortOptions: [
@@ -719,17 +719,9 @@ export default {
         handleBeforeUpload(file) {
             let activeName = this.activeName;
             console.log("activeName"+this.activeName);
-            let dataInfoid = '';
-            if(activeName == 'first'){
-                dataInfoid = this.balanceInfo.id;
-            }else if(activeName == 'second'){
-                dataInfoid = this.incomeInfo.id;
-            }else if(activeName == 'third'){
-                dataInfoid = this.cashFlowInfo.id;
-            }
-
+            let dataInfoid = this.balanceInfo.id+','+this.incomeInfo.id+','+this.cashFlowInfo.id;
             this.importData = {
-                dataInfoid: dataInfoid
+                dataInfoids: dataInfoid
             }
             console.log("导入数据"+JSON.stringify(this.importData));
         },
