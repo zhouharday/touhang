@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="picture">
-            <div class="img_wrapper" @click="progressModal=true">
+            <div class="img_wrapper">
                 <img src="/static/img/double.png">
             </div>
             <!-- 小双助手 -->
