@@ -59,7 +59,8 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
-        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_company" v-if="isShowProjectBtn('XQ-bianji')" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_company" v-else class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
