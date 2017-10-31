@@ -27,14 +27,18 @@ const state = {
         isLogged: false, //登录状态
     },
     loading: false,
-    permissionCode: [],
-}
+    permissionCode: [], //客户端系统项目、基金按钮数据
+    permissionCode_project: [], //项目按钮数据
+    permissionCode_fund: [], //基金按钮数据
+    projectPermissions: false, //是否存在项目权限按钮
+    fundPermissions: false, //是否存在基金权限按钮
+};
 
 const mutations = {
     addTab(state, targetName) {
         if (!state.TitleList) {
             return;
-        }
+        };
         let obj = {};
         obj.title = targetName.title;
         obj.path = targetName.url;
@@ -43,7 +47,7 @@ const mutations = {
             if (state.TitleList[i].name == targetName.name) {
                 return;
             }
-        }
+        };
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },
@@ -97,9 +101,24 @@ const mutations = {
                 if (res.status == "200") {
                     if (res.data.state == "200") {
                         console.log('按钮权限数据');
-                        console.log(res);
+                        // console.log(res.data);
                         state.permissionCode = res.data.result; //保存所有按钮数据
                         window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
+                        console.log(state.permissionCode);
+                        state.permissionCode.map((item, index) => {
+                            state.permissionCode_project = [];
+                            state.permissionCode_fund = [];
+                            if (state.permissionCode[index].permissionType == 0) { //项目按钮
+                                state.permissionCode_project.push(state.permissionCode[index]);
+                            };
+                            if (state.permissionCode[index].permissionType == 1) { //基金按钮
+                                state.permissionCode_fund.push(state.permissionCode[index]);
+                            }
+                        });
+                        console.log('项目按钮权限');
+                        console.log(state.permissionCode_project);
+                        console.log('基金按钮权限');
+                        console.log(state.permissionCode_fund);
                         // console.log(res.data.message);
                     } else {
                         console.log(res.data.message);
@@ -110,6 +129,26 @@ const mutations = {
                 console.log(error);
             })
     },
+    filtersPermissionCode_project(state, str) { //过滤项目按钮方法
+        state.projectPermissions = false;
+        state.permissionCode_project.map((item, index) => {
+            if (item.permissionCode == str) {
+                return ProjectPermissions = true;
+            } else {
+                return ProjectPermissions = false;
+            }
+        })
+    },
+    filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
+        state.fundPermissions = false;
+        state.permissionCode_fund.map((item, index) => {
+            if (item.permissionCode == str) {
+                return fundPermissions = true;
+            } else {
+                return fundPermissions = false;
+            }
+        })
+    }
 };
 
 const actions = {
@@ -253,6 +292,7 @@ const actions = {
         })
     }
 }
+
 export default {
     state,
     mutations,
