@@ -362,7 +362,6 @@ export default {
         },
         editNotice() { //编辑公告列表 api
             // alert('bj');
-            alert(222);
             this.$http.post(this.api + '/work/modifyNoticeInfo', {
                 "id": this.sendNoticeform.id,
                 "noticeTitle": this.sendNoticeform.noticeTitle,

@@ -121,8 +121,12 @@ const mutations = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.state == "200") {
-                        // console.log('按钮权限数据');
-                        // console.log(res.data);
+                        // console.log(res);
+                        // console.log('权限按钮数据');
+                        if(res.data.result.length == 0){
+                            console.log('没有权限按钮数据');
+                            return;
+                        };
                         state.permissionCode = res.data.result; //保存所有按钮数据
                         window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
                         // console.log(state.permissionCode);
@@ -138,11 +142,11 @@ const mutations = {
                                 window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
                             }
                         });
-                        // console.log('项目按钮权限');
-                        // console.log(state.permissionCode_project);
-                        // console.log('基金按钮权限');
-                        // console.log(state.permissionCode_fund);
-                        // console.log(res.data.message);
+                        console.log('项目按钮权限');
+                        console.log(state.permissionCode_project);
+                        console.log('基金按钮权限');
+                        console.log(state.permissionCode_fund);
+                        console.log(res.data.message);
                     } else {
                         console.log(res.data.message);
                     }
