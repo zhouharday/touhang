@@ -3,7 +3,7 @@
         <el-collapse v-model="activeNames" @change="handleChange">
             <el-collapse-item title="项目费用" name="1">
                 <div class="fileTable">
-                    <tabel-header :data="headerInfo_cost" @add="costAdd1=true"></tabel-header>
+                    <tabel-header :data="checkProjectAuth('GL-XMFY-XZ') ? headerInfo_cost : _headerInfo_cost" @add="costAdd1=true"></tabel-header>
                     <el-table :data="costData" border style="width: 100%" align="center">
                         <el-table-column label="费用类型" prop="costType" align="center">
                         </el-table-column>
@@ -12,8 +12,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button type="text" @click="goEditFee(scope.row)">编辑</el-button>
-                                <el-button type="text" @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
+                                <el-button v-if="checkProjectAuth('GL-XMFY-BJ')" type="text" @click="goEditFee(scope.row)">编辑</el-button>
+                                <el-button v-if="checkProjectAuth('GL-XMFY-SC')" type="text" @click="handleDelete(scope.$index,costData, 'fee')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -58,7 +58,7 @@
             <el-collapse-item title="项目合同" name="2">
                 <!-- 项目合同 部分 -->
                 <div class="fileTable">
-                    <tabel-header :data="headerInfo_contract" @add="goAddContract"></tabel-header>
+                    <tabel-header :data="checkProjectAuth('GL-XMHT-XZ') ? headerInfo_contract: _headerInfo_contract" @add="goAddContract"></tabel-header>
                     <el-table :data="contractData" border style="width: 100%" align="center" show-summary>
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
@@ -72,8 +72,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-if="scope.row.status == 1" type="text" @click="goEditContract(scope.row.id)">编辑</el-button>
-                                <el-button v-if="scope.row.status == 1" type="text" @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
+                                <el-button v-if="checkProjectAuth('GL-XMHT-BJ') && (scope.row.status == 1)" type="text" @click="goEditContract(scope.row.id)">编辑</el-button>
+                                <el-button v-if="checkProjectAuth('GL-XMHT-SC') && (scope.row.status == 1)" type="text" @click="handleDelete(scope.$index,contractData, 'contract')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -287,7 +287,7 @@
             <el-collapse-item title="投资支付" name="3">
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
-                    <tabel-header :data="headerInfo_paid" @add="goAddPaid"></tabel-header>
+                    <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
                     <el-table :data="paidData" border style="width: 100%" align="center" show-summary>
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
@@ -304,8 +304,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-if="scope.$index == 0" type="text" @click="goEditPay(scope.row.id)">编辑</el-button>
-                                <el-button v-if="scope.$index == 0" type="text" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
+                                <el-button v-if="checkProjectAuth('GL-TZZF-BJ') && (scope.$index == 0)" type="text" @click="goEditPay(scope.row.id)">编辑</el-button>
+                                <el-button v-if="checkProjectAuth('GL-TZZF-SC') && (scope.$index == 0)" type="text" @click="handleDelete(scope.$index,paidData, 'pay')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -464,7 +464,7 @@
             <el-collapse-item title="项目分红" name="4">
                 <!--  项目分红 部分-->
                 <div class="fileTable sharingDialog">
-                    <tabel-header :data="headerInfo_sharing" @add="goAddShare"></tabel-header>
+                    <tabel-header :data="checkProjectAuth('GL-XMFH-XZ') ? headerInfo_sharing : _headerInfo_sharing" @add="goAddShare"></tabel-header>
                     <el-table :data="sharingData" border style="width: 100%" align="center" show-summary>
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
@@ -479,8 +479,8 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button v-if="scope.$index == 0" type="text" size="small" @click="goEditShare(scope.row.id)">编辑</el-button>
-                                <el-button v-if="scope.$index == 0" type="text" size="small" @click="handleDelete(scope.$index,sharingData,'share')">删除</el-button>
+                                <el-button v-if="checkProjectAuth('GL-XMFH-BJ') && (scope.$index == 0)" type="text" size="small" @click="goEditShare(scope.row.id)">编辑</el-button>
+                                <el-button v-if="checkProjectAuth('GL-XMFH-SC') && (scope.$index == 0)" type="text" size="small" @click="handleDelete(scope.$index,sharingData,'share')">删除</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -632,7 +632,7 @@ import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import uploadFiles from 'components/uploadFiles'
 import { getDicChildren } from 'common/js/dictionary'
-import { changeDate } from 'common/js/config'
+import { changeDate,checkProjectAuth } from 'common/js/config'
 import {
     delGu, delContract, delFee, addFee, editFee, fees,
     addContract, contracts, getContractDetail, editContract,
@@ -680,6 +680,10 @@ export default {
                 costTypeId: ''
             },
             costData: [],
+            _headerInfo_cost: {
+                desc: '项目费用',
+                btnGroup: []
+            },
             headerInfo_cost: {
                 desc: '项目费用',
                 btnGroup: [{
@@ -706,6 +710,10 @@ export default {
             },
             contractForm2: {},
             contractData: [],
+            _headerInfo_contract: {
+                desc: '项目合同',
+                btnGroup: []
+            },
             headerInfo_contract: {
                 desc: '项目合同',
                 btnGroup: [{
@@ -764,6 +772,10 @@ export default {
                 ]
             },
             paidData: [],
+            _headerInfo_paid: {
+                desc: '投资支付',
+                btnGroup: []
+            },
             headerInfo_paid: {
                 desc: '投资支付',
                 btnGroup: [{
@@ -796,6 +808,10 @@ export default {
                     explain: '添加'
                 }]
             },
+            _headerInfo_sharing: {
+                desc: '项目分红',
+                btnGroup: []
+            },
             contractDocInfo: [],
             payDocInfo:[],
             shareDocInfo:[]
@@ -814,6 +830,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             this.getFee();
             this.getContract();

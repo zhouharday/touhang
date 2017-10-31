@@ -91,3 +91,15 @@ export function compare(prop) {
         }
     }
 }
+
+export function checkProjectAuth(code){
+    let result = sessionStorage.getItem('permissionCode_project').includes(code);
+    if(!result) console.log("CODE: "+ code+ '无权限' );
+    return result;
+}
+
+export function checkFundAuth(code){
+    let result = sessionStorage.getItem('permissionCode_fund').includes(code);
+    if(!result) console.log("CODE: "+ code+ '无权限' );
+    return result;
+}

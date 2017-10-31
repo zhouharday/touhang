@@ -53,33 +53,33 @@
         </div>
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="详情" name="details" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
                     <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
                     <table-form :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
-                <el-tab-pane label="审批" name="approve" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
                     <approve-table :tabs="tabs"></approve-table>
                 </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
                     <file-table :tabs="tabs" :projectId="projectId" ></file-table>
                 </el-tab-pane>
-                <el-tab-pane label="管理" name="manage" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-guanli')" label="管理" name="manage" class="tab_list">
                     <manage-table :tabs="tabs" :proId="projectId"></manage-table>
                 </el-tab-pane>
-                <el-tab-pane label="记录" name="record" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
                     <record-form :tabs="tabs" :projectId="projectId"></record-form>
                 </el-tab-pane>
-                <el-tab-pane label="风险管理" name="risk" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-fengxianguanli')" label="风险管理" name="risk" class="tab_list">
                     <risk-table :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
-                <el-tab-pane label="重大事项" name="event" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-zhongdashixiang')" label="重大事项" name="event" class="tab_list">
                     <event-table :tabs="tabs" :projectId="projectId"></event-table>
                 </el-tab-pane>
-                <el-tab-pane label="数据填报" name="data" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-shujutianbao')" label="数据填报" name="data" class="tab_list">
                     <data-table :tabs="tabs" :projectId="projectId"></data-table>
                 </el-tab-pane>
-                <el-tab-pane label="监控设置" name="monitor" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-jiankongshezhi')" label="监控设置" name="monitor" class="tab_list">
                     <monitor-table :tabs="tabs" :projectId="projectId"></monitor-table>
                 </el-tab-pane>
             </el-tabs>
@@ -105,6 +105,7 @@ import monitorTable from './monitor'
 
 import { getProjectUsers } from 'api/projectSys';
 import { getPreDetail } from 'api/projectPre';
+import {checkProjectAuth } from 'common/js/config'
 import { getWarnMessageList, getInvestSubject, getAppraisementRep } from 'api/projectAfter';
 
 export default {
@@ -183,6 +184,9 @@ export default {
          }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             this.initInfo();
             this.initData();

@@ -5,7 +5,7 @@
                 <el-button @click="changeRisk1" :class="{active:f_show}">风险上报</el-button>
                 <el-button @click="changeRisk2" :class="{active:s_show}">风险预警</el-button>
             </div>
-            <div class="rightBtn">
+            <div v-if="checkProjectAuth('FXGL-tianjia')" class="rightBtn">
                 <el-button type="danger" size="small" @click="openAddModal" v-if="addBtn">添加</el-button>
             </div>
         </div>
@@ -26,8 +26,8 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
-                        <el-button v-if="scope.row.status != '已完成' && userId == scope.row.receivedUserId" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
-                        <el-button v-if="userId == scope.row.seedUserId" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-genzong') && (scope.row.status != '已完成' && userId == scope.row.receivedUserId)" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-shanchu') && (userId == scope.row.seedUserId)" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -338,7 +338,7 @@
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
 import uploadFiles from 'components/uploadFiles'
-import { changeDate, checkAuth } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 
 import {
     dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams
@@ -544,6 +544,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             this.getDatas();
             this.getWarningList();

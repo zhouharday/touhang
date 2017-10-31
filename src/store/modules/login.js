@@ -138,6 +138,8 @@ const mutations = {
                                 window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
                             }
                         });
+
+                        console.log("项目权限："+JSON.stringify(state.permissionCode_project));
                         // console.log('项目按钮权限');
                         // console.log(state.permissionCode_project);
                         // console.log('基金按钮权限');

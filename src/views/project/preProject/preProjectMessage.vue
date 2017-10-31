@@ -47,31 +47,31 @@
         </div>
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane v-if="isShowProjectBtn('XM-xiangqing')" label="详情" name="details" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
                     <detail-form :tabs="tabs" :proId="projectId" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
                     <table-form :tabs="tabs" :companyForm="companyForm" :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('XM-tuandui')" label="团队" name="team" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
                     <team-table :tabs="tabs" :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
                     </team-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('XM-jilu')" label="记录" name="record" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
                     <record-form :tabs="tabs" :proId="projectId"></record-form>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('XM-shenpi')" label="审批" name="approve" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
                     <approve-table :tabs="tabs"></approve-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('XM-wendang')" label="文档" name="file" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
                     <file-table :tabs="tabs" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
                     <risk-table :tabs="tabs" :proId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('XM-guanli') && (isManage || isExit)" label="管理" name="manage" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('XM-guanli') && (isManage || isExit)" label="管理" name="manage" class="tab_list">
                     <manage-table :tabs="tabs" :proId="projectId"></manage-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isShowProjectBtn('GL-XMTC') && isExit" label="退出" name="outing" class="tab_list">
+                <el-tab-pane v-if="checkProjectAuth('GL-XMTC') && isExit" label="退出" name="outing" class="tab_list">
                     <outing-form :tabs="tabs" :proId="projectId"></outing-form>
                 </el-tab-pane>
             </el-tabs>
@@ -101,6 +101,7 @@ import Loading from 'element-ui'
 import deleteReminders from 'components/deleteReminders'
 import applyForms from 'components/applyDialog'
 import progressForms from 'components/progressDialog'
+import {checkProjectAuth } from 'common/js/config'
 import {
     getPreDetail,
     slectAllStage,
@@ -233,14 +234,8 @@ export default {
         }
     },
     methods: {
-        isShowProjectBtn(permissionCode) {
-            
-            //check 项目权限
-            this.$store.commit({
-                type: "filtersPermissionCode_project",
-                permissionCode: permissionCode
-            });
-            return this.$store.state.login.projectPermissions;
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
         },
         listenUploaded(uploaded) {
             if (uploaded) {

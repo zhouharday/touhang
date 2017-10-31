@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="riskTable">
-            <tabel-header :data="headerInfo_risk" @add="openAddModal"></tabel-header>
+            <tabel-header :data="checkProjectAuth('FXGL-tianjia') ? headerInfo_risk : _headerInfo_risk" @add="openAddModal"></tabel-header>
             <el-table :data="riskData" border style="width: 100%" align="center">
                 <el-table-column label="主题" prop="riskTheme" align="center">
                 </el-table-column>
@@ -18,8 +18,8 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
-                        <el-button v-if="scope.row.status != '已完成' && userId == scope.row.receivedUserId" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
-                        <el-button v-if="userId == scope.row.seedUserId" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-genzong') && (scope.row.status != '已完成' && userId == scope.row.receivedUserId)" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-shanchu') && (userId == scope.row.seedUserId)" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -176,7 +176,7 @@
 
 <script>
 import tabelHeader from 'components/tabelHeader'
-import { changeDate } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 import uploadFiles from 'components/uploadFiles'
 import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams } from 'api/projectPre'
 
@@ -336,6 +336,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             this.initInfo();
             this.getDatas();
