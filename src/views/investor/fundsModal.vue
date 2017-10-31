@@ -75,8 +75,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-// import {GetProtocolsList} from 'api/investor'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 export default {
     props: {
         fundsInfo: {
@@ -86,7 +85,7 @@ export default {
     },
     data() {
         return {
-            allAgreement: [],
+            allAgreement: this.$store.state.investor.agreement || [],
             agreementList: '',
             size: 1000,
             rules1: {
@@ -124,24 +123,13 @@ export default {
             this.fundsInfo.subscribeAmount = current.subscribeAmount
             this.fundsInfo.residueAmount = current.residueAmount
         },
+        ...mapActions([
+            'getAgreementInfo'
+        ])
     },
     created() {
-        // GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
-        //     if (res.status == '200') {
-        //         // console.log(res)
-        //         var allAgreement = res.data.result.list
-        //         if (this.agreement.length === 0) {
-        //             this.allAgreement = protocolsList
-        //         } else {
-        //             this.allAgreement = this.agreement
-        //         }
-        //     }
-        // }).catch(err => {
-        //     let response = err.data
-        //     this.$Message.error(response.message || '获取资金明细失败！')
-        // })
-        // console.log(this.agreement.length === 0)
         this.allAgreement = this.agreement
+        console.log(this.$store.state.investor.agreement)
     },
     computed: {
         ...mapGetters([

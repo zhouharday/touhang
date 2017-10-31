@@ -77,7 +77,7 @@ export default {
     data() {
         return {
             allAgreement: [],
-            agreementData: [],
+            agreementData: this.$store.state.investor.agreement || [],
             getAgreementValue: '',
             size: 1000,
             rules1: {

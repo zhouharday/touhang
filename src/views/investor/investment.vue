@@ -182,7 +182,7 @@ export default {
             var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getEarningsAmountList(fundId, merchantsId).then((res) => {
                 if (res.status == '200') {
-                    console.log(res.data.result.list)
+                    // console.log(res.data.result.list)
                     this.quitCapitalData = res.data.result.list
                 }
             })
