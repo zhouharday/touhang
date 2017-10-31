@@ -94,7 +94,7 @@ export default {
         this.$store.state.login.loading = true;
         sessionStorage.clear();
         // this.$router.push({ name: 'homeContent' });
-        
+
         let number = trimStr(this.userName);
         let pass = trimStr(this.passWord);
         pass = this.md5(pass, 32);
