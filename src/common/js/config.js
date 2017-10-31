@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import $store from 'vuex';
 export function changeDate(_date) {
     var value = new Date(_date);
     var year = value.getFullYear()
@@ -92,24 +90,4 @@ export function compare(prop) {
             return 0
         }
     }
-}
-
-export function isShowProjectBtn(permissionCode) {
-    //check 项目权限
-    $store.commit({
-        type: "filtersPermissionCode_project",
-        permissionCode: permissionCode
-    });
-    //   console.log(this.$store.state.login.projectPermissions);
-    return this.$store.state.login.projectPermissions;
-}
-
-export function isShowFundBtn(permissionCode) {
-    //check 基金权限
-    $store.commit({
-        type: "filtersPermissionCode_fund",
-        permissionCode: permissionCode
-    });
-    //   console.log(this.$store.state.login.fundPermissions);
-    return this.$store.state.login.fundPermissions;
 }
