@@ -606,4 +606,37 @@ export function roleBindPermission(roleId,permissionIds) {
 }
 
 
-/*******************************基金权限******************************************/
+/*******************************运营数据管理******************************************/
+
+export function zhibiaolist() {
+    const data = {
+        "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id,
+    }
+    return service({url:'/formLabel/queryOperateFrom', method: 'post', data})
+}
+
+
+export function addzhibiao(formId,fieldName) {
+    const data = {
+        "formId":formId, //
+        "fieldName":fieldName, //名称
+        "userId":JSON.parse(sessionStorage.getItem('userInfor')).id,
+    }
+    return service({url:'/formLabel/editFrom', method: 'post', data})
+}
+export function editzhibiao(formId,id,fieldName) {
+    const data = {
+        "formId":formId,
+        "id":id, // 科目id 修/ 改必须 新增不要
+        "fieldName":fieldName //名称
+    }
+    console.log(data)
+    return service({url:'/formLabel/editFrom', method: 'post', data})
+}
+
+export function deletezhibiao(formLabelId) {
+    const data = {
+        "formLabelId":formLabelId //科目id
+    }
+    return service({url:'/formLabel/deletFromLabel', method: 'post', data})
+}

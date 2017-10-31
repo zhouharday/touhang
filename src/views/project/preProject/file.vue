@@ -37,30 +37,20 @@
                                 <el-button type="text">上传</el-button>
                                 <input type="file" class="fileInput" @change="changeFile($event, scope.row.fileId, scope.row.stageId)" ref="avatarInput">
                             </div>
-                            <a v-if="scope.row.id != '' && scope.row.id != undefined" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
-                            <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   class="btn_border" @click="preview(scope.row.documentUrl)">预览</el-button>
+                            <a v-if="scope.row.id != null" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
+                            <el-button v-if="scope.row.id != null && scope.row.previewPath != ''" type="text"   class="btn_border" @click="preview(scope.row.documentUrl)">预览</el-button>
                             <el-button v-if="scope.row.id != '' && scope.row.id != undefined" type="text"   @click="handleDelete(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
             </template>
         </div>
-        <!-- 47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf?filename=Aaaaaaaaaaaaaaaaaaaaa.pdf -->
-        <vueshowpdf :v-show="isshowpdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></vueshowpdf>
-        <!-- 文件预览功能 -->
-        <div class="viewFiles" v-show="isHide">
-            <div class="closeView" @click="closeView">
-                <img src="/static/img/close.png">
-            </div>
-            <div class="fileArea">
-                不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。 v-show 是简单地切换元素的 CSS 属性 display 。 注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在 切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。 惰性的：如果在初始渲染时条件为假，则什么也不做 ——直到条件第一次变为真时，才会开始渲染条件块。 相比之下， v-show 就简单得多——不管初始条件是什么，元素总是 会被渲染，并且只是简单地基于 CSS 进行切换。 一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。 因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。 v-if 与 v-for 一起使用 当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。 请查阅 列表渲染指南 以获取详细信息。 ← Class 与 Style 绑定 列表渲染 → 发现错误？想参与编辑？ 在 Github 上编辑此页！
-            </div>
-        </div>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></show-pdf>
     </div>
 </template>
 
 <script>
-import vueshowpdf from 'vueshowpdf'
+import showPdf from 'components/showPdf'
 import {
     getProjectDoc, delDocument
 } from 'api/projectPre';
@@ -85,12 +75,12 @@ export default {
         }
     },
     components: {
-        vueshowpdf
+        showPdf
     },
     data() {
         return {
-            pdfurls:'//cdn.mozilla.net/pdfjs/tracemonkey.pdf',
-            isshowpdf:true,
+            pdfurls:'',
+            isshowpdf:false,
 
             projectDocList: [],
             isShow: true,
@@ -102,12 +92,7 @@ export default {
                 user: '',
                 date: ''
             },
-            fileData: [{
-                stageFile: 'BBBBBBBB.PDF',
-                fileName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            }],
+            fileData: [],
             projectForm: {
                 user: '',
                 date: ''
@@ -144,21 +129,8 @@ export default {
                 console.log('getProjectDoc() exists error: ', e);
             });
         },
-        handleUpload(file) {
-            this.file = file;
-            return false;
-        },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
         preview(url) {
-            console.log(url);
-            //this.pdfurls = 'http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzJ4-ATdp5AAFCOVhhyKg846.pdf?filename=Aaaaaaaaaaaaaaaaaaaaa.pdf';
+            this.pdfurls = url.replace('http://47.90.120.190:8086', '/file');
             this.isshowpdf = true;
         },
         pdferr(err){
@@ -168,10 +140,6 @@ export default {
         closepdf(){
             console.log("closepdf");
             this.isshowpdf = false;
-        },
-        closeView() {
-            this.isShow = true,
-                this.isHide = false
         },
         handleDelete(docId) {
             console.log('删除文档ID: ' + JSON.stringify(docId));
@@ -202,6 +170,7 @@ export default {
                     'Content-Type': 'multipart/form-data'
                 }
             };
+            // this.$http.post('http://192.168.0.136:9091' + '/files/uploadProjectDocument', formData, config)
             this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
             .then((res)=> {
                 console.log("上传文件结果:"+ JSON.stringify(res.data));

@@ -2,8 +2,8 @@
   <div class="cpdf">
    <div class="center">
      <div class="contor">
-      <el-button @click="prev">上一页</el-button>
-      <el-button @click="next">下一页</el-button>    
+      <el-button @click="prev" :disabled="!hasPrev">上一页</el-button>
+      <el-button @click="next" :disabled="!hasNext">下一页</el-button>    
       <span>Page: <span v-text="page_num"></span> / <span v-text="page_count"></span></span>
           
       <el-button @click="addscale" icon="plus"></el-button>
@@ -15,20 +15,28 @@
   </div>
 </template>
 <script>
-import PDFJS from '../../../static/pdf/pdf.js'
+import PDFJS from '../../static/js/pdf/pdf.js'
+// import PDFJS from 'pdfjs'
  import {
   mapActions,
   mapGetters
  } from 'vuex';
  export default {
   name: 'c-pdf',
-  props: ['pdfurl'],
+  props: {
+    'pdfurl':{
+      type: String,
+      default:''
+    }
+  },
   data() {
     return {
      pdfDoc: null, //pdfjs 生成的对象
      pageNum: 1,//
      pageRendering: false,
      pageNumPending: null,
+     hasPrev: false,
+     hasNext: false,
      scale: 1.2,//放大倍数
      page_num: 0,//当前页数
      page_count: 0,//总页数
@@ -36,7 +44,27 @@ import PDFJS from '../../../static/pdf/pdf.js'
      minscale: 0.8//最小放大倍数
     }
   },
+  watch: {
+        'pdfurl':function (to,from){
+            if(to != from){
+                this.init();
+            }
+        }
+    },
   methods: {
+    init(){
+        let vm = this;
+        console.log("地址：a"+vm.pdfurl);
+        PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
+           vm.pdfDoc = pdfDoc_;
+           vm.page_count = vm.pdfDoc.numPages;
+
+           vm.hasPrev = vm.pageNum > 1;
+           vm.hasNext = vm.page_count > vm.pageNum;
+
+           vm.renderPage(vm.pageNum);
+        });
+    },
     renderPage(num) { //渲染pdf
      let vm = this
      this.pageRendering = true;
@@ -64,20 +92,23 @@ import PDFJS from '../../../static/pdf/pdf.js'
           vm.pageNumPending = null;
         }
        });
-     });
+     }).catch(e => {
+        console.log('renderPage error ', e);
+        this.$emit('pdferr');
+      });
      vm.page_num = vm.pageNum;
  
     },
     addscale() {//放大
      if(this.scale >= this.maxscale) {
-       return
+       return false;
      }
      this.scale += 0.1;
      this.queueRenderPage(this.pageNum)
     },
     minus() {//缩小
      if(this.scale <= this.minscale) {
-       return
+       return false;
      }
      this.scale -= 0.1;
      this.queueRenderPage(this.pageNum)
@@ -85,7 +116,7 @@ import PDFJS from '../../../static/pdf/pdf.js'
     prev() {//上一页
      let vm = this
      if(vm.pageNum <= 1) {
-       return;
+       return false;
      }
      vm.pageNum--;
      vm.queueRenderPage(vm.pageNum);
@@ -93,13 +124,16 @@ import PDFJS from '../../../static/pdf/pdf.js'
     next() {//下一页
      let vm = this
      if(vm.pageNum >= vm.page_count) {
-       return;
+       return false;
      }
      vm.pageNum++;
      vm.queueRenderPage(vm.pageNum);
     },
     closepdf() {//关闭PDF
-     this.$emit('closepdf')
+      this.pdfDoc = null;
+      this.page_count = 0;
+
+      this.$emit('closepdf');
     },
     queueRenderPage(num) {
      if(this.pageRendering) {
@@ -116,12 +150,7 @@ import PDFJS from '../../../static/pdf/pdf.js'
     }
   },
   mounted() {
-    let vm = this
-    PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
-     vm.pdfDoc = pdfDoc_;
-     vm.page_count = vm.pdfDoc.numPages
-     vm.renderPage(vm.pageNum);
-    });
+    this.init();
   }
  }
 </script>

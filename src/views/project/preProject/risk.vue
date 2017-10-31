@@ -18,8 +18,8 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
-                        <el-button v-if="scope.row.status != '已完成'" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
-                        <el-button type="text" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button v-if="scope.row.status != '已完成' && userId == scope.row.receivedUserId" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button v-if="userId == scope.row.seedUserId" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -194,6 +194,7 @@ export default {
     data() {
         return {
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name,
+            userId: JSON.parse(sessionStorage.getItem('userInfor')).id,
             createDate: changeDate(new Date()),
 
             actionUrl:this.api + '/files/upload',
