@@ -135,11 +135,11 @@
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
-            <el-row v-if="showOrHide.isShowSidebar && showOrHide.isVshowYe">
+            <!-- <el-row v-if="showOrHide.isShowSidebar && showOrHide.isVshowYe">
                 <el-col :span="24" v-for="(menuItem,index) in theModel" :key="menuItem">
                      <my-tree :model="menuItem"></my-tree>
                 </el-col>
-            </el-row>
+            </el-row> -->
             <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>

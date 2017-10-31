@@ -80,6 +80,8 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
+             console.log(this.investorData)
+             console.log(row)
             // console.log(typeof(row.paidDate))
             this.fundsDetailsModal = true
             row.paidAmount = parseFloat(row.paidAmount)
