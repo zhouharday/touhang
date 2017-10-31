@@ -192,7 +192,6 @@ export default {
         type: "filtersPermissionCode_project",
         permissionCode: permissionCode
       });
-      //console.log(this.$store.state.login.projectPermissions);
       return this.$store.state.login.projectPermissions;
     },
     isShowFundBtn(permissionCode) {
@@ -201,7 +200,6 @@ export default {
         type: "filtersPermissionCode_fund",
         permissionCode: permissionCode
       });
-      //   console.log(this.$store.state.login.fundPermissions);
       return this.$store.state.login.fundPermissions;
     }
   },
