@@ -38,7 +38,51 @@
                 <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                     <el-tab-pane label="角色权限" name="first">
 
-                        <role-limits :treeData="treeData" :nowId = "nowId"></role-limits>
+                        <!--<role-limits :treeData="treeData" :nowId = "nowId"></role-limits>-->
+
+
+                        <div class="a">
+                            <!--<div :v-if="nowId">-->
+                                <div class="limitBtn" >
+                                    <el-button type="danger" size="small"  v-if="nowId" @click="Setting">保存修改</el-button>
+                                </div>
+                            <!--</div>-->
+                            <div class="textWrapper">
+                                <el-row>
+                                    <el-col :span="24" >
+                                        <!--<my-tree :model="treeData"></my-tree>-->
+                                        <div v-for="item in treeData" >
+                                            <el-col :span="24" style="border: 1px solid #dfe6ec;">
+                                                <el-col :span="6" >
+                                                    <div class="left">{{item.menuName}}</div>
+                                                </el-col>
+                                                <el-col :span="18">
+                                                    <div  class="right" >
+                                                        <el-col>
+                                                            <el-row :span = "18" v-for="nextItem in item.children" style="flex-direction: row; display: flex ;border-bottom: 1px solid #dfe6ec;">
+                                                                <el-col :span="8" style=" padding-left: 10px; border-right: 1px solid #dfe6ec;">
+                                                                    <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                                                        <el-checkbox :label="nextItem.path" >{{nextItem.menuName}}</el-checkbox>
+                                                                    </el-checkbox-group>
+                                                                </el-col>
+                                                                <el-col :span = "16" style="padding-left: 10px">
+
+                                                                    <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                                                        <el-checkbox v-for="(text, index) of nextItem.buttons"  style="margin-left: 0px; margin-right: 15px" :label="text.path" >{{text.menuName}}</el-checkbox>
+                                                                    </el-checkbox-group>
+                                                                </el-col>
+                                                            </el-row>
+                                                        </el-col>
+                                                    </div>
+                                                </el-col>
+                                            </el-col>
+                                        </div>
+                                    </el-col>
+                                </el-row>
+                            </div>
+                        </div>
+
+
                     </el-tab-pane>
                     <el-tab-pane label="角色用户" name="second">
                         <role-user :roleUserList = "roleUserList" :nowId = "nowId" @refreshRoleUserList = "refreshRoleUserList"></role-user>
@@ -79,7 +123,10 @@
     import {getNodes} from 'api/system'
     import {getRightUserList} from 'api/system'
     import {saveRole} from 'api/system'
-
+    import {authorization} from 'api/system'
+    import {getUpdata} from "api/system"
+    import ElRow from "element-ui/packages/row/src/row";
+    import ElCol from "element-ui/packages/col/src/col";
 
 export default {
 
@@ -95,9 +142,13 @@ export default {
                     fundName: '',
                     editFlag: false
                 },
+                allData:[],
+                clickMenu:[],
             }
         },
         components: {
+            ElCol,
+            ElRow,
             roleLimits,
             roleUser
         },
@@ -162,21 +213,47 @@ export default {
             //右侧列表
             handleCurrentChange(val) {
 //                this.currentRow = val;
-                    this.nowId = val.id
+                this.nowId = val.id
+                this.clickMenu = []
 //                获取角色权限
                 getUserRole(val.id).then((res)=>{
                     var arr = res.data.result
+                    var userRole = res.data.result
+                    userRole.forEach(function (item) {
+                        if (this.clickMenu){
+                            this.clickMenu.push(item.path)
+                        }else
+                            this.clickMenu = [item.path]
+                    },this)
 //                    获取所有权限
-                    getUserAllRole().then((res)=>{
-                        this.treeData = getNodes(res.data.result,arr)
-                        console.log(res.data.result)
-                        console.log(this.treeData)
-                    })
+//                    getUserAllRole().then((res)=>{
+////                        this.treeData = getNodes(res.data.result,arr)
+//                        this.treeData = res.data.result
+//                        console.log(this.treeData)
+//                    })
                 }),
 //                获取角色用户
                     getRightUserList(val.id).then((res)=>{
                         this.roleUserList = res.data.result
                     })
+            },
+            Setting(){
+                console.log(this.clickMenu)
+                var string = getUpdata(this.clickMenu)
+                console.log(string)
+                authorization(this.nowId,string).then((res)=>{
+                    console.log(res.data)
+                    getUserRole(this.nowId).then((res)=>{
+                        var arr = res.data.result
+                        var userRole = res.data.result
+                        userRole.forEach(function (item) {
+                            if (this.clickMenu){
+                                this.clickMenu.push(item.path)
+                            }else
+                                this.clickMenu = [item.path]
+                        },this)
+                    })
+                })
             }
 
 
@@ -185,19 +262,14 @@ export default {
         created(){
             //角色列表
             getRoleList().then((res)=>{
-
                 res.data.result.list.forEach(function (item,index) {
                     item.editFlag = false
                 })
                 this.roleInfo = res.data.result.list
-//                console.log(this.roleInfo)
             }),
 //            所有权限
             getUserAllRole().then((res)=>{
-                console.log('**********************')
-                console.log(res.data.result)
                 this.treeData = res.data.result
-//                 this.treeData = getNodes(res.data.result,[])
             })
         }
     }
@@ -215,8 +287,39 @@ export default {
         padding-top: 12px;
         padding-bottom: 12px;
     }
+    .limitBtn {
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: flex-end;
+    }
+    .left {
+        /*height: 40px;*/
+        line-height: 40px;
+        /*border-top: 1px solid #dfe6ec;*/
+        /*border-bottom: none;*/
+        /*border-right: none;*/
+
+        text-align: center;
+    }
+    .f_right {
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid #dfe6ec;
+        border-left: none;
+        border-bottom: none;
+        text-align: center;
+        font-weight: bold;
+        background-color: #eef1f6;
+    }
     .right {
-        text-align: right;
+        display: flex;
+
+        min-height: 40px;
+        line-height: 40px;
+        /*padding-left: 10px;*/
+        border-left: 1px solid #dfe6ec;
+        border-right: none;
+        border-bottom: none;
     }
 }
 

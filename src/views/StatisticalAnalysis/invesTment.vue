@@ -12,11 +12,6 @@
                 <el-col :span="9">
                     <div class="grid-content bg-purple-dark">
                         <div>
-                            <!--<div class="Quarterly">-->
-                                <!--<span> 01 </span>月-->
-                                <!--<span> 01 </span>季度-->
-                                <!--<span> 2017 </span>年-->
-                            <!--</div>-->
                             <el-table class="invesTabData" :data="invesTabData" border style="width: 100%">
                                 <el-table-column prop="stageName" label="项目阶段" align="center" width="">
                                 </el-table-column>
@@ -54,12 +49,14 @@ export default {
     this.countProjectMessage();
   },
   mounted() {
-    let myChart = echarts.init(document.getElementById("invesTment_Echarts"));
-    // console.log(myChart);
-    myChart.setOption(this.option);
+    //   this.countProjectMessage();
+    // let myChart = echarts.init(document.getElementById("invesTment_Echarts"));
+    // this.countProjectMessage();
+    // myChart.setOption(this.option);
   },
   data() {
     return {
+      data: [],
       option: {
         title: {
           text: "项目投资统计表",
@@ -67,8 +64,8 @@ export default {
           subtext: ""
         },
         tooltip: {
-          trigger: "item"
-          //   formatter: "{a} <br/>{b} : {c}%"
+        //   trigger: "item",
+        //   formatter: "{a} <br/>{b} : {c}%"
         },
         toolbox: {
           feature: {
@@ -127,27 +124,18 @@ export default {
             //     fontSize: 15
             //   }
             // },
-            data: [
-              // {projectNumber: '10', stageName: 'a'},
-              // {projectNumber: '20', stageName: 'b'},
-              // {projectNumber: '30', stageName: 'c'},
-              // {projectNumber: '40', stageName: 'd'},
-              // {projectNumber: '50', stageName: 'e'},
-              // {projectNumber: '60', stageName: 'f'}
-              // {projectNumber: '10', stageName: 'a'},
-              // {value: '20', name: 'b'},
-              // {value: '30', name: 'c'},
-              // {value: '40', name: 'd'},
-              // {value: '50', name: 'e'},
-              // {value: '60', name: 'f'}
-            ]
+            data: this.data
           }
         ]
       },
-      invesTabData: [],
+      invesTabData: []
     };
   },
   methods: {
+    intEcart() { //初始化Echarts 方法
+      let myChart = echarts.init(document.getElementById("invesTment_Echarts"));
+      myChart.setOption(this.option);
+    },
     countProjectMessage() {
       this.$http
         .post(this.api + "/projectPool/countProjectMessage", {
@@ -157,18 +145,25 @@ export default {
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
-            //   console.log(res.data);
+                console.log(res.data);
               this.invesTabData = res.data.result;
-              res.data.result.forEach(ele => {
-                ele.projectNumber = 'value';
-                ele.stageName = 'name';
+              this.data = [];
+              res.data.result.forEach((ele, index1) => {
+            //   this.option.title.text = ele.name;
+                let obj = {};
+                // data.push(ele);
+                obj.name = ele.stageName;
+                obj.value = ele.projectNumber;
+                this.data.push(obj);
               });
-              this.option.series.forEach((item, index) => {
-                //   console.log(item.data);
-                item.data = res.data.result;
+              this.option.series.forEach((item, index2) => {
+                item.data = this.data;
               });
-              console.log('/////////////////////////////');
-              console.log(res.data.result);
+              console.log(this.data);
+              console.log(this.option.series);
+              this.intEcart();
+              //   console.log("/////////////////////////////");
+              //   console.log(res.data.result);
               this.$Message.success(res.data.message);
             } else {
               this.$Message.error(res.data.message);

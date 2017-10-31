@@ -186,7 +186,6 @@
     </div>
 </template>
 
-
 <script>
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
@@ -284,9 +283,10 @@ export default {
     watch: {},
     methods: {
         disable(name) {
-            return name.flag = !name.flag;
+            name.flag = !name.flag;
         },
         changeProjectInfo() {
+            if(this.basicForm.flag) return false;
             let basicForm = this.basicForm;
             basicForm.projectId = this.projectId;
             changeProjectInfo(basicForm).then(resp => {
@@ -296,52 +296,34 @@ export default {
             })
         },
         changeEnterpriseInfo() {
+            if(this.companyForm.flag) return false;
             let companyForm = this.companyForm;
             companyForm.projectId = this.projectId;
             companyForm.registerDate = companyForm.registerDate;
+            // console.log("参数："+ JSON.stringify(companyForm));
             changeEnterpriseInfo(companyForm).then(resp => {
                 if(resp.data.status == '200'){
                     this.disable(companyForm);
                 }
-                console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
+                // console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
             }).catch(e => {
                 console.log('changeEnterpriseInfo exists error: ', e);
             })
         },
         changeCapitalInfo() {
+            if(this.capitalForm.flag) return false;
             let capitalForm = this.capitalForm;
             capitalForm.projectId = this.projectId;
             capitalForm.startInvestDate = capitalForm.startInvestDate;
             capitalForm.exitDate = capitalForm.exitDate;
-            let {
-             id, 
-             projectTurnId, 
-             appraisementAmount, 
-             investAmount, 
-             stockProportion, 
-             oldAmount, 
-             currency, 
-             stock, 
-             investmentCapital, 
-             startInvestDate, 
-             exitDate
-            } = this.capitalForm;
+            let {id, projectTurnId, appraisementAmount, investAmount, stockProportion, oldAmount, currency, stock, investmentCapital, startInvestDate, exitDate } = this.capitalForm;
             let params = {
-                id, 
                 projectId : this.projectId,
-                projectTurnId, 
-                appraisementAmount, 
-                investAmount, 
-                stockProportion, 
-                oldAmount, 
-                currency, 
-                stock, 
-                investmentCapital, 
-                startInvestDate, 
-                exitDate
-            }
+                id, projectTurnId, appraisementAmount, investAmount, stockProportion, oldAmount, currency, stock, investmentCapital, startInvestDate, exitDate };
             changeCapitalInfo(capitalForm).then(resp => {
-                this.disable(this.capitalForm);
+                if(resp.data.status == '200'){
+                    this.disable(capitalForm);
+                }
             }).catch(e => {
                 console.log('changeCapitalInfo exists error: ', e);
             })

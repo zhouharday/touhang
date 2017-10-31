@@ -179,10 +179,10 @@
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="投资金额（元）" prop="investAmount">
-                                <el-input v-model="fundForm1.investAmount" auto-complete="off"></el-input>
+                                <el-input v-model.number="fundForm1.investAmount" auto-complete="off"></el-input>
                             </el-form-item>
                             <el-form-item label="股权占比（%）" prop="stockRatio">
-                                <el-input v-model="fundForm1.stockRatio" auto-complete="off"></el-input>
+                                <el-input v-model.number="fundForm1.stockRatio" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
@@ -494,9 +494,9 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目合同" prop="contract">
-                                        <el-select @change="selShareContract" value-key="id" v-model="sharingForm1.contract" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item" :disabled="item.status == 1">
+                                    <el-form-item label="项目合同" prop="contractId">
+                                        <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
+                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -562,9 +562,9 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
-                                    <el-form-item label="项目合同" prop="contract">
-                                        <el-select @change="selShareContract" value-key="id" v-model="sharingForm1.contract" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item" :disabled="item.status == 1">
+                                    <el-form-item label="项目合同" prop="contractId">
+                                        <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
+                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
                                             </el-option>
                                         </el-select>
                                     </el-form-item>
@@ -727,12 +727,10 @@ export default {
                     { required: true, message: '请选择基金', trigger: 'blur' }
                 ],
                 investAmount: [
-                    { required: true, message: '请输入投资金额', trigger: 'blur' },
-                    { type: 'number', message: '投资金额必须为数字', trigger: 'blur' }
+                    { type: 'number', required: true, message: '请输入投资金额数值', trigger: 'blur' }
                 ],
                 stockRatio: [
-                    { required: true, message: '请输入股权占比', trigger: 'blur' },
-                    { type: 'number', message: '股权占比必须为数字', trigger: 'blur' }
+                    { type: 'number', required: true, message: '请输入股权占比数值', trigger: 'blur' }
                 ]
             },
             fundData1: [],
@@ -776,14 +774,14 @@ export default {
             // 项目分红
             sharingForm1: {
                 id: '',
-                contract: '',
+                contractId: '',
                 shareTitle: '',
                 shareAmount: 0,
                 handlerUserId: '',
                 shareDate: ''
             },
             rules4: {
-                contract: [
+                contractId: [
                     { required: true, message: '请选择项目合同', trigger: 'change' }
                 ],
                 shareDate: [
@@ -798,54 +796,9 @@ export default {
                     explain: '添加'
                 }]
             },
-            contractDocInfo: [
-                {
-                    type: '1',
-                    name: '项目合同.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '项目合同.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '项目合同2.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '项目合同2.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ],
-            payDocInfo:[
-                {
-                    type: '1',
-                    name: '投资支付.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '投资支付2.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '投资支付.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '投资支付2.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ],
-            shareDocInfo:[
-                {
-                    type: '1',
-                    name: '项目分红.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '项目分红2.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '项目分红.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '项目分红2.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ]
+            contractDocInfo: [],
+            payDocInfo:[],
+            shareDocInfo:[]
         }
     },
     created() {
@@ -854,8 +807,8 @@ export default {
         // this.init();
     },
     watch: {
-        'tabs':function (to,from){
-            if(to.tabList[6]){
+        'tabs': function(to, from) {
+            if (to.tabList[6]) {
                 this.init();
             }
         }
@@ -1036,14 +989,13 @@ export default {
                     this.fundData1.push(this.fundForm1);
 
                     this.fundForm1 = {
-                        fund: '',
+                        fundId: '',
                         fundName: '',
                         investAmount: '',
                         stockRatio: '',
                         editFlag: false
                     };
                     this.fundAdd1 = false;
-                    //this.contractAdd1 = true;
                     this.changeInvestAmount();
                 }
             });
@@ -1075,7 +1027,6 @@ export default {
         },
         // 编辑 项目合同  确定按钮
         confirmContractAdd2(id) {
-
             this.$refs["contractForm2"].validate((valid) => {
                 if (valid) {
                     let projectContract = this.contractForm2;
@@ -1148,11 +1099,13 @@ export default {
             })
         },
         //打开添加投资支付
-        goAddPaid(){
-            if(this.contractData.length == 1){
+        goAddPaid() {
+            if (this.contractData.length == 1) {
                 let contract = this.contractData[0];
                 this.paidForm1.contractAmount = contract.contractAmount;
                 this.paidForm1.contractId = contract.id;
+                this.paidForm1.payTitle = '';
+                this.paidForm1.payDate = '';
                 //获得合同中的投资主体(基金)列表
                 getContractDetail(contract.id).then(resp => {
                     if (resp.data.status == '200') {
@@ -1180,10 +1133,10 @@ export default {
                     stockRatio: '',
                     payDate: ''
                 };
-                this.payDocInfo = [];
                 this.fundData2 = [];
                 this.fundData2.push();
             }
+            this.payDocInfo = [];
             this.paidAdd1 = true;
         },
         // 添加 投资支付 确定按钮
@@ -1281,12 +1234,12 @@ export default {
                 }
             });
         },
-        changeInvestAmount(){
+        changeInvestAmount() {
             let sum = 0.0;
-            for(let i = 0; i < this.fundData1.length; i++){
+            for (let i = 0; i < this.fundData1.length; i++) {
                 sum += (parseFloat(this.fundData1[i].investAmount | 0));
             }
-            this.contractForm1.contractAmount = sum;
+            this.$set(this.$data.contractForm1, 'contractAmount', sum);
             this.contractForm2.contractAmount = sum;
         },
         //投资支付金额合计
@@ -1310,14 +1263,12 @@ export default {
         //选择项目分红的合同
         selShareContract(value) {
             if (!value) return;
-            this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
-            this.sharingForm1.contractAmount = value.contractAmount;
-            this.sharingForm1.contractId = value.id;
+            // this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             //获得合同中的投资主体(基金)列表
-            getContractDetail(value.id).then(resp => {
+            getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
                     this.fundData3 = resp.data.result.fundInfo;
-
+                    this.$set(this.$data.sharingForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
                     this.fundData3.forEach(function(item, index) {
                         item.contractFundId = item.id;
                         item.id = '';

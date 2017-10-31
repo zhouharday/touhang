@@ -81,8 +81,9 @@
   margin-bottom: 20px;
 }
 .createForm {
+  // float: left;
   text-align: center;
-  width: 100%;
+  // width: 100%;
   min-height: 100%;
 //   position: relative; // padding: 24px;
   // background: #fff;
@@ -114,12 +115,15 @@
       width: 100%;
   }
   .form-components {
-    min-height: 340px;
+    padding: 24px;
+    float: left;
+    min-height: 348px;
     width: 30%;
-    text-align: left;
-    padding-top: 10px;
-    margin-top: 20px;
     background: #fff;
+    margin-top: 20px;
+    // margin-left: 10px;
+    margin-right: 10px;
+    text-align: left;
   }
   ul {
     margin-top: 30px;
@@ -130,6 +134,8 @@
     text-align: left;
   }
   .leftForm {
+    padding: 24px;
+    float: left;
     min-height: 340px;
     width: 38%;
     background: #cccccc;
@@ -145,6 +151,8 @@
     }
   }
   .rightForm {
+    padding: 24px;
+    float: left;
     position: inherit;
     width: 30%;
     min-height: 340px;

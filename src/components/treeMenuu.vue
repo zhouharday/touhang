@@ -29,17 +29,9 @@
                             <!--<el-checkbox v-for="(checkbox, checkedIndex) in text.details"  :label="checkbox" :key="checkedIndex">{{checkbox}}</el-checkbox>-->
                             <!--</el-checkbox-group>-->
                             <!--</div>-->
-                            <el-checkbox v-for="(text, index) of model.menuContent"   :label="text.path" >{{text.menuName}}</el-checkbox>
-
-
-
-
+                            <el-checkbox v-for="(text, index) of model.menuContent" :label="text.path" >{{text.menuName}}</el-checkbox>
                             <!--</div>-->
                         </el-checkbox-group>
-
-
-
-
                     </el-col>
                 </el-row>
             </el-col>

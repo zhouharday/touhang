@@ -281,7 +281,7 @@ export default {
                 }
             };
 
-            this.$http.post(API_ROOT + '/files/upload', formData, config)
+            this.$http.post(this.api + '/files/upload', formData, config)
             .then((res)=> {
                 if (res.status == '200') {
                     if (res.data.status == '200') {
@@ -299,6 +299,7 @@ export default {
             })
         },
         submitForm(formName) {
+            console.log("this.basicForm"+this.basicForm.projectLogo);
             let basicForm = this.basicForm;
             let companyForm = this.companyForm;
             this.$refs[formName].validate((valid) => {

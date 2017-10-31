@@ -13,7 +13,7 @@
             <el-table :data="operatingData" border style="width: 100%">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="openDetails1(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
+                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="goAddData(scope.row.id, '2', true)">{{ scope.row.baseDate }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
                             </el-date-picker>
@@ -42,7 +42,7 @@
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">保存
                         </el-button> -->
-                        <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">编辑</el-button>
+                        <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -140,26 +140,26 @@
             <!-- 添加经营数据明细 对话框 -->
             <el-dialog title="添加经营数据明细" :visible.sync="operatingModal2" :close-on-click-modal="false" class="editData">
                 <el-table :data="operatingData1" border style="width:100%">
-                    <el-table-column label="项目" prop="project" align="center">
+                    <el-table-column label="项目" prop="field_name" align="center">
                     </el-table-column>
-                    <el-table-column label="经营目标" prop="operatingGoal" align="center">
+                    <el-table-column label="经营目标" prop="simple_value" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.operatingGoal" placeholder="">{{ scope.row.operatingGoal }}</el-input>
+                            <el-input v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="截止基准日实际情况" prop="realSituation" align="center">
+                    <el-table-column label="截止基准日实际情况" prop="complex_value" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.realSituation" placeholder="">{{ scope.row.realSituation }}</el-input>
+                            <el-input v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="完成率" prop="completionRate" align="center">
+                    <el-table-column label="完成率" prop="value1" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.completionRate" placeholder="">{{ scope.row.completionRate }}</el-input>
+                            <el-input v-model="scope.row.value1" placeholder="">{{ scope.row.value1 }}</el-input>
                         </template>
                     </el-table-column>
-                    <el-table-column label="下半年计划" prop="secondPlan" align="center">
+                    <el-table-column label="下半年计划" prop="value2" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.secondPlan" placeholder="">{{ scope.row.secondPlan }}</el-input>
+                            <el-input v-model="scope.row.value2" placeholder="">{{ scope.row.value2 }}</el-input>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -176,7 +176,7 @@
             <el-table :data="financialData" border style="width: 100%" align="center">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                     <template scope="scope">
-                         <span style="color:#f05e5e;cursor:pointer" @click="openDetails2(scope.row,scope.$index)">{{ scope.row.baseDate }}</span>
+                         <span style="color:#f05e5e;cursor:pointer" @click="goAddData(scope.row.id, '2', true)">{{ scope.row.baseDate }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
@@ -192,7 +192,7 @@
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
                         </el-button>
-                        <el-button type="text" @click="goAddData(scope.row.id, '2')">添加数据</el-button>
+                        <el-button type="text" @click="goAddData(scope.row.id, '2', false)">添加数据</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -241,11 +241,11 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :action="importUrl" :data="importData">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" show-upload-list="false" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
-                        <a href="/static/img/sheet.txt" download="资产负债表">模板下载</a>
+                        <a href="http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls" download="资产负债表">模板下载</a>
                     </el-button>
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -361,6 +361,7 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             importUrl:this.api+'/excel//financial',
+            // importUrl:"http://192.168.0.136:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
             operatingData: [
@@ -392,7 +393,7 @@ export default {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
-                sort: [
+                dataType: [
                     { required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
@@ -400,8 +401,8 @@ export default {
                 baseDate: [
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
-                sort: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                dataType: [
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             sortOptions: [
@@ -472,7 +473,14 @@ export default {
                 }
             ],
             //  财务数据
-            financialData: [],
+            financialData: [
+                {
+                    baseDate: 'asdasd',
+                    dataType: 'lklkjkjk',
+                    operatorName: 'asdsdfs',
+                    currentDeta: '2017-10-30'
+                }
+            ],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -551,11 +559,11 @@ export default {
             })
         },
         //打开添加数据明细表单
-        goAddData(subjectId, dataType) {
-            this.readControl = false;
-            this.finacial_title = '添加财务数据明细';
+        goAddData(subjectId, dataType, readControl = false) {
+            this.readControl = readControl;
+            this.finacial_title = '财务数据明细';
             getDataFormBody(subjectId).then(resp => {
-                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let formBody = resp.data.result.dataInfos;
                     //填充表单
@@ -564,7 +572,7 @@ export default {
 
                         if(_dataType == 1){
                             //填充经营数据表单
-                            this.fillOperateSheet(formBody[idx].operations);
+                            this.operatingData1 = formBody[idx].operations;
                             this.operateInfo = formBody[idx].dataInfo;
                         }else if(_dataType == 2){
                             //填充资产负债表单
@@ -594,16 +602,29 @@ export default {
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
             })
-            if (dataType == '1') {
-                this.operatingModal2 = true;
-            } else {
-                this.financialModal2 = true;
-            }
-
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
             this.operatingModal2 = false;
+            let operateData = {
+                dataInfo: this.operateInfo,
+                operations: this.operatingData1
+            };
+            let dataInfos = [operateData];
+            let params = {
+                dataInfos: dataInfos
+            };
+            fillDataForm(params).then(resp => {
+                // console.log("财务数据-保存数据 结果："+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    this.financialModal2 = false;
+                    this.clearData();
+                } else {
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            });
         },
         // 查看财务数据详情
         openDetails2(row,index) {
@@ -723,28 +744,48 @@ export default {
         // 上传附件的方法
         handleBeforeUpload(file) {
             let activeName = this.activeName;
-            let dataInfoid = '';
-            if(activeName == 'first'){
-                dataInfoid = this.balanceInfo.id;
-            }else if(activeName == 'second'){
-                dataInfoid = this.incomeInfo.id;
-            }else if(activeName == 'third'){
-                dataInfoid = this.cashFlowInfo.id;
-            }
-
+            console.log("activeName"+this.activeName);
+            let dataInfoid = this.balanceInfo.id+','+this.incomeInfo.id+','+this.cashFlowInfo.id;
             this.importData = {
-                dataInfoid: dataInfoid
+                dataInfoids: dataInfoid
             }
             console.log("导入数据"+JSON.stringify(this.importData));
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
-        },
+        handleSuccess(){
+            getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
+                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
+                    let formBody = resp.data.result.dataInfos;
+                    //填充表单
+                    for(var idx = 0; idx < formBody.length; idx ++){
+                        var _dataType = formBody[idx].dataInfo.dataType;
+
+                        if(_dataType == 1){
+                            //填充经营数据表单
+                            this.fillOperateSheet(formBody[idx].operations);
+                            this.operateInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 2){
+                            //填充资产负债表单
+                            // console.log("资产负债表："+JSON.stringify(formBody[idx].operations));
+                            this.balanceSheet = transform(formBody[idx].operations);
+                            this.balanceInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 3){
+                            //填充现金流量表单
+                            this.cashFlowStatement = formBody[idx].operations;
+                            this.cashFlowInfo = formBody[idx].dataInfo;
+                        }else if(_dataType == 4){
+                            //填充利润表单
+                            this.incomeStatement = formBody[idx].operations;
+                            this.incomeInfo = formBody[idx].dataInfo;
+                        }
+                    }
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('getFee() exists error: ', e);
+            })
+        }
     },
     components: {
         deleteReminders

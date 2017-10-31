@@ -81,6 +81,11 @@ const dictionary = (resolve) => {
         resolve(module)
     })
 }
+const formLabel = (resolve) => {
+    import('views/system/formLabel').then((module) => {
+        resolve(module)
+    })
+}
 const fundAuthority = (resolve) => {
     import('views/system/fundAuthority').then((module) => {
         resolve(module)
@@ -169,6 +174,10 @@ const r3 = [
         path: 'dictionary',
         name: 'dictionary',
         component: dictionary
+    }, {
+        path: 'formLabel',
+        name: 'formLabel',
+        component: formLabel
     }, {
         path: 'fundAuthority',
         name: 'fundAuthority',

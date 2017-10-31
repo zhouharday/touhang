@@ -26,14 +26,19 @@ const state = {
         text: '',
         isLogged: false, //登录状态
     },
-    loading: false
-}
+    loading: false,
+    permissionCode: [], //客户端系统项目、基金按钮数据
+    permissionCode_project: [], //项目按钮数据
+    permissionCode_fund: [], //基金按钮数据
+    projectPermissions: false, //是否存在项目权限按钮
+    fundPermissions: false, //是否存在基金权限按钮
+};
 
 const mutations = {
     addTab(state, targetName) {
         if (!state.TitleList) {
             return;
-        }
+        };
         let obj = {};
         obj.title = targetName.title;
         obj.path = targetName.url;
@@ -42,7 +47,7 @@ const mutations = {
             if (state.TitleList[i].name == targetName.name) {
                 return;
             }
-        }
+        };
         state.TitleList.push(obj);
         window.sessionStorage.setItem('key', JSON.stringify(state.TitleList));
     },
@@ -85,11 +90,72 @@ const mutations = {
             message: msg.message,
             type: msg.type
         })
+    },
+    getPermissionButton(state, user) { //获取客户端系统项目、基金按钮
+        user.this.$http
+            .post(user.this.api + "/permission/getPermissionButton", {
+                "userId": state.userInfor.id,
+                "merchantId": state.merchants[0].id
+            })
+            .then(res => {
+                if (res.status == "200") {
+                    if (res.data.state == "200") {
+                        console.log('按钮权限数据');
+                        // console.log(res.data);
+                        state.permissionCode = res.data.result; //保存所有按钮数据
+                        window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
+                        console.log(state.permissionCode);
+                        state.permissionCode.map((item, index) => {
+                            state.permissionCode_project = [];
+                            state.permissionCode_fund = [];
+                            if (state.permissionCode[index].permissionType == 0) { //项目按钮
+                                state.permissionCode_project.push(state.permissionCode[index]);
+                            };
+                            if (state.permissionCode[index].permissionType == 1) { //基金按钮
+                                state.permissionCode_fund.push(state.permissionCode[index]);
+                            }
+                        });
+                        console.log('项目按钮权限');
+                        console.log(state.permissionCode_project);
+                        console.log('基金按钮权限');
+                        console.log(state.permissionCode_fund);
+                        // console.log(res.data.message);
+                    } else {
+                        console.log(res.data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    },
+    filtersPermissionCode_project(state, str) { //过滤项目按钮方法
+        state.projectPermissions = false;
+        state.permissionCode_project.map((item, index) => {
+            if (item.permissionCode == str) {
+                return ProjectPermissions = true;
+            } else {
+                return ProjectPermissions = false;
+            }
+        })
+    },
+    filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
+        state.fundPermissions = false;
+        state.permissionCode_fund.map((item, index) => {
+            if (item.permissionCode == str) {
+                return fundPermissions = true;
+            } else {
+                return fundPermissions = false;
+            }
+        })
     }
 };
 
 const actions = {
-    loginAPI({commit,state}, user) { //send login API
+    loginAPI({
+        commit,
+        state
+    }, user) { //send login API
         user.self.$http.post(user.self.api + '/user/login', {
             number: user.name,
             pass: user.pwd
@@ -108,7 +174,7 @@ const actions = {
                 return;
             } else if (data.status == '200') { //登录成功
                 // console.log(data);
-                if(data.data.result.userInfo.disables == '0'){
+                if (data.data.result.userInfo.disables == '0') {
                     commit('Notification', {
                         title: '',
                         message: '该用户已被禁用',
@@ -131,26 +197,41 @@ const actions = {
                         // console.log(state.merchants[0].type);
 
                         if (state.merchants[0].type == '0') { //审核中
-                            commit('saveApprovalStatus', { type: state.merchants[0].type, text: '您的申请正在审核中,请您耐心等待~' });
+                            commit('saveApprovalStatus', {
+                                type: state.merchants[0].type,
+                                text: '您的申请正在审核中,请您耐心等待~'
+                            });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
 
                         } else if (state.merchants[0].type == '1') { //审核通过
 
-                            commit('saveApprovalStatus', { type: state.merchants[0].type, text: '审核通过' });
+                            commit('saveApprovalStatus', {
+                                type: state.merchants[0].type,
+                                text: '审核通过'
+                            });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
 
                         } else if (state.merchants[0].type == '2') { //审核失败
                             // alert(state.merchants[0].type);
-                            commit('saveApprovalStatus', { type: state.merchants[0].type, text: '太遗憾了,您的审核未通过,再接再厉哦~' });
+                            commit('saveApprovalStatus', {
+                                type: state.merchants[0].type,
+                                text: '太遗憾了,您的审核未通过,再接再厉哦~'
+                            });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
 
                         } else if (state.merchants[0].type == '3') { //已注册但未开通试用权限
                             // alert(state.merchants[0].type);
-                            commit('saveApprovalStatus', { type: state.merchants[0].type, text: '恭喜您注册成功,请您点击右上角申请开通使用权限~' });
+                            commit('saveApprovalStatus', {
+                                type: state.merchants[0].type,
+                                text: '恭喜您注册成功,请您点击右上角申请开通使用权限~'
+                            });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
                         };
                         if (state.merchants[0].type != '1') { //还未审核通过
-                            commit('showOrHide', { isVshowYe: 0, isShowSidebar: 1 });
+                            commit('showOrHide', {
+                                isVshowYe: 0,
+                                isShowSidebar: 1
+                            });
                             window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
                             user.self.$router.push({ //只显示通讯录菜单列表
                                 name: 'contacts'
@@ -162,10 +243,16 @@ const actions = {
                                 type: 'success'
                             });
                         } else {
-                            commit('showOrHide', { isVshowYe: 1, isShowSidebar: 1 });
+                            commit('showOrHide', {
+                                isVshowYe: 1,
+                                isShowSidebar: 1
+                            });
                             window.sessionStorage.setItem('showOrHide', JSON.stringify(state.showOrHide));
                             user.self.$router.push({ //审核已通过
                                 name: 'homeContent'
+                            });
+                            commit('getPermissionButton', {
+                                this: user.self
                             });
                             commit('Notification', {
                                 title: '',
@@ -189,7 +276,6 @@ const actions = {
                         });
                     }
                     // console.log(state.merchants.length);
-
                 } else if (data.data.result.userInfo.isMerchant == '0') { //无组织(不存在这种情况)
                     user.self.$router.push({
                         name: 'homeContent'
@@ -206,6 +292,7 @@ const actions = {
         })
     }
 }
+
 export default {
     state,
     mutations,

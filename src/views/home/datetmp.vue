@@ -263,7 +263,7 @@ export default {
       arrM.map(item => {
         // item.item = [];
         if (time == item.time) {
-          console.log(item);
+          // console.log(item);
           setTimeout(function() {
             self.have = true;
             this.spanScheduleTitle = [];
@@ -271,7 +271,7 @@ export default {
           // this.spanScheduleTitle = [];
           // this.spanScheduleTitle = item.item;
           this.spanScheduleTitle = this.removeDuplicatedItem(item.item);
-          console.log(this.spanScheduleTitle);
+          // console.log(this.spanScheduleTitle);
           item.item.forEach(ele => {
             // this.$msgbox({
             //     title: '任务详情',

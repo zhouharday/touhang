@@ -41,20 +41,13 @@
                 </el-table>
             </template>
         </div>
-        <!-- 文件预览功能 -->
-        <div class="viewFiles" v-show="isHide">
-            <div class="closeView" @click="closeView">
-                <img src="/static/img/close.png">
-            </div>
-            <div class="fileArea">
-                不同的是带有 v-show 的元素始终会被渲染并保留在 DOM 中。 v-show 是简单地切换元素的 CSS 属性 display 。 注意， v-show 不支持 语法，也不支持 v-else。v-if vs v-show v-if 是“真正的”条件渲染，因为它会确保在 切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。 惰性的：如果在初始渲染时条件为假，则什么也不做 ——直到条件第一次变为真时，才会开始渲染条件块。 相比之下， v-show 就简单得多——不管初始条件是什么，元素总是 会被渲染，并且只是简单地基于 CSS 进行切换。 一般来说， v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。 因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件不太可能改变，则使用 v-if 较好。 v-if 与 v-for 一起使用 当 v-if 与 v-for 一起使v-if 也是用时，v-for 具有比 v-if 更高的优先级。 请查阅 列表渲染指南 以获取详细信息。 ← Class 与 Style 绑定 列表渲染 → 发现错误？想参与编辑？ 在 Github 上编辑此页！
-            </div>
-        </div>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></show-pdf>
     </div>
 </template>
 
 
 <script>
+import showPdf from 'components/showPdf'
 import {
     getProjectDoc
 } from 'api/projectPre';
@@ -70,8 +63,14 @@ export default {
             default: ''
         }
     },
+    components: {
+        showPdf
+    },
     data() {
         return {
+            pdfurls:'',
+            isshowpdf:false,
+
             projectDocList: [],
             isShow: true,
             isHide: false,
@@ -127,26 +126,17 @@ export default {
                 console.log('getProjectDoc() exists error: ', e);
             });
         },
-        handleUpload(file) {
-            this.file = file;
-            return false;
+        preview(url) {
+            this.pdfurls = url.replace('http://47.90.120.190:8086', '/file');
+            this.isshowpdf = true;
         },
-        upload() {
-            this.loadingStatus = true;
-            setTimeout(() => {
-                this.file = null;
-                this.loadingStatus = false;
-                this.$Message.success('上传成功')
-            }, 1500);
+        pdferr(err){
+            console.log("pdferr!! ", err);
+            this.$Message.error('读取预览文件出错！');
         },
-        preview(row) {
-            this.isShow = false,
-                this.isHide = true,
-                console.log(row.fileName)
-        },
-        closeView() {
-            this.isShow = true,
-                this.isHide = false
+        closepdf(){
+            console.log("closepdf");
+            this.isshowpdf = false;
         }
     }
 }
