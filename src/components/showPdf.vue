@@ -92,7 +92,10 @@ import PDFJS from '../../static/js/pdf/pdf.js'
           vm.pageNumPending = null;
         }
        });
-     });
+     }).catch(e => {
+        console.log('renderPage error ', e);
+        this.$emit('pdferr');
+      });
      vm.page_num = vm.pageNum;
  
     },
