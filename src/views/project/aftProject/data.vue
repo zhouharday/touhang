@@ -5,7 +5,7 @@
                 <el-button @click="changeData1" :class="{active:f_show}">经营数据</el-button>
                 <el-button @click="changeData2" :class="{active:s_show}">财务数据</el-button>
             </div>
-            <div class="rightBtn">
+            <div v-if="checkProjectAuth('SJTB-tianjia')" class="rightBtn">
                 <el-button type="danger" size="small" @click="addData">添加</el-button>
             </div>
         </div>
@@ -18,7 +18,6 @@
                             <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
                             </el-date-picker>
                         </span>
-                        <!-- <el-button v-if="!scope.row.editFlag" type="text" @click="operatingDelete=true">{{ scope.row.baseDate }}</el-button> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
@@ -38,11 +37,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <!-- <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">编辑
-                        </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">保存
-                        </el-button> -->
-                        <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -188,11 +183,11 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
                         </el-button>
-                        <el-button type="text" @click="goAddData(scope.row.id, '2', false)">添加数据</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji')" type="text" @click="goAddData(scope.row.id, '2', false)">添加数据</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -324,7 +319,7 @@
 <script >
 import deleteReminders from 'components/deleteReminders'
 import 'common/js/filter'
-import { changeDate } from 'common/js/config'
+import { changeDate,checkProjectAuth } from 'common/js/config'
 import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm,
     transform, deTransform
 } from 'api/projectAfter';
@@ -364,22 +359,7 @@ export default {
             // importUrl:"http://192.168.0.136:9091"+'/excel/financial',
             importData:{},
             // 经营数据表头
-            operatingData: [
-                {
-                    baseDate: '2017-1-1',
-                    dataType: '半年报',
-                    operatorName: '张三',
-                    currentDeta: '2017-10-11',
-                    editFlag: false
-                },
-                {
-                    baseDate: '2017-9-1',
-                    dataType: '月报',
-                    operatorName: '李四',
-                    currentDeta: '2017-10-12',
-                    editFlag: false
-                }
-            ],
+            operatingData: [],
             // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
@@ -394,7 +374,7 @@ export default {
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
                 dataType: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             rules2: {
@@ -421,66 +401,9 @@ export default {
                 }
             ],
             // 经营数据-添加数据 table
-            operatingData1: [
-                {
-                    project: '营业收入',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '净利润',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '总资产',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '净资产',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '用户数',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '活跃用户数',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '其他',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                }
-            ],
+            operatingData1: [],
             //  财务数据
-            financialData: [
-                {
-                    baseDate: 'asdasd',
-                    dataType: 'lklkjkjk',
-                    operatorName: 'asdsdfs',
-                    currentDeta: '2017-10-30'
-                }
-            ],
+            financialData: [],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -512,6 +435,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             //获取经营数据主体
             this.getOperateSubject();

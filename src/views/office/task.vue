@@ -254,7 +254,7 @@
                 </el-form>
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="tableCancle">取 消</el-button>
-                    <el-button type="danger" @click="saveTabValue(2)">提 交</el-button>
+                    <el-button type="danger" @click="addTaskRecord(2)">提 交</el-button>
                 </div>
             </el-dialog>
             <!--已办任务-查看 dialog-->
@@ -950,6 +950,7 @@ export default {
             this.dialogFormVisible2 = false;
         },
         addTaskRecord() { //提交处理过的任务
+        alert(2);
             this.$http.post(this.api + '/work/addTaskRecord', {
                 "taskId": this.form1.taskId,
                 "recordDetails": this.form1.reportContent,
@@ -959,7 +960,9 @@ export default {
                 .then(res => {
                     if (res.status == '200') {
                         // this.closeTask(this.form1.taskId);
-                        // this.getTaskList2(this.page,this.pageSize);
+                        this.data2 = [];
+                        this.getTaskList2(this.page,this.pageSize);
+                        this.dialogFormVisible2 = false;
                         this.$Message.success(res.data.message);
                     } else if (res.status == '403') {
                         this.$Message.error(res.data.message);
@@ -975,7 +978,7 @@ export default {
             })
                 .then(res => {
                     if (res.status == '200') {
-                        this.getTaskList(num);
+                        this.getTaskList(this.page,this.pageSize);
                         this.$Message.success(res.data.message);
                     } else if (res.status == '403') {
                         this.$Message.error(res.data.message);

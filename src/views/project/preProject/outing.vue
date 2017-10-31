@@ -53,8 +53,8 @@
         </el-table>
         <el-row>
             <el-col style="margin-top:10px;">
-                <el-button type="default" v-show="isShow" @click="editForm">编 辑</el-button>
-                <el-button type="danger" v-show="isShow" @click="confirmSave">保 存</el-button>
+                <el-button v-if="checkProjectAuth('GL-XMTC-BJ')" type="default" v-show="isShow" @click="editForm">编 辑</el-button>
+                <el-button v-if="checkProjectAuth('GL-XMTC-BJ')" type="danger" v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
         </el-row>
     </section>
@@ -65,6 +65,7 @@
 import { mapGetters } from 'vuex'
 import { getDicChildren } from 'common/js/dictionary'
 import uploadFiles from 'components/uploadFiles'
+import { checkProjectAuth } from 'common/js/config'
 
 import {
     getExitDetail, saveExit
@@ -151,6 +152,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             this.getExitDetail();
         },

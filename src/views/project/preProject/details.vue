@@ -1,7 +1,7 @@
 <template>
     <div class="form">
         <!-- 基本信息 -->
-        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" v-if="checkProjectAuth('XQ-bianji')" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -59,7 +59,7 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
-        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" v-if="checkProjectAuth('XQ-bianji')" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
@@ -118,7 +118,7 @@
             </el-form>
         </div>
         <!-- 投资信息 -->
-        <tabel-header :data="headerInfo_capital" @add="disable(capitalForm)" @show="changeCapitalInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_capital : _headerInfo_capital" @add="disable(capitalForm)" @show="changeCapitalInfo()" class="title"></tabel-header>
         <div class="capitalForm">
             <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
                 <el-row>
@@ -189,7 +189,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
-import { changeDate } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 import { getDicChildren } from 'common/js/dictionary'
 import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
 import { changeCapitalInfo } from 'api/projectPre';
@@ -235,6 +235,10 @@ export default {
                 value: 'no',
                 label: '否'
             }],
+            _headerInfo_basic: {
+                desc: '基本信息',
+                btnGroup: []
+            },
             headerInfo_basic: {
                 desc: '基本信息',
                 btnGroup: [{
@@ -246,6 +250,10 @@ export default {
                     explain: '提交'
                 }]
             },
+            _headerInfo_company: {
+                desc: '企业信息',
+                btnGroup: []
+            },
             headerInfo_company: {
                 desc: '企业信息',
                 btnGroup: [{
@@ -256,6 +264,10 @@ export default {
                     icon: 'upload',
                     explain: '提交'
                 }]
+            },
+            _headerInfo_capital: {
+                desc: '投资信息',
+                btnGroup: []
             },
             headerInfo_capital: {
                 desc: '投资信息',
@@ -282,6 +294,9 @@ export default {
     },
     watch: {},
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         disable(name) {
             name.flag = !name.flag;
         },

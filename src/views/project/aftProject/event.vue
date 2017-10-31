@@ -1,6 +1,6 @@
 <template>
     <div class="eventBox">
-        <el-form :model="eventForm" :rules="rules1" ref="eventForm" label-width="120px" class="eventForm">
+        <el-form v-if="checkProjectAuth('ZDSX-tijiao')" :model="eventForm" :rules="rules1" ref="eventForm" label-width="120px" class="eventForm">
             <el-form-item label="汇报事项" prop="issuesType">
                 <el-select v-model="eventForm.issuesType" placeholder="请选择汇报事项" style="width: 100%;">
                     <el-option v-for="item in eventOptions" :key="item.key" :label="item.value" :value="item.key">
@@ -30,7 +30,7 @@
                             <span v-for="doc in item.documentInfo">
                                 <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
-                            <el-button type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
+                            <el-button v-if="checkProjectAuth('ZDSX-shanchu')" type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
                         </p>
                         <p>{{item.issuesContent}}</p>
                         <p style="text-align:right">
@@ -47,7 +47,7 @@
 <script>
 import '../../../common/js/filter'
 import uploadFiles from 'components/uploadFiles'
-import { changeDate } from '../../../common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 import {
     getEventList, addEvent, delEvent
 } from 'api/projectAfter';
@@ -120,29 +120,7 @@ export default {
                     value: '其他'
                 }
             ],
-            documentInfo:[
-                // {
-                //     type: '1',
-                //     name: '重大事项1.jpg',
-                //     url: 'http://www.xxx.com/img1.jpg',
-                //     fileName: '重大事项1.jpg',
-                //     filePath: 'http://www.xxx.com/img1.jpg'
-                // },
-                // {
-                //     type: '1',
-                //     name: '2重大事项122.jpg',
-                //     url: 'http://www.xxx.com/img2.jpg',
-                //     fileName: '2重大事项122.jpg',
-                //     filePath: 'http://www.xxx.com/img1.jpg'
-                // },
-                // {
-                //     type: '1',
-                //     name: '3重大事项133.jpg',
-                //     url: 'http://www.xxx.com/img2.jpg',
-                //     fileName: '3重大事项133.jpg',
-                //     filePath: 'http://www.xxx.com/img1.jpg'
-                // }
-            ]
+            documentInfo:[]
         }
     },
     created() {
@@ -156,6 +134,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code);
+        },
         init() {
             this.getEventList();
         },

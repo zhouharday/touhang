@@ -91,6 +91,27 @@ const mutations = {
             type: msg.type
         })
     },
+    getUserButton(state, user) {
+        user.this.$http
+            .post(user.this.api + "/role/getUserButton", {
+                "userId": state.userInfor.id,
+                "merchantId": state.merchants[0].id
+            })
+            .then(res => {
+                if (res.status == "200") {
+                    if (res.data.state == "200") {
+                        console.log('其他模块按钮权限数据');
+                        console.log(res.data);
+                        
+                    } else {
+                        console.log(res.data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
     getPermissionButton(state, user) { //获取客户端系统项目、基金按钮
         user.this.$http
             .post(user.this.api + "/permission/getPermissionButton", {
@@ -100,11 +121,15 @@ const mutations = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.state == "200") {
-                        console.log('按钮权限数据');
-                        // console.log(res.data);
+                        // console.log(res);
+                        // console.log('权限按钮数据');
+                        if(res.data.result.length == 0){
+                            console.log('没有权限按钮数据');
+                            return;
+                        };
                         state.permissionCode = res.data.result; //保存所有按钮数据
                         window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
-                        console.log(state.permissionCode);
+                        // console.log(state.permissionCode);
                         state.permissionCode_project = [];
                         state.permissionCode_fund = [];
                         state.permissionCode.map((item, index) => {
@@ -117,11 +142,11 @@ const mutations = {
                                 window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
                             }
                         });
-                        // console.log('项目按钮权限');
-                        // console.log(state.permissionCode_project);
-                        // console.log('基金按钮权限');
-                        // console.log(state.permissionCode_fund);
-                        // console.log(res.data.message);
+                        console.log('项目按钮权限');
+                        console.log(state.permissionCode_project);
+                        console.log('基金按钮权限');
+                        console.log(state.permissionCode_fund);
+                        console.log(res.data.message);
                     } else {
                         console.log(res.data.message);
                     }
@@ -132,18 +157,16 @@ const mutations = {
             })
     },
     filtersPermissionCode_project(state, str) { //过滤项目按钮方法
-        let isBtn = state.permissionCode_project.includes(str.permissionCode);
-        console.log(isBtn);
-        if (isBtn) {
+        let haveBtn = state.permissionCode_project.includes(str.permissionCode);
+        if (haveBtn) {
             state.projectPermissions = true;
         } else {
             state.projectPermissions = false;
         }
     },
     filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        let isBtn = state.permissionCode_fund.includes(str.permissionCode);
-        console.log(isBtn);
-        if (isBtn) {
+        let haveBtn = state.permissionCode_fund.includes(str.permissionCode);
+        if (haveBtn) {
             state.fundPermissions = true;
         } else {
             state.fundPermissions = false;
@@ -217,7 +240,6 @@ const actions = {
                                 text: '太遗憾了,您的审核未通过,再接再厉哦~'
                             });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
-
                         } else if (state.merchants[0].type == '3') { //已注册但未开通试用权限
                             // alert(state.merchants[0].type);
                             commit('saveApprovalStatus', {
@@ -251,6 +273,9 @@ const actions = {
                                 name: 'homeContent'
                             });
                             commit('getPermissionButton', {
+                                this: user.self
+                            });
+                            commit('getUserButton', {
                                 this: user.self
                             });
                             commit('Notification', {
