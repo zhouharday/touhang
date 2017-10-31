@@ -423,7 +423,10 @@ export default {
         name: name
       });
       // alert(222)
-    }
+    },
+    isShowsss(){
+      return this.isShow = false;
+    },
   }
 };
 </script>
