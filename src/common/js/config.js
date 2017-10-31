@@ -55,6 +55,10 @@ export function getNodes(arr) {
     return nodes
 }
 
+export function checkAuth(){
+    console.log("this.$route.params.investProjectId: "+this.$route.params.investProjectId);
+}
+
 function pushNode(node, pNodes) {
     let charlds = [];
     pNodes.map(function (pNode) {

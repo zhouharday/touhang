@@ -133,8 +133,8 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-select value-key="id" v-model="scope.row.fund" placeholder="请选择基金">
-                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item">
+                                        <el-select value-key="id" v-model="scope.row.fundId" placeholder="请选择基金">
+                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </span>
@@ -246,8 +246,8 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-select value-key="id" v-model="scope.row.fund" placeholder="请选择基金">
-                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item">
+                                        <el-select value-key="id" v-model="scope.row.fundId" placeholder="请选择基金">
+                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
                                             </el-option>
                                         </el-select>
                                     </span>
@@ -976,16 +976,14 @@ export default {
         confirmFundAdd1() {
             this.$refs["fundForm1"].validate((valid) => {
                 if(valid){
-                    // this.fundForm1.fundId = this.fundForm1.fundId;
                     let fundId = this.fundForm1.fundId;
                     let fundName = '';
                     this.myFundOptions.forEach(item =>{
-                        if(fundId == item.fundId){
+                        if(fundId == item.id){
                             fundName = item.fundName;
                         }
                     });
-                    this.fundForm1.fundName = fundName;
-
+                    this.$set(this.$data.fundForm1, 'fundName', fundName);
                     this.fundData1.push(this.fundForm1);
 
                     this.fundForm1 = {
@@ -1061,8 +1059,14 @@ export default {
         //保存投资主体
         saveFund(index, row, type = 'fundData1') {
             row.editFlag = !row.editFlag;
-            row.fundName = row.fund.fundName;
-            row.fundId = row.fund.id;
+            let fundName = '';
+            let fundId = row.fundId;
+            this.myFundOptions.forEach(item =>{
+                if(fundId == item.id){
+                    fundName = item.fundName;
+                }
+            });
+            row.fundName = fundName;
             this.fundData1.push();
         },
         //计算总剩余金额/支付金额

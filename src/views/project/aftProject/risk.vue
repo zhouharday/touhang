@@ -338,7 +338,7 @@
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
 import uploadFiles from 'components/uploadFiles'
-import { changeDate } from 'common/js/config'
+import { changeDate, checkAuth } from 'common/js/config'
 
 import {
     dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams
@@ -743,6 +743,8 @@ export default {
             this.f_show = true;
             this.s_show = false;
             this.addBtn = true;
+            checkAuth();
+
         },
         changeRisk2() {
             this.f_show = false;

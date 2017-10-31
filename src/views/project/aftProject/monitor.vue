@@ -351,7 +351,7 @@ export default {
             this.monitorSetting = !this.monitorSetting;
             getDataMonitorDetail(id).then(resp => {
                 if (resp.data.status == '200') {
-                    // console.log("打开编辑 监控设置"+JSON.stringify(resp.data.result));
+                    console.log("打开编辑 监控设置"+JSON.stringify(resp.data.result));
                     this.monitorForm = resp.data.result.dataMonitor;
                     this.dataMonitorTable = resp.data.result.monitorInfos;
                     this.title = '编辑监控设置';

@@ -394,7 +394,7 @@ export default {
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
                 dataType: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             rules2: {
