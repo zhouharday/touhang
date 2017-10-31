@@ -121,6 +121,7 @@
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
+            
             <!-- <el-row v-if="showOrHide.isShowSidebar && showOrHide.isVshowYe">
                 <el-col :span="24" v-for="(menuItem,index) in theModel" :key="menuItem">
                      <my-tree :model="menuItem"></my-tree>
@@ -151,7 +152,7 @@ export default {
       return {
         merchants: this.$store.state.login.merchants,
         userInfor: this.$store.state.login.userInfor
-      }
+      };
     },
     onRoutes(state) {
       // alert(111);
@@ -412,9 +413,9 @@ export default {
       });
       // alert(222)
     },
-    isShowsss(){
-      return this.isShow = false;
-    },
+    isShowsss() {
+      return (this.isShow = false);
+    }
   }
 };
 </script>
