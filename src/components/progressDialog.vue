@@ -11,6 +11,7 @@
             <div v-for="(item,index) in appendixList" :key="item.index">
 
             </div>
+            
             <el-table :data="table" style="margin:15px 0;" :row-class-name="tableRowClassName">
                 <el-table-column prop="node" label="审批节点" align="center">
                 </el-table-column>
