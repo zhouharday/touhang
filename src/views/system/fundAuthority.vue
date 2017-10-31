@@ -192,7 +192,7 @@ export default {
         type: "filtersPermissionCode_project",
         permissionCode: permissionCode
       });
-    //   console.log(this.$store.state.login.projectPermissions);
+      //console.log(this.$store.state.login.projectPermissions);
       return this.$store.state.login.projectPermissions;
     },
     isShowFundBtn(permissionCode) {
@@ -201,13 +201,15 @@ export default {
         type: "filtersPermissionCode_fund",
         permissionCode: permissionCode
       });
-    //   console.log(this.$store.state.login.fundPermissions);
+      //   console.log(this.$store.state.login.fundPermissions);
       return this.$store.state.login.fundPermissions;
     }
   },
   computed: {},
   created() {
-    //        获取角色列表
+    //获取角色列表
+    this.$store.state.login.permissionCode_project =
+      JSON.parse(sessionStorage.getItem("permissionCode_project")) || [];
     this.$store.state.login.permissionCode_fund =
       JSON.parse(sessionStorage.getItem("permissionCode_fund")) || [];
     queryList(1).then(res => {

@@ -132,18 +132,16 @@ const mutations = {
             })
     },
     filtersPermissionCode_project(state, str) { //过滤项目按钮方法
-        let isBtn = state.permissionCode_project.includes(str.permissionCode);
-        console.log(isBtn);
-        if (isBtn) {
+        let haveBtn = state.permissionCode_project.includes(str.permissionCode);
+        if (haveBtn) {
             state.projectPermissions = true;
         } else {
             state.projectPermissions = false;
         }
     },
     filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        let isBtn = state.permissionCode_fund.includes(str.permissionCode);
-        console.log(isBtn);
-        if (isBtn) {
+        let haveBtn = state.permissionCode_fund.includes(str.permissionCode);
+        if (haveBtn) {
             state.fundPermissions = true;
         } else {
             state.fundPermissions = false;
