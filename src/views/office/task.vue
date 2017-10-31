@@ -978,7 +978,7 @@ export default {
             })
                 .then(res => {
                     if (res.status == '200') {
-                        this.getTaskList(num);
+                        this.getTaskList(this.page,this.pageSize);
                         this.$Message.success(res.data.message);
                     } else if (res.status == '403') {
                         this.$Message.error(res.data.message);
