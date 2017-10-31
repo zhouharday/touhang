@@ -215,7 +215,6 @@ const actions = {
                                 text: '太遗憾了,您的审核未通过,再接再厉哦~'
                             });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
-
                         } else if (state.merchants[0].type == '3') { //已注册但未开通试用权限
                             // alert(state.merchants[0].type);
                             commit('saveApprovalStatus', {
