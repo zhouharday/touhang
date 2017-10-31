@@ -169,6 +169,7 @@ export default {
             var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getAgreementAmountList(invId, merId).then((res) => {
                 if (res.status == '200') {
+                console.log(res.data.result.list);
                     this.investorData = res.data.result.list
                 }
             }).catch(err => {

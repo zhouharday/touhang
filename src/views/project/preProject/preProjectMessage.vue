@@ -12,14 +12,14 @@
         </div>
         <div class="step">
             <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
-                                             'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
-                                             'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
-                                             'step_third':index==(stepLists.length-1)}">
+                                                         'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+                                                         'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+                                                         'step_third':index==(stepLists.length-1)}">
                 <span>{{item.stageName}}</span>
             </div>
         </div>
         <div class="picture">
-            <div class="img_wrapper" @click="progressModal=true">
+            <div class="img_wrapper">
                 <img src="/static/img/double.png">
             </div>
             <!-- 小双助手 -->
@@ -82,7 +82,7 @@
         <!-- 发起申请 对话框-->
         <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" :table="progressTable"></progress-forms>
+        <progress-forms :progressModal="progressModal" isBlock="true"  dialogTitle='审批' :table1="appendixTable" :table2="progressTable" :approvalForm="approvalForm"  :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
     </div>
 </template>
 
@@ -160,29 +160,12 @@ export default {
                 baseInfo: '工商信息',
                 flag: true
             },
-            applyForm: { // 发起申请表单
+            applyForm: { // 发起申请对话框 表单
                 title: '',
                 auditor: '',
                 notes: ''
             },
-            progressTable: [ //查看进度表单 节点table
-                {
-                    node: '发起人',
-                    operator: '杨军',
-                    startingTime: '2017-10-30 16:25:14',
-                    conclusion: '同意'
-                }
-            ],
-            applyForm2: { // 发起申请表单
-                title: '',
-                person: '',
-                date: '',
-                notes: '',
-                appendix: '',
-                auditor: '',
-                reports: ''
-            },
-            auditorOptions: [{ //发起申请表单 审批人列表
+            auditorOptions: [{ //发起申请对话框 审批人列表
                 value: '选项1',
                 label: '张三'
             }, {
@@ -192,18 +175,32 @@ export default {
                 value: '选项3',
                 label: '王二'
             }],
-            commentLists: [ //查看进度表单  意见汇总列表
-                {
-                    comment: '法务意见',
-                    num: '2',
-                    note: '【管理员】2017/08/15'
+            appendixTable: {
+                progressName: 'AAA项目XX申请',
+                appendixList: [{
+                    fileName: '调研报告1',
+                    url: ''
                 },
                 {
-                    comment: '反馈项目负责人',
-                    num: '2',
-                    note: '【管理员】2017/08/15'
+                    fileName: '调研报告2',
+                    url: ''
+                }]
+            },
+            progressTable: [ //查看进度对话框 节点table
+                {
+                    node: '发起人',
+                    operator: '杨军',
+                    startingTime: '2017-10-30 16:25:14',
+                    conclusion: '同意',
+                    notes: '意见备注意见备注意见备注意见备注意见备注意见备注意见备注意见备注意见备注意见备注意见备注意见备注'
                 }
-            ]
+            ],
+            //审批对话框  审批意见表单
+            approvalForm: {
+                radio: '1',
+                auditor: '',
+                approvalNotes: ''
+            }
         }
     },
     components: {
@@ -219,7 +216,7 @@ export default {
         manageTable,
         outingForm,
         applyForms,
-        progressForms 
+        progressForms
     },
     created() {
         this.investProjectId = this.$route.params.investProjectId;
@@ -489,12 +486,18 @@ export default {
         },
         // 发起申请表单
         submitApply() {
-           this.applyModal = false;
+            this.applyModal = false;
         },
         cancleApply() {
-          this.applyModal = false;
+            this.applyModal = false;
         },
-        // 查看进度表单
+        // 审批表单
+        submitApproval() {
+            this.progressModal = false;
+        },
+        cancleApproval() {
+            this.progressModal = false;
+        }
     }
 }
 </script>
@@ -709,7 +712,7 @@ export default {
                 }
             }
         }
-    } 
+    }
     .comment_box {
         height: 80px;
         display: flex;

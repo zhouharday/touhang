@@ -3,12 +3,11 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button size="small" @click="roleDialog=true">添加</el-button>
+                    <el-button v-if="isShowFundBtn('GL-JJXQ-BJ')" size="small" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%"  highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
-
                             <span v-if="!scope.row.editFlag">{{ scope.row.roleName}}</span>
                             <span v-if="scope.row.editFlag">
                                 <el-input v-model="scope.row.roleName" placeholder=""></el-input>
@@ -41,7 +40,7 @@
                         <div class="f_right">权限</div>
                     </el-col>
 
-                    <div v-for="item in allData.permissions" >
+                    <div v-for="item in allData.permissions" :key="item">
                         <el-col :span="24" style="border: 1px solid #dfe6ec;">
                         <el-col :span="6" >
                             <div class="left">{{item.permissionName}}</div>
@@ -49,12 +48,12 @@
                         <el-col :span="18">
                             <div class="right">
                                 <div v-if="item.children">
-                                    <div v-for="nextItem in item.children">
+                                    <div v-for="nextItem in item.children" :key="nextItem">
                                         <div style="flex-direction: row; display: flex">
                                         <div >{{nextItem.permissionName}}</div>
                                         <div style=" margin-left: 20px">
                                             <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                            <el-checkbox v-for="(text, index) of nextItem.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                            <el-checkbox :key="text" v-for="(text, index) of nextItem.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
                                         </div>
                                         </div>
@@ -62,7 +61,7 @@
                                 </div>
                                 <div v-if="!item.children">
                                     <el-checkbox-group v-model="clickMenu" @change="a">
-                                        <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                        <el-checkbox :key="text" v-for="(text, index) of item.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
                                 </div>
                             </div>
@@ -92,118 +91,141 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import deleteReminders from 'components/deleteReminders'
-    import {queryList} from 'api/system'
-    import {reloadQueryData} from 'api/system'
-    import {projectRoleEdit} from 'api/system'
-    import {projectRoleSave} from 'api/system'
-    import {deleteUser} from 'api/system'
-    import {permissionlistByRoleId} from 'api/system'
-    import {permissionqueryList} from 'api/system'
+import deleteReminders from "components/deleteReminders";
+import { queryList } from "api/system";
+import { reloadQueryData } from "api/system";
+import { projectRoleEdit } from "api/system";
+import { projectRoleSave } from "api/system";
+import { deleteUser } from "api/system";
+import { permissionlistByRoleId } from "api/system";
+import { permissionqueryList } from "api/system";
 
-    import {getUpdataFund} from 'api/system'
-    import {roleBindPermission} from 'api/system'
-    import ElCol from "element-ui/packages/col/src/col";
+import { getUpdataFund } from "api/system";
+import { roleBindPermission } from "api/system";
+import ElCol from "element-ui/packages/col/src/col";
+import { mapState } from "vuex";
+import { isShowProjectBtn } from "common/js/config";
+import { isShowFundBtn } from "common/js/config";
 export default {
-    data() {
-        return {
-            clickMenu:[],
-            roleDialog: false,
-            deleteReminders: false,
-            modal_loading: false,
-            message: '是否确认删除该角色？',
-            roleData: [
-                {
-                    role: '项目负责人',
-                    editFlag: false
-                },
-                {
-                    role: '项目成员',
-                    editFlag: false
-                },
-                {
-                    role: '投后人员',
-                    editFlag: false
-                }
-            ],
-            roleForm: {
-                roleName: '',
-                editFlag: false
-            },
-            deletData:'',
-            allData:[],
-            userId:''
+  data() {
+    return {
+      clickMenu: [],
+      roleDialog: false,
+      deleteReminders: false,
+      modal_loading: false,
+      message: "是否确认删除该角色？",
+      roleData: [
+        {
+          role: "项目负责人",
+          editFlag: false
+        },
+        {
+          role: "项目成员",
+          editFlag: false
+        },
+        {
+          role: "投后人员",
+          editFlag: false
         }
+      ],
+      roleForm: {
+        roleName: "",
+        editFlag: false
+      },
+      deletData: "",
+      allData: [],
+      userId: ""
+    };
+  },
+  methods: {
+    saveRole() {
+      var String = getUpdataFund(this.clickMenu, this.allData.data);
+      if (String.length < 1) {
+        String = "";
+      }
+      roleBindPermission(this.userId, String).then(res => {
+        console.log(res);
+      });
     },
-    methods: {
-        saveRole(){
-
-            var String = getUpdataFund(this.clickMenu,this.allData.data )
-            if (String.length < 1){
-                String = ''
-            }
-            roleBindPermission(this.userId,String).then((res)=>{
-                console.log(res)
-            })
-        },
-        // 添加角色 的方法
-        addRole() {
-            if(this.roleDialog == true){
-                projectRoleSave(1,this.roleForm.roleName).then((res)=>{
-                    queryList(1).then((res)=>{
-                        this.roleData = reloadQueryData(res.data.result)
-                        this.roleDialog = false;
-                    })
-                })
-            }
-        },
-        //编辑
-        checkEdit(index, row) {
-            console.log(row)
-            row.editFlag = !row.editFlag;
-            if (!row.editFlag) {
-                projectRoleEdit(row.id, row.roleName).then((res) => {
-                    queryList(1).then((res)=>{
-                        this.roleData = reloadQueryData(res.data.result)
-                    })
-                })
-            }
-        },
-
-        handleCurrentChange(row){
-            this.clickMenu = []
-            this.userId = row.id
-            permissionlistByRoleId(row.id).then((res)=>{
-                var userRole = res.data.result
-                userRole.forEach(function (item) {
-                    if (this.clickMenu){
-                        this.clickMenu.push(item.path)
-                    }else
-                        this.clickMenu = [item.path]
-                },this)
-                permissionqueryList(1).then((res)=>{
-                    this.allData = res.data.result
-
-                })
-            })
-        }
+    // 添加角色 的方法
+    addRole() {
+      if (this.roleDialog == true) {
+        projectRoleSave(1, this.roleForm.roleName).then(res => {
+          queryList(1).then(res => {
+            this.roleData = reloadQueryData(res.data.result);
+            this.roleDialog = false;
+          });
+        });
+      }
     },
-    created(){
-//        获取角色列表
-        queryList(1).then((res)=>{
-            this.roleData = reloadQueryData(res.data.result)
-        })
+    //编辑
+    checkEdit(index, row) {
+      console.log(row);
+      row.editFlag = !row.editFlag;
+      if (!row.editFlag) {
+        projectRoleEdit(row.id, row.roleName).then(res => {
+          queryList(1).then(res => {
+            this.roleData = reloadQueryData(res.data.result);
+          });
+        });
+      }
+    },
 
-        //获取所有权限
-        permissionqueryList(1).then((res)=>{
-            this.allData = res.data.result
-        })
+    handleCurrentChange(row) {
+      this.clickMenu = [];
+      this.userId = row.id;
+      permissionlistByRoleId(row.id).then(res => {
+        var userRole = res.data.result;
+        userRole.forEach(function(item) {
+          if (this.clickMenu) {
+            this.clickMenu.push(item.path);
+          } else this.clickMenu = [item.path];
+        }, this);
+        permissionqueryList(1).then(res => {
+          this.allData = res.data.result;
+        });
+      });
     },
-    components: {
-        ElCol,
-        deleteReminders
+    isShowProjectBtn(permissionCode) {
+      //check 项目权限
+      this.$store.commit({
+        type: "filtersPermissionCode_project",
+        permissionCode: permissionCode
+      });
+      //console.log(this.$store.state.login.projectPermissions);
+      return this.$store.state.login.projectPermissions;
     },
-}
+    isShowFundBtn(permissionCode) {
+      //check 基金权限
+      this.$store.commit({
+        type: "filtersPermissionCode_fund",
+        permissionCode: permissionCode
+      });
+      //   console.log(this.$store.state.login.fundPermissions);
+      return this.$store.state.login.fundPermissions;
+    }
+  },
+  computed: {},
+  created() {
+    //获取角色列表
+    this.$store.state.login.permissionCode_project =
+      JSON.parse(sessionStorage.getItem("permissionCode_project")) || [];
+    this.$store.state.login.permissionCode_fund =
+      JSON.parse(sessionStorage.getItem("permissionCode_fund")) || [];
+    queryList(1).then(res => {
+      this.roleData = reloadQueryData(res.data.result);
+    });
+
+    //获取所有权限
+    permissionqueryList(1).then(res => {
+      this.allData = res.data.result;
+    });
+  },
+  components: {
+    ElCol,
+    deleteReminders
+  }
+};
 </script>
 
 
@@ -212,62 +234,62 @@ export default {
 
 <style lang="less" scoped>
 .fundLimits {
-    width: 100%;
-    padding: 24px;
-    background: #fff;
-    min-height: 820px;
-    .roleBtn,
-    .limitBtn {
-        margin-bottom: 15px;
-    }
-    .limitBtn {
-        display: flex;
-        justify-content: flex-end;
-    }
-    .left {
-        /*height: 40px;*/
-        line-height: 40px;
-        /*border-top: 1px solid #dfe6ec;*/
-        /*border-bottom: none;*/
-        /*border-right: none;*/
+  width: 100%;
+  padding: 24px;
+  background: #fff;
+  min-height: 820px;
+  .roleBtn,
+  .limitBtn {
+    margin-bottom: 15px;
+  }
+  .limitBtn {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .left {
+    /*height: 40px;*/
+    line-height: 40px;
+    /*border-top: 1px solid #dfe6ec;*/
+    /*border-bottom: none;*/
+    /*border-right: none;*/
 
-        text-align: center;
-    }
-    .f_right {
-        height: 40px;
-        line-height: 40px;
-        border: 1px solid #dfe6ec;
-        border-left: none;
-        border-bottom: none;
-        text-align: center;
-        font-weight: bold;
-        background-color: #eef1f6;
-    }
-    .right {
-        display: flex;
+    text-align: center;
+  }
+  .f_right {
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #dfe6ec;
+    border-left: none;
+    border-bottom: none;
+    text-align: center;
+    font-weight: bold;
+    background-color: #eef1f6;
+  }
+  .right {
+    display: flex;
 
-        min-height: 40px;
-        line-height: 40px;
-        padding-left: 10px;
-        border-left: 1px solid #dfe6ec;
-        border-right: none;
-        border-bottom: none;
-    }
-    .mgr {
-        margin-right: 15px;
-    }
-    .manage-rt {
-        height: 110px;
-        line-height: 110px;
-        text-align: center;
-        border: 1px solid #dfe6ec;
-    }
-    .manage-lt {
-        height: 110px;
-        border: 1px solid #dfe6ec;
-        border-left: none;
-        padding-top: 25px;
-        box-sizing: border-box;
-    }
+    min-height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    border-left: 1px solid #dfe6ec;
+    border-right: none;
+    border-bottom: none;
+  }
+  .mgr {
+    margin-right: 15px;
+  }
+  .manage-rt {
+    height: 110px;
+    line-height: 110px;
+    text-align: center;
+    border: 1px solid #dfe6ec;
+  }
+  .manage-lt {
+    height: 110px;
+    border: 1px solid #dfe6ec;
+    border-left: none;
+    padding-top: 25px;
+    box-sizing: border-box;
+  }
 }
 </style>

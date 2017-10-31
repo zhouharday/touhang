@@ -743,7 +743,6 @@ export default {
             this.f_show = true;
             this.s_show = false;
             this.addBtn = true;
-            checkAuth();
 
         },
         changeRisk2() {

@@ -122,7 +122,7 @@ export default {
                     type: 'number',
                     required: true,
                     message: '认缴金额应为数字',
-                    trigger: 'change'
+                    trigger: 'blue'
                 }],
                 signDate: [{
                     type: 'date',
