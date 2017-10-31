@@ -105,20 +105,22 @@ const mutations = {
                         state.permissionCode = res.data.result; //保存所有按钮数据
                         window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
                         console.log(state.permissionCode);
+                        state.permissionCode_project = [];
+                        state.permissionCode_fund = [];
                         state.permissionCode.map((item, index) => {
-                            state.permissionCode_project = [];
-                            state.permissionCode_fund = [];
                             if (state.permissionCode[index].permissionType == 0) { //项目按钮
-                                state.permissionCode_project.push(state.permissionCode[index]);
+                                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
+                                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
                             };
                             if (state.permissionCode[index].permissionType == 1) { //基金按钮
-                                state.permissionCode_fund.push(state.permissionCode[index]);
+                                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
+                                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
                             }
                         });
-                        console.log('项目按钮权限');
-                        console.log(state.permissionCode_project);
-                        console.log('基金按钮权限');
-                        console.log(state.permissionCode_fund);
+                        // console.log('项目按钮权限');
+                        // console.log(state.permissionCode_project);
+                        // console.log('基金按钮权限');
+                        // console.log(state.permissionCode_fund);
                         // console.log(res.data.message);
                     } else {
                         console.log(res.data.message);
@@ -130,24 +132,22 @@ const mutations = {
             })
     },
     filtersPermissionCode_project(state, str) { //过滤项目按钮方法
-        state.projectPermissions = false;
-        state.permissionCode_project.map((item, index) => {
-            if (item.permissionCode == str) {
-                return ProjectPermissions = true;
-            } else {
-                return ProjectPermissions = false;
-            }
-        })
+        let isBtn = state.permissionCode_project.includes(str.permissionCode);
+        console.log(isBtn);
+        if (isBtn) {
+            state.projectPermissions = true;
+        } else {
+            state.projectPermissions = false;
+        }
     },
     filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        state.fundPermissions = false;
-        state.permissionCode_fund.map((item, index) => {
-            if (item.permissionCode == str) {
-                return fundPermissions = true;
-            } else {
-                return fundPermissions = false;
-            }
-        })
+        let isBtn = state.permissionCode_fund.includes(str.permissionCode);
+        console.log(isBtn);
+        if (isBtn) {
+            state.fundPermissions = true;
+        } else {
+            state.fundPermissions = false;
+        }
     }
 };
 
@@ -210,7 +210,6 @@ const actions = {
                                 text: '审核通过'
                             });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
-
                         } else if (state.merchants[0].type == '2') { //审核失败
                             // alert(state.merchants[0].type);
                             commit('saveApprovalStatus', {
@@ -290,7 +289,7 @@ const actions = {
             });
             console.log(error);
         })
-    }
+    },
 }
 
 export default {
