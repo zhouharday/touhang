@@ -53,7 +53,12 @@
             </el-col>
             <el-col :span="24">
                 <el-form-item label="投资协议附件">
-                    <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
+                    <Upload multiple
+                            type="drag"
+                            name="files"
+                            :action="actionUrl"
+                            :show-upload-list="true"
+                            :on-success="handleSuccess">
                         <div style="padding: 20px 0">
                             <Icon type="ios-cloud-upload" size="52"></Icon>
                             <p>点击或将文件拖拽到这里上传</p>
@@ -97,6 +102,7 @@ export default {
                 label: 'LP',
                 value: '5'
             }],
+            actionUrl: this.api + '/files/upload',
             rules1: {
                 agreementName: [{
                     required: true,
@@ -131,6 +137,22 @@ export default {
                     trigger: 'blur'
                 }]
             }
+        }
+    },
+    methods: {
+        handleSuccess(res, file, fileList) {
+            // console.log(res)
+            // console.log(file)
+            var documents = []
+            fileList.map((x) => {
+                if(x.response) {
+                    documents.push({
+                        fileName: x.response.fileName,
+                        fileUrl: x.response.filePath.split('?')[0]
+                    })
+                }
+            })
+            this.AgreementInfo.documentInfo = documents
         }
     },
     created() {

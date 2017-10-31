@@ -2,11 +2,11 @@ import Vue from 'vue'
 import moment from 'moment'
 
 Vue.filter('formatDate', (value, formatString) => { // 年月日
-    if(value) {
+    if(value && value != 'null') {
         formatString = formatString || 'YYYY-MM-DD'
         return moment(value).format(formatString)
     } else {
-        return
+        return '————'
     }
 })
 
@@ -17,7 +17,7 @@ Vue.filter('formatDateDetails', (value, formatString) => { // 年月日
 
 Vue.filter('toMoney', (num) => {
     if (num === 'null' || num === null || num === '' || num === undefined) {
-        return 0
+        return '————'
     } else {
         num = parseFloat(num).toFixed(2)
         num = Number(num.split('.')[0]).toLocaleString() + '.' + num.split('.')[1]

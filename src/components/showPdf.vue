@@ -3,9 +3,9 @@
    <div class="center">
      <div class="contor">
       <el-button @click="prev" :disabled="!hasPrev">上一页</el-button>
-      <el-button @click="next" :disabled="!hasNext">下一页</el-button>    
+      <el-button @click="next" :disabled="!hasNext">下一页</el-button>
       <span>Page: <span v-text="page_num"></span> / <span v-text="page_count"></span></span>
-          
+
       <el-button @click="addscale" icon="plus"></el-button>
       <el-button @click="minus" icon="minus"></el-button>
       <el-button id="prev" @click="closepdf">关闭</el-button>
@@ -77,14 +77,14 @@ import PDFJS from '../../static/js/pdf/pdf.js'
        //alert(vm.canvas.height)
        canvas.height = viewport.height;
        canvas.width = viewport.width;
- 
+
        // Render PDF page into canvas context
        var renderContext = {
         canvasContext: vm.ctx,
         viewport: viewport
        };
        var renderTask = page.render(renderContext);
- 
+
        // Wait for rendering to finish
        renderTask.promise.then(function() {
         vm.pageRendering = false;
@@ -99,7 +99,7 @@ import PDFJS from '../../static/js/pdf/pdf.js'
         this.$emit('pdferr');
       });
      vm.page_num = vm.pageNum;
- 
+
     },
     addscale() {//放大
      if(this.scale >= this.maxscale) {
@@ -157,7 +157,7 @@ import PDFJS from '../../static/js/pdf/pdf.js'
  }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .cpdf {
   position: fixed;
   top: 0;

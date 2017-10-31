@@ -65,9 +65,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {
-    GetProtocolsList
-} from 'api/investor'
+// import {GetProtocolsList} from 'api/investor'
+import {mapGetters} from 'vuex'
 export default {
     props: {
         quitApplyInfo: {
@@ -110,13 +109,19 @@ export default {
         }
     },
     created() {
-        GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
-            if (res.status == '200') {
-                this.agreementData = res.data.result.list
-            }
-        })
+        // GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
+        //     if (res.status == '200') {
+        //         this.agreementData = res.data.result.list
+        //     }
+        // })
 
         // this.quitApplyInfo.investorName = this.$store.state.investor.investorName
+        this.agreementData = this.agreement
+    },
+    computed: {
+        ...mapGetters([
+            'agreement'
+        ])
     }
 }
 </script>

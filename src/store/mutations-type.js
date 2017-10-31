@@ -14,6 +14,7 @@ export const GET_INVESTORLIST = 'GET_INVESTORLIST' // 获取投资者列表
 export const GET_PROJECTTYPE = 'GET_PROJECTTYPE' // 项目类型
 export const GET_INVESTOR = 'GET_INVESTOR' // 获取当前点击投资者
 export const GET_INVESTORNAME = 'GET_INVESTORNAME' // 获取当前投资者名称
+export const GET_AGREEMENT = 'GET_AGREEMENT' // 获取当前投资者的投资协议
 // 综合查询
 export const GET_PROJECTSTATUS = 'GET_PROJECTSTATUS' // 获取项目阶段
 // 项目管理
