@@ -47,6 +47,8 @@ import PDFJS from '../../static/js/pdf/pdf.js'
   watch: {
         'pdfurl':function (to,from){
             if(to != from){
+                this.pageNum = 1;
+                this.scale = 1.0;
                 this.init();
             }
         }
