@@ -1,14 +1,13 @@
 <template>
-    <section class="fundLimits">
+    <section class="projectLimits">
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button size="small" @click="roleDialog=true">添加</el-button>
+                    <el-button v-if="isShowProjectBtn('XM-wendang')" size="small" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%"  highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
-
                             <span v-if="!scope.row.editFlag">{{ scope.row.roleName}}</span>
                             <span v-if="scope.row.editFlag">
                                 <el-input v-model="scope.row.roleName" placeholder=""></el-input>
@@ -30,7 +29,7 @@
                 <el-row>
                     <el-col>
                         <div class="limitBtn">
-                            <!--<el-button type="default" size="small" v-if="this.userId">修改权限</el-button>-->
+                            <!--<el-button type="default" size="small">修改权限</el-button>-->
                             <el-button type="danger" size="small" @click="saveRole" v-if="this.userId">保存</el-button>
                         </div>
                     </el-col>
@@ -40,41 +39,34 @@
                     <el-col :span="18">
                         <div class="f_right">权限</div>
                     </el-col>
-
-                    <div v-for="item in allData.permissions" :key="item">
+                    <div v-for="item in allData.permissions">
                         <el-col :span="24" style="border: 1px solid #dfe6ec;">
-                        <el-col :span="6" >
+                        <el-col :span="6">
                             <div class="left">{{item.permissionName}}</div>
                         </el-col>
                         <el-col :span="18">
                             <div class="right">
                                 <div v-if="item.children">
-                                    <div v-for="nextItem in item.children" :key="nextItem">
+                                    <div v-for="nextItem in item.children">
                                         <div style="flex-direction: row; display: flex">
-                                        <!-- <div >{{nextItem.permissionName}}</div> -->
-                                         <div style=" margin-left: 20px">
-                                            <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                            <el-checkbox :label="nextItem.path" >{{nextItem.permissionName}}</el-checkbox>
-                                            </el-checkbox-group>
-                                        </div>
-                                        <div style=" margin-left: 20px;"> 
-                                            <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                            <el-checkbox v-for="(text, index) of nextItem.buttons" :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
-                                            </el-checkbox-group>
-                                        </div>
+                                            <div >{{nextItem.permissionName}}</div>
+                                            <div style=" margin-left: 20px">
+                                                <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                                    <el-checkbox v-for="(text, index) of nextItem.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                                </el-checkbox-group>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="!item.children">
+                                <div v-if="!item.children ">
                                     <el-checkbox-group v-model="clickMenu" @change="a">
-                                        <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
+                                        <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
                                 </div>
                             </div>
                         </el-col>
                         </el-col>
                     </div>
-
                 </el-row>
             </el-col>
         </el-row>
@@ -86,7 +78,7 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="roleDialog = false">取 消</el-button>
+                <el-button type="default" @click="roleDialog = false">取 消</el-button>
                 <el-button type="danger" @click="addRole">确 定</el-button>
             </div>
         </el-dialog>
@@ -105,14 +97,12 @@ import { projectRoleSave } from "api/system";
 import { deleteUser } from "api/system";
 import { permissionlistByRoleId } from "api/system";
 import { permissionqueryList } from "api/system";
-
 import { getUpdataFund } from "api/system";
 import { roleBindPermission } from "api/system";
-import ElCol from "element-ui/packages/col/src/col";
+
 export default {
   data() {
     return {
-      clickMenu: [],
       roleDialog: false,
       deleteReminders: false,
       modal_loading: false,
@@ -137,15 +127,20 @@ export default {
       },
       deletData: "",
       allData: [],
-      userId: ""
+      clickMenu: []
     };
+  },
+  created() {
+    //   alert(222);
+    this.$store.state.login.permissionCode_project =
+      JSON.parse(sessionStorage.getItem("permissionCode_project")) || [];
+    // this.$store.state.login.permissionCode_fund =
+    //   JSON.parse(sessionStorage.getItem("permissionCode_fund")) || [];
+    // console.log(this.$store.state.login.permissionCode_project);
   },
   methods: {
     saveRole() {
       var String = getUpdataFund(this.clickMenu, this.allData.data);
-      if (String.length < 1) {
-        String = "";
-      }
       roleBindPermission(this.userId, String).then(res => {
         console.log(res);
       });
@@ -153,8 +148,8 @@ export default {
     // 添加角色 的方法
     addRole() {
       if (this.roleDialog == true) {
-        projectRoleSave(1, this.roleForm.roleName).then(res => {
-          queryList(1).then(res => {
+        projectRoleSave(0, this.roleForm.roleName).then(res => {
+          queryList(0).then(res => {
             this.roleData = reloadQueryData(res.data.result);
             this.roleDialog = false;
           });
@@ -167,7 +162,7 @@ export default {
       row.editFlag = !row.editFlag;
       if (!row.editFlag) {
         projectRoleEdit(row.id, row.roleName).then(res => {
-          queryList(1).then(res => {
+          queryList(0).then(res => {
             this.roleData = reloadQueryData(res.data.result);
           });
         });
@@ -184,26 +179,32 @@ export default {
             this.clickMenu.push(item.path);
           } else this.clickMenu = [item.path];
         }, this);
-        permissionqueryList(1).then(res => {
+        permissionqueryList(0).then(res => {
           this.allData = res.data.result;
         });
       });
+    },
+    isShowProjectBtn(permissionCode) {
+      //check 项目权限
+      this.$store.commit({
+        type: "filtersPermissionCode_project",
+        permissionCode: permissionCode
+      });
+      return this.$store.state.login.projectPermissions;
     }
   },
   created() {
     //        获取角色列表
-    queryList(1).then(res => {
+    queryList(0).then(res => {
       this.roleData = reloadQueryData(res.data.result);
     });
 
     //获取所有权限
-    permissionqueryList(1).then(res => {
-      console.log(res.data.result);
+    permissionqueryList(0).then(res => {
       this.allData = res.data.result;
     });
   },
   components: {
-    ElCol,
     deleteReminders
   }
 };
@@ -214,7 +215,7 @@ export default {
 
 
 <style lang="less" scoped>
-.fundLimits {
+.projectLimits {
   width: 100%;
   padding: 24px;
   background: #fff;
@@ -228,12 +229,11 @@ export default {
     justify-content: flex-end;
   }
   .left {
+    /*min-height: ;*/
     /*height: 40px;*/
     line-height: 40px;
-    /*border-top: 1px solid #dfe6ec;*/
+    /*border: 1px solid #dfe6ec;*/
     /*border-bottom: none;*/
-    /*border-right: none;*/
-
     text-align: center;
   }
   .f_right {
@@ -248,26 +248,29 @@ export default {
   }
   .right {
     display: flex;
-
+    /*height: 40px;*/
     min-height: 40px;
+    /*padding: 5px 0;*/
     line-height: 40px;
     padding-left: 10px;
     border-left: 1px solid #dfe6ec;
-    border-right: none;
+    /*border-left: none;*/
     border-bottom: none;
   }
   .mgr {
     margin-right: 15px;
   }
   .manage-rt {
-    height: 110px;
-    line-height: 110px;
+    height: 140px;
+    line-height: 140px;
     text-align: center;
     border: 1px solid #dfe6ec;
+    border-bottom: none;
   }
   .manage-lt {
-    height: 110px;
+    height: 140px;
     border: 1px solid #dfe6ec;
+    border-bottom: none;
     border-left: none;
     padding-top: 25px;
     box-sizing: border-box;

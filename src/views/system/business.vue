@@ -3,7 +3,7 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button v-if="isShowBtn('XM-wendang')" size="small" @click="roleDialog=true">添加</el-button>
+                    <el-button size="small" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%"  highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
@@ -90,119 +90,118 @@
 </template>
 
 <script type="text/ecmascript-6">
-import deleteReminders from "components/deleteReminders";
-import { queryList } from "api/system";
-import { reloadQueryData } from "api/system";
-import { projectRoleEdit } from "api/system";
-import { projectRoleSave } from "api/system";
-import { deleteUser } from "api/system";
-import { permissionlistByRoleId } from "api/system";
-import { permissionqueryList } from "api/system";
+import deleteReminders from 'components/deleteReminders'
+import {queryList} from 'api/system'
+import {reloadQueryData} from 'api/system'
+import {projectRoleEdit} from 'api/system'
+import {projectRoleSave} from 'api/system'
+import {deleteUser} from 'api/system'
+import {permissionlistByRoleId} from 'api/system'
+import {permissionqueryList} from 'api/system'
 
-import { getUpdataFund } from "api/system";
-import { roleBindPermission } from "api/system";
+
+import {getUpdataFund} from 'api/system'
+import {roleBindPermission} from 'api/system'
 
 export default {
-  data() {
-    return {
-      roleDialog: false,
-      deleteReminders: false,
-      modal_loading: false,
-      message: "是否确认删除该角色？",
-      roleData: [
-        {
-          role: "项目负责人",
-          editFlag: false
-        },
-        {
-          role: "项目成员",
-          editFlag: false
-        },
-        {
-          role: "投后人员",
-          editFlag: false
+    data() {
+        return {
+            roleDialog: false,
+            deleteReminders: false,
+            modal_loading: false,
+            message: '是否确认删除该角色？',
+            roleData: [
+                {
+                    role: '项目负责人',
+                    editFlag: false
+                },
+                {
+                    role: '项目成员',
+                    editFlag: false
+                },
+                {
+                    role: '投后人员',
+                    editFlag: false
+                }
+            ],
+            roleForm: {
+                roleName: '',
+                editFlag: false
+            },
+            deletData:'',
+            allData:[],
+            clickMenu:[],
         }
-      ],
-      roleForm: {
-        roleName: "",
-        editFlag: false
-      },
-      deletData: "",
-      allData: [],
-      clickMenu: []
-    };
-  },
-  methods: {
-    saveRole() {
-      var String = getUpdataFund(this.clickMenu, this.allData.data);
-      roleBindPermission(this.userId, String).then(res => {
-        console.log(res);
-      });
     },
-    // 添加角色 的方法
-    addRole() {
-      if (this.roleDialog == true) {
-        projectRoleSave(0, this.roleForm.roleName).then(res => {
-          queryList(0).then(res => {
-            this.roleData = reloadQueryData(res.data.result);
-            this.roleDialog = false;
-          });
-        });
-      }
-    },
-    //编辑
-    checkEdit(index, row) {
-      console.log(row);
-      row.editFlag = !row.editFlag;
-      if (!row.editFlag) {
-        projectRoleEdit(row.id, row.roleName).then(res => {
-          queryList(0).then(res => {
-            this.roleData = reloadQueryData(res.data.result);
-          });
-        });
-      }
-    },
+    methods: {
 
-    handleCurrentChange(row) {
-      this.clickMenu = [];
-      this.userId = row.id;
-      permissionlistByRoleId(row.id).then(res => {
-        var userRole = res.data.result;
-        userRole.forEach(function(item) {
-          if (this.clickMenu) {
-            this.clickMenu.push(item.path);
-          } else this.clickMenu = [item.path];
-        }, this);
-        permissionqueryList(0).then(res => {
-          this.allData = res.data.result;
-        });
-      });
+        saveRole(){
+
+            var String = getUpdataFund(this.clickMenu,this.allData.data )
+            roleBindPermission(this.userId,String).then((res)=>{
+                console.log(res)
+            })
+
+        },
+        // 添加角色 的方法
+        addRole() {
+            if(this.roleDialog == true){
+                projectRoleSave(0,this.roleForm.roleName).then((res)=>{
+                    queryList(0).then((res)=>{
+                        this.roleData = reloadQueryData(res.data.result)
+                        this.roleDialog = false;
+                    })
+                })
+            }
+        },
+        //编辑
+        checkEdit(index, row) {
+            console.log(row)
+            row.editFlag = !row.editFlag;
+            if (!row.editFlag) {
+                projectRoleEdit(row.id, row.roleName).then((res) => {
+                    queryList(0).then((res)=>{
+                        this.roleData = reloadQueryData(res.data.result)
+                    })
+                })
+            }
+        },
+
+        handleCurrentChange(row){
+            this.clickMenu = []
+            this.userId = row.id
+            permissionlistByRoleId(row.id).then((res)=>{
+                var userRole = res.data.result
+                userRole.forEach(function (item) {
+                    if (this.clickMenu){
+                        this.clickMenu.push(item.path)
+                    }else
+                        this.clickMenu = [item.path]
+                },this)
+                permissionqueryList(0).then((res)=>{
+                    this.allData = res.data.result
+
+                })
+            })
+
+        }
     },
-    isShowBtn(permissionCode) {
-    //   let btn = true;
-    //   return btn;
-    console.log(permissionCode);
-      this.$store.commit({
-        type: "filtersPermissionCode_project",
-        permissionCode: permissionCode
-      });
+    created(){
+//        获取角色列表
+        queryList(0).then((res)=>{
+            this.roleData = reloadQueryData(res.data.result)
+        })
+
+        //获取所有权限
+        permissionqueryList(0).then((res)=>{
+            this.allData = res.data.result
+        })
     }
-  },
-  created() {
-    //        获取角色列表
-    queryList(0).then(res => {
-      this.roleData = reloadQueryData(res.data.result);
-    });
-
-    //获取所有权限
-    permissionqueryList(0).then(res => {
-      this.allData = res.data.result;
-    });
-  },
-  components: {
-    deleteReminders
-  }
-};
+    ,
+    components: {
+        deleteReminders
+    },
+}
 </script>
 
 
@@ -211,64 +210,64 @@ export default {
 
 <style lang="less" scoped>
 .projectLimits {
-  width: 100%;
-  padding: 24px;
-  background: #fff;
-  min-height: 820px;
-  .roleBtn,
-  .limitBtn {
-    margin-bottom: 15px;
-  }
-  .limitBtn {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .left {
-    /*min-height: ;*/
-    /*height: 40px;*/
-    line-height: 40px;
-    /*border: 1px solid #dfe6ec;*/
-    /*border-bottom: none;*/
-    text-align: center;
-  }
-  .f_right {
-    height: 40px;
-    line-height: 40px;
-    border: 1px solid #dfe6ec;
-    border-left: none;
-    border-bottom: none;
-    text-align: center;
-    font-weight: bold;
-    background-color: #eef1f6;
-  }
-  .right {
-    display: flex;
-    /*height: 40px;*/
-    min-height: 40px;
-    /*padding: 5px 0;*/
-    line-height: 40px;
-    padding-left: 10px;
-    border-left: 1px solid #dfe6ec;
-    /*border-left: none;*/
-    border-bottom: none;
-  }
-  .mgr {
-    margin-right: 15px;
-  }
-  .manage-rt {
-    height: 140px;
-    line-height: 140px;
-    text-align: center;
-    border: 1px solid #dfe6ec;
-    border-bottom: none;
-  }
-  .manage-lt {
-    height: 140px;
-    border: 1px solid #dfe6ec;
-    border-bottom: none;
-    border-left: none;
-    padding-top: 25px;
-    box-sizing: border-box;
-  }
+    width: 100%;
+    padding: 24px;
+    background: #fff;
+    min-height: 820px;
+    .roleBtn,
+    .limitBtn {
+        margin-bottom: 15px;
+    }
+    .limitBtn {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .left {
+        /*min-height: ;*/
+        /*height: 40px;*/
+        line-height: 40px;
+        /*border: 1px solid #dfe6ec;*/
+        /*border-bottom: none;*/
+        text-align: center;
+    }
+    .f_right {
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid #dfe6ec;
+        border-left: none;
+        border-bottom: none;
+        text-align: center;
+        font-weight: bold;
+        background-color: #eef1f6;
+    }
+    .right {
+        display: flex;
+        /*height: 40px;*/
+        min-height: 40px;
+        /*padding: 5px 0;*/
+        line-height: 40px;
+        padding-left: 10px;
+        border-left: 1px solid #dfe6ec;
+        /*border-left: none;*/
+        border-bottom: none;
+    }
+    .mgr {
+        margin-right: 15px;
+    }
+    .manage-rt {
+        height: 140px;
+        line-height: 140px;
+        text-align: center;
+        border: 1px solid #dfe6ec;
+        border-bottom: none;
+    }
+    .manage-lt {
+        height: 140px;
+        border: 1px solid #dfe6ec;
+        border-bottom: none;
+        border-left: none;
+        padding-top: 25px;
+        box-sizing: border-box;
+    }
 }
 </style>

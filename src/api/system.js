@@ -153,6 +153,40 @@ export  function getSelectIndex(id,type) {
 }
 
 /*******************************业务配置******************************************/
+export function getStageApprove(stageId) {
+    const data = {
+        "stageId": stageId,
+    }
+    return service({url: '/dictionaryController/getStageApprove', method: 'post', data})
+}
+
+export function addStageApprove(id,stageId,stageName,shenpidata) {
+    const data = {
+        "id": id,
+        "stageId": stageId,
+        "stageName": stageName,//阶段名称
+        "userId": JSON.parse(sessionStorage.getItem('userInfor')).id,//当前登录用户id
+        "data":shenpidata
+        // "data": [
+        //     {
+        //         "id": "",
+        //         "roleId": "1234"
+        //     },
+        //     {
+        //         "id": "",
+        //         "roleId": "12345"
+        //     },
+        //     {
+        //         "id": "",
+        //         "roleId": "1234654"//角色id
+        //     }
+        // ]
+    }
+    console.log(data)
+    return service({url: '/dictionaryController/addStageApprove', method: 'post', data})
+}
+
+
 //左侧列表
 export  function getConfigLeftList() {
     const data = {
@@ -616,12 +650,15 @@ export function zhibiaolist() {
 }
 
 
-export function addzhibiao(formId,fieldName) {
+export function addzhibiao(formId,fieldName,sort) {
+    var j = parseInt(sort)
     const data = {
         "formId":formId, //
         "fieldName":fieldName, //名称
         "userId":JSON.parse(sessionStorage.getItem('userInfor')).id,
+        "sort":j
     }
+console.log(data)
     return service({url:'/formLabel/editFrom', method: 'post', data})
 }
 export function editzhibiao(formId,id,fieldName) {

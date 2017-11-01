@@ -342,9 +342,10 @@ export default {
         line-height: 42px;
         margin-bottom: 12px;
         display: flex;
+        background: none;
         .filter {
             flex: 0 0 50%;
-            padding-top: 3px;
+            padding-top: 25px;
         }
         .btn {
             flex: 0 0 50%;
