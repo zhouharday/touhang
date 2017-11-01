@@ -80,8 +80,11 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
-             console.log(this.investorData)
-             console.log(row)
+            row.documentInfo.map((x) => {
+                x.name = x.fileName,
+                x.url = x.filePath
+            })
+            // console.log(row)
             // console.log(typeof(row.paidDate))
             this.fundsDetailsModal = true
             row.paidAmount = parseFloat(row.paidAmount)
@@ -111,6 +114,7 @@ export default {
             this.fundsDetailsModal = false
         },
         modifyModal() {
+            // console.log(this.fundsInfo)
             var fundsInfo = this.$refs.fundsModal.$refs.fundsInfo
             fundsInfo.validate((valid) => {
                 if (valid) {

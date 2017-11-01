@@ -69,7 +69,7 @@
                 <team :teamData="teamData"></team>
             </el-tab-pane>
             <el-tab-pane label="审批" name="examine" class="tab_list">
-                <examine></examine>
+                <examine :examineData="examineData"></examine>
             </el-tab-pane>
             <el-tab-pane label="投资者" name="Investor" class="tab_list">
                 <investor :investorData="investorData"></investor>
@@ -114,7 +114,8 @@ import {
     getFundApprList,
     selectStageUploadDocument,
     slectStageAllocation,
-    nextStage
+    nextStage,
+    getApproveList
 } from 'api/fund'
 const NUM = 2
 export default {
@@ -203,6 +204,7 @@ export default {
             fileListData: [], // 文档列表
             projectsData: [], // 投资项目
             costData: [], // 基金费用
+            examineData: [], // 审批数据
             file: null,
             listIndex: 0, // 当前点击id
             loadingStatus: false,
@@ -231,6 +233,13 @@ export default {
                     if (res.status == '200') {
                         // console.log(res.data.result) // 投资者数据为空
                         this.investorData = res.data.result
+                    }
+                })
+            } else if (this.activeName === 'examine') {
+                getApproveList(this.$route.params.id).then((res) => {
+                    if(res.status === 200) {
+                        console.log(res)
+                        this.examineData = res.data.result.list
                     }
                 })
             } else if (this.activeName == 'project') {

@@ -52,18 +52,9 @@
                 </el-form-item>
             </el-col>
             <el-col :span="24">
+                <!-- {{AgreementInfo.documentInfo}} -->
                 <el-form-item label="投资协议附件">
-                    <Upload multiple
-                            type="drag"
-                            name="files"
-                            :action="actionUrl"
-                            :show-upload-list="true"
-                            :on-success="handleSuccess">
-                        <div style="padding: 20px 0">
-                            <Icon type="ios-cloud-upload" size="52"></Icon>
-                            <p>点击或将文件拖拽到这里上传</p>
-                        </div>
-                    </Upload>
+                    <upload-files @uploadSuccess="uploadSuccess" :documentInfo="AgreementInfo.documentInfo"></upload-files>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -73,6 +64,7 @@
 
 <script type="text/ecmascript-6">
 import {getAllNormalFund} from 'api/investor'
+import uploadFiles from 'components/uploadFiles'
 export default {
     props: {
         AgreementInfo: {
@@ -102,7 +94,6 @@ export default {
                 label: 'LP',
                 value: '5'
             }],
-            actionUrl: this.api + '/files/upload',
             rules1: {
                 agreementName: [{
                     required: true,
@@ -140,19 +131,8 @@ export default {
         }
     },
     methods: {
-        handleSuccess(res, file, fileList) {
-            // console.log(res)
-            // console.log(file)
-            var documents = []
-            fileList.map((x) => {
-                if(x.response) {
-                    documents.push({
-                        fileName: x.response.fileName,
-                        fileUrl: x.response.filePath.split('?')[0]
-                    })
-                }
-            })
-            this.AgreementInfo.documentInfo = documents
+        uploadSuccess(list) {
+            this.AgreementInfo.documentInfo = list
         }
     },
     created() {
@@ -164,6 +144,9 @@ export default {
             let response = err.response
             this.$Message.error(response.message || '获取基金选择列表！')
         })
+    },
+    components: {
+        uploadFiles
     }
 }
 </script>
@@ -172,5 +155,42 @@ export default {
 .protocolDetails {
     width: 100%;
     height: 100%;
+    .demo-upload-list {
+        display: flex;
+        min-height: 30px;
+        text-align: center;
+        line-height: 30px;
+        margin: 12px 0;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        /*box-shadow: 0 1px 1px rgba(0,0,0,.2);*/
+        margin-right: 4px;
+        span {
+            flex: 1;
+        }
+    }
+    .demo-upload-list-cover {
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,.6);
+    }
+    .demo-upload-list:hover .demo-upload-list-cover {
+        display: block;
+    }
+    .demo-upload-list-cover i {
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 2px;
+    }
 }
 </style>

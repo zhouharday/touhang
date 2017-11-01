@@ -61,12 +61,7 @@
             </el-col>
             <el-col :span="24">
                 <el-form-item label="出资协议附件">
-                    <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
-                        <div style="padding: 20px 0">
-                            <Icon type="ios-cloud-upload" size="52"></Icon>
-                            <p>点击或将文件拖拽到这里上传</p>
-                        </div>
-                    </Upload>
+                    <upload-files @uploadSuccess="uploadSuccess" :documentInfo="fundsInfo.documentInfo"></upload-files>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -76,6 +71,7 @@
 
 <script type="text/ecmascript-6">
 import {mapGetters, mapActions} from 'vuex'
+import uploadFiles from 'components/uploadFiles'
 export default {
     props: {
         fundsInfo: {
@@ -85,7 +81,6 @@ export default {
     },
     data() {
         return {
-            allAgreement: this.$store.state.investor.agreement || [],
             agreementList: '',
             size: 1000,
             rules1: {
@@ -123,18 +118,21 @@ export default {
             this.fundsInfo.subscribeAmount = current.subscribeAmount
             this.fundsInfo.residueAmount = current.residueAmount
         },
+        uploadSuccess(list) {
+            this.fundsInfo.documentInfo = list
+            // console.log(list)
+        },
         ...mapActions([
             'getAgreementInfo'
         ])
     },
-    created() {
-        this.allAgreement = this.agreement
-        console.log(this.$store.state.investor.agreement)
-    },
     computed: {
-        ...mapGetters([
-            'agreement'
-        ])
+        ...mapGetters({
+            allAgreement: 'agreement'
+        })
+    },
+    components: {
+        uploadFiles
     }
 }
 </script>

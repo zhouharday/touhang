@@ -50,12 +50,7 @@
                 </el-col>
                 <el-col :span="24">
                     <el-form-item label="拜访记录附件">
-                        <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
-                            <div style="padding: 20px 0">
-                                <Icon type="ios-cloud-upload" size="52"></Icon>
-                                <p>点击或将文件拖拽到这里上传</p>
-                            </div>
-                        </Upload>
+                        <upload-files @uploadSuccess="handleSuccess" :documentInfo="addVisiting.documentInfo"></upload-files>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -74,6 +69,7 @@
 import 'common/js/filter'
 import tableHeader from "components/tabelHeader"
 import deleteReminders from "components/deleteReminders"
+import uploadFiles from "components/uploadFiles"
 import {
     getVisitingRecordList,
     addVisitingRecord,
@@ -123,9 +119,14 @@ export default {
             }
         },
         editRow(index, row) {
+            console.log(row)
             this.modelVisiting = true
             this.addVisiting = row
             this.addOrEdit = false
+            row.documentInfo.map((x) => {
+                x.name = x.fileName,
+                x.url = x.filePath
+            })
         },
         deleteRow(index, row) {
             this.deleteModal = !this.deleteModal
@@ -136,6 +137,7 @@ export default {
             this.modelVisiting = false
         },
         confirmVisiting() {
+            console.log(this.addVisiting)
             this.$refs.addVisiting.validate((valid) => {
                 if (valid) {
                     if (this.addOrEdit == true) {
@@ -174,6 +176,10 @@ export default {
         comfirmCancel() {
             this.deleteModal = false
         },
+        handleSuccess(list) {
+            this.addVisiting.documentInfo = list
+            console.log(this.addVisiting)
+        },
         _visitingRecordList() {
             getVisitingRecordList(this.$route.params.userId).then((res) => {
                 if (res.status == '200') {
@@ -186,7 +192,8 @@ export default {
         }
     },
     components: {
-        deleteReminders
+        deleteReminders,
+        uploadFiles
     }
 }
 </script>

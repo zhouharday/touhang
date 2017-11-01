@@ -104,6 +104,10 @@ export default {
             this.addOrModify = true;
         },
         handleEdit(index, row) {
+            row.documentInfo.map((x) => {
+                x.name = x.fileName,
+                x.url = x.filePath
+            })
             row.signDate = new Date(row.signDate)
             this.modelAgreement = true
             this.addOrModify = false

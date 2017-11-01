@@ -1,16 +1,21 @@
 <template>
 <div class="examine">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
-    <el-table :data="teamData" border style="width: 100%">
-        <el-table-column label="审批主题" prop="theme" align="center">
+    <el-table :data="examineData" border style="width: 100%">
+        <el-table-column label="审批主题" prop="approveTitle" align="center">
         </el-table-column>
-        <el-table-column label="申请人" prop="applicant" align="center">
+        <el-table-column label="申请人" prop="userName" align="center">
         </el-table-column>
-        <el-table-column label="申请时间" prop="apply" align="center">
+        <el-table-column label="申请时间" prop="createDate" align="center">
         </el-table-column>
-        <el-table-column label="审批时间" prop="approval" align="center">
+        <el-table-column label="审批时间" prop="disposeDate" align="center">
         </el-table-column>
-        <el-table-column label="审批状态" prop="status" align="center">
+        <el-table-column label="审批状态" align="center">
+            <template scope="scope">
+                <div v-if="scope.row.disposeResult === 0">审批中</div>
+                <div v-else-if="scope.row.disposeResult === 1">同意</div>
+                <div v-else>拒绝</div>
+            </template>
         </el-table-column>
         <!-- <el-table-column label="操作">
             <template scope="scope">
@@ -62,6 +67,12 @@
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 export default {
+    props: {
+        examineData: {
+            type: Array,
+            default: () => []
+        }
+    },
     data() {
         return {
             formLabelWidth: '80px',

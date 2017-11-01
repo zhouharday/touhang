@@ -348,3 +348,10 @@ export function uploadProjectDocument(uploadData) {
         data
     })
 }
+// 审批列表 investProject/getApproveList
+export function getApproveList(fundId) {
+    const data = {
+        typeId: fundId
+    }
+    return service({url: 'investProject/getApproveList', method: 'post', data})
+}
