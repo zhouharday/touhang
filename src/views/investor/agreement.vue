@@ -56,6 +56,7 @@ import tableHeader from 'components/tabelHeader'
 import protocolDetails from './protocolDetails'
 import deleteReminders from 'components/deleteReminders'
 import '../../common/js/filter'
+import { mapActions } from 'vuex'
 import {
     addAgreement,
     updateAgreement,
@@ -130,7 +131,7 @@ export default {
                             if(res.status == '200') {
                                 this.$Message.success(res.data.message || '签约成功！')
                                 // this.modelSign = false
-                                this.getAgreementList()
+                                this._getAgreementList()
                                 this.modelAgreement = false
                             }
                         })
@@ -140,7 +141,7 @@ export default {
                             if(res.status == '200') {
                                 this.$Message.success(res.data.message || '修改成功！')
                                 // this.modelSign = false
-                                this.getAgreementList()
+                                this._getAgreementList()
                                 this.modelAgreement = false
                             }
                         })
@@ -155,22 +156,26 @@ export default {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除协议成功！')
                     this.deleteReminders = false
-                    this.getAgreementList()
+                    this._getAgreementList()
                 }
             })
         },
         cancelAgreement() {
             this.deleteReminders = false
         },
-        getAgreementList() {
+        _getAgreementList() {
             GetProtocolsList(this.$route.params.userId).then((res) => {
                 if (res.status == '200') {
                     this.agreementData = res.data.result.list
+                    this.getAgreementInfo(res.data.result.list)
                 }
             }).catch(err => {
                 console.log(err)
             })
-        }
+        },
+        ...mapActions([
+            'getAgreementInfo'
+        ])
     },
     components: {
         tableHeader,

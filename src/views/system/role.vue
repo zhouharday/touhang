@@ -59,18 +59,18 @@
                                                 <el-col :span="18">
                                                     <div  class="right" >
                                                         <el-col>
-                                                            <el-row :span = "18" v-for="nextItem in item.children" style="flex-direction: row; display: flex ;border-bottom: 1px solid #dfe6ec;">
-                                                                <el-col :span="8" style=" padding-left: 10px; border-right: 1px solid #dfe6ec;">
+                                                            <el-row :span = "18" v-for="nextItem in item.children" style="flex-direction: row; display: flex ;border-bottom: 1px solid #dfe6ec;padding-left: 10px">
+                                                                <!--<el-col :span="8" style=" padding-left: 10px; border-right: 1px solid #dfe6ec;">-->
                                                                     <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
                                                                         <el-checkbox :label="nextItem.path" >{{nextItem.menuName}}</el-checkbox>
                                                                     </el-checkbox-group>
-                                                                </el-col>
-                                                                <el-col :span = "16" style="padding-left: 10px">
+                                                                <!--</el-col>-->
+                                                                <!--<el-col :span = "16" style="padding-left: 10px">-->
 
-                                                                    <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                                                        <el-checkbox v-for="(text, index) of nextItem.buttons"  style="margin-left: 0px; margin-right: 15px" :label="text.path" >{{text.menuName}}</el-checkbox>
-                                                                    </el-checkbox-group>
-                                                                </el-col>
+                                                                    <!--<el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">-->
+                                                                        <!--<el-checkbox v-for="(text, index) of nextItem.buttons"  style="margin-left: 0px; margin-right: 15px" :label="text.path" >{{text.menuName}}</el-checkbox>-->
+                                                                    <!--</el-checkbox-group>-->
+                                                                <!--</el-col>-->
                                                             </el-row>
                                                         </el-col>
                                                     </div>
