@@ -146,7 +146,7 @@ const mutations = {
                         console.log(state.permissionCode_project);
                         console.log('基金按钮权限');
                         console.log(state.permissionCode_fund);
-                        console.log(res.data.message);
+                        // console.log(res.data.message);
                     } else {
                         console.log(res.data.message);
                     }
