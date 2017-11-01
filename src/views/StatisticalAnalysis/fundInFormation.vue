@@ -175,6 +175,12 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
+              res.data.result.list.map((item,index)=> {
+                // res.data.result.list[index].map((ele,index)=> {
+                  if(res.data.result.list[index].fundAppraisement == 'null'){
+                    res.data.result.list[index].fundAppraisement = '';
+                  }
+              });
               this.fundTabData = res.data.result.list;
               this.pages_1.pageNum = res.data.result.pageNum; //当前页码
               this.pages_1.total = res.data.result.total; //数据总数

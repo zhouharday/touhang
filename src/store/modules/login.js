@@ -32,6 +32,7 @@ const state = {
     permissionCode_fund: [], //基金按钮数据
     projectPermissions: false, //是否存在项目权限按钮
     fundPermissions: false, //是否存在基金权限按钮
+    fund: [],
 };
 
 const mutations = {
@@ -102,7 +103,7 @@ const mutations = {
                     if (res.data.state == "200") {
                         console.log('其他模块按钮权限数据');
                         console.log(res.data);
-                        
+
                     } else {
                         console.log(res.data.message);
                     }
@@ -123,7 +124,7 @@ const mutations = {
                     if (res.data.state == "200") {
                         // console.log(res);
                         // console.log('权限按钮数据');
-                        if(res.data.result.length == 0){
+                        if (res.data.result.length == 0) {
                             console.log('没有项目基金权限数据');
                             return;
                         };
@@ -165,12 +166,11 @@ const mutations = {
         }
     },
     filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        let haveBtn = state.permissionCode_fund.includes(str.permissionCode);
-        if (haveBtn) {
-            state.fundPermissions = true;
-        } else {
-            state.fundPermissions = false;
+        let haveBtn = sessionStorage.getItem('permissionCode_fund').includes(str.permissionCode);
+        if(haveBtn){
+            return true;
         }
+        return false;
     }
 };
 
@@ -193,6 +193,7 @@ const actions = {
                     message: '用户名或密码不正确，请重新输入',
                     type: 'error'
                 });
+                state.loading = false;
                 // this.$Message.error('用户名或密码不正确，请重新输入');
                 return;
             } else if (data.status == '200') { //登录成功
@@ -205,6 +206,7 @@ const actions = {
                     });
                     return;
                 };
+                state.loading = false;
                 // alert('success');
                 state.approvelType.isLogged = true;
                 // console.log(user);

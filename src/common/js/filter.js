@@ -11,7 +11,7 @@ Vue.filter('formatDate', (value, formatString) => { // 年月日
 })
 
 Vue.filter('formatDateDetails', (value, formatString) => { // 年月日
-    formatString = formatString || 'YYYY-MM-DD, HH:mm:ss'
+    formatString = formatString || 'YYYY-MM-DD HH:mm:ss'
     return moment(value).format(formatString)
 })
 

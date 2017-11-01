@@ -9,7 +9,7 @@
                     <Table border :data="data1" :columns="columns1" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div class="pagination">
-                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
+                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
                             </el-pagination>
                         </div>
                     </div>
@@ -921,15 +921,15 @@ export default {
     },
     saveForm(val, formName) {
       //确定 fun
-      // this.checkformVal(formName);
-      if (val == 1) {
+      let checkAddTaskForm1 = this.checkformVal(formName);
+      if (val == 1 && checkAddTaskForm1) {
         //添加任务
         console.log(this.addTaskForm1);
         this.sendTaskData1(); //发送添加任务数据
         // this.getTaskList1(1);
         this.dialogFormVisible1 = false;
         this.addTaskForm1 = {};
-      }
+      };
       if (val == 2) {
         //代办任务
         this.dialogFormVisible2 = false;
