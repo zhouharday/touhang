@@ -921,15 +921,15 @@ export default {
     },
     saveForm(val, formName) {
       //确定 fun
-      // this.checkformVal(formName);
-      if (val == 1) {
+      let checkAddTaskForm1 = this.checkformVal(formName);
+      if (val == 1 && checkAddTaskForm1) {
         //添加任务
         console.log(this.addTaskForm1);
         this.sendTaskData1(); //发送添加任务数据
         // this.getTaskList1(1);
         this.dialogFormVisible1 = false;
         this.addTaskForm1 = {};
-      }
+      };
       if (val == 2) {
         //代办任务
         this.dialogFormVisible2 = false;
