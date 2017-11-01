@@ -9,7 +9,7 @@
                     <Table border :data="data1" :columns="columns1" stripe></Table>
                     <div style="margin: 10px;overflow: hidden">
                         <div class="pagination">
-                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
+                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
                             </el-pagination>
                         </div>
                     </div>

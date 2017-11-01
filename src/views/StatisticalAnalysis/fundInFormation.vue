@@ -180,7 +180,6 @@ export default {
                   if(res.data.result.list[index].fundAppraisement == 'null'){
                     res.data.result.list[index].fundAppraisement = '';
                   }
-                // });
               });
               this.fundTabData = res.data.result.list;
               this.pages_1.pageNum = res.data.result.pageNum; //当前页码

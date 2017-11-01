@@ -93,8 +93,8 @@ export function compare(prop) {
 }
 
 export function filtersPermissionCode_project(permissionCode) { //check 项目权限
-    if(sessionStorage.getItem('permissionCode_project') == null){
-        return;
+    if (sessionStorage.getItem('permissionCode_project') == null) {
+        return console.log('无权限');
     };
     let haveBtn = sessionStorage.getItem('permissionCode_project').includes(permissionCode);
     if (haveBtn) {
@@ -102,9 +102,10 @@ export function filtersPermissionCode_project(permissionCode) { //check 项目�
     }
     return false;
 }
+
 export function filtersPermissionCode_fund(permissionCode) { //check 基金权限
-    if(sessionStorage.getItem('permissionCode_fund') == null){
-        return;
+    if (sessionStorage.getItem('permissionCode_fund') == null) {
+        return console.log('无权限');
     };
     let haveBtn = sessionStorage.getItem('permissionCode_fund').includes(permissionCode);
     if (haveBtn) {
@@ -118,7 +119,9 @@ export function checkProjectAuth(code) {
         return false;
     }
     let result = sessionStorage.getItem('permissionCode_project').includes(code);
-    if (!result) {console.log("CODE: " + code + '无权限')}
+    if (!result) {
+        console.log("CODE: " + code + '无权限')
+    };
     return result;
 }
 
