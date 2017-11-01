@@ -46,6 +46,7 @@ export default {
                 let index = href.indexOf('#');
                 let url = href.substr(0,index);
                 window.location.href = url + '#/login';
+                this.$store.state.login.loading = false;
                 // this.$router.push('/login');
             }
         },

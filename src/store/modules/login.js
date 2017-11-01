@@ -124,13 +124,8 @@ const mutations = {
                     if (res.data.state == "200") {
                         // console.log(res);
                         // console.log('权限按钮数据');
-<<<<<<< HEAD
-                        if (res.data.result.length == 0) {
-                            console.log('没有权限按钮数据');
-=======
                         if(res.data.result.length == 0){
                             console.log('没有项目基金权限数据');
->>>>>>> f880f49f4167c2678e3e9992fe1f1e7d9a7dd57a
                             return;
                         };
                         state.permissionCode = res.data.result; //保存所有按钮数据
@@ -170,7 +165,7 @@ const mutations = {
             state.projectPermissions = false;
         }
     },
-    filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
+    filtersPermissionCode_fund_F(state, str) { //过滤基金按钮方法
         // alert(1);
         // let haveBtn = state.permissionCode_fund.includes(str.permissionCode);
         // state.fund.str = str;
@@ -204,6 +199,7 @@ const actions = {
                     message: '用户名或密码不正确，请重新输入',
                     type: 'error'
                 });
+                state.loading = false;
                 // this.$Message.error('用户名或密码不正确，请重新输入');
                 return;
             } else if (data.status == '200') { //登录成功
@@ -216,6 +212,7 @@ const actions = {
                     });
                     return;
                 };
+                state.loading = false;
                 // alert('success');
                 state.approvelType.isLogged = true;
                 // console.log(user);
@@ -326,6 +323,16 @@ const actions = {
             console.log(error);
         })
     },
+    filtersPermissionCode_fund({state,commit}, str) { //过滤基金按钮方法
+        commit('filtersPermissionCode_fund_F', str);
+        // if (state.permissionCode_fund.indexOf(str.permissionCode) != -1) {
+        //     // state.fundPermissions = true;
+        //     // alert(1);
+        //     return state.fund.push(str.permissionCode);
+        // } else {
+        //     // state.fundPermissions = false;
+        // }
+    }
 }
 
 export default {

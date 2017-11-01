@@ -320,7 +320,7 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
-              console.log(res.data.result[5].data);
+              // console.log(res.data.result[5].data);
               this.option1.title.text = res.data.result[0].title;
               this.option2.title.text = res.data.result[1].title;
               this.option3.title.text = res.data.result[2].title;
