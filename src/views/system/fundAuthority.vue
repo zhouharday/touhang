@@ -196,14 +196,10 @@ export default {
     },
     isShowFundBtn(permissionCode) {
       //check 基金权限
-      // this.$store.commit({
-      //   type: "filtersPermissionCode_fund",
-      //   permissionCode: permissionCode
-      // });
-      this.$store.dispatch({
-          type: "filtersPermissionCode_fund",
-          permissionCode: permissionCode
-        });
+      this.$store.commit({
+        type: "filtersPermissionCode_fund",
+        permissionCode: permissionCode
+      });
       // console.log(this.$store.state.login.fund);
       let haveBtn = this.$store.state.login.fund.indexOf(permissionCode);
       if (haveBtn != -1) {
