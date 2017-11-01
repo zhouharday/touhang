@@ -39,7 +39,7 @@
                 </el-table>
             </template>
         </div>
-        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></show-pdf>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf>
     </div>
 </template>
 
@@ -75,30 +75,7 @@ export default {
             isHide: false,
             file: null,
             formLabelWidth: '80px',
-            fileData: [{
-                stageFile: 'BBBBBBBB.PDF',
-                fileName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            }],
-            inspectionData: [{
-                stageFile: 'AAAAAAAAA.PDF',
-                inspectionName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            }],
-            projectData: [{
-                stageFile: 'AAAAAAAAA.PDF',
-                projectName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            },
-            {
-                stageFile: 'AAAAAAAAA.PDF',
-                projectName: 'AAAAAAAAA.PDF',
-                user: '张三',
-                date: '2017-09-09'
-            }]
+            fileData: []
         }
     },
     created() {
