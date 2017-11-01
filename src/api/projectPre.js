@@ -65,6 +65,17 @@ export function nextStage(params = {}) {
 	return service({url: '/dictionaryController/nextStage', method: 'post', data});
 }
 
+//获取审批角色
+export function getTeamListPage(params = {}){
+	let {roleId, investProjectId} = params;
+	const data = {
+		roleId,
+		investProjectId,
+		type: 0, //0:项目   1：基金
+	}
+	return service({url: '/projectRole/getTeamListPage', method: 'post', data});
+}
+
 //项目中止
 export function suspendInvestProject(id = undefined) {
 	const data = {

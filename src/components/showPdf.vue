@@ -56,7 +56,7 @@ import PDFJS from '../../static/js/pdf/pdf.js'
   methods: {
     init(){
         let vm = this;
-        console.log("地址：a"+vm.pdfurl);
+        console.log("预览地址："+vm.pdfurl);
         PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
            vm.pdfDoc = pdfDoc_;
            vm.page_count = vm.pdfDoc.numPages;

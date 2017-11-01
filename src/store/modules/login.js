@@ -124,7 +124,7 @@ const mutations = {
                         // console.log(res);
                         // console.log('权限按钮数据');
                         if(res.data.result.length == 0){
-                            console.log('没有权限按钮数据');
+                            console.log('没有项目基金权限数据');
                             return;
                         };
                         state.permissionCode = res.data.result; //保存所有按钮数据
