@@ -194,8 +194,8 @@ export default {
   data() {
     return {
       menus: [],
-      isShow: true,
-      // isShow: false,
+    //   isShow: true,
+      isShow: false,
       theModel: [],
       setting: {
         view: {
