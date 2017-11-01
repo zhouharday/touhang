@@ -38,9 +38,9 @@
                             <input type="file" class="fileInput" @change="changeFile($event, item.id)" ref="avatarInput">
                         </div>
                         <!-- 发起申请 -->
-                        <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
+                        <el-button v-if="item.type == 2" type="text" class="state" @click="openDialog(1, item.id)">立即审批</el-button>
                         <!-- 查看进度 -->
-                        <el-button v-if="item.type == 3 && item.status == 0" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
+                        <el-button v-if="item.type == 3" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,8 @@ import {
     slectAllStage,
     getStageUploadDocument,
     nextStage,
-    suspendInvestProject
+    suspendInvestProject,
+    getTeamListPage
 } from 'api/projectPre';
 import {
     getProjectUsers
@@ -167,14 +168,14 @@ export default {
                 notes: ''
             },
             auditorOptions: [{ //发起申请对话框 审批人列表
-                value: '选项1',
-                label: '张三'
+                userId: '选项1',
+                userName: '张三'
             }, {
-                value: '选项2',
-                label: '李四'
+                userId: '选项2',
+                userName: '李四'
             }, {
-                value: '选项3',
-                label: '王二'
+                userId: '选项3',
+                userName: '王二'
             }],
             appendixTable: {
                 progressName: 'AAA项目XX申请',
@@ -388,11 +389,34 @@ export default {
                 stageId
             };
             nextStage(params).then(resp => {
-                if (resp.data.status === "200") {
+                if (resp.data.status == "200") {
                     this.getStageUploadDocument();
+                }else if(resp.data.status == "9030"){
+                    //发起申请
+                    this.applyForm = resp.data.result;
+                    let roleId = resp.data.result.roleId;
+                    let params = {roleId: roleId, investProjectId: this.investProjectId};
+                    this.getAuditorOptions(params);
+                    this.applyModal = true;
+
+                } else {
+                    this.$Message.error(res.data.message);
                 }
+
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
+            });
+        },
+        getAuditorOptions(params){
+            getTeamListPage(params).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.auditorOptions = data.result.list;
+                }else{
+                    this.auditorOptions = [];
+                }
+            }).catch(e => {
+                console.log('获取项目角色列表 error: ', e);
             });
         },
         // 小双助手 打开不同的对话框
