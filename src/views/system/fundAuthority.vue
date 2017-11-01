@@ -8,7 +8,6 @@
                 <el-table :data="roleData" border style="width: 100%"  highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
                         <template scope="scope">
-
                             <span v-if="!scope.row.editFlag">{{ scope.row.roleName}}</span>
                             <span v-if="scope.row.editFlag">
                                 <el-input v-model="scope.row.roleName" placeholder=""></el-input>
@@ -105,11 +104,17 @@ import { projectRoleSave } from "api/system";
 import { deleteUser } from "api/system";
 import { permissionlistByRoleId } from "api/system";
 import { permissionqueryList } from "api/system";
-
 import { getUpdataFund } from "api/system";
 import { roleBindPermission } from "api/system";
 import ElCol from "element-ui/packages/col/src/col";
+import { mapState } from "vuex";
+import { filtersPermissionCode_fund } from "common/js/config";
 export default {
+  computed: {
+    ...mapState({
+      // str: state => state.login.fund
+    })
+  },
   data() {
     return {
       clickMenu: [],
@@ -188,16 +193,22 @@ export default {
           this.allData = res.data.result;
         });
       });
+    },
+    isShowFundBtn(permissionCode) {
+      return filtersPermissionCode_fund(permissionCode);
     }
   },
   created() {
-    //        获取角色列表
+    //获取角色列表
     queryList(1).then(res => {
+      console.log("角色列表");
+      console.log(res.data.result);
       this.roleData = reloadQueryData(res.data.result);
     });
 
     //获取所有权限
     permissionqueryList(1).then(res => {
+      console.log("所有权限");
       console.log(res.data.result);
       this.allData = res.data.result;
     });
