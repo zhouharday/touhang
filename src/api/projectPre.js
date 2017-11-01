@@ -48,7 +48,8 @@ export function getStageUploadDocument(params = {}) {
 	const data = {
 		typeId,
 		investProjectId,
-		type: 1
+		type: 1,
+		userId: JSON.parse(sessionStorage.getItem('userInfor')).id
 	}
 	return service({url: '/dictionaryController/selectStageUploadDocument', method: 'post', data});
 }
@@ -70,10 +71,58 @@ export function getTeamListPage(params = {}){
 	let {roleId, investProjectId} = params;
 	const data = {
 		roleId,
-		investProjectId,
+		inverstProjectId: investProjectId,
 		type: 0, //0:项目   1：基金
 	}
 	return service({url: '/projectRole/getTeamListPage', method: 'post', data});
+}
+
+//下一阶段，发起申请
+export function startApproveInfo(params = {}){
+	let {currentStageId, roleId, approveTitle, approveUserId, orderValue, remark} = params;
+	const data = {
+		currentStageId,
+		userId: JSON.parse(sessionStorage.getItem('userInfor')).id,
+		roleId,
+		approveTitle,
+		approveUserId,
+		orderValue,
+		remark
+	}
+	return service({url: 'investProject/startApproveInfo', method: 'post', data});
+}
+
+//阶段申请详情
+export function getApproveInfo(id = undefined){
+	const data = {
+		id: id,
+		merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+	}
+	return service({url: 'investProject/getApproveInfo', method: 'post', data});
+}
+
+//提交审批
+export function approveResult(params = {}, stageId, typeId){
+	let {id, disposeResult, roleId, orderValue, approveUserId} = params;
+	const data = {
+		id: id,
+		disposeResult,
+		roleId,
+		orderValue,
+		approveUserId,
+		stageId,
+		typeId,
+		type: 1
+	}
+	return service({url: 'investProject/approveResult', method: 'post', data});
+}
+
+//审批列表
+export function getApproveList(projectId = undefined){
+	const data = {
+		typeId: projectId
+	}
+	return service({url: 'investProject/getApproveList', method: 'post', data});
 }
 
 //项目中止

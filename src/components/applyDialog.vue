@@ -6,21 +6,21 @@
             <el-form :model="applyForm" ref="applyForm" label-width="60px">
                 <el-row>
                     <el-col :span="13">
-                        <el-form-item label="标题" prop="name">
-                            <el-input v-model="applyForm.title" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
+                        <el-form-item label="标题" prop="approveTitle">
+                            <el-input v-model="applyForm.approveTitle" placeholder="标题自动生成" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="审批人" prop="auditor">
-                            <el-select v-model="applyForm.auditor" filterable placeholder="请选择" style="width: 50%">
-                                <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                        <el-form-item label="审批人" prop="approveUserId">
+                            <el-select v-model="applyForm.approveUserId" filterable placeholder="请选择" style="width: 50%">
+                                <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="备注" prop="notes">
-                            <el-input type="textarea" v-model="applyForm.notes" :rows="4"></el-input>
+                        <el-form-item label="备注" prop="remark">
+                            <el-input type="textarea" v-model="applyForm.remark" :rows="4"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -33,7 +33,7 @@
     </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 export default {
     props: {
         applyModal: {
@@ -47,11 +47,18 @@ export default {
             type: Array
         }
     },
+    watch: {
+        'applyModal':function (to,from){
+            console.log(123);
+        }
+    },
     methods: {
         submitHandler(event) {
-            this.$emit('submit', event.target)
+            this.$emit('submit', this.applyForm)
         },
         cancleHandler(event) {
+            this.applyForm = {};
+            this.auditorOptions = [];
             this.$emit('cancle', event.target)
         }
     }

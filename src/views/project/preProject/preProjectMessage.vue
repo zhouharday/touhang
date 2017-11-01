@@ -60,7 +60,7 @@
                     <record-form :tabs="tabs" :proId="projectId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-                    <approve-table :tabs="tabs"></approve-table>
+                    <approve-table :tabs="tabs" :projectId="projectId"></approve-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
                     <file-table :tabs="tabs" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
@@ -82,7 +82,7 @@
         <!-- 发起申请 对话框-->
         <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" isBlock="true"  dialogTitle='审批' :table1="appendixTable" :table2="progressTable" :approvalForm="approvalForm"  :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
+        <progress-forms :progressModal="progressModal" :isBlock="isBlock"  dialogTitle='审批' :table1="appendixTable" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
     </div>
 </template>
 
@@ -108,7 +108,10 @@ import {
     getStageUploadDocument,
     nextStage,
     suspendInvestProject,
-    getTeamListPage
+    getTeamListPage,
+    startApproveInfo,
+    getApproveInfo,
+    approveResult
 } from 'api/projectPre';
 import {
     getProjectUsers
@@ -141,6 +144,7 @@ export default {
             progressModal: false,
             title: '',
             prompt: '任务助手小双温馨提示:',
+            isBlock: false,
             activeName: 'details',
             proUsers: [], // 项目用户列表
             proRoles: [], // 项目角色列表
@@ -163,9 +167,12 @@ export default {
                 flag: true
             },
             applyForm: { // 发起申请对话框 表单
-                title: '',
-                auditor: '',
-                notes: ''
+                currentStageId: '',
+                roleId: '',
+                approveTitle: '',
+                approveUserId: '',
+                orderValue: '',
+                remark: ''
             },
             auditorOptions: [{ //发起申请对话框 审批人列表
                 userId: '选项1',
@@ -390,14 +397,16 @@ export default {
             };
             nextStage(params).then(resp => {
                 if (resp.data.status == "200") {
+                    console.log("200");
                     this.getStageUploadDocument();
                 }else if(resp.data.status == "9030"){
+                    console.log("9030");
+                    this.applyModal = true;
                     //发起申请
-                    this.applyForm = resp.data.result;
+                    this.$set(this.$data, 'applyForm', resp.data.result);
                     let roleId = resp.data.result.roleId;
                     let params = {roleId: roleId, investProjectId: this.investProjectId};
                     this.getAuditorOptions(params);
-                    this.applyModal = true;
 
                 } else {
                     this.$Message.error(res.data.message);
@@ -418,23 +427,6 @@ export default {
             }).catch(e => {
                 console.log('获取项目角色列表 error: ', e);
             });
-        },
-        // 小双助手 打开不同的对话框
-        openDialog(index, id) {
-            if (index == 1) {
-                this.applyModal = true;
-            } else if (index == 2) {
-                this.progressModal = true;
-
-            }
-            // switch (index) {
-            //    case 1:
-            //      this.applyModal = true;
-            //      break;
-            //    case 2:
-            //      this.progressModal = true;
-            //      break;
-            // }
         },
         disable(name) {
             if (name.flag === false) {
@@ -513,15 +505,65 @@ export default {
                 })
         },
         // 发起申请表单
-        submitApply() {
+        submitApply(applyForm) {
             this.applyModal = false;
+            startApproveInfo(applyForm).then(resp => {
+                if (resp.data.status === "200") {
+                    this.getStageUploadDocument();
+                }else {
+                    this.$Message.error(res.data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
         },
         cancleApply() {
             this.applyModal = false;
         },
+        // 小双助手 打开不同的对话框
+        openDialog(index, id) {
+            getApproveInfo(id).then(resp => {
+                if (resp.data.status === "200") {
+                    console.log("审批详情："+JSON.stringify(resp.data.result));
+                    //this.getStageUploadDocument();
+                    this.appendixTable = resp.data.result.dataDocumentResult;
+                    this.progressTable = resp.data.result.approveStageNodeData;
+                    this.approvalForm = resp.data.result;
+                    this.$set(this.$data.approvalForm, 'disposeResult', "1"); //默认同意
+                    this.$set(this.$data.approvalForm, 'approveUserId', ""); //默认同意
+                    if(resp.data.result.roleId != null && resp.data.result.roleId != ''){
+                        let roleId = resp.data.result.roleId;
+                        let params = {roleId: roleId, investProjectId: this.investProjectId};
+                        this.getAuditorOptions(params);
+                    }
+
+                    this.progressModal = true;
+                    if (index == 1) {
+                        this.isBlock = true;
+                    } else if (index == 2) {
+                        this.isBlock = false;
+                    }
+                }else {
+                    this.$Message.error(res.data.message);
+                }
+            }).catch(e => {
+                console.log('openDialog() exists error: ', e);
+            });
+
+        },
         // 审批表单
-        submitApproval() {
-            this.progressModal = false;
+        submitApproval(approvalForm) {
+            approveResult(approvalForm, this.stageId, this.projectId).then(resp => {
+                if (resp.data.status === "200") {
+                    console.log("审批详情："+JSON.stringify(resp.data.result));
+                    this.progressModal = false;
+                    this.getStageUploadDocument();
+                }else {
+                    this.$Message.error(res.data.message);
+                }
+            }).catch(e => {
+                console.log('openDialog() exists error: ', e);
+            });
         },
         cancleApproval() {
             this.progressModal = false;

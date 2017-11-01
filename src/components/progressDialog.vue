@@ -19,18 +19,18 @@
                 </el-table-column>
             </el-table>
             <el-table :data="table2" style="margin:15px 0;" :row-class-name="tableRowClassName">
-                <el-table-column prop="node" label="审批节点" align="center">
+                <el-table-column prop="roleName" label="审批节点" align="center">
                 </el-table-column>
-                <el-table-column prop="operator" label="处理人" align="center">
+                <el-table-column prop="approveUserName" label="处理人" align="center">
                 </el-table-column>
-                <el-table-column prop="startingTime" label="开始时间" align="center" width="210">
+                <el-table-column prop="disposeDate" label="开始时间" align="center" width="210">
                 </el-table-column>
-                <el-table-column prop="conclusion" label="结论" align="center">
+                <el-table-column prop="disposeResult" label="结论" align="center">
                 </el-table-column>
                 <el-table-column label="意见备注" align="center">
                     <template scope="scope">
                         <el-popover ref="popover1" trigger="hover" placement="top">
-                            <p style="width:400px;text-indent:28px">{{ scope.row.notes }}</p>
+                            <p style="width:400px;text-indent:28px">{{ scope.row.remark }}</p>
                         </el-popover>
                         <el-button type="text" v-popover:popover1>查看</el-button>
                     </template>
@@ -45,19 +45,19 @@
                 </div>
                 <el-form :model="approvalForm" label-position="right" style="padding: 10px 0 0 50px">
                     <el-form-item>
-                        <el-radio v-model="approvalForm.radio" label="1">同意</el-radio>
+                        <el-radio v-model="approvalForm.disposeResult" label="1">同意</el-radio>
                     </el-form-item>
-                    <el-form-item label="审批人">
-                        <el-select v-model="approvalForm.auditor" placeholder="请选择审批人">
-                            <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-form-item v-if="approvalForm.roleId" label="审批人">
+                        <el-select v-model="approvalForm.approveUserId" placeholder="请选择审批人">
+                            <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                             </el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item>
-                        <el-radio v-model="approvalForm.radio" label="2">不同意</el-radio>
+                        <el-radio v-model="approvalForm.disposeResult" label="2">不同意</el-radio>
                     </el-form-item>
                     <el-form-item label="审批意见">
-                        <el-input type="textarea" v-model="approvalForm.approvalNotes" :rows="4" style="width:75%"></el-input>
+                        <el-input type="textarea" v-model="approvalForm.remark" :rows="4" style="width:75%"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer" style="text-align:center">
@@ -101,7 +101,7 @@ export default {
     },
     methods: {
         submitHandler(event) {
-            this.$emit('submit', event.target)
+            this.$emit('submit', this.approvalForm);
         },
         cancleHandler(event) {
             this.$emit('cancle', event.target)

@@ -29,7 +29,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api': {
-                // target: 'http://192.168.0.101:9091', //平台
+                // target: 'http://192.168.0.124:9091', //平台
                 // target:'http://192.168.0.191:9092',//平台
                 // target: 'http://192.168.0.198:9091',
                 // target: 'http://18f46963j4.iok.la',

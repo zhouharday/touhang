@@ -23,7 +23,7 @@
                     </el-table>
                 </el-col>
                 <el-col :span="12">
-                    <echarts class="chart"></echarts>
+                    <my-echarts class="chart" :opinion="opinion" :opinionData="opinionData"></my-echarts>
                 </el-col>
             </el-row>
         </div>
@@ -91,7 +91,7 @@
 <script>
 import 'common/js/filter'
 import tableShow from '../../../components/tableShow'
-import echarts from '../../../components/echarts'
+import myEcharts from '../../../components/myEcharts'
 import detailForm from './details'
 import tableForm from './tables'
 import approveTable from './approve'
@@ -105,12 +105,12 @@ import monitorTable from './monitor'
 
 import { getProjectUsers } from 'api/projectSys';
 import { getPreDetail } from 'api/projectPre';
-import {checkProjectAuth } from 'common/js/config'
-import { getWarnMessageList, getInvestSubject, getAppraisementRep } from 'api/projectAfter';
+import {checkProjectAuth, changeDate } from 'common/js/config'
+import { getWarnMessageList, getInvestSubject, getAppraisementRep, getAppraisementDetails } from 'api/projectAfter';
 
 export default {
     components: {
-        echarts,
+        myEcharts,
         tableShow,
         detailForm,
         tableForm,
@@ -125,6 +125,8 @@ export default {
     },
     data() {
         return {
+            opinion: [],
+            opinionData: [],
             projectId: '',
             investProjectId: '',
             title: '',
@@ -212,6 +214,7 @@ export default {
             this.getWarnMessageList();
             this.getInvestSubject();
             this.getAppraisementRep();
+            this.getAppraisementDetails();
             this.getProUsers();
         },
         /**
@@ -287,6 +290,23 @@ export default {
             getAppraisementRep(this.projectId).then(resp => {
                 if(resp.data.status == '200'){
                     this.tableData = resp.data.appraisement;
+                }else{
+                    this.$message.error(resp.data.message);
+                }
+            });
+        },
+        getAppraisementDetails(){
+            getAppraisementDetails(this.projectId).then(resp => {
+                if(resp.data.status == '200'){
+                    let _opinion = [];
+                    let _opinionData = [];
+                    let dataList = resp.data.result
+                    dataList.forEach((item)=>{
+                        _opinion.push(changeDate(item.appraisementDate));
+                        _opinionData.push(item.appraisementValue);
+                    });
+                    this.opinion = _opinion;
+                    this.opinionData = _opinionData;
                 }else{
                     this.$message.error(resp.data.message);
                 }
