@@ -3,8 +3,7 @@
         <el-row :gutter="30">
             <el-col :span="6">
                 <div class="roleBtn">
-                    <el-button v-if="isShowFundBtn('GL-JJXQ-SYFP-SC')" size="small" @click="roleDialog=true">添加</el-button>
-                    <!-- <el-button size="small" @click="roleDialog=true">添加</el-button> -->
+                    <el-button size="small" @click="roleDialog=true">添加</el-button>
                 </div>
                 <el-table :data="roleData" border style="width: 100%"  highlight-current-row @current-change="handleCurrentChange">
                     <el-table-column prop="roleName" label="角色名称" align="center">
@@ -109,6 +108,7 @@ import { getUpdataFund } from "api/system";
 import { roleBindPermission } from "api/system";
 import ElCol from "element-ui/packages/col/src/col";
 import { mapState } from "vuex";
+import { filtersPermissionCode_fund } from "common/js/config";
 export default {
   computed: {
     ...mapState({
@@ -195,22 +195,7 @@ export default {
       });
     },
     isShowFundBtn(permissionCode) {
-      //check 基金权限
-      this.$store.commit({
-        type: "filtersPermissionCode_fund",
-        permissionCode: permissionCode
-      });
-      // console.log(this.$store.state.login.fund);
-      let haveBtn = this.$store.state.login.fund.indexOf(permissionCode);
-      if (haveBtn != -1) {
-        return true;
-      };
-      return false;
-      // return {
-      // fundPermissions1: this.$store.state.login.fundPermissions1,
-      // fundPermissions2: this.$store.state.login.fundPermissions2
-      // }
-      // return this.$store.state.login.fundPermissions;
+      return filtersPermissionCode_fund(permissionCode);
     }
   },
   created() {

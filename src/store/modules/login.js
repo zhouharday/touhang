@@ -166,18 +166,11 @@ const mutations = {
         }
     },
     filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        // alert(1);
-        // let haveBtn = state.permiss
-        ionCode_fund.includes(str.permissionCode);
-        // state.fund.str = str;
-        // let haveBtn = state.permissionCode_fund.indexOf(str.permissionCode);
-        if (state.permissionCode_fund.indexOf(str.permissionCode) != -1) {
-            // state.fundPermissions = true;
-            // alert(1);
-            return state.fund.push(str.permissionCode);
-        } else {
-            // state.fundPermissions = false;
+        let haveBtn = sessionStorage.getItem('permissionCode_fund').includes(str.permissionCode);
+        if(haveBtn){
+            return true;
         }
+        return false;
     }
 };
 
