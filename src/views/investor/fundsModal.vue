@@ -87,7 +87,7 @@ export default {
                 agreementName: [{
                     required: true,
                     message: '请选择协议名称',
-                    trigger: 'change'
+                    trigger: 'blue'
                 }],
                 paidAmount: [{
                     type: 'number',

@@ -37,16 +37,17 @@
                     <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" v-if="item.type == '2'">
-                        <span v-if="item.status == '0'">立即申请</span>
+                        <span v-if="item.status == '0'">立即审批</span>
                     <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
                         <span v-if="item.status == '0'">查看进度</span>
-                    <span v-else="item.status !== '0'">已完成</span>
+                        <span v-else="item.status !== '0'">已完成</span>
                     </span>
                 </div>
             </div>
             <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
+            <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions"></apply-dialog>
         </div>
     </div>
     <div class="chart">
@@ -61,7 +62,7 @@
     </div>
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="详情" name="details" class="tab_list">
+            <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
                 <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
                 </my-details>
             </el-tab-pane>
@@ -77,10 +78,10 @@
             <el-tab-pane label="投资项目" name="project" class="tab_list">
                 <projects :projectsData="projectsData"></projects>
             </el-tab-pane>
-            <el-tab-pane label="文档" name="file" class="tab_list">
+            <el-tab-pane label="文档" name="file" class="tab_list" v-if="haveJurisdiction('GL-JJWD')">
                 <my-file :fileListData="fileListData"></my-file>
             </el-tab-pane>
-            <el-tab-pane label="运营管理" name="manage" class="tab_list">
+            <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
                 <manage :costData="costData" :fundName="formDetails.fundName"></manage>
             </el-tab-pane>
         </el-tabs>
@@ -103,6 +104,8 @@ import Manage from './manage'
 import echarts from '../../components/echarts'
 import deleteReminders from 'components/deleteReminders'
 import MyUpload from 'components/upload'
+import {checkFundAuth} from 'common/js/config'
+import applyDialog from 'components/applyDialog'
 import {
     getMyFundDetails,
     getFundTeamList,
@@ -115,7 +118,8 @@ import {
     selectStageUploadDocument,
     slectStageAllocation,
     nextStage,
-    getApproveList
+    getApproveList,
+    getTeamListPage
 } from 'api/fund'
 const NUM = 2
 export default {
@@ -134,6 +138,10 @@ export default {
             tableData: {},
             activeName: 'details',
             showOrhiddren: true,
+            applyModal: false, // 发起申请对话框
+            roleId: '0',
+            auditorOptions: [], // 审批人员列表
+            applyForm: {},
             formDetails: {
                 fundName: '',
                 fundNo: '',
@@ -274,6 +282,11 @@ export default {
                         this.$Message.error(res.data.message || '操作失败，有未完成的任务')
                     } else if (res.data.status == '9022') {
                         this.$Message.error(res.data.message || '请勿重复操作')
+                    } else if (res.data.status === '9030') {
+                        this.applyModal = true
+                        this.applyForm = res.data.result
+                        this.roleId = res.data.result.roleId
+                        this._getTeamlist()
                     } else if (res.data.status == '200') {
                         this.getDataStageAddUpload()
                     }
@@ -295,7 +308,7 @@ export default {
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
-                    // console.log(res)
+                    console.log(res)
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
                     if (res.data.result[0] === undefined) {
@@ -337,7 +350,14 @@ export default {
                     this.formMIS = Object.assign({}, {
                         flag: true
                     }, res.data.result.fundManageInfo)
-                    this.formAccountInfo = res.data.result.fundAccinfo
+
+                    if(res.data.result.fundAccinfo) {
+                        var fundAccinfo = res.data.result.fundAccinfo
+                        fundAccinfo.map((x) => {
+                            x.flag = true
+                        })
+                        this.formAccountInfo = fundAccinfo
+                    }
                     if (res.data.result.fundBaseInfo.fundOrgValue) {
                         this.fundLevel.priority = res.data.result.fundBaseInfo.fundOrgValue.split(':')[0]
                         this.fundLevel.intermediateStage = res.data.result.fundBaseInfo.fundOrgValue.split(':')[1]
@@ -353,6 +373,24 @@ export default {
                         this.formRegistration = Object.assign({}, {
                             flag: true
                         }, res.data.result.fundRegistration)
+                    }
+                }
+            })
+        },
+        haveJurisdiction(str) {
+            if (checkFundAuth(str)) {
+                return true
+            } else {
+                return false
+            }
+        },
+        _getTeamlist() {
+            getTeamListPage(this.roleId, this.$route.params.id).then((res) => {
+                if(res.status === 200) {
+                    if (res.data.result.list) {
+                        this.auditorOptions = res.data.result.list
+                    } else {
+                        this.auditorOptions = []
                     }
                 }
             })
@@ -391,7 +429,8 @@ export default {
         myFile: File,
         Manage,
         deleteReminders,
-        MyUpload
+        MyUpload,
+        applyDialog
     }
 }
 </script>

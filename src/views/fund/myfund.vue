@@ -183,7 +183,7 @@ export default {
                 title: '添加基金',
                 url: '/home/add',
                 name: 'add'
-            })
+            });
             this.$router.push('/home/add')
         },
         handleRouter(index, row) {

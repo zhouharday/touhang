@@ -912,7 +912,8 @@ export default {
     checkformVal(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          console.log("submit!");
+          return true;
         } else {
           console.log("error submit!!");
           return false;
@@ -929,7 +930,7 @@ export default {
         // this.getTaskList1(1);
         this.dialogFormVisible1 = false;
         this.addTaskForm1 = {};
-      }
+      };
       if (val == 2) {
         //代办任务
         this.dialogFormVisible2 = false;
@@ -1131,7 +1132,6 @@ export default {
     },
     handleCurrentChange3(page) {
       //获取tabList3 分页数据
-      // console.log(pages);
       // this.page = '';
       this.page3s = page;
       this.getTaskList3(this.pages3, this.pageSizes3);
