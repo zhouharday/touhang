@@ -146,6 +146,10 @@ export default {
         projectId: {
             type: String,
             default: ''
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -259,7 +263,7 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
             this.getDataMonitorList();
@@ -293,11 +297,11 @@ export default {
         },
         //选择监控数据源，获取相应指标
         changeDataSource(val){
-            console.log("打开编辑时: " + this.idEditModel);
+            if((val == null || val == ''))return false;
             if(!this.idEditModel){
                 getFormByType(val).then(resp => {
                     if (resp.data.status == '200') {
-                        console.log("选择监控数据源" );
+                        // console.log("选择监控数据源" );
                         var _data = resp.data.result;
                         _data.forEach(function(item, index){
                             item.isMonitor = 0;

@@ -68,6 +68,10 @@ export default {
         proRoles: {
             type: Array,
             default: []
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -113,7 +117,7 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
             this.getDatas();

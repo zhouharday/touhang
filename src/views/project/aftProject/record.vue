@@ -38,6 +38,10 @@ export default {
             type: Object,
             default: {}
         },
+        isInTeam: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
@@ -61,7 +65,7 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
             this.initInfo();

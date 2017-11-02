@@ -47,32 +47,32 @@
         </div>
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane v-if="checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
-                    <detail-form :tabs="tabs" :proId="projectId" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
+                    <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
-                    <table-form :tabs="tabs" :companyForm="companyForm" :memberData="memberData" :structureData="structureData"></table-form>
+                    <table-form :tabs="tabs" :companyForm="companyForm" :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
-                    <team-table :tabs="tabs" :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
+                <el-tab-pane :disabled="!checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
+                    <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :proUsers="proUsers" :proRoles="proRoles">
                     </team-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
-                    <record-form :tabs="tabs" :proId="projectId"></record-form>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
+                    <record-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></record-form>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-                    <approve-table :tabs="tabs" :projectId="projectId"></approve-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
+                    <approve-table :tabs="tabs" :isInTeam="isInTeam" :projectId="projectId"></approve-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
-                    <file-table :tabs="tabs" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
+                    <file-table :tabs="tabs" :isInTeam="isInTeam" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
-                    <risk-table :tabs="tabs" :proId="projectId" :proUsers="proUsers"></risk-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
+                    <risk-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('XM-guanli') && (isManage || isExit)" label="管理" name="manage" class="tab_list">
-                    <manage-table :tabs="tabs" :proId="projectId"></manage-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
+                    <manage-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></manage-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="checkProjectAuth('GL-XMTC') && isExit" label="退出" name="outing" class="tab_list">
-                    <outing-form :tabs="tabs" :proId="projectId"></outing-form>
+                <el-tab-pane :disabled="!checkProjectAuth('GL-XMTC')" v-if="isExit" label="退出" name="outing" class="tab_list">
+                    <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -111,7 +111,8 @@ import {
     getTeamListPage,
     startApproveInfo,
     getApproveInfo,
-    approveResult
+    approveResult,
+    getTeams
 } from 'api/projectPre';
 import {
     getProjectUsers
@@ -210,7 +211,8 @@ export default {
                 radio: '1',
                 auditor: '',
                 approvalNotes: ''
-            }
+            },
+            isInTeam: false
         }
     },
     components: {
@@ -244,7 +246,29 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            console.log("权限验证结果，CODE："+code+","+(checkProjectAuth(code) && this.isInTeam));
+            return (checkProjectAuth(code) && this.isInTeam);
+        },
+        checkTeamUser(){
+            getTeams(this.investProjectId).then(resp => {
+                this.teamData = resp.data.result;
+                if(resp.data.result == null || resp.data.result.length == 0){
+                    this.isInTeam = false;
+                }else{
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let _isInTeam = false;
+                    resp.data.result.forEach((item) =>{
+                        if(item.userId == userId){
+                            _isInTeam = true;
+                            return;
+                        }
+                    });
+                    this.isInTeam = _isInTeam;
+                }
+                console.log("登录人是否在团队:"+this.isInTeam);
+            }).catch(e => {
+                console.log('checkTeamUser error: ', e);
+            })
         },
         listenUploaded(uploaded) {
             if (uploaded) {
@@ -275,7 +299,7 @@ export default {
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             this.merchantId = merchants[0].id;
-            this.getProUsers(), this.getProRoles();
+            this.getProUsers(), this.getProRoles(),this.checkTeamUser();
         },
         slectAllStage() {
             slectAllStage().then(resp => {
@@ -370,7 +394,7 @@ export default {
             });
         },
         /**
-         * [getProUsers 获取项目用户列表]
+         * [getProUsers 获取企业用户列表]
          * @return {[type]} [description]
          */
         getProUsers() {

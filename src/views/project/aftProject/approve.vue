@@ -26,6 +26,7 @@
 
 <script >
 import tabelHeader from 'components/tabelHeader'
+import { checkProjectAuth } from 'common/js/config'
 import {getApproveList} from 'api/projectPre'
 export default {
     props: {
@@ -36,6 +37,10 @@ export default {
         projectId: {
             type: String,
             default: ''
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -69,6 +74,9 @@ export default {
         },
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init(){
             getApproveList(this.projectId).then(resp => {
                 console.log("审批列表："+JSON.stringify(resp.data));
