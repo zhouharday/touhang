@@ -36,20 +36,20 @@
                         </span>
                     <span v-else="item.status !== '0'">已完成</span>
                     </span>
-                    {{item}}
+                    <!-- {{item}} -->
                     <span class="state" v-if="item.type == '2'">
-                        <span v-if="item.status == '0'" @click="showProgressModal(item.id)">立即审批</span>
+                        <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">立即审批</span>
                         <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
-                        <span v-if="item.status == '0'">查看进度</span>
+                        <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">查看进度</span>
                         <span v-else="item.status !== '0'">已完成</span>
                     </span>
                 </div>
             </div>
             <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
             <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="confirmApplyModal" @cancle="cancleApplyModal"></apply-dialog>
-            <progress-dialog :progressModal="progressModal"></progress-dialog>
+            <progress-dialog :progressModal="progressModal" :documentInfo="documentInfo" :table2="approveStageNodeData" :approvalForm="approvalForm" :isBlock="whichClick" :auditorOptions="auditorOptions" :dialogTitle="dialogTitle" @submit="confirmProgress" @cancle="cancalProgress"></progress-dialog>
         </div>
     </div>
     <div class="chart">
@@ -124,7 +124,8 @@ import {
     getApproveList,
     getTeamListPage,
     startApproveInfo,
-    getApproveInfo
+    getApproveInfo,
+    approveResult
 } from 'api/fund'
 const NUM = 2
 export default {
@@ -147,6 +148,11 @@ export default {
             roleId: '0',
             auditorOptions: [], // 审批人员列表
             progressModal: false, // 立即审批对话框
+            approvalForm: {
+                disposeResult: '1',
+                approveUserId: '',
+                remark: ''
+            },
             applyForm: {},
             formDetails: {
                 fundName: '',
@@ -283,7 +289,7 @@ export default {
         changeStep() {
             nextStage(this.$route.params.id, NUM, this.currentStep).then((res) => {
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     if (res.data.status == '9021') {
                         this.$Message.error(res.data.message || '操作失败，有未完成的任务')
                     } else if (res.data.status == '9022') {
@@ -292,7 +298,9 @@ export default {
                         this.applyModal = true
                         this.applyForm = res.data.result
                         this.roleId = res.data.result.roleId
-                        this._getTeamlist()
+                        this._getTeamlist(this.roleId, this.$route.params.id)
+                    } else if (res.data.status === '9032') {
+                        this.$Message.info(res.data.message || '操作失败,有审批未完成')
                     } else if (res.data.status == '200') {
                         this.getDataStageAddUpload()
                     }
@@ -309,12 +317,53 @@ export default {
                 this.$Message.error('提交申请失败！')
             })
         },
-        showProgressModal(id) { // 立即审批方法
+        cancleApplyModal() {
+            this.applyModal = false
+            return false
+        },
+        showProgressModal(id, type) { // 立即审批方法
+            if (type === 2) {
+                this.whichClick = true
+            } else {
+                this.whichClick = false
+            }
             getApproveInfo(id).then((res) => {
-                if(res.status === '200') {
+                if(res.status === 200) {
+                    console.log(res)
+                    this.dialogTitle = res.data.result.approveTitle
+                    this.documentInfo = res.data.result.dataDocumentResult
+                    this.approveStageNodeData = res.data.result.approveStageNodeData
+                    this._getTeamlist(res.data.result.roleId, this.$route.params.id)
+                    this.approvalForm = Object.assign({}, this.approvalForm, {
+                        id: res.data.result.id,
+                        roleId: res.data.result.roleId,
+                        orderValue: res.data.result.orderValue,
+                        stageId: sessionStorage.getItem('currentStep'),
+                        typeId: this.$route.params.id,
+                        type: 2
+                    })
                     this.progressModal = true
                 }
             })
+        },
+        confirmProgress() {
+            approveResult(this.approvalForm).then((res) => {
+                if(res.status === 200) {
+                    if (res.data.status === 200) {
+                        this.$Message.success(res.data.message || '审批成功!')
+                    } else if (res.data.status == '9131') {
+                        this.$Message.success(res.data.message || '您已经完成此审批，不能重复审批!')
+                    }
+                    this.progressModal = false
+                    this.approvalForm = {}
+                }
+            }).catch(err => {
+                this.$Message.error('审批失败！')
+            })
+        },
+        cancalProgress() {
+            this.progressModal = false
+            this.approvalForm = {}
         },
         showModalUpload(index) { // 显示上传模态框
             this.listIndex = index
@@ -407,8 +456,8 @@ export default {
                 return false
             }
         },
-        _getTeamlist() {
-            getTeamListPage(this.roleId, this.$route.params.id).then((res) => {
+        _getTeamlist(roleId, id) {
+            getTeamListPage(roleId, id).then((res) => {
                 if(res.status === 200) {
                     console.log(res)
                     if (res.data.result.list) {

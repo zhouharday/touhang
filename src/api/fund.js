@@ -378,3 +378,8 @@ export function getApproveInfo(approveId) {
     }
     return service({url: 'investProject/getApproveInfo', method: 'post', data})
 }
+// 审批 investProject/approveResult
+export function approveResult(result) {
+    const data = result
+    return service({url: 'investProject/approveResult', method: 'post', data})
+}
