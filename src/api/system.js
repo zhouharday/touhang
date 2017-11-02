@@ -661,11 +661,13 @@ export function addzhibiao(formId,fieldName,sort) {
 console.log(data)
     return service({url:'/formLabel/editFrom', method: 'post', data})
 }
-export function editzhibiao(formId,id,fieldName) {
+export function editzhibiao(formId,id,fieldName,sort) {
+     var j = parseInt(sort)
     const data = {
         "formId":formId,
         "id":id, // 科目id 修/ 改必须 新增不要
-        "fieldName":fieldName //名称
+        "fieldName":fieldName, //名称
+         "sort":j
     }
     console.log(data)
     return service({url:'/formLabel/editFrom', method: 'post', data})

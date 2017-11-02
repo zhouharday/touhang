@@ -54,7 +54,12 @@
                                         <div v-for="item in treeData" >
                                             <el-col :span="24" style="border: 1px solid #dfe6ec;">
                                                 <el-col :span="6" >
-                                                    <div class="left">{{item.menuName}}</div>
+                                                    <div class="left">
+                                                        <!-- {{item.menuName}} -->
+                                                        <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                                                        <el-checkbox :label="item.path" >{{item.menuName}}</el-checkbox>
+                                                                    </el-checkbox-group>
+                                                    </div>
                                                 </el-col>
                                                 <el-col :span="18">
                                                     <div  class="right" >
@@ -295,11 +300,12 @@ export default {
     .left {
         /*height: 40px;*/
         line-height: 40px;
+        padding-left: 15px;
         /*border-top: 1px solid #dfe6ec;*/
         /*border-bottom: none;*/
         /*border-right: none;*/
 
-        text-align: center;
+        text-align: left;
     }
     .f_right {
         height: 40px;

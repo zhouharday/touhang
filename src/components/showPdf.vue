@@ -31,6 +31,7 @@ import PDFJS from '../../static/js/pdf/pdf.js'
   },
   data() {
     return {
+     transUrl: '',
      pdfDoc: null, //pdfjs 生成的对象
      pageNum: 1,//
      pageRendering: false,
@@ -49,6 +50,7 @@ import PDFJS from '../../static/js/pdf/pdf.js'
             if(to != from){
                 this.pageNum = 1;
                 this.scale = 1.0;
+                this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
                 this.init();
             }
         }
@@ -56,8 +58,11 @@ import PDFJS from '../../static/js/pdf/pdf.js'
   methods: {
     init(){
         let vm = this;
-        console.log("预览地址："+vm.pdfurl);
-        PDFJS.getDocument(vm.pdfurl).then(function(pdfDoc_) { //初始化pdf
+        console.log("预览地址："+vm.transUrl);
+        if(vm.transUrl == '') {
+          return;
+        }
+        PDFJS.getDocument(vm.transUrl).then(function(pdfDoc_) { //初始化pdf
            vm.pdfDoc = pdfDoc_;
            vm.page_count = vm.pdfDoc.numPages;
 
@@ -152,6 +157,7 @@ import PDFJS from '../../static/js/pdf/pdf.js'
     }
   },
   mounted() {
+
     this.init();
   }
  }

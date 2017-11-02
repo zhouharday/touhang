@@ -33,7 +33,7 @@
                     <el-table-column align="center">
                         <template scope="scope">
                             <a v-if="checkProjectAuth('WD-xiazai') && (scope.row.id != null)" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
-                            <el-button v-if="checkProjectAuth('WD-yulan') && (scope.row.id != null && scope.row.previewPath != '')" type="text"   class="btn_border" @click="preview(scope.row.previewPath)">预览</el-button>
+                            <el-button v-if="checkProjectAuth('WD-yulan') && (scope.row.id != null && scope.row.previewPath != null)" type="text"   class="btn_border" @click="preview(scope.row.previewPath)">预览</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -106,7 +106,7 @@ export default {
             });
         },
         preview(url) {
-            this.pdfurls = url.replace('http://47.90.120.190:8086', '/file');
+            this.pdfurls = url;
             this.isshowpdf = true;
         },
         pdferr(err){
@@ -114,7 +114,6 @@ export default {
             this.$Message.error('读取预览文件出错！');
         },
         closepdf(){
-            console.log("closepdf");
             this.isshowpdf = false;
         }
     }

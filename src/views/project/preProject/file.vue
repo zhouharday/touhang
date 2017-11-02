@@ -38,7 +38,7 @@
                                 <input type="file" class="fileInput" @change="changeFile($event, scope.row.fileId, scope.row.stageId)" ref="avatarInput">
                             </div>
                             <a v-if="checkProjectAuth('WD-xiazai') && (scope.row.id != null)" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
-                            <el-button v-if="checkProjectAuth('WD-yulan') && (scope.row.id != null && scope.row.previewPath != '')" type="text"   class="btn_border" @click="preview(scope.row.previewPath)">预览</el-button>
+                            <el-button v-if="checkProjectAuth('WD-yulan') && (scope.row.id != null && scope.row.previewPath != null)" type="text"   class="btn_border" @click="preview(scope.row.previewPath)">预览</el-button>
                             <el-button v-if="checkProjectAuth('WD-shanchu') && (scope.row.id != '' && scope.row.id != undefined)" type="text"   @click="handleDelete(scope.row.id)">删除</el-button>
                         </template>
                     </el-table-column>

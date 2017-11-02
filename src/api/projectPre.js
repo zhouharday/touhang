@@ -103,7 +103,7 @@ export function getApproveInfo(id = undefined){
 
 //提交审批
 export function approveResult(params = {}, stageId, typeId){
-	let {id, disposeResult, roleId, orderValue, approveUserId} = params;
+	let {id, disposeResult, roleId, orderValue, approveUserId, remark} = params;
 	const data = {
 		id: id,
 		disposeResult,
@@ -112,6 +112,7 @@ export function approveResult(params = {}, stageId, typeId){
 		approveUserId,
 		stageId,
 		typeId,
+		remark,
 		type: 1
 	}
 	return service({url: 'investProject/approveResult', method: 'post', data});
