@@ -23,7 +23,7 @@
                     </el-submenu>
                 </el-menu>
             </div>
-
+<!-- 菜单 -->
             <el-menu v-show="!isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
@@ -132,8 +132,8 @@
                 </el-submenu>
             </el-menu>
             <div v-if="item.children.length == 0" v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" v-for="(item,index) in menus" :key="item" class="div_el-menu-itemel-submenu__title" @click="addTab(item.menuName,'/home/' + item.url, item.url)">
-                    <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
-                    <span index="assistant">{{item.menuName}}</span>
+                <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
+                <span index="assistant">{{item.menuName}}</span>
             </div>
             <!-- 菜单列表 End -->
         </div>
@@ -142,12 +142,10 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
-import zTree from "../../static/js/zTree/jquery.ztree.core";
 import { getNodes } from "common/js/config";
 import myTree from "components/treeMenu";
 export default {
-  components: { jq, zTree, getNodes, myTree },
+  components: { getNodes, myTree },
   created() {
     this.findResourceByUid();
   },
@@ -163,24 +161,20 @@ export default {
       };
     },
     onRoutes(state) {
-      // alert(111);
       return this.$route.path.replace("/", "");
     },
     userName(state) {
-      // alert(222);
       this.$store.state.login.userInfor =
         JSON.parse(sessionStorage.getItem("userInfor")) || {};
       return this.$store.state.login.userInfor;
     },
     um_id(state) {
-      // alert(333);
       this.$store.state.login.logoSrc =
         JSON.parse(sessionStorage.getItem("merchants")) || {};
       return this.$store.state.login.merchants;
     },
     showOrHide() {
       if (JSON.parse(sessionStorage.getItem("showOrHide")) == null) {
-        // alert(111);
         this.$store.state.login.showOrHide.isVshowYe = 1;
         this.$store.state.login.showOrHide.isShowSidebar = 0;
         return this.$store.state.login.showOrHide;

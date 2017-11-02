@@ -804,7 +804,7 @@ export default {
           { type: "array", required: true, message: "请选择用户", trigger: "blur" }
         ]
       }
-    };
+    }
   },
   methods: {
     assistMsgPages(pageNum) {
@@ -979,7 +979,7 @@ export default {
           this.$Message.error("请求超时");
         });
     },
-    approval(item, index) {
+    approval(item, index) { //审批项目/基金
       // this.approvalModal = !this.approvalModal;
       console.log(item);
       if (item.type == 1) {
