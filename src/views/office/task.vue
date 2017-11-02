@@ -929,7 +929,7 @@ export default {
         // this.getTaskList1(1);
         this.dialogFormVisible1 = false;
         this.addTaskForm1 = {};
-      };
+      }
       if (val == 2) {
         //代办任务
         this.dialogFormVisible2 = false;
