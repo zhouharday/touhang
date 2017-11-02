@@ -33,7 +33,7 @@
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="projectInforTabData" border style="width: 100%">
+            <el-table :data="projectInforTabData" border stripe style="width: 100%">
                 <el-table-column fixed="left" prop="projectName" label="项目名称" width="150" align="center">
                 </el-table-column>
                 <el-table-column prop="projectType" label="项目类型" width="150" align="center">

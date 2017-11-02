@@ -12,7 +12,7 @@
                 <el-col :span="9">
                     <div class="grid-content bg-purple-dark">
                         <div>
-                            <el-table class="invesTabData" :data="invesTabData" border style="width: 100%">
+                            <el-table class="invesTabData" :data="invesTabData" border stripe style="width: 100%">
                                 <el-table-column prop="stageName" label="项目阶段" align="center" width="">
                                 </el-table-column>
                                 <el-table-column prop="projectNumber" label="项目数量" align="center" width="">

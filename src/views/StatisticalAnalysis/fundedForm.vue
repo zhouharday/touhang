@@ -22,7 +22,7 @@
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="fundedTabData" border style="width: 100%">
+            <el-table :data="fundedTabData" border stripe style="width: 100%">
                 <el-table-column prop="investorName" label="投资者" align="center">
                 </el-table-column>
                 <el-table-column prop="investorType" label="类型" align="center">
