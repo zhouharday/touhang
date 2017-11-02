@@ -33,7 +33,7 @@
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="fundTabData" border style="width: 100%">
+            <el-table :data="fundTabData" border stripe style="width: 100%">
                 <el-table-column fixed="left" prop="fundName" label="基金名称" width="230" align="center">
                 </el-table-column>
                 <el-table-column prop="orgName" label="组织类型" width="150" align="center">

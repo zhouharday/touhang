@@ -82,7 +82,7 @@
         <!-- 发起申请 对话框-->
         <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" :isBlock="isBlock"  dialogTitle='审批' :table1="appendixTable" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
+        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock="isBlock" :documentInfo="documentInfo" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
     </div>
 </template>
 
@@ -145,6 +145,7 @@ export default {
             title: '',
             prompt: '任务助手小双温馨提示:',
             isBlock: false,
+            dialogTitle: '查看进度',
             activeName: 'details',
             proUsers: [], // 项目用户列表
             proRoles: [], // 项目角色列表
@@ -184,7 +185,7 @@ export default {
                 userId: '选项3',
                 userName: '王二'
             }],
-            appendixTable: {
+            documentInfo: {
                 progressName: 'AAA项目XX申请',
                 appendixList: [{
                     fileName: '调研报告1',
@@ -309,6 +310,17 @@ export default {
             this.isExit = isExit;
             this.isManage = isManage;
             this.nextStageDisabled = nextStageDisabled;
+
+            if(this.nextStageDisabled){
+                let _hasApprove = false;
+                this.module.forEach((item)=>{
+                    if(item.type == 2 || item.type == 3){
+                        _hasApprove = true;
+                        return ;
+                    }
+                });
+                this.nextStageDisabled = this.nextStageDisabled || _hasApprove;
+            }
         },
         /**
          * [getPreProDetail 项目详情]
@@ -409,7 +421,7 @@ export default {
                     this.getAuditorOptions(params);
 
                 } else {
-                    this.$Message.error(res.data.message);
+                    this.$Message.error(resp.data.message);
                 }
 
             }).catch(e => {
@@ -457,7 +469,7 @@ export default {
                     this.deleteReminders = !this.deleteReminders;
                 }
             }).catch(e => {
-                console.log('changeStep() exists error: ', e);
+                console.log('中止项目 error: ', e);
             });
 
         },
@@ -511,7 +523,7 @@ export default {
                 if (resp.data.status === "200") {
                     this.getStageUploadDocument();
                 }else {
-                    this.$Message.error(res.data.message);
+                    this.$Message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
@@ -526,11 +538,12 @@ export default {
                 if (resp.data.status === "200") {
                     console.log("审批详情："+JSON.stringify(resp.data.result));
                     //this.getStageUploadDocument();
-                    this.appendixTable = resp.data.result.dataDocumentResult;
+                    this.documentInfo = resp.data.result.dataDocumentResult;
                     this.progressTable = resp.data.result.approveStageNodeData;
                     this.approvalForm = resp.data.result;
                     this.$set(this.$data.approvalForm, 'disposeResult', "1"); //默认同意
-                    this.$set(this.$data.approvalForm, 'approveUserId', ""); //默认同意
+                    this.$set(this.$data.approvalForm, 'approveUserId', ""); //默认为空
+                    this.$set(this.$data.approvalForm, 'remark', ""); //默认为空
                     if(resp.data.result.roleId != null && resp.data.result.roleId != ''){
                         let roleId = resp.data.result.roleId;
                         let params = {roleId: roleId, investProjectId: this.investProjectId};
@@ -540,11 +553,12 @@ export default {
                     this.progressModal = true;
                     if (index == 1) {
                         this.isBlock = true;
+                        this.dialogTitle = '审批';
                     } else if (index == 2) {
                         this.isBlock = false;
                     }
                 }else {
-                    this.$Message.error(res.data.message);
+                    this.$Message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('openDialog() exists error: ', e);

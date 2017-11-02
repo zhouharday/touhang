@@ -22,7 +22,7 @@
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="fundedTabData" border style="width: 100%">
+            <el-table :data="fundedTabData" border stripe style="width: 100%">
                 <el-table-column prop="investorName" label="投资者" align="center">
                 </el-table-column>
                 <el-table-column prop="investorType" label="类型" align="center">
@@ -124,13 +124,10 @@ export default {
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     handleCurrentChange(page) {
       //分页页码切换
-      //获取tabList3 分页数据
-      // console.log(pages);
       // this.page = '';
       this.page = page;
       this.searchInvestorList(this.page, this.pageSize, "");

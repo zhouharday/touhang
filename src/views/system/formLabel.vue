@@ -43,7 +43,7 @@
                 </el-dialog>
         </section>
 </template>
-<script  type="text/ecmascript-6">
+<script>
 import { zhibiaolist } from "api/system";
 import { addzhibiao } from "api/system";
 import { editzhibiao } from "api/system";
@@ -86,6 +86,8 @@ export default {
         sort: row.sort,
         id: row.id
       };
+      if(!this.zhibiaoForm.sort)
+        this.zhibiaoForm.sort = '0';
       this.editOrNew = true;
       //                row.editFlag = !row.editFlag;
       //                if (!row.editFlag) {
@@ -107,7 +109,8 @@ export default {
         editzhibiao(
           this.formId,
           this.zhibiaoForm.id,
-          this.zhibiaoForm.zhibiaoName
+          this.zhibiaoForm.zhibiaoName,
+          this.zhibiaoForm.sort
         ).then(res => {
           this.roleDialog = false;
           zhibiaolist().then(res => {
