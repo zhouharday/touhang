@@ -36,9 +36,10 @@
                         </span>
                     <span v-else="item.status !== '0'">已完成</span>
                     </span>
+                    {{item}}
                     <span class="state" v-if="item.type == '2'">
-                        <span v-if="item.status == '0'">立即审批</span>
-                    <span v-else="item.status !== '0'">已完成</span>
+                        <span v-if="item.status == '0'" @click="showProgressModal(item.id)">立即审批</span>
+                        <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
                         <span v-if="item.status == '0'">查看进度</span>
@@ -47,7 +48,8 @@
                 </div>
             </div>
             <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
-            <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions"></apply-dialog>
+            <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="confirmApplyModal" @cancle="cancleApplyModal"></apply-dialog>
+            <progress-dialog :progressModal="progressModal"></progress-dialog>
         </div>
     </div>
     <div class="chart">
@@ -106,6 +108,7 @@ import deleteReminders from 'components/deleteReminders'
 import MyUpload from 'components/upload'
 import {checkFundAuth} from 'common/js/config'
 import applyDialog from 'components/applyDialog'
+import progressDialog from 'components/progressDialog'
 import {
     getMyFundDetails,
     getFundTeamList,
@@ -119,7 +122,9 @@ import {
     slectStageAllocation,
     nextStage,
     getApproveList,
-    getTeamListPage
+    getTeamListPage,
+    startApproveInfo,
+    getApproveInfo
 } from 'api/fund'
 const NUM = 2
 export default {
@@ -141,6 +146,7 @@ export default {
             applyModal: false, // 发起申请对话框
             roleId: '0',
             auditorOptions: [], // 审批人员列表
+            progressModal: false, // 立即审批对话框
             applyForm: {},
             formDetails: {
                 fundName: '',
@@ -293,6 +299,23 @@ export default {
                 }
             })
         },
+        confirmApplyModal() { // 确认提交审批
+            startApproveInfo(this.applyForm).then((res) => {
+                if (res.status === 200) {
+                    this.getDataStageAddUpload()
+                    this.applyModal = false
+                }
+            }).catch(err => {
+                this.$Message.error('提交申请失败！')
+            })
+        },
+        showProgressModal(id) { // 立即审批方法
+            getApproveInfo(id).then((res) => {
+                if(res.status === '200') {
+                    this.progressModal = true
+                }
+            })
+        },
         showModalUpload(index) { // 显示上传模态框
             this.listIndex = index
             this.modalUpload = true
@@ -387,6 +410,7 @@ export default {
         _getTeamlist() {
             getTeamListPage(this.roleId, this.$route.params.id).then((res) => {
                 if(res.status === 200) {
+                    console.log(res)
                     if (res.data.result.list) {
                         this.auditorOptions = res.data.result.list
                     } else {
@@ -430,7 +454,8 @@ export default {
         Manage,
         deleteReminders,
         MyUpload,
-        applyDialog
+        applyDialog,
+        progressDialog
     }
 }
 </script>

@@ -363,5 +363,18 @@ export function getTeamListPage(id, investId){
 		inverstProjectId: investId,
 		type: 1, //0:项目   1：基金
 	}
-	return service({url: '/projectRole/getTeamListPage', method: 'post', data});
+	return service({url: '/projectRole/getTeamListPage', method: 'post', data})
+}
+//下一阶段，发起申请
+export function startApproveInfo(approveInfo){
+	const data = approveInfo
+	return service({url: 'investProject/startApproveInfo', method: 'post', data})
+}
+// 查看进度或者立即审批  investProject/getApproveInfo
+export function getApproveInfo(approveId) {
+    const data = {
+        id: approveId,
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+    }
+    return service({url: 'investProject/getApproveInfo', method: 'post', data})
 }
