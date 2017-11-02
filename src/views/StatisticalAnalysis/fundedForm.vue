@@ -124,13 +124,10 @@ export default {
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     handleCurrentChange(page) {
       //分页页码切换
-      //获取tabList3 分页数据
-      // console.log(pages);
       // this.page = '';
       this.page = page;
       this.searchInvestorList(this.page, this.pageSize, "");

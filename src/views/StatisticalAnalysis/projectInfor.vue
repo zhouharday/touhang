@@ -71,7 +71,7 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
                 </el-pagination>
             </div>
         </div>
@@ -83,7 +83,7 @@ export default {
   computed: {
     user() {
       this.$store.state.login.merchants =
-        JSON.parse(sessionStorage.getItem("merchants")) || {};
+        JSON.parse(sessionStorage.getItem("merchants")) || [];
       this.$store.state.login.userInfor =
         JSON.parse(sessionStorage.getItem("userInfor")) || {};
       return {
@@ -101,7 +101,7 @@ export default {
       this.from = 1;
       this.to = this.projectInforTabData.length;
       this.altogether = this.projectInforTabData.length;
-    }
+    };
     // console.log(this.projectInforTabData.length);
     this.projectMessage("", this.input2);
     this.projectType();
@@ -109,10 +109,10 @@ export default {
   methods: {
     changeActive(index, item) {
       this.ind = index;
-      if(index == 0){
-          this.projectMessage('','');
+      if (index == 0) {
+        this.projectMessage("", "");
       } else {
-          this.projectMessage(item.id,'');
+        this.projectMessage(item.id, "");
       }
     },
     projectType() {
@@ -146,7 +146,7 @@ export default {
           projectTypeId: projectTypeId,
           projectName: name,
           page: this.page,
-          pageSize: this.pageSize,
+          pageSize: this.pageSize
         })
         .then(res => {
           if (res.status == "200") {
@@ -242,7 +242,7 @@ section {
       text-align: center;
       border-radius: 15px;
       background: #f05e5e;
-        padding: 0 10px;
+      padding: 0 10px;
     }
   }
 }
