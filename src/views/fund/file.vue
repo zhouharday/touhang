@@ -57,7 +57,7 @@
         </el-col>
     </el-row>
     <!-- 预览 -->
-    <show-pdf :pdfurl="pdfurl" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
+    <show-pdf :pdfurl="pdfurl" class="showpdf" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
     <!-- 上传基金设立报表-->
     <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false" :show-close="false">
         <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
