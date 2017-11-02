@@ -67,6 +67,9 @@ export default {
         },
     },
     methods: {
+        init(){
+            this.isBlock = false;
+        },
         checkProjectAuth(code){
             return checkProjectAuth(code) && this.isInTeam;
         },
