@@ -30,14 +30,13 @@
                                     @click="uploadFundDoc(scope.$index, scope.row)">
                                     上传
                             </el-button>
-                            <el-button type="text"
-                                       size="small"
-                                       v-if="haveJurisdiction('GL-JJWD-XZ')"
-                                       v-show="scope.row.id"
-                                       class="scopeBtn"
-                                       @click="downloadFundDoc(scope.$index, scope.row)">
-                                       下载
-                            </el-button>
+                            <a :href="scope.row.documentUrl"
+                                style="font-size:12px;color: #F05E5E;"
+                                v-if="haveJurisdiction('GL-JJWD-XZ')"
+                                v-show="scope.row.id"
+                                class="scopeBtn">
+                                下载
+                            </a>
                             <el-button type="text"
                                        size="small"
                                        v-if="haveJurisdiction('GL-JJWD-YL')"
@@ -62,7 +61,7 @@
     <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false" :show-close="false">
         <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
             <div style="padding: 20px 0">
-                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
             </div>
         </Upload>
@@ -107,7 +106,6 @@ export default {
             pdfurl: '', // 预览路径
             showOrhiddren: false, // 是否显示预览
             upload: false, // 上传
-            previewFundInfo: '', //预览信息
             reminders: false, // 确认删除模态框
             modal_loading: false, // 确认删除loading效果
             actionUrl: API_ROOT + '/files/uploadProjectDocument',
@@ -167,9 +165,9 @@ export default {
             }
         },
         previewFundDoc(index, row) {
+            console.log(row)
             this.pdfurl = row.previewPath
             this.showOrhiddren = true
-            this.previewFundInfo = row.documentUrl.split('?')[0]
             console.log(row.documentUrl.split('?')[0])
         },
         modalCancel() {
