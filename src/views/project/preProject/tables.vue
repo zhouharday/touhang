@@ -157,6 +157,10 @@ export default {
         structureData: {
             type: Array,
             default: []
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -259,7 +263,7 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         //添加 董事会成员的方法
         addMember() {

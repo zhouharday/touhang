@@ -30,6 +30,7 @@
 <script >
 import tabelHeader from 'components/tabelHeader'
 import progressForms from 'components/progressDialog'
+import { checkProjectAuth } from 'common/js/config'
 import {getApproveList, getApproveInfo} from 'api/projectPre'
 export default {
     props: {
@@ -40,6 +41,10 @@ export default {
         projectId: {
             type: String,
             default: ''
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -62,6 +67,9 @@ export default {
         },
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init(){
             getApproveList(this.projectId).then(resp => {
                 if (resp.data.status == '200') {

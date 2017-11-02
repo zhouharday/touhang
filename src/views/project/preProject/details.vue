@@ -224,6 +224,10 @@ export default {
         capitalForm: {
             type: Object,
             default: {}
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -295,7 +299,7 @@ export default {
     watch: {},
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         disable(name) {
             name.flag = !name.flag;

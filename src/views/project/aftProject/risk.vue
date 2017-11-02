@@ -357,6 +357,10 @@ export default {
         proUsers: {
             type: Array,
             default: []
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     watch: {
@@ -545,7 +549,7 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
             this.getDatas();

@@ -54,33 +54,33 @@
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
                 <el-tab-pane v-if="checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
-                    <detail-form :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                    <detail-form :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
-                    <table-form :memberData="memberData" :structureData="structureData"></table-form>
+                    <table-form :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-                    <approve-table :tabs="tabs"></approve-table>
+                    <approve-table :isInTeam="isInTeam" :projectId="projectId" :tabs="tabs"></approve-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
-                    <file-table :tabs="tabs" :projectId="projectId" ></file-table>
+                    <file-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId" ></file-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-guanli')" label="管理" name="manage" class="tab_list">
-                    <manage-table :tabs="tabs" :proId="projectId"></manage-table>
+                    <manage-table :isInTeam="isInTeam" :tabs="tabs" :proId="projectId"></manage-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
-                    <record-form :tabs="tabs" :projectId="projectId"></record-form>
+                    <record-form :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></record-form>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-fengxianguanli')" label="风险管理" name="risk" class="tab_list">
-                    <risk-table :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
+                    <risk-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-zhongdashixiang')" label="重大事项" name="event" class="tab_list">
-                    <event-table :tabs="tabs" :projectId="projectId"></event-table>
+                    <event-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></event-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-shujutianbao')" label="数据填报" name="data" class="tab_list">
-                    <data-table :tabs="tabs" :projectId="projectId"></data-table>
+                    <data-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></data-table>
                 </el-tab-pane>
                 <el-tab-pane v-if="checkProjectAuth('XM-jiankongshezhi')" label="监控设置" name="monitor" class="tab_list">
-                    <monitor-table :tabs="tabs" :projectId="projectId"></monitor-table>
+                    <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -104,7 +104,7 @@ import dataTable from './data'
 import monitorTable from './monitor'
 
 import { getProjectUsers } from 'api/projectSys';
-import { getPreDetail } from 'api/projectPre';
+import { getTeams, getPreDetail } from 'api/projectPre';
 import {checkProjectAuth, changeDate } from 'common/js/config'
 import { getWarnMessageList, getInvestSubject, getAppraisementRep, getAppraisementDetails } from 'api/projectAfter';
 
@@ -169,6 +169,7 @@ export default {
                 content: '',
                 appendix: ''
             },
+            isInTeam: false
         }
     },
     created() {
@@ -187,7 +188,7 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code);
+            return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
             this.initInfo();
@@ -216,6 +217,27 @@ export default {
             this.getAppraisementRep();
             this.getAppraisementDetails();
             this.getProUsers();
+        },
+        checkTeamUser(){
+            getTeams(this.investProjectId).then(resp => {
+                this.teamData = resp.data.result;
+                if(resp.data.result == null || resp.data.result.length == 0){
+                    this.isInTeam = false;
+                }else{
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let _isInTeam = false;
+                    resp.data.result.forEach((item) =>{
+                        if(item.userId == userId){
+                            _isInTeam = true;
+                            return;
+                        }
+                    });
+                    this.isInTeam = _isInTeam;
+                }
+                console.log("登录人是否在团队:"+this.isInTeam);
+            }).catch(e => {
+                console.log('checkTeamUser error: ', e);
+            })
         },
         /**
          * [getProUsers 获取项目用户列表]
