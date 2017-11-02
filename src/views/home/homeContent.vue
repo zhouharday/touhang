@@ -56,16 +56,16 @@
                                 <span>{{waitSth}}</span>
                             </div>
                             <div v-if="daibanRw" class="daibanRw">暂无数据</div>
-                            <div class="homeContentBot_a" v-for="(item,index) in projectList.result" :key="item.id">
+                            <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.id">
                                 <div>
                                     <img src="/static/img/cr_prject.png">
                                     <span>{{item.stageName}}</span>
                                 </div>
-                                <div>【{{item.name}}】</div>
+                                <div>【{{item.typeName}}】</div>
                                 <div>
-                                    <span>{{item.typeName}}</span>
-                                    <!-- <span @click="approvalModal=true">{{item.projectText3}}</span> -->
-                                    <span>{{item.createtime}}</span>
+                                    <span>{{item.name}}</span>
+                                    <span @click="approval(item,index)">立即审批</span>
+                                    <span>{{item.createTime}}</span>
                                 </div>
                             </div>
                             <!-- <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
@@ -436,6 +436,9 @@
   .page {
     float: right;
     font-size: 14px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
   }
 }
 
@@ -669,6 +672,8 @@ export default {
   },
   data() {
     return {
+      msg: {},
+      page: 1,
       daibanRw: false,
       activeName: "first",
       // applyModal: false,
@@ -837,7 +842,6 @@ export default {
       this.monthDate = arr;
       this.getData();
     },
-
     getData() {
       //获取日程列表 api
       this.$http
@@ -861,9 +865,7 @@ export default {
                   }
                 });
               });
-            } else if (res.data.status == "403") {
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "49999") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -950,24 +952,25 @@ export default {
           this.$Message.error("请求超时");
         });
     },
-    findUserTask(page) {
+    findUserTask() {
       //小双提醒
       this.$http
-        .post(this.api + "/activitiCommon/findUserTask", {
-          merchantId: this.user.merchants[0].id,
-          userId: this.user.userInfor.id,
-          page: page,
+        .post(this.api + "/investProject/selectMineApproveList", {
+          // userId: this.user.userInfor.id,
+          userId: "06a660734d044030aa04f7a3f2f8764e",
+          page: this.page,
           pageSize: 3
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
-              this.projectList = res.data.result;
+              console.log(res.data);
+              this.projectList = res.data.result.list;
               if (res.data.result.result.length == "0") {
                 this.daibanRw = true;
               }
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -975,6 +978,32 @@ export default {
         .catch(error => {
           this.$Message.error("请求超时");
         });
+    },
+    approval(item, index) {
+      // this.approvalModal = !this.approvalModal;
+      console.log(item);
+      if (item.type == 1) {
+        //审批项目
+        this.addTab(
+          "投资项目-" + item.typeName,
+          "/home/preProjectMessage/" + item.typeId + "/" + item.investProjectId,
+          "preProjectMessage/" + item.typeId + "/" + item.investProjectId
+        );
+        this.$router.push({
+          name: "preProjectMessage",
+          params: { userId: item.typeId, investProjectId: item.investProjectId }
+        });
+      } else {
+        //审批基金
+        this.addTab(item.typeName + "详情", "/home/fundDetails/" + item.typeId);
+        this.$router.push({
+          name: "fundDetails",
+          params: { id: item.typeId }
+        });
+      }
+    },
+    addTab(th, url, name) {
+      this.$store.commit({ type: "addTab", title: th, url: url, name: name });
     }
   }
 };
