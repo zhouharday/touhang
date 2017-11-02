@@ -64,7 +64,6 @@ export default {
     methods: {
         init(){
             getApproveList(this.projectId).then(resp => {
-                console.log("审批列表："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.approvalData = resp.data.result.list;
                 } else {
@@ -76,7 +75,6 @@ export default {
         },
         openApproval(id){
             getApproveInfo(id).then(resp => {
-                console.log("审批详情："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.dialogTitle = resp.data.result.approveTitle;
                     this.documentInfo = resp.data.result.dataDocumentResult;
