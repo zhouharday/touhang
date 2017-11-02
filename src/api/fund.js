@@ -317,7 +317,8 @@ export function getFundApprList(listId) {
 export function selectStageUploadDocument(fundId, num) {
     const data = {
         typeId: fundId,
-        type: num
+        type: num,
+        userId: JSON.parse(sessionStorage.getItem('userInfor')).id
     }
     return service({url: '/dictionaryController/selectStageUploadDocument', method: 'post', data})
 }
@@ -354,4 +355,13 @@ export function getApproveList(fundId) {
         typeId: fundId
     }
     return service({url: 'investProject/getApproveList', method: 'post', data})
+}
+//获取审批角色
+export function getTeamListPage(id, investId){
+	const data = {
+		roleId: id,
+		inverstProjectId: investId,
+		type: 1, //0:项目   1：基金
+	}
+	return service({url: '/projectRole/getTeamListPage', method: 'post', data});
 }

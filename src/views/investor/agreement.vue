@@ -89,6 +89,7 @@ export default {
             let new_AgreementInfo = {
                 id: '',
                 agreementName: '',
+                documentInfo: [],
                 structuralLevelId: '',
                 investorName: this.$store.state.investor.investorName || sessionStorage.getItem('INVESTORNAME'),
                 inverstorId: this.$route.params.userId,

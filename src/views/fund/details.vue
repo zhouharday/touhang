@@ -235,7 +235,7 @@
         </el-table-column>
         <el-table-column label="户名">
             <template scope="scope">
-                <el-input v-model="scope.row.username" placeholder="请输入内容"></el-input>
+                <el-input v-model="scope.row.username" :disabled="scope.row.flag" placeholder="请输入内容"></el-input>
             </template>
         </el-table-column>
         <el-table-column label="开户行">
@@ -245,13 +245,17 @@
                     :fetch-suggestions="querySearch"
                     placeholder="请输入内容"
                     @select="handleSelect"
-                    style="width:100%;">
+                    style="width:100%;"
+                    :disabled="scope.row.flag">
                 </el-autocomplete>
             </template>
         </el-table-column>
         <el-table-column label="账号">
             <template scope="scope">
-                <el-input v-model="scope.row.accountNumber" placeholder="请输入内容"></el-input>
+                <el-input v-model="scope.row.accountNumber"
+                          placeholder="请输入内容"
+                          :disabled="scope.row.flag">
+                </el-input>
             </template>
         </el-table-column>
     </el-table>
@@ -265,8 +269,21 @@
 
 <script type="text/ecmascript-6">
 import fundTitle from './fundTitle'
-import {mapGetters} from 'vuex'
-import {selectAllManageCompany, sectorList, updateFundInfo, updateFundManageInfo, updateFundReg, updataFunAccInfo, getMyFundDetails} from 'api/fund'
+import {
+    mapGetters
+} from 'vuex'
+import {
+    selectAllManageCompany,
+    sectorList,
+    updateFundInfo,
+    updateFundManageInfo,
+    updateFundReg,
+    updataFunAccInfo,
+    getMyFundDetails
+} from 'api/fund'
+import {
+    checkFundAuth
+} from 'common/js/config'
 export default {
     props: {
         formDetails: {
@@ -300,37 +317,6 @@ export default {
     },
     data() {
         return {
-            headerInfo_details: {
-                desc: '基本信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }, {
-                    icon: 'upload',
-                    explain: '提交'
-                }]
-            },
-            headerInfo_MIS: {
-                desc: '管理信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
-            },
-            headerInfo_Registration: {
-                desc: '备案注册',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
-            },
-            headerInfo_Accountinfo: {
-                desc: '账户信息',
-                btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
-                }]
-            },
             managementCompany: [],
             managementType: [], // 管理类型
             OrgTypeList: [], // 组织类型
@@ -427,6 +413,11 @@ export default {
                 return name.flag = false
             }
         },
+        disableAccountinfo() {
+            this.formAccountInfo.map((x) => {
+                x.flag = false
+            })
+        },
         handlerPreservation() { // 修改基本信息
             this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
             updateFundInfo(this.formDetails).then((res) => {
@@ -446,7 +437,7 @@ export default {
         },
         editRegistration() { // 修改备案注册
             this.formRegistration.fundId = this.$route.params.id
-            console.log(this.formRegistration)
+            // console.log(this.formRegistration)
             updateFundReg(this.formRegistration).then((res) => {
                 if (res.status === 200) {
                     this.$Message.success(res.data.message || '修改备案注册成功！')
@@ -455,10 +446,12 @@ export default {
             })
         },
         getAccountInfo() { // 修改账户信息
-            console.log(this.formAccountInfo)
+            this.formAccountInfo.map((x) => {
+                x.flag = false
+            })
             updataFunAccInfo(this.formAccountInfo).then((res) => {
                 if (res.status === 200) {
-                    console.log(res)
+                    // console.log(res)
                     this.$Message.success(res.data.message || '修改账户成功！')
                     this._getFundList()
                 }
@@ -484,7 +477,7 @@ export default {
                     return false
                 }
             })
-            if(judgeDetails && judgeMis) {
+            if (judgeDetails && judgeMis) {
                 this.$emit('confirmSubmission')
             }
         },
@@ -542,13 +535,22 @@ export default {
         _getFundList() {
             getMyFundDetails(this.$route.params.id).then((res) => {
                 if (res.status === 200) {
+                    var fundBaseInfo = res.data.result.fundBaseInfo
+                    fundBaseInfo.fundScale = parseFloat(fundBaseInfo.fundScale)
+                    fundBaseInfo.fundTerm = parseFloat(fundBaseInfo.fundTerm)
                     this.formDetails = Object.assign({}, {
                         flag: true
-                    }, res.data.result.fundBaseInfo)
+                    }, fundBaseInfo)
                     this.formMIS = Object.assign({}, {
                         flag: true
                     }, res.data.result.fundManageInfo)
-                    this.formAccountInfo = res.data.result.fundAccinfo
+                    if(res.data.result.fundAccinfo) {
+                        var fundAccinfo = res.data.result.fundAccinfo
+                        fundAccinfo.map((x) => {
+                            x.flag = true
+                        })
+                        this.formAccountInfo = fundAccinfo
+                    }
                     this.formRegistration = Object.assign({}, {
                         flag: true
                     }, res.data.result.fundRegistration)
@@ -557,11 +559,64 @@ export default {
         }
     },
     mounted() {
+        // console.log(!checkFundAuth('GL-JJXQ-BJ'))
         this.restaurants = this.loadAll()
         this.managementType = JSON.parse(sessionStorage.getItem('MANTYPE')) || this.getManType
         this.OrgTypeList = JSON.parse(sessionStorage.getItem('ORGTYPE')) || this.OrgType
     },
     computed: {
+        headerInfo_details: function() {
+            if (checkFundAuth('GL-JJXQ-BJ')) {
+                return {
+                    desc: '基本信息',
+                    haveJurisdiction: true
+                }
+            } else {
+                return {
+                    desc: '基本信息',
+                    haveJurisdiction: false
+                }
+            }
+        },
+        headerInfo_MIS: function() {
+            if (checkFundAuth('GL-JJXQ-BJ')) {
+                return {
+                    desc: '管理信息',
+                    haveJurisdiction: true
+                }
+            } else {
+                return {
+                    desc: '管理信息',
+                    haveJurisdiction: false
+                }
+            }
+        },
+        headerInfo_Registration: function() {
+            if (checkFundAuth('GL-JJXQ-BJ')) {
+                return {
+                    desc: '备案注册',
+                    haveJurisdiction: true
+                }
+            } else {
+                return {
+                    desc: '备案注册',
+                    haveJurisdiction: false
+                }
+            }
+        },
+        headerInfo_Accountinfo: function() {
+            if (checkFundAuth('GL-JJXQ-BJ')) {
+                return {
+                    desc: '账户信息',
+                    haveJurisdiction: true
+                }
+            } else {
+                return {
+                    desc: '账户信息',
+                    haveJurisdiction: false
+                }
+            }
+        },
         ...mapGetters([
             'getManType',
             'OrgType',

@@ -25,12 +25,14 @@
                             <el-button type="text"
                                     size="small"
                                     class="scopeBtn"
+                                    v-if="haveJurisdiction('GL-JJWD-SCH')"
                                     v-show="!scope.row.id"
                                     @click="uploadFundDoc(scope.$index, scope.row)">
                                     上传
                             </el-button>
                             <el-button type="text"
                                        size="small"
+                                       v-if="haveJurisdiction('GL-JJWD-XZ')"
                                        v-show="scope.row.id"
                                        class="scopeBtn"
                                        @click="downloadFundDoc(scope.$index, scope.row)">
@@ -38,12 +40,14 @@
                             </el-button>
                             <el-button type="text"
                                        size="small"
+                                       v-if="haveJurisdiction('GL-JJWD-YL')"
                                        v-show="scope.row.id"
                                        class="btn_border scopeBtn" @click="previewFundDoc(scope.$index, scope.row)">
                                        预览
                             </el-button>
                             <el-button type="text"
                                        size="small"
+                                       v-if="haveJurisdiction('GL-JJWD-SC')"
                                        class="scopeBtn" @click="deleteFundDoc(scope.$index, scope.row)">
                                        删除
                             </el-button>
@@ -77,6 +81,7 @@
 import deleteReminders from 'components/deleteReminders'
 import {deleteDocument,selectProjectOrFundDocument} from 'api/fund'
 import {API_ROOT} from '../../config'
+import {checkFundAuth} from 'common/js/config'
 export default {
     props: {
         fileListData: {
@@ -167,6 +172,13 @@ export default {
         },
         confirmCancel() {
             this.reminders = false
+        },
+        haveJurisdiction(str) {
+            if (checkFundAuth(str)) {
+                return true
+            } else {
+                return false
+            }
         },
         _getFundDoc() {
             selectProjectOrFundDocument(this.$route.params.id, 2).then((res) => {

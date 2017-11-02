@@ -67,6 +67,7 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
+            console.log(row)
             this.quitDetailsModal = true
             this.bonusInfo = row
             row.documentInfo.map((x) => {

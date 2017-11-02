@@ -4,7 +4,7 @@
         <div class="desc">
             <span class="defaultcolor">{{data.desc}}</span>
         </div>
-        <div class="btn" v-if="edit">
+        <div class="btn" v-if="edit" v-show="data.haveJurisdiction">
             <el-button class="btnwrapper" @click="editFormData" v-if="editOrPre">
                 <Icon type="edit"></Icon>
                 <span class="explain">编辑</span>
