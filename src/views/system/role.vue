@@ -149,6 +149,7 @@ export default {
                 },
                 allData:[],
                 clickMenu:[],
+                yunXiangMuId:'',
             }
         },
         components: {
@@ -244,6 +245,7 @@ export default {
             },
             Setting(){
                 console.log(this.clickMenu)
+                this.clickMenu.push(this.yunXiangMuId)
                 var string = getUpdata(this.clickMenu)
                 console.log(string)
                 authorization(this.nowId,string).then((res)=>{
@@ -275,6 +277,14 @@ export default {
 //            所有权限
             getUserAllRole().then((res)=>{
                 this.treeData = res.data.result
+                this.treeData.forEach((item)=>{
+                    if(item.menuName == '云项目'){
+                        this.yunXiangMuId = item.path
+                    }
+                })
+                console.log(this.yunXiangMuId)
+
+
             })
         }
     }

@@ -956,8 +956,8 @@ export default {
       //小双提醒
       this.$http
         .post(this.api + "/investProject/selectMineApproveList", {
-          // userId: this.user.userInfor.id,
-          userId: "06a660734d044030aa04f7a3f2f8764e",
+          userId: this.user.userInfor.id,
+          // userId: "06a660734d044030aa04f7a3f2f8764e",
           page: this.page,
           pageSize: 3
         })

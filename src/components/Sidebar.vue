@@ -123,7 +123,7 @@
             </el-menu>
             <!-- 菜单列表 Start -->
             <el-menu v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
-              <el-submenu v-if="item.children.length != 0" :index="index" v-for="(item,index) in menus" :key="item">
+              <el-submenu  :index="index" v-for="(item,index) in menus" :key="item">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
                         <span >{{item.menuName}}</span>
@@ -131,10 +131,10 @@
                     <el-menu-item v-for="(item,index) in item.children" :key="item" :index="item.url" @click="addTab(item.menuName,'/home/' + item.url, item.url)">{{item.menuName}}</el-menu-item>
                 </el-submenu>
             </el-menu>
-            <div v-if="item.children.length == 0" v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" v-for="(item,index) in menus" :key="item" class="div_el-menu-itemel-submenu__title" @click="addTab(item.menuName,'/home/' + item.url, item.url)">
+            <!-- <div index='2' v-if="item.children.length == 0" v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" v-for="(item,index) in menus" :key="item" class="div_el-menu-itemel-submenu__title" @click="addTab(item.menuName,'/home/' + item.url, item.url)">
                 <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
                 <span index="assistant">{{item.menuName}}</span>
-            </div>
+            </div> -->
             <!-- 菜单列表 End -->
         </div>
     </div>
