@@ -10,7 +10,7 @@
             <el-button @click="minus" icon="minus"></el-button>
             <el-button id="prev" @click="closepdf">关闭</el-button>
         </div>
-        <canvas class="canvasstyle" id="the-canvas"></canvas>
+        <canvas id="myCanvas"></canvas>
     </div>
 </div>
 </template>
@@ -64,26 +64,19 @@ export default {
                 vm.pdfDoc = pdfDoc_;
                 vm.page_count = vm.pdfDoc.numPages;
 
-                vm.hasPrev = vm.pageNum > 1;
-                vm.hasNext = vm.page_count > vm.pageNum;
-
                 vm.renderPage(vm.pageNum);
             });
         },
         renderPage(num) { //渲染pdf
             let vm = this
             this.pageRendering = true;
-            let canvas = document.getElementById('the-canvas')
+            let canvas = document.getElementById('myCanvas')
             // Using promise to fetch the page
             this.pdfDoc.getPage(num).then(function(page) {
                 var viewport = page.getViewport(vm.scale);
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
-                // console.log("canvas.height:"+canvas.height);
-                // console.log("canvas.width:"+canvas.width);
-                // console.log("viewport.height:"+viewport.height);
-                // console.log("viewport.width:"+viewport.width);
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: vm.ctx,
@@ -93,7 +86,6 @@ export default {
 
                 // Wait for rendering to finish
                 renderTask.promise.then(function() {
-                    // console.log("1111");
                     vm.pageRendering = false;
                     if (vm.pageNumPending !== null) {
                         // New page rendering is pending
@@ -108,6 +100,9 @@ export default {
                 this.$emit('pdferr');
             });
             vm.page_num = vm.pageNum;
+
+            vm.hasPrev = vm.pageNum > 1;
+            vm.hasNext = vm.page_count > vm.pageNum;
 
         },
         addscale() { //放大
@@ -143,6 +138,7 @@ export default {
         closepdf() { //关闭PDF
             this.pdfDoc = null;
             this.page_count = 0;
+            this.pageNum = 1;
 
             this.$emit('closepdf');
         },
@@ -156,7 +152,7 @@ export default {
     },
     computed: {
         ctx() {
-            let id = document.getElementById('the-canvas')
+            let id = document.getElementById('myCanvas')
             return id.getContext('2d');
         }
     },
