@@ -246,7 +246,6 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            console.log("权限验证结果，CODE："+code+","+(checkProjectAuth(code) && this.isInTeam));
             return (checkProjectAuth(code) && this.isInTeam);
         },
         checkTeamUser(){

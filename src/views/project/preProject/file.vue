@@ -45,7 +45,7 @@
                 </el-table>
             </template>
         </div>
-        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></show-pdf>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf>
     </div>
 </template>
 
@@ -138,7 +138,7 @@ export default {
             });
         },
         preview(url) {
-            this.pdfurls = url.replace('http://47.90.120.190:8086', '/file');
+            this.pdfurls = url;
             this.isshowpdf = true;
         },
         pdferr(err){

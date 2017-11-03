@@ -16,12 +16,13 @@
 </template>
 <script>
 import PDFJS from '../../static/js/pdf/pdf.js'
+// import '../../static/js/pdf/pdf.worker.js'
+// import PDFJS from 'pdfjs'
 import {
     mapActions,
     mapGetters
 } from 'vuex';
 export default {
-    name: 'c-pdf',
     props: {
         'pdfurl': {
             type: String,
@@ -76,10 +77,13 @@ export default {
             // Using promise to fetch the page
             this.pdfDoc.getPage(num).then(function(page) {
                 var viewport = page.getViewport(vm.scale);
-                //alert(vm.canvas.height)
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
+                // console.log("canvas.height:"+canvas.height);
+                // console.log("canvas.width:"+canvas.width);
+                // console.log("viewport.height:"+viewport.height);
+                // console.log("viewport.width:"+viewport.width);
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: vm.ctx,
@@ -89,12 +93,15 @@ export default {
 
                 // Wait for rendering to finish
                 renderTask.promise.then(function() {
+                    // console.log("1111");
                     vm.pageRendering = false;
                     if (vm.pageNumPending !== null) {
                         // New page rendering is pending
                         vm.renderPage(vm.pageNumPending);
                         vm.pageNumPending = null;
                     }
+                }).catch(err =>{
+                    console.log('renderTask error ', err);
                 });
             }).catch(e => {
                 console.log('renderPage error ', e);
