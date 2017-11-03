@@ -195,7 +195,7 @@ export default {
         { src: '/static/img/project_manger.png'},
         { src: '/static/img/touzizhe.png'},
         { src: '/static/img/survey.png'},
-        { src: '/static/img/sys_statistics.png'},
+        { src: '/static/img/sys_analysis.png'},
         { src: '/static/img/sys_mang.png'},
       ],
       menus: [],
