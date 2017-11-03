@@ -388,16 +388,24 @@
                 this.fundDialog = !this.fundDialog;
 //                console.log(this.projectForm)
 //                id,stageId,stageName,userId,shenpidata
-                var id = this.shenpidata.id
-                var stageId = this.shenpidata.stageId
-                var stageName = this.shenpidata.stageName
-                var shenpidata = this.shenpidata.data
+                var id = this.shenpidata.id;
+                var stageId = this.shenpidata.stageId;
+                var stageName = this.shenpidata.stageName;
+                var shenpidata = this.shenpidata.data;
+                 this.showRole.forEach((item,index)=> {
+                    if(this.projectForm.nodeName1 == item.roleName)
+                        this.projectForm.nodeName1= item.id
+                    if(this.projectForm.nodeName2 == item.roleName)
+                        this.projectForm.nodeName2 = item.id
+                    if(this.projectForm.nodeName3 == item.roleName)
+                        this.projectForm.nodeName3 = item.id
+                });
                 shenpidata = [{"id":"","roleId":this.projectForm.nodeName1},{"id":"","roleId":this.projectForm.nodeName2},{"id":"","roleId":this.projectForm.nodeName3}]
                 this.shenpidata.data.forEach(function (item,index) {
 //                    console.log(item)
                     shenpidata[index].id = item.id
-                })
-                console.log(shenpidata)
+                });
+                console.log(shenpidata);
                 addStageApprove(id,stageId,stageName,shenpidata).then((res)=>{
                     getConfigLeftList().then((res) => {
                         this.leftList = reloadData(res.data.result)

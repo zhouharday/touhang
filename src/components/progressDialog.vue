@@ -1,7 +1,7 @@
 <template>
     <!-- 查看进度 对话框 -->
     <div class="progressBox">
-        <el-dialog :title="dialogTitle" :visible.sync="progressModal">
+        <el-dialog :title="dialogTitle" :visible.sync="progressModal" :close-on-click-modal="false" @close="closeModal">
             <div style="height:2px;border-bottom: 1px solid #f05e5e;margin-bottom:20px"></div>
             <el-table :data="documentInfo">
                 <el-table-column label="文档列表" prop="allocationDocumentName" width="250">
@@ -145,6 +145,9 @@ export default {
         pdferr(err){
             console.log("pdferr!! ", err);
             this.$Message.error('读取预览文件出错！');
+        },
+        closeModal() { // 预览关闭按钮
+            this.$emit('closeShowModal')
         },
         closepdf(){
             this.isshowpdf = false;
