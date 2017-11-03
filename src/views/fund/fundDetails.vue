@@ -30,7 +30,7 @@
                     <span class="count">{{index + 1}}</span>
                     <p class="desc">{{item.title}}</p>
                     <span class="state" v-if="item.type == '1'">
-                        <span @click="showModalUpload(index)"
+                        <span @click="showModalUpload(index, item.id)"
                               v-if="item.status == '0'">
                               立即上传
                         </span>
@@ -49,7 +49,7 @@
             </div>
             <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
             <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="confirmApplyModal" @cancle="cancleApplyModal"></apply-dialog>
-            <progress-dialog :progressModal="progressModal" :documentInfo="documentInfo" :table2="approveStageNodeData" :approvalForm="approvalForm" :isBlock="whichClick" :auditorOptions="auditorOptions" :dialogTitle="dialogTitle" @submit="confirmProgress" @cancle="cancalProgress"></progress-dialog>
+            <progress-dialog :progressModal="progressModal" :documentInfo="documentInfo" :table2="approveStageNodeData" :approvalForm="approvalForm" :isBlock="whichClick" :auditorOptions="auditorOptions" :dialogTitle="dialogTitle" @submit="confirmProgress" @cancle="cancalProgress" @closeShowModal="closeShowModal"></progress-dialog>
         </div>
     </div>
     <div class="chart">
@@ -62,7 +62,7 @@
             </el-col>
         </el-row>
     </div>
-    <div class="tabs">
+    <div class="tabs" v-if="existPermissions">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
                 <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
@@ -128,6 +128,7 @@ import {
     approveResult
 } from 'api/fund'
 const NUM = 2
+// 676779a52d2245ad88eeade2a8703247
 export default {
     data() {
         return {
@@ -148,6 +149,7 @@ export default {
             roleId: '0',
             auditorOptions: [], // 审批人员列表
             progressModal: false, // 立即审批对话框
+            existPermissions: false, // 当前用户是否拥有权限
             approvalForm: {
                 disposeResult: '1',
                 approveUserId: '',
@@ -258,7 +260,7 @@ export default {
             } else if (this.activeName === 'examine') {
                 getApproveList(this.$route.params.id).then((res) => {
                     if(res.status === 200) {
-                        console.log(res)
+                        // console.log(res)
                         this.examineData = res.data.result.list
                     }
                 })
@@ -329,7 +331,7 @@ export default {
             }
             getApproveInfo(id).then((res) => {
                 if(res.status === 200) {
-                    console.log(res)
+                    // console.log(res)
                     this.dialogTitle = res.data.result.approveTitle
                     this.documentInfo = res.data.result.dataDocumentResult
                     this.approveStageNodeData = res.data.result.approveStageNodeData
@@ -365,8 +367,14 @@ export default {
             this.progressModal = false
             this.approvalForm = {}
         },
-        showModalUpload(index) { // 显示上传模态框
+        closeShowModal() {
+            this.progressModal = false
+        },
+        showModalUpload(index, id) { // 显示上传模态框
+            this.stepId = id
+            this.uploadInfo.fileId = id
             this.listIndex = index
+            // console.log(this.uploadInfo)
             this.modalUpload = true
         },
         cancelModal() { //隐藏上传模态框
@@ -380,7 +388,7 @@ export default {
         getDataStageAddUpload() { // 获取小双，阶段数据
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
                     if (res.data.result[0] === undefined) {
@@ -390,12 +398,12 @@ export default {
                     }
                     sessionStorage.setItem('stepId', this.stepId)
                     sessionStorage.setItem('currentStep', res.data.stageId)
-                    console.log(res)
+                    // console.log(res)
                 }
             })
             slectStageAllocation().then((res) => { // 获取配置项目或者基金的阶段
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     this.steps = res.data.result
                     sessionStorage.setItem('steps', JSON.stringify(res.data.result))
                 }
@@ -459,7 +467,7 @@ export default {
         _getTeamlist(roleId, id) {
             getTeamListPage(roleId, id).then((res) => {
                 if(res.status === 200) {
-                    console.log(res)
+                    // console.log(res)
                     if (res.data.result.list) {
                         this.auditorOptions = res.data.result.list
                     } else {
@@ -467,16 +475,30 @@ export default {
                     }
                 }
             })
-        }
+        },
+        _existPermissions() {
+            getFundTeamList(this.$route.params.id).then((res) => {
+                var getIdList = []
+                var currentUserId = JSON.parse(sessionStorage.getItem('userInfor')).id
+                if (res.status === 200 && res.data.result) {
+                    res.data.result.map((x) => {
+                        getIdList.push(x.userId)
+                    })
+                } else {
+                    this.existPermissions = false
+                }
+                this.existPermissions = getIdList.includes(currentUserId) ? true : false
+            })
+        },
     },
     mounted() {
-        this.$nextTick(() => {
-            getFundApprList(this.$route.params.id).then((res) => {
-                if (res.status == '200') {
-                    console.log(res)
-                }
-            })
-        })
+        // this.$nextTick(() => {
+        //     getFundApprList(this.$route.params.id).then((res) => {
+        //         if (res.status == '200') {
+        //             console.log(res)
+        //         }
+        //     })
+        // })
         this.getDataStageAddUpload()
     },
     created() {
@@ -487,6 +509,7 @@ export default {
             }
         })
         this._getFundList(this.$route.params.id)
+        this._existPermissions()
     },
     beforeRouteUpdate(to, from, next) {
         this._getFundList(to.params.id)
