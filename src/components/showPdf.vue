@@ -16,7 +16,6 @@
 </template>
 <script>
 import PDFJS from '../../static/js/pdf/pdf.js'
-// import PDFJS from 'pdfjs'
 import {
     mapActions,
     mapGetters
@@ -27,6 +26,14 @@ export default {
         'pdfurl': {
             type: String,
             default: ''
+        }
+    },
+    watch: {
+        'pdfurl':function (to,from){
+            if(to != from){
+                this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
+                this.init();
+            }
         }
     },
     data() {
@@ -43,16 +50,6 @@ export default {
             page_count: 0, //总页数
             maxscale: 2, //最大放大倍数
             minscale: 0.8 //最小放大倍数
-        }
-    },
-    watch: {
-        'pdfurl': function(to, from) {
-            if (to != from) {
-                this.pageNum = 1;
-                this.scale = 1.0;
-                this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
-                this.init();
-            }
         }
     },
     methods: {
@@ -157,7 +154,6 @@ export default {
         }
     },
     mounted() {
-
         this.init();
     }
 }
@@ -185,4 +181,5 @@ export default {
         }
     }
 }
+
 </style>
