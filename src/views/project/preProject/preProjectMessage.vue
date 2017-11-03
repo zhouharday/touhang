@@ -567,6 +567,7 @@ export default {
                     this.approvalForm = resp.data.result;
                     this.$set(this.$data.approvalForm, 'disposeResult', "1"); //默认同意
                     this.$set(this.$data.approvalForm, 'approveUserId', ""); //默认为空
+                    this.$set(this.$data.approvalForm, 'remark', ""); //默认为空
                     if(resp.data.result.roleId != null && resp.data.result.roleId != ''){
                         let roleId = resp.data.result.roleId;
                         let params = {roleId: roleId, investProjectId: this.investProjectId};
