@@ -383,3 +383,10 @@ export function approveResult(result) {
     const data = result
     return service({url: 'investProject/approveResult', method: 'post', data})
 }
+// 中止基金 /fund/suspendFund
+export function suspendFund(fundId) {
+    const data = {
+        id: fundId
+    }
+    return service({url: '/fund/suspendFund', method: 'post', data})
+}

@@ -7,7 +7,7 @@
         <div class="right">
             <!-- :disabled="judgementFundStage" -->
             <el-button type="danger" @click="changeStep">下一阶段</el-button>
-            <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
+            <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="stopSuppression">中止
             </el-button>
         </div>
     </div>
@@ -89,7 +89,7 @@
         </el-tabs>
     </div>
     <!-- 中止确认弹框 -->
-    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="deleteReminders=false" @cancel="deleteReminders=false">
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="confirmSuppression" @cancel="deleteReminders=false">
     </delete-reminders>
 </div>
 </template>
@@ -125,10 +125,10 @@ import {
     getTeamListPage,
     startApproveInfo,
     getApproveInfo,
-    approveResult
+    approveResult,
+    suspendFund
 } from 'api/fund'
 const NUM = 2
-// 676779a52d2245ad88eeade2a8703247
 export default {
     data() {
         return {
@@ -297,6 +297,7 @@ export default {
                     } else if (res.data.status == '9022') {
                         this.$Message.error(res.data.message || '请勿重复操作')
                     } else if (res.data.status === '9030') {
+                        console.log(res)
                         this.applyModal = true
                         this.applyForm = res.data.result
                         this.roleId = res.data.result.roleId
@@ -309,8 +310,10 @@ export default {
                 }
             })
         },
-        confirmApplyModal() { // 确认提交审批
+        confirmApplyModal() { // 确认提交审批申请
+            this.applyForm.userId = JSON.parse(sessionStorage.getItem('userInfor')).id
             startApproveInfo(this.applyForm).then((res) => {
+                // console.log(this.applyForm)
                 if (res.status === 200) {
                     this.getDataStageAddUpload()
                     this.applyModal = false
@@ -331,7 +334,6 @@ export default {
             }
             getApproveInfo(id).then((res) => {
                 if(res.status === 200) {
-                    // console.log(res)
                     this.dialogTitle = res.data.result.approveTitle
                     this.documentInfo = res.data.result.dataDocumentResult
                     this.approveStageNodeData = res.data.result.approveStageNodeData
@@ -346,6 +348,7 @@ export default {
                     })
                     this.progressModal = true
                 }
+                console.log(res)
             })
         },
         confirmProgress() {
@@ -357,7 +360,12 @@ export default {
                         this.$Message.success(res.data.message || '您已经完成此审批，不能重复审批!')
                     }
                     this.progressModal = false
-                    this.approvalForm = {}
+                    this.approvalForm = {
+                        disposeResult: '1',
+                        approveUserId: '',
+                        remark: ''
+                    }
+                    this.getDataStageAddUpload()
                 }
             }).catch(err => {
                 this.$Message.error('审批失败！')
@@ -365,7 +373,11 @@ export default {
         },
         cancalProgress() {
             this.progressModal = false
-            this.approvalForm = {}
+            this.approvalForm = {
+                disposeResult: '1',
+                approveUserId: '',
+                remark: ''
+            }
         },
         closeShowModal() {
             this.progressModal = false
@@ -418,6 +430,23 @@ export default {
         //         return true
         //     }
         // },
+        stopSuppression() { //
+            this.deleteReminders = true
+        },
+        confirmSuppression() { // 确认中止
+            suspendFund(this.$route.params.id).then((res) => {
+                if (res.status === 200) {
+                    if (res.data.status === '9015') {
+                        this.$Message.info(res.data.message || '该阶段无法中止！')
+                    } else if (res.data.status === '200') {
+                        this.$Message.info(res.data.message || '操作成功!')
+                    }
+                }
+            }).catch(err => {
+                this.$Message.info('该阶段无法中止！')
+            })
+            this.deleteReminders = false
+        },
         _getFundList(id) {
             getMyFundDetails(id).then((res) => {
                 if (res.status == '200') {
@@ -467,7 +496,7 @@ export default {
         _getTeamlist(roleId, id) {
             getTeamListPage(roleId, id).then((res) => {
                 if(res.status === 200) {
-                    // console.log(res)
+                    console.log(res)
                     if (res.data.result.list) {
                         this.auditorOptions = res.data.result.list
                     } else {
