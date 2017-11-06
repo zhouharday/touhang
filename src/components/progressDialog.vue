@@ -132,7 +132,7 @@ export default {
     },
     methods: {
         submitHandler(event) {
-            console.log(this.approvalForm);
+            // console.log(this.approvalForm);
             this.$emit('submit', this.approvalForm);
         },
         cancleHandler(event) {
