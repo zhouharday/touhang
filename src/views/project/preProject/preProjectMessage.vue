@@ -246,7 +246,6 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            console.log("权限验证结果，CODE："+code+","+(checkProjectAuth(code) && this.isInTeam));
             return (checkProjectAuth(code) && this.isInTeam);
         },
         checkTeamUser(){
@@ -820,27 +819,6 @@ export default {
                 }
             }
         }
-    }
-    .comment_box {
-        height: 80px;
-        display: flex;
-        align-items: center;
-        padding-left: 90px;
-        .comment_left {
-            width: 100px;
-            margin-right: 150px;
-            text-align: center;
-        }
-        .comment_right {
-            display: flex;
-            flex-direction: column;
-        }
-    }
-    .bgh {
-        background: #fff;
-    }
-    .bgl {
-        background: #EEF0F4;
     }
     .tabs {
         width: 100%;

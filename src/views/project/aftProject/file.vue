@@ -166,25 +166,4 @@ export default {
     }
 }
 
-
-.viewFiles {
-    position: relative;
-    width: 100%;
-    padding: 20px 30px;
-    box-sizing: border-box;
-    background: #fff;
-    .closeView {
-        position: absolute;
-        right: 0;
-        top: 0;
-        cursor: pointer;
-        img {
-            width: 35px;
-            height: 35px;
-            border: 1px solid #fff;
-            border-radius: 50%;
-            background: #F05E5E;
-        }
-    }
-}
 </style>

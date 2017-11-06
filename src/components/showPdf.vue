@@ -10,18 +10,19 @@
             <el-button @click="minus" icon="minus"></el-button>
             <el-button id="prev" @click="closepdf">关闭</el-button>
         </div>
-        <canvas class="canvasstyle" id="the-canvas"></canvas>
+        <canvas id="myCanvas"></canvas>
     </div>
 </div>
 </template>
 <script>
 import PDFJS from '../../static/js/pdf/pdf.js'
+// import '../../static/js/pdf/pdf.worker.js'
+// import PDFJS from 'pdfjs'
 import {
     mapActions,
     mapGetters
 } from 'vuex';
 export default {
-    name: 'c-pdf',
     props: {
         'pdfurl': {
             type: String,
@@ -63,20 +64,16 @@ export default {
                 vm.pdfDoc = pdfDoc_;
                 vm.page_count = vm.pdfDoc.numPages;
 
-                vm.hasPrev = vm.pageNum > 1;
-                vm.hasNext = vm.page_count > vm.pageNum;
-
                 vm.renderPage(vm.pageNum);
             });
         },
         renderPage(num) { //渲染pdf
             let vm = this
             this.pageRendering = true;
-            let canvas = document.getElementById('the-canvas')
+            let canvas = document.getElementById('myCanvas')
             // Using promise to fetch the page
             this.pdfDoc.getPage(num).then(function(page) {
                 var viewport = page.getViewport(vm.scale);
-                //alert(vm.canvas.height)
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
@@ -95,12 +92,17 @@ export default {
                         vm.renderPage(vm.pageNumPending);
                         vm.pageNumPending = null;
                     }
+                }).catch(err =>{
+                    console.log('renderTask error ', err);
                 });
             }).catch(e => {
                 console.log('renderPage error ', e);
                 this.$emit('pdferr');
             });
             vm.page_num = vm.pageNum;
+
+            vm.hasPrev = vm.pageNum > 1;
+            vm.hasNext = vm.page_count > vm.pageNum;
 
         },
         addscale() { //放大
@@ -136,6 +138,7 @@ export default {
         closepdf() { //关闭PDF
             this.pdfDoc = null;
             this.page_count = 0;
+            this.pageNum = 1;
 
             this.$emit('closepdf');
         },
@@ -149,7 +152,7 @@ export default {
     },
     computed: {
         ctx() {
-            let id = document.getElementById('the-canvas')
+            let id = document.getElementById('myCanvas')
             return id.getContext('2d');
         }
     },

@@ -45,7 +45,7 @@
                 </el-table>
             </template>
         </div>
-        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr" maxscale='4' minscale='0.6' scale='1.1' ></show-pdf>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf>
     </div>
 </template>
 
@@ -138,7 +138,7 @@ export default {
             });
         },
         preview(url) {
-            this.pdfurls = url.replace('http://47.90.120.190:8086', '/file');
+            this.pdfurls = url;
             this.isshowpdf = true;
         },
         pdferr(err){
@@ -204,10 +204,6 @@ export default {
 
 
 <style lang="less" scoped>
-.showPdf{
-    width: 1000px;
-    height: 1000px;
-}
 .fileTable {
     width: 100%;
     height: 100%;
@@ -255,26 +251,5 @@ export default {
     width:80%;
     height:25px;
     line-height:25px;
-}
-
-.viewFiles {
-    position: relative;
-    width: 100%;
-    padding: 20px 30px;
-    box-sizing: border-box;
-    background: #fff;
-    .closeView {
-        position: absolute;
-        right: 0;
-        top: 0;
-        cursor: pointer;
-        img {
-            width: 35px;
-            height: 35px;
-            border: 1px solid #fff;
-            border-radius: 50%;
-            background: #F05E5E;
-        }
-    }
 }
 </style>

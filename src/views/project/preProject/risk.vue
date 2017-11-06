@@ -161,7 +161,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadSuccess($event, recordDocInfo)" :documentInfo="recordDocInfo"></upload-files>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -254,8 +254,7 @@ export default {
             recordList: [],
             trackingForm: {
                 disposeResult: '',
-                content: '',
-                appendix: ''
+                recordDetails: ''
             },
             rules2: {
                 disposeResult: [
@@ -391,6 +390,7 @@ export default {
         },
         //查看风险详情
         getRiskInfo(riskId, optType) {
+            console.log(optType == '1');
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
@@ -404,6 +404,11 @@ export default {
                     if(optType == '1'){
                         //跟踪风险
                         this.modalTracking=true;
+                        this.trackingForm =  {
+                            disposeResult: '',
+                            recordDetails: ''
+                        }
+                        this.recordDocInfo = [];
                     }
                     else{
                         //查看风险
