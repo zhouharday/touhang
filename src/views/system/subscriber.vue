@@ -171,7 +171,8 @@ export default {
                 sex: '',
                 birthday: '',
                 cellphone: '',
-                email: ''
+                email: '',
+                pass: this.md5('123456',32),
             },
             modelSubscriber: false,
             formLabelWidth: '50px',
@@ -243,7 +244,7 @@ export default {
             })
         },
         confirmIncome(){
-
+            // this.addSubscriber.cellphone = this.md5(this.addSubscriber.cellphone,32);
             if(this.checkMobile(this.addSubscriber.cellphone) == false)
                return
             else{
@@ -258,9 +259,9 @@ export default {
                     depArr.forEach((item)=> {
                         if(item.deptName == this.addSubscriber.department)
                             this.addSubscriber.department = item.id
-                    })
+                    });
 //                    console.log(this.addSubscriber)
-                    var LockStatus
+                    var LockStatus;
                     addNewUser(this.addSubscriber,this.newOrChange).then((res)=>{
                         console.log(res)
                         getUserlist('',LockStatus,this.input2).then((res)=>{

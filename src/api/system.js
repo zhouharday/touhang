@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import service from 'common/js/fetch'
 /*******************************公司信息******************************************/
 export function companyInfo(url) {
@@ -100,7 +101,7 @@ export function addNewUser(User,newOrChange) {
             // "nickname":"红豆股份", //昵称
             "name": User.name, //用户名  必须
             "number":User.account, //账户
-            "pass":"123456", //密码
+            // "pass":Vue.md5('123456',32), //密码
             "age":User.birthday, //年龄
             "six":User.sex, //性别
             // "phone":, //电话号码
@@ -108,7 +109,7 @@ export function addNewUser(User,newOrChange) {
             "telephone":User.cellphone,
             "emil":User.email,
             "id":User.role
-        }
+        };
         console.log('**************')
         console.log(data)
         return service({url: '/user/updateUser', method: 'post', data})
@@ -118,7 +119,7 @@ export function addNewUser(User,newOrChange) {
             // "nickname":"红豆股份", //昵称
             "name": User.name, //用户名  必须
             "number":User.account, //账户
-            "pass":"123456", //密码
+            "pass":User.pass, //密码
             "age":User.birthday, //年龄
             "six":User.sex, //性别
             // "phone":, //电话号码
