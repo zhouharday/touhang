@@ -370,7 +370,7 @@ export default {
   }
 
   .active {
-    background: #e4353e;
+    background: #f10215;
   }
 }
 .formComponents {

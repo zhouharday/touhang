@@ -47,7 +47,7 @@
                     <Button type="error" size="large" long :loading="modal_loading1" @click="del1">删除</Button>
                 </div>
             </Modal>
-            <!-- Modal1  -->
+            <!-- Modal1 -->
             <!-- Modal3 -->
             <Modal v-model="modal3" width="360">
                 <p slot="header" style="color:#f60;text-align:center">
@@ -237,8 +237,8 @@
                         <el-row :gutter="20">
                             <el-col :span="24">
                                 <el-form-item label="任务进展" prop="radio" :label-width="formLabelWidth">
-                                    <el-radio class="radio" v-model="form1.radio" label="0">处理中</el-radio>
-                                    <el-radio class="radio" v-model="form1.radio" label="1" @change="radios(radio)">已完成</el-radio>
+                                    <el-radio class="radio" v-model="form1.radio" label="0" @change="changes">处理中</el-radio>
+                                    <el-radio class="radio" v-model="form1.radio" label="1" @change="changes">已完成</el-radio>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -840,6 +840,10 @@ export default {
     };
   },
   methods: {
+    changes(val) {
+      // alert(333);
+      console.log(val);
+    },
     del1() {
       //删除指派任务
       this.modal_loading1 = true;
@@ -914,13 +918,13 @@ export default {
       let isTrue = false;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log("submit!");
-          return this.isTrue = true;
+          // console.log("submit!");
+          return (this.isTrue = true);
         } else {
-          console.log("error submit!!");
-          return this.isTrue = false;
+          // console.log("error submit!!");
+          return (this.isTrue = false);
         }
-      })
+      });
     },
     saveForm(val, formName) {
       //确定 fun
@@ -933,7 +937,7 @@ export default {
         // this.getTaskList1(1);
         this.dialogFormVisible1 = false;
         this.addTaskForm1 = {};
-      };
+      }
       if (val == 2) {
         //代办任务
         this.dialogFormVisible2 = false;
@@ -1005,7 +1009,6 @@ export default {
     },
     addTaskRecord() {
       //提交处理过的任务
-      alert(2);
       this.$http
         .post(this.api + "/work/addTaskRecord", {
           taskId: this.form1.taskId,
