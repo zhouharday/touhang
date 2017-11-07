@@ -6,7 +6,7 @@
                     <el-row :gutter="40">
                         <el-col :span="7">
                             <el-form-item label="用户ID：" prop="phone">
-                                <el-input v-model="form1.phone" auto-complete="off" disabled></el-input>
+                                <el-input v-model="form1.number" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="7">
@@ -38,11 +38,11 @@
                                 <el-input v-model="form1.phone" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="14">
+                        <!-- <el-col :span="14">
                             <el-form-item label="办公电话：" prop="telephone">
                                 <el-input v-model="form1.telephone" auto-complete="off"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="14">
                             <el-form-item label="邮箱：" prop="emil">
                                 <el-input v-model="form1.emil" auto-complete="off"></el-input>
@@ -191,7 +191,7 @@ export default {
         this.isSendCode = !this.isSendCode;
         // this.valueData = false;
         var self = this;
-        var sec = 10;
+        var sec = 60;
         var timer1 = setInterval(function() {
           // self.isSendCode = true;
           self.btnText = sec + "s";
@@ -211,29 +211,22 @@ export default {
       this.$http
         .post(this.api + "/personalCenter/seedCode", {
           id: this.user.userInfor.id,
-          contactPhone: this.form2.phone
+          inputPhone: this.form2.phone
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
               this.time();
-              this.$Message.success(res.data.message);
               console.log(res.data);
-            } else if (res.data.status == "1006") {
-              //手机号不合法
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "1008") {
-              //手机号不合法
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "403") {
-              //服务器异常
+              this.$Message.success(res.data.message);
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
-          console.log(error);
-        });
+          this.$Message.error('请求超时');
+        })
     },
     /************************验证码倒计时结束*********************/
 
@@ -266,16 +259,21 @@ export default {
             if (res.data.status == "200") {
               console.log(res.data);
               this.form1 = res.data.result;
+              let arr = [];
+              res.data.result.roleList.map((item,index)=>{
+                arr.push(res.data.result.roleList[index].roleName);
+                this.form1.userRole = arr.join(',');
+                // this.form1.userRole = item.roleName;
+              });
               this.form1.companyName = this.user.merchants[0].merchant_name;
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     updatePersonalData() {
@@ -294,14 +292,13 @@ export default {
               console.log(res.data);
               this.selectpersonalInfo();
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     queryList() {
@@ -316,25 +313,26 @@ export default {
               console.log(res.data);
               this.department = res.data.result;
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     updatePass() {
+      let newPwd = this.md5(this.form2.newPwd2,32);
+      let pass = this.md5(this.form2.currentPwd,32);
       //个人中心密码更改 api
       this.$http
         .post(this.api + "/personalCenter/updatePass", {
           id: this.user.userInfor.id, //用户ID
           mobileCode: this.form2.code, //用户输入的验证码
           phone: this.form2.phone, //用户手机号码
-          newPwd: this.form2.newPwd2, //新的密码
-          pass: this.form2.currentPwd //当前密码
+          newPwd: newPwd, //新的密码
+          pass: pass //当前密码
         })
         .then(res => {
           if (res.status == "200") {
@@ -342,16 +340,13 @@ export default {
             if (res.data.status == "200") {
               console.log(res.data);
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "1014") {
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     }
   }
@@ -375,7 +370,7 @@ export default {
   }
 
   .active {
-    background: blue;
+    background: #e4353e;
   }
 }
 .formComponents {

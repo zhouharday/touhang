@@ -458,6 +458,7 @@ export default {
 
   data() {
     return {
+      isTrue: false,
       pages1: 1, //当前页码
       pages2: 1, //当前页码
       pages3: 1, //当前页码
@@ -910,20 +911,22 @@ export default {
       this.form1.reportContent = "";
     },
     checkformVal(formName) {
+      let isTrue = false;
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log("submit!");
-          return true;
+          return this.isTrue = true;
         } else {
           console.log("error submit!!");
-          return false;
+          return this.isTrue = false;
         }
-      });
+      })
     },
     saveForm(val, formName) {
       //确定 fun
-      let checkAddTaskForm1 = this.checkformVal(formName);
-      if (val == 1 && checkAddTaskForm1) {
+      this.checkformVal(formName);
+      console.log(this.isTrue);
+      if (val == 1 && this.isTrue) {
         //添加任务
         console.log(this.addTaskForm1);
         this.sendTaskData1(); //发送添加任务数据
