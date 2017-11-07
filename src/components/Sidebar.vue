@@ -188,15 +188,16 @@ export default {
   },
   data() {
     return {
-      menusImg: [ //菜单图标
-        { src: '/static/img/office.png'},
-        { src: '/static/img/zhushou.png'},
-        { src: '/static/img/project.png'},
-        { src: '/static/img/project_manger.png'},
-        { src: '/static/img/touzizhe.png'},
-        { src: '/static/img/survey.png'},
-        { src: '/static/img/sys_analysis.png'},
-        { src: '/static/img/sys_mang.png'},
+      menusImg: [
+        //菜单图标
+        { src: "/static/img/office.png" },
+        { src: "/static/img/zhushou.png" },
+        { src: "/static/img/project.png" },
+        { src: "/static/img/project_manger.png" },
+        { src: "/static/img/touzizhe.png" },
+        { src: "/static/img/survey.png" },
+        { src: "/static/img/sys_analysis.png" },
+        { src: "/static/img/sys_mang.png" }
       ],
       menus: [],
       isShow: true,

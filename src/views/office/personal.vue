@@ -6,7 +6,7 @@
                     <el-row :gutter="40">
                         <el-col :span="7">
                             <el-form-item label="用户ID：" prop="phone">
-                                <el-input v-model="form1.phone" auto-complete="off" disabled></el-input>
+                                <el-input v-model="form1.number" auto-complete="off" disabled></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="7">
@@ -211,22 +211,15 @@ export default {
       this.$http
         .post(this.api + "/personalCenter/seedCode", {
           id: this.user.userInfor.id,
-          contactPhone: this.form2.phone
+          inputPhone: this.form2.phone
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
               this.time();
-              this.$Message.success(res.data.message);
               console.log(res.data);
-            } else if (res.data.status == "1006") {
-              //手机号不合法
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "1008") {
-              //手机号不合法
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "403") {
-              //服务器异常
+              this.$Message.success(res.data.message);
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -266,6 +259,12 @@ export default {
             if (res.data.status == "200") {
               console.log(res.data);
               this.form1 = res.data.result;
+              let arr = [];
+              res.data.result.roleList.map((item,index)=>{
+                arr.push(res.data.result.roleList[index].roleName);
+                this.form1.userRole = arr.join(',');
+                // this.form1.userRole = item.roleName;
+              });
               this.form1.companyName = this.user.merchants[0].merchant_name;
               this.$Message.success(res.data.message);
             } else if (res.data.status == "403") {
