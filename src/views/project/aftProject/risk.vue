@@ -159,7 +159,7 @@
                 <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in proTeam" :key="item.userId" :label="item.userName" :value="item.userId">
+                            <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -168,7 +168,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="recordDocInfo"></upload-files>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -652,6 +652,8 @@ export default {
                     if(optType == '1'){
                         //跟踪风险
                         this.modalTracking=true;
+                        this.$set(this.$data.trackingForm, 'disposeResult', '');
+                        this.$set(this.$data.trackingForm, 'recordDetails', '');
                     }
                     else{
                         //查看风险

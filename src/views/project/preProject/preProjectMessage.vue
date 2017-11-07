@@ -82,7 +82,7 @@
         <!-- 发起申请 对话框-->
         <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock="isBlock" :documentInfo="documentInfo" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
+        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock="isBlock" :documentInfo="documentInfo" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval" @closeShowModal="closeShowModal"></progress-forms>
     </div>
 </template>
 
@@ -603,6 +603,9 @@ export default {
             });
         },
         cancleApproval() {
+            this.progressModal = false;
+        },
+        closeShowModal(){
             this.progressModal = false;
         }
     }

@@ -41,9 +41,9 @@ export default {
         handleRemove(file, fileList) {
             this.documentInfo.forEach((item) => {
                 if (item.uid === file.uid) {
-                    item.type = '2'
-                    item.fileName = item.name,
-                    item.filePath = item.url
+                    item.type = '2';
+                    item.fileName = item.name;
+                    item.filePath = item.url;
                 }
             });
             // console.log("remove documentInfo ***"+JSON.stringify(this.documentInfo));

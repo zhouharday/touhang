@@ -99,9 +99,14 @@ export default {
     //删除
     handleDelete(index, row) {
       deletezhibiao(row.id).then(res => {
-        zhibiaolist().then(res => {
-          this.zhibiaoData = reloadQueryData(res.data.result.formLabels);
-        });
+        if (res.data.status == "200") {
+            zhibiaolist().then(res => {
+              this.zhibiaoData = reloadQueryData(res.data.result.formLabels);
+            });
+        }else {
+            console.log(res);
+            this.$Message.error(res.data.message);
+        }
       });
     },
     addnewzhibiao() {

@@ -236,11 +236,11 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" show-upload-list="false" :data="importData">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" :show-upload-list="showList" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
-                        <a href="http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls" download="资产负债表">模板下载</a>
+                        <a :href="importTemplateUrl" download="资产负债表">模板下载</a>
                     </el-button>
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -360,8 +360,9 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             importUrl:this.api+'/excel//financial',
-            // importUrl:"http://192.168.0.136:9091"+'/excel/financial',
-            importData:{},
+            importTemplateUrl: 'http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls',
+            showList: false,
+            importData: { dataInfoids:''},
             // 经营数据表头
             operatingData: [],
             // 经营数据-添加 表单
@@ -493,7 +494,7 @@ export default {
             this.readControl = readControl;
             this.finacial_title = '财务数据明细';
             getDataFormBody(subjectId).then(resp => {
-                console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let formBody = resp.data.result.dataInfos;
                     //填充表单
@@ -641,7 +642,7 @@ export default {
                         dataCat: dataType == '1' ? 0 : 1
                     };
                     saveDataSubject(data).then(resp => {
-                        console.log("添加数据表头 结果：" + JSON.stringify(resp.data));
+                        // console.log("添加数据表头 结果：" + JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             if (dataType == '1') {
                                 this.operatingForm1 = { baseDate: '', dataType: '' };
@@ -674,14 +675,13 @@ export default {
         // 上传附件的方法
         handleBeforeUpload(file) {
             let activeName = this.activeName;
-            console.log("activeName"+this.activeName);
             let dataInfoid = this.balanceInfo.id+','+this.incomeInfo.id+','+this.cashFlowInfo.id;
-            this.importData = {
-                dataInfoids: dataInfoid
-            }
-            console.log("导入数据"+JSON.stringify(this.importData));
+            this.$set(this.$data.importData, 'dataInfoids', dataInfoid);
+            // console.log("导入数据"+JSON.stringify(this.importData));
         },
         handleSuccess(){
+            this.$Message.info("数据导入成功");
+            this.$refs['import'].clearFiles();
             getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
@@ -710,10 +710,10 @@ export default {
                         }
                     }
                 }else{
-                    this.$message.error(resp.data.message);
+                    this.$Message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('getFee() exists error: ', e);
+                console.log('导入后获取数据 error: ', e);
             })
         }
     },

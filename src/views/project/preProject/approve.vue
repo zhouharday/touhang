@@ -22,7 +22,7 @@
             </el-table>
         </section>
         <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock='isBlock' :documentInfo="documentInfo" :table2="progressTable"></progress-forms>
+        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock='isBlock' :documentInfo="documentInfo" :table2="progressTable" @closeShowModal="closeShowModal"></progress-forms>
     </div>
 </template>
 
@@ -99,6 +99,9 @@ export default {
             });
 
             this.progressModal = true;
+        },
+        closeShowModal(){
+            this.progressModal = false;
         }
     },
     components: {

@@ -49,7 +49,7 @@ export default {
                 desc: '记录'
             },
             value: {
-                text: ''
+                recordText: ''
             },
             recordList: []
         }
@@ -121,7 +121,7 @@ export default {
             });
         },
         resetInput() {
-            this.value.recordText = '';
+            this.$set(this.$data.value, 'recordText', '');
         },
         delRecord(index, item) {
             delRecord(item.id, STATUS_DELETE).then(resp => {
