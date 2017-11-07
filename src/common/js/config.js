@@ -116,6 +116,7 @@ export function filtersPermissionCode_fund(permissionCode) { //check 基金权�
 
 export function checkProjectAuth(code) {
     if (sessionStorage.getItem('permissionCode_project') == null) {
+        console.log("项目权限为空, CODE: " + code + '无权限');
         return false;
     }
     let result = sessionStorage.getItem('permissionCode_project').includes(code);
@@ -127,6 +128,7 @@ export function checkProjectAuth(code) {
 
 export function checkFundAuth(code) {
     if (sessionStorage.getItem('permissionCode_fund') == null) {
+        console.log("基金权限为空, CODE: " + code + '无权限');
         return false;
     }
     let result = sessionStorage.getItem('permissionCode_fund').includes(code);

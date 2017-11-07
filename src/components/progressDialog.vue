@@ -43,15 +43,15 @@
                         <span>审批意见</span>
                     </div>
                 </div>
-                <el-form :model="approvalForm" label-position="right" style="padding: 10px 0 0 50px">
+                <el-form :model="approvalForm" :rules="rule" ref="approvalForm" label-position="right" style="padding: 10px 0 0 50px">
                     <el-form-item label="审批结果">
                         <el-redio-group @change="changeResult">
                             <el-radio v-model="approvalForm.disposeResult" label="1">同意</el-radio>
                             <el-radio v-model="approvalForm.disposeResult" label="2">不同意</el-radio>
                         </el-redio-group>
                     </el-form-item>
-                    <el-form-item v-if="approvalForm.roleId" label="审  批  人">
-                        <el-select v-model="approvalForm.approveUserId" placeholder="请选择审批人" :disabled="!isAccept">
+                    <el-form-item v-if="approvalForm.roleId && approvalForm.disposeResult == '1'" prop="approveUserId" label="审  批  人">
+                        <el-select v-model="approvalForm.approveUserId" placeholder="请选择审批人">
                             <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                             </el-option>
                         </el-select>
@@ -112,7 +112,6 @@ export default {
         return {
             pdfurls:'',
             isshowpdf:false,
-            isAccept: true,
             resultOptions: [
                 {
                     key: -1,
@@ -128,24 +127,24 @@ export default {
                     key: 2,
                     value: '不同意'
                 }
-            ]
+            ],
+            rule: {
+                approveUserId: [
+                    { required: true, message: '请选择下一级审批人', trigger: 'blur' }
+                ]    
+            },
         }
     },
     methods: {
-        changeResult(event){
-            let value = event.target.value;
-            if(value == '1'){
-                this.isAccept = true;
-            }else{
-                this.isAccept = false;
-            }
-        },
         submitHandler(event) {
-            // console.log(this.approvalForm);
-            this.$emit('submit', this.approvalForm);
+            this.$refs["approvalForm"].validate((valid) => {
+                if (valid) {
+                    this.$emit('submit', this.approvalForm);
+                }
+            });
         },
         cancleHandler(event) {
-            this.$emit('cancle', event.target)
+            this.$emit('cancle', event.target);
         },
         preview(url) {
             this.pdfurls = url;

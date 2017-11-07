@@ -429,12 +429,7 @@ export default {
                 }
             ],
             // 风险跟踪 处理记录
-            riskRecords: [
-                {
-                    record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
-                    file: 'AAA.doc'
-                }
-            ],
+            riskRecords: [],
             // 风险跟踪 处理表单
             trackingForm: {
                 disposeResult: ''
