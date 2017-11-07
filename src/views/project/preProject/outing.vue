@@ -106,42 +106,8 @@ export default {
                 handlerUserId: '',
                 exitDate: '',
             },
-            outingData2: [
-                {
-                    id: "",//本条记录id 修改时需要
-                    fundId: "",//基金id
-                    fundName: "",//基金名称
-                    projectExitId: "",
-                    investAmount: '',//投资金额
-                    stockRatio: '',//股权占比
-                    exitAmount: "300",//回款金额
-                    detailsStatus: 1,
-                    editFlag: false
-                }
-            ],
-            documentInfo:[
-                {
-                    type: '1',
-                    name: '退出附件1.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '退出附件1.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '退出附件2.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '退出附件2.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '退出附件3.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '退出附件3.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ]
+            outingData2: [],
+            documentInfo:[]
         }
     },
     created() {
@@ -169,10 +135,12 @@ export default {
                     this.outingForm = resp.data.result.projectExit;
 
                     let documentInfo = resp.data.result.projectExit.documentInfo;
-                    documentInfo.forEach(item => {
-                        item.name = item.name == null ? item.fileName : item.name;
-                        item.url = item.url == null ? item.filePath : item.url;
-                    });
+                    if(documentInfo != null){
+                        documentInfo.forEach(item => {
+                            item.name = item.name == null ? item.fileName : item.name;
+                            item.url = item.url == null ? item.filePath : item.url;
+                        });
+                    }
                     this.$set(this.$data['outingForm'],'documentInfo',documentInfo);
                     
                     this.outingData2 = resp.data.result.projectExitList
@@ -198,7 +166,7 @@ export default {
                 projectExitList: this.outingData2
             };
 
-            console.log('保存退出单: ' + JSON.stringify(data));
+            // console.log('保存退出单: ' + JSON.stringify(data));
             saveExit(this.outingForm, this.outingData2).then(resp => {
                 if (resp.data.status == '200') {
                     this.getExitDetail();

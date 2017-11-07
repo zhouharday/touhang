@@ -45,7 +45,7 @@
                 </el-table>
             </template>
         </div>
-        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf>
+        <div><show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf></div>
     </div>
 </template>
 
