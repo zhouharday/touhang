@@ -51,11 +51,11 @@ export default {
   // },
   created() {
     // console.log(this.isLogged);
-    this.$Message.config({
-    top: 10,
-    duration: 3
-});
-    this.$Message.info('请使用 Google 浏览器，体验更佳哦~~');
+//     this.$Message.config({
+//     top: 10,
+//     duration: 3
+// });
+//     this.$Message.info('请使用 Google 浏览器，体验更佳哦~~');
   },
   mounted() {},
   computed: {
