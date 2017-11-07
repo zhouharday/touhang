@@ -237,8 +237,8 @@
                         <el-row :gutter="20">
                             <el-col :span="24">
                                 <el-form-item label="任务进展" prop="radio" :label-width="formLabelWidth">
-                                    <el-radio class="radio" v-model="form1.radio" label="0">处理中</el-radio>
-                                    <el-radio class="radio" v-model="form1.radio" label="1" @change="radios(radio)">已完成</el-radio>
+                                    <el-radio class="radio" v-model="form1.radio" label="0" :change="changes">处理中</el-radio>
+                                    <el-radio class="radio" v-model="form1.radio" label="1" :change="changes">已完成</el-radio>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -840,6 +840,10 @@ export default {
     };
   },
   methods: {
+    changes(val){
+      console.log(val);
+      // alert(555);
+    },
     del1() {
       //删除指派任务
       this.modal_loading1 = true;
@@ -914,10 +918,10 @@ export default {
       let isTrue = false;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log("submit!");
+          // console.log("submit!");
           return this.isTrue = true;
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
           return this.isTrue = false;
         }
       })
