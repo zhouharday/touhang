@@ -133,29 +133,8 @@ export default {
             prompt: '任务助手小双温馨提示:',
             activeName: 'details',
             proUsers: [], // 项目用户列表
-            message: [
-                {
-                    count: 1,
-                    desc: '2017【经营数据】指标出现警告',
-                    state: true
-                }, {
-                    count: 2,
-                    desc: '2017【年报】指标出现警告',
-                    state: false
-                }
-            ],
-            tableData: {
-                "appraisementValue": 0,
-                "projectCost": "248002",
-                "incomeRatio": "-69%",
-                "newFuying": 0,
-                "investAmount": "4000000",
-                "appraisementChange": 0,
-                "stock": "15",
-                "exitAmount": 1460271,
-                "shareAmount": 1460000,
-                "exitIncome": -2787731
-            },
+            message: [],
+            tableData: {},
             tabs: {
                 tabList:[true, false, false, false, false, false, false, false, false]
             },

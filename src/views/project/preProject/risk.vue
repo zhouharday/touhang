@@ -274,55 +274,9 @@ export default {
                     label: '已完成'
                 }
             ],
-            riskData: [
-                {
-                    riskTheme: 'AAAAAAAAAA',
-                    handlePerson: '',
-                    assignor: '',
-                    startingDate: '',
-                    endingDate: '',
-                    state: ''
-                }
-            ],
-            documentInfo:[
-                {
-                    type: '1',
-                    name: '111.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '111.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '222.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '222.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '333.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '333.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ],
-            recordDocInfo:[
-                {
-                    type: '1',
-                    name: '111.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '111.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '222.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '222.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ]
+            riskData: [],
+            documentInfo:[],
+            recordDocInfo:[]
         }
     },
     components: {
