@@ -106,7 +106,7 @@ export function addNewUser(User,newOrChange) {
             "six":User.sex, //性别
             // "phone":, //电话号码
             "dept":User.department, //部门id
-            "telephone":User.cellphone,
+            "phone":User.cellphone,
             "emil":User.email,
             "id":User.role
         };
@@ -124,7 +124,7 @@ export function addNewUser(User,newOrChange) {
             "six":User.sex, //性别
             // "phone":, //电话号码
             "dept":User.department, //部门id
-            "telephone":User.cellphone,
+            "phone":User.cellphone,
             "emil":User.email
         }
         return service({url: '/user/saveUser', method: 'post', data})

@@ -190,6 +190,15 @@ const actions = {
                     type: 'error'
                 });
                 state.loading = false;
+                return;
+            } else if (data.data.status == '1015') {
+                commit('Notification', {
+                    title: '',
+                    message: data.data.message,
+                    type: 'warning'
+                });
+                state.loading = false;
+                return;
             } else if (data.data.status == '156') { //用户名或密码不正确
                 commit('Notification', {
                     title: '',
@@ -200,6 +209,7 @@ const actions = {
                 // this.$Message.error('用户名或密码不正确，请重新输入');
                 return;
             } else if (data.status == '200') { //登录成功
+                state.loading = false;
                 // console.log(data);
                 if (data.data.result.userInfo.disables == '0') {
                     commit('Notification', {
@@ -209,7 +219,6 @@ const actions = {
                     });
                     return;
                 };
-                state.loading = false;
                 // alert('success');
                 state.approvelType.isLogged = true;
                 // console.log(user);
