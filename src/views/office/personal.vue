@@ -38,11 +38,11 @@
                                 <el-input v-model="form1.phone" auto-complete="off"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="14">
+                        <!-- <el-col :span="14">
                             <el-form-item label="办公电话：" prop="telephone">
                                 <el-input v-model="form1.telephone" auto-complete="off"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="14">
                             <el-form-item label="邮箱：" prop="emil">
                                 <el-input v-model="form1.emil" auto-complete="off"></el-input>
@@ -267,7 +267,7 @@ export default {
               });
               this.form1.companyName = this.user.merchants[0].merchant_name;
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -293,7 +293,7 @@ export default {
               console.log(res.data);
               this.selectpersonalInfo();
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -315,14 +315,13 @@ export default {
               console.log(res.data);
               this.department = res.data.result;
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     updatePass() {
@@ -341,16 +340,13 @@ export default {
             if (res.data.status == "200") {
               console.log(res.data);
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "1014") {
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     }
   }
