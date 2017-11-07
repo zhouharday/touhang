@@ -155,21 +155,6 @@ const mutations = {
                 console.log(error);
             })
     },
-    filtersPermissionCode_project(state, str) { //过滤项目按钮方法
-        let haveBtn = state.permissionCode_project.includes(str.permissionCode);
-        if (haveBtn) {
-            state.projectPermissions = true;
-        } else {
-            state.projectPermissions = false;
-        }
-    },
-    filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        let haveBtn = sessionStorage.getItem('permissionCode_fund').includes(str.permissionCode);
-        if (haveBtn) {
-            return true;
-        }
-        return false;
-    }
 };
 
 const actions = {
@@ -294,7 +279,7 @@ const actions = {
                                 message: '登录成功',
                                 type: 'success'
                             });
-                        }
+                        };
                         // console.log('um_id:' + state.merchants[0].um_id);
                         // console.log('//////////////////////////////////////////////////////////////////////////');
                         state.logoSrc.logo = data.data.result.merchants[0].logo; //企业logo
