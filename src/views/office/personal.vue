@@ -191,7 +191,7 @@ export default {
         this.isSendCode = !this.isSendCode;
         // this.valueData = false;
         var self = this;
-        var sec = 10;
+        var sec = 60;
         var timer1 = setInterval(function() {
           // self.isSendCode = true;
           self.btnText = sec + "s";
@@ -225,8 +225,8 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
-        });
+          this.$Message.error('请求超时');
+        })
     },
     /************************验证码倒计时结束*********************/
 
@@ -274,7 +274,6 @@ export default {
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     updatePersonalData() {
@@ -300,7 +299,6 @@ export default {
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
     queryList() {
@@ -325,14 +323,16 @@ export default {
         });
     },
     updatePass() {
+      let newPwd = this.md5(this.form2.newPwd2,32);
+      let pass = this.md5(this.form2.currentPwd,32);
       //个人中心密码更改 api
       this.$http
         .post(this.api + "/personalCenter/updatePass", {
           id: this.user.userInfor.id, //用户ID
           mobileCode: this.form2.code, //用户输入的验证码
           phone: this.form2.phone, //用户手机号码
-          newPwd: this.form2.newPwd2, //新的密码
-          pass: this.form2.currentPwd //当前密码
+          newPwd: newPwd, //新的密码
+          pass: pass //当前密码
         })
         .then(res => {
           if (res.status == "200") {
@@ -370,7 +370,7 @@ export default {
   }
 
   .active {
-    background: blue;
+    background: #e4353e;
   }
 }
 .formComponents {
