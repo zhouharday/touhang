@@ -529,7 +529,7 @@ export default {
         endTime: "", //完成时间
         taskState: "", //任务状态
         taskInfo: "", //任务说明
-        recording: "",
+        recording: [],
         receiveUserId: "" //处理记录
       },
       rules1: {

@@ -15,9 +15,9 @@
                 <el-col :span="8" class="searchIpt">
                     <div class="grid-content bg-purple-dark">
                         <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
-                            <el-button class="searchIpt" type="danger" size="small">
+                            <!-- <el-button class="searchIpt" type="danger" size="small">
                                 导出统计表
-                            </el-button>
+                            </el-button> -->
                         </a>
                     </div>
                 </el-col>
