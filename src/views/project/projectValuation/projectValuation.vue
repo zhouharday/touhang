@@ -19,7 +19,7 @@
                 <template scope="scope">
                     <span v-if="!scope.row.editFlag">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                        <el-select @change="changeType" v-model="scope.row.arithmeticType" placeholder="请选择算法类型">
+                        <el-select @change="changeType(scope.row.arithmeticType, scope.row)" v-model="scope.row.arithmeticType" placeholder="请选择算法类型">
                             <el-option v-for="item in typeOptions" :key="item.key" :label="item.value" :value="item.key">
                             </el-option>
                         </el-select>
@@ -28,15 +28,15 @@
             </el-table-column>
             <el-table-column label="估值参数" align="center" width="400px">
                 <template scope="scope">
-                    <span v-if="!scope.row.editFlag">{{note1}}： {{ scope.row.appraisementParamer}}　X　{{note2}}： {{scope.row.appraisementParamerTwo}}　X　{{note3}}： {{scope.row.stockRatio}}%</span>
+                    <span v-if="!scope.row.editFlag">{{scope.row.note1}}： {{ scope.row.appraisementParamer}}　x　{{scope.row.note2}}： {{scope.row.appraisementParamerTwo}}　x　{{scope.row.note3}}： {{scope.row.stockRatio}}%</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
                         <el-row width="100%">
                             <el-col style="line-height:47px">
-                                {{note1}}
+                                {{scope.row.note1}}
                                 <el-input @change="changeParam(scope.$index, scope.row)" v-model="scope.row.appraisementParamer" auto-complete="off" style="width:50px;height:47px"></el-input>
-                                X {{note2}}
+                                X {{scope.row.note2}}
                                 <el-input @change="changeParam(scope.$index, scope.row)" v-model="scope.row.appraisementParamerTwo" auto-complete="off" style="width:50px;height:47px"></el-input>
-                                X {{note3}}
+                                X {{scope.row.note3}}
                                 <el-input :value="scope.row.stockRatio/100" disabled auto-complete="off" style="width:50px;height:47px">
                                 </el-input>
                             </el-col>
@@ -174,10 +174,16 @@ export default {
             };
             getAppraisementList(params).then(resp => {
                 if (resp.data.status == '200') {
-                    let dataList = resp.data.result.list.forEach(function(item, index){
+                    var _typeOptions = this.typeOptions;
+                    let dataList = resp.data.result.list;
+                    dataList.forEach(function(item, index){
                         item.editFlag = false;
+                        if(item.arithmeticType){
+                            item.note1 = _typeOptions[item.arithmeticType - 1].note1;
+                            item.note2 = _typeOptions[item.arithmeticType - 1].note2;
+                        }
                     });
-                    this.tableData = resp.data.result.list || [];
+                    this.tableData = dataList;
                     this.total = resp.data.result.total || 0;
                 } else if (resp.data.status == '49999') {
                     this.operatingData = [];
@@ -189,9 +195,9 @@ export default {
                 console.log('getProjectValuation() exists error: ', e);
             });
         },
-        changeType(val){
-            this.note1 = this.typeOptions[val-1].note1;
-            this.note2 = this.typeOptions[val-1].note2;
+        changeType(val, row){
+            row.note1 = this.typeOptions[val-1].note1;
+            row.note2 = this.typeOptions[val-1].note2;
         },
         changeParam(index, row){
             row.appraisementValue = row.appraisementParamer*row.appraisementParamerTwo*row.stockRatio/100;

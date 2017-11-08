@@ -141,7 +141,7 @@ export default {
                             item.url = item.url == null ? item.filePath : item.url;
                         });
                     }
-                    this.$set(this.$data['outingForm'],'documentInfo',documentInfo);
+                    this.$set(this.$data.outingForm,'documentInfo',documentInfo);
                     
                     this.outingData2 = resp.data.result.projectExitList
                 }
@@ -160,7 +160,7 @@ export default {
             this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
                 ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
 
-            this.outingForm.documentInfo = this.documentInfo;
+            // this.outingForm.documentInfo = this.documentInfo;
             let data = {
                 projectExit: this.outingForm,
                 projectExitList: this.outingData2
@@ -186,10 +186,10 @@ export default {
             this.outingForm.exitAmount = sum;
         },
         uploadSuccess(documentInfo, dataName){
-            this.$set(this.$data, dataName, documentInfo);
+            this.$set(this.$data.outingForm, dataName, documentInfo);
         },
         removeSucess(documentInfo, dataName){
-            this.$set(this.$data, dataName, documentInfo);
+            this.$set(this.$data.outingForm, dataName, documentInfo);
         }
     }
 }
