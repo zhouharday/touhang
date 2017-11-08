@@ -1,43 +1,43 @@
 <template>
-    <div class="login-wrap">
-        <div>
-            <div class="login-entangle">
-                <p class="login-left">Lead Investor</p>
-                <p class="login-center">Financial investment</p>
-                <div class="login-bottom">
-                    <span class="left-fir">高效</span>
-                    <span class="left-dot"></span>
-                    <span class="left-sec">信任</span>
-                    <span class="right-dot"></span>
-                    <span class="left-thi">依赖</span>
-                </div>
-            </div>
-            <div class="login-box">
-                <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval" @keyup.enter.native="submitForm">
-                </component>
-                <div class="login_btn">
-                    <Button type="button" :loading="loading" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</Button>
-                </div>
-                <hr class="hr" />
-                <div class="login-right-bottom">
-                    <p>
-                        <img src="/static/img/联系我们.png">
-                    </p>
-                    <p>
-                        <img src="/static/img/关于我们.png">
-                    </p>
-                    <p>
-                        <img src="/static/img/App下载.png">
-                    </p>
-                </div>
-                <div class="login-footer">
-                    <p>联系我们</p>
-                    <p>关于我们</p>
-                    <p>APP下载</p>
-                </div>
-            </div>
+  <div class="login-wrap">
+    <div>
+      <div class="login-entangle">
+        <p class="login-left">Lead Investor</p>
+        <p class="login-center">Financial investment</p>
+        <div class="login-bottom">
+          <span class="left-fir">高效</span>
+          <span class="left-dot"></span>
+          <span class="left-sec">信任</span>
+          <span class="right-dot"></span>
+          <span class="left-thi">依赖</span>
         </div>
+      </div>
+      <div class="login-box">
+        <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval" @keyup.enter.native="submitForm">
+        </component>
+        <div class="login_btn">
+          <Button type="button" :loading="loading" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</Button>
+        </div>
+        <hr class="hr" />
+        <div class="login-right-bottom">
+          <p>
+            <img src="/static/img/联系我们.png">
+          </p>
+          <p>
+            <img src="/static/img/关于我们.png">
+          </p>
+          <p>
+            <img src="/static/img/App下载.png">
+          </p>
+        </div>
+        <div class="login-footer">
+          <p>联系我们</p>
+          <p>关于我们</p>
+          <p>APP下载</p>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
