@@ -384,7 +384,7 @@ section {
   .el-form-item_div {
     .el-form-item_div1 {
       min-height: 34px;
-      line-height: 2;
+      line-height: 1.5;
       padding: 3px 10px;
       background: #eef1f6;
     }
