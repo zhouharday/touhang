@@ -565,6 +565,7 @@ export default {
 @import "../../common/styles/variable.less";
 .fund {
     width: 100%;
+    // min-width: 1343px;
     /*height: 100%;*/
     background-color: #fff;
     padding: 24px;

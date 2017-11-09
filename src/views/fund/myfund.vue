@@ -8,7 +8,7 @@
         <!-- 基金阶段 -->
         <my-filter :chooseInfo="allFundStage" @getIdInfo="clickStage"></my-filter>
         <!-- 基金状态 -->
-        <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter>
+        <!-- <my-filter :chooseInfo="allFundStatus" @getIdInfo="clickStatus"></my-filter> -->
     </div>
     <div class="tables">
         <table-header :theme="theme" :data="tableInfo" @add="watchTarget" @show="leadingIn" @down="downloadTem" class="addPadding">
