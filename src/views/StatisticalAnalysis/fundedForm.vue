@@ -15,21 +15,24 @@
                 <el-col :span="8" class="searchIpt">
                     <div class="grid-content bg-purple-dark">
                         <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
-                            <el-button class="searchIpt" type="danger" size="small">
+                            <!-- <el-button class="searchIpt" type="danger" size="small">
                                 导出统计表
-                            </el-button>
+                            </el-button> -->
                         </a>
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="fundedTabData" border style="width: 100%">
+            <el-table :data="fundedTabData" border stripe style="width: 100%">
                 <el-table-column prop="investorName" label="投资者" align="center">
                 </el-table-column>
-                <el-table-column prop="investorTypeId" label="类型" align="center">
+                <el-table-column prop="investorType" label="类型" align="center">
                 </el-table-column>
                 <el-table-column prop="fundName" label="基金名称" align="center">
                 </el-table-column>
-                <el-table-column prop="signDate" label="签订日期" align="center">
+                <el-table-column label="签订日期" align="center">
+                  <template scope='scope'>
+                    <div>{{scope.row.signDate | formatDateDetails}}</div>
+                  </template>
                 </el-table-column>
                 <el-table-column prop="subscribeAmount" label="认缴金额" align="center">
                 </el-table-column>
@@ -39,14 +42,15 @@
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
-                </el-pagination>
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+              </el-pagination>
             </div>
         </div>
     </section>
 </template>
 
 <script>
+import "../../common/js/filter";
 export default {
   computed: {
     user() {
@@ -120,25 +124,24 @@ export default {
         })
         .catch(error => {
           this.$Message.error("请求超时");
-          console.log("请求超时");
         });
     },
-    handleCurrentChange(page) { //分页页码切换
-      //获取tabList3 分页数据
-      // console.log(pages);
+    handleCurrentChange(page) {
+      //分页页码切换
       // this.page = '';
       this.page = page;
-      this.searchInvestorList(this.page, this.pageSize,'');
+      this.searchInvestorList(this.page, this.pageSize, "");
     },
-    handleSizeChange(pageSize) { //分页条数切换
+    handleSizeChange(pageSize) {
+      //分页条数切换
       // this.pageSize = '';
       this.pageSize = pageSize;
-      this.searchInvestorList(this.page, this.pageSize,'');
+      this.searchInvestorList(this.page, this.pageSize, "");
     },
-    handleIconClick() { //模糊查询
-      this.searchInvestorList(this.page, this.pageSize,this.input2);
-    },
-    
+    handleIconClick() {
+      //模糊查询
+      this.searchInvestorList(this.page, this.pageSize, this.input2);
+    }
   }
 };
 </script>

@@ -61,12 +61,7 @@
             </el-col>
             <el-col :span="24">
                 <el-form-item label="出资协议附件">
-                    <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
-                        <div style="padding: 20px 0">
-                            <Icon type="ios-cloud-upload" size="52"></Icon>
-                            <p>点击或将文件拖拽到这里上传</p>
-                        </div>
-                    </Upload>
+                    <upload-files @uploadSuccess="uploadSuccess" :documentInfo="fundsInfo.documentInfo"></upload-files>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -75,9 +70,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {
-    GetProtocolsList
-} from 'api/investor'
+import {mapGetters, mapActions} from 'vuex'
+import uploadFiles from 'components/uploadFiles'
 export default {
     props: {
         fundsInfo: {
@@ -87,14 +81,13 @@ export default {
     },
     data() {
         return {
-            allAgreement: [],
             agreementList: '',
             size: 1000,
             rules1: {
                 agreementName: [{
                     required: true,
                     message: '请选择协议名称',
-                    trigger: 'change'
+                    trigger: 'blue'
                 }],
                 paidAmount: [{
                     type: 'number',
@@ -125,17 +118,21 @@ export default {
             this.fundsInfo.subscribeAmount = current.subscribeAmount
             this.fundsInfo.residueAmount = current.residueAmount
         },
+        uploadSuccess(list) {
+            this.fundsInfo.documentInfo = list
+            // console.log(list)
+        },
+        ...mapActions([
+            'getAgreementInfo'
+        ])
     },
-    created() {
-        GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
-            if (res.status == '200') {
-                // console.log(res)
-                this.allAgreement = res.data.result.list
-            }
-        }).catch(err => {
-            let response = err.data
-            this.$Message.error(response.message || '获取资金明细失败！')
+    computed: {
+        ...mapGetters({
+            allAgreement: 'agreement'
         })
+    },
+    components: {
+        uploadFiles
     }
 }
 </script>

@@ -7,7 +7,7 @@
         <div class="right">
             <!-- :disabled="judgementFundStage" -->
             <el-button type="danger" @click="changeStep">下一阶段</el-button>
-            <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
+            <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="stopSuppression">中止
             </el-button>
         </div>
     </div>
@@ -30,23 +30,26 @@
                     <span class="count">{{index + 1}}</span>
                     <p class="desc">{{item.title}}</p>
                     <span class="state" v-if="item.type == '1'">
-                        <span @click="showModalUpload(index)"
+                        <span @click="showModalUpload(index, item.id)"
                               v-if="item.status == '0'">
                               立即上传
                         </span>
                     <span v-else="item.status !== '0'">已完成</span>
                     </span>
+                    <!-- {{item}} -->
                     <span class="state" v-if="item.type == '2'">
-                        <span v-if="item.status == '0'">立即申请</span>
-                    <span v-else="item.status !== '0'">已完成</span>
+                        <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">立即审批</span>
+                        <span v-else="item.status !== '0'">已完成</span>
                     </span>
                     <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
-                        <span v-if="item.status == '0'">查看进度</span>
-                    <span v-else="item.status !== '0'">已完成</span>
+                        <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">查看进度</span>
+                        <span v-else="item.status !== '0'">已完成</span>
                     </span>
                 </div>
             </div>
             <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
+            <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="confirmApplyModal" @cancle="cancleApplyModal"></apply-dialog>
+            <progress-dialog :progressModal="progressModal" :documentInfo="documentInfo" :table2="approveStageNodeData" :approvalForm="approvalForm" :isBlock="whichClick" :auditorOptions="auditorOptions" :dialogTitle="dialogTitle" @submit="confirmProgress" @cancle="cancalProgress" @closeShowModal="closeShowModal"></progress-dialog>
         </div>
     </div>
     <div class="chart">
@@ -59,9 +62,9 @@
             </el-col>
         </el-row>
     </div>
-    <div class="tabs">
+    <div class="tabs" v-if="existPermissions">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="详情" name="details" class="tab_list">
+            <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
                 <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
                 </my-details>
             </el-tab-pane>
@@ -69,7 +72,7 @@
                 <team :teamData="teamData"></team>
             </el-tab-pane>
             <el-tab-pane label="审批" name="examine" class="tab_list">
-                <examine></examine>
+                <examine :examineData="examineData"></examine>
             </el-tab-pane>
             <el-tab-pane label="投资者" name="Investor" class="tab_list">
                 <investor :investorData="investorData"></investor>
@@ -77,16 +80,16 @@
             <el-tab-pane label="投资项目" name="project" class="tab_list">
                 <projects :projectsData="projectsData"></projects>
             </el-tab-pane>
-            <el-tab-pane label="文档" name="file" class="tab_list">
+            <el-tab-pane label="文档" name="file" class="tab_list" v-if="haveJurisdiction('GL-JJWD')">
                 <my-file :fileListData="fileListData"></my-file>
             </el-tab-pane>
-            <el-tab-pane label="运营管理" name="manage" class="tab_list">
+            <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
                 <manage :costData="costData" :fundName="formDetails.fundName"></manage>
             </el-tab-pane>
         </el-tabs>
     </div>
     <!-- 中止确认弹框 -->
-    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="deleteReminders=false" @cancel="deleteReminders=false">
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="confirmSuppression" @cancel="deleteReminders=false">
     </delete-reminders>
 </div>
 </template>
@@ -103,6 +106,9 @@ import Manage from './manage'
 import echarts from '../../components/echarts'
 import deleteReminders from 'components/deleteReminders'
 import MyUpload from 'components/upload'
+import {checkFundAuth} from 'common/js/config'
+import applyDialog from 'components/applyDialog'
+import progressDialog from 'components/progressDialog'
 import {
     getMyFundDetails,
     getFundTeamList,
@@ -114,7 +120,13 @@ import {
     getFundApprList,
     selectStageUploadDocument,
     slectStageAllocation,
-    nextStage
+    nextStage,
+    getApproveList,
+    getTeamListPage,
+    startApproveInfo,
+    getApproveInfo,
+    approveResult,
+    suspendFund
 } from 'api/fund'
 const NUM = 2
 export default {
@@ -133,6 +145,17 @@ export default {
             tableData: {},
             activeName: 'details',
             showOrhiddren: true,
+            applyModal: false, // 发起申请对话框
+            roleId: '0',
+            auditorOptions: [], // 审批人员列表
+            progressModal: false, // 立即审批对话框
+            existPermissions: false, // 当前用户是否拥有权限
+            approvalForm: {
+                disposeResult: '1',
+                approveUserId: '',
+                remark: ''
+            },
+            applyForm: {},
             formDetails: {
                 fundName: '',
                 fundNo: '',
@@ -203,6 +226,7 @@ export default {
             fileListData: [], // 文档列表
             projectsData: [], // 投资项目
             costData: [], // 基金费用
+            examineData: [], // 审批数据
             file: null,
             listIndex: 0, // 当前点击id
             loadingStatus: false,
@@ -233,6 +257,13 @@ export default {
                         this.investorData = res.data.result
                     }
                 })
+            } else if (this.activeName === 'examine') {
+                getApproveList(this.$route.params.id).then((res) => {
+                    if(res.status === 200) {
+                        // console.log(res)
+                        this.examineData = res.data.result.list
+                    }
+                })
             } else if (this.activeName == 'project') {
                 getProjectContractByFund(this.$route.params.id).then((res) => {
                     if (res.status == '200') {
@@ -260,19 +291,102 @@ export default {
         changeStep() {
             nextStage(this.$route.params.id, NUM, this.currentStep).then((res) => {
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     if (res.data.status == '9021') {
                         this.$Message.error(res.data.message || '操作失败，有未完成的任务')
                     } else if (res.data.status == '9022') {
                         this.$Message.error(res.data.message || '请勿重复操作')
+                    } else if (res.data.status === '9030') {
+                        console.log(res)
+                        this.applyModal = true
+                        this.applyForm = res.data.result
+                        this.roleId = res.data.result.roleId
+                        this._getTeamlist(this.roleId, this.$route.params.id)
+                    } else if (res.data.status === '9032') {
+                        this.$Message.info(res.data.message || '操作失败,有审批未完成')
                     } else if (res.data.status == '200') {
                         this.getDataStageAddUpload()
                     }
                 }
             })
         },
-        showModalUpload(index) { // 显示上传模态框
+        confirmApplyModal() { // 确认提交审批申请
+            this.applyForm.userId = JSON.parse(sessionStorage.getItem('userInfor')).id
+            startApproveInfo(this.applyForm).then((res) => {
+                // console.log(this.applyForm)
+                if (res.status === 200) {
+                    this.getDataStageAddUpload()
+                    this.applyModal = false
+                }
+            }).catch(err => {
+                this.$Message.error('提交申请失败！')
+            })
+        },
+        cancleApplyModal() {
+            this.applyModal = false
+            return false
+        },
+        showProgressModal(id, type) { // 立即审批方法
+            if (type === 2) {
+                this.whichClick = true
+            } else {
+                this.whichClick = false
+            }
+            getApproveInfo(id).then((res) => {
+                if(res.status === 200) {
+                    this.dialogTitle = res.data.result.approveTitle
+                    this.documentInfo = res.data.result.dataDocumentResult
+                    this.approveStageNodeData = res.data.result.approveStageNodeData
+                    this._getTeamlist(res.data.result.roleId, this.$route.params.id)
+                    this.approvalForm = Object.assign({}, this.approvalForm, {
+                        id: res.data.result.id,
+                        roleId: res.data.result.roleId,
+                        orderValue: res.data.result.orderValue,
+                        stageId: sessionStorage.getItem('currentStep'),
+                        typeId: this.$route.params.id,
+                        type: 2
+                    })
+                    this.progressModal = true
+                }
+                console.log(res)
+            })
+        },
+        confirmProgress() {
+            approveResult(this.approvalForm).then((res) => {
+                if(res.status === 200) {
+                    if (res.data.status === 200) {
+                        this.$Message.success(res.data.message || '审批成功!')
+                    } else if (res.data.status == '9131') {
+                        this.$Message.success(res.data.message || '您已经完成此审批，不能重复审批!')
+                    }
+                    this.progressModal = false
+                    this.approvalForm = {
+                        disposeResult: '1',
+                        approveUserId: '',
+                        remark: ''
+                    }
+                    this.getDataStageAddUpload()
+                }
+            }).catch(err => {
+                this.$Message.error('审批失败！')
+            })
+        },
+        cancalProgress() {
+            this.progressModal = false
+            this.approvalForm = {
+                disposeResult: '1',
+                approveUserId: '',
+                remark: ''
+            }
+        },
+        closeShowModal() {
+            this.progressModal = false
+        },
+        showModalUpload(index, id) { // 显示上传模态框
+            this.stepId = id
+            this.uploadInfo.fileId = id
             this.listIndex = index
+            // console.log(this.uploadInfo)
             this.modalUpload = true
         },
         cancelModal() { //隐藏上传模态框
@@ -296,12 +410,12 @@ export default {
                     }
                     sessionStorage.setItem('stepId', this.stepId)
                     sessionStorage.setItem('currentStep', res.data.stageId)
-                    console.log(res)
+                    // console.log(res)
                 }
             })
             slectStageAllocation().then((res) => { // 获取配置项目或者基金的阶段
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     this.steps = res.data.result
                     sessionStorage.setItem('steps', JSON.stringify(res.data.result))
                 }
@@ -316,6 +430,23 @@ export default {
         //         return true
         //     }
         // },
+        stopSuppression() { //
+            this.deleteReminders = true
+        },
+        confirmSuppression() { // 确认中止
+            suspendFund(this.$route.params.id).then((res) => {
+                if (res.status === 200) {
+                    if (res.data.status === '9015') {
+                        this.$Message.info(res.data.message || '该阶段无法中止！')
+                    } else if (res.data.status === '200') {
+                        this.$Message.info(res.data.message || '操作成功!')
+                    }
+                }
+            }).catch(err => {
+                this.$Message.info('该阶段无法中止！')
+            })
+            this.deleteReminders = false
+        },
         _getFundList(id) {
             getMyFundDetails(id).then((res) => {
                 if (res.status == '200') {
@@ -328,7 +459,14 @@ export default {
                     this.formMIS = Object.assign({}, {
                         flag: true
                     }, res.data.result.fundManageInfo)
-                    this.formAccountInfo = res.data.result.fundAccinfo
+
+                    if(res.data.result.fundAccinfo) {
+                        var fundAccinfo = res.data.result.fundAccinfo
+                        fundAccinfo.map((x) => {
+                            x.flag = true
+                        })
+                        this.formAccountInfo = fundAccinfo
+                    }
                     if (res.data.result.fundBaseInfo.fundOrgValue) {
                         this.fundLevel.priority = res.data.result.fundBaseInfo.fundOrgValue.split(':')[0]
                         this.fundLevel.intermediateStage = res.data.result.fundBaseInfo.fundOrgValue.split(':')[1]
@@ -347,16 +485,49 @@ export default {
                     }
                 }
             })
-        }
-    },
-    mounted() {
-        this.$nextTick(() => {
-            getFundApprList(this.$route.params.id).then((res) => {
-                if (res.status == '200') {
+        },
+        haveJurisdiction(str) {
+            if (checkFundAuth(str)) {
+                return true
+            } else {
+                return false
+            }
+        },
+        _getTeamlist(roleId, id) {
+            getTeamListPage(roleId, id).then((res) => {
+                if(res.status === 200) {
                     console.log(res)
+                    if (res.data.result.list) {
+                        this.auditorOptions = res.data.result.list
+                    } else {
+                        this.auditorOptions = []
+                    }
                 }
             })
-        })
+        },
+        _existPermissions() {
+            getFundTeamList(this.$route.params.id).then((res) => {
+                var getIdList = []
+                var currentUserId = JSON.parse(sessionStorage.getItem('userInfor')).id
+                if (res.status === 200 && res.data.result) {
+                    res.data.result.map((x) => {
+                        getIdList.push(x.userId)
+                    })
+                } else {
+                    this.existPermissions = false
+                }
+                this.existPermissions = getIdList.includes(currentUserId) ? true : false
+            })
+        },
+    },
+    mounted() {
+        // this.$nextTick(() => {
+        //     getFundApprList(this.$route.params.id).then((res) => {
+        //         if (res.status == '200') {
+        //             console.log(res)
+        //         }
+        //     })
+        // })
         this.getDataStageAddUpload()
     },
     created() {
@@ -367,6 +538,7 @@ export default {
             }
         })
         this._getFundList(this.$route.params.id)
+        this._existPermissions()
     },
     beforeRouteUpdate(to, from, next) {
         this._getFundList(to.params.id)
@@ -382,7 +554,9 @@ export default {
         myFile: File,
         Manage,
         deleteReminders,
-        MyUpload
+        MyUpload,
+        applyDialog,
+        progressDialog
     }
 }
 </script>

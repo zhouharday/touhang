@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="riskTable">
-            <tabel-header :data="headerInfo_risk" @add="openAddModal"></tabel-header>
+            <tabel-header :data="checkProjectAuth('FXGL-tianjia') ? headerInfo_risk : _headerInfo_risk" @add="openAddModal"></tabel-header>
             <el-table :data="riskData" border style="width: 100%" align="center">
                 <el-table-column label="主题" prop="riskTheme" align="center">
                 </el-table-column>
@@ -18,8 +18,8 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
-                        <el-button v-if="scope.row.status != '已完成' && userId == scope.row.receivedUserId" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
-                        <el-button v-if="userId == scope.row.seedUserId" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-genzong') && (scope.row.status != '已完成' && userId == scope.row.receivedUserId)" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-shanchu') && (userId == scope.row.seedUserId)" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -161,7 +161,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadSuccess($event, recordDocInfo)" :documentInfo="recordDocInfo"></upload-files>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -176,7 +176,7 @@
 
 <script>
 import tabelHeader from 'components/tabelHeader'
-import { changeDate } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 import uploadFiles from 'components/uploadFiles'
 import { dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams } from 'api/projectPre'
 
@@ -189,6 +189,10 @@ export default {
         proId: {
             type: String,
             default: ''
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -250,8 +254,7 @@ export default {
             recordList: [],
             trackingForm: {
                 disposeResult: '',
-                content: '',
-                appendix: ''
+                recordDetails: ''
             },
             rules2: {
                 disposeResult: [
@@ -271,55 +274,9 @@ export default {
                     label: '已完成'
                 }
             ],
-            riskData: [
-                {
-                    riskTheme: 'AAAAAAAAAA',
-                    handlePerson: '',
-                    assignor: '',
-                    startingDate: '',
-                    endingDate: '',
-                    state: ''
-                }
-            ],
-            documentInfo:[
-                {
-                    type: '1',
-                    name: '111.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '111.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '222.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '222.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '333.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '333.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ],
-            recordDocInfo:[
-                {
-                    type: '1',
-                    name: '111.jpg',
-                    url: 'http://www.xxx.com/img1.jpg',
-                    fileName: '111.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                },
-                {
-                    type: '1',
-                    name: '222.jpg',
-                    url: 'http://www.xxx.com/img2.jpg',
-                    fileName: '222.jpg',
-                    filePath: 'http://www.xxx.com/img1.jpg'
-                }
-            ]
+            riskData: [],
+            documentInfo:[],
+            recordDocInfo:[]
         }
     },
     components: {
@@ -336,6 +293,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init() {
             this.initInfo();
             this.getDatas();
@@ -384,6 +344,7 @@ export default {
         },
         //查看风险详情
         getRiskInfo(riskId, optType) {
+            console.log(optType == '1');
             //当前处理风险ID
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
@@ -397,6 +358,11 @@ export default {
                     if(optType == '1'){
                         //跟踪风险
                         this.modalTracking=true;
+                        this.trackingForm =  {
+                            disposeResult: '',
+                            recordDetails: ''
+                        }
+                        this.recordDocInfo = [];
                     }
                     else{
                         //查看风险

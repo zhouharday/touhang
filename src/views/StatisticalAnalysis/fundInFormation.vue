@@ -26,14 +26,14 @@
                 <el-col :span="8" class="searchIpt">
                     <div class="grid-content bg-purple-dark">
                         <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
-                            <el-button class="searchIpt" type="danger" size="small">
+                            <!-- <el-button class="searchIpt" type="danger" size="small">
                                 导出统计表
-                            </el-button>
+                            </el-button> -->
                         </a>
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="fundTabData" border style="width: 100%">
+            <el-table :data="fundTabData" border stripe style="width: 100%">
                 <el-table-column fixed="left" prop="fundName" label="基金名称" width="230" align="center">
                 </el-table-column>
                 <el-table-column prop="orgName" label="组织类型" width="150" align="center">
@@ -175,6 +175,12 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
+              res.data.result.list.map((item,index)=> {
+                // res.data.result.list[index].map((ele,index)=> {
+                  if(res.data.result.list[index].fundAppraisement == 'null'){
+                    res.data.result.list[index].fundAppraisement = '';
+                  }
+              });
               this.fundTabData = res.data.result.list;
               this.pages_1.pageNum = res.data.result.pageNum; //当前页码
               this.pages_1.total = res.data.result.total; //数据总数

@@ -2,7 +2,7 @@
 <!-- 运营管理页面 -->
 <div class="manage">
     <Tabs value="fundCost" @on-click="changeTabs">
-        <TabPane label="基金费用" name="fundCost">
+        <TabPane label="基金费用" name="fundCost" v-if="haveJurisdiction('GL-JJXQ-JJFY')">
             <tabel-header :data="costInfo" @add="methodCost"></tabel-header>
             <el-table :data="costData" border :show-summary="true" style="width: 100%">
                 <el-table-column label="费用类型" align="center">
@@ -23,14 +23,14 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                        <el-button type="text" size="small"
-                       @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                       @click="handleEdit(scope.$index, scope.row)" v-if="haveJurisdiction('GL-JJXQ-JJFY-BJ')">编辑</el-button>
                        <el-button type="text" size="small"
-                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                       @click="handleDelete(scope.$index, scope.row)" v-if="haveJurisdiction('GL-JJXQ-JJFY-SC')">删除</el-button>
                    </template>
                 </el-table-column>
             </el-table>
         </TabPane>
-        <TabPane label="收益分配" name="income">
+        <TabPane label="收益分配" name="income" v-if="haveJurisdiction('GL-JJXQ-SYFP')">
             <tabel-header :data="incomeInfo" @add="methodIncome"></tabel-header>
             <el-table :data="incomeData" border style="width: 100%">
                 <el-table-column label="分配日期" align="center">
@@ -49,8 +49,8 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                       <el-button type="text" size="small" @click="editIncomeDis(scope.$index, scope.row)">编辑</el-button>
-                       <el-button type="text" size="small" @click="delIncomeDis(scope.$index, scope.row)">删除</el-button>
+                       <el-button type="text" size="small" @click="editIncomeDis(scope.$index, scope.row)" v-if="haveJurisdiction('GL-JJXQ-SYFP-BJ')">编辑</el-button>
+                       <el-button type="text" size="small" @click="delIncomeDis(scope.$index, scope.row)" v-if="haveJurisdiction('GL-JJXQ-SYFP-SC')">删除</el-button>
                    </template>
                 </el-table-column>
             </el-table>
@@ -147,6 +147,9 @@
 
 <script type="text/ecmascript-6">
 import 'common/js/filter'
+import {
+    checkFundAuth
+} from 'common/js/config'
 import tabelHeader from 'components/tabelHeader'
 import deleteReminders from 'components/deleteReminders'
 import {
@@ -174,20 +177,6 @@ export default {
     },
     data() {
         return {
-            costInfo: {
-                desc: '基金费用',
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '添加'
-                }]
-            },
-            incomeInfo: {
-                desc: '收益分配',
-                btnGroup: [{
-                    icon: 'plus-round',
-                    explain: '添加'
-                }]
-            },
             incomeData: [],
             formLabelWidth: '100px',
             modalCost: false,
@@ -234,7 +223,7 @@ export default {
             this.modalIncome = true
             this.profit = false
             getFundAllocationDetails(row.id).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
                     this.tableData = res.data.params
                 }
@@ -254,7 +243,7 @@ export default {
                     fundAllocation: this.formIncome,
                     params: this.params
                 }).then((res) => {
-                    if(res.status == '200') {
+                    if (res.status == '200') {
                         this.$Message.success(res.data.message || '添加成功！')
                         this.modalIncome = false
                         this._getAllocationList()
@@ -269,7 +258,7 @@ export default {
                         this.$Message.success(res.data.message || '编辑成功！')
                         this.modalIncome = false
                         this._getAllocationList()
-                    } else if(res.status == '9004') {
+                    } else if (res.status == '9004') {
                         this.$Message.success(res.data.message || '有投资者退出,无法更改!')
                         this.modalIncome = false
                     }
@@ -302,7 +291,7 @@ export default {
         },
         comfirmDel() {
             deleteAllocation(this.paramsId).then((res) => {
-                if(res.status == '200') {
+                if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！')
                     this.deleteReminders = false
                     this._getAllocationList()
@@ -357,16 +346,55 @@ export default {
                     this.incomeData = res.data.result
                 }
             })
+        },
+        haveJurisdiction(str) {
+            if (checkFundAuth(str)) {
+                return true
+            } else {
+                return false
+            }
+        }
+    },
+    computed: {
+        costInfo: function() {
+            if (checkFundAuth('GL-JJXQ-JJFY-TJ')) {
+                return {
+                    desc: '基金费用',
+                    btnGroup: [{
+                        icon: 'plus-round',
+                        explain: '添加'
+                    }]
+                }
+            } else {
+                return {
+                    desc: '基金费用'
+                }
+            }
+        },
+        incomeInfo() {
+            if (checkFundAuth('GL-JJXQ-SYFP-TJ')) {
+                return {
+                    desc: '收益分配',
+                    btnGroup: [{
+                        icon: 'plus-round',
+                        explain: '添加'
+                    }]
+                }
+            } else {
+                return {
+                    desc: '收益分配'
+                }
+            }
         }
     },
     mounted() {
+        // console.log(this.haveJurisdiction('GL-JJXQ-SYFP'))
         costType().then((res) => {
             if (res.status == '200') {
                 this.costTypes = res.data.result
                 window.sessionStorage.setItem('costTypes', JSON.stringify(res.data.result))
             }
         })
-        console.log(this.fundName)
     },
     components: {
         tabelHeader,

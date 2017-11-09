@@ -5,7 +5,7 @@
                 <el-button @click="changeRisk1" :class="{active:f_show}">风险上报</el-button>
                 <el-button @click="changeRisk2" :class="{active:s_show}">风险预警</el-button>
             </div>
-            <div class="rightBtn">
+            <div v-if="checkProjectAuth('FXGL-tianjia')" class="rightBtn">
                 <el-button type="danger" size="small" @click="openAddModal" v-if="addBtn">添加</el-button>
             </div>
         </div>
@@ -26,8 +26,8 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getRiskInfo(scope.row.id, '2')">查看详情</el-button>
-                        <el-button v-if="scope.row.status != '已完成' && userId == scope.row.receivedUserId" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
-                        <el-button v-if="userId == scope.row.seedUserId" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-genzong') && (scope.row.status != '已完成' && userId == scope.row.receivedUserId)" type="text" @click="getRiskInfo(scope.row.id, '1')">跟踪</el-button>
+                        <el-button v-if="checkProjectAuth('FXGL-shanchu') && (userId == scope.row.seedUserId)" type="text" @click="handleDelete(scope.row.id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -159,7 +159,7 @@
                 <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
                     <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
                         <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in proTeam" :key="item.userId" :label="item.userName" :value="item.userId">
+                            <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -168,7 +168,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="recordDocInfo"></upload-files>
+                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -338,7 +338,7 @@
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
 import uploadFiles from 'components/uploadFiles'
-import { changeDate } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 
 import {
     dangers, addDanger, editDanger, delDanger, insertRiskFollower, selectRiskRegister, getTeams
@@ -357,6 +357,10 @@ export default {
         proUsers: {
             type: Array,
             default: []
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     watch: {
@@ -425,12 +429,7 @@ export default {
                 }
             ],
             // 风险跟踪 处理记录
-            riskRecords: [
-                {
-                    record: '2017-06-28 18:42:55   刘备  【处理中】已经提交相应处理方案',
-                    file: 'AAA.doc'
-                }
-            ],
+            riskRecords: [],
             // 风险跟踪 处理表单
             trackingForm: {
                 disposeResult: ''
@@ -544,6 +543,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init() {
             this.getDatas();
             this.getWarningList();
@@ -645,6 +647,8 @@ export default {
                     if(optType == '1'){
                         //跟踪风险
                         this.modalTracking=true;
+                        this.$set(this.$data.trackingForm, 'disposeResult', '');
+                        this.$set(this.$data.trackingForm, 'recordDetails', '');
                     }
                     else{
                         //查看风险
@@ -743,6 +747,7 @@ export default {
             this.f_show = true;
             this.s_show = false;
             this.addBtn = true;
+
         },
         changeRisk2() {
             this.f_show = false;

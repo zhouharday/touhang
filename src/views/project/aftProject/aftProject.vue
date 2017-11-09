@@ -63,16 +63,7 @@ export default {
                 title: '项目类型：',
                 details: []
             },
-            tableData: [{
-                project: '京东',
-                mananger: '刘经理',
-                industry: '房地产',
-                sort: 'PE',
-                investingDate: '2017-09-08',
-                investment: '',
-                state: '',
-                id: 0
-            }]
+            tableData: []
         }
     },
     created() {        

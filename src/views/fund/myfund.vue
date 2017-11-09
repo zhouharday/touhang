@@ -15,7 +15,7 @@
             <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
             </el-input>
         </table-header>
-        <el-table :data="myFund"  v-loading="loading" border style="width: 100%">
+        <el-table :data="myFund" v-loading="loading" border style="width: 100%">
             <el-table-column fixed label="基金名称" width="200" align="center">
                 <template scope="scope">
                     <div class="name" @click="handleRouter(scope.$index, scope.row)">
@@ -95,7 +95,10 @@ import myFilter from 'components/myFilter'
 import deleteReminders from 'components/deleteReminders'
 import Service from 'common/js/fetch'
 import '../../common/js/filter.js' //时间格式过滤器
-import {mapMutations,mapGetters} from 'vuex'
+import {
+    mapMutations,
+    mapGetters
+} from 'vuex'
 import {
     getManagementType,
     getMyFund,
@@ -183,7 +186,7 @@ export default {
                 title: '添加基金',
                 url: '/home/add',
                 name: 'add'
-            })
+            });
             this.$router.push('/home/add')
         },
         handleRouter(index, row) {
@@ -243,7 +246,7 @@ export default {
         getFundListsData() {
             getMyFund(this.page, this.pageSize, this.fundSearch, this.organizationId, this.managementId, this.stageId, this.statusId).then((res) => {
                 if (res.status == '200') {
-                    console.log(res)
+                    // console.log(res)
                     this.myFund = res.data.result.list
                     this.pageTotal = res.data.result.total
                 }

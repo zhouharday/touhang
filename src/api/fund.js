@@ -317,7 +317,8 @@ export function getFundApprList(listId) {
 export function selectStageUploadDocument(fundId, num) {
     const data = {
         typeId: fundId,
-        type: num
+        type: num,
+        userId: JSON.parse(sessionStorage.getItem('userInfor')).id
     }
     return service({url: '/dictionaryController/selectStageUploadDocument', method: 'post', data})
 }
@@ -347,4 +348,45 @@ export function uploadProjectDocument(uploadData) {
         headers: {'Content-Type': 'multipart/form-data; boundary=${bound}'},
         data
     })
+}
+// 审批列表 investProject/getApproveList
+export function getApproveList(fundId) {
+    const data = {
+        typeId: fundId
+    }
+    return service({url: 'investProject/getApproveList', method: 'post', data})
+}
+//获取审批角色
+export function getTeamListPage(id, investId){
+	const data = {
+		roleId: id,
+		inverstProjectId: investId,
+		type: 1, //0:项目   1：基金
+	}
+	return service({url: '/projectRole/getTeamListPage', method: 'post', data})
+}
+//下一阶段，发起申请
+export function startApproveInfo(approveInfo){
+	const data = approveInfo
+	return service({url: 'investProject/startApproveInfo', method: 'post', data})
+}
+// 查看进度或者立即审批  investProject/getApproveInfo
+export function getApproveInfo(approveId) {
+    const data = {
+        id: approveId,
+        merchantId: JSON.parse(sessionStorage.getItem('merchants'))[0].id
+    }
+    return service({url: 'investProject/getApproveInfo', method: 'post', data})
+}
+// 审批 investProject/approveResult
+export function approveResult(result) {
+    const data = result
+    return service({url: 'investProject/approveResult', method: 'post', data})
+}
+// 中止基金 /fund/suspendFund
+export function suspendFund(fundId) {
+    const data = {
+        id: fundId
+    }
+    return service({url: '/fund/suspendFund', method: 'post', data})
 }

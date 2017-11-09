@@ -43,23 +43,31 @@
                     <div v-for="item in allData.permissions">
                         <el-col :span="24" style="border: 1px solid #dfe6ec;">
                         <el-col :span="6">
-                            <div class="left">{{item.permissionName}}</div>
+                            <div class="left">
+                                <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                    <el-checkbox :label="item.path" >{{item.permissionName}}</el-checkbox>
+                                </el-checkbox-group>
+                            </div>
                         </el-col>
                         <el-col :span="18">
                             <div class="right">
-                                <div v-if="item.children">
-                                    <div v-for="nextItem in item.children">
+                                <div v-if="item.children" >
+                                    <div v-for="nextItem in item.children" :key="nextItem">
                                         <div style="flex-direction: row; display: flex">
-                                            <div >{{nextItem.permissionName}}</div>
-                                            <div style=" margin-left: 20px">
-                                                <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                                    <el-checkbox v-for="(text, index) of nextItem.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
-                                                </el-checkbox-group>
-                                            </div>
+                                         <div  style=" margin-left: 15px" >
+                                            <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                            <el-checkbox :label="nextItem.path" >{{nextItem.permissionName}}</el-checkbox>
+                                            </el-checkbox-group>
+                                        </div>
+                                        <div style=" margin-left: 15px;"> 
+                                            <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
+                                            <el-checkbox v-for="(text, index) of nextItem.buttons" :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
+                                            </el-checkbox-group>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="!item.children ">
+                                <div v-if="!item.children "style=" margin-left: 15px">
                                     <el-checkbox-group v-model="clickMenu" @change="a">
                                         <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
@@ -226,9 +234,10 @@ export default {
         /*min-height: ;*/
         /*height: 40px;*/
         line-height: 40px;
+        padding-left: 10px;
         /*border: 1px solid #dfe6ec;*/
         /*border-bottom: none;*/
-        text-align: center;
+        text-align: left;
     }
     .f_right {
         height: 40px;

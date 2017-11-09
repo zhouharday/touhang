@@ -67,9 +67,13 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
+            console.log(row)
             this.quitDetailsModal = true
             this.bonusInfo = row
-            console.log(row)
+            row.documentInfo.map((x) => {
+                x.name = x.fileName,
+                x.url = x.filePath
+            })
         },
         handleDelete(index, row) {
             deleteEarningsAmount(row.id).then((res) => {

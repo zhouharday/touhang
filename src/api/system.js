@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import service from 'common/js/fetch'
 /*******************************公司信息******************************************/
 export function companyInfo(url) {
@@ -100,15 +101,15 @@ export function addNewUser(User,newOrChange) {
             // "nickname":"红豆股份", //昵称
             "name": User.name, //用户名  必须
             "number":User.account, //账户
-            "pass":"123456", //密码
+            // "pass":Vue.md5('123456',32), //密码
             "age":User.birthday, //年龄
             "six":User.sex, //性别
             // "phone":, //电话号码
             "dept":User.department, //部门id
-            "telephone":User.cellphone,
+            "phone":User.cellphone,
             "emil":User.email,
             "id":User.role
-        }
+        };
         console.log('**************')
         console.log(data)
         return service({url: '/user/updateUser', method: 'post', data})
@@ -118,12 +119,12 @@ export function addNewUser(User,newOrChange) {
             // "nickname":"红豆股份", //昵称
             "name": User.name, //用户名  必须
             "number":User.account, //账户
-            "pass":"123456", //密码
+            "pass":User.pass, //密码
             "age":User.birthday, //年龄
             "six":User.sex, //性别
             // "phone":, //电话号码
             "dept":User.department, //部门id
-            "telephone":User.cellphone,
+            "phone":User.cellphone,
             "emil":User.email
         }
         return service({url: '/user/saveUser', method: 'post', data})
@@ -153,6 +154,40 @@ export  function getSelectIndex(id,type) {
 }
 
 /*******************************业务配置******************************************/
+export function getStageApprove(stageId) {
+    const data = {
+        "stageId": stageId,
+    }
+    return service({url: '/dictionaryController/getStageApprove', method: 'post', data})
+}
+
+export function addStageApprove(id,stageId,stageName,shenpidata) {
+    const data = {
+        "id": id,
+        "stageId": stageId,
+        "stageName": stageName,//阶段名称
+        "userId": JSON.parse(sessionStorage.getItem('userInfor')).id,//当前登录用户id
+        "data":shenpidata
+        // "data": [
+        //     {
+        //         "id": "",
+        //         "roleId": "1234"
+        //     },
+        //     {
+        //         "id": "",
+        //         "roleId": "12345"
+        //     },
+        //     {
+        //         "id": "",
+        //         "roleId": "1234654"//角色id
+        //     }
+        // ]
+    }
+    console.log(data)
+    return service({url: '/dictionaryController/addStageApprove', method: 'post', data})
+}
+
+
 //左侧列表
 export  function getConfigLeftList() {
     const data = {
@@ -616,19 +651,24 @@ export function zhibiaolist() {
 }
 
 
-export function addzhibiao(formId,fieldName) {
+export function addzhibiao(formId,fieldName,sort) {
+    var j = parseInt(sort)
     const data = {
         "formId":formId, //
         "fieldName":fieldName, //名称
         "userId":JSON.parse(sessionStorage.getItem('userInfor')).id,
+        "sort":j
     }
+console.log(data)
     return service({url:'/formLabel/editFrom', method: 'post', data})
 }
-export function editzhibiao(formId,id,fieldName) {
+export function editzhibiao(formId,id,fieldName,sort) {
+     var j = parseInt(sort)
     const data = {
         "formId":formId,
         "id":id, // 科目id 修/ 改必须 新增不要
-        "fieldName":fieldName //名称
+        "fieldName":fieldName, //名称
+         "sort":j
     }
     console.log(data)
     return service({url:'/formLabel/editFrom', method: 'post', data})

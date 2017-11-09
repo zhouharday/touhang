@@ -29,13 +29,13 @@
                                 @click="uploadInvestorDoc(scope.$index, scope.row)">
                                 上传
                         </el-button>
-                        <el-button type="text"
-                                   size="small"
-                                   v-show="scope.row.id"
-                                   class="scopeBtn"
-                                   @click="downloadInvestorDoc(scope.$index, scope.row)">
-                                   下载
-                        </el-button>
+                        <a :href="scope.row.documentUrl"
+                            style="font-size:12px;color: #F05E5E;"
+                            v-if="haveJurisdiction('GL-JJWD-XZ')"
+                            v-show="scope.row.id"
+                            class="scopeBtn">
+                            下载
+                        </a>
                         <el-button type="text"
                                    size="small"
                                    class="btn_border scopeBtn" @click="previewInvestorDoc(scope.$index, scope.row)">
@@ -51,18 +51,16 @@
             </el-table>
         </el-col>
     </el-row>
+    <!-- 预览 -->
+    <show-pdf :pdfurl="pdfurl" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
     <!-- 上传基金设立报表-->
     <Modal v-model="modalAdd" title="基金设立报告" :mask-closable="false">
-        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" v-show="upload">
+        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
             <div style="padding: 20px 0">
-                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
             </div>
         </Upload>
-        <div style="text-align:center;" v-show="preview">
-            {{previewFundInfo}}
-            <img :src="previewFundInfo" alt="" style="width: 50%; height: auto;">
-        </div>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalAdd = false">取 消</el-button>
         </div>
@@ -75,6 +73,7 @@
 
 <script type="text/ecmascript-6">
 import {API_ROOT} from '../../config'
+import showPdf from 'components/showPdf'
 import deleteReminders from 'components/deleteReminders'
 import {deleteDocument, selectProjectOrFundDocument} from 'api/fund'
 export default {
@@ -86,6 +85,8 @@ export default {
     },
     data() {
         return {
+            pdfurl: '', // 预览路径
+            showOrhiddren: false, // 是否显示预览
             listHeader: ['投资者文档', '文档名称', '上传人', '上传日期', '操作'],
             modalAdd: false,
             file: null, // 上传
@@ -99,8 +100,6 @@ export default {
                 userId: JSON.parse(sessionStorage.getItem('userInfor')).id
             },
             deleteId: '',
-            upload: false, // 上传
-            preview: false, // 预览
             reminders: false, // 确认删除模态框
         }
     },
@@ -116,13 +115,16 @@ export default {
             this.deleteId = row.id
         },
         previewInvestorDoc(index, row) { // 预览投资者文档
+            this.pdfurl = row.previewPath
             this.modalAdd = true
-            this.preview = true
-            this.previewFundInfo = row.documentUrl.split('?')[0]
+            this.showOrhiddren = true
         },
-        downloadInvestorDoc(index, row) {
-            console.log(row)
-            window.open(row.documentUrl, '_blank')
+        closepdf() { // 关闭预览
+            this.showOrhiddren = false
+        },
+        errorHaddle() {
+            this.$Message.error('文件无法预览，请重新上传！')
+            this.showOrhiddren = false
         },
         handleSuccess(res, file) {
             if(res.status == '200') {
@@ -161,7 +163,8 @@ export default {
         }
     },
     components: {
-        deleteReminders
+        deleteReminders,
+        showPdf
     }
 }
 </script>

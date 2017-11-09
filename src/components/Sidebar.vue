@@ -23,7 +23,7 @@
                     </el-submenu>
                 </el-menu>
             </div>
-            
+<!-- 菜单 -->
             <el-menu v-show="!isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
                 <el-submenu index="1">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
@@ -121,36 +121,32 @@
                     </el-menu-item>
                 </el-submenu>
             </el-menu>
-
             <!-- 菜单列表 Start -->
             <el-menu v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
-              <el-submenu :index="index" v-for="(item,index) in menus" :key="item" >
+              <el-submenu :index="index" v-for="(item,index) in menus" :key="item">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
-                        <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/office.png" />
-                        <span>{{item.menuName}}</span>
+                        <img style="margin-top:18px;display:block;float:left;margin-right:7px;" :src="menusImg[index].src" />
+                        <span v-if="item.children.length !== 0">{{item.menuName}}</span>
+                        <span style="display: block;" :index="item.url" @click="addTab(item.menuName,'/home/' + item.url, item.url)" v-if="item.children.length == 0">{{item.menuName}}</span>
                     </template>
                     <el-menu-item v-for="(item,index) in item.children" :key="item" :index="item.url" @click="addTab(item.menuName,'/home/' + item.url, item.url)">{{item.menuName}}</el-menu-item>
                 </el-submenu>
             </el-menu>
+            <!-- <div index='2' v-if="item.children.length == 0" v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" v-for="(item,index) in menus" :key="item" class="div_el-menu-itemel-submenu__title" @click="addTab(item.menuName,'/home/' + item.url, item.url)">
+                <img style="margin-top: 18px;display: block;float: left;margin-right: 7px;" src="/static/img/zhushou.png" />
+                <span index="assistant">{{item.menuName}}</span>
+            </div> -->
             <!-- 菜单列表 End -->
-            <!-- <el-row v-if="showOrHide.isShowSidebar && showOrHide.isVshowYe">
-                <el-col :span="24" v-for="(menuItem,index) in theModel" :key="menuItem">
-                     <my-tree :model="menuItem"></my-tree>
-                </el-col>
-            </el-row> -->
-            <!-- <ul id="zTree" class="ztree"></ul> -->
         </div>
     </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import jq from "../../static/js/zTree/jquery-1.4.4.min.js";
-import zTree from "../../static/js/zTree/jquery.ztree.core";
 import { getNodes } from "common/js/config";
 import myTree from "components/treeMenu";
 export default {
-  components: { jq, zTree, getNodes, myTree },
+  components: { getNodes, myTree },
   created() {
     this.findResourceByUid();
   },
@@ -163,27 +159,23 @@ export default {
       return {
         merchants: this.$store.state.login.merchants,
         userInfor: this.$store.state.login.userInfor
-      }
+      };
     },
     onRoutes(state) {
-      // alert(111);
       return this.$route.path.replace("/", "");
     },
     userName(state) {
-      // alert(222);
       this.$store.state.login.userInfor =
         JSON.parse(sessionStorage.getItem("userInfor")) || {};
       return this.$store.state.login.userInfor;
     },
     um_id(state) {
-      // alert(333);
       this.$store.state.login.logoSrc =
         JSON.parse(sessionStorage.getItem("merchants")) || {};
       return this.$store.state.login.merchants;
     },
     showOrHide() {
       if (JSON.parse(sessionStorage.getItem("showOrHide")) == null) {
-        // alert(111);
         this.$store.state.login.showOrHide.isVshowYe = 1;
         this.$store.state.login.showOrHide.isShowSidebar = 0;
         return this.$store.state.login.showOrHide;
@@ -196,8 +188,20 @@ export default {
   },
   data() {
     return {
+      menusImg: [
+        //菜单图标
+        { src: "/static/img/office.png" },
+        { src: "/static/img/zhushou.png" },
+        { src: "/static/img/project.png" },
+        { src: "/static/img/project_manger.png" },
+        { src: "/static/img/touzizhe.png" },
+        { src: "/static/img/survey.png" },
+        { src: "/static/img/sys_analysis.png" },
+        { src: "/static/img/sys_mang.png" }
+      ],
       menus: [],
       isShow: true,
+      // isShow: false,
       theModel: [],
       setting: {
         view: {
@@ -424,9 +428,9 @@ export default {
       });
       // alert(222)
     },
-    isShowsss(){
-      return this.isShow = false;
-    },
+    isShowsss() {
+      return (this.isShow = false);
+    }
   }
 };
 </script>

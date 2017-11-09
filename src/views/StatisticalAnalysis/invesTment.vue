@@ -12,7 +12,7 @@
                 <el-col :span="9">
                     <div class="grid-content bg-purple-dark">
                         <div>
-                            <el-table class="invesTabData" :data="invesTabData" border style="width: 100%">
+                            <el-table class="invesTabData" :data="invesTabData" border stripe style="width: 100%">
                                 <el-table-column prop="stageName" label="项目阶段" align="center" width="">
                                 </el-table-column>
                                 <el-table-column prop="projectNumber" label="项目数量" align="center" width="">
@@ -20,6 +20,10 @@
                                 <el-table-column prop="percent" label="转化率%" align="center" width="">
                                 </el-table-column>
                             </el-table>
+                            <!-- <div class="pagination">
+                              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+                              </el-pagination>
+                            </div> -->
                         </div>
                     </div>
                 </el-col>
@@ -36,7 +40,7 @@ export default {
   computed: {
     user() {
       this.$store.state.login.merchants =
-        JSON.parse(sessionStorage.getItem("merchants")) || {};
+        JSON.parse(sessionStorage.getItem("merchants")) || [];
       this.$store.state.login.userInfor =
         JSON.parse(sessionStorage.getItem("userInfor")) || {};
       return {
@@ -145,11 +149,12 @@ export default {
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
-                console.log(res.data);
+              console.log(res.data);
               this.invesTabData = res.data.result;
+
               this.data = [];
               res.data.result.forEach((ele, index1) => {
-            //   this.option.title.text = ele.name;
+              //this.option.title.text = ele.name;
                 let obj = {};
                 // data.push(ele);
                 obj.name = ele.stageName;

@@ -1,36 +1,36 @@
 <template>
     <!-- 查看进度 对话框 -->
     <div class="progressBox">
-        <el-dialog :title="dialogTitle" :visible.sync="progressModal">
+        <el-dialog :title="dialogTitle" :visible.sync="progressModal" :close-on-click-modal="false" @close="closeModal">
             <div style="height:2px;border-bottom: 1px solid #f05e5e;margin-bottom:20px"></div>
-            <el-table :data="table1.appendixList">
-                <el-table-column :label="table1.progressName" width="250">
-                    <template scope="scope">
-                        <span v-if="scope.$index==0">附件</span>
-                    </template>
+            <el-table :data="documentInfo">
+                <el-table-column label="文档列表" prop="allocationDocumentName" width="250">
                 </el-table-column>
-                <el-table-column prop="fileName">
+                <el-table-column prop="documentName">
                 </el-table-column>
                 <el-table-column align="left">
                     <template scope="scope">
-                        <el-button type="text">预览</el-button>
-                        <a :href="scope.row.url" style="font-size:12px;color:#f05e5e;margin-left:10px" :download="scope.row.fileName">下载</a>
+                        <el-button v-if="scope.row.previewPath != null" type="text" @click="preview(scope.row.previewPath)">预览</el-button>
+                        <a :href="scope.row.documentUrl" style="font-size:12px;color:#f05e5e;margin-left:10px" :download="scope.row.documentName">下载</a>
                     </template>
                 </el-table-column>
             </el-table>
             <el-table :data="table2" style="margin:15px 0;" :row-class-name="tableRowClassName">
-                <el-table-column prop="node" label="审批节点" align="center">
+                <el-table-column prop="roleName" label="审批节点" align="center">
                 </el-table-column>
-                <el-table-column prop="operator" label="处理人" align="center">
+                <el-table-column prop="approveUserName" label="处理人" align="center">
                 </el-table-column>
-                <el-table-column prop="startingTime" label="开始时间" align="center" width="210">
+                <el-table-column prop="disposeDate" label="开始时间" align="center" width="210">
                 </el-table-column>
-                <el-table-column prop="conclusion" label="结论" align="center">
+                <el-table-column prop="disposeResult" label="结论" align="center">
+                    <template scope="scope">
+                        {{scope.row.disposeResult |key2value(resultOptions, scope.row.disposeResult)}}
+                    </template>
                 </el-table-column>
                 <el-table-column label="意见备注" align="center">
                     <template scope="scope">
                         <el-popover ref="popover1" trigger="hover" placement="top">
-                            <p style="width:400px;text-indent:28px">{{ scope.row.notes }}</p>
+                            <p style="width:400px;text-indent:28px">{{ scope.row.remark }}</p>
                         </el-popover>
                         <el-button type="text" v-popover:popover1>查看</el-button>
                     </template>
@@ -43,21 +43,21 @@
                         <span>审批意见</span>
                     </div>
                 </div>
-                <el-form :model="approvalForm" label-position="right" style="padding: 10px 0 0 50px">
-                    <el-form-item>
-                        <el-radio v-model="approvalForm.radio" label="1">同意</el-radio>
+                <el-form :model="approvalForm" :rules="rule" ref="approvalForm" label-position="right" style="padding: 10px 0 0 50px">
+                    <el-form-item label="审批结果">
+                        <el-redio-group @change="changeResult">
+                            <el-radio v-model="approvalForm.disposeResult" label="1">同意</el-radio>
+                            <el-radio v-model="approvalForm.disposeResult" label="2">不同意</el-radio>
+                        </el-redio-group>
                     </el-form-item>
-                    <el-form-item label="审批人">
-                        <el-select v-model="approvalForm.auditor" placeholder="请选择审批人">
-                            <el-option v-for="item in auditorOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-form-item v-if="approvalForm.roleId && approvalForm.disposeResult == '1'" prop="approveUserId" label="审  批  人">
+                        <el-select v-model="approvalForm.approveUserId" placeholder="请选择审批人">
+                            <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item>
-                        <el-radio v-model="approvalForm.radio" label="2">不同意</el-radio>
-                    </el-form-item>
                     <el-form-item label="审批意见">
-                        <el-input type="textarea" v-model="approvalForm.approvalNotes" :rows="4" style="width:75%"></el-input>
+                        <el-input type="textarea" v-model="approvalForm.remark" :rows="4" style="width:75%"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer" style="text-align:center">
@@ -66,11 +66,14 @@
                 </div>
             </div>
         </el-dialog>
+        <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf>
     </div>
 </template>
 
 
-<script type="text/ecmascript-6">
+<script>
+import 'common/js/filter'
+import showPdf from 'components/showPdf'
 export default {
     props: {
         progressModal: {
@@ -81,30 +84,81 @@ export default {
             type: String,
             default: '查看进度'
         },
-        table1: {
-            type: Object,
-            default: {} /*table1默认格式 table1: { progressName: 'xxx',appendixList: [{fileName:'', url: ''}]} */
+        documentInfo: {
+            type: Array,
+            default: []
         },
         table2: {
-            type: Array
+            type: Array,
+            default: []
         },
         approvalForm: {
-            type: Object
+            type: Object,
+            default:{}
         },
         auditorOptions: {
-            type: Array
+            type: Array,
+            default:[]
         },
         isBlock: { // false时 查看进度对话框， true时 审批对话框
             type: Boolean,
             default: false
         }
     },
+    components: {
+        showPdf
+    },
+    data() {
+        return {
+            pdfurls:'',
+            isshowpdf:false,
+            resultOptions: [
+                {
+                    key: -1,
+                    value: '发起申请'
+                }, {
+                    key: 0,
+                    value: '待审批'
+                },
+                {
+                    key: 1,
+                    value: '同意'
+                }, {
+                    key: 2,
+                    value: '不同意'
+                }
+            ],
+            rule: {
+                approveUserId: [
+                    { required: true, message: '请选择下一级审批人', trigger: 'blur' }
+                ]    
+            },
+        }
+    },
     methods: {
         submitHandler(event) {
-            this.$emit('submit', event.target)
+            this.$refs["approvalForm"].validate((valid) => {
+                if (valid) {
+                    this.$emit('submit', this.approvalForm);
+                }
+            });
         },
         cancleHandler(event) {
-            this.$emit('cancle', event.target)
+            this.$emit('cancle', event.target);
+        },
+        preview(url) {
+            this.pdfurls = url;
+            this.isshowpdf = true;
+        },
+        pdferr(err){
+            console.log("pdferr!! ", err);
+            this.$Message.error('读取预览文件出错！');
+        },
+        closeModal() { // 预览关闭按钮
+            this.$emit('closeShowModal')
+        },
+        closepdf(){
+            this.isshowpdf = false;
         }
     }
 }

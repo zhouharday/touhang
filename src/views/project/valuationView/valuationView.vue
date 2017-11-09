@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column label="估值参数" align="center">
                 <template scope="scope">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}  
-                {{ scope.row.appraisementParamer}} X {{scope.row.appraisementParamerTwo}} X {{scope.row.stockRatio}}%</template>
+                {{ scope.row.appraisementParamer}} x {{scope.row.appraisementParamerTwo}} x {{scope.row.stockRatio}}%</template>
             </el-table-column>
             <el-table-column prop="appraisementValue" label="估值（元）" align="center">
                 <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>

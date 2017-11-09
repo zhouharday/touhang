@@ -51,12 +51,13 @@
             </el-col>
             <el-col :span="24">
                 <el-form-item label="投资协议附件">
-                    <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
+                    <!-- <Upload multiple type="drag" action="//jsonplaceholder.typicode.com/posts/">
                         <div style="padding: 20px 0">
                             <Icon type="ios-cloud-upload" size="52"></Icon>
                             <p>点击或将文件拖拽到这里上传</p>
                         </div>
-                    </Upload>
+                    </Upload> -->
+                    <upload-files @uploadSuccess="handleSuccess" :documentInfo="quitApplyInfo.documentInfo"></upload-files>
                 </el-form-item>
             </el-col>
         </el-row>
@@ -65,9 +66,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {
-    GetProtocolsList
-} from 'api/investor'
+import {GetProtocolsList} from 'api/investor'
+import uploadFiles from 'components/uploadFiles'
+import {mapGetters, mapActions} from 'vuex'
 export default {
     props: {
         quitApplyInfo: {
@@ -78,7 +79,6 @@ export default {
     data() {
         return {
             allAgreement: [],
-            agreementData: [],
             getAgreementValue: '',
             size: 1000,
             rules1: {
@@ -107,16 +107,29 @@ export default {
             this.getAgreementValue = value
             this.quitApplyInfo.investorName = value
             this.quitApplyInfo.fundName = value
-        }
+        },
+        handleSuccess(list) {
+            this.quitApplyInfo.documentInfo = list
+            console.log(this.quitApplyInfo)
+        },
+        ...mapActions([
+            'getAgreementInfo'
+        ])
     },
     created() {
         GetProtocolsList(this.$route.params.userId, this.size).then((res) => {
             if (res.status == '200') {
-                this.agreementData = res.data.result.list
+                this.getAgreementInfo(res.data.result.list)
             }
         })
-
-        // this.quitApplyInfo.investorName = this.$store.state.investor.investorName
+    },
+    computed: {
+        ...mapGetters({
+            agreementData: 'agreement'
+        })
+    },
+    components: {
+        uploadFiles
     }
 }
 </script>

@@ -183,6 +183,10 @@ export default {
         capitalForm: {
             type: Object,
             default: {}
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

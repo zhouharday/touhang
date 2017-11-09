@@ -1,6 +1,6 @@
 <template>
     <div class="monitorTable">
-        <tabel-header :data="headerInfo_monitor" @add="goAddMonitor"></tabel-header>
+        <tabel-header :data="checkProjectAuth('JKSZ-jiankongshezhi') ? headerInfo_monitor : _headerInfo_monitor" @add="goAddMonitor"></tabel-header>
         <el-table :data="monitorData" border style="width: 100%">
             <el-table-column label="数据来源" prop="dataSource" align="center">
                 <template scope="scope">{{scope.row.dataSource | key2value(dataSourcesOptions, scope.row.dataSource)}}</template>
@@ -13,9 +13,9 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                    <el-button type="text" @click="editMonitor(scope.row.id)">编辑</el-button>
-                    <el-button type="text" v-if="scope.row.isOpen == 1" @click="switchMonitor(scope.row.id, scope.row.isOpen)">关闭</el-button>
-                    <el-button type="text" v-if="scope.row.isOpen != 1" @click="switchMonitor(scope.row.id, scope.row.isOpen)">开启</el-button>
+                    <el-button v-if="checkProjectAuth('JKSZ-bianji')" type="text" @click="editMonitor(scope.row.id)">编辑</el-button>
+                    <el-button type="text" v-if="checkProjectAuth('JKSZ-guanbi') && (scope.row.isOpen == 1)" @click="switchMonitor(scope.row.id, scope.row.isOpen)">关闭</el-button>
+                    <el-button type="text" v-if="checkProjectAuth('JKSZ-kaiqi') && (scope.row.isOpen != 1)" @click="switchMonitor(scope.row.id, scope.row.isOpen)">开启</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -135,7 +135,7 @@
 <script>
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
-import { changeDate } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 import { getDataMonitorList, getDataMonitorDetail, updateDataMonitor, getFormByType, saveDataMonitor } from 'api/projectAfter';
 export default {
     props: {
@@ -146,6 +146,10 @@ export default {
         projectId: {
             type: String,
             default: ''
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -242,6 +246,9 @@ export default {
                     explain: '监控设置'
                 }]
             },
+            _headerInfo_monitor: {
+                btnGroup: []
+            },
             idEditModel: false
         }
     },
@@ -255,6 +262,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init() {
             this.getDataMonitorList();
         },
@@ -287,11 +297,11 @@ export default {
         },
         //选择监控数据源，获取相应指标
         changeDataSource(val){
-            console.log("打开编辑时: " + this.idEditModel);
+            if((val == null || val == ''))return false;
             if(!this.idEditModel){
                 getFormByType(val).then(resp => {
                     if (resp.data.status == '200') {
-                        console.log("选择监控数据源" );
+                        // console.log("选择监控数据源" );
                         var _data = resp.data.result;
                         _data.forEach(function(item, index){
                             item.isMonitor = 0;
@@ -351,7 +361,7 @@ export default {
             this.monitorSetting = !this.monitorSetting;
             getDataMonitorDetail(id).then(resp => {
                 if (resp.data.status == '200') {
-                    // console.log("打开编辑 监控设置"+JSON.stringify(resp.data.result));
+                    console.log("打开编辑 监控设置"+JSON.stringify(resp.data.result));
                     this.monitorForm = resp.data.result.dataMonitor;
                     this.dataMonitorTable = resp.data.result.monitorInfos;
                     this.title = '编辑监控设置';

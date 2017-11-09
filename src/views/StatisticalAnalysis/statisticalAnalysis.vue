@@ -1,50 +1,50 @@
 <template>
-    <section>
-        <!-- 这是统计分析图 -->
-        <div class="statisticalFrom">
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="statistical_Echarts_1" style="width: 600px;height:400px;"></div>
-                        <!-- <div>
-                            <ul>
-                                <li><span>{{}}</span><span>{{}}</span></li>
-                            </ul>
-                        </div> -->
-                    </div>
-                </el-col>
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="statistical_Echarts_2" style="width: 600px;height:400px;"></div>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="statistical_Echarts_3" style="width: 600px;height:400px;"></div>
-                    </div>
-                </el-col>
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="statistical_Echarts_4" style="width: 600px;height:400px;"></div>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="statistical_Echarts_5" style="width: 600px;height:400px;"></div>
-                    </div>
-                </el-col>
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="statistical_Echarts_6" style="width: 600px;height:400px;"></div>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-    </section>
+  <section>
+    <!-- 这是统计分析图 -->
+    <div class="statisticalFrom">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="statistical_Echarts_1" style="width: 600px;height:400px;"></div>
+            <!-- <div>
+                              <ul>
+                                  <li><span>{{}}</span><span>{{}}</span></li>
+                              </ul>
+                          </div> -->
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="statistical_Echarts_2" style="width: 600px;height:400px;"></div>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="statistical_Echarts_3" style="width: 600px;height:400px;"></div>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="statistical_Echarts_4" style="width: 600px;height:400px;"></div>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="statistical_Echarts_5" style="width: 600px;height:400px;"></div>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="statistical_Echarts_6" style="width: 600px;height:400px;"></div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -320,7 +320,7 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
-              console.log(res.data.result[5].data);
+              // console.log(res.data.result[5].data);
               this.option1.title.text = res.data.result[0].title;
               this.option2.title.text = res.data.result[1].title;
               this.option3.title.text = res.data.result[2].title;

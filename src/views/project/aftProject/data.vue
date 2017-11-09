@@ -5,7 +5,7 @@
                 <el-button @click="changeData1" :class="{active:f_show}">经营数据</el-button>
                 <el-button @click="changeData2" :class="{active:s_show}">财务数据</el-button>
             </div>
-            <div class="rightBtn">
+            <div v-if="checkProjectAuth('SJTB-tianjia')" class="rightBtn">
                 <el-button type="danger" size="small" @click="addData">添加</el-button>
             </div>
         </div>
@@ -18,7 +18,6 @@
                             <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
                             </el-date-picker>
                         </span>
-                        <!-- <el-button v-if="!scope.row.editFlag" type="text" @click="operatingDelete=true">{{ scope.row.baseDate }}</el-button> -->
                     </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
@@ -38,11 +37,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <!-- <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">编辑
-                        </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1')">保存
-                        </el-button> -->
-                        <el-button v-if="!scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -188,11 +183,11 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
                         </el-button>
-                        <el-button type="text" @click="goAddData(scope.row.id, '2', false)">添加数据</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji')" type="text" @click="goAddData(scope.row.id, '2', false)">添加数据</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -241,11 +236,11 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" show-upload-list="false" :data="importData">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" :show-upload-list="showList" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
-                        <a href="http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls" download="资产负债表">模板下载</a>
+                        <a :href="importTemplateUrl" download="资产负债表">模板下载</a>
                     </el-button>
                 </div>
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -324,7 +319,7 @@
 <script >
 import deleteReminders from 'components/deleteReminders'
 import 'common/js/filter'
-import { changeDate } from 'common/js/config'
+import { changeDate,checkProjectAuth } from 'common/js/config'
 import { getDataSubjectList, saveDataSubject, updDataSubject, getDataSubjectDetail, getDataFormBody, fillDataForm,
     transform, deTransform
 } from 'api/projectAfter';
@@ -337,6 +332,10 @@ export default {
         projectId: {
             type: String,
             default: ''
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -361,25 +360,11 @@ export default {
             loadingStatus: false,
             activeName: 'first',
             importUrl:this.api+'/excel//financial',
-            // importUrl:"http://192.168.0.136:9091"+'/excel/financial',
-            importData:{},
+            importTemplateUrl: 'http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls',
+            showList: false,
+            importData: { dataInfoids:''},
             // 经营数据表头
-            operatingData: [
-                {
-                    baseDate: '2017-1-1',
-                    dataType: '半年报',
-                    operatorName: '张三',
-                    currentDeta: '2017-10-11',
-                    editFlag: false
-                },
-                {
-                    baseDate: '2017-9-1',
-                    dataType: '月报',
-                    operatorName: '李四',
-                    currentDeta: '2017-10-12',
-                    editFlag: false
-                }
-            ],
+            operatingData: [],
             // 经营数据-添加 表单
             operatingForm1: {
                 baseDate: '',
@@ -394,7 +379,7 @@ export default {
                     { type: 'date', required: true, message: '请选择基准日', trigger: 'change' }
                 ],
                 dataType: [
-                    { required: true, message: '请选择类型', trigger: 'change' }
+                    { type: 'number', required: true, message: '请选择类型', trigger: 'change' }
                 ]
             },
             rules2: {
@@ -421,66 +406,9 @@ export default {
                 }
             ],
             // 经营数据-添加数据 table
-            operatingData1: [
-                {
-                    project: '营业收入',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '净利润',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '总资产',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '净资产',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '用户数',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '活跃用户数',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                },
-                {
-                    project: '其他',
-                    operatingGoal: '',
-                    realSituation: '',
-                    completionRate: '',
-                    secondPlan: ''
-                }
-            ],
+            operatingData1: [],
             //  财务数据
-            financialData: [
-                {
-                    baseDate: 'asdasd',
-                    dataType: 'lklkjkjk',
-                    operatorName: 'asdsdfs',
-                    currentDeta: '2017-10-30'
-                }
-            ],
+            financialData: [],
             // 财务数据-添加 表单
             financialForm1: {
                 baseDate: '',
@@ -512,6 +440,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init() {
             //获取经营数据主体
             this.getOperateSubject();
@@ -563,7 +494,7 @@ export default {
             this.readControl = readControl;
             this.finacial_title = '财务数据明细';
             getDataFormBody(subjectId).then(resp => {
-                console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
+                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let formBody = resp.data.result.dataInfos;
                     //填充表单
@@ -711,7 +642,7 @@ export default {
                         dataCat: dataType == '1' ? 0 : 1
                     };
                     saveDataSubject(data).then(resp => {
-                        console.log("添加数据表头 结果：" + JSON.stringify(resp.data));
+                        // console.log("添加数据表头 结果：" + JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             if (dataType == '1') {
                                 this.operatingForm1 = { baseDate: '', dataType: '' };
@@ -744,14 +675,13 @@ export default {
         // 上传附件的方法
         handleBeforeUpload(file) {
             let activeName = this.activeName;
-            console.log("activeName"+this.activeName);
             let dataInfoid = this.balanceInfo.id+','+this.incomeInfo.id+','+this.cashFlowInfo.id;
-            this.importData = {
-                dataInfoids: dataInfoid
-            }
-            console.log("导入数据"+JSON.stringify(this.importData));
+            this.$set(this.$data.importData, 'dataInfoids', dataInfoid);
+            // console.log("导入数据"+JSON.stringify(this.importData));
         },
         handleSuccess(){
+            this.$Message.info("数据导入成功");
+            this.$refs['import'].clearFiles();
             getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
@@ -780,10 +710,10 @@ export default {
                         }
                     }
                 }else{
-                    this.$message.error(resp.data.message);
+                    this.$Message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('getFee() exists error: ', e);
+                console.log('导入后获取数据 error: ', e);
             })
         }
     },

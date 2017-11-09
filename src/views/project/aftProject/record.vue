@@ -1,7 +1,7 @@
 <template>
     <div class="recordBox">
         <tabel-header :data="headerInfo_record" class="title"></tabel-header>
-        <div class="recordForm">
+        <div v-if="checkProjectAuth('JL-tianjiajilu')" class="recordForm">
             <Input v-model="value.recordText" type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
             <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
         </div>
@@ -16,7 +16,7 @@
                         </p>
                         <p>{{item.seedInfo}}</p>
                         <p>
-                            <el-button type="text" class="delbtn" @click="delRecord(index, item)">删除</el-button>
+                            <el-button v-if="checkProjectAuth('JL-shanchu')" type="text" class="delbtn" @click="delRecord(index, item)">删除</el-button>
                         </p>
                     </div>
                 </TimelineItem>
@@ -27,6 +27,7 @@
 
 <script >
 import tabelHeader from 'components/tabelHeader'
+import {checkProjectAuth } from 'common/js/config'
 import { getRecords, addRecord, delRecord } from 'api/project';
 
 const STATUS_NORMAL = 1; // 正常
@@ -37,6 +38,10 @@ export default {
             type: Object,
             default: {}
         },
+        isInTeam: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
@@ -44,7 +49,7 @@ export default {
                 desc: '记录'
             },
             value: {
-                text: ''
+                recordText: ''
             },
             recordList: []
         }
@@ -59,6 +64,9 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init() {
             this.initInfo();
             this.getDatas();
@@ -113,7 +121,7 @@ export default {
             });
         },
         resetInput() {
-            this.value.recordText = '';
+            this.$set(this.$data.value, 'recordText', '');
         },
         delRecord(index, item) {
             delRecord(item.id, STATUS_DELETE).then(resp => {

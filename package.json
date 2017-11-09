@@ -24,7 +24,6 @@
     "lodash": "^4.17.4",
     "moment": "^2.19.1",
     "node-sass": "^4.5.3",
-    "pdfjs": "^2.0.0-alpha.3",
     "postcss-cssnext": "^3.0.2",
     "qs": "^6.5.0",
     "sass-loader": "^6.0.6",
@@ -37,7 +36,6 @@
     "vue-quill-editor": "^1.1.1",
     "vue-router": "^2.2.0",
     "vue-simplemde": "^0.3.2",
-    "vueshowpdf": "^1.1.2",
     "vuex": "^2.3.1",
     "zrender": "^3.6.1"
   },

@@ -5,7 +5,7 @@
             <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
             <el-col class="total" :span="21">
                 <el-row :gutter="20">
-                    <el-col :span="6" v-for="(item, index) of titleInfo.total" :key="item.index">
+                    <el-col :xs="8" :sm="12" :md="10" :lg="6" v-for="(item, index) of titleInfo.total" :key="item.index">
                         <p class="desc">{{item.desc}}</p>
                         <p class="amount">{{item.amount | toMoney}}<span class="unit">元</span></p>
                     </el-col>
@@ -42,8 +42,13 @@ import investorDoc from './investorDoc'
 import agreement from "./agreement"
 import visitingRecord from "./visitingRecord"
 import investment from './investment'
-import {GetProtocolsList, getVisitingRecordList, getAgreementAmountList} from 'api/investor'
 import {selectProjectOrFundDocument} from 'api/fund'
+import {
+    GetProtocolsList,
+    getVisitingRecordList,
+    getAgreementAmountList
+} from 'api/investor'
+
 export default {
     data() {
         return {
@@ -138,7 +143,9 @@ export default {
     .base-style();
     .header {
         width: 100%;
-        padding-bottom: @height-small;
+        max-height: 60px;
+        margin-bottom: @height-small;
+        overflow: hidden;
         .info {
             width: 100%;
             height: 60px;
@@ -163,6 +170,11 @@ export default {
             }
 
         }
+    }
+    .tabs {
+        width: 100%;
+        clear: both;
+        overflow: hidden;
     }
     .page {
         width: 100%;

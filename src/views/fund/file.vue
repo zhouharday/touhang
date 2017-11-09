@@ -25,25 +25,28 @@
                             <el-button type="text"
                                     size="small"
                                     class="scopeBtn"
+                                    v-if="haveJurisdiction('GL-JJWD-SCH')"
                                     v-show="!scope.row.id"
                                     @click="uploadFundDoc(scope.$index, scope.row)">
                                     上传
                             </el-button>
+                            <a :href="scope.row.documentUrl"
+                                style="font-size:12px;color: #F05E5E;"
+                                v-if="haveJurisdiction('GL-JJWD-XZ')"
+                                v-show="scope.row.id"
+                                class="scopeBtn">
+                                下载
+                            </a>
                             <el-button type="text"
                                        size="small"
-                                       v-show="scope.row.id"
-                                       class="scopeBtn"
-                                       @click="downloadFundDoc(scope.$index, scope.row)">
-                                       下载
-                            </el-button>
-                            <el-button type="text"
-                                       size="small"
+                                       v-if="haveJurisdiction('GL-JJWD-YL')"
                                        v-show="scope.row.id"
                                        class="btn_border scopeBtn" @click="previewFundDoc(scope.$index, scope.row)">
                                        预览
                             </el-button>
                             <el-button type="text"
                                        size="small"
+                                       v-if="haveJurisdiction('GL-JJWD-SC')"
                                        class="scopeBtn" @click="deleteFundDoc(scope.$index, scope.row)">
                                        删除
                             </el-button>
@@ -52,18 +55,16 @@
             </el-table>
         </el-col>
     </el-row>
+    <!-- 预览 -->
+    <show-pdf :pdfurl="pdfurl" class="showpdf" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
     <!-- 上传基金设立报表-->
     <el-dialog title="基金设立报告" :visible.sync="modalAdd" :close-on-click-modal="false" :show-close="false">
-        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" v-if="upload == true && preview == false">
+        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
             <div style="padding: 20px 0">
-                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
             </div>
         </Upload>
-        <div class="img_wrapper" v-if="preview == true && upload == false">
-            {{previewFundInfo}}
-            <img :src="previewFundInfo" alt="" style="width: 50%; height: auto;">
-        </div>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalCancel">取 消</el-button>
         </div>
@@ -77,6 +78,8 @@
 import deleteReminders from 'components/deleteReminders'
 import {deleteDocument,selectProjectOrFundDocument} from 'api/fund'
 import {API_ROOT} from '../../config'
+import {checkFundAuth} from 'common/js/config'
+import showPdf from 'components/showPdf'
 export default {
     props: {
         fileListData: {
@@ -100,9 +103,9 @@ export default {
             fileData: [],
             registrationData: [],
             deleteId: '',
-            preview: false, // 预览
+            pdfurl: '', // 预览路径
+            showOrhiddren: false, // 是否显示预览
             upload: false, // 上传
-            previewFundInfo: '', //预览信息
             reminders: false, // 确认删除模态框
             modal_loading: false, // 确认删除loading效果
             actionUrl: API_ROOT + '/files/uploadProjectDocument',
@@ -122,6 +125,13 @@ export default {
             this.upload = true
             this.uploadInfo.stageId = row.stageId
             this.uploadInfo.fileId = row.fileId
+        },
+        closepdf() {
+            this.showOrhiddren = false
+        },
+        errorHaddle() {
+            this.$Message.error('文件无法预览，请重新上传！')
+            this.showOrhiddren = false
         },
         handleSuccess(res, file) {
             if(res.status == '200') {
@@ -155,9 +165,9 @@ export default {
             }
         },
         previewFundDoc(index, row) {
-            this.modalAdd = true
-            this.preview = true
-            this.previewFundInfo = row.documentUrl.split('?')[0]
+            console.log(row)
+            this.pdfurl = row.previewPath
+            this.showOrhiddren = true
             console.log(row.documentUrl.split('?')[0])
         },
         modalCancel() {
@@ -168,6 +178,13 @@ export default {
         confirmCancel() {
             this.reminders = false
         },
+        haveJurisdiction(str) {
+            if (checkFundAuth(str)) {
+                return true
+            } else {
+                return false
+            }
+        },
         _getFundDoc() {
             selectProjectOrFundDocument(this.$route.params.id, 2).then((res) => {
                 if (res.status == '200') {
@@ -177,7 +194,8 @@ export default {
         }
     },
     components: {
-        deleteReminders
+        deleteReminders,
+        showPdf
     }
 }
 </script>

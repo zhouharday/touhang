@@ -38,41 +38,41 @@
                             <input type="file" class="fileInput" @change="changeFile($event, item.id)" ref="avatarInput">
                         </div>
                         <!-- 发起申请 -->
-                        <el-button v-if="item.type == 2 && item.status == 0" type="text" class="state" @click="openDialog(1, item.id)">发起申请</el-button>
+                        <el-button v-if="item.type == 2" type="text" class="state" @click="openDialog(1, item.id)">立即审批</el-button>
                         <!-- 查看进度 -->
-                        <el-button v-if="item.type == 3 && item.status == 0" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
+                        <el-button v-if="item.type == 3" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="tabs">
             <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="详情" name="details" class="tab_list">
-                    <detail-form :tabs="tabs" :proId="projectId" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+                <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
+                    <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
                     </detail-form>
-                    <table-form :tabs="tabs" :companyForm="companyForm" :memberData="memberData" :structureData="structureData"></table-form>
+                    <table-form :tabs="tabs" :companyForm="companyForm" :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
                 </el-tab-pane>
-                <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team-table :tabs="tabs" :proId="projectId" :proUsers="proUsers" :proRoles="proRoles">
+                <el-tab-pane :disabled="!checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
+                    <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :proUsers="proUsers" :proRoles="proRoles">
                     </team-table>
                 </el-tab-pane>
-                <el-tab-pane label="记录" name="record" class="tab_list">
-                    <record-form :tabs="tabs" :proId="projectId"></record-form>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
+                    <record-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></record-form>
                 </el-tab-pane>
-                <el-tab-pane label="审批" name="approve" class="tab_list">
-                    <approve-table :tabs="tabs"></approve-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
+                    <approve-table :tabs="tabs" :isInTeam="isInTeam" :projectId="projectId"></approve-table>
                 </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list">
-                    <file-table :tabs="tabs" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
+                    <file-table :tabs="tabs" :isInTeam="isInTeam" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
                 </el-tab-pane>
-                <el-tab-pane label="风险登记" name="risk" class="tab_list">
-                    <risk-table :tabs="tabs" :proId="projectId" :proUsers="proUsers"></risk-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
+                    <risk-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId" :proUsers="proUsers"></risk-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
-                    <manage-table :tabs="tabs" :proId="projectId"></manage-table>
+                <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
+                    <manage-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></manage-table>
                 </el-tab-pane>
-                <el-tab-pane v-if="isExit" label="退出" name="outing" class="tab_list">
-                    <outing-form :tabs="tabs" :proId="projectId"></outing-form>
+                <el-tab-pane :disabled="!checkProjectAuth('GL-XMTC')" v-if="isExit" label="退出" name="outing" class="tab_list">
+                    <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -82,7 +82,7 @@
         <!-- 发起申请 对话框-->
         <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" isBlock="true"  dialogTitle='审批' :table1="appendixTable" :table2="progressTable" :approvalForm="approvalForm"  :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval"></progress-forms>
+        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock="isBlock" :documentInfo="documentInfo" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval" @closeShowModal="closeShowModal"></progress-forms>
     </div>
 </template>
 
@@ -101,12 +101,18 @@ import Loading from 'element-ui'
 import deleteReminders from 'components/deleteReminders'
 import applyForms from 'components/applyDialog'
 import progressForms from 'components/progressDialog'
+import {checkProjectAuth } from 'common/js/config'
 import {
     getPreDetail,
     slectAllStage,
     getStageUploadDocument,
     nextStage,
-    suspendInvestProject
+    suspendInvestProject,
+    getTeamListPage,
+    startApproveInfo,
+    getApproveInfo,
+    approveResult,
+    getTeams
 } from 'api/projectPre';
 import {
     getProjectUsers
@@ -139,6 +145,8 @@ export default {
             progressModal: false,
             title: '',
             prompt: '任务助手小双温馨提示:',
+            isBlock: false,
+            dialogTitle: '查看进度',
             activeName: 'details',
             proUsers: [], // 项目用户列表
             proRoles: [], // 项目角色列表
@@ -161,21 +169,24 @@ export default {
                 flag: true
             },
             applyForm: { // 发起申请对话框 表单
-                title: '',
-                auditor: '',
-                notes: ''
+                currentStageId: '',
+                roleId: '',
+                approveTitle: '',
+                approveUserId: '',
+                orderValue: '',
+                remark: ''
             },
             auditorOptions: [{ //发起申请对话框 审批人列表
-                value: '选项1',
-                label: '张三'
+                userId: '选项1',
+                userName: '张三'
             }, {
-                value: '选项2',
-                label: '李四'
+                userId: '选项2',
+                userName: '李四'
             }, {
-                value: '选项3',
-                label: '王二'
+                userId: '选项3',
+                userName: '王二'
             }],
-            appendixTable: {
+            documentInfo: {
                 progressName: 'AAA项目XX申请',
                 appendixList: [{
                     fileName: '调研报告1',
@@ -200,7 +211,8 @@ export default {
                 radio: '1',
                 auditor: '',
                 approvalNotes: ''
-            }
+            },
+            isInTeam: false
         }
     },
     components: {
@@ -233,6 +245,30 @@ export default {
         }
     },
     methods: {
+        checkProjectAuth(code){
+            return (checkProjectAuth(code) && this.isInTeam);
+        },
+        checkTeamUser(){
+            getTeams(this.investProjectId).then(resp => {
+                this.teamData = resp.data.result;
+                if(resp.data.result == null || resp.data.result.length == 0){
+                    this.isInTeam = false;
+                }else{
+                    let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                    let _isInTeam = false;
+                    resp.data.result.forEach((item) =>{
+                        if(item.userId == userId){
+                            _isInTeam = true;
+                            return;
+                        }
+                    });
+                    this.isInTeam = _isInTeam;
+                }
+                console.log("登录人是否在团队:"+this.isInTeam);
+            }).catch(e => {
+                console.log('checkTeamUser error: ', e);
+            })
+        },
         listenUploaded(uploaded) {
             if (uploaded) {
                 this.getStageUploadDocument(); //获取当前阶段及任务小助
@@ -262,7 +298,7 @@ export default {
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             this.merchantId = merchants[0].id;
-            this.getProUsers(), this.getProRoles();
+            this.getProUsers(), this.getProRoles(),this.checkTeamUser();
         },
         slectAllStage() {
             slectAllStage().then(resp => {
@@ -297,6 +333,17 @@ export default {
             this.isExit = isExit;
             this.isManage = isManage;
             this.nextStageDisabled = nextStageDisabled;
+
+            if(this.nextStageDisabled){
+                let _hasApprove = false;
+                this.module.forEach((item)=>{
+                    if(item.type == 2 || item.type == 3){
+                        _hasApprove = true;
+                        return ;
+                    }
+                });
+                this.nextStageDisabled = this.nextStageDisabled || _hasApprove;
+            }
         },
         /**
          * [getPreProDetail 项目详情]
@@ -346,7 +393,7 @@ export default {
             });
         },
         /**
-         * [getProUsers 获取项目用户列表]
+         * [getProUsers 获取企业用户列表]
          * @return {[type]} [description]
          */
         getProUsers() {
@@ -384,29 +431,37 @@ export default {
                 stageId
             };
             nextStage(params).then(resp => {
-                if (resp.data.status === "200") {
+                if (resp.data.status == "200") {
+                    console.log("200");
                     this.getStageUploadDocument();
+                }else if(resp.data.status == "9030"){
+                    console.log("9030");
+                    this.applyModal = true;
+                    //发起申请
+                    this.$set(this.$data, 'applyForm', resp.data.result);
+                    let roleId = resp.data.result.roleId;
+                    let params = {roleId: roleId, investProjectId: this.investProjectId};
+                    this.getAuditorOptions(params);
+
+                } else {
+                    this.$Message.error(resp.data.message);
                 }
+
             }).catch(e => {
                 console.log('changeStep() exists error: ', e);
             });
         },
-        // 小双助手 打开不同的对话框
-        openDialog(index, id) {
-            if (index == 1) {
-                this.applyModal = true;
-            } else if (index == 2) {
-                this.progressModal = true;
-
-            }
-            // switch (index) {
-            //    case 1:
-            //      this.applyModal = true;
-            //      break;
-            //    case 2:
-            //      this.progressModal = true;
-            //      break;
-            // }
+        getAuditorOptions(params){
+            getTeamListPage(params).then(resp => {
+                let data = resp.data;
+                if (data.status == '200') {
+                    this.auditorOptions = data.result.list;
+                }else{
+                    this.auditorOptions = [];
+                }
+            }).catch(e => {
+                console.log('获取项目角色列表 error: ', e);
+            });
         },
         disable(name) {
             if (name.flag === false) {
@@ -437,7 +492,7 @@ export default {
                     this.deleteReminders = !this.deleteReminders;
                 }
             }).catch(e => {
-                console.log('changeStep() exists error: ', e);
+                console.log('中止项目 error: ', e);
             });
 
         },
@@ -485,17 +540,72 @@ export default {
                 })
         },
         // 发起申请表单
-        submitApply() {
+        submitApply(applyForm) {
             this.applyModal = false;
+            startApproveInfo(applyForm).then(resp => {
+                if (resp.data.status === "200") {
+                    this.getStageUploadDocument();
+                }else {
+                    this.$Message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('changeStep() exists error: ', e);
+            });
         },
         cancleApply() {
             this.applyModal = false;
         },
+        // 小双助手 打开不同的对话框
+        openDialog(index, id) {
+            getApproveInfo(id).then(resp => {
+                if (resp.data.status === "200") {
+                    console.log("审批详情："+JSON.stringify(resp.data.result));
+                    //this.getStageUploadDocument();
+                    this.documentInfo = resp.data.result.dataDocumentResult;
+                    this.progressTable = resp.data.result.approveStageNodeData;
+                    this.approvalForm = resp.data.result;
+                    this.$set(this.$data.approvalForm, 'disposeResult', "1"); //默认同意
+                    this.$set(this.$data.approvalForm, 'approveUserId', ""); //默认为空
+                    this.$set(this.$data.approvalForm, 'remark', ""); //默认为空
+                    if(resp.data.result.roleId != null && resp.data.result.roleId != ''){
+                        let roleId = resp.data.result.roleId;
+                        let params = {roleId: roleId, investProjectId: this.investProjectId};
+                        this.getAuditorOptions(params);
+                    }
+
+                    this.dialogTitle = resp.data.result.approveTitle;
+                    this.progressModal = true;
+                    if (index == 1) {
+                        this.isBlock = true;
+                    } else if (index == 2) {
+                        this.isBlock = false;
+                    }
+                }else {
+                    this.$Message.error(resp.data.message);
+                }
+            }).catch(e => {
+                console.log('openDialog() exists error: ', e);
+            });
+
+        },
         // 审批表单
-        submitApproval() {
-            this.progressModal = false;
+        submitApproval(approvalForm) {
+            approveResult(approvalForm, this.stageId, this.projectId).then(resp => {
+                if (resp.data.status === "200") {
+                    console.log("审批详情："+JSON.stringify(resp.data.result));
+                    this.progressModal = false;
+                    this.getStageUploadDocument();
+                }else {
+                    this.$Message.error(res.data.message);
+                }
+            }).catch(e => {
+                console.log('openDialog() exists error: ', e);
+            });
         },
         cancleApproval() {
+            this.progressModal = false;
+        },
+        closeShowModal(){
             this.progressModal = false;
         }
     }
@@ -712,27 +822,6 @@ export default {
                 }
             }
         }
-    }
-    .comment_box {
-        height: 80px;
-        display: flex;
-        align-items: center;
-        padding-left: 90px;
-        .comment_left {
-            width: 100px;
-            margin-right: 150px;
-            text-align: center;
-        }
-        .comment_right {
-            display: flex;
-            flex-direction: column;
-        }
-    }
-    .bgh {
-        background: #fff;
-    }
-    .bgl {
-        background: #EEF0F4;
     }
     .tabs {
         width: 100%;

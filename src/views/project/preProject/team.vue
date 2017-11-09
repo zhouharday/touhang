@@ -1,7 +1,7 @@
 <template>
     <div class="table">
         <div class="teamTable">
-            <tabel-header :data="headerInfo_team" @add="addTeam"></tabel-header>
+            <tabel-header :data="checkProjectAuth('XMTD-TS') ? headerInfo_team: _headerInfo_team" @add="addTeam"></tabel-header>
             <el-table :data="teamData" border style="width: 100%">
                 <el-table-column label="姓名" prop="userName" align="center">
                     <template scope="scope">
@@ -17,7 +17,7 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button type="text" size="small" @click="handleDelete(scope.$index,teamData)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('XMTD-SC')" type="text" size="small" @click="handleDelete(scope.$index,teamData)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -48,7 +48,7 @@
 
 <script>
 import tabelHeader from 'components/tabelHeader'
-import { changeDate } from 'common/js/config'
+import { changeDate,checkProjectAuth } from 'common/js/config'
 import { getTeams, addInsertProjectTeam, delTeam } from 'api/projectPre'
 
 export default {
@@ -68,6 +68,10 @@ export default {
         proRoles: {
             type: Array,
             default: []
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -112,6 +116,9 @@ export default {
         },
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         init() {
             this.getDatas();
         },

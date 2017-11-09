@@ -3,13 +3,15 @@ import {getInvestorList, getProjectType, getIdType, getSubArea} from 'api/invest
 const state = {
     investorList: {},
     projectType: {},
-    investorName: ''
+    investorName: '',
+    agreement: [] // 投资协议
 }
 
 const getters = {
     investorList: state => state.investorList,
     projectType: state => state.projectType,
-    investorName: state => state.investorName
+    investorName: state => state.investorName,
+    agreement: state => state.agreement
 }
 
 const mutations = {
@@ -21,6 +23,9 @@ const mutations = {
     },
     [types.GET_INVESTORNAME](state, investorName) {
         state.investorName = investorName
+    },
+    [types.GET_AGREEMENT](state, agreement) {
+        state.agreement = agreement
     }
 }
 
@@ -28,8 +33,12 @@ const actions = {
     getInvestor({commit, dispatch}) {
         return getInvestorList().then((response) => {
             if (response.status == '200') {
-                // console.log(response.data.result)
-                commit(types.GET_INVESTORLIST, response.data.result)
+                if (response.data.result) {
+                    commit(types.GET_INVESTORLIST, response.data.result)
+                } else {
+                    commit(types.GET_INVESTORLIST, [])
+                }
+
             }
         }).catch(err => {
             console.log(response)
@@ -43,6 +52,9 @@ const actions = {
         }).catch(err => {
             console.log(response)
         })
+    },
+    getAgreementInfo({commit}, dataInfo) {
+        commit(types.GET_AGREEMENT, dataInfo)
     }
 }
 

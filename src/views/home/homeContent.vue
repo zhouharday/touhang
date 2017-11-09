@@ -27,7 +27,7 @@
                                         <span class="cursor" @click="openMsg(item,'msg')">{{item.assistMessage.msgContent}}</span>
                                     </li>
                                 </ul>
-                                <Page class="page" show-total='true' :total=assistMessage.total :current="1" simple @on-change="assistMsgPages"></Page>
+                                <Page class="page" show-sizer="true" page-size="4" show-total='true' :total="assistMessage.total" :current="page1" simple @on-change="assistMsgPages"></Page>
                             </el-tab-pane>
                             <el-tab-pane label="公司公告" name="second">
                                 <ul class="notice_ul">
@@ -38,7 +38,7 @@
                                         <span class="cursor" @click="openMsg(item,'notic')">{{item.assistNotice.noticeContent}}</span>
                                     </li>
                                 </ul>
-                                <Page class="page" show-total='true' :total=assistNotice.total :current="1" simple @on-change="assistNoticPages"></Page>
+                                <Page class="page" show-total='true' page-size="4" :total="assistNotice.total" :current="page2" simple @on-change="assistNoticPages"></Page>
                             </el-tab-pane>
                         </el-tabs>
                     </div>
@@ -56,16 +56,16 @@
                                 <span>{{waitSth}}</span>
                             </div>
                             <div v-if="daibanRw" class="daibanRw">暂无数据</div>
-                            <div class="homeContentBot_a" v-for="(item,index) in projectList.result" :key="item.id">
+                            <div class="homeContentBot_a" v-for="(item,index) in projectList" :key="item.id">
                                 <div>
                                     <img src="/static/img/cr_prject.png">
                                     <span>{{item.stageName}}</span>
                                 </div>
-                                <div>【{{item.name}}】</div>
+                                <div>【{{item.typeName}}】</div>
                                 <div>
-                                    <span>{{item.typeName}}</span>
-                                    <!-- <span @click="approvalModal=true">{{item.projectText3}}</span> -->
-                                    <span>{{item.createtime}}</span>
+                                    <span>{{item.name}}</span>
+                                    <span @click="approval(item,index)">立即审批</span>
+                                    <span>{{item.createTime}}</span>
                                 </div>
                             </div>
                             <!-- <div class="homeContentBot_b" v-for="(item,index) in projectManger" :key="item.index">
@@ -85,7 +85,7 @@
                                                                                         <span>{{item.time}}</span>
                                                                                     </div>
                                                                                 </div> -->
-                            <Page class="page" show-total='true' :total=projectList.total :current="1" simple @on-change="projectList"></Page>
+                            <Page class="page" show-total='true' page-size="3" :total="projectList.total" :current="page3" simple @on-change="projectList"></Page>
                         </div>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                                 <span>{{item.createDate}}</span>
                             </p>
                         </div>
-                        <Page class="page" :current="1" :total="taskLists.total" simple @on-change="taskListsPage"></Page>
+                        <Page class="page" :current="page4" page-size="2" :total="taskLists.total" simple @on-change="taskListsPage"></Page>
                         <!-- <div class="sysMessage" v-show="sysMessage">{{sysMessageTitle}}</div> -->
                     </div>
                 </div>
@@ -436,6 +436,9 @@
   .page {
     float: right;
     font-size: 14px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
   }
 }
 
@@ -669,6 +672,11 @@ export default {
   },
   data() {
     return {
+      msg: {},
+      page1: 1,
+      page2: 1,
+      page3: 1,
+      page4: 1,
       daibanRw: false,
       activeName: "first",
       // applyModal: false,
@@ -706,8 +714,8 @@ export default {
       // ],
       noRead: "未读",
       readed: "已读",
-      assistNotice: [], //公司公告列表数据
-      assistMessage: [], //系统消息
+      assistNotice: {}, //公司公告列表数据
+      assistMessage: {}, //系统消息
       taskLists: [], //代办任务列表数据
       // applyForm: { // 立即申请表单
       //     title: '',
@@ -802,17 +810,23 @@ export default {
     };
   },
   methods: {
-    assistMsgPages(pageNum) {
-      this.getMessageList(pageNum);
+    assistMsgPages(page) {
+      //系统消息分页
+      this.page1 = page;
+      this.getMessageList();
     },
     assistNoticPages(pageNum) {
-      this.getNoticeUserList(pageNum);
+      //公告消息分页
+      this.page2 = page;
+      this.getNoticeUserList();
     },
-    taskListsPage(pageNum) {
-      this.getTaskList(pageNum);
+    projectList(pageNum) { //小双提醒分页
+      this.page3 = page;
+      this.findUserTask();
     },
-    projectList(pageNum) {
-      this.findUserTask(pageNum);
+    taskListsPage(page) { //代办任务分页
+      this.page4 = page;
+      this.getTaskList();
     },
     changetime(data) {},
     openMsg(item, type) {
@@ -837,7 +851,6 @@ export default {
       this.monthDate = arr;
       this.getData();
     },
-
     getData() {
       //获取日程列表 api
       this.$http
@@ -861,9 +874,7 @@ export default {
                   }
                 });
               });
-            } else if (res.data.status == "403") {
-              this.$Message.error(res.data.message);
-            } else if (res.data.status == "49999") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -887,13 +898,15 @@ export default {
       this.$http
         .post(this.api + "/work/getNoticeUserList", {
           userId: this.user.userInfor.id,
-          page: pageNum,
+          page: this.page2,
           pageSize: 4
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
               this.assistNotice = res.data.result;
+              console.log("公司公告");
+              console.log(res.data.result);
               this.$Message.success(res.data.message);
             } else if (res.data.status == "403") {
               this.$Message.error(res.data.message);
@@ -909,13 +922,16 @@ export default {
       this.$http
         .post(this.api + "/work/getMessageList", {
           userId: this.user.userInfor.id,
-          page: pageNum,
+          page: this.page1,
           pageSize: 4
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
+              console.log("系统消息");
+              console.log(res.data.result);
               this.assistMessage = res.data.result;
+              console.log(this.assistMessage.total);
               this.$Message.success(res.data.message);
             } else if (res.data.status == "403") {
               this.$Message.error(res.data.message);
@@ -933,7 +949,7 @@ export default {
           userId: this.user.userInfor.id,
           merchantId: this.user.merchants[0].id,
           type: 2,
-          page: page,
+          page: this.page4,
           pageSize: 2
         })
         .then(res => {
@@ -950,24 +966,25 @@ export default {
           this.$Message.error("请求超时");
         });
     },
-    findUserTask(page) {
+    findUserTask() {
       //小双提醒
       this.$http
-        .post(this.api + "/activitiCommon/findUserTask", {
-          merchantId: this.user.merchants[0].id,
+        .post(this.api + "/investProject/selectMineApproveList", {
           userId: this.user.userInfor.id,
-          page: page,
+          // userId: "06a660734d044030aa04f7a3f2f8764e",
+          page: this.page3,
           pageSize: 3
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
-              this.projectList = res.data.result;
+              console.log(res.data);
+              this.projectList = res.data.result.list;
               if (res.data.result.result.length == "0") {
                 this.daibanRw = true;
               }
               this.$Message.success(res.data.message);
-            } else if (res.data.status == "403") {
+            } else {
               this.$Message.error(res.data.message);
             }
           }
@@ -975,6 +992,33 @@ export default {
         .catch(error => {
           this.$Message.error("请求超时");
         });
+    },
+    approval(item, index) {
+      //审批项目/基金
+      // this.approvalModal = !this.approvalModal;
+      console.log(item);
+      if (item.type == 1) {
+        //审批项目
+        this.addTab(
+          "投资项目-" + item.typeName,
+          "/home/preProjectMessage/" + item.typeId + "/" + item.investProjectId,
+          "preProjectMessage/" + item.typeId + "/" + item.investProjectId
+        );
+        this.$router.push({
+          name: "preProjectMessage",
+          params: { userId: item.typeId, investProjectId: item.investProjectId }
+        });
+      } else {
+        //审批基金
+        this.addTab(item.typeName + "详情", "/home/fundDetails/" + item.typeId);
+        this.$router.push({
+          name: "fundDetails",
+          params: { id: item.typeId }
+        });
+      }
+    },
+    addTab(th, url, name) {
+      this.$store.commit({ type: "addTab", title: th, url: url, name: name });
     }
   }
 };

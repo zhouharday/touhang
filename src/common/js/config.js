@@ -91,3 +91,47 @@ export function compare(prop) {
         }
     }
 }
+
+export function filtersPermissionCode_project(permissionCode) { //check 项目权限
+    if (sessionStorage.getItem('permissionCode_project') == null) {
+        return console.log('无权限');
+    };
+    let haveBtn = sessionStorage.getItem('permissionCode_project').includes(permissionCode);
+    if (haveBtn) {
+        return true;
+    }
+    return false;
+}
+
+export function filtersPermissionCode_fund(permissionCode) { //check 基金权限
+    if (sessionStorage.getItem('permissionCode_fund') == null) {
+        return console.log('无权限');
+    };
+    let haveBtn = sessionStorage.getItem('permissionCode_fund').includes(permissionCode);
+    if (haveBtn) {
+        return true;
+    }
+    return false;
+}
+
+export function checkProjectAuth(code) {
+    if (sessionStorage.getItem('permissionCode_project') == null) {
+        console.log("项目权限为空, CODE: " + code + '无权限');
+        return false;
+    }
+    let result = sessionStorage.getItem('permissionCode_project').includes(code);
+    if (!result) {
+        console.log("CODE: " + code + '无权限')
+    };
+    return result;
+}
+
+export function checkFundAuth(code) {
+    if (sessionStorage.getItem('permissionCode_fund') == null) {
+        console.log("基金权限为空, CODE: " + code + '无权限');
+        return false;
+    }
+    let result = sessionStorage.getItem('permissionCode_fund').includes(code);
+    if (!result) console.log("CODE: " + code + '无权限');
+    return result;
+}

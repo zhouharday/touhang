@@ -1,6 +1,6 @@
 <template>
 <div class="department">
-    <div class="title">
+    <div class="titles">
         <el-button type="danger" @click="addDepartment" size="small">
             <Icon type="plus-round"></Icon>
             添加
@@ -12,7 +12,7 @@
 
                 <template scope="props">
                     <el-row>
-                        <el-col v-for="(item, index) of props.row.children">
+                        <el-col v-for="(item, index) in props.row.children" :key="item">
                             <el-row :gutter="20">
                                 <el-col :span="13" class="item" >
                                     <span class="add_margin" v-if="!item.editFlag">{{item.deptName}}</span>
@@ -256,12 +256,16 @@ export default {
 @import "../../common/styles/mixin.less";
 .department {
     .base-style();
-    .title {
+    .titles {
         width: 100%;
         height: 42px;
         line-height: 42px;
         flex: 1;
         text-align: right;
+        background: none;
+        >button{
+            float: right;
+        }
     }
     .title1 {
         width: 40%;

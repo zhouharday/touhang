@@ -273,6 +273,13 @@ export function getAppraisementList(params = {}) {
 	return service({url: '/appraisement/likeSelectAppraisementPage', method: 'post', data});
 }
 
+//投后项目估值趋势图
+export function getAppraisementDetails(projectId = undefined) {
+	const data = {
+		projectId
+	};
+	return service({url: '/appraisementDetails/selectAppraisementDetails', method: 'post', data});
+}
 
 //项目估值 - 项目估值历史记录查询
 export function getAppraisementRec(params = {}) {

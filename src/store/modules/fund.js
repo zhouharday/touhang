@@ -13,7 +13,7 @@ const state = {
     fundInvestment: [],
     managementCompany: [],
     OrgType: JSON.parse(sessionStorage.getItem('ORGTYPE')) || [], // 组织类型
-    myFundList: {},
+    myFundList: [],
     // myFundDetails: {},
     fundStage: [
         {
@@ -99,7 +99,11 @@ const actions = {
         const LIST_DATA = null
         return getMyFund(1, 10, LIST_DATA, LIST_DATA, LIST_DATA, LIST_DATA, LIST_DATA).then((res) => {
             if (res.status == '200') {
-                commit(types.GET_MYFUNDLIDT, res.data.result)
+                if(res.data.result) {
+                    commit(types.GET_MYFUNDLIDT, res.data.result)
+                } else {
+                    commit(types.GET_MYFUNDLIDT, [])
+                }
             }
         })
     },

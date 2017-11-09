@@ -32,6 +32,7 @@ const state = {
     permissionCode_fund: [], //基金按钮数据
     projectPermissions: false, //是否存在项目权限按钮
     fundPermissions: false, //是否存在基金权限按钮
+    fund: [],
 };
 
 const mutations = {
@@ -91,6 +92,27 @@ const mutations = {
             type: msg.type
         })
     },
+    getUserButton(state, user) {
+        user.this.$http
+            .post(user.this.api + "/role/getUserButton", {
+                "userId": state.userInfor.id,
+                "merchantId": state.merchants[0].id
+            })
+            .then(res => {
+                if (res.status == "200") {
+                    if (res.data.state == "200") {
+                        console.log('其他模块按钮权限数据');
+                        console.log(res.data);
+
+                    } else {
+                        console.log(res.data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
     getPermissionButton(state, user) { //获取客户端系统项目、基金按钮
         user.this.$http
             .post(user.this.api + "/permission/getPermissionButton", {
@@ -100,20 +122,24 @@ const mutations = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.state == "200") {
-                        console.log('按钮权限数据');
-                        // console.log(res.data);
-                        state.permissionCode = res.data.result; //保存所有按钮数据
+                        if (res.data.result.length == 0) {
+                            console.log('没有项目基金权限数据');
+                            return;
+                        };
+                        state.permissionCode = res.data.result; //保存所有权限按钮数据
                         window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
-                        console.log(state.permissionCode);
+                        // console.log(state.permissionCode);
+                        state.permissionCode_project = [];
+                        state.permissionCode_fund = [];
                         state.permissionCode.map((item, index) => {
-                            state.permissionCode_project = [];
-                            state.permissionCode_fund = [];
                             if (state.permissionCode[index].permissionType == 0) { //项目按钮
-                                state.permissionCode_project.push(state.permissionCode[index]);
+                                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
+                                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
                             };
                             if (state.permissionCode[index].permissionType == 1) { //基金按钮
-                                state.permissionCode_fund.push(state.permissionCode[index]);
-                            }
+                                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
+                                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
+                            };
                         });
                         console.log('项目按钮权限');
                         console.log(state.permissionCode_project);
@@ -129,26 +155,6 @@ const mutations = {
                 console.log(error);
             })
     },
-    filtersPermissionCode_project(state, str) { //过滤项目按钮方法
-        state.projectPermissions = false;
-        state.permissionCode_project.map((item, index) => {
-            if (item.permissionCode == str) {
-                return ProjectPermissions = true;
-            } else {
-                return ProjectPermissions = false;
-            }
-        })
-    },
-    filtersPermissionCode_fund(state, str) { //过滤基金按钮方法
-        state.fundPermissions = false;
-        state.permissionCode_fund.map((item, index) => {
-            if (item.permissionCode == str) {
-                return fundPermissions = true;
-            } else {
-                return fundPermissions = false;
-            }
-        })
-    }
 };
 
 const actions = {
@@ -163,16 +169,32 @@ const actions = {
             // pass: "e10adc3949ba59abbe56e057f20f883e"
         }).then(data => {
             if (data.status == '403') {
-                alert(data.message);
+                commit('Notification', {
+                    title: '',
+                    message: '请求超时',
+                    type: 'error'
+                });
+                state.loading = false;
+                return;
+            } else if (data.data.status == '1015') {
+                commit('Notification', {
+                    title: '',
+                    message: data.data.message,
+                    type: 'warning'
+                });
+                state.loading = false;
+                return;
             } else if (data.data.status == '156') { //用户名或密码不正确
                 commit('Notification', {
                     title: '',
                     message: '用户名或密码不正确，请重新输入',
                     type: 'error'
                 });
+                state.loading = false;
                 // this.$Message.error('用户名或密码不正确，请重新输入');
                 return;
             } else if (data.status == '200') { //登录成功
+                state.loading = false;
                 // console.log(data);
                 if (data.data.result.userInfo.disables == '0') {
                     commit('Notification', {
@@ -195,22 +217,18 @@ const actions = {
                     // console.log(state.merchants);
                     if (state.merchants.length == '1') { //只有一个组织
                         // console.log(state.merchants[0].type);
-
                         if (state.merchants[0].type == '0') { //审核中
                             commit('saveApprovalStatus', {
                                 type: state.merchants[0].type,
                                 text: '您的申请正在审核中,请您耐心等待~'
                             });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
-
                         } else if (state.merchants[0].type == '1') { //审核通过
-
                             commit('saveApprovalStatus', {
                                 type: state.merchants[0].type,
                                 text: '审核通过'
                             });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
-
                         } else if (state.merchants[0].type == '2') { //审核失败
                             // alert(state.merchants[0].type);
                             commit('saveApprovalStatus', {
@@ -218,7 +236,6 @@ const actions = {
                                 text: '太遗憾了,您的审核未通过,再接再厉哦~'
                             });
                             window.sessionStorage.setItem('saveApprovalStatus', JSON.stringify(state.approvelType));
-
                         } else if (state.merchants[0].type == '3') { //已注册但未开通试用权限
                             // alert(state.merchants[0].type);
                             commit('saveApprovalStatus', {
@@ -254,12 +271,15 @@ const actions = {
                             commit('getPermissionButton', {
                                 this: user.self
                             });
+                            commit('getUserButton', {
+                                this: user.self
+                            });
                             commit('Notification', {
                                 title: '',
                                 message: '登录成功',
                                 type: 'success'
                             });
-                        }
+                        };
                         // console.log('um_id:' + state.merchants[0].um_id);
                         // console.log('//////////////////////////////////////////////////////////////////////////');
                         state.logoSrc.logo = data.data.result.merchants[0].logo; //企业logo
@@ -268,18 +288,20 @@ const actions = {
                         // console.log(state.logoSrc);
                     } else if (state.merchants.length > '1') { //有多个组织列表
                         state.CardBox = loginBox;
-                    } else if (state.merchants.length == '0') { //有多个组织列表
+                    } else if (state.merchants.length == '0') { //无组织列表
                         commit('Notification', {
                             title: '',
                             message: '无组织',
                             type: 'error'
                         });
-                    }
+                    };
+                    state.loading = false;
                     // console.log(state.merchants.length);
                 } else if (data.data.result.userInfo.isMerchant == '0') { //无组织(不存在这种情况)
                     user.self.$router.push({
                         name: 'homeContent'
                     });
+                    state.loading = false;
                 }
             }
         }).catch(error => {
@@ -288,9 +310,10 @@ const actions = {
                 message: '服务器异常,请稍后再试',
                 type: 'error'
             });
+            state.loading = false;
             console.log(error);
         })
-    }
+    },
 }
 
 export default {

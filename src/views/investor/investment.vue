@@ -97,6 +97,7 @@ export default {
                     residueAmount: '', //剩余金额
                     contributiveRatio: '', //出资占比
                     paidAmount: '', //实缴金额
+                    documentInfo: [],
                     managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, // 经办人id
                     managerName: JSON.parse(sessionStorage.getItem('userInfor')).name, // 经办人
                     handlingDate: new Date()
@@ -107,6 +108,7 @@ export default {
                 let invbonusInfo = {
                     agreementName: '', // 协议名称v
                     investorName: '', // 投资者v
+                    documentInfo: [],
                     fundName: '', // 基金名称v
                     handlingDate: '', // 经办日期v
                     shareMoney: '', //退出金额v
@@ -169,6 +171,7 @@ export default {
             var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getAgreementAmountList(invId, merId).then((res) => {
                 if (res.status == '200') {
+                console.log(res.data.result.list);
                     this.investorData = res.data.result.list
                 }
             }).catch(err => {
@@ -181,7 +184,7 @@ export default {
             var merchantsId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
             getEarningsAmountList(fundId, merchantsId).then((res) => {
                 if (res.status == '200') {
-                    console.log(res.data.result.list)
+                    // console.log(res.data.result.list)
                     this.quitCapitalData = res.data.result.list
                 }
             })

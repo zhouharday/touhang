@@ -2,7 +2,7 @@
 <div class="tables">
     <!-- 董事会成员 -->
     <div class="memberTable">
-        <tabel-header :data="headerInfo_member" @add="addMember"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_member : _headerInfo_member" @add="addMember"></tabel-header>
         <el-table :data="memberData" border style="width: 100%">
             <el-table-column label="姓名" prop="name" align="center">
                 <template scope="scope">
@@ -30,11 +30,11 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('XQ-bianji') && !scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">编辑
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">保存
                         </el-button>
-                        <el-button type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('XQ-bianji')" type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
                     </template>
             </el-table-column>
         </el-table>
@@ -59,7 +59,7 @@
     </div>
     <!-- 股权结构 -->
     <div class="structureTable">
-        <tabel-header :data="headerInfo_structure" @add="addStructure" class="structureHeader"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_structure: _headerInfo_structure" @add="addStructure" class="structureHeader"></tabel-header>
         <el-table :data="structureData" border style="width: 100%">
             <el-table-column label="股东姓名" prop="stockholderName" align="center">
                 <template scope="scope">
@@ -103,11 +103,11 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('XQ-bianji') && !scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">保存
+                        <el-button v-if="checkProjectAuth('XQ-bianji') && scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">保存
                         </el-button>
-                        <el-button type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('XQ-bianji')" type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
                     </template>
             </el-table-column>
         </el-table>
@@ -142,6 +142,7 @@
 <script style="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 import 'common/js/filter'
+import {checkProjectAuth } from 'common/js/config'
 import { addOwer, delOwer, addGu, delGu, owers, gus } from 'api/projectPre';
 export default {
     props: {
@@ -156,6 +157,10 @@ export default {
         structureData: {
             type: Array,
             default: []
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -231,12 +236,20 @@ export default {
                     explain: '添加'
                 }]
             },
+            _headerInfo_member: {
+                desc: '董事会成员',
+                btnGroup: []
+            },
             headerInfo_structure: {
                 desc: '股权结构',
                 btnGroup: [{
                     icon: 'plus-round',
                     explain: '添加'
                 }]
+            },
+            _headerInfo_structure: {
+                desc: '股权结构',
+                btnGroup: []
             }
         }
     },
@@ -249,6 +262,9 @@ export default {
         // }
     },
     methods: {
+        checkProjectAuth(code){
+            return checkProjectAuth(code) && this.isInTeam;
+        },
         //添加 董事会成员的方法
         addMember() {
             let new_memberForm = {
