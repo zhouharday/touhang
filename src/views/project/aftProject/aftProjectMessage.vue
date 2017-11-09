@@ -191,11 +191,11 @@ export default {
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             this.merchantId = merchants[0].id;
+            this.checkTeamUser();
             this.getWarnMessageList();
             this.getInvestSubject();
             this.getAppraisementRep();
             this.getAppraisementDetails();
-            this.checkTeamUser();
             this.getProUsers();
         },
         checkTeamUser(){
