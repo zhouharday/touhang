@@ -228,7 +228,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractForm2.documentInfo"></upload-files>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractDocInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -288,7 +288,7 @@
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
-                    <el-table :data="paidData" border style="width: 100%" align="center" show-summary>
+                    <el-table :data="paidData" border style="width: 100%" align="center" show-summary="true">
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
@@ -386,7 +386,7 @@
                     </el-dialog>
                     <!-- 编辑投资支付 对话框-->
                     <el-dialog title="编辑投资支付" :visible.sync="paidAdd2" :close-on-click-modal="false" style="width：65%;">
-                        <el-form :model="paidForm1" label-position="right" label-width="110px">
+                        <el-form :model="paidForm1" :rules="paidRules" ref="paidForm1" label-position="right" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题" prop="payTitle">
@@ -429,7 +429,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="相关附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="paidForm1.documentInfo"></upload-files>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="payDocInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -592,7 +592,7 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="相关附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="sharingForm1.documentInfo"></upload-files>
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -931,6 +931,31 @@ export default {
                 console.log('getParticipationList() exists error: ', e);
             })
         },
+        getSummaries(param) {
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '总价';
+                    return;
+                }
+                const values = data.map(item => Number(item[column.property]));
+                if (!values.every(value => isNaN(value))) {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                    sums[index] += ' 元';
+                } else {
+                    sums[index] = 'N/A';
+                }
+            });
+            return sums;
+        },
         //获取合同列表
         getContract() {
             contracts(this.proId).then(resp => {
@@ -1034,7 +1059,7 @@ export default {
                         item.name = item.name == null ? item.fileName : item.name;
                         item.url = item.url == null ? item.filePath : item.url;
                     });
-                    this.$set(this.$data['contractForm2'],'documentInfo',documentInfo);
+                    this.contractDocInfo = documentInfo;
 
                     this.fundData1 = resp.data.result.fundInfo;
                     this.fundData1.forEach(function(item, index) {
@@ -1056,14 +1081,14 @@ export default {
                         ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                     projectContract.handlerDate = changeDate(this.contractForm2.handlerDate),
                     projectContract.signDate = changeDate(this.contractForm2.signDate),
-                    projectContract.documentInfo = this.contractDocInfo
+                    projectContract.documentInfo = this.contractDocInfo;
                     let data = {
                         projectContract: projectContract,
                         fundInfo: this.fundData1
                     }
-                    console.log("编辑 项目合同:"+JSON.stringify(data));
+                    // console.log("编辑 项目合同:"+JSON.stringify(data));
                     editContract(projectContract, this.fundData1).then(resp => {
-                        console.log("编辑 项目合同:"+JSON.stringify(resp.data));
+                        // console.log("编辑 项目合同:"+JSON.stringify(resp.data));
                         if (resp.data.status == '200') {
                             this.contractForm2 = {};
                             this.fundData1 = [];
@@ -1213,7 +1238,7 @@ export default {
                         item.name = item.name == null ? item.fileName : item.name;
                         item.url = item.url == null ? item.filePath : item.url;
                     });
-                    this.$set(this.$data['paidForm1'],'documentInfo',documentInfo);
+                    this.payDocInfo = documentInfo;
 
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidAdd2 = !this.paidAdd2;
@@ -1365,7 +1390,7 @@ export default {
                         item.name = item.name == null ? item.fileName : item.name;
                         item.url = item.url == null ? item.filePath : item.url;
                     });
-                    this.$set(this.$data['sharingForm1'],'documentInfo',documentInfo);
+                    this.shareDocInfo = documentInfo;
                     
                     this.sharingAdd2 = !this.sharingAdd2;
                 } else {
@@ -1483,13 +1508,10 @@ export default {
             }
         },
         uploadSuccess(documentInfo, dataName){
-            // console.log("fileList--"+JSON.stringify(documentInfo));
             this.$set(this.$data, dataName, documentInfo);
-            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         },
         removeSucess(documentInfo, dataName){
             this.$set(this.$data, dataName, documentInfo);
-            // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         }
     }
 }

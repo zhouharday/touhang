@@ -23,15 +23,20 @@ export default {
         }
     },
     created(){
-        console.log(this.documentInfo)
+    },
+    watch: {
+        'documentInfo':function (to,from){
+        }
     },
     methods: {
         handleSuccess(resp, file, fileList) {
             if (resp.status == '200') {
                 fileList.forEach(item => {
-                    item.filePath = resp.filePath;
-                    item.fileName = resp.fileName;
-                    item.type = '1';
+                    if (item.uid === file.uid) {
+                        item.filePath = resp.filePath;
+                        item.fileName = resp.fileName;
+                        item.type = '1';
+                    }
                 });
                 this.documentInfo = fileList;
                 this.$emit('uploadSuccess', fileList);
@@ -42,8 +47,6 @@ export default {
             this.documentInfo.forEach((item) => {
                 if (item.uid === file.uid) {
                     item.type = '2';
-                    item.fileName = item.name;
-                    item.filePath = item.url;
                 }
             });
             // console.log("remove documentInfo ***"+JSON.stringify(this.documentInfo));
