@@ -7,10 +7,10 @@
           <div class="grid-content bg-purple-dark">
             <div id="statistical_Echarts_1" style="width: 600px;height:400px;"></div>
             <!-- <div>
-                              <ul>
-                                  <li><span>{{}}</span><span>{{}}</span></li>
-                              </ul>
-                          </div> -->
+                                <ul>
+                                    <li><span>{{}}</span><span>{{}}</span></li>
+                                </ul>
+                            </div> -->
           </div>
         </el-col>
         <el-col :span="12">

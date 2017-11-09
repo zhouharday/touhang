@@ -106,8 +106,8 @@ export default {
         // window.setCookie("name",number);
         // window.setCookie("pwd",pass);
         // console.log(pass);
-        this.userName = "";
-        this.passWord = "";
+        // this.userName = "";
+        // this.passWord = "";
         this.valueData = false;
         this.$store.dispatch({
           type: "loginAPI",

@@ -615,6 +615,7 @@ export default {
 
 <style lang="less" scoped>
 .preProjectMessage {
+    
     width: 100%;
     min-height: 100%;
     background-color: #fff;
