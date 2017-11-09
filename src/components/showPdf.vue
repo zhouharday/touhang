@@ -5,7 +5,7 @@
             <el-button id="prev" @click="closepdf">关闭</el-button>
         </div>
     </div>
-    <iframe v-if="isshowpdf" :src="'../../../../static/js/pdf/web/viewer.html?file='+transUrl" width="100%" height="100%" scrolling="no"></iframe>
+    <iframe v-if="isshowpdf" :src="'../../../../static/js/pdf/web/viewer.html?file='+pdfurl" width="100%" height="100%" scrolling="no"></iframe>
 </div>
 </template>
 <script>

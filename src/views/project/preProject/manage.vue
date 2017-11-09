@@ -99,7 +99,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model.number="contractForm1.stockRatio" auto-complete="off"></el-input>
+                                        <el-input v-model.number="contractForm1.stockRatio" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -152,7 +152,7 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.stockRatio" placeholder=""></el-input>
+                                        <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -212,7 +212,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model.number="contractForm2.stockRatio" auto-complete="off"></el-input>
+                                        <el-input v-model.number="contractForm2.stockRatio" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -265,7 +265,7 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.stockRatio" placeholder=""></el-input>
+                                        <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -288,7 +288,7 @@
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
-                    <el-table :data="paidData" border style="width: 100%" align="center" show-summary="true">
+                    <el-table :data="paidData" border style="width: 100%" align="center" show-summary="true" :summary-method="getPaySummaries">
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
@@ -465,7 +465,7 @@
                 <!--  项目分红 部分-->
                 <div class="fileTable sharingDialog">
                     <tabel-header :data="checkProjectAuth('GL-XMFH-XZ') ? headerInfo_sharing : _headerInfo_sharing" @add="goAddShare"></tabel-header>
-                    <el-table :data="sharingData" border style="width: 100%" align="center" show-summary>
+                    <el-table :data="sharingData" border style="width: 100%" align="center" show-summary :summary-method="getShareSummaries">
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
@@ -705,9 +705,9 @@ export default {
                 contractName: [
                     { required: true, message: '请输入合同名称', trigger: 'blur' }
                 ],
-                stockRatio: [
-                    { type : "number", required: true, message: '股权占比必须是数字', trigger: 'blur' }
-                ],
+                // stockRatio: [
+                //     { type : "number", required: true, message: '股权占比必须是数字', trigger: 'blur' }
+                // ],
                 signDate: [
                     { type : "date", required: true, message: '请选择签约日期', trigger: 'blur' }
                 ]
@@ -931,16 +931,17 @@ export default {
                 console.log('getParticipationList() exists error: ', e);
             })
         },
-        getSummaries(param) {
+        getPaySummaries(param) {
             const { columns, data } = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
-                    sums[index] = '总价';
+                    sums[index] = '合计';
                     return;
                 }
                 const values = data.map(item => Number(item[column.property]));
-                if (!values.every(value => isNaN(value))) {
+                console.log(column.property);
+                if (!values.every(value => isNaN(value)) && column.property == 'paidInMoney') {
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
                         if (!isNaN(value)) {
@@ -949,9 +950,35 @@ export default {
                             return prev;
                         }
                     }, 0);
-                    sums[index] += ' 元';
+                    // sums[index] += ' 元';
                 } else {
-                    sums[index] = 'N/A';
+                    sums[index] = '';
+                }
+            });
+            return sums;
+        },
+        getShareSummaries(param) {
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                const values = data.map(item => Number(item[column.property]));
+                console.log(column.property);
+                if (!values.every(value => isNaN(value)) && column.property == 'shareAmount') {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                    // sums[index] += ' 元';
+                } else {
+                    sums[index] = '';
                 }
             });
             return sums;
@@ -1287,12 +1314,15 @@ export default {
             });
         },
         changeInvestAmount() {
-            let sum = 0.0;
+            let sumAmount = 0.0, sumStockRatio = 0.0;
             for (let i = 0; i < this.fundData1.length; i++) {
-                sum += (parseFloat(this.fundData1[i].investAmount | 0));
+                sumAmount += (parseFloat(this.fundData1[i].investAmount | 0));
+                sumStockRatio += (parseFloat(this.fundData1[i].stockRatio | 0));
             }
-            this.$set(this.$data.contractForm1, 'contractAmount', sum);
-            this.contractForm2.contractAmount = sum;
+            this.$set(this.$data.contractForm1, 'contractAmount', sumAmount);
+            this.$set(this.$data.contractForm1, 'stockRatio', sumStockRatio);
+            this.contractForm2.contractAmount = sumAmount;
+            this.contractForm2.stockRatio = sumStockRatio;
         },
         //投资支付金额合计
         sumPay() {
@@ -1344,6 +1374,7 @@ export default {
             };
             this.shareDocInfo = [];
             this.sharingAdd1 = true;
+            this.fundData3 = [];
         },
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
