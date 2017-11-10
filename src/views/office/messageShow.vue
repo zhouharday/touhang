@@ -387,12 +387,12 @@ export default {
             // alert(565);
             if (res.data.status == "200") {
               console.log(res.data);
-            }
+            };
             this.getNoticeUserList1(1, 10);
             if (res.data.status == "49996") {
               //数据为空
               console.log("传入参数非法");
-            }
+            };
           } else if (res.data.status == "403") {
             console.log(res.data.message);
           }
