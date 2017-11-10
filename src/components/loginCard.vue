@@ -172,7 +172,6 @@ export default {
         },
         time() { //倒计时功能
             if (!this.isSendCode) {
-                alert(111);
                 // this.sendVerificationCode();
                 this.isSendCode = !this.isSendCode;
                 this.valueData = false;
@@ -239,7 +238,6 @@ export default {
             this.$refs[formName].validate((valid) => {
 
                 if (valid) {
-                    alert(555);
                     console.log('验证通过');
                     console.log(this.form1);
                     this.form1.checkPwd = this.md5(this.form1.checkPwd);
