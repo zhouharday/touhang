@@ -374,6 +374,7 @@ span {
     border: none;
     font-size: 20px;
     outline: none; // color: #fff;
+    padding: 5px;
 }
 
 .login-ac,

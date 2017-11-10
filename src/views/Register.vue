@@ -1,38 +1,42 @@
 <template>
-    <div class="register-wrap">
-        <div class="register-case">
-            <div class="register-name">
-                <p>领投者企业注册</p>
-                <span>Lead investor enterprise registration</span>
-            </div>
-            <div class="register-box">
-                <div class="register-en">
-                    <label>企业名称：</label>
-                    <input required type="text" class="register-enterprise" placeholder="请输入企业名称" @input="checkVata" v-model="register.merchantName">
-                </div>
-                <div class="register-in">
-                    <label>所属行业：</label>
-                    <el-select class="register_select" required @change="checkVata" v-model="register.industry" placeholder="请选择">
-                        <el-option v-for="item in industry" :key="item.id" :label="item.dicName" :value="item.id">
-                        </el-option>
-                    </el-select>
-                </div>
-                <div class="register-us">
-                    <label>联系人姓名：</label>
-                    <input required type="text" class="register-user" placeholder="请输入联系人姓名" @input="checkVata" v-model="register.contactUser">
-                </div>
-                <div class="register-ad">
-                    <label>所在地：</label>
-                    <el-select class="register_select" required @change="checkVata" v-model="register.province" placeholder="请选择">
-                        <el-option v-for="item in provinces" :key="item.id" :label="item.dicName" :value="item.id">
-                        </el-option>
-                    </el-select>
-                </div>
-            </div>
-            <button type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确 定</button>
-            <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
+  <div class="register-wrap">
+    <div class="register-case">
+      <div class="register-name">
+        <p>领投者企业注册</p>
+        <span>Lead investor enterprise registration</span>
+      </div>
+      <div class="register-box">
+        <div class="register-en">
+          <label>
+            <span>*</span> 企业名称：</label>
+          <input required type="text" class="register-enterprise" placeholder="请输入企业名称" v-model="register.merchantName">
         </div>
+        <div class="register-in">
+          <label>
+            <span>*</span> 所属行业：</label>
+          <el-select class="register_select" required v-model="register.industry" placeholder="请选择">
+            <el-option v-for="item in industry" :key="item.id" :label="item.dicName" :value="item.id">
+            </el-option>
+          </el-select>
+        </div>
+        <div class="register-us">
+          <label>
+            <span>*</span> 联系人姓名：</label>
+          <input required type="text" class="register-user" placeholder="请输入联系人姓名" v-model="register.contactUser">
+        </div>
+        <div class="register-ad">
+          <label>
+            <span>*</span> 所在地：</label>
+          <el-select class="register_select" required v-model="register.province" placeholder="请选择">
+            <el-option v-for="item in provinces" :key="item.id" :label="item.dicName" :value="item.id">
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <button type="button" class="register-btn active" @click="submitForm">确 定</button>
+      <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
     </div>
+  </div>
 </template>
 
 <script>
@@ -139,8 +143,10 @@ export default {
         return;
       }
       this.valueData = 0;
+      this.$Message.warning("请输入必填项");
     },
     submitForm() {
+      this.checkVata();
       //最后一步提交所有注册数据
       if (this.valueData) {
         console.log(this.register);
@@ -189,6 +195,8 @@ export default {
             // alert(222);
             console.log(error);
           });
+      } else {
+        this.$Message.warning("请输入必填项");
       }
     }
   }
@@ -196,7 +204,7 @@ export default {
 </script>
 
 
-<style scoped>
+<style lang="less" scoped>
 html,
 body {
   width: 100%;
@@ -306,6 +314,12 @@ input::-webkit-input-placeholder {
 
 .active {
   background: red;
+  // &:hover{
+  //   background: #f05e5e;
+  // }
+  &:active {
+    background: #f05e5e;
+  }
 }
 
 .register_select {

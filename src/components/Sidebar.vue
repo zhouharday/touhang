@@ -200,8 +200,8 @@ export default {
         { src: "/static/img/sys_mang.png" }
       ],
       menus: [],
-      isShow: true,
-      // isShow: false,
+      // isShow: true,
+      isShow: false,
       theModel: [],
       setting: {
         view: {
