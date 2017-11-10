@@ -23,7 +23,7 @@ export default {
     watch: {
         'pdfurl':function (to,from){
             if(to != from){
-                this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
+                // this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
                 this.isshowpdf = true;
             }
         }
