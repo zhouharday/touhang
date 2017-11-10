@@ -44,11 +44,11 @@
                 </el-table-column> -->
                 <el-table-column prop="fundScale" label="基金规模" width="250" align="center">
                 </el-table-column>
-                <el-table-column prop="placementSum" label="募集总额" width="150" align="center">
+                <el-table-column prop="placementSum" label="募集总额(元)" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="investAmount" label="投资总额" width="150" align="center">
+                <el-table-column prop="investAmount" label="投资总额(元)" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="remainAmount" label="剩余额度" width="250" align="center">
+                <el-table-column prop="remainAmount" label="剩余额度(元)" width="250" align="center">
                 </el-table-column>
                 <el-table-column prop="fundAppraisement" label="基金估值" width="150" align="center">
                 </el-table-column>

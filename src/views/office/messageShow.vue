@@ -402,9 +402,10 @@ export default {
         });
     },
     lookNotice(row) {
+      // alert(222);
+      console.log(row);
       //查看公告列表 Btn
       // alert(row.noticeContent);
-      // console.log(row);
       // if (row.noticeContent == null || row.noticeTitle == null) {
       //     this.$Message.warning('无消息');
       //     return;
@@ -418,6 +419,10 @@ export default {
       //         });
       //     }
       // });
+      this.sendNoticeform.noticeTitle = row.noticeTitle;
+      this.sendNoticeform.noticeContent = row.noticeContent;
+      this.sendNoticeform.seedUserId = row.seedUserName;
+      this.sendNoticeform.seedNoticeDate = row.seedNoticeDate;
       this.viewModal = true;
     },
     deleteNotice(id) {

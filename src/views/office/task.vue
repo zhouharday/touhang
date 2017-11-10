@@ -888,6 +888,7 @@ export default {
     },
     viewTask1(params) {
       //查看指派任务详情
+      // alert(222);
       console.log(params.row);
       this.viewDialog1 = true;
       this.viewTaskForm1.taskName = params.row.taskName;
