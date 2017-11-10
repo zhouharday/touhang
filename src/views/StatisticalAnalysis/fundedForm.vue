@@ -34,11 +34,11 @@
                     <div>{{scope.row.signDate | formatDateDetails}}</div>
                   </template>
                 </el-table-column>
-                <el-table-column prop="subscribeAmount" label="认缴金额" align="center">
+                <el-table-column prop="subscribeAmount" label="认缴金额(元)" align="center">
                 </el-table-column>
-                <el-table-column prop="paidAmount" label="实缴金额" align="center">
+                <el-table-column prop="paidAmount" label="实缴金额(元)" align="center">
                 </el-table-column>
-                <el-table-column prop="contributiveRatio" label="出资占比" align="center">
+                <el-table-column prop="contributiveRatio" label="出资占比(%)" align="center">
                 </el-table-column>
             </el-table>
             <div class="pagination">
