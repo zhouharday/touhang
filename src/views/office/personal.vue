@@ -1,99 +1,99 @@
 <template>
-    <section class="personal">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="编辑资料" name="first">
-                <el-form label-position="left" :model="form1" :rules="rules1" ref="form1" label-width="90px">
-                    <el-row :gutter="40">
-                        <el-col :span="7">
-                            <el-form-item label="用户ID：" prop="phone">
-                                <el-input v-model="form1.number" auto-complete="off" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="7">
-                            <el-form-item label="用户角色：" prop="userRole">
-                                <el-input v-model="form1.userRole" auto-complete="off" disabled></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="14">
-                            <el-form-item label="企业名称：" prop="companyName">
-                                <el-input :disabled="1" v-model="form1.companyName" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="14">
-                            <el-form-item label="部门：" prop="deptName">
-                                <!-- <el-select v-model="form1.dept" placeholder="请选择" size="120%">
-                                    <el-option v-for="item in department" :key="item.id" :label="item.deptName" :value="item.id">
-                                    </el-option>
-                                </el-select> -->
-                                    <el-input :disabled="1" v-model="form1.deptName" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="14" style="margin-bottom:50px">
-                            <el-form-item label="姓名：" prop="name">
-                                <el-input v-model="form1.name" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="14">
-                            <el-form-item label="手机：" prop="phone">
-                                <el-input v-model="form1.phone" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <!-- <el-col :span="14">
-                            <el-form-item label="办公电话：" prop="telephone">
-                                <el-input v-model="form1.telephone" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col> -->
-                        <el-col :span="14">
-                            <el-form-item label="邮箱：" prop="emil">
-                                <el-input v-model="form1.emil" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
+  <section class="personal">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="编辑资料" name="first">
+        <el-form label-position="left" :model="form1" :rules="rules1" ref="form1" label-width="90px">
+          <el-row :gutter="40">
+            <el-col :span="7">
+              <el-form-item label="用户ID：" prop="phone">
+                <el-input v-model="form1.number" auto-complete="off" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7">
+              <el-form-item label="用户角色：" prop="userRole">
+                <el-input v-model="form1.userRole" auto-complete="off" disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14">
+              <el-form-item label="企业名称：" prop="companyName">
+                <el-input :disabled="1" v-model="form1.companyName" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14">
+              <el-form-item label="部门：" prop="deptName">
+                <!-- <el-select v-model="form1.dept" placeholder="请选择" size="120%">
+                                      <el-option v-for="item in department" :key="item.id" :label="item.deptName" :value="item.id">
+                                      </el-option>
+                                  </el-select> -->
+                <el-input :disabled="1" v-model="form1.deptName" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14" style="margin-bottom:50px">
+              <el-form-item label="姓名：" prop="name">
+                <el-input v-model="form1.name" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="14">
+              <el-form-item label="手机：" prop="phone">
+                <el-input v-model="form1.phone" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col :span="14">
+                              <el-form-item label="办公电话：" prop="telephone">
+                                  <el-input v-model="form1.telephone" auto-complete="off"></el-input>
+                              </el-form-item>
+                          </el-col> -->
+            <el-col :span="14">
+              <el-form-item label="邮箱：" prop="emil">
+                <el-input v-model="form1.emil" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
 
-                    </el-row>
-                </el-form>
-                <div style="margin-left:23%">
-                    <el-button>取消</el-button>
-                    <el-button type="danger" @click="dangerBtn">确认</el-button>
-                </div>
-            </el-tab-pane>
-            <el-tab-pane label="修改密码" name="second">
-                <el-form label-position="left" :model="form2" ref="form2" label-width="120px">
-                    <el-row :gutter="40">
-                        <el-col :span="13">
-                            <el-form-item label="请输入当前密码" prop="currentPwd">
-                                <el-input v-model="form2.currentPwd" @input="checkVata" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="13">
-                            <el-form-item label="请输入新密码" prop="newPwd">
-                                <el-input v-model="form2.newPwd" @input="checkVata" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="13">
-                            <el-form-item label="请确认新密码" prop="newPwd2">
-                                <el-input v-model="form2.newPwd2" @input="checkVata" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="13">
-                            <el-form-item label="请输入手机号" prop="phone">
-                                <el-input v-model="form2.phone" @input="checkVata" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="4">
-                            <el-button :class="{'active-code':isSendCode}" @click="sendVerificationCode" class="code-btn" :disabled="!isSendCode" type="danger">{{ btnText}}
-                            </el-button>
-                        </el-col>
-                        <el-col :span="13">
-                            <el-form-item label="请输入验证码" prop="code">
-                                <el-input v-model="form2.code" @input="checkVata" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <el-button type="danger" style="width:100px;margin-left:23%;" @click="submitForm" :disabled="!valueData" :class="{ active:valueData }">完成</el-button>
-            </el-tab-pane>
-        </el-tabs>
-    </section>
+          </el-row>
+        </el-form>
+        <div style="margin-left:23%">
+          <el-button>取消</el-button>
+          <el-button type="danger" @click="dangerBtn">确认</el-button>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="修改密码" name="second">
+        <el-form label-position="left" :model="form2" ref="form2" label-width="120px">
+          <el-row :gutter="40">
+            <el-col :span="13">
+              <el-form-item label="请输入当前密码" prop="currentPwd">
+                <el-input v-model="form2.currentPwd" @input="checkVata" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="13">
+              <el-form-item label="请输入新密码" prop="newPwd">
+                <el-input v-model="form2.newPwd" @input="checkVata" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="13">
+              <el-form-item label="请确认新密码" prop="newPwd2">
+                <el-input v-model="form2.newPwd2" @input="checkVata" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="13">
+              <el-form-item label="请输入手机号" prop="phone">
+                <el-input v-model="form2.phone" @input="checkVata" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-button :class="{'active-code':isSendCode}" @click="sendVerificationCode" class="code-btn" :disabled="!isSendCode" type="danger">{{ btnText}}
+              </el-button>
+            </el-col>
+            <el-col :span="13">
+              <el-form-item label="请输入验证码" prop="code">
+                <el-input v-model="form2.code" @input="checkVata" auto-complete="off"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <el-button type="danger" style="width:100px;margin-left:23%;" @click="submitForm" :disabled="!valueData" :class="{ active:valueData }">完成</el-button>
+      </el-tab-pane>
+    </el-tabs>
+  </section>
 </template>
 
 
@@ -225,8 +225,8 @@ export default {
           }
         })
         .catch(error => {
-          this.$Message.error('请求超时');
-        })
+          this.$Message.error("请求超时");
+        });
     },
     /************************验证码倒计时结束*********************/
 
@@ -260,9 +260,9 @@ export default {
               console.log(res.data);
               this.form1 = res.data.result;
               let arr = [];
-              res.data.result.roleList.map((item,index)=>{
+              res.data.result.roleList.map((item, index) => {
                 arr.push(res.data.result.roleList[index].roleName);
-                this.form1.userRole = arr.join(',');
+                this.form1.userRole = arr.join(",");
                 // this.form1.userRole = item.roleName;
               });
               this.form1.companyName = this.user.merchants[0].merchant_name;
@@ -323,8 +323,8 @@ export default {
         });
     },
     updatePass() {
-      let newPwd = this.md5(this.form2.newPwd2,32);
-      let pass = this.md5(this.form2.currentPwd,32);
+      let newPwd = this.md5(this.form2.newPwd2, 32);
+      let pass = this.md5(this.form2.currentPwd, 32);
       //个人中心密码更改 api
       this.$http
         .post(this.api + "/personalCenter/updatePass", {
@@ -339,6 +339,9 @@ export default {
             console.log(res);
             if (res.data.status == "200") {
               console.log(res.data);
+              this.$router.push({ name: "login" });
+              sessionStorage.clear();
+              localStorage.clear();
               this.$Message.success(res.data.message);
             } else {
               this.$Message.error(res.data.message);

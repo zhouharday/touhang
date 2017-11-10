@@ -133,425 +133,461 @@
 
 <style lang="less" scoped>
 .messageShow {
-    position: relative;
-    background: #ffffff;
-    padding: 24px;
-    >div:nth-child(1) {
-        margin-top: 20px;
-    }
-    .messageBtn {
-        position: absolute;
-        top: 6px;
-        right: 30px;
-    }
+  position: relative;
+  background: #ffffff;
+  padding: 24px;
+  > div:nth-child(1) {
+    margin-top: 20px;
+  }
+  .messageBtn {
+    position: absolute;
+    top: 6px;
+    right: 30px;
+  }
 }
 </style>
 
 <script>
-import { mapState } from 'vuex'
-import { getSysDate } from 'common/js/config'
+import { mapState } from "vuex";
+import { getSysDate } from "common/js/config";
 export default {
-    computed: {
-        userId(state) {
-            // alert(111);
-            this.$store.state.login.merchants = JSON.parse(sessionStorage.getItem('merchants')) || {};
-            return this.$store.state.login.userInfor.id;
-        },
+  computed: {
+    userId(state) {
+      // alert(111);
+      this.$store.state.login.merchants =
+        JSON.parse(sessionStorage.getItem("merchants")) || {};
+      return this.$store.state.login.userInfor.id;
+    }
+  },
+  beforeCreate() {
+    //请求系统消息 list
+  },
+  created() {
+    // console.log(this.$store.state.login.userInfor.id);
+    this.getNoticeUserList1(this.page, this.pageSize);
+  },
+  mounted() {},
+  data() {
+    return {
+      isNotice: false,
+      isAssist: false,
+      modal_loading1: false,
+      modal_loading2: false,
+      noticeIndex: "",
+      assistIndex: "",
+      rowNotice: "", //公司公告
+      rowAssist: "", //系统消息
+      delModal1: false,
+      delModal2: false,
+      viewModal: false,
+      edit: false,
+      // start: { //消息发布状态
+      //     a: true, //编辑
+      //     b: true, //发布
+      //     c: true, //删除
+      //     d: false, //查看
+      // },
+      isAddMsg: true,
+      page: 1,
+      pageSize: 10,
+      page1: {
+        pageNum: "", //当前页码
+        total: "", //数据总数
+        pageSize: "", //每页条数
+        navigatepageNums: "", //页数
+        current: "" //当前页码
+      },
+      page2: {
+        pageNum: "", //当前页码
+        total: "", //数据总数
+        pageSize: "", //每页条数
+        navigatepageNums: "", //页数
+        current: "" //当前页码
+      },
+      labelPosition: "left",
+      formLabelWidth: "120px",
+      dialogFormVisible: false,
+      cancles: true,
+      saves: true,
+      realses: true,
+      sendNoticeform: {
+        //添加公告form
+        noticeTitle: "", //主题
+        noticeContent: "", //内容
+        seedUserId: "", //发布人
+        seedNoticeDate: "", //发布日期
+        noticeType: "" //发布状态
+      },
+      tableData1: [], //公司公告列表数据
+      tableData2: [] //系统消息列表数据
+    };
+  },
+  methods: {
+    delModal1Btn(index, row) {
+      this.isNotice = true;
+      this.isAssist = false;
+      this.noticeIndex = index;
+      this.rowNotice = row;
+      console.log(this.rowNotice);
+      this.delModal1 = true;
+      this.modal_loading1 = false;
     },
-    beforeCreate() { //请求系统消息 list
+    delModal2Btn(index, row) {
+      this.isAssist = true;
+      this.isNotice = false;
+      this.assistIndex = index;
+      this.rowAssist = row;
+      console.log(this.rowAssist);
+      this.delModal2 = true;
+      this.modal_loading2 = false;
+    },
+    del1() {
+      console.log(this.rowNotice);
+      this.modal_loading1 = true;
+      this.deleteNotice(this.rowNotice.id);
+      setTimeout(() => {
+        this.tableData1.splice(this.noticeIndex, 1);
+        this.modal_loading3 = false;
+        this.delModal1 = false;
+        this.$Message.success("删除成功");
+      }, 2000);
+    },
+    del2() {
+      console.log(this.rowAssist);
+      this.modal_loading2 = true;
+      this.deleteAssistMsgUser(this.rowAssist.id);
+      setTimeout(() => {
+        this.tableData2.splice(this.assistIndex, 1);
+        this.modal_loading3 = false;
+        this.delModal2 = false;
+        this.$Message.success("删除成功");
+      }, 2000);
+    },
 
-    },
-    created() {
-        // console.log(this.$store.state.login.userInfor.id);
-        this.getNoticeUserList1(this.page, this.pageSize);
-    },
-    mounted() {
-
-    },
-    data() {
-        return {
-            isNotice: false,
-            isAssist: false,
-            modal_loading1: false,
-            modal_loading2: false,
-            noticeIndex: '',
-            assistIndex: '',
-            rowNotice: '', //公司公告
-            rowAssist: '', //系统消息
-            delModal1: false,
-            delModal2: false,
-            viewModal: false,
-            edit: false,
-            // start: { //消息发布状态
-            //     a: true, //编辑
-            //     b: true, //发布
-            //     c: true, //删除
-            //     d: false, //查看
-            // },
-            isAddMsg: true,
-            page: 1,
-            pageSize: 10,
-            page1: {
-                pageNum: '', //当前页码
-                total: '', //数据总数
-                pageSize: '', //每页条数
-                navigatepageNums: '', //页数
-                current: '', //当前页码
-            },
-            page2: {
-                pageNum: '', //当前页码
-                total: '', //数据总数
-                pageSize: '', //每页条数
-                navigatepageNums: '', //页数
-                current: '', //当前页码
-            },
-            labelPosition: 'left',
-            formLabelWidth: '120px',
-            dialogFormVisible: false,
-            cancles: true,
-            saves: true,
-            realses: true,
-            sendNoticeform: { //添加公告form
-                noticeTitle: "", //主题
-                noticeContent: '', //内容
-                seedUserId: '', //发布人
-                seedNoticeDate: '', //发布日期
-                noticeType: "" //发布状态
-            },
-            tableData1: [], //公司公告列表数据
-            tableData2: [], //系统消息列表数据
-        }
-    },
-    methods: {
-        delModal1Btn(index, row) {
-            this.isNotice = true;
-            this.isAssist = false;
-            this.noticeIndex = index;
-            this.rowNotice = row;
-            console.log(this.rowNotice);
-            this.delModal1 = true;
-            this.modal_loading1 = false;
-        },
-        delModal2Btn(index, row) {
-            this.isAssist = true;
-            this.isNotice = false;
-            this.assistIndex = index;
-            this.rowAssist = row;
-            console.log(this.rowAssist);
-            this.delModal2 = true;
-            this.modal_loading2 = false;
-        },
-        del1() {
-            console.log(this.rowNotice);
-            this.modal_loading1 = true;
-            this.deleteNotice(this.rowNotice.id);
-            setTimeout(() => {
-                this.tableData1.splice(this.noticeIndex, 1);
-                this.modal_loading3 = false;
-                this.delModal1 = false;
-                this.$Message.success('删除成功');
-            }, 2000);
-        },
-        del2() {
-            console.log(this.rowAssist);
-            this.modal_loading2 = true;
-            this.deleteAssistMsgUser(this.rowAssist.id);
-            setTimeout(() => {
-                this.tableData2.splice(this.assistIndex, 1);
-                this.modal_loading3 = false;
-                this.delModal2 = false;
-                this.$Message.success('删除成功');
-            }, 2000);
-        },
-
-        /************公告 Start***************/
-        getNoticeUserList1(pages, pageSize) { //获取公司公告列表数据
-            // alert(1);
-            this.$http.post(this.api + '/work/getNoticeList', {
-                "seedUserId": this.userId,
-                "page": pages,
-                "pageSize": pageSize,
-                "merchantId": this.$store.state.login.merchants[0].id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data);
-                        res.data.result.list.forEach(function(item, index) {
-                            if (item.noticeType == '1') {
-                                item.noticeType = '未发布';
-                            } else {
-                                item.noticeType = '已发布';
-                            }
-                        }, this);
-                        this.tableData1 = res.data.result.list;
-                        this.page1.pageNum = res.data.result.pageNum; //当前页码
-                        this.page1.total = res.data.result.total; //数据总数
-                        this.page1.pageSize = res.data.result.pageSize; //每页条数
-                        this.page1.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
-                        if (res.data.status == '49999') { //数据为空
-                            console.log('没有新数据');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        getNoticeUserList2(num) { //保存/发布公司公告列表数据
-            if (this.edit) {
-                console.log('编辑数据');
-                console.log(this.sendNoticeform);
-                this.editNotice();
-                return;
-            };
-            // alert(2);
-            this.$http.post(this.api + '/work/addNotice', {
-                "seedUserId": this.userId,
-                "noticeTitle": this.sendNoticeform.noticeTitle,
-                "seedNoticeDate": this.sendNoticeform.seedNoticeDate,
-                "noticeType": num,
-                "noticeContent": this.sendNoticeform.noticeContent,
-                "merchantId": this.$store.state.login.merchants[0].id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data.message);
-                        this.getNoticeUserList1(1, 10);
-                        if (res.data.status == '49996') { //数据为空
-                            console.log('传入参数非法');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        releaseNotice(row) { //发布公司公告列表数据
-            // console.log(id);
-            // alert(2);
-            this.$http.post(this.api + '/work/seedNotice', {
-                id: row.id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data.message);
-                        this.getNoticeUserList1(1);
-                        if (res.data.status == '49996') { //数据为空
-                            console.log('传入参数非法');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        editNoticeBtn(row) { //编辑公告列表 Btn
-            this.edit = true;
-            this.sendNoticeform.noticeTitle = row.noticeTitle;
-            this.sendNoticeform.noticeContent = row.noticeContent;
-            this.sendNoticeform.seedUserId = row.seedUserName;
-            this.sendNoticeform.seedNoticeDate = row.createDate;
-            this.sendNoticeform.id = row.id;
-            this.dialogFormVisible = true;
-        },
-        editNotice() { //编辑公告列表 api
-            // alert('bj');
-            this.$http.post(this.api + '/work/modifyNoticeInfo', {
-                "id": this.sendNoticeform.id,
-                "noticeTitle": this.sendNoticeform.noticeTitle,
-                "seedNoticeDate": this.sendNoticeform.seedNoticeDate,
-                "noticeContent": this.sendNoticeform.noticeContent
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        // alert(565);
-                        if (res.data.status == '200') {
-                            console.log(res.data);
-                        };
-                        this.getNoticeUserList1(1, 10);
-                        if (res.data.status == '49996') { //数据为空
-                            console.log('传入参数非法');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        lookNotice(row) { //查看公告列表 Btn
-            // alert(row.noticeContent);
-            // console.log(row);
-            // if (row.noticeContent == null || row.noticeTitle == null) {
-            //     this.$Message.warning('无消息');
-            //     return;
-            // };
-            // this.$alert(row.noticeContent, row.noticeTitle, {
-            //     confirmButtonText: '确定',
-            //     callback: action => {
-            //         this.$message({
-            //             type: 'info',
-            //             message: `action: ${action}`
-            //         });
-            //     }
-            // });
-            this.viewModal = true;
-
-        },
-        deleteNotice(id) { //删除公告列表
-            this.$http.post(this.api + '/work/deleteNotice', {
-                id: id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data.message);
-                        this.getNoticeUserList1(this.pages, this.pageSize);
-                        if (res.data.status == '49996') { //数据为空
-                            console.log('传入参数非法');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        deleteAssistMsgUser(id) { //删除系统消息
-            this.$http.post(this.api + '/work/deleteAssistMsgUser', {
-                id: id
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        console.log(res.data.message);
-                        this.getMessageList(this.pages, this.pageSize);
-                        if (res.data.status == '49996') { //数据为空
-                            console.log('传入参数非法');
-                        }
-                    } else if (res.data.status == '403') {
-                        console.log(res.data.message);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-        },
-        /***************公告 End******************* */
-        /***************系统消息 Start********************/
-        /***************系统消息 End******************* */
-        handleCurrentChange1(pages) { //获取tabList1 分页数据
-            console.log(pages);
-            this.pages = pages;
-            this.getNoticeUserList1(this.pages, this.pageSize);
-        },
-        handleCurrentChange2(pages) { //获取tabList2 分页数据
-            console.log(pages);
-            this.pages = pages;
-            this.getMessageList(this.pages, this.pageSize);
-        },
-        handleSizeChange1(pages) { //获取tabList2 分页数据
-            console.log(pages);
-            this.pageSize = pages;
-            this.getNoticeUserList1(this.pages, this.pageSize);
-        },
-        handleSizeChange2(pages) { //获取tabList2 分页数据
-            console.log(pages);
-            this.pageSize = pages;
-            this.getMessageList(this.pages, this.pageSize);
-        },
-        tableDatasss(tab) {
-            if (tab.index == '0') {
-                this.isAddMsg = true;
-                this.getNoticeUserList1();
-            } else if (tab.index == '1') {
-                this.isAddMsg = false;
-                this.getMessageList(1, 10);
+    /************公告 Start***************/
+    getNoticeUserList1(pages, pageSize) {
+      //获取公司公告列表数据
+      // alert(1);
+      this.$http
+        .post(this.api + "/work/getNoticeList", {
+          seedUserId: this.userId,
+          page: pages,
+          pageSize: pageSize,
+          merchantId: this.$store.state.login.merchants[0].id
+        })
+        .then(res => {
+          if (res.status == "200") {
+            console.log(res.data);
+            res.data.result.list.forEach(function(item, index) {
+              if (item.noticeType == "1") {
+                item.noticeType = "未发布";
+              } else {
+                item.noticeType = "已发布";
+              }
+            }, this);
+            this.tableData1 = res.data.result.list;
+            this.page1.pageNum = res.data.result.pageNum; //当前页码
+            this.page1.total = res.data.result.total; //数据总数
+            this.page1.pageSize = res.data.result.pageSize; //每页条数
+            this.page1.navigatepageNums =
+              res.data.result.navigatepageNums.length; //页数长度
+            if (res.data.status == "49999") {
+              //数据为空
+              console.log("没有新数据");
             }
-        },
-        cancle() { //取消 Btn
-            this.dialogFormVisible = false;
-        },
-        saveORrealse(num) { //保存 Btn
-            // alert(11);
-            if (num == '1') { //保存
-                this.sendNoticeform.noticeType = "1";
-                this.getNoticeUserList2(num);
-            } else { //发布
-                this.sendNoticeform.noticeType = "2";
-                this.getNoticeUserList2(num);
-            }
-            this.dialogFormVisible = false;
-            console.log(this.sendNoticeform);
-        },
-        releaseChange(data) {
-            console.log(data);
-            data.start = "已发布";
-            this.sendData(); //send data for server
-        },
-        realseBtn() { //发布新公告Dialog btn 方法
-            // alert(111);
-            let sysDate = getSysDate();
-            this.edit = false;
-            let new_sendNoticeform = {
-                noticeTitle: "", //主题
-                noticeContent: '', //内容
-                seedUserId: this.$store.state.login.userInfor.name, //发布人
-                seedNoticeDate: sysDate, //发布日期
-                noticeType: "" //发布状态
-            };
-            this.sendNoticeform = new_sendNoticeform;
-            this.dialogFormVisible = true;
-            this.saves = true;
-            this.realses = true;
-        },
-        releaseData() { //发布
-            this.dialogFormVisible = false;
-            this.form.start = "已发布";
-            // this.start.d = true;
-            this.sendData(); //send data for server
-            this.clearVal();
-        },
-        getDateValue(val) { //获取完成时间的值
-            // console.log(val);
-            this.sendNoticeform.seedNoticeDate = val;
-            return val;
-        },
-        deleteRow(index, rows) { //删除当前行
-            rows.splice(index, 1);
-        },
-        getMessageList(page, pageSize) { //获取系统消息 api
-            this.$http.post(this.api + '/work/getMessageList', {
-                "userId": this.userId,
-                "page": this.pages,
-                "pageSize": this.pageSize,
-            })
-                .then(res => {
-                    if (res.status == '200') {
-                        if (res.data.status == '200') {
-                            console.log('系统消息');
-                            console.log(res.data);
-                            this.tableData2 = res.data.result.list;
-                            this.page2.pageNum = res.data.result.pageNum; //当前页码
-                            this.page2.total = res.data.result.total; //数据总数
-                            this.page2.pageSize = res.data.result.pageSize; //每页条数
-                            this.page2.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
-                            this.$Message.success(res.data.message);
-                        } else if (res.data.status == '403') {
-                            this.$Message.error(res.data.message);
-                        }
-                    }
-                })
-                .catch(error => {
-                    this.$Message.error("请求超时");
-                })
-        },
+          } else if (res.data.status == "403") {
+            console.log(res.data.message);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
-}
+    getNoticeUserList2(num) {
+      //保存/发布公司公告列表数据
+      if (this.edit) {
+        console.log("编辑数据");
+        console.log(this.sendNoticeform);
+        this.editNotice(num);
+        return;
+      };
+      // alert(2);
+      this.$http
+        .post(this.api + "/work/addNotice", {
+          seedUserId: this.userId,
+          noticeTitle: this.sendNoticeform.noticeTitle,
+          seedNoticeDate: this.sendNoticeform.seedNoticeDate,
+          noticeType: num,
+          noticeContent: this.sendNoticeform.noticeContent,
+          merchantId: this.$store.state.login.merchants[0].id
+        })
+        .then(res => {
+          if (res.status == "200") {
+            console.log(res.data.message);
+            this.getNoticeUserList1(1, 10);
+            if (res.data.status == "49996") {
+              //数据为空
+              console.log("传入参数非法");
+            }
+          } else if (res.data.status == "403") {
+            console.log(res.data.message);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    releaseNotice(row) {
+      //发布公司公告列表数据
+      // console.log(id);
+      // alert(2);
+      this.$http
+        .post(this.api + "/work/seedNotice", {
+          id: row.id
+        })
+        .then(res => {
+          if (res.status == "200") {
+            console.log(res.data.message);
+            this.getNoticeUserList1(1);
+            if (res.data.status == "49996") {
+              //数据为空
+              console.log("传入参数非法");
+            }
+          } else if (res.data.status == "403") {
+            console.log(res.data.message);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    editNoticeBtn(row) {
+      //编辑公告列表 Btn
+      this.edit = true;
+      this.sendNoticeform.noticeTitle = row.noticeTitle;
+      this.sendNoticeform.noticeContent = row.noticeContent;
+      this.sendNoticeform.seedUserId = row.seedUserName;
+      this.sendNoticeform.seedNoticeDate = row.createDate;
+      this.sendNoticeform.id = row.id;
+      this.dialogFormVisible = true;
+    },
+    editNotice(num) {
+      //编辑公告列表 api
+      // alert('bj');
+      this.$http
+        .post(this.api + "/work/modifyNoticeInfo", {
+          id: this.sendNoticeform.id,
+          noticeTitle: this.sendNoticeform.noticeTitle,
+          seedNoticeDate: this.sendNoticeform.seedNoticeDate,
+          noticeContent: this.sendNoticeform.noticeContent,
+          noticeType: num
+        })
+        .then(res => {
+          if (res.status == "200") {
+            // alert(565);
+            if (res.data.status == "200") {
+              console.log(res.data);
+            }
+            this.getNoticeUserList1(1, 10);
+            if (res.data.status == "49996") {
+              //数据为空
+              console.log("传入参数非法");
+            }
+          } else if (res.data.status == "403") {
+            console.log(res.data.message);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    lookNotice(row) {
+      //查看公告列表 Btn
+      // alert(row.noticeContent);
+      // console.log(row);
+      // if (row.noticeContent == null || row.noticeTitle == null) {
+      //     this.$Message.warning('无消息');
+      //     return;
+      // };
+      // this.$alert(row.noticeContent, row.noticeTitle, {
+      //     confirmButtonText: '确定',
+      //     callback: action => {
+      //         this.$message({
+      //             type: 'info',
+      //             message: `action: ${action}`
+      //         });
+      //     }
+      // });
+      this.viewModal = true;
+    },
+    deleteNotice(id) {
+      //删除公告列表
+      this.$http
+        .post(this.api + "/work/deleteNotice", {
+          id: id
+        })
+        .then(res => {
+          if (res.status == "200") {
+            console.log(res.data.message);
+            this.getNoticeUserList1(this.pages, this.pageSize);
+            if (res.data.status == "49996") {
+              //数据为空
+              console.log("传入参数非法");
+            }
+          } else if (res.data.status == "403") {
+            console.log(res.data.message);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    deleteAssistMsgUser(id) {
+      //删除系统消息
+      this.$http
+        .post(this.api + "/work/deleteAssistMsgUser", {
+          id: id
+        })
+        .then(res => {
+          if (res.status == "200") {
+            console.log(res.data.message);
+            this.getMessageList(this.pages, this.pageSize);
+            if (res.data.status == "49996") {
+              //数据为空
+              console.log("传入参数非法");
+            }
+          } else if (res.data.status == "403") {
+            console.log(res.data.message);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    /***************公告 End******************* */
+    /***************系统消息 Start********************/
+    /***************系统消息 End******************* */
+    handleCurrentChange1(pages) {
+      //获取tabList1 分页数据
+      console.log(pages);
+      this.pages = pages;
+      this.getNoticeUserList1(this.pages, this.pageSize);
+    },
+    handleCurrentChange2(pages) {
+      //获取tabList2 分页数据
+      console.log(pages);
+      this.pages = pages;
+      this.getMessageList(this.pages, this.pageSize);
+    },
+    handleSizeChange1(pages) {
+      //获取tabList2 分页数据
+      console.log(pages);
+      this.pageSize = pages;
+      this.getNoticeUserList1(this.pages, this.pageSize);
+    },
+    handleSizeChange2(pages) {
+      //获取tabList2 分页数据
+      console.log(pages);
+      this.pageSize = pages;
+      this.getMessageList(this.pages, this.pageSize);
+    },
+    tableDatasss(tab) {
+      if (tab.index == "0") {
+        this.isAddMsg = true;
+        this.getNoticeUserList1();
+      } else if (tab.index == "1") {
+        this.isAddMsg = false;
+        this.getMessageList(1, 10);
+      }
+    },
+    cancle() {
+      //取消 Btn
+      this.dialogFormVisible = false;
+    },
+    saveORrealse(num) {
+      //保存 Btn
+      // alert(11);
+      if (num == "1") {
+        //保存
+        this.sendNoticeform.noticeType = "1";
+        this.getNoticeUserList2(num);
+      } else {
+        //发布
+        this.sendNoticeform.noticeType = "2";
+        this.getNoticeUserList2(num);
+      }
+      this.dialogFormVisible = false;
+      console.log(this.sendNoticeform);
+    },
+    releaseChange(data) {
+      console.log(data);
+      data.start = "已发布";
+      this.sendData(); //send data for server
+    },
+    realseBtn() {
+      //发布新公告Dialog btn 方法
+      // alert(111);
+      let sysDate = getSysDate();
+      this.edit = false;
+      let new_sendNoticeform = {
+        noticeTitle: "", //主题
+        noticeContent: "", //内容
+        seedUserId: this.$store.state.login.userInfor.name, //发布人
+        seedNoticeDate: sysDate, //发布日期
+        noticeType: "" //发布状态
+      };
+      this.sendNoticeform = new_sendNoticeform;
+      this.dialogFormVisible = true;
+      this.saves = true;
+      this.realses = true;
+    },
+    releaseData() {
+      //发布
+      this.dialogFormVisible = false;
+      this.form.start = "已发布";
+      // this.start.d = true;
+      this.sendData(); //send data for server
+      this.clearVal();
+    },
+    getDateValue(val) {
+      //获取完成时间的值
+      // console.log(val);
+      this.sendNoticeform.seedNoticeDate = val;
+      return val;
+    },
+    deleteRow(index, rows) {
+      //删除当前行
+      rows.splice(index, 1);
+    },
+    getMessageList(page, pageSize) {
+      //获取系统消息 api
+      this.$http
+        .post(this.api + "/work/getMessageList", {
+          userId: this.userId,
+          page: this.pages,
+          pageSize: this.pageSize
+        })
+        .then(res => {
+          if (res.status == "200") {
+            if (res.data.status == "200") {
+              console.log("系统消息");
+              console.log(res.data);
+              this.tableData2 = res.data.result.list;
+              this.page2.pageNum = res.data.result.pageNum; //当前页码
+              this.page2.total = res.data.result.total; //数据总数
+              this.page2.pageSize = res.data.result.pageSize; //每页条数
+              this.page2.navigatepageNums =
+                res.data.result.navigatepageNums.length; //页数长度
+              this.$Message.success(res.data.message);
+            } else if (res.data.status == "403") {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    }
+  }
+};
 </script>
