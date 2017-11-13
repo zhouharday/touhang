@@ -3,14 +3,14 @@
         <section class="fileTable" v-show="isShow">
             <tabel-header :data="headerInfo_file" @add="fileDialog"></tabel-header>
             <el-table :data="fileData" border style="width: 100%" align="center">
-                <el-table-column label="文档名称" prop="documentName" align="center">
+                <el-table-column label="文档名称" prop="documentName" align="center" resizable="false">
                 </el-table-column>
-                <el-table-column label="用户" prop="uploadUser" align="center">
+                <el-table-column label="用户" prop="uploadUser" align="center" resizable="false">
                 </el-table-column>
-                <el-table-column label="上传日期" prop="createDate" align="center">
+                <el-table-column label="上传日期" prop="createDate" align="center" resizable="false">
                     <template scope="scope">{{scope.row.createDate | formatDate}}</template>
                 </el-table-column>
-                <el-table-column label="操作" align="center">
+                <el-table-column label="操作" align="center" resizable="false">
                     <template scope="scope">
                         <a v-if="scope.row.id != '' && scope.row.id != undefined" :href="scope.row.documentUrl" style="font-size:12px;" download="scope.row.documentName">下载</a>
                         <el-button v-if="scope.row.id != null && scope.row.previewPath != null" type="text"   class="btn_border" @click="preview(scope.row.previewPath)">预览</el-button>

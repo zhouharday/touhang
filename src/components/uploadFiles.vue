@@ -60,4 +60,8 @@ export default {
 .upload /deep/ .ivu-upload-list {
     display: block!important;
 }
+
+.upload .ivu-upload-list {
+    display: block!important;
+}
 </style>

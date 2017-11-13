@@ -22,15 +22,15 @@
             </div>
             <template v-for="(docList, index) in projectDocList">
                 <el-table :data="docList.dataDocumentResult" border style="width: 100%" align="center">
-                    <el-table-column :label="docList.title" prop="allocationDocumentName" align="center">
+                    <el-table-column :label="docList.title" prop="allocationDocumentName" align="center" resizable="false">
                     </el-table-column>
-                    <el-table-column prop="documentName" align="center">
+                    <el-table-column prop="documentName" align="center" resizable="false">
                     </el-table-column>
-                    <el-table-column prop="uploadUser" align="center">
+                    <el-table-column prop="uploadUser" align="center" resizable="false">
                     </el-table-column>
-                    <el-table-column prop="createDate" align="center">
+                    <el-table-column prop="createDate" align="center" resizable="false">
                     </el-table-column>
-                    <el-table-column align="center">
+                    <el-table-column align="center" resizable="false">
                         <template scope="scope">
                             <!-- 上传 -->
                             <div v-if="checkProjectAuth('WD-shangchuan') && (index != 0 && (scope.row.id == null || scope.row.id == undefined || scope.row.id == ''))" style=" position:relative;">

@@ -21,7 +21,7 @@
         </div>
         <div class="list">
             <div class="list_title default">收益率（%）</div>
-            <div class="list_content default">{{data.incomeRatio }}</div>
+            <div class="list_content default">{{data.incomeRatio ? data.incomeRatio : '————'}}</div>
             <div class="list_title default">项目费用（元）</div>
             <div class="list_content default">{{data.projectCost | toMoney}}</div>
         </div>

@@ -18,6 +18,7 @@ Vue.use(iView)
 Vue.use(echarts)
 Vue.use(ElementUI)
 Vue.prototype.md5 = md5
+// axios.defaults.withCredentials=true;
 Vue.prototype.$http = axios
 // Vue.prototype.$http = axios.create();
 // Vue.prototype.api = '/api'; //公司IP请求时 URL
