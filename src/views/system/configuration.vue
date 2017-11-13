@@ -99,7 +99,7 @@
 
         </el-row>
         <!-- 添加 项目阶段 对话框-->
-        <el-dialog title="项目阶段名称" :visible.sync="projectDialog" class="fileDialog">
+        <el-dialog :title=itemtitle :visible.sync="projectDialog" class="fileDialog">
             <el-form :model="projectForm">
                 <el-row>
                     <el-col>
@@ -291,6 +291,7 @@
                 fundRole:[],
                 businessRole:[],
                 showRole:[],
+                 itemtitle:'',
             }
         },
         methods: {
@@ -325,6 +326,9 @@
                         SetConfig(item.data, this.deleteList).then((res) => {
                             if (res.data.status == '9024') {
                                 alert(res.data.message)
+                                getConfigLeftList().then((res) => {
+                                    this.leftList = reloadData(res.data.result)
+                                })                            
                             } else {
                                 getConfigLeftList().then((res) => {
                                     this.leftList = reloadData(res.data.result)
@@ -343,6 +347,8 @@
                     stageName: '',
                     editFlag: false
                 };
+                 this.itemtitle ='添加' + item.title;
+                // this.itemtitle = 'zzz';
                 this.projectForm = new_projectForm;
                 this.projectDialog = !this.projectDialog;
             },
@@ -360,6 +366,7 @@
                 SetConfig(newList, this.deleteList).then((res) => {
                     if (res.data.status == '9024') {
                         alert(res.data.message)
+                        
                     } else {
                         getConfigLeftList().then((res) => {
                             this.leftList = reloadData(res.data.result)

@@ -51,7 +51,7 @@
                             <template scope="scope">
                                 <a :href=scope.row.documentUrl style="font-size:12px;" download="xxxxx文档">下载</a>
 
-                                <el-button v-if="scope.row.type == 1"  type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
+                                <el-button  type="text" size="small" class="btn_border" @click="preview(scope.row)">预览</el-button>
 
                             </template>
                         </el-table-column>
@@ -72,7 +72,7 @@
             </div>
         </el-col>
     </el-row>
-
+    <show-pdf v-show="isshowpdf" @closepdf="closepdf" :pdfurl="pdfurls" @pdferr="pdferr"></show-pdf>
 </div>
 </template>
 
@@ -82,6 +82,7 @@ import tableHeader from 'components/tabelHeader'
 import {getLeftList} from 'api/search'
 import {getRightList} from 'api/search'
 import {getSelectIndex} from 'api/search'
+import showPdf from 'components/showPdf'
 export default {
     data() {
         return {
@@ -103,14 +104,25 @@ export default {
             chooseInfo:[],
             fileData:[],
             fileType:'',
+             pdfurls:'',
+            isshowpdf:false,
+
         }
 
     },
     components: {
         myFilter,
-        tableHeader
+        tableHeader,
+        showPdf
     },
     methods:{
+        pdferr(err){
+            console.log("pdferr!! ", err);
+            this.$Message.error('读取预览文件出错！');
+        },
+        closepdf(){
+            this.isshowpdf = false;
+        },
         handleIconClick(){
             getLeftList(this.inputSearch).then((res)=>{
                 console.log(res.data)
@@ -136,10 +148,12 @@ export default {
             }, 1500);
         },
         preview(row) {
-            this.isShow = false,
-                this.isHide = true,
-                this.fileData = row.documentUrl.split('?')[0],
-                console.log(this.fileData)
+            // this.isShow = false,
+            //     this.isHide = true,
+            //     this.fileData = row.documentUrl.split('?')[0],
+            //     console.log(this.fileData)
+            this.pdfurls = row.previewPath;
+            this.isshowpdf = true;
         },
         closeView() {
             this.isShow = true,
