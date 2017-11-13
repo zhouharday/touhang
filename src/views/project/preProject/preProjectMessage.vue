@@ -368,6 +368,7 @@ export default {
             // console.log('项目详情-企业信息为空 result: '+JSON.stringify(resp.data.result));
             console.log("项目详情-企业信息为空");
             this.companyForm = {
+              registerDate: '',
               flag: true
             };
           } else {

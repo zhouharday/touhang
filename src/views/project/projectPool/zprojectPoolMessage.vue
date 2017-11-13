@@ -162,7 +162,7 @@ export default {
                 if (enterpriseInfo) {
                     this.companyForm = Object.assign({}, this.companyForm, enterpriseInfo);
                 } else {
-                    this.companyForm = {registerDate: ''};
+                    this.companyForm = {registerDate: '', flag: true};
                 }
                 if(listOwnershipStructure){
                     this.structureForm = Object.assign({}, this.structureForm, listOwnershipStructure);

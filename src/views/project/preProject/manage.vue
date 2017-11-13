@@ -88,7 +88,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%">
+                                        <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -201,7 +201,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm2.signDate" style="width: 100%;">
+                                        <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm2.signDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -328,7 +328,9 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件" >
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
+                                        <span v-for="item in contractDocument">
+                                            <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -348,7 +350,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="支付日期" prop="payDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;">
+                                        <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -403,7 +405,9 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件" prop="contractAppendix">
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
+                                        <span v-for="item in contractDocument">
+                                            <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -423,7 +427,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="支付日期" prop="payDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;">
+                                        <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -518,7 +522,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红日期" prop="shareDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                                        <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -586,7 +590,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红日期" prop="shareDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                                        <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -676,6 +680,8 @@ export default {
             paidAdd2: false,
             sharingAdd1: false,
             sharingAdd2: false,
+            isEditPay: false,
+            isEditShare: false,
             //项目费用
             costForm1: {
                 costTypeId: ''
@@ -705,11 +711,8 @@ export default {
                 contractName: [
                     { required: true, message: '请输入合同名称', trigger: 'blur' }
                 ],
-                // stockRatio: [
-                //     { type : "number", required: true, message: '股权占比必须是数字', trigger: 'blur' }
-                // ],
                 signDate: [
-                    { type : "date", required: true, message: '请选择签约日期', trigger: 'blur' }
+                    { required: true, message: '请选择签约日期', trigger: 'blur' }
                 ]
             },
             contractForm2: {},
@@ -762,12 +765,13 @@ export default {
                 payDate: '',
                 paidInMoney: 0
             },
+            contractDocument: [],
             paidRules: {
                 contractId: [
                     { required: true, message: '请选择项目合同', trigger: 'change' }
                 ],
                 payDate:[
-                    { type: 'date', required: true, message: '请选择支付日期', trigger: 'change' }
+                    { required: true, message: '请选择支付日期', trigger: 'change' }
                 ]
             },
             paidDetailRule: {
@@ -801,7 +805,7 @@ export default {
                     { required: true, message: '请选择项目合同', trigger: 'change' }
                 ],
                 shareDate: [
-                    { type: "date", required: true, message: '请选择分红日期', trigger: 'change' }
+                    { required: true, message: '请选择分红日期', trigger: 'change' }
                 ]    
             },
             sharingData: [],
@@ -940,7 +944,7 @@ export default {
                     return;
                 }
                 const values = data.map(item => Number(item[column.property]));
-                console.log(column.property);
+                // console.log(column.property);
                 if (!values.every(value => isNaN(value)) && column.property == 'paidInMoney') {
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
@@ -966,7 +970,7 @@ export default {
                     return;
                 }
                 const values = data.map(item => Number(item[column.property]));
-                console.log(column.property);
+                // console.log(column.property);
                 if (!values.every(value => isNaN(value)) && column.property == 'shareAmount') {
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
@@ -1156,13 +1160,18 @@ export default {
         },
         //选择投资支付的合同
         selContract(value) {
-            if (!value) return false;
+            if (!value ) return false;
+            if(this.isEditPay){
+                this.isEditPay = false;
+                return false;
+            }
             // this.paidForm1.payTitle = "投资支付-" + value.contractName;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
 
                     this.$set(this.$data.paidForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
+                    this.contractDocument = resp.data.result.projectContract.documentInfo;
                     this.fundData2 = resp.data.result.fundInfo;
 
                     this.fundData2.forEach(function(item, index) {
@@ -1215,6 +1224,7 @@ export default {
                 this.fundData2 = [];
                 this.fundData2.push();
             }
+            this.contractDocument = [];
             this.payDocInfo = [];
             this.paidAdd1 = true;
         },
@@ -1231,7 +1241,8 @@ export default {
                         surplusAmount: this.paidForm1.surplusAmount,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        payDate: this.paidForm1.payDate,
                         documentInfo: this.payDocInfo
                     };
                     let data = {
@@ -1258,8 +1269,9 @@ export default {
         goEditPay(id) {
             getContractPayDetail(id).then(resp => {
                 if (resp.data.status == '200') {
+                    this.isEditPay = true;
                     this.paidForm1 = resp.data.result.projectInvestPay;
-
+                    this.contractDocument = resp.data.result.projectInvestPay.contractDocument;
                     let documentInfo = resp.data.result.projectInvestPay.documentInfo;
                     documentInfo.forEach(item => {
                         item.name = item.name == null ? item.fileName : item.name;
@@ -1290,7 +1302,8 @@ export default {
                         surplusAmount: this.paidForm1.surplusAmount,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        payDate: this.paidForm1.payDate,
                         documentInfo: this.payDocInfo
                     };
                     let data = {
@@ -1345,6 +1358,10 @@ export default {
         //选择项目分红的合同
         selShareContract(value) {
             if (!value) return;
+            if(this.isEditShare){
+                this.isEditShare = false;
+                return false;
+            }
             // this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
@@ -1413,6 +1430,7 @@ export default {
         goEditShare(id) {
             getParticipationDetail(id).then(resp => {
                 if (resp.data.status == '200') {
+                    this.isEditShare = true;
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
 
@@ -1543,6 +1561,16 @@ export default {
         },
         removeSucess(documentInfo, dataName){
             this.$set(this.$data, dataName, documentInfo);
+        },
+        setPayDate(val){
+            this.$set(this.$data.paidForm1, 'payDate', ''+val);
+        },
+        setSignDate(val){
+            this.$set(this.$data.contractForm1, 'signDate', ''+val);
+            this.$set(this.$data.contractForm2, 'signDate', ''+val);
+        },
+        setShareDate(val){
+            this.$set(this.$data.sharingForm1, 'shareDate', ''+val);
         }
     }
 }
