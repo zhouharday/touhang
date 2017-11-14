@@ -117,17 +117,17 @@ export default {
                 this.$refs.companyInfo.validate((valid) => {
                     if (valid) {
                         addOrUpdateManagerCompany(this.managerId, this.companyInfo.companyName, this.companyInfo.companyDescribe).then((res) => {
-                            if (res.status == '200') {
+                            if (res.data.status == '200') {
                                 this.addOrEdit = false
-                                selectManageCompany(this.page, this.pageSize).then((res) => {
-                                    if (res.status == '200') {
-                                        this.companyData = res.data.result.list
-                                        this.totalPage = res.data.result.total
-                                        this.$Message.success(res.data.message || '添加成功！')
-                                        this.manageCompany = false
-                                        this.addOrEdit = false
-                                    }
-                                })
+                                this._addManageCompany()
+                                this.manageCompany = false
+                                this.addOrEdit = false
+                                console.log(res)
+                                this.$Message.success(res.data.message || '添加成功！')
+                            } else {
+                                this.$Message.success(res.data.message || '添加失败！')
+                                this.manageCompany = false
+                                this.addOrEdit = false
                             }
                         })
                     } else {
@@ -162,13 +162,8 @@ export default {
             deleteManagerCompany(this.deleteId).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功')
-                    selectManageCompany(this.page, this.pageSize).then((res) => {
-                        if (res.status == '200') {
-                            this.companyData = res.data.result.list
-                            this.totalPage = res.data.result.total
-                            this.deleteReminders = false
-                        }
-                    })
+                    this._addManageCompany()
+                    this.deleteReminders = false
                 }
             })
         },
@@ -177,30 +172,23 @@ export default {
         },
         handleSizeChange(val) {
             this.pageSize = val
-            selectManageCompany(this.page, this.pageSize).then((res) => {
-                if (res.status == '200') {
-                    this.companyData = res.data.result.list
-                    this.totalPage = res.data.result.total
-                }
-            })
+            this._addManageCompany()
         },
         handleCurrentChange(val) {
             this.page = val
+            this._addManageCompany()
+        },
+        _addManageCompany() {
             selectManageCompany(this.page, this.pageSize).then((res) => {
                 if (res.status == '200') {
                     this.companyData = res.data.result.list
                     this.totalPage = res.data.result.total
                 }
             })
-        },
+        }
     },
     created() {
-        selectManageCompany(this.page, this.pageSize).then((res) => {
-            if (res.status == '200') {
-                this.companyData = res.data.result.list
-                this.totalPage = res.data.result.total
-            }
-        })
+        this._addManageCompany()
     },
     components: {
         tableHeader,
