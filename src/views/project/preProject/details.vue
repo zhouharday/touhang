@@ -1,9 +1,13 @@
 <template>
     <div class="form">
         <!-- 基本信息 -->
+<<<<<<< HEAD
         <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" v-if="checkProjectAuth('XQ-bianji')" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
+=======
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
+>>>>>>> c7d9a594a6e3d2a73adc1cab8030bc9c620665f4
         <div class="basicForm">
-            <el-form ref="basicForm" :model="basicForm" label-width="120px">
+            <el-form ref="basicForm" :model="basicForm" label-width="170px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="项目名称" prop="projectName">
@@ -59,9 +63,13 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
+<<<<<<< HEAD
         <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" v-if="checkProjectAuth('XQ-bianji')" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
+=======
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+>>>>>>> c7d9a594a6e3d2a73adc1cab8030bc9c620665f4
         <div class="companyForm">
-            <el-form ref="companyForm" :model="companyForm" label-width="120px">
+            <el-form ref="companyForm" :model="companyForm" label-width="170px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="企业名称" prop="enterpriseName">

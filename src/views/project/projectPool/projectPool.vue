@@ -85,7 +85,7 @@
                                                 </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.create_date}}</div>
+                            <div class="fow">{{ scope.row.create_date | formatDate}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
@@ -118,6 +118,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import 'common/js/filter'
 import { getDicChildrenII } from 'common/js/dictionary'
 import { getPros, transPro, delPro } from 'api/project';
 export default {
