@@ -11,7 +11,7 @@
                 <div class="left">{{file.title}}</div>
                 <div class="right"></div>
             </div>
-            <el-table :data="file.dataDocumentResult" border :show-header="false" style="width: 100%">
+            <el-table :data="file.dataDocumentResult" :show-header="false" style="width: 100%">
                 <el-table-column label="基金阶段" prop="allocationDocumentName">
                 </el-table-column>
                 <el-table-column label="文档名称" prop="documentName">

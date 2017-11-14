@@ -1,7 +1,7 @@
 <template>
 <div class="agreement">
-    <tableHeader :data="dataTitle" @add="showAgreement"></tableHeader>
-    <el-table :data="agreementData" border style="width: 100%;">
+    <tableHeader :data="dataTitle" :theme="theme" @add="showAgreement"></tableHeader>
+    <el-table :data="agreementData" style="width: 100%;">
         <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
         <el-table-column label="基金名称" prop="fundName" align="center">
@@ -81,7 +81,8 @@ export default {
             modelAgreement: false,
             deleteReminders: false,
             deleteId: '',
-            AgreementInfo: {}
+            AgreementInfo: {},
+            theme: "#fff"
         }
     },
     methods: {
@@ -113,7 +114,7 @@ export default {
             this.modelAgreement = true
             this.addOrModify = false
             this.deleteReminders = false
-            this.AgreementInfo = row
+            this.AgreementInfo = Object.assign({}, row)
             this.AgreementInfo.subscribeAmount = parseFloat(this.AgreementInfo.subscribeAmount)
             this.AgreementInfo.registerDate = row.register_date
             this.AgreementInfo.structuralLevelId = this.AgreementInfo.structuralLevelId.toString()

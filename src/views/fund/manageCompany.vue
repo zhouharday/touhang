@@ -4,7 +4,7 @@
         </table-header>
         <!-- table_content start-->
         <div class="table_content">
-            <el-table :data="companyData" border style="width: 100%">
+            <el-table :data="companyData" style="width: 100%">
                 <el-table-column label="名称" prop="companyName" align="center">
                 </el-table-column>
                 <el-table-column label="备注" prop="companyDescribe" align="center">

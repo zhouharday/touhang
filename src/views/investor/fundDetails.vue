@@ -1,6 +1,6 @@
 <template>
 <div class="fundDetails">
-    <el-table :data="investorData" border style="width: 100%;">
+    <el-table :data="investorData" style="width: 100%;">
         <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
         <el-table-column label="基金名称" prop="fundName" align="center">
@@ -89,7 +89,7 @@ export default {
             this.fundsDetailsModal = true
             row.paidAmount = parseFloat(row.paidAmount)
             row.paidDate = new Date(row.paidDate)
-            this.fundsInfo = row
+            this.fundsInfo = Object.assign({}, row)
             // console.log(typeof(this.fundsInfo.paidDate))
         },
         handleDelete(index, row) {

@@ -1,7 +1,7 @@
 <template>
 <div class="examine">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
-    <el-table :data="examineData" border style="width: 100%">
+    <el-table :data="examineData" style="width: 100%">
         <el-table-column label="审批主题" align="center">
             <template scope="scope">
                 <div @click="showExamineModal(scope.$index, scope.row)" class="title">

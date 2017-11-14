@@ -15,8 +15,8 @@
             <el-input placeholder="请输入搜索内容" icon="search" v-model="fundSearch" :on-icon-click="handleIconClick" autofocus='true' style="width: 320px;" @click="submitSearch" @blur="submitSearch">
             </el-input>
         </table-header>
-        <el-table :data="myFund" v-loading="loading" border style="width: 100%">
-            <el-table-column fixed label="基金名称" width="200" align="center">
+        <el-table :data="myFund" v-loading="loading" style="width: 100%">
+            <el-table-column fixed label="基金名称" width="300" align="center">
                 <template scope="scope">
                     <div class="name" @click="handleRouter(scope.$index, scope.row)">
                         <span class="investorName">{{ scope.row.fundName }}</span>

@@ -1,7 +1,7 @@
 <template>
 <div class="projects">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
-    <el-table :data="projectsData" border style="width: 100%">
+    <el-table :data="projectsData" style="width: 100%">
         <el-table-column label="项目名称" prop="project_name" align="center">
         </el-table-column>
         <el-table-column label="投资金额（元）" prop="sumInvestAmount" align="center">

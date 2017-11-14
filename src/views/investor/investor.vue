@@ -6,7 +6,7 @@
         </el-input>
     </tableHeader>
     <div class="tables">
-        <el-table :data="investorData" v-loading="loading" border style="width: 100%;">
+        <el-table :data="investorData" v-loading="loading" style="width: 100%;">
             <el-table-column label="投资者名称" align="center">
                 <template scope="scope">
                         <div class="name" @click="handleRouter(scope.$index, scope.row)">
