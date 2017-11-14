@@ -77,8 +77,8 @@
         <!--项目table -->
         <el-row class="common">
             <el-col :span="24">
-                <el-table border :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
-                    <el-table-column label="项目" min-width="100">
+                <el-table :data="tableData" style="width:100%" max-height="700" class="table-item" :row-class-name="tableRowClassName">
+                    <el-table-column label="项目" min-width="150">
                         <template scope="scope">
                             <a @click="ShowMessagwe(scope.row,scope.$index)" class="theme">{{ scope.row.name }}</a>
                             <div>{{ scope.row.brief }}</div>
@@ -523,7 +523,7 @@ export default {
 }
 
 .fow {
-    font-weight: bold;
+    // font-weight: bold;
 }
 
 .back {

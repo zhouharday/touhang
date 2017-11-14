@@ -5,7 +5,7 @@
             <el-tabs @tab-click="tableDatasss">
                 <!-- 公司公告 Tab -->
                 <el-tab-pane value="1" label="公司公告">
-                    <el-table stripe :data="tableData1" border style="width: 100%">
+                    <el-table stripe :data="tableData1" style="width: 100%">
                         <el-table-column prop="noticeTitle" label="主题" align="center">
                         </el-table-column>
                         <el-table-column prop="seedUserName" label="发布人" align="center">
@@ -46,7 +46,7 @@
                 </Modal>
                 <!-- 系统消息 Tab -->
                 <el-tab-pane value="2" label="系统消息">
-                    <el-table stripe :data="tableData2" border style="width: 100%">
+                    <el-table stripe :data="tableData2" style="width: 100%">
                         <el-table-column prop="assistMessage.msgTitle" label="主题" width="550" align="center">
                         </el-table-column>
                         <el-table-column prop="assistMessage.seedUserName" label="发布人" width="" align="center">
@@ -141,7 +141,7 @@
   }
   .messageBtn {
     position: absolute;
-    top: 6px;
+    top: 25px;
     right: 30px;
   }
 }
