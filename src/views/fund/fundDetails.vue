@@ -53,7 +53,7 @@
         </div>
     </div>
     <div class="chart">
-        <el-row :gutter="10">
+        <el-row :gutter="10" style="width: 100%; height: 100%">
             <el-col :span="12">
                 <tableInfo :data="tableData"></tableInfo>
             </el-col>

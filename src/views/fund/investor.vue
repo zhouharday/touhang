@@ -1,7 +1,7 @@
 <template>
 <div class="investorTable">
     <tabel-header :data="headerInfo" @method="method"></tabel-header>
-    <el-table :data="investorData" border style="width: 100%">
+    <el-table :data="investorData" style="width: 100%">
         <el-table-column label="投资者" prop="investorName" align="center">
         </el-table-column>
         <el-table-column label="协议名称" prop="agreementName" align="center">
