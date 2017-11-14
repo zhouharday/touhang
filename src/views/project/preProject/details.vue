@@ -1,7 +1,7 @@
 <template>
     <div class="form">
         <!-- 基本信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" v-if="checkProjectAuth('XQ-bianji')" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="170px">
                 <el-row>
@@ -59,7 +59,7 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" v-if="checkProjectAuth('XQ-bianji')" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="170px">
                 <el-row>
@@ -335,7 +335,7 @@ export default {
             let basicForm = this.basicForm;
             basicForm.projectId = this.projectId;
             changeProjectInfo(basicForm).then(resp => {
-                this.disable(basicForm);
+                this.able(basicForm, this.headerInfo_basic);
             }).catch(e => {
                 console.log('changeProjectInfo exists error: ', e);
             })
@@ -348,7 +348,7 @@ export default {
             // console.log("参数："+ JSON.stringify(companyForm));
             changeEnterpriseInfo(companyForm).then(resp => {
                 if (resp.data.status == '200') {
-                    this.disable(companyForm);
+                    this.able(companyForm, this.headerInfo_company);
                 }
                 // console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
             }).catch(e => {
@@ -368,7 +368,7 @@ export default {
             };
             changeCapitalInfo(capitalForm).then(resp => {
                 if (resp.data.status == '200') {
-                    this.disable(capitalForm);
+                    this.able(capitalForm, this.headerInfo_capital);
                 }
             }).catch(e => {
                 console.log('changeCapitalInfo exists error: ', e);
