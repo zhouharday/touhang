@@ -11,7 +11,7 @@
                 <div class="left">{{file.title}}</div>
                 <div class="right"></div>
             </div>
-            <el-table :show-header="false" :data="file.dataDocumentResult" :key="Math.random()" style="width: 100%">
+            <el-table :data="file.dataDocumentResult" :show-header="false" style="width: 100%">
                 <el-table-column label="基金阶段" prop="allocationDocumentName">
                 </el-table-column>
                 <el-table-column label="文档名称" prop="documentName">
@@ -75,6 +75,7 @@
 import {API_ROOT} from '../../config'
 import showPdf from 'components/showPdf'
 import deleteReminders from 'components/deleteReminders'
+import {checkFundAuth} from 'common/js/config'
 import {deleteDocument, selectProjectOrFundDocument} from 'api/fund'
 export default {
     props: {
@@ -153,6 +154,13 @@ export default {
         },
         confirmCancel() {
             this.reminders = false
+        },
+        haveJurisdiction(str) {
+            if (checkFundAuth(str)) {
+                return true
+            } else {
+                return false
+            }
         },
         _getInvestDoc() {
             selectProjectOrFundDocument(this.$route.params.userId, 3).then((res) => {

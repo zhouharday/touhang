@@ -150,7 +150,7 @@ export default {
           this._getDepartmentName(this.currentData);
         })
       })
-      .catch(error=> {
+      .catch(error => {
           this.$Message.error('请求超时');
       });
     },

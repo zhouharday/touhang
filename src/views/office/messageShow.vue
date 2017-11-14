@@ -369,6 +369,7 @@ export default {
       this.sendNoticeform.seedUserId = row.seedUserName;
       this.sendNoticeform.seedNoticeDate = row.createDate;
       this.sendNoticeform.id = row.id;
+      this.sendNoticeform.seedNoticeDate = getSysDate();
       this.dialogFormVisible = true;
     },
     editNotice(num) {
