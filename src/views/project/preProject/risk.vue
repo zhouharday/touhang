@@ -78,7 +78,7 @@
             </el-dialog>
             <!-- 查看风险详情 对话框 -->
             <el-dialog :title="titleMsg" :visible.sync="modalRiskView" :close-on-click-modal="false">
-                <el-form :model="viewForm" ref="addForm" :label-width="formLabelWidth">
+                <el-form :model="viewForm" :label-width="formLabelWidth">
                     <el-row>
                         <el-col>
                             <el-form-item label="风险主题" prop="riskTheme">
@@ -117,9 +117,11 @@
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="附件" prop="appendix">
-                                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
-                            </el-form-item>
+                            <el-form-item label="附件" prop="documentInfo">
+                                <p v-for="doc in viewForm.documentInfo">
+                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                </p>
+                        </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -405,9 +407,10 @@ export default {
             selectRiskRegister(riskId).then(resp => {
                 // console.log("hola datevid"+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    this.tableData = [];
+                    // this.tableData = [];
                     this.recordList = [];
-                    this.tableData.push(resp.data.result);
+                    // this.tableData.push(resp.data.result);
+                    this.viewForm = resp.data.result;
                     this.recordList = resp.data.result.record;
                     this.recordList.push();
                     if (optType == '1') {

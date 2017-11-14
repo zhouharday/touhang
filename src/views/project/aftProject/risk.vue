@@ -124,8 +124,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col>
-                            <el-form-item label="附件" prop="appendix">
-                                <upload-files @uploadSuccess="uploadSuccess($event, 'documentInfo')" @removeSucess="removeSucess($event, 'documentInfo')" :documentInfo="documentInfo"></upload-files>
+                            <el-form-item label="附件" prop="documentInfo">
+                                <p v-for="doc in viewForm.documentInfo">
+                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                </p>
                             </el-form-item>
                         </el-col>
                     </el-row>
