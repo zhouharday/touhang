@@ -108,7 +108,7 @@
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
-                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                     </el-pagination>
                 </div>
             </el-col>
@@ -444,7 +444,7 @@ export default {
         border-bottom: 1px solid #F05E5E;
     }
     .fow {
-        font-weight: bold;
+        /*font-weight: bold;*/
     }
     .project {
         color: #F05E5E;
