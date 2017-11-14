@@ -1,9 +1,9 @@
 <template>
     <div class="form">
         <!-- 基本信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" v-if="checkProjectAuth('XQ-bianji')" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
-            <el-form ref="basicForm" :model="basicForm" label-width="120px">
+            <el-form ref="basicForm" :model="basicForm" label-width="170px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="项目名称" prop="projectName">
@@ -59,9 +59,9 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" v-if="checkProjectAuth('XQ-bianji')" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
-            <el-form ref="companyForm" :model="companyForm" label-width="120px">
+            <el-form ref="companyForm" :model="companyForm" label-width="170px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="企业名称" prop="enterpriseName">
