@@ -125,34 +125,36 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="documentInfo">
-                                <p v-for="doc in viewForm.documentInfo">
-                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                                </p>
+                                <div style="width:983px;padding:10px 15px; background: #eef1f6;">
+                                    <p v-for="doc in viewForm.documentInfo" :key="doc.index">
+                                        <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                    </p>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
                 <!-- <el-table :data="tableData" border style="width: 100%">
-                                        <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
-                                        </el-table-column>
-                                        <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
-                                        </el-table-column>
-                                        <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
-                                        </el-table-column>
-                                        <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
-                                        </el-table-column>
-                                        <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
-                                        </el-table-column>
-                                        <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
-                                        </el-table-column>
-                                        <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
-                                            <template scope="scope">
-                                                <p v-for="item in scope.row.documentInfo">
-                                                    <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a>
-                                                </p>
-                                            </template>
-                                        </el-table-column>
-                                    </el-table> -->
+                                            <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
+                                            </el-table-column>
+                                            <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
+                                            </el-table-column>
+                                            <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
+                                            </el-table-column>
+                                            <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
+                                            </el-table-column>
+                                            <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
+                                            </el-table-column>
+                                            <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
+                                            </el-table-column>
+                                            <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                                                <template scope="scope">
+                                                    <p v-for="item in scope.row.documentInfo">
+                                                        <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a>
+                                                    </p>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table> -->
                 <div class="operationBox">
                     <div class="left">
                         <div>处理记录</div>
@@ -193,62 +195,62 @@
             </el-dialog>
             <!-- 风险跟踪  对话框 -->
             <!-- <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
-                        <el-table :data="tableData" border style="width: 100%">
-                            <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
-                            </el-table-column>
-                            <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
-                            </el-table-column>
-                            <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
-                            </el-table-column>
-                            <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
-                            </el-table-column>
-                            <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
-                            </el-table-column>
-                            <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
-                            </el-table-column>
-                            <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
-                                <template scope="scope">
-                                    <p v-for="item in scope.row.documentInfo">
-                                        <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a>
+                            <el-table :data="tableData" border style="width: 100%">
+                                <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
+                                </el-table-column>
+                                <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
+                                </el-table-column>
+                                <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
+                                </el-table-column>
+                                <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
+                                </el-table-column>
+                                <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
+                                </el-table-column>
+                                <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
+                                </el-table-column>
+                                <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                                    <template scope="scope">
+                                        <p v-for="item in scope.row.documentInfo">
+                                            <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a>
+                                        </p>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            <div class="operationBox">
+                                <div class="left">
+                                    <div>处理记录</div>
+                                </div>
+                                <div class="right">
+                                    <p v-for="item in recordList" :key="item.id">
+                                        <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
+                                        <span>{{item.recordDetails}}</span>
+                                        <span v-for="doc in item.documentInfo">
+                                            <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a>
+                                        </span>
+                                        </span>
                                     </p>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div class="operationBox">
-                            <div class="left">
-                                <div>处理记录</div>
+                                </div>
                             </div>
-                            <div class="right">
-                                <p v-for="item in recordList" :key="item.id">
-                                    <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
-                                    <span>{{item.recordDetails}}</span>
-                                    <span v-for="doc in item.documentInfo">
-                                        <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a>
-                                    </span>
-                                    </span>
-                                </p>
+                            <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
+                                <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
+                                    <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
+                                        <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                                <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
+                                    <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
+                                    </el-input>
+                                </el-form-item>
+                                <el-form-item label="处理方案" :label-width="formLabelWidth">
+                                    <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
+                                </el-form-item>
+                            </el-form>
+                            <div slot="footer" class="dialog-footer">
+                                <el-button @click="modalTracking= false">取 消</el-button>
+                                <el-button type="danger" @click="confirmTracking()">保 存</el-button>
                             </div>
-                        </div>
-                        <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
-                            <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
-                                <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                                    <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
-                                <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="处理方案" :label-width="formLabelWidth">
-                                <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
-                            </el-form-item>
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="modalTracking= false">取 消</el-button>
-                            <el-button type="danger" @click="confirmTracking()">保 存</el-button>
-                        </div>
-                    </el-dialog> -->
+                        </el-dialog> -->
         </div>
 
         <div class="s_risk" v-show="s_show">
@@ -900,6 +902,7 @@ export default {
         }
     }
 }
+
 .operation-box {
     width: 1102px;
     display: flex;
