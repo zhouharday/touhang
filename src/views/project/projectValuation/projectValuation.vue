@@ -9,13 +9,13 @@
                 </el-input>
             </el-col>
         </el-row>
-        <el-table :data="tableData" style="width:100%" border class="table-item">
-            <el-table-column prop="projectName" fixed label="项目名称" align="center" width="200px">
+        <el-table :data="tableData" style="width:100%" class="table-item">
+            <el-table-column prop="projectName" label="项目名称" align="center" min-width="300px">
                 <template scope="scope">
                     <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row.projectId)">{{ scope.row.projectName }}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="算法类型" align="center" width="215px">
+            <el-table-column label="算法类型" align="center" min-width="200px">
                 <template scope="scope">
                     <span v-if="!scope.row.editFlag">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
@@ -26,7 +26,7 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column label="估值参数" align="center" width="400px">
+            <el-table-column label="估值参数" align="center" min-width="400px">
                 <template scope="scope">
                     <span v-if="!scope.row.editFlag">{{scope.row.note1}}： {{ scope.row.appraisementParamer}}　x　{{scope.row.note2}}： {{scope.row.appraisementParamerTwo}}　x　{{scope.row.note3}}： {{scope.row.stockRatio}}%</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
@@ -44,18 +44,18 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="200px">
+            <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="150px">
                 <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
             </el-table-column>
-            <el-table-column prop="appraisementDate" label="估值日期" align="center" width="200px">
+            <el-table-column prop="appraisementDate" label="估值日期" align="center" width="180px">
                 <template scope="scope">{{scope.row.appraisementDate | formatDate}}</template>
             </el-table-column>
-            <el-table-column prop="appraisementUserName" label="估值人员" align="center" width="200px">
+            <el-table-column prop="appraisementUserName" label="估值人员" align="center" width="150px">
             </el-table-column>
-            <el-table-column prop="appraisementStatus" label="状态" align="center" width="200px">
+            <el-table-column prop="appraisementStatus" label="状态" align="center" width="150px">
                 <template scope="scope">{{scope.row.appraisementStatus == '1' ? '已估值' : '未估值'}}</template>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" align="center" width="200px">
+            <el-table-column label="操作" align="center" width="150px">
                 <template scope="scope">
                     <el-button v-if="!scope.row.editFlag && scope.row.appraisementStatus != 1" type="text" size="small" style="color: #f05e5e" @click="checkEdit(scope.$index,scope.row)">编辑
                     </el-button>
@@ -65,9 +65,9 @@
                 </template>
             </el-table-column>
         </el-table>
-        <div class="page">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[2, 5, 10, 20]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
+        <div class="pagination">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                    </el-pagination>
         </div>
         <!-- 估值历史 dialog -->
         <div class="history">
