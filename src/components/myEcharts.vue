@@ -27,7 +27,6 @@ export default {
     },
     watch: {
         'opinion':function (to,from){
-            console.log("hola datevid"+this.opinion);
             this.drawGraph()
         }
     },

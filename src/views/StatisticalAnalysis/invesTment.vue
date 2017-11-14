@@ -1,35 +1,35 @@
 <template>
-    <section>
-        <!-- 这是项目投资统计表 -->
-        <div class="invesTment_form">
-            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-            <el-row :gutter="20">
-                <el-col :span="12">
-                    <div class="grid-content bg-purple-dark">
-                        <div id="invesTment_Echarts" class="invesTment_Echarts" style="width: 550px;height:400px;"></div>
-                    </div>
-                </el-col>
-                <el-col :span="9">
-                    <div class="grid-content bg-purple-dark">
-                        <div>
-                            <el-table class="invesTabData" :data="invesTabData" border stripe style="width: 100%">
-                                <el-table-column prop="stageName" label="项目阶段" align="center" width="">
-                                </el-table-column>
-                                <el-table-column prop="projectNumber" label="项目数量" align="center" width="">
-                                </el-table-column>
-                                <el-table-column prop="percent" label="转化率%" align="center" width="">
-                                </el-table-column>
-                            </el-table>
-                            <!-- <div class="pagination">
-                              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
-                              </el-pagination>
-                            </div> -->
-                        </div>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-    </section>
+  <section>
+    <!-- 这是项目投资统计表 -->
+    <div class="invesTment_form">
+      <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple-dark">
+            <div id="invesTment_Echarts" class="invesTment_Echarts" style="width: 550px;height:400px;"></div>
+          </div>
+        </el-col>
+        <el-col :span="9">
+          <div class="grid-content bg-purple-dark">
+            <div>
+              <el-table class="invesTabData" :data="invesTabData" border stripe style="width: 100%">
+                <el-table-column prop="stageName" label="项目阶段" align="center" width="">
+                </el-table-column>
+                <el-table-column prop="projectNumber" label="项目数量" align="center" width="">
+                </el-table-column>
+                <el-table-column prop="percent" label="转化率%" align="center" width="">
+                </el-table-column>
+              </el-table>
+              <!-- <div class="pagination">
+                                  <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+                                  </el-pagination>
+                                </div> -->
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -68,8 +68,8 @@ export default {
           subtext: ""
         },
         tooltip: {
-        //   trigger: "item",
-        //   formatter: "{a} <br/>{b} : {c}%"
+          trigger: "item"
+          // formatter: "{a} <br/>{b} : {c}%"
         },
         toolbox: {
           feature: {
@@ -83,7 +83,7 @@ export default {
           //   left: "30%",
           //   right: "50%"
         },
-        // calculable: true,
+        calculable: true,
         series: [
           {
             name: "项目投资统计表",
@@ -91,9 +91,9 @@ export default {
             left: "10%",
             // right: '50%',
             top: 60,
-            //x2: 80,
+            x2: 80,
             bottom: 60,
-            width: "90%",
+            width: "100%",
             // height: {totalHeight} - y - y2,
             min: 0,
             max: 100,
@@ -112,22 +112,22 @@ export default {
                 }
               }
             },
-            // labelLine: {
-            //   normal: {
-            //     length: 10,
-            //     lineStyle: {
-            //       width: 1,
-            //       type: "solid"
-            //     }
-            //   }
-            // },
-            // itemStyle: {
-            //   normal: {
-            //     borderColor: "#fff",
-            //     borderWidth: 1,
-            //     fontSize: 15
-            //   }
-            // },
+            labelLine: {
+              normal: {
+                length: 10,
+                lineStyle: {
+                  width: 1,
+                  type: "solid"
+                }
+              }
+            },
+            itemStyle: {
+              normal: {
+                borderColor: "#fff",
+                borderWidth: 1,
+                fontSize: 15
+              }
+            },
             data: this.data
           }
         ]
@@ -136,7 +136,8 @@ export default {
     };
   },
   methods: {
-    intEcart() { //初始化Echarts 方法
+    intEcart() {
+      //初始化Echarts 方法
       let myChart = echarts.init(document.getElementById("invesTment_Echarts"));
       myChart.setOption(this.option);
     },
@@ -154,7 +155,7 @@ export default {
 
               this.data = [];
               res.data.result.forEach((ele, index1) => {
-              //this.option.title.text = ele.name;
+                //this.option.title.text = ele.name;
                 let obj = {};
                 // data.push(ele);
                 obj.name = ele.stageName;

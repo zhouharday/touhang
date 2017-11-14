@@ -5,7 +5,7 @@
             <el-button id="prev" @click="closepdf">关闭</el-button>
         </div>
     </div>
-    <iframe v-if="isshowpdf" :src="'../../../../static/js/pdf/web/viewer.html?file='+transUrl" width="100%" height="100%" scrolling="no"></iframe>
+    <iframe v-if="isshowpdf" :src="'../../../../static/js/pdf/web/viewer.html?file='+pdfurl" width="100%" height="100%" scrolling="no"></iframe>
 </div>
 </template>
 <script>
@@ -23,7 +23,7 @@ export default {
     watch: {
         'pdfurl':function (to,from){
             if(to != from){
-                this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
+                // this.transUrl = to.replace('http://47.90.120.190:8086', '/file');
                 this.isshowpdf = true;
             }
         }

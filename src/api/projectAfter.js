@@ -91,9 +91,11 @@ export function getInvestSubject(projectId = undefined) {
 }
 
 //获取投后项目详情上面的小双提醒（预警）
-export function getWarnMessageList(projectId = undefined) {
+export function getWarnMessageList(projectId = undefined, page, pageSize) {
 	const data = {
-		projectId
+		projectId,
+		page, 
+		pageSize
 	};
 	return service({url: '/WarnRecords/selectWarnMessageList', method: 'post', data});
 }

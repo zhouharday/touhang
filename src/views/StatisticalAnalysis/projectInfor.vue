@@ -33,8 +33,8 @@
                     </div>
                 </el-col>
             </el-row>
-            <el-table :data="projectInforTabData" border stripe style="width: 100%">
-                <el-table-column fixed="left" prop="projectName" label="项目名称" width="150" align="center">
+            <el-table :data="projectInforTabData" stripe style="width: 100%">
+                <el-table-column fixed="left" prop="projectName" label="项目名称" width="200" align="center">
                 </el-table-column>
                 <el-table-column prop="projectType" label="项目类型" width="150" align="center">
                 </el-table-column>
@@ -44,7 +44,7 @@
                 </el-table-column> -->
                 <el-table-column prop="payDate" label="投资时间" width="250" align="center">
                 </el-table-column>
-                <el-table-column prop="investAmount" label="投资金额" width="150" align="center">
+                <el-table-column prop="investAmount" label="投资金额(元)" width="200" align="center">
                 </el-table-column>
                 <el-table-column prop="newAppraisement" label="最新估值" width="150" align="center">
                 </el-table-column>
@@ -52,19 +52,19 @@
                 </el-table-column>
                 <el-table-column prop="exitIncome" label="退出收益" width="150" align="center">
                 </el-table-column>
-                <el-table-column prop="incomeRatio" label="收益率" width="150" align="center">
+                <el-table-column prop="incomeRatio" label="收益率(%)" width="150" align="center">
                 </el-table-column>
                 <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资主体" width="200" align="center">
                     <template scope="scope">
                         <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.investmentSubject}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资金额" width="150" align="center">
+                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资金额(元)" width="200" align="center">
                     <template scope="scope">
                         <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.investmentAmount}}</div>
                     </template>
                 </el-table-column>
-                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="股权占比" width="150" align="center">
+                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="股权占比(%)" width="150" align="center">
                     <template scope="scope">
                         <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.stock}}</div>
                     </template>

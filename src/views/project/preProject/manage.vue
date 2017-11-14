@@ -88,7 +88,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%">
+                                        <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -99,7 +99,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model.number="contractForm1.stockRatio" auto-complete="off"></el-input>
+                                        <el-input v-model.number="contractForm1.stockRatio" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -152,7 +152,7 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.stockRatio" placeholder=""></el-input>
+                                        <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -201,7 +201,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm2.signDate" style="width: 100%;">
+                                        <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm2.signDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -212,7 +212,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model.number="contractForm2.stockRatio" auto-complete="off"></el-input>
+                                        <el-input v-model.number="contractForm2.stockRatio" auto-complete="off" disabled></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -265,7 +265,7 @@
                                 <template scope="scope">
                                     <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
                                     <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.stockRatio" placeholder=""></el-input>
+                                        <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
                                     </span>
                                 </template>
                             </el-table-column>
@@ -288,7 +288,7 @@
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
-                    <el-table :data="paidData" border style="width: 100%" align="center" show-summary="true">
+                    <el-table :data="paidData" border style="width: 100%" align="center" show-summary="true" :summary-method="getPaySummaries">
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
@@ -328,7 +328,9 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件" >
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
+                                        <span v-for="item in contractDocument">
+                                            <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -348,7 +350,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="支付日期" prop="payDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;">
+                                        <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -403,7 +405,9 @@
                                 </el-col>
                                 <el-col>
                                     <el-form-item label="合同附件" prop="contractAppendix">
-                                        <el-input v-model="paidForm1.contractAppendix" auto-complete="off" disabled></el-input>
+                                        <span v-for="item in contractDocument">
+                                            <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                        </span>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -423,7 +427,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="支付日期" prop="payDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;">
+                                        <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -465,7 +469,7 @@
                 <!--  项目分红 部分-->
                 <div class="fileTable sharingDialog">
                     <tabel-header :data="checkProjectAuth('GL-XMFH-XZ') ? headerInfo_sharing : _headerInfo_sharing" @add="goAddShare"></tabel-header>
-                    <el-table :data="sharingData" border style="width: 100%" align="center" show-summary>
+                    <el-table :data="sharingData" border style="width: 100%" align="center" show-summary :summary-method="getShareSummaries">
                         <el-table-column label="合同名称" prop="contractName" align="center">
                         </el-table-column>
                         <el-table-column label="合同金额（元）" prop="contractAmount" align="center">
@@ -518,7 +522,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红日期" prop="shareDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                                        <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -586,7 +590,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="分红日期" prop="shareDate">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                                        <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                                         </el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -676,6 +680,8 @@ export default {
             paidAdd2: false,
             sharingAdd1: false,
             sharingAdd2: false,
+            isEditPay: false,
+            isEditShare: false,
             //项目费用
             costForm1: {
                 costTypeId: ''
@@ -705,11 +711,8 @@ export default {
                 contractName: [
                     { required: true, message: '请输入合同名称', trigger: 'blur' }
                 ],
-                stockRatio: [
-                    { type : "number", required: true, message: '股权占比必须是数字', trigger: 'blur' }
-                ],
                 signDate: [
-                    { type : "date", required: true, message: '请选择签约日期', trigger: 'blur' }
+                    { required: true, message: '请选择签约日期', trigger: 'blur' }
                 ]
             },
             contractForm2: {},
@@ -762,12 +765,13 @@ export default {
                 payDate: '',
                 paidInMoney: 0
             },
+            contractDocument: [],
             paidRules: {
                 contractId: [
                     { required: true, message: '请选择项目合同', trigger: 'change' }
                 ],
                 payDate:[
-                    { type: 'date', required: true, message: '请选择支付日期', trigger: 'change' }
+                    { required: true, message: '请选择支付日期', trigger: 'change' }
                 ]
             },
             paidDetailRule: {
@@ -801,7 +805,7 @@ export default {
                     { required: true, message: '请选择项目合同', trigger: 'change' }
                 ],
                 shareDate: [
-                    { type: "date", required: true, message: '请选择分红日期', trigger: 'change' }
+                    { required: true, message: '请选择分红日期', trigger: 'change' }
                 ]    
             },
             sharingData: [],
@@ -931,16 +935,17 @@ export default {
                 console.log('getParticipationList() exists error: ', e);
             })
         },
-        getSummaries(param) {
+        getPaySummaries(param) {
             const { columns, data } = param;
             const sums = [];
             columns.forEach((column, index) => {
                 if (index === 0) {
-                    sums[index] = '总价';
+                    sums[index] = '合计';
                     return;
                 }
                 const values = data.map(item => Number(item[column.property]));
-                if (!values.every(value => isNaN(value))) {
+                // console.log(column.property);
+                if (!values.every(value => isNaN(value)) && column.property == 'paidInMoney') {
                     sums[index] = values.reduce((prev, curr) => {
                         const value = Number(curr);
                         if (!isNaN(value)) {
@@ -949,9 +954,35 @@ export default {
                             return prev;
                         }
                     }, 0);
-                    sums[index] += ' 元';
+                    // sums[index] += ' 元';
                 } else {
-                    sums[index] = 'N/A';
+                    sums[index] = '';
+                }
+            });
+            return sums;
+        },
+        getShareSummaries(param) {
+            const { columns, data } = param;
+            const sums = [];
+            columns.forEach((column, index) => {
+                if (index === 0) {
+                    sums[index] = '合计';
+                    return;
+                }
+                const values = data.map(item => Number(item[column.property]));
+                // console.log(column.property);
+                if (!values.every(value => isNaN(value)) && column.property == 'shareAmount') {
+                    sums[index] = values.reduce((prev, curr) => {
+                        const value = Number(curr);
+                        if (!isNaN(value)) {
+                            return prev + curr;
+                        } else {
+                            return prev;
+                        }
+                    }, 0);
+                    // sums[index] += ' 元';
+                } else {
+                    sums[index] = '';
                 }
             });
             return sums;
@@ -1129,13 +1160,18 @@ export default {
         },
         //选择投资支付的合同
         selContract(value) {
-            if (!value) return false;
+            if (!value ) return false;
+            if(this.isEditPay){
+                this.isEditPay = false;
+                return false;
+            }
             // this.paidForm1.payTitle = "投资支付-" + value.contractName;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
 
                     this.$set(this.$data.paidForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
+                    this.contractDocument = resp.data.result.projectContract.documentInfo;
                     this.fundData2 = resp.data.result.fundInfo;
 
                     this.fundData2.forEach(function(item, index) {
@@ -1188,6 +1224,7 @@ export default {
                 this.fundData2 = [];
                 this.fundData2.push();
             }
+            this.contractDocument = [];
             this.payDocInfo = [];
             this.paidAdd1 = true;
         },
@@ -1204,7 +1241,8 @@ export default {
                         surplusAmount: this.paidForm1.surplusAmount,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        payDate: this.paidForm1.payDate,
                         documentInfo: this.payDocInfo
                     };
                     let data = {
@@ -1231,8 +1269,9 @@ export default {
         goEditPay(id) {
             getContractPayDetail(id).then(resp => {
                 if (resp.data.status == '200') {
+                    this.isEditPay = true;
                     this.paidForm1 = resp.data.result.projectInvestPay;
-
+                    this.contractDocument = resp.data.result.projectInvestPay.contractDocument;
                     let documentInfo = resp.data.result.projectInvestPay.documentInfo;
                     documentInfo.forEach(item => {
                         item.name = item.name == null ? item.fileName : item.name;
@@ -1263,7 +1302,8 @@ export default {
                         surplusAmount: this.paidForm1.surplusAmount,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
+                        payDate: this.paidForm1.payDate,
                         documentInfo: this.payDocInfo
                     };
                     let data = {
@@ -1287,12 +1327,15 @@ export default {
             });
         },
         changeInvestAmount() {
-            let sum = 0.0;
+            let sumAmount = 0.0, sumStockRatio = 0.0;
             for (let i = 0; i < this.fundData1.length; i++) {
-                sum += (parseFloat(this.fundData1[i].investAmount | 0));
+                sumAmount += (parseFloat(this.fundData1[i].investAmount | 0));
+                sumStockRatio += (parseFloat(this.fundData1[i].stockRatio | 0));
             }
-            this.$set(this.$data.contractForm1, 'contractAmount', sum);
-            this.contractForm2.contractAmount = sum;
+            this.$set(this.$data.contractForm1, 'contractAmount', sumAmount);
+            this.$set(this.$data.contractForm1, 'stockRatio', sumStockRatio);
+            this.contractForm2.contractAmount = sumAmount;
+            this.contractForm2.stockRatio = sumStockRatio;
         },
         //投资支付金额合计
         sumPay() {
@@ -1315,6 +1358,10 @@ export default {
         //选择项目分红的合同
         selShareContract(value) {
             if (!value) return;
+            if(this.isEditShare){
+                this.isEditShare = false;
+                return false;
+            }
             // this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
@@ -1344,6 +1391,7 @@ export default {
             };
             this.shareDocInfo = [];
             this.sharingAdd1 = true;
+            this.fundData3 = [];
         },
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
@@ -1382,6 +1430,7 @@ export default {
         goEditShare(id) {
             getParticipationDetail(id).then(resp => {
                 if (resp.data.status == '200') {
+                    this.isEditShare = true;
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
 
@@ -1512,6 +1561,16 @@ export default {
         },
         removeSucess(documentInfo, dataName){
             this.$set(this.$data, dataName, documentInfo);
+        },
+        setPayDate(val){
+            this.$set(this.$data.paidForm1, 'payDate', ''+val);
+        },
+        setSignDate(val){
+            this.$set(this.$data.contractForm1, 'signDate', ''+val);
+            this.$set(this.$data.contractForm2, 'signDate', ''+val);
+        },
+        setShareDate(val){
+            this.$set(this.$data.sharingForm1, 'shareDate', ''+val);
         }
     }
 }

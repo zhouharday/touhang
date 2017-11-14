@@ -44,6 +44,7 @@
                                     </el-button> -->
                             </div>
                         </div>
+                        <Page class="page" show-sizer="true" :page-size="pageSize" :current="page" :total="total" simple @on-change="getWarning"></Page>
                         <div class="img_wrapper">
                             <img src="/static/img/double-02.png">
                         </div>
@@ -131,6 +132,9 @@ export default {
             investProjectId: '',
             title: '',
             prompt: '任务助手小双温馨提示:',
+            page: 1,
+            pageSize: 5,
+            total: 0,
             activeName: 'details',
             proUsers: [], // 项目用户列表
             message: [],
@@ -191,11 +195,11 @@ export default {
         initInfo() {
             let merchants = JSON.parse(window.sessionStorage.getItem('merchants') || '[]');
             this.merchantId = merchants[0].id;
+            this.checkTeamUser();
             this.getWarnMessageList();
             this.getInvestSubject();
             this.getAppraisementRep();
             this.getAppraisementDetails();
-            this.checkTeamUser();
             this.getProUsers();
         },
         checkTeamUser(){
@@ -264,12 +268,14 @@ export default {
         },
         //获取预警提醒
         getWarnMessageList() {
-            getWarnMessageList(this.projectId).then(resp => {
+            getWarnMessageList(this.projectId, this.page, this.pageSize).then(resp => {
                 // console.log("获取预警提醒: "+ JSON.stringify(resp.data));
                 if(resp.data.status == '200'){
-                    this.message = resp.data.result;
+                    this.message = resp.data.result.list;
+                    this.total = resp.data.result.total;
                 }else if (resp.data.status === '49999') {
                     this.message = [];
+                    this.total = 0;
                 }else{
                     this.$message.error(resp.data.message);
                 }
@@ -329,6 +335,10 @@ export default {
                 return 'positive-row';
             }
             return '';
+        },
+        getWarning(page){
+            this.page = page;
+            this.getWarnMessageList();
         }
     }
 }   
@@ -422,11 +432,18 @@ export default {
                     color: #a0a3aa;
                 }
             }
+            .page {
+                float: right;
+                font-size: 14px;
+                position: absolute;
+                right: 20px;
+                bottom: 15px;
+            }
             .img_wrapper img {
                 position: absolute;
                 width: 120px;
                 height: 120px;
-                bottom: 10px;
+                bottom: 55px;
                 right: 10px;
             }
         }

@@ -122,7 +122,7 @@
                 </el-submenu>
             </el-menu>
             <!-- 菜单列表 Start -->
-            <el-menu v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router @open="handleOpen" @close="handleClose">
+            <el-menu v-show="showOrHide.isShowSidebar && showOrHide.isVshowYe && isShow" :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened @open="handleOpen" @close="handleClose">
               <el-submenu :index="index" v-for="(item,index) in menus" :key="item">
                     <template slot="title" style="height:50px;line-height:50px;" class="title">
                         <img style="margin-top:18px;display:block;float:left;margin-right:7px;" :src="menusImg[index].src" />

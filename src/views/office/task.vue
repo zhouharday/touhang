@@ -6,7 +6,7 @@
       <Tabs @on-click="getTaskList">
         <Tab-pane :name="1" label="指派任务">
           <!-- <Table border :columns="columns1" :data="data1" align="center"></Table> -->
-          <Table border :data="data1" :columns="columns1" stripe></Table>
+          <Table :data="data1" :columns="columns1" stripe></Table>
           <div style="margin: 10px;overflow: hidden">
             <div class="pagination">
               <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
@@ -15,7 +15,7 @@
           </div>
         </Tab-pane>
         <Tab-pane :name="2" label="待办任务">
-          <Table border :data="data2" :columns="columns2" stripe></Table>
+          <Table :data="data2" :columns="columns2" stripe></Table>
           <div style="margin: 10px;overflow: hidden">
             <div class="pagination">
               <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
@@ -24,7 +24,7 @@
           </div>
         </Tab-pane>
         <Tab-pane :name="3" label="已办任务">
-          <Table border :data="data3" :columns="columns3" stripe></Table>
+          <Table :data="data3" :columns="columns3" stripe></Table>
           <div style="margin: 10px;overflow: hidden">
             <div class="pagination">
               <el-pagination @size-change="handleSizeChange3" @current-change="handleCurrentChange3" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="page3.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page3.total">
@@ -888,6 +888,7 @@ export default {
     },
     viewTask1(params) {
       //查看指派任务详情
+      // alert(222);
       console.log(params.row);
       this.viewDialog1 = true;
       this.viewTaskForm1.taskName = params.row.taskName;

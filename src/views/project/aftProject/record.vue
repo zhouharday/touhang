@@ -2,7 +2,7 @@
     <div class="recordBox">
         <tabel-header :data="headerInfo_record" class="title"></tabel-header>
         <div v-if="checkProjectAuth('JL-tianjiajilu')" class="recordForm">
-            <Input v-model="value.recordText" type="textarea" :rows="5" placeholder="请输入文本内容..."></Input>
+            <Input v-model="value.recordText" type="textarea" :rows="5" maxlength="175" placeholder="请输入文本内容..."></Input>
             <el-button type="danger" class="submit-btn" @click="submitRecord">提交</el-button>
         </div>
         <div class="recordArea">
@@ -212,6 +212,8 @@ export default {
                     border-left: 20px solid transparent;
                 }
                 p {
+
+                    font-size: 12px;
                     margin-bottom: 5px;
                     span {
                         margin-right: 20px;
