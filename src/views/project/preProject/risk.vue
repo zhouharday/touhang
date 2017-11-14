@@ -77,34 +77,61 @@
                 </div>
             </el-dialog>
             <!-- 查看风险详情 对话框 -->
-            <el-dialog title="查看风险上报详情" :visible.sync="modalRiskView" :close-on-click-modal="false">
-                <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
-                        <template scope="scope">
-                            <p v-for="item in scope.row.documentInfo">
-                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
-                        </template>
-                    </el-table-column>
-                </el-table>
+            <el-dialog :title="titleMsg" :visible.sync="modalRiskView" :close-on-click-modal="false">
+                <el-form :model="viewForm" :label-width="formLabelWidth">
+                    <el-row>
+                        <el-col>
+                            <el-form-item label="风险主题" prop="riskTheme">
+                                <el-input v-model="viewForm.riskTheme" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="风险描述" prop="riskDescribe">
+                                <el-input type="textarea" :rows="3" v-model="viewForm.riskDescribe" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="提出人" prop="userName">
+                                <el-input v-model="userName" placeholder="当前用户" disabled></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="提出时间" prop="createDate">
+                                <el-input v-model="viewForm.createDate" disabled>
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="接收人" prop="receivedUserId">
+                                <el-select v-model="viewForm.receivedUserId" style="width:100%" disabled>
+                                    <el-option v-for="item in proTeam" :key="item.userId" :label="item.userName" :value="item.userId">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="完成时间" prop="completeDate">
+                                <el-date-picker type="date" placeholder="完成时间" v-model="viewForm.completeDate" style="width: 100%;" disabled>
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col>
+                            <el-form-item label="附件" prop="documentInfo">
+                                <p v-for="doc in viewForm.documentInfo">
+                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                </p>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
                 <div class="operationBox">
                     <div class="left">
                         <div>处理记录</div>
                     </div>
                     <div class="right">
                         <p v-for="item in recordList" :key="item.id">
-                            <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
+                            <span>{{item.disposeResult == '1' ? '【处理中】' : '【已完成】'}}</span>
                             <span>{{item.recordDetails}}</span>
                             <span v-for="doc in item.documentInfo">
                                 <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
@@ -112,63 +139,87 @@
                         </p>
                     </div>
                 </div>
+                <!-- 跟踪对话框的处理表单 -->
+                <div v-show="isTrack">
+                    <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
+                        <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
+                            <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
+                                <el-option v-for="item in resultOptions" :key="item.key" :label="item.value" :value="item.key">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
+                            <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="处理方案" :label-width="formLabelWidth">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" @removeSucess="removeSucess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer formBtn">
+                        <el-button @click="modalRiskView= false">取 消</el-button>
+                        <el-button type="danger" @click="confirmTracking()">保 存</el-button>
+                    </div>
+                </div>
             </el-dialog>
             <!-- 风险跟踪  对话框 -->
-            <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
-                <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
-                    </el-table-column>
-                    <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
-                        <template scope="scope">
-                            <p v-for="item in scope.row.documentInfo">
-                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a></p>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div class="operationBox">
-                    <div class="left">
-                        <div>处理记录</div>
-                    </div>
-                    <div class="right">
-                        <p v-for="item in recordList" :key="item.id">
-                            <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
-                            <span>{{item.recordDetails}}</span>
-                            <span v-for="doc in item.documentInfo">
-                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
-                            </span>
-                        </p>
-                    </div>
-                </div>
-                <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
-                    <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
-                        <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
-                            <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
-                        <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item label="处理方案" :label-width="formLabelWidth">
-                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="modalTracking= false">取 消</el-button>
-                    <el-button type="danger" @click="confirmTracking('trackingForm')">保 存</el-button>
-                </div>
-            </el-dialog>
+            <!-- <el-dialog title="风险跟踪" :visible.sync="modalTracking" :close-on-click-modal="false">
+                                <el-table :data="tableData" border style="width: 100%">
+                                    <el-table-column prop="riskTheme" label="风险主题" width="150px" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="riskDescribe" label="风险描述" width="150px" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="seedUserName" label="指派人" width="150px" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="createDate" label="提出时间" width="150px" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="receivedUserName" label="处理人" width="150px" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="completeDate" label="完成时间" width="200px" align="center">
+                                    </el-table-column>
+                                    <el-table-column prop="documentInfo" label="附件" width="150px" align="center">
+                                        <template scope="scope">
+                                            <p v-for="item in scope.row.documentInfo">
+                                                <a :href="item.filePath" style="font-size:12px;" :download="item.fileName">{{item.fileName}}</a>
+                                            </p>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <div class="operationBox">
+                                    <div class="left">
+                                        <div>处理记录</div>
+                                    </div>
+                                    <div class="right">
+                                        <p v-for="item in recordList" :key="item.id">
+                                            <span>{{item.disposeResult == '1' ? '处理中' : '已完成'}}</span>
+                                            <span>{{item.recordDetails}}</span>
+                                            <span v-for="doc in item.documentInfo">
+                                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                            </span>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <el-form :model="trackingForm" :rules="rules2" ref="trackingForm" style="margin-top:20px;background:#eef1f6;padding:10px;">
+                                    <el-form-item label="处理结果" prop="disposeResult" :label-width="formLabelWidth">
+                                        <el-select v-model="trackingForm.disposeResult" placeholder="请选择处理状态">
+                                            <el-option v-for="item in resultOptions" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                    <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
+                                        <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
+                                        </el-input>
+                                    </el-form-item>
+                                    <el-form-item label="处理方案" :label-width="formLabelWidth">
+                                        <upload-files @uploadSuccess="uploadSuccess($event, 'recordDocInfo')" :documentInfo="recordDocInfo"></upload-files>
+                                    </el-form-item>
+                                </el-form>
+                                <div slot="footer" class="dialog-footer">
+                                    <el-button @click="modalTracking= false">取 消</el-button>
+                                    <el-button type="danger" @click="confirmTracking('trackingForm')">保 存</el-button>
+                                </div>
+                            </el-dialog> -->
         </section>
     </div>
 </template>
@@ -201,7 +252,7 @@ export default {
             userId: JSON.parse(sessionStorage.getItem('userInfor')).id,
             createDate: changeDate(new Date()),
 
-            actionUrl:this.api + '/files/upload',
+            actionUrl: this.api + '/files/upload',
             showUploadAlert: false,
             uploadMessage: '',
 
@@ -209,6 +260,8 @@ export default {
             projectId: '',
             modalAdd: false,
             modalRiskView: false,
+            isTrack: false,
+            titleMsg: '查看风险登记详情',
             modalTracking: false,
             formLabelWidth: '80px',
             file: null,
@@ -230,10 +283,14 @@ export default {
                 appendix: '',
                 Records: ''
             },
+            // 查看风险详情 对话框表单
+            viewForm: {
+
+            },
             proTeam: [
                 {
-                    id:'',
-                    name:''
+                    id: '',
+                    name: ''
                 },
             ],
             rules1: {
@@ -275,8 +332,8 @@ export default {
                 }
             ],
             riskData: [],
-            documentInfo:[],
-            recordDocInfo:[]
+            documentInfo: [],
+            recordDocInfo: []
         }
     },
     components: {
@@ -285,15 +342,15 @@ export default {
     },
     created() {
     },
-    watch:{
-        'tabs':function (to,from){
-            if(to.tabList[5]){
+    watch: {
+        'tabs': function(to, from) {
+            if (to.tabList[5]) {
                 this.init();
             }
         }
     },
     methods: {
-        checkProjectAuth(code){
+        checkProjectAuth(code) {
             return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
@@ -302,7 +359,7 @@ export default {
             this.getProTeam();
         },
         //查询项目团队成员
-        getProTeam(){
+        getProTeam() {
             console.log(this.$route.params.investProjectId);
             getTeams(this.$route.params.investProjectId).then(resp => {
                 // console.log("项目团队成员:"+JSON.stringify(resp.data));
@@ -349,26 +406,33 @@ export default {
             this.riskId = riskId;
             selectRiskRegister(riskId).then(resp => {
                 // console.log("hola datevid"+JSON.stringify(resp.data));
-                if(resp.data.status == '200'){
-                    this.tableData = [];
+                if (resp.data.status == '200') {
+                    // this.tableData = [];
                     this.recordList = [];
-                    this.tableData.push(resp.data.result);
+                    // this.tableData.push(resp.data.result);
+                    this.viewForm = resp.data.result;
                     this.recordList = resp.data.result.record;
                     this.recordList.push();
-                    if(optType == '1'){
+                    if (optType == '1') {
                         //跟踪风险
-                        this.modalTracking=true;
-                        this.trackingForm =  {
+                        // this.modalTracking = true;
+                        this.modalRiskView = true;
+                        this.isTrack = true;
+                        this.titleMsg = '查看风险跟踪';
+
+                        this.trackingForm = {
                             disposeResult: '',
                             recordDetails: ''
                         }
                         this.recordDocInfo = [];
                     }
-                    else{
+                    else {
                         //查看风险
-                        this.modalRiskView=true;
+                        this.modalRiskView = true;
+                        this.isTrack = false;
+                        this.titleMsg = '查看风险上报详情';
                     }
-                }else {
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -397,7 +461,7 @@ export default {
         //添加风险
         confirmAdd() {
             this.$refs["AddForm"].validate((valid) => {
-                if(valid) {
+                if (valid) {
                     this.AddForm.completeDate = changeDate(this.AddForm.completeDate);
                     let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
                     let risk = {
@@ -409,7 +473,7 @@ export default {
                         riskDescribe: this.AddForm.riskDescribe,
                         documentInfo: this.documentInfo
                     };
-                    console.log("添加风险::"+JSON.stringify(risk));
+                    console.log("添加风险::" + JSON.stringify(risk));
                     addDanger(risk).then(resp => {
                         if (resp.data.status == '200') {
                             this.getDatas();
@@ -422,7 +486,7 @@ export default {
                     });
                 }
             });
-            
+
         },
         //添加风险跟踪
         confirmTracking(formName) {
@@ -438,7 +502,7 @@ export default {
                         recordDetails,
                         documentInfo
                     };
-                    console.log("添加风险跟踪 params::"+JSON.stringify(params));
+                    console.log("添加风险跟踪 params::" + JSON.stringify(params));
                     insertRiskFollower(params).then(resp => {
                         if (resp.data.status == '200') {
                             this.getDatas();
@@ -454,12 +518,12 @@ export default {
                 }
             });
         },
-        uploadSuccess(documentInfo, dataName){
+        uploadSuccess(documentInfo, dataName) {
             // console.log("fileList--"+JSON.stringify(documentInfo));
             this.$set(this.$data, dataName, documentInfo);
             // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         },
-        removeSucess(documentInfo, dataName){
+        removeSucess(documentInfo, dataName) {
             this.$set(this.$data, dataName, documentInfo);
             // console.log("this.documentInfo--"+JSON.stringify(this.documentInfo));
         }
@@ -478,24 +542,29 @@ export default {
 .operationBox {
     width: 1102px;
     display: flex;
-    border: 1px solid #dfe6ec;
     border-top: none;
     .left {
-        width: 149px;
+        width: 122px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 14px;
-        font-weight: bold;
         color: #1f2d3d;
-        background-color: #eef1f6;
     }
     .right {
-        border-left: 1px solid #dfe6ec;
-        padding: 10px 50px;
+        width: 983px;
+        background-color: #eef1f6;
+        border: 1px solid #d1dbe5;
+        border-radius: 4px;
+        padding: 10px 15px;
         span {
             margin-left: 20px;
         }
     }
+}
+
+.formBtn {
+    margin-top: 15px;
+    text-align: center;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 <div class="team">
     <tabel-header :data="headerInfo" @add="addTeam"></tabel-header>
-    <el-table :data="teamData" border style="width: 100%">
+    <el-table :data="teamData" style="width: 100%">
         <el-table-column label="姓名" prop="userName" align="center">
         </el-table-column>
         <el-table-column label="角色" prop="roleName" align="center">

@@ -2,9 +2,9 @@
 <div class="mytabel">
     <div class="mytabel_wrapper">
         <div class="list">
-            <div class="list_title default">最新估值（元）</div>
+            <div class="list_title default">最新估值(元)</div>
             <div class="list_content default">{{data.newAppra | toMoney}}</div>
-            <div class="list_title default">最新浮盈（元）</div>
+            <div class="list_title default">最新浮盈(元)</div>
             <div class="list_content default">
                 {{data.newFuy | toMoney}}
                 <Icon type="arrow-up-c" class="up" v-show="data.newFuy > 0"></Icon>
@@ -14,19 +14,19 @@
         <div class="list">
             <div class="list_title default">估值日期</div>
             <div class="list_content default">{{data.appraisementDate | formatDate}}</div>
-            <div class="list_title default">基金规模（元）</div>
+            <div class="list_title default">基金规模(元)</div>
             <div class="list_content default">{{data.fundScale | toMoney | toBillion}}</div>
         </div>
         <div class="list">
-            <div class="list_title default">募集总额（元）</div>
+            <div class="list_title default">募集总额(元)</div>
             <div class="list_content default">{{data.placementSum | toMoney}}</div>
-            <div class="list_title default">投资总额（元）</div>
+            <div class="list_title default">投资总额(元)</div>
             <div class="list_content default">{{data.investAmount | toMoney}}</div>
         </div>
         <div class="list">
-            <div class="list_title default">剩余额度（元）</div>
+            <div class="list_title default">剩余额度(元)</div>
             <div class="list_content default">{{data.remain | toMoney}}</div>
-            <div class="list_title default">待分配总额（元）</div>
+            <div class="list_title default">待分配总额(元)</div>
             <div class="list_content default">{{data.waitAmount | toMoney}}</div>
         </div>
     </div>
@@ -59,6 +59,7 @@ export default {
                 line-height: 40px;
                 border-right: 1px solid #ccc;
                 border-bottom: 1px solid #ccc;
+                line-height: 2;
             }
             .list_title {
                 background: #eef0f4;

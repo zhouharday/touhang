@@ -1,6 +1,6 @@
 <template>
 <div class="quitCapital">
-    <el-table :data="quitCapitalData" border show-summary style="width: 100%;">
+    <el-table :data="quitCapitalData" show-summary style="width: 100%;">
         <el-table-column label="协议名称" prop="agreementName" align="center">
         </el-table-column>
         <el-table-column label="基金名称" prop="fundName" align="center">
@@ -67,9 +67,8 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
-            console.log(row)
             this.quitDetailsModal = true
-            this.bonusInfo = row
+            this.bonusInfo = Object.assign({}, row)
             row.documentInfo.map((x) => {
                 x.name = x.fileName,
                 x.url = x.filePath

@@ -32,7 +32,7 @@
         </TabPane>
         <TabPane label="收益分配" name="income" v-if="haveJurisdiction('GL-JJXQ-SYFP')">
             <tabel-header :data="incomeInfo" @add="methodIncome"></tabel-header>
-            <el-table :data="incomeData" border style="width: 100%">
+            <el-table :data="incomeData" style="width: 100%">
                 <el-table-column label="分配日期" align="center">
                     <template scope="scope">
                         <div>{{scope.row.shareDate | formatDate}}</div>
@@ -76,7 +76,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalCost = false">取 消</el-button>
+            <el-button @click="cancelCost">取 消</el-button>
             <el-button type="danger" @click="confirmCost">确 定</el-button>
         </div>
     </el-dialog>
@@ -283,7 +283,7 @@ export default {
         handleEdit(index, row) { // 编辑按钮
             this.modalCost = true
             this.addOrEdit = false
-            this.formCost = row
+            this.formCost = Object.assign({}, row)
         },
         delIncomeDis(index, row) { // 删除收益分配
             this.paramsId = row.id
@@ -301,7 +301,7 @@ export default {
         comfirCancel() {
             this.deleteReminders = false
         },
-        confirmCost() {
+        confirmCost() { // 基金费用确认
             if (this.addOrEdit == false) {
                 updateFundFee(this.formCost).then((res) => {
                     if (res.status == '200') {
@@ -332,6 +332,9 @@ export default {
                     }
                 })
             }
+        },
+        cancelCost() { // 基金费用取消
+            this.modalCost = false
         },
         _getFundFeeList() {
             getFundFeeList(this.$route.params.id).then((res) => {

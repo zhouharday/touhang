@@ -13,7 +13,7 @@
         </table-header>
         <!-- table_content start-->
         <div class="table_content">
-            <el-table :data="teamData" border style="width: 100%">
+            <el-table :data="teamData" style="width: 100%">
                 <el-table-column label="机构名称" prop="orgName" align="center">
                 </el-table-column>
                 <el-table-column label="机构类型" prop="orgType" align="center">

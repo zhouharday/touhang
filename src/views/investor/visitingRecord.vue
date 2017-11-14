@@ -3,7 +3,7 @@
     <div style="text-align:right;margin-bottom:10px">
         <el-button type="danger" style="background-color:#fff;padding:8px 15px;" @click="showVisiting">添加</el-button>
     </div>
-    <el-table :data="visitingRecord" border style="width: 100%">
+    <el-table :data="visitingRecord" style="width: 100%">
         <el-table-column prop="manageName" label="拜访人" align="center">
         </el-table-column>
         <el-table-column label="拜访时间" align="center">
@@ -97,6 +97,12 @@ export default {
                 seeDate: new Date(),
             },
             rules1: {
+                seeDate: [{
+                    type: 'date',
+                    required: true,
+                    message: '请选择日期',
+                    trigger: 'blue'
+                }],
                 seeContent: [{
                     required: true,
                     message: '请输入拜访内容',
@@ -119,13 +125,12 @@ export default {
             }
         },
         editRow(index, row) {
-            console.log(row)
             this.modelVisiting = true
-            this.addVisiting = row
+            this.addVisiting = Object.assign({}, row)
             this.addOrEdit = false
             row.documentInfo.map((x) => {
                 x.name = x.fileName,
-                x.url = x.filePath
+                    x.url = x.filePath
             })
         },
         deleteRow(index, row) {
