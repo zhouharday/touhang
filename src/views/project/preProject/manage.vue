@@ -558,7 +558,7 @@
                     </el-dialog>
                     <!-- 编辑项目分红 对话框-->
                     <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
-                        <el-form :model="sharingForm1" :rules="rules4" label-position="right" label-width="110px">
+                        <el-form :model="sharingForm1" ref="sharingForm1" :rules="rules4" label-position="right" label-width="110px">
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="标题" prop="shareTitle">
@@ -1242,7 +1242,7 @@ export default {
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                         // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
-                        payDate: this.paidForm1.payDate,
+                        payDate: changeDate(this.paidForm1.payDate),
                         documentInfo: this.payDocInfo
                     };
                     let data = {
@@ -1303,7 +1303,7 @@ export default {
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                         // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
-                        payDate: this.paidForm1.payDate,
+                        payDate: changeDate(this.paidForm1.payDate),
                         documentInfo: this.payDocInfo
                     };
                     let data = {
