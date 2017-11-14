@@ -121,7 +121,7 @@
                                 <p v-for="doc in viewForm.documentInfo">
                                     <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
                                 </p>
-                        </el-form-item>
+                            </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
