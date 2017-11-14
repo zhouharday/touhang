@@ -13,6 +13,7 @@
     "babel-polyfill": "^6.26.0",
     "echarts": "^3.7.1",
     "element-ui": "^1.4.7",
+    "es6-promise-polyfill": "^1.2.0",
     "eventsource-polyfill": "^0.9.6",
     "extract-text-webpack-plugin": "^2.1.2",
     "http-proxy": "^1.16.2",
@@ -36,8 +37,7 @@
     "vue-quill-editor": "^1.1.1",
     "vue-router": "^2.2.0",
     "vue-simplemde": "^0.3.2",
-    "vuex": "^2.3.1",
-    "zrender": "^3.6.1"
+    "vuex": "^2.3.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

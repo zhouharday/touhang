@@ -85,7 +85,7 @@
                                                 </el-table-column> -->
                     <el-table-column label="成立时间" align="center">
                         <template scope="scope">
-                            <div class="fow">{{ scope.row.create_date}}</div>
+                            <div class="fow">{{ scope.row.create_date | formatDate}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" min-width="100" align="center">
@@ -108,7 +108,7 @@
                     </el-table-column>
                 </el-table>
                 <div class="pagination">
-                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[3, 5, 10, 20, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                    <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                     </el-pagination>
                 </div>
             </el-col>
@@ -118,6 +118,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import 'common/js/filter'
 import { getDicChildrenII } from 'common/js/dictionary'
 import { getPros, transPro, delPro } from 'api/project';
 export default {
@@ -444,7 +445,7 @@ export default {
         border-bottom: 1px solid #F05E5E;
     }
     .fow {
-        font-weight: bold;
+        /*font-weight: bold;*/
     }
     .project {
         color: #F05E5E;
