@@ -619,6 +619,9 @@ export default {
     min-height: 100%;
     background-color: #fff;
     padding: 24px;
+    // .item_wrapper {
+    //      overflow: hidden;
+    // }
     .title {
         width: 100%;
         height: 64px;

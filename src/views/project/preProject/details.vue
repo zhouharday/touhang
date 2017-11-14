@@ -1,7 +1,7 @@
 <template>
     <div class="form">
         <!-- 基本信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" v-if="checkProjectAuth('XQ-bianji')" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" v-if="checkProjectAuth('XQ-bianji')" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -25,7 +25,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属行业" prop="industry">
-                             <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in industryOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -33,7 +33,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目来源" prop="projectFrom">
-                             <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in fromOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -41,7 +41,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地" prop="address">
-                             <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in addressOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -49,7 +49,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="业务部门" prop="department">
-                             <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in departmentOptions" :key="item.id" :label="item.deptName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -59,7 +59,7 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" v-if="checkProjectAuth('XQ-bianji')" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" v-if="checkProjectAuth('XQ-bianji')" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
@@ -118,7 +118,7 @@
             </el-form>
         </div>
         <!-- 投资信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_capital : _headerInfo_capital" @add="disable(capitalForm)" @show="changeCapitalInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_capital : _headerInfo_capital" @add="disable(capitalForm,headerInfo_capital)" @show="able(capitalForm,headerInfo_capital)" @down="changeCapitalInfo()" class="title"></tabel-header>
         <div class="capitalForm">
             <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
                 <el-row>
@@ -196,13 +196,13 @@ import { changeCapitalInfo } from 'api/projectPre';
 
 export default {
     computed: mapGetters({
-        typeOptions:'getTypeOptions',   // 获取项目类型
-        industryOptions:'getIndustryOptions',   // 获取项目所属行业
-        fromOptions:'getFromOptions',   // 获取项目来源
-        addressOptions:'getAddressOptions',   // 获取项目所在地
-        departmentOptions:'getDepartmentOptions',   // 获取业务部门
-        projectTurnType:'getProjectTurnType',   // 获取项目投资信息轮次
-        currencyOptions:'getCurrencyOptions'   // 获取币种类型
+        typeOptions: 'getTypeOptions',   // 获取项目类型
+        industryOptions: 'getIndustryOptions',   // 获取项目所属行业
+        fromOptions: 'getFromOptions',   // 获取项目来源
+        addressOptions: 'getAddressOptions',   // 获取项目所在地
+        departmentOptions: 'getDepartmentOptions',   // 获取业务部门
+        projectTurnType: 'getProjectTurnType',   // 获取项目投资信息轮次
+        currencyOptions: 'getCurrencyOptions'   // 获取币种类型
     }),
     props: {
         proId: {
@@ -246,12 +246,16 @@ export default {
             headerInfo_basic: {
                 desc: '基本信息',
                 btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
+                    explain: '编辑',
+                    show: false
                 },
                 {
-                    icon: 'upload',
-                    explain: '提交'
+                    explain: '取消',
+                    show: true
+                },
+                {
+                    explain: '提交',
+                    show: true
                 }]
             },
             _headerInfo_company: {
@@ -261,12 +265,16 @@ export default {
             headerInfo_company: {
                 desc: '企业信息',
                 btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
+                    explain: '编辑',
+                    show: false
                 },
                 {
-                    icon: 'upload',
-                    explain: '提交'
+                    explain: '取消',
+                    show: true
+                },
+                {
+                    explain: '提交',
+                    show: true
                 }]
             },
             _headerInfo_capital: {
@@ -276,12 +284,16 @@ export default {
             headerInfo_capital: {
                 desc: '投资信息',
                 btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
+                    explain: '编辑',
+                    show: false
                 },
                 {
-                    icon: 'upload',
-                    explain: '提交'
+                    explain: '取消',
+                    show: true
+                },
+                {
+                    explain: '提交',
+                    show: true
                 }]
             },
         }
@@ -298,14 +310,28 @@ export default {
     },
     watch: {},
     methods: {
-        checkProjectAuth(code){
+        checkProjectAuth(code) {
             return checkProjectAuth(code) && this.isInTeam;
         },
-        disable(name) {
-            name.flag = !name.flag;
+        // 编辑按钮
+        disable(name, headerInfo) {
+            name.flag = false;
+            headerInfo.btnGroup[0].show = true;
+            headerInfo.btnGroup[1].show = false;
+            headerInfo.btnGroup[2].show = false;
         },
+        // 取消按钮
+        able(name, headerInfo) {
+            if (!name.flag) {
+                name.flag = !name.flag;
+                headerInfo.btnGroup[0].show = false;
+                headerInfo.btnGroup[1].show = true;
+                headerInfo.btnGroup[2].show = true;
+            }
+        },
+        // 提交按钮
         changeProjectInfo() {
-            if(this.basicForm.flag) return false;
+            if (this.basicForm.flag) return false;
             let basicForm = this.basicForm;
             basicForm.projectId = this.projectId;
             changeProjectInfo(basicForm).then(resp => {
@@ -315,13 +341,13 @@ export default {
             })
         },
         changeEnterpriseInfo() {
-            if(this.companyForm.flag) return false;
+            if (this.companyForm.flag) return false;
             let companyForm = this.companyForm;
             companyForm.projectId = this.projectId;
             companyForm.registerDate = companyForm.registerDate;
             // console.log("参数："+ JSON.stringify(companyForm));
             changeEnterpriseInfo(companyForm).then(resp => {
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.disable(companyForm);
                 }
                 // console.log('changeEnterpriseInfo resp: '+JSON.stringify(resp.data));
@@ -330,17 +356,18 @@ export default {
             })
         },
         changeCapitalInfo() {
-            if(this.capitalForm.flag) return false;
+            if (this.capitalForm.flag) return false;
             let capitalForm = this.capitalForm;
             capitalForm.projectId = this.projectId;
             capitalForm.startInvestDate = capitalForm.startInvestDate;
             capitalForm.exitDate = capitalForm.exitDate;
-            let {id, projectTurnId, appraisementAmount, investAmount, stockProportion, oldAmount, currency, stock, investmentCapital, startInvestDate, exitDate } = this.capitalForm;
+            let { id, projectTurnId, appraisementAmount, investAmount, stockProportion, oldAmount, currency, stock, investmentCapital, startInvestDate, exitDate } = this.capitalForm;
             let params = {
-                projectId : this.projectId,
-                id, projectTurnId, appraisementAmount, investAmount, stockProportion, oldAmount, currency, stock, investmentCapital, startInvestDate, exitDate };
+                projectId: this.projectId,
+                id, projectTurnId, appraisementAmount, investAmount, stockProportion, oldAmount, currency, stock, investmentCapital, startInvestDate, exitDate
+            };
             changeCapitalInfo(capitalForm).then(resp => {
-                if(resp.data.status == '200'){
+                if (resp.data.status == '200') {
                     this.disable(capitalForm);
                 }
             }).catch(e => {
