@@ -5,7 +5,12 @@
 </template>
 
 <script>
-export default {}
+import Vuex from 'vuex';
+import store from './store';
+import axios from 'axios';
+export default {
+    
+}
 </script>
 
 <style lang="less">

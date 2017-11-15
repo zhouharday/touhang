@@ -33,6 +33,7 @@ const state = {
     projectPermissions: false, //是否存在项目权限按钮
     fundPermissions: false, //是否存在基金权限按钮
     fund: [],
+    token: '' || JSON.parse(sessionStorage.getItem('userInfor')).token
 };
 
 const mutations = {
@@ -195,7 +196,7 @@ const actions = {
                 return;
             } else if (data.status == '200') { //登录成功
                 state.loading = false;
-                // console.log(data);
+                console.log(data);
                 if (data.data.result.userInfo.disables == '0') {
                     commit('Notification', {
                         title: '',
@@ -209,7 +210,8 @@ const actions = {
                 // console.log(user);
                 commit('pushUserInfor', data.data.result);
                 window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
-                // console.log(state.userInfor);
+                state.token = state.userInfor.token;
+                console.log(state.token);
                 // console.log(data.data);
                 if (data.data.result.userInfo.isMerchant >= '1') { //有组织
                     commit('pushMerchants', data.data.result);
