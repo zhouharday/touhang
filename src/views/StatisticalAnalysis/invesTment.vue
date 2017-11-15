@@ -35,7 +35,7 @@
 <script>
 // import echarts from 'echarts/lib/echarts';
 import echarts from "echarts";
-import jquery from 'jquery'
+import jquery from "jquery";
 // import ZRender from 'zrender';
 export default {
   computed: {
@@ -135,11 +135,11 @@ export default {
       // },
       option: {
         title: {
-          text: "项目投资统计表",
+          text: "项目投资统计表"
           // subtext: "纯属虚构"
         },
         tooltip: {
-          trigger: "item",
+          trigger: "item"
           // formatter: "{a} <br/>{b} : {c}%"
         },
         toolbox: {
@@ -163,7 +163,7 @@ export default {
                 // formatter: "{b}预期"
               },
               emphasis: {
-                position: "inside",
+                position: "inside"
                 // formatter: "{b}预期: {c}%"
               }
             },
@@ -200,7 +200,7 @@ export default {
                 }
               },
               emphasis: {
-                position: "inside",
+                position: "inside"
                 // formatter: "{b}实际: {c}%"
               }
             },
@@ -235,7 +235,6 @@ export default {
         .post(this.api + "/projectPool/countProjectMessage", {
           merchantId: this.user.merchants[0].id
           //   projectStageId: ""
-
         })
         .then(res => {
           if (res.status == "200") {
