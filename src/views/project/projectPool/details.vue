@@ -1,6 +1,6 @@
 <template>
     <div class="form">
-        <tabel-header :data="headerInfo_basic" @add="disable(basicForm)" @show="changeProjectInfo()" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_basic" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="120px">
                 <el-row>
@@ -24,7 +24,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所属行业" prop="industry">
-                             <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.industryId" filterable placeholder="请选择所属行业" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in industryOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -32,7 +32,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="项目来源" prop="projectFrom">
-                             <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.projectFromId" filterable placeholder="请选择项目来源" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in fromOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -40,7 +40,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="所在地" prop="address">
-                             <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.addressId" filterable placeholder="请选择所在地" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in addressOptions" :key="item.id" :label="item.dicName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -48,7 +48,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="业务部门" prop="department">
-                             <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
+                            <el-select v-model="basicForm.departmentId" filterable placeholder="请选择业务部门" style="width:100%" :disabled="basicForm.flag">
                                 <el-option v-for="item in departmentOptions" :key="item.id" :label="item.deptName" :value="item.id">
                                 </el-option>
                             </el-select>
@@ -57,7 +57,7 @@
                 </el-row>
             </el-form>
         </div>
-        <tabel-header :data="headerInfo_company" @add="disable(companyForm)" @show="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="headerInfo_company" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="120px">
                 <el-row>
@@ -109,7 +109,7 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="备注" prop="remark">
-                            <el-input  type="textarea" v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
+                            <el-input type="textarea" v-model="companyForm.remark" :disabled="companyForm.flag"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -126,12 +126,12 @@ import { getDicChildren } from 'common/js/dictionary'
 import { changeEnterpriseInfo, changeProjectInfo, getDeptListByMid } from 'api/project';
 export default {
     computed: mapGetters({
-        projectData:'getProjectData',   // 获取项目详情数据
-        typeOptions:'getTypeOptions',   // 获取项目类型
-        industryOptions:'getIndustryOptions',   // 获取项目所属行业
-        fromOptions:'getFromOptions',   // 获取项目来源
-        addressOptions:'getAddressOptions',   // 获取项目所在地
-        departmentOptions:'getDepartmentOptions',   // 获取业务部门
+        projectData: 'getProjectData',   // 获取项目详情数据
+        typeOptions: 'getTypeOptions',   // 获取项目类型
+        industryOptions: 'getIndustryOptions',   // 获取项目所属行业
+        fromOptions: 'getFromOptions',   // 获取项目来源
+        addressOptions: 'getAddressOptions',   // 获取项目所在地
+        departmentOptions: 'getDepartmentOptions',   // 获取业务部门
     }),
     props: {
         tabs: {
@@ -167,23 +167,31 @@ export default {
             headerInfo_basic: {
                 desc: '基本信息',
                 btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
+                    explain: '编辑',
+                    show: false
                 },
                 {
-                    icon: 'upload',
-                    explain: '提交'
+                    explain: '取消',
+                    show: true
+                },
+                {
+                    explain: '提交',
+                    show: true
                 }]
             },
             headerInfo_company: {
                 desc: '企业信息',
                 btnGroup: [{
-                    icon: 'edit',
-                    explain: '编辑'
+                    explain: '编辑',
+                    show: false
                 },
                 {
-                    icon: 'upload',
-                    explain: '提交'
+                    explain: '取消',
+                    show: true
+                },
+                {
+                    explain: '提交',
+                    show: true
                 }]
             },
         }
@@ -203,21 +211,33 @@ export default {
             this.disableForm();
         },
         disableForm() {
-            this.disable(this.basicForm);
-            this.disable(this.companyForm);
+            this.disable(this.basicForm,headerInfo_basic);
+            this.disable(this.companyForm,headerInfo_company);
+            // this.disable(this.basicForm);
+            // this.disable(this.companyForm);
         },
-        disable(name) {
-            if (name.flag === false) {
-                return name.flag = true
-            } else {
-                return name.flag = false
+        // 编辑按钮
+        disable(name, headerInfo) {
+            name.flag = false;
+            headerInfo.btnGroup[0].show = true;
+            headerInfo.btnGroup[1].show = false;
+            headerInfo.btnGroup[2].show = false;
+        },
+        // 取消按钮
+        able(name, headerInfo) {
+            if (!name.flag) {
+                name.flag = !name.flag;
+                headerInfo.btnGroup[0].show = false;
+                headerInfo.btnGroup[1].show = true;
+                headerInfo.btnGroup[2].show = true;
             }
         },
+        // 提交按钮
         changeProjectInfo() {
             let basicForm = this.basicForm;
             basicForm.projectId = this.projectId;
             changeProjectInfo(basicForm).then(resp => {
-                this.disable(basicForm);
+                this.able(basicForm, this.headerInfo_basic);
             }).catch(e => {
                 console.log('changeProjectInfo exists error: ', e);
             })
@@ -226,7 +246,7 @@ export default {
             let companyForm = this.companyForm;
             companyForm.projectId = this.projectId;
             changeEnterpriseInfo(companyForm).then(resp => {
-                this.disable(companyForm);
+                this.able(companyForm, this.headerInfo_company);
                 console.log('changeEnterpriseInfo resp: ', resp);
             }).catch(e => {
                 console.log('changeEnterpriseInfo exists error: ', e);
