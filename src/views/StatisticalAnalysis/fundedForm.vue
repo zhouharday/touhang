@@ -1,56 +1,57 @@
 <template>
-    <section class="fundedForm">
-        <!-- 这是出资统计表 -->
-        <div>
-            <el-row class="customerMang">
-                <el-col :span="6">
-                    <div class="grid-content bg-purple-dark">
-                        <el-input placeholder="请按投资者名称进行查询" icon="search" v-model="input2" @keyup.enter.native="handleIconClick" :on-icon-click="handleIconClick">
-                        </el-input>
-                    </div>
-                </el-col>
-                <el-col :span="10">
-                    <div class="grid-content bg-purple-dark"></div>
-                </el-col>
-                <el-col :span="8" class="searchIpt">
-                    <div class="grid-content bg-purple-dark">
-                        <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
-                            <!-- <el-button class="searchIpt" type="danger" size="small">
+  <section class="fundedForm">
+    <!-- 这是出资统计表 -->
+    <div>
+      <el-row class="customerMang">
+        <el-col :span="6">
+          <div class="grid-content bg-purple-dark">
+            <el-input placeholder="请按投资者名称进行查询" icon="search" v-model="input2" @keyup.enter.native="handleIconClick" :on-icon-click="handleIconClick">
+            </el-input>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <div class="grid-content bg-purple-dark"></div>
+        </el-col>
+        <el-col :span="8" class="searchIpt">
+          <div class="grid-content bg-purple-dark">
+            <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
+              <!-- <el-button class="searchIpt" type="danger" size="small">
                                 导出统计表
                             </el-button> -->
-                        </a>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-table :data="fundedTabData" stripe style="width: 100%">
-                <el-table-column prop="investorName" label="投资者" align="center">
-                </el-table-column>
-                <el-table-column prop="investorType" label="类型" align="center">
-                </el-table-column>
-                <el-table-column prop="fundName" label="基金名称" align="center">
-                </el-table-column>
-                <el-table-column label="签订日期" align="center">
-                  <template scope='scope'>
-                    <div>{{scope.row.signDate | formatDateDetails}}</div>
-                  </template>
-                </el-table-column>
-                <el-table-column prop="subscribeAmount" label="认缴金额(元)" align="center">
-                </el-table-column>
-                <el-table-column prop="paidAmount" label="实缴金额(元)" align="center">
-                </el-table-column>
-                <el-table-column prop="contributiveRatio" label="出资占比(%)" align="center">
-                </el-table-column>
-            </el-table>
-            <div class="pagination">
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
-              </el-pagination>
-            </div>
-        </div>
-    </section>
+            </a>
+          </div>
+        </el-col>
+      </el-row>
+      <el-table :data="fundedTabData" stripe style="width: 100%">
+        <el-table-column prop="investorName" label="投资者" align="center">
+        </el-table-column>
+        <el-table-column prop="investorType" label="类型" align="center">
+        </el-table-column>
+        <el-table-column prop="fundName" label="基金名称" align="center">
+        </el-table-column>
+        <el-table-column label="签订日期" align="center">
+          <template scope='scope'>
+            <div>{{scope.row.signDate | formatDateDetails}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="subscribeAmount" label="认缴金额(元)" align="center">
+        </el-table-column>
+        <el-table-column prop="paidAmount" label="实缴金额(元)" align="center">
+        </el-table-column>
+        <el-table-column prop="contributiveRatio" label="出资占比(%)" align="center">
+        </el-table-column>
+      </el-table>
+      <div class="pagination">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+        </el-pagination>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
 import "../../common/js/filter";
+import {formatNum} from"../../common/js/config";
 export default {
   computed: {
     user() {
@@ -61,7 +62,7 @@ export default {
       return {
         merchants: this.$store.state.login.merchants,
         userInfor: this.$store.state.login.userInfor
-      };
+      }
     }
   },
   created() {
@@ -110,6 +111,11 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data);
+              res.data.result.list.map(item => {
+                item.paidAmount = formatNum(String(item.paidAmount));
+                item.subscribeAmount = formatNum(String(item.subscribeAmount));
+                // console.log(item.paidAmount)
+              });
               this.fundedTabData = res.data.result.list;
               this.pages.pageNum = res.data.result.pageNum; //当前页码
               this.pages.total = res.data.result.total; //数据总数

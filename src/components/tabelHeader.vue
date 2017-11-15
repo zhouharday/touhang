@@ -1,18 +1,18 @@
 <template>
-<div class="tableHeader">
+  <div class="tableHeader">
     <div class="title" ref="title">
-        <div class="desc">
-            <slot></slot>
-            <span v-show="data.desc" class="defaultcolor" ref="desc">{{data.desc}}</span>
-        </div>
-        <div class="btn" ref="btn" v-if="edit">
-            <el-button v-for="(btn, index) in data.btnGroup" :key="btn.index" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="!btn.show">
-                <Icon :type="btn.icon" v-show="btn.icon"></Icon>
-                <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
-            </el-button>
-        </div>
+      <div class="desc">
+        <slot></slot>
+        <span v-show="data.desc" class="defaultcolor" ref="desc">{{data.desc}}</span>
+      </div>
+      <div class="btn" ref="btn" v-if="edit">
+        <el-button v-for="(btn, index) in data.btnGroup" :key="btn.index" @click="handler(index, $event)" class="btnwrapper" ref="btnwrapper" v-show="!btn.show">
+          <Icon :type="btn.icon" v-show="btn.icon"></Icon>
+          <span v-show="btn.explain" class="explain">{{btn.explain}}</span>
+        </el-button>
+      </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script>

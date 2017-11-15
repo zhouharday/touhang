@@ -15,7 +15,7 @@
                     <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row.projectId)">{{ scope.row.projectName }}</el-button>
                 </template>
             </el-table-column>
-            <el-table-column label="算法类型" align="center" min-width="200px">
+            <el-table-column label="算法类型" align="center" width="150px">
                 <template scope="scope">
                     <span v-if="!scope.row.editFlag">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}</span>
                     <span v-if="scope.row.editFlag" class="cell-edit-input">
@@ -44,7 +44,7 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="150px">
+            <el-table-column prop="appraisementValue" label="估值（元）" align="center" width="200px">
                 <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
             </el-table-column>
             <el-table-column prop="appraisementDate" label="估值日期" align="center" width="180px">

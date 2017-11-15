@@ -35,6 +35,7 @@
 <script>
 // import echarts from 'echarts/lib/echarts';
 import echarts from "echarts";
+import jquery from 'jquery'
 // import ZRender from 'zrender';
 export default {
   computed: {
@@ -61,14 +62,84 @@ export default {
   data() {
     return {
       data: [],
+      // option: {
+      //   title: {
+      //     text: "项目投资统计表",
+      //     // right: '30%',
+      //     subtext: ""
+      //   },
+      //   tooltip: {
+      //     trigger: "item",
+      //     formatter: "{a} <br/>{b} : {c}%"
+      //   },
+      //   toolbox: {
+      //     feature: {
+      //       dataView: { readOnly: false },
+      //       restore: {},
+      //       saveAsImage: {}
+      //     }
+      //   },
+      //   legend: {
+      //     //   data: ["储备项目", "立项项目", "投决项目", "投后项目", "退出项目"],
+      //     //   left: "30%",
+      //     //   right: "50%"
+      //   },
+      //   calculable: true,
+      //   series: [
+      //     {
+      //       name: "项目投资统计表",
+      //       type: "funnel",
+      //       left: "10%",
+      //       // right: '50%',
+      //       top: 60,
+      //       x2: 80,
+      //       bottom: 60,
+      //       width: "100%",
+      //       // height: {totalHeight} - y - y2,
+      //       min: 0,
+      //       max: 100,
+      //       minSize: "0%",
+      //       maxSize: "100%",
+      //       sort: "descending",
+      //       gap: 2,
+      //       label: {
+      //         normal: {
+      //           show: true,
+      //           position: "inside"
+      //         },
+      //         emphasis: {
+      //           textStyle: {
+      //             fontSize: 15
+      //           }
+      //         }
+      //       },
+      //       labelLine: {
+      //         normal: {
+      //           length: 10,
+      //           lineStyle: {
+      //             width: 1,
+      //             type: "solid"
+      //           }
+      //         }
+      //       },
+      //       itemStyle: {
+      //         normal: {
+      //           borderColor: "#fff",
+      //           borderWidth: 1,
+      //           fontSize: 15
+      //         }
+      //       },
+      //       data: this.data
+      //     }
+      //   ]
+      // },
       option: {
         title: {
-          text: "项目投资统计表",
-          // right: '30%',
-          subtext: ""
+          text: "漏斗图",
+          // subtext: "纯属虚构"
         },
         tooltip: {
-          trigger: "item"
+          trigger: "item",
           // formatter: "{a} <br/>{b} : {c}%"
         },
         toolbox: {
@@ -79,56 +150,74 @@ export default {
           }
         },
         legend: {
-          //   data: ["储备项目", "立项项目", "投决项目", "投后项目", "退出项目"],
-          //   left: "30%",
-          //   right: "50%"
+          data: ["展现", "点击", "访问", "咨询", "订单"]
         },
-        calculable: true,
         series: [
           {
-            name: "项目投资统计表",
+            name: "预期",
             type: "funnel",
             left: "10%",
-            // right: '50%',
-            top: 60,
-            x2: 80,
-            bottom: 60,
-            width: "100%",
-            // height: {totalHeight} - y - y2,
-            min: 0,
-            max: 100,
-            minSize: "0%",
-            maxSize: "100%",
-            sort: "descending",
-            gap: 2,
+            width: "80%",
             label: {
               normal: {
-                show: true,
-                position: "inside"
+                formatter: "{b}预期"
               },
               emphasis: {
-                textStyle: {
-                  fontSize: 15
-                }
+                position: "inside",
+                // formatter: "{b}预期: {c}%"
               }
             },
             labelLine: {
               normal: {
-                length: 10,
-                lineStyle: {
-                  width: 1,
-                  type: "solid"
-                }
+                show: false
               }
             },
             itemStyle: {
               normal: {
-                borderColor: "#fff",
-                borderWidth: 1,
-                fontSize: 15
+                opacity: 0.7
               }
             },
-            data: this.data
+            data: [
+              { value: 60, name: "访问" },
+              { value: 40, name: "咨询" },
+              { value: 20, name: "订单" },
+              { value: 80, name: "点击" },
+              { value: 100, name: "展现" }
+            ]
+          },
+          {
+            name: "实际",
+            type: "funnel",
+            left: "10%",
+            width: "80%",
+            maxSize: "80%",
+            label: {
+              normal: {
+                position: "inside",
+                // formatter: "{c}%",
+                textStyle: {
+                  color: "#fff"
+                }
+              },
+              emphasis: {
+                position: "inside",
+                formatter: "{b}实际: {c}%"
+              }
+            },
+            itemStyle: {
+              normal: {
+                opacity: 0.5,
+                borderColor: "#fff",
+                borderWidth: 2
+              }
+            },
+            data: [
+              { value: 30, name: "访问" },
+              { value: 10, name: "咨询" },
+              { value: 5, name: "订单" },
+              { value: 50, name: "点击" },
+              { value: 80, name: "展现" }
+            ]
           }
         ]
       },
@@ -146,13 +235,13 @@ export default {
         .post(this.api + "/projectPool/countProjectMessage", {
           merchantId: this.user.merchants[0].id
           //   projectStageId: ""
+
         })
         .then(res => {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data);
               this.invesTabData = res.data.result;
-
               this.data = [];
               res.data.result.forEach((ele, index1) => {
                 //this.option.title.text = ele.name;
@@ -160,6 +249,7 @@ export default {
                 // data.push(ele);
                 obj.name = ele.stageName;
                 obj.value = ele.projectNumber;
+                // obj.value = ele.percent;
                 this.data.push(obj);
               });
               this.option.series.forEach((item, index2) => {

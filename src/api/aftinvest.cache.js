@@ -15,12 +15,18 @@ export function changeInv(id = undefined) {
         workAddress,   //办公地址: null
         mainBusiness,  //主营业务: null
         remark,  //备注: null
+
     }
-    return service({url: '/projectPool/updateEnterpriseInfo', method: 'post', data})
+    return service({
+        url: '/projectPool/updateEnterpriseInfo', 
+        method: 'post', 
+        data
+    })
 }
 //提交基本信息
 export function changePro(id = undefined) {
     const data = {
+
        id, //必传:0875d8a18eb34f599ff3bdb7fbba3cf8
        projectName,//项目名: "2"
        projectShortName, //项目简称: "3"
@@ -33,7 +39,9 @@ export function changePro(id = undefined) {
        projectLeaderId,  //项目负责人id : null
        merchantId, //商户ID : null
     }
-    return service({url: '/projectPool/updateProjectInfo', method: 'post', data})
+    return service({
+        url: '/projectPool/updateProjectInfo', method: 'post', data
+    })
 }
 //提交投资信息
 export function changeLottery(id = undefined) {
