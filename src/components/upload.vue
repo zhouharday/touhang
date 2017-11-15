@@ -1,8 +1,7 @@
 <template>
 <div class="upload">
-    <el-dialog title="基金设立报告" :visible.sync="modalUpload" :close-on-click-modal="false" :show-close="false">
+    <el-dialog :title="title" :visible.sync="modalUpload" :close-on-click-modal="false" :show-close="false">
         <Upload ref="upload"
-                multiple
                 type="drag"
                 :action="actionUrl"
                 :on-success="handleSuccess"
@@ -32,6 +31,10 @@ export default {
         uploadInfo: {
             type: Object,
             default: {}
+        },
+        title: {
+            type: String,
+            default: '基金设立报告'
         }
     },
     data() {

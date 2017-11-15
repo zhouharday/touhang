@@ -121,7 +121,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="备注" prop="remark">
-                                <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="operatingForm1.remark">
+                                <el-input type="textarea" :autosize="{ minRows: 2}" maxlength="500" placeholder="请输入内容" v-model="operatingForm1.remark">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -222,7 +222,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="备注" prop="remark">
-                                <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="financialForm1.remark">
+                                <el-input type="textarea" :autosize="{ minRows: 2}" maxlength="500" placeholder="请输入内容" v-model="financialForm1.remark">
                                 </el-input>
                             </el-form-item>
                         </el-col>
