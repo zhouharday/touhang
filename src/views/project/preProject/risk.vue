@@ -158,7 +158,7 @@
                     </el-form>
                     <div slot="footer" class="dialog-footer formBtn">
                         <el-button @click="modalRiskView= false">取 消</el-button>
-                        <el-button type="danger" @click="confirmTracking()">保 存</el-button>
+                        <el-button type="danger" @click="confirmTracking('trackingForm')">保 存</el-button>
                     </div>
                 </div>
             </el-dialog>
@@ -322,13 +322,13 @@ export default {
                 ]
             },
             resultOptions: [
-                { //处理结果列表
-                    value: '1',
-                    label: '处理中'
+                {
+                    key: '1',
+                    value: '处理中'
                 },
-                { //处理结果列表
-                    value: '2',
-                    label: '已完成'
+                {
+                    key: '2',
+                    value: '已完成'
                 }
             ],
             riskData: [],
@@ -506,7 +506,7 @@ export default {
                     insertRiskFollower(params).then(resp => {
                         if (resp.data.status == '200') {
                             this.getDatas();
-                            this.modalTracking = false;
+                            this.modalRiskView = false;
                         } else {
                             this.$message.error(resp.data.message);
                         }
