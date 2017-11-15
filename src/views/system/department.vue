@@ -140,33 +140,35 @@ export default {
   methods: {
     moveUp(row) {
       console.log(row);
-      moveDepartment(row.id, "up").then(res => {
-        console.log("*****");
-        console.log(res);
-        getDepartmentList().then(res => {
-          var dataList = addEdit(res.data.result);
-          var treeList = getNodes(dataList);
-          this.currentData = treeList;
-          this._getDepartmentName(this.currentData);
+      moveDepartment(row.id, "up")
+        .then(res => {
+          console.log("*****");
+          console.log(res);
+          getDepartmentList().then(res => {
+            var dataList = addEdit(res.data.result);
+            var treeList = getNodes(dataList);
+            this.currentData = treeList;
+            this._getDepartmentName(this.currentData);
+          });
         })
-      })
-      .catch(error => {
-          this.$Message.error('请求超时');
-      });
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
     },
     moveDown(row) {
       moveDepartment(row.id, "down").then(res => {
         console.log("*****");
         console.log(res);
-        getDepartmentList().then(res => {
-          var dataList = addEdit(res.data.result);
-          var treeList = getNodes(dataList);
-          this.currentData = treeList;
-          this._getDepartmentName(this.currentData);
-        })
-        .catch(error=> {
-          this.$Message.error('请求超时');
-      });
+        getDepartmentList()
+          .then(res => {
+            var dataList = addEdit(res.data.result);
+            var treeList = getNodes(dataList);
+            this.currentData = treeList;
+            this._getDepartmentName(this.currentData);
+          })
+          .catch(error => {
+            this.$Message.error("请求超时");
+          });
       });
     },
     addDepartment() {
@@ -179,21 +181,22 @@ export default {
       addNewDepartment(
         this.departmentData.department,
         this.departmentData.superior
-      ).then(res => {
-        console.log(res);
-        getDepartmentList().then(res => {
-          var dataList = addEdit(res.data.result);
-          var treeList = getNodes(dataList);
-          this.currentData = treeList;
-          this._getDepartmentName(this.currentData);
-          this.departmentData.department = "";
-          this.departmentData.superior = "";
-          //this.myFund = res.data.result.list
+      )
+        .then(res => {
+          console.log(res);
+          getDepartmentList().then(res => {
+            var dataList = addEdit(res.data.result);
+            var treeList = getNodes(dataList);
+            this.currentData = treeList;
+            this._getDepartmentName(this.currentData);
+            this.departmentData.department = "";
+            this.departmentData.superior = "";
+            //this.myFund = res.data.result.list
+          });
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
         });
-      })
-      .catch(error=> {
-          this.$Message.error('请求超时');
-      });
     },
     editClick(item) {
       console.log(item);
@@ -201,12 +204,12 @@ export default {
         console.log(item.deptName);
         /***********************/
         SetDepartment(item.deptName, item.parentId, item.id)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(error=> {
-          this.$Message.error('请求超时');
-      });
+          .then(res => {
+            console.log(res);
+          })
+          .catch(error => {
+            this.$Message.error("请求超时");
+          });
       }
       item.editFlag = !item.editFlag;
     },
@@ -235,33 +238,35 @@ export default {
     },
     //确认删除
     confirmDel() {
-      deletDepartment(this.deleteId).then(res => {
-        getDepartmentList().then(res => {
-          this.deleteReminders = !this.deleteReminders;
-          var dataList = addEdit(res.data.result);
-          var treeList = getNodes(dataList);
-          this.currentData = treeList;
-          this._getDepartmentName(this.currentData);
+      deletDepartment(this.deleteId)
+        .then(res => {
+          getDepartmentList().then(res => {
+            this.deleteReminders = !this.deleteReminders;
+            var dataList = addEdit(res.data.result);
+            var treeList = getNodes(dataList);
+            this.currentData = treeList;
+            this._getDepartmentName(this.currentData);
+          });
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
         });
-      })
-      .catch(error=> {
-          this.$Message.error('请求超时');
-      });
     }
   },
   created() {
     (this.companyName = JSON.parse(
       sessionStorage.getItem("merchants")
     )[0].merchant_name),
-      getDepartmentList().then(res => {
-        var dataList = addEdit(res.data.result);
-        var treeList = getNodes(dataList);
-        this.currentData = treeList;
-        this._getDepartmentName(this.currentData);
-      })
-      .catch(error=> {
-          this.$Message.error('请求超时');
-      });
+      getDepartmentList()
+        .then(res => {
+          var dataList = addEdit(res.data.result);
+          var treeList = getNodes(dataList);
+          this.currentData = treeList;
+          this._getDepartmentName(this.currentData);
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
   }
 };
 </script>
