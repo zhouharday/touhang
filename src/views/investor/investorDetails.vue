@@ -14,23 +14,23 @@
         </el-row>
     </div>
     <div class="tabs">
-        <Tabs v-model="detailsName" type="card" @on-click="getTabs">
-            <TabPane label="基本信息" name="info">
+        <el-tabs v-model="detailsName" type="card" @tab-click="getTabs">
+            <el-tab-pane label="基本信息" name="info">
                 <baseInfo @investorDetailsInfo="investorDetailsInfo"></baseInfo>
-            </TabPane>
-            <TabPane label="投资者文档" name="invDoc">
+            </el-tab-pane>
+            <el-tab-pane label="投资者文档" name="invDoc">
                 <investorDoc :investmentData="investmentData"></investorDoc>
-            </TabPane>
-            <TabPane label="投资协议" name="agree">
+            </el-tab-pane>
+            <el-tab-pane label="投资协议" name="agree">
                 <agreement :agreementData="agreementData"></agreement>
-            </TabPane>
-            <TabPane label="资金明细" name="funddet" class="tab_list">
+            </el-tab-pane>
+            <el-tab-pane label="资金明细" name="funddet" class="tab_list">
                 <investment :investorData="investorData"></investment>
-            </TabPane>
-            <TabPane label="拜访记录" name="visiting">
+            </el-tab-pane>
+            <el-tab-pane label="拜访记录" name="visiting">
                 <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
-            </TabPane>
-        </Tabs>
+            </el-tab-pane>
+        </el-tabs>
     </div>
 </div>
 </template>
@@ -71,8 +71,8 @@ export default {
         }
     },
     methods: {
-        getTabs(name) {
-            if (name == 'agree') {
+        getTabs(tab, event) {
+            if (tab.name == 'agree') {
                 GetProtocolsList(this.$route.params.userId).then((res) => {
                     if (res.status == '200') {
                         // console.log(res)
@@ -81,7 +81,7 @@ export default {
                 }).catch(err => {
                     console.log(err)
                 })
-            } else if (name == 'visiting') {
+            } else if (tab.name == 'visiting') {
                 getVisitingRecordList(this.$route.params.userId).then((res) => {
                     if (res.status === 200) {
                         this.visitingRecord = (res.data.status == '200') ? res.data.result.list : []
@@ -90,7 +90,7 @@ export default {
                     let response = err.data
                     this.$Message.error(response.message || '获取拜访记录失败！')
                 })
-            } else if (name == 'funddet') {
+            } else if (tab.name == 'funddet') {
                 var invId = this.$route.params.userId
                 var merId = JSON.parse(sessionStorage.getItem('merchants'))[0].id
                 getAgreementAmountList(invId, merId).then((res) => {
@@ -101,7 +101,7 @@ export default {
                     let response = err.data
                     this.$Message.error(response.message || '获取资金明细失败！')
                 })
-            } else if (name == 'invDoc') {
+            } else if (tab.name == 'invDoc') {
                 selectProjectOrFundDocument(this.$route.params.userId, 3).then((res) => {
                     if (res.status == '200') {
                         // console.log(res)
