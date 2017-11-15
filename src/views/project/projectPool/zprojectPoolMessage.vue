@@ -94,15 +94,15 @@ export default {
             activeName: 'details',
             basicForm: {
                 baseInfo: '基本信息',
-                flag: false
+                flag: true
             },
             companyForm: {
                 baseInfo: '企业信息',
-                flag: false
+                flag: true
             },
             industryForm: {
                 baseInfo: '工商信息',
-                flag: false
+                flag: true
             },
             projectData: {}     // 项目池详情信息
         }
