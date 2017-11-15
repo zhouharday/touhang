@@ -34,8 +34,10 @@
                         <span v-if="item.status == 1" class="state">已完成</span>
                         <!-- 立即上传 -->
                         <div v-if="item.type == 1 && item.status == 0" style="float: left;position:relative;">
-                            <el-button type="text" style="color:#f05e5e">立即上传</el-button>
-                            <input type="file" class="fileInput" @change="changeFile($event, item.id)" ref="avatarInput">
+                            <span @click="showModalUpload(index, item.id, item.title)"
+                                  v-if="item.status == '0'" style="color:#f05e5e;cursor: pointer;">
+                                  立即上传
+                            </span>
                         </div>
                         <!-- 发起申请 -->
                         <el-button v-if="item.type == 2" type="text" class="state" @click="openDialog(1, item.id)">立即审批</el-button>
@@ -79,6 +81,7 @@
         <!-- 中止确认弹框 -->
         <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
         </delete-reminders>
+        <my-upload :modalUpload="modalUpload" :title="uploadTitle" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
         <!-- 发起申请 对话框-->
         <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
         <!-- 查看进度 对话框 -->
@@ -98,6 +101,7 @@ import riskTable from "./risk";
 import manageTable from "./manage";
 import outingForm from "./outing";
 import Loading from "element-ui";
+import MyUpload from 'components/upload'
 import deleteReminders from "components/deleteReminders";
 import applyForms from "components/applyDialog";
 import progressForms from "components/progressDialog";
@@ -125,6 +129,15 @@ export default {
     return {
       userId: "",
       file: "",
+      uploadInfo: {
+        file: null,
+        stageId: '',
+        uploadTypeId: '',
+        fileId: '',
+        type: 3,
+        userId: JSON.parse(sessionStorage.getItem('userInfor')).id
+      },
+      modalUpload: false,
       stepLists: [],
       projectId: "",
       investProjectId: "",
@@ -233,7 +246,8 @@ export default {
     manageTable,
     outingForm,
     applyForms,
-    progressForms
+    progressForms,
+    MyUpload
   },
   created() {
     this.investProjectId = this.$route.params.investProjectId;
@@ -544,42 +558,20 @@ export default {
         name: name
       });
     },
-    changeFile(event, fileId) {
-      //上传文件input
-      this.file = event.target.files[0];
-      let userId = JSON.parse(sessionStorage.getItem("userInfor")).id;
-      event.preventDefault();
-      let formData = new FormData();
-      formData.append("file", this.file);
-      formData.append("stageId", this.stageId);
-      formData.append("userId", userId);
-      formData.append("type", 3);
-      formData.append("uploadTypeId", this.projectId);
-      formData.append("fileId", fileId);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      };
-      this.$http
-        .post(this.api + "/files/uploadProjectDocument", formData, config)
-        .then(res => {
-          // console.log("上传文件结果:"+ JSON.stringify(res.data));
-          if (res.status == "200") {
-            if (res.data.status == "200") {
-              this.getStageUploadDocument();
-              this.uploaded = true;
-            } else {
-              this.$Message.error(res.data.message);
-              //loadingInstance.close();
-            }
-          }
-        })
-        .catch(e => {
-          this.$Message.error("上传错误");
-          console.log("上传错误: ", e);
-          // loadingInstance.close();
-        });
+    showModalUpload(index, id, title) { // 显示上传模态框
+        this.uploadInfo.fileId = id;
+        this.uploadInfo.stageId = this.stageId;
+        this.uploadInfo.uploadTypeId = this.projectId;
+        this.uploadTitle = title;
+        this.modalUpload = true;
+    },
+    cancelModal() { //隐藏上传模态框
+        this.modalUpload = false;
+    },
+    uploadSuccess() { // 上传成功隐藏模态框
+        this.getStageUploadDocument();
+        this.modalUpload = false;
+        this.uploaded = true;
     },
     // 发起申请表单
     submitApply(applyForm) {

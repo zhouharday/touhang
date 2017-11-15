@@ -201,10 +201,10 @@ export default {
                     value: '资产负债表'
                 }, {
                     key: 3,
-                    value: '利润表'
+                    value: '现金流量表'
                 }, {
                     key: 4,
-                    value: '现金流量表'
+                    value: '利润表'
                 }
             ],
             sortOptions: [
