@@ -82,7 +82,7 @@
     </el-dialog>
 
     <!-- 添加收益分配-->
-    <el-dialog title="AAAA基金收益分配" :visible.sync="modalIncome" :close-on-click-modal="false">
+    <el-dialog title="收益分配" :visible.sync="modalIncome" :close-on-click-modal="false">
         <el-form :model="modeIncome">
             <el-row :gutter="10">
                 <el-col :span="12">
@@ -199,7 +199,7 @@ export default {
                 documentInfo: [],
                 handleUser: JSON.parse(sessionStorage.getItem('userInfor')).name,
                 fundId: this.$route.params.id, //基金id
-                handleDate: ''
+                handleDate: new Date()
             },
             params: [],
             costTypes: [] || JSON.parse(sessionStorage.getItem('costTypes')),
@@ -212,22 +212,29 @@ export default {
             this.modalCost = true
             this.addOrEdit = true
         },
-        methodIncome() {
+        methodIncome() { // 添加
             this.modalIncome = true
             this.profit = true
+            this.formIncome = Object.assign({}, this.formIncome)
+            this.formIncome.handleDate = new Date()
             this.formIncome.allocationName = this.fundName + '收益分配申请表'
             this.formIncome.fundName = this.fundName
-            console.log(this.fundName)
-        },
-        editIncomeDis(index, row) {
-            this.modalIncome = true
-            this.profit = false
-            getFundAllocationDetails(row.id).then((res) => {
+            getInvestorByFund(this.$route.params.id).then((res) => {
                 if (res.status == '200') {
-                    this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
-                    this.tableData = res.data.params
+                    // console.log(res.data.result) // 投资者数据为空
+                    this.tableData = res.data.result
+                    this.tableData.map((x) => {
+                        x.shareMoney = x.earningsSum
+                    })
                 }
             })
+        },
+        editIncomeDis(index, row) {
+            var arr = []
+            this.modalIncome = true
+            this.profit = false
+            this.formIncome.fundName = this.fundName
+            this.tableData = arr.concat(this.tableData)
             this.formIncome = Object.assign({}, this.formIncome, row)
         },
         confirmIncome() {
@@ -247,6 +254,8 @@ export default {
                         this.$Message.success(res.data.message || '添加成功！')
                         this.modalIncome = false
                         this._getAllocationList()
+                        this.formIncome = ''
+                        this.tableData = ''
                     }
                 })
             } else {
@@ -258,6 +267,7 @@ export default {
                         this.$Message.success(res.data.message || '编辑成功！')
                         this.modalIncome = false
                         this._getAllocationList()
+                        this.formIncome = ''
                     } else if (res.status == '9004') {
                         this.$Message.success(res.data.message || '有投资者退出,无法更改!')
                         this.modalIncome = false
@@ -269,15 +279,7 @@ export default {
             if (name == 'income') {
                 // console.log(this.fundName)
                 this._getAllocationList()
-                getInvestorByFund(this.$route.params.id).then((res) => {
-                    if (res.status == '200') {
-                        // console.log(res.data.result) // 投资者数据为空
-                        this.tableData = res.data.result
-                        this.tableData.map((x) => {
-                            x.shareMoney = x.earningsSum
-                        })
-                    }
-                })
+                this._getAssignmentDetails()
             }
         },
         handleEdit(index, row) { // 编辑按钮
@@ -340,6 +342,17 @@ export default {
             getFundFeeList(this.$route.params.id).then((res) => {
                 if (res.status == '200') {
                     this.costData = res.data.result
+                }
+            })
+        },
+        _getAssignmentDetails() { // 获取收益明细
+            getInvestorByFund(this.$route.params.id).then((res) => {
+                if (res.status == '200') {
+                    // console.log(res.data.result) // 投资者数据为空
+                    this.tableData = res.data.result
+                    this.tableData.map((x) => {
+                        x.shareMoney = x.earningsSum
+                    })
                 }
             })
         },
