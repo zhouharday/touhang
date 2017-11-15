@@ -42,7 +42,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="风险描述" prop="riskDescribe">
-                                <el-input type="textarea" :rows="3" v-model="addForm.riskDescribe" auto-complete="off">
+                                <el-input type="textarea" :autosize="{ minRows: 2}" maxlength="500" v-model="addForm.riskDescribe" placeholder="请输入描述(限500字)..." auto-complete="off">
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -94,7 +94,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="风险描述" prop="riskDescribe">
-                                <el-input type="textarea" :rows="3" v-model="viewForm.riskDescribe" disabled>
+                                <el-input type="textarea" :autosize="{ minRows: 2}" maxlength="500" v-model="viewForm.riskDescribe" disabled>
                                 </el-input>
                             </el-form-item>
                         </el-col>
@@ -179,7 +179,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="汇报内容" prop="recordDetails" :label-width="formLabelWidth">
-                            <el-input type="textarea" :rows="2" v-model="trackingForm.recordDetails" auto-complete="off">
+                            <el-input type="textarea" :autosize="{ minRows: 2}"  maxlength="500" v-model="trackingForm.recordDetails" auto-complete="off">
                             </el-input>
                         </el-form-item>
                         <el-form-item label="处理方案" :label-width="formLabelWidth">
