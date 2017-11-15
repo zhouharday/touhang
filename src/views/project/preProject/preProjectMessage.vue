@@ -848,7 +848,7 @@ export default {
         height: 36px;
         margin-left: 24px;
         line-height: 36px;
-        overflow: auto;
+        overflow: hidden;
         .count,
         .desc,
         .state {
