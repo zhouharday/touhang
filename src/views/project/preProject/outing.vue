@@ -37,20 +37,23 @@
                     </el-form-item>
                 </el-col>
             </el-row>
+            <el-table :data="outingData2" border>
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="回款金额（元）" prop="exitAmount" align="center">
+                    <template scope="scope">
+                        <el-form-item prop="exitAmount" label-width="0px" :rules="exitRule" height="100%">
+                            <el-input v-model.number="scope.row.exitAmount" @input="sumExit" placeholder="请输入回款金额" :disabled="controlEdit"></el-input>
+                        </el-form-item>
+                    </template>
+                </el-table-column>
+            </el-table>
         </el-form>
-        <el-table :data="outingData2" border>
-            <el-table-column label="基金名称" prop="fundName" align="center">
-            </el-table-column>
-            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-            </el-table-column>
-            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-            </el-table-column>
-            <el-table-column label="回款金额（元）" prop="exitAmount" align="center">
-                <template scope="scope">
-                    <el-input v-model="scope.row.exitAmount" @input="sumExit" placeholder="请输入回款金额" :disabled="controlEdit">{{ scope.row.exitAmount | 0}}</el-input>
-                </template>
-            </el-table-column>
-        </el-table>
+        
         <el-row>
             <el-col style="margin-top:10px;">
                 <el-button v-if="checkProjectAuth('GL-XMTC-BJ')" type="default" v-show="isShow" @click="editForm">编 辑</el-button>
@@ -106,6 +109,9 @@ export default {
                 handlerUserId: '',
                 exitDate: '',
             },
+            exitRule: [
+                { type: 'number', message: '回款金额必须是数字' }
+            ],
             outingData2: [],
             documentInfo:[]
         }
@@ -142,8 +148,14 @@ export default {
                         });
                     }
                     this.$set(this.$data.outingForm,'documentInfo',documentInfo);
-                    
-                    this.outingData2 = resp.data.result.projectExitList
+                    let exitList = resp.data.result.projectExitList;
+                    console.log(exitList);
+                    exitList.forEach((item)=>{
+                        item.exitAmount = parseFloat(item.exitAmount) || 0.0;
+                        console.log(typeof(item.exitAmount));
+                    });
+                    this.outingData2 = exitList;
+                    console.log(this.outingData2);
                 }
             }).catch(e => {
                 console.log('获取退出单 error: ', e);
