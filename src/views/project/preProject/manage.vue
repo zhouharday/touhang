@@ -1,7 +1,8 @@
 <template>
     <section class="manage">
-        <el-collapse v-model="activeNames" @change="handleChange">
-            <el-collapse-item title="项目费用" name="1">
+        <Tabs value="cost" @on-click="changeTabs">
+            <TabPane label="项目费用" name="cost">
+                <!-- 项目费用 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="checkProjectAuth('GL-XMFY-XZ') ? headerInfo_cost : _headerInfo_cost" @add="costAdd1=true"></tabel-header>
                     <el-table :data="costData" border style="width: 100%" align="center">
@@ -17,45 +18,9 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!-- 添加项目费用 对话框-->
-                    <el-dialog title="添加项目费用" :visible.sync="costAdd1" :close-on-click-modal="false">
-                        <el-form :model="costForm1" label-position="right" label-width="100px">
-                            <el-form-item label="费用类型">
-                                <el-select v-model="costForm1.costTypeId" placeholder="请选择费用类型" style="width: 100%;">
-                                    <el-option v-for="item in costSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="金额（元）">
-                                <el-input v-model="costForm1.amountMoney" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="default" @click="costAdd1 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmCostAdd1">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <!-- 编辑项目费用 对话框-->
-                    <el-dialog title="编辑项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
-                        <el-form :model="costForm2" label-position="right" label-width="100px">
-                            <el-form-item label="费用类型">
-                                <el-select v-model="costForm2.costTypeId" placeholder="请选择费用类型" style="width: 100%;">
-                                    <el-option v-for="item in costSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="金额（元）">
-                                <el-input v-model="costForm2.amountMoney" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="default" @click="costAdd2 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmCostAdd2()">确 定</el-button>
-                        </div>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-            <el-collapse-item title="项目合同" name="2">
+            </TabPane>
+            <TabPane label="项目合同" name="contract">
                 <!-- 项目合同 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="checkProjectAuth('GL-XMHT-XZ') ? headerInfo_contract: _headerInfo_contract" @add="goAddContract"></tabel-header>
@@ -77,214 +42,9 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!-- 添加项目合同 对话框-->
-                    <el-dialog title="添加项目合同" :visible.sync="contractAdd1"  :close-on-click-modal="false">
-                        <el-form :model="contractForm1" :rules="contractRule1" ref="contractForm1" label-position="right" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="合同名称" prop="contractName">
-                                        <el-input v-model="contractForm1.contractName" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）" prop="contractAmount">
-                                        <el-input v-model="contractForm1.contractAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model.number="contractForm1.stockRatio" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlerDate" style="width: 100%;">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="合同附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractDocInfo"></upload-files>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title" style="justify-content:space-between;">
-                            <div class="left" style="width:25.2%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                            <div class="right">
-                                <el-button type="danger" @click="fundAdd1=true">添加</el-button>
-                            </div>
-                        </div>
-                        <el-table :data="fundData1" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-select value-key="id" v-model="scope.row.fundId" placeholder="请选择基金">
-                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
-                                            </el-option>
-                                        </el-select>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.investAmount }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.investAmount" @change="changeInvestAmount" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFund(scope.$index,scope.row, 'fundData1')">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData1, 'invest')">删除</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="contractAdd1 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmContractAdd1">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <!-- 添加 出资主体dialog -->
-                    <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
-                        <el-form :model="fundForm1" :rules="rules2" ref="fundForm1" label-position="right" label-width="120px">
-                            <el-form-item label="基金名称" prop="fundId">
-                                <el-select v-model="fundForm1.fundId" placeholder="请选择基金" style="width: 100%">
-                                    <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="投资金额（元）" prop="investAmount">
-                                <el-input v-model.number="fundForm1.investAmount" auto-complete="off"></el-input>
-                            </el-form-item>
-                            <el-form-item label="股权占比（%）" prop="stockRatio">
-                                <el-input v-model.number="fundForm1.stockRatio" auto-complete="off"></el-input>
-                            </el-form-item>
-                        </el-form>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="contractAdd1 = true,fundAdd1 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmFundAdd1">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <!-- 编辑项目合同 对话框-->
-                    <el-dialog title="编辑项目合同" :visible.sync="contractAdd2" :close-on-click-modal="false">
-                        <el-form :model="contractForm2" :rules="contractRule1" ref="contractForm2" label-position="right" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="合同名称" prop="contractName">
-                                        <el-input v-model="contractForm2.contractName" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="签约日期" prop="signDate">
-                                        <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm2.signDate" style="width: 100%;">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）" prop="contractAmount">
-                                        <el-input v-model="contractForm2.contractAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="股权占比（%）" prop="stockRatio">
-                                        <el-input v-model.number="contractForm2.stockRatio" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-date-picker type="date" placeholder="选择日期" v-model="contractForm2.handlerDate" style="width: 100%;">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="合同附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractDocInfo"></upload-files>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title" style="justify-content:space-between;">
-                            <div class="left" style="width:25.2%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                            <div class="right">
-                                <el-button type="danger" @click="fundAdd1=true">添加</el-button>
-                            </div>
-                        </div>
-                        <el-table :data="fundData1" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-select value-key="id" v-model="scope.row.fundId" placeholder="请选择基金">
-                                            <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
-                                            </el-option>
-                                        </el-select>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.investAmount | toMoney}}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.investAmount" @change="changeInvestAmount" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                                <template scope="scope">
-                                    <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
-                                    <span v-if="scope.row.editFlag" class="cell-edit-input">
-                                        <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
-                                    </span>
-                                </template>
-                            </el-table-column>
-                            <el-table-column label="操作" align="center">
-                                <template scope="scope">
-                                    <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">编辑</el-button>
-                                    <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFund(scope.$index,scope.row, 'fundData1')">保存</el-button>
-                                    <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData1, 'invest')">删除</el-button>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="contractAdd2 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmContractAdd2(contractForm2.id)">确 定</el-button>
-                        </div>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-            <el-collapse-item title="投资支付" name="3">
+            </TabPane>
+            <TabPane label="投资支付" name="paid">
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
@@ -309,163 +69,9 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!-- 添加投资支付 对话框-->
-                    <el-dialog title="添加投资支付" :visible.sync="paidAdd1" :close-on-click-modal="false" style="width：65%;">
-                        <el-form :model="paidForm1" :rules="paidRules" ref="paidForm1" label-position="right" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题" prop="payTitle">
-                                        <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同" prop="contractId">
-                                        <el-select @change="selContract" v-model="paidForm1.contractId" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id">
-                                            </el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="合同附件" >
-                                        <span v-for="item in contractDocument">
-                                            <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
-                                        </span>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）" prop="contractAmount">
-                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="剩余金额（元）" prop="surplusAmount">
-                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="支付日期" prop="payDate">
-                                        <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="相关附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="payDocInfo"></upload-files>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:16.8%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData2" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="支付金额（元）" prop="payAmount" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="default" @click="paidAdd1 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmPaidAdd1">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <!-- 编辑投资支付 对话框-->
-                    <el-dialog title="编辑投资支付" :visible.sync="paidAdd2" :close-on-click-modal="false" style="width：65%;">
-                        <el-form :model="paidForm1" :rules="paidRules" ref="paidForm1" label-position="right" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题" prop="payTitle">
-                                        <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同" prop="contractId">
-                                        <el-select @change="selContract" value-key="id" v-model="paidForm1.contractId" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id">
-                                            </el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="合同附件" prop="contractAppendix">
-                                        <span v-for="item in contractDocument">
-                                            <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
-                                        </span>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）" prop="contractAmount">
-                                        <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="剩余金额（元）" prop="surplusAmount">
-                                        <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="支付日期" prop="payDate">
-                                        <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="相关附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="payDocInfo"></upload-files>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:16.8%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData2" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="支付金额（元）" prop="payAmount" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="default" @click="paidAdd2 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmPaidAdd2(paidForm1.id)">确 定</el-button>
-                        </div>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-            <el-collapse-item title="项目分红" name="4">
+            </TabPane>
+            <TabPane label="项目分红" name="sharing">
                 <!--  项目分红 部分-->
                 <div class="fileTable sharingDialog">
                     <tabel-header :data="checkProjectAuth('GL-XMFH-XZ') ? headerInfo_sharing : _headerInfo_sharing" @add="goAddShare"></tabel-header>
@@ -488,145 +94,540 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!-- 添加项目分红 对话框-->
-                    <el-dialog title="添加项目分红" :visible.sync="sharingAdd1" :close-on-click-modal="false">
-                        <el-form :model="sharingForm1" :rules="rules4" ref="sharingForm1" label-position="right" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题" prop="shareTitle">
-                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同" prop="contractId">
-                                        <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
-                                            </el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）" prop="contractAmount">
-                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红金额（元）" prop="shareAmount">
-                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红日期" prop="shareDate">
-                                        <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="相关附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:20.3%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData3" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button @click="sharingAdd1 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
-                        </div>
-                    </el-dialog>
-                    <!-- 编辑项目分红 对话框-->
-                    <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
-                        <el-form :model="sharingForm1" ref="sharingForm1" :rules="rules4" label-position="right" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题" prop="shareTitle">
-                                        <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同" prop="contractId">
-                                        <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
-                                            <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
-                                            </el-option>
-                                        </el-select>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）" prop="contractAmount">
-                                        <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红金额（元）" prop="contractAmount">
-                                        <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红日期" prop="shareDate">
-                                        <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
-                                        </el-date-picker>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="相关附件">
-                                        <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:20.3%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData3" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
-                                <template scope="scope">
-                                    <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                        <div slot="footer" class="dialog-footer">
-                            <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
-                            <el-button type="danger" @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
-                        </div>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-        </el-collapse>
+            </TabPane>
+        </Tabs>
+        <!-- 添加项目费用 对话框-->
+        <el-dialog title="添加项目费用" :visible.sync="costAdd1" :close-on-click-modal="false">
+            <el-form :model="costForm1" label-position="right" label-width="100px">
+                <el-form-item label="费用类型">
+                    <el-select v-model="costForm1.costTypeId" placeholder="请选择费用类型" style="width: 100%;">
+                        <el-option v-for="item in costSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="金额（元）">
+                    <el-input v-model="costForm1.amountMoney" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="default" @click="costAdd1 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmCostAdd1">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 编辑项目费用 对话框-->
+        <el-dialog title="编辑项目费用" :visible.sync="costAdd2" :close-on-click-modal="false">
+            <el-form :model="costForm2" label-position="right" label-width="100px">
+                <el-form-item label="费用类型">
+                    <el-select v-model="costForm2.costTypeId" placeholder="请选择费用类型" style="width: 100%;">
+                        <el-option v-for="item in costSortOptions" :key="item.id" :label="item.dicName" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="金额（元）">
+                    <el-input v-model="costForm2.amountMoney" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="default" @click="costAdd2 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmCostAdd2()">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加项目合同 对话框-->
+        <el-dialog title="添加项目合同" :visible.sync="contractAdd1" :close-on-click-modal="false">
+            <el-form :model="contractForm1" :rules="contractRule1" ref="contractForm1" label-position="right" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="合同名称" prop="contractName">
+                            <el-input v-model="contractForm1.contractName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="签约日期" prop="signDate">
+                            <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm1.signDate" style="width: 100%">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="contractForm1.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="股权占比（%）" prop="stockRatio">
+                            <el-input v-model.number="contractForm1.stockRatio" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办日期">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="contractForm1.handlerDate" style="width: 100%;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="合同附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title" style="justify-content:space-between;">
+                <div class="left" style="width:25.2%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+                <div class="right">
+                    <el-button type="danger" @click="fundAdd1=true">添加</el-button>
+                </div>
+            </div>
+            <el-table :data="fundData1" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-select value-key="id" v-model="scope.row.fundId" placeholder="请选择基金">
+                                <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.investAmount }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.investAmount" @change="changeInvestAmount" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template scope="scope">
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">编辑</el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFund(scope.$index,scope.row, 'fundData1')">保存</el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData1, 'invest')">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="contractAdd1 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmContractAdd1">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加 出资主体dialog -->
+        <el-dialog title="添加出资主体" :visible.sync="fundAdd1" :close-on-click-modal="false">
+            <el-form :model="fundForm1" :rules="rules2" ref="fundForm1" label-position="right" label-width="120px">
+                <el-form-item label="基金名称" prop="fundId">
+                    <el-select v-model="fundForm1.fundId" placeholder="请选择基金" style="width: 100%">
+                        <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="投资金额（元）" prop="investAmount">
+                    <el-input v-model.number="fundForm1.investAmount" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="股权占比（%）" prop="stockRatio">
+                    <el-input v-model.number="fundForm1.stockRatio" auto-complete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="contractAdd1 = true,fundAdd1 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmFundAdd1">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 编辑项目合同 对话框-->
+        <el-dialog title="编辑项目合同" :visible.sync="contractAdd2" :close-on-click-modal="false">
+            <el-form :model="contractForm2" :rules="contractRule1" ref="contractForm2" label-position="right" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="合同名称" prop="contractName">
+                            <el-input v-model="contractForm2.contractName" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="签约日期" prop="signDate">
+                            <el-date-picker @input="setSignDate" :editable="false" type="date" placeholder="选择日期" v-model="contractForm2.signDate" style="width: 100%;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="contractForm2.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="股权占比（%）" prop="stockRatio">
+                            <el-input v-model.number="contractForm2.stockRatio" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办日期">
+                            <el-date-picker type="date" placeholder="选择日期" v-model="contractForm2.handlerDate" style="width: 100%;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="合同附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'contractDocInfo')" @removeSucess="removeSucess($event, 'contractDocInfo')" :documentInfo="contractDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title" style="justify-content:space-between;">
+                <div class="left" style="width:25.2%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+                <div class="right">
+                    <el-button type="danger" @click="fundAdd1=true">添加</el-button>
+                </div>
+            </div>
+            <el-table :data="fundData1" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.fundName }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-select value-key="id" v-model="scope.row.fundId" placeholder="请选择基金">
+                                <el-option v-for="item in myFundOptions" :key="item.id" :label="item.fundName" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.investAmount | toMoney}}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.investAmount" @change="changeInvestAmount" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.stockRatio }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="scope.row.stockRatio" @change="changeInvestAmount" placeholder=""></el-input>
+                        </span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template scope="scope">
+                        <el-button v-if="!scope.row.editFlag" type="text" size="small" @click="checkEdit(scope.$index,scope.row, 'fundData1')">编辑</el-button>
+                        <el-button v-if="scope.row.editFlag" type="text" size="small" @click="saveFund(scope.$index,scope.row, 'fundData1')">保存</el-button>
+                        <el-button type="text" size="small" @click="handleDelete(scope.$index,fundData1, 'invest')">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="contractAdd2 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmContractAdd2(contractForm2.id)">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加投资支付 对话框-->
+        <el-dialog title="添加投资支付" :visible.sync="paidAdd1" :close-on-click-modal="false" style="width：65%;">
+            <el-form :model="paidForm1" :rules="paidRules" ref="paidForm1" label-position="right" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题" prop="payTitle">
+                            <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同" prop="contractId">
+                            <el-select @change="selContract" v-model="paidForm1.contractId" placeholder="请选择合同" style="width: 100%;">
+                                <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="合同附件">
+                            <span v-for="item in contractDocument" :key="item.index">
+                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                            </span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="剩余金额（元）" prop="surplusAmount">
+                            <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="支付日期" prop="payDate">
+                            <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="payDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title">
+                <div class="left" style="width:16.8%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData2" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                </el-table-column>
+                <el-table-column label="支付金额（元）" prop="payAmount" align="center">
+                    <template scope="scope">
+                        <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="default" @click="paidAdd1 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmPaidAdd1">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 编辑投资支付 对话框-->
+        <el-dialog title="编辑投资支付" :visible.sync="paidAdd2" :close-on-click-modal="false" style="width：65%;">
+            <el-form :model="paidForm1" :rules="paidRules" ref="paidForm1" label-position="right" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题" prop="payTitle">
+                            <el-input v-model="paidForm1.payTitle" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同" prop="contractId">
+                            <el-select @change="selContract" value-key="id" v-model="paidForm1.contractId" placeholder="请选择合同" style="width: 100%;">
+                                <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="合同附件" prop="contractAppendix">
+                            <span v-for="item in contractDocument" :key="item.index">
+                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                            </span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="paidForm1.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="剩余金额（元）" prop="surplusAmount">
+                            <el-input v-model="paidForm1.surplusAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="支付日期" prop="payDate">
+                            <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'payDocInfo')" @removeSucess="removeSucess($event, 'payDocInfo')" :documentInfo="payDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title">
+                <div class="left" style="width:16.8%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData2" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                </el-table-column>
+                <el-table-column label="支付金额（元）" prop="payAmount" align="center">
+                    <template scope="scope">
+                        <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="default" @click="paidAdd2 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmPaidAdd2(paidForm1.id)">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 添加项目分红 对话框-->
+        <el-dialog title="添加项目分红" :visible.sync="sharingAdd1" :close-on-click-modal="false">
+            <el-form :model="sharingForm1" :rules="rules4" ref="sharingForm1" label-position="right" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题" prop="shareTitle">
+                            <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同" prop="contractId">
+                            <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
+                                <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红金额（元）" prop="shareAmount">
+                            <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红日期" prop="shareDate">
+                            <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title">
+                <div class="left" style="width:20.3%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData3" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                    <template scope="scope">
+                        <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="sharingAdd1 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 编辑项目分红 对话框-->
+        <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
+            <el-form :model="sharingForm1" ref="sharingForm1" :rules="rules4" label-position="right" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题" prop="shareTitle">
+                            <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同" prop="contractId">
+                            <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
+                                <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红金额（元）" prop="contractAmount">
+                            <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红日期" prop="shareDate">
+                            <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title">
+                <div class="left" style="width:20.3%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData3" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                    <template scope="scope">
+                        <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
+            </div>
+        </el-dialog>
     </section>
 </template>
 
@@ -636,7 +637,7 @@ import { mapGetters } from 'vuex'
 import tabelHeader from 'components/tabelHeader'
 import uploadFiles from 'components/uploadFiles'
 import { getDicChildren } from 'common/js/dictionary'
-import { changeDate,checkProjectAuth } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 import {
     delGu, delContract, delFee, addFee, editFee, fees,
     addContract, contracts, getContractDetail, editContract,
@@ -770,7 +771,7 @@ export default {
                 contractId: [
                     { required: true, message: '请选择项目合同', trigger: 'change' }
                 ],
-                payDate:[
+                payDate: [
                     { required: true, message: '请选择支付日期', trigger: 'change' }
                 ]
             },
@@ -806,7 +807,7 @@ export default {
                 ],
                 shareDate: [
                     { required: true, message: '请选择分红日期', trigger: 'change' }
-                ]    
+                ]
             },
             sharingData: [],
             headerInfo_sharing: {
@@ -821,8 +822,8 @@ export default {
                 btnGroup: []
             },
             contractDocInfo: [],
-            payDocInfo:[],
-            shareDocInfo:[]
+            payDocInfo: [],
+            shareDocInfo: []
         }
     },
     created() {
@@ -838,7 +839,7 @@ export default {
         }
     },
     methods: {
-        checkProjectAuth(code){
+        checkProjectAuth(code) {
             return checkProjectAuth(code) && this.isInTeam;
         },
         init() {
@@ -1002,7 +1003,7 @@ export default {
             })
         },
         // 打开添加 项目合同
-        goAddContract(){
+        goAddContract() {
             this.contractAdd1 = true;
             this.contractForm1 = {
                 contractName: '',
@@ -1036,7 +1037,7 @@ export default {
                     }
                     addContract(projectContract, this.fundData1).then(resp => {
                         if (resp.data.status == '200') {
-                            
+
                             this.contractAdd1 = false;
                             this.getContract();
                         } else {
@@ -1046,7 +1047,7 @@ export default {
                         console.log('addContract() exists error: ', e);
                     })
                 }
-                else{
+                else {
                     return false;
                 }
             });
@@ -1054,11 +1055,11 @@ export default {
         // 添加出资主体 确定按钮
         confirmFundAdd1() {
             this.$refs["fundForm1"].validate((valid) => {
-                if(valid){
+                if (valid) {
                     let fundId = this.fundForm1.fundId;
                     let fundName = '';
-                    this.myFundOptions.forEach(item =>{
-                        if(fundId == item.id){
+                    this.myFundOptions.forEach(item => {
+                        if (fundId == item.id) {
                             fundName = item.fundName;
                         }
                     });
@@ -1081,7 +1082,7 @@ export default {
         goEditContract(id) {
             this.contractAdd2 = !this.contractAdd2;
             getContractDetail(id).then(resp => {
-                console.log("打开编辑 项目合同："+JSON.stringify(resp.data));
+                console.log("打开编辑 项目合同：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.contractForm2 = resp.data.result.projectContract;
 
@@ -1110,9 +1111,9 @@ export default {
 
                     projectContract.handlerUserId = (this.contractForm2.handlerUserId != '' && this.contractForm2.handlerUserId != undefined)
                         ? this.contractForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                    projectContract.handlerDate = changeDate(this.contractForm2.handlerDate),
-                    projectContract.signDate = changeDate(this.contractForm2.signDate),
-                    projectContract.documentInfo = this.contractDocInfo;
+                        projectContract.handlerDate = changeDate(this.contractForm2.handlerDate),
+                        projectContract.signDate = changeDate(this.contractForm2.signDate),
+                        projectContract.documentInfo = this.contractDocInfo;
                     let data = {
                         projectContract: projectContract,
                         fundInfo: this.fundData1
@@ -1140,8 +1141,8 @@ export default {
             row.editFlag = !row.editFlag;
             let fundName = '';
             let fundId = row.fundId;
-            this.myFundOptions.forEach(item =>{
-                if(fundId == item.id){
+            this.myFundOptions.forEach(item => {
+                if (fundId == item.id) {
                     fundName = item.fundName;
                 }
             });
@@ -1160,8 +1161,8 @@ export default {
         },
         //选择投资支付的合同
         selContract(value) {
-            if (!value ) return false;
-            if(this.isEditPay){
+            if (!value) return false;
+            if (this.isEditPay) {
                 this.isEditPay = false;
                 return false;
             }
@@ -1211,7 +1212,7 @@ export default {
                 }).catch(e => {
                     console.log('selContract() exists error: ', e);
                 });
-            }else{
+            } else {
                 this.paidForm1 = {
                     contractId: '',
                     payAmount: '',
@@ -1358,7 +1359,7 @@ export default {
         //选择项目分红的合同
         selShareContract(value) {
             if (!value) return;
-            if(this.isEditShare){
+            if (this.isEditShare) {
                 this.isEditShare = false;
                 return false;
             }
@@ -1381,13 +1382,13 @@ export default {
             })
         },
         //打开添加项目分红
-        goAddShare(){
+        goAddShare() {
             this.sharingForm1 = {
                 shareTitle: '',
                 contractId: '',
                 contractAmount: '',
                 shareAmount: '',
-                shareDate:''
+                shareDate: ''
             };
             this.shareDocInfo = [];
             this.sharingAdd1 = true;
@@ -1440,7 +1441,7 @@ export default {
                         item.url = item.url == null ? item.filePath : item.url;
                     });
                     this.shareDocInfo = documentInfo;
-                    
+
                     this.sharingAdd2 = !this.sharingAdd2;
                 } else {
                     this.$message.error(resp.data.message);
@@ -1556,21 +1557,21 @@ export default {
                     break;
             }
         },
-        uploadSuccess(documentInfo, dataName){
+        uploadSuccess(documentInfo, dataName) {
             this.$set(this.$data, dataName, documentInfo);
         },
-        removeSucess(documentInfo, dataName){
+        removeSucess(documentInfo, dataName) {
             this.$set(this.$data, dataName, documentInfo);
         },
-        setPayDate(val){
-            this.$set(this.$data.paidForm1, 'payDate', ''+val);
+        setPayDate(val) {
+            this.$set(this.$data.paidForm1, 'payDate', '' + val);
         },
-        setSignDate(val){
-            this.$set(this.$data.contractForm1, 'signDate', ''+val);
-            this.$set(this.$data.contractForm2, 'signDate', ''+val);
+        setSignDate(val) {
+            this.$set(this.$data.contractForm1, 'signDate', '' + val);
+            this.$set(this.$data.contractForm2, 'signDate', '' + val);
         },
-        setShareDate(val){
-            this.$set(this.$data.sharingForm1, 'shareDate', ''+val);
+        setShareDate(val) {
+            this.$set(this.$data.sharingForm1, 'shareDate', '' + val);
         }
     }
 }

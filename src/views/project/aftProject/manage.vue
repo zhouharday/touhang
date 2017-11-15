@@ -1,7 +1,7 @@
 <template>
     <section class="manage">
-        <el-collapse v-model="activeNames" @change="handleChange">
-            <el-collapse-item title="项目费用" name="1">
+        <Tabs value="cost" @on-click="changeTabs">
+            <TabPane label="项目费用" name="cost">
                 <div class="fileTable">
                     <tabel-header :data="headerInfo_cost"></tabel-header>
                     <el-table :data="costData" border style="width: 100%" align="center">
@@ -12,8 +12,8 @@
                         </el-table-column>
                     </el-table>
                 </div>
-            </el-collapse-item>
-            <el-collapse-item title="项目合同" name="2">
+            </TabPane>
+            <TabPane label="项目合同" name="contract">
                 <!-- 项目合同 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="headerInfo_contract"></tabel-header>
@@ -31,67 +31,9 @@
                         <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                         </el-table-column>
                     </el-table>
-                    <!-- 项目合同详情 对话框-->
-                    <el-dialog title="项目合同详情" :visible.sync="contractDetails">
-                        <el-form :model="contractForm1" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="合同名称">
-                                        <el-input v-model="contractForm1.contractName" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="签约日期">
-                                        <el-input type="date" v-model="contractForm1.signDate" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）">
-                                        <el-input v-model="contractForm1.contractAmount" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="股权占比（%）">
-                                        <el-input v-model="contractForm1.stockRatio" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="contractForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办日期">
-                                        <el-input type="date" v-model="contractForm1.handlerDate" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="合同附件">
-                                        <span v-for="doc in contractForm1.documentInfo">
-                                            <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                                        </span>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title" style="justify-content:space-between;">
-                            <div class="left" style="width:25.2%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData1" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                                <template scope="scope">{{scope.row.investAmount | toMoney}}</template>
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                        </el-table>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-            <el-collapse-item title="投资支付" name="3">
+            </TabPane>
+            <TabPane label="投资支付" name="paid">
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="headerInfo_paid"></tabel-header>
@@ -113,77 +55,10 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <!-- 投资支付详情 对话框-->
-                    <el-dialog title="投资支付详情" :visible.sync="paidDetails" style="width：65%;">
-                        <el-form :model="paidForm1" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题">
-                                        <el-input v-model="paidForm1.payTitle" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同">
-                                        <el-input v-model="paidForm1.contractName" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="合同附件">
-                                        <el-input v-model="paidForm1.contractAppendix" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）">
-                                        <el-input v-model="paidForm1.contractAmount" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="剩余金额（元）">
-                                        <el-input v-model="paidForm1.surplusAmount" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="paidForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="支付日期">
-                                        <el-input type="date" v-model="paidForm1.payDate" disabled style="width: 100%;">
-                                        </el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="相关附件">
-                                        <span v-for="doc in paidForm1.documentInfo">
-                                            <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                                        </span>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:16.8%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData2" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="支付金额（元）" prop="payAmount" align="center">
-                            </el-table-column>
-                        </el-table>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-            <el-collapse-item title="项目分红" name="4">
-                <!--  项目分红 部分-->
+            </TabPane>
+            <TabPane label="项目分红" name="sharing">
+                <!-- 项目分红 部分 -->
                 <div class="fileTable sharingDialog">
                     <tabel-header :data="headerInfo_sharing"></tabel-header>
                     <el-table :data="sharingData" border style="width: 100%" align="center" show-summary>
@@ -201,69 +76,194 @@
                         <el-table-column label="分红日期" prop="shareDate" align="center">
                         </el-table-column>
                     </el-table>
-                    <!-- 项目分红详情 对话框-->
-                    <el-dialog title="项目分红详情" :visible.sync="sharingDetails">
-                        <el-form :model="sharingForm1" label-width="110px">
-                            <el-row>
-                                <el-col :span="12">
-                                    <el-form-item label="标题">
-                                        <el-input v-model="sharingForm1.shareTitle" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="项目合同">
-                                          <el-input v-model="sharingForm1.contractName" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="合同金额（元）">
-                                        <el-input v-model="sharingForm1.contractAmount" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红金额（元）">
-                                        <el-input v-model="sharingForm1.shareAmount" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="经办人">
-                                        <el-input v-model="sharingForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col :span="12">
-                                    <el-form-item label="分红日期">
-                                        <el-input type="date"  v-model="sharingForm1.shareDate" placeholder="选择日期" disabled style="width: 100%;">
-                                        </el-input>
-                                    </el-form-item>
-                                </el-col>
-                                <el-col>
-                                    <el-form-item label="相关附件">
-                                        <span v-for="doc in sharingForm1.documentInfo">
-                                            <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                                        </span>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row>
-                        </el-form>
-                        <div class="table_title">
-                            <div class="left" style="width:20.3%">
-                                <span class="desc">{{ table_title }}</span>
-                            </div>
-                        </div>
-                        <el-table :data="fundData3" border style="width: 100%" align="center">
-                            <el-table-column label="基金名称" prop="fundName" align="center">
-                            </el-table-column>
-                            <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                            </el-table-column>
-                            <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                            </el-table-column>
-                            <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
-                            </el-table-column>
-                        </el-table>
-                    </el-dialog>
                 </div>
-            </el-collapse-item>
-        </el-collapse>
+            </TabPane>
+        </Tabs>
+        <!-- 项目合同详情 对话框-->
+        <el-dialog title="项目合同详情" :visible.sync="contractDetails">
+            <el-form :model="contractForm1" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="合同名称">
+                            <el-input v-model="contractForm1.contractName" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="签约日期">
+                            <el-input type="date" v-model="contractForm1.signDate" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）">
+                            <el-input v-model="contractForm1.contractAmount" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="股权占比（%）">
+                            <el-input v-model="contractForm1.stockRatio" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="contractForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办日期">
+                            <el-input type="date" v-model="contractForm1.handlerDate" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="合同附件">
+                            <span v-for="doc in contractForm1.documentInfo" :key="doc.index">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                            </span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title" style="justify-content:space-between;">
+                <div class="left" style="width:25.2%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData1" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                    <template scope="scope">{{scope.row.investAmount | toMoney}}</template>
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+        <!-- 投资支付详情 对话框-->
+        <el-dialog title="投资支付详情" :visible.sync="paidDetails" style="width：65%;">
+            <el-form :model="paidForm1" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题">
+                            <el-input v-model="paidForm1.payTitle" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同">
+                            <el-input v-model="paidForm1.contractName" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="合同附件">
+                            <el-input v-model="paidForm1.contractAppendix" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）">
+                            <el-input v-model="paidForm1.contractAmount" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="剩余金额（元）">
+                            <el-input v-model="paidForm1.surplusAmount" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="paidForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="支付日期">
+                            <el-input type="date" v-model="paidForm1.payDate" disabled style="width: 100%;">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <span v-for="doc in paidForm1.documentInfo" :key="doc.index">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                            </span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title">
+                <div class="left" style="width:16.8%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData2" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                </el-table-column>
+                <el-table-column label="支付金额（元）" prop="payAmount" align="center">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
+        <!-- 项目分红详情 对话框-->
+        <el-dialog title="项目分红详情" :visible.sync="sharingDetails">
+            <el-form :model="sharingForm1" label-width="110px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题">
+                            <el-input v-model="sharingForm1.shareTitle" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同">
+                            <el-input v-model="sharingForm1.contractName" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）">
+                            <el-input v-model="sharingForm1.contractAmount" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红金额（元）">
+                            <el-input v-model="sharingForm1.shareAmount" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="sharingForm1.handlerUserName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红日期">
+                            <el-input type="date" v-model="sharingForm1.shareDate" placeholder="选择日期" disabled style="width: 100%;">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <span v-for="doc in sharingForm1.documentInfo" :key="doc.index">
+                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                            </span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <div class="table_title">
+                <div class="left" style="width:20.3%">
+                    <span class="desc">{{ table_title }}</span>
+                </div>
+            </div>
+            <el-table :data="fundData3" border style="width: 100%" align="center">
+                <el-table-column label="基金名称" prop="fundName" align="center">
+                </el-table-column>
+                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                </el-table-column>
+                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                </el-table-column>
+                <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
     </section>
 </template>
 
@@ -335,8 +335,8 @@ export default {
         this.$store.dispatch('getMyFundOptions')
     },
     watch: {
-        'tabs':function (to,from){
-            if(to.tabList[3]){
+        'tabs': function(to, from) {
+            if (to.tabList[3]) {
                 this.init();
             }
         }
@@ -355,7 +355,7 @@ export default {
                     this.costData = resp.data.result;
                 } else if (resp.data.status === '49999') {
                     this.costData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -369,7 +369,7 @@ export default {
                     this.contractData = resp.data.result;
                 } else if (resp.data.status === '49999') {
                     this.contractData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -377,22 +377,22 @@ export default {
             })
         },
         // 获取项目合同详情
-        openContract(row,index) {
-           getContractDetail(row.id).then(resp => {
-                if(resp.data.status == '200'){
+        openContract(row, index) {
+            getContractDetail(row.id).then(resp => {
+                if (resp.data.status == '200') {
                     this.contractDetails = !this.contractDetails;
                     this.contractForm1 = resp.data.result.projectContract;
                     this.fundData1 = resp.data.result.fundInfo;
-                    this.fundData1.forEach(function(item, index){
+                    this.fundData1.forEach(function(item, index) {
                         let fund = {
-                            id:item.fundId,
-                            fundName:item.fundName
+                            id: item.fundId,
+                            fundName: item.fundName
                         };
 
                         item.fund = fund;
                     });
                     this.fundData1.push();
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -406,7 +406,7 @@ export default {
                     this.paidData = resp.data.result.list;
                 } else if (resp.data.status === '49999') {
                     this.paidData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -414,14 +414,14 @@ export default {
             })
         },
         // 获取投资支付详情
-        openPaid(row,index) {
-           getContractPayDetail(row.id).then(resp => {
-                console.log('打开编辑投资支付: '+JSON.stringify(resp.data));
-                if(resp.data.status == '200'){
+        openPaid(row, index) {
+            getContractPayDetail(row.id).then(resp => {
+                console.log('打开编辑投资支付: ' + JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidDetails = !this.paidDetails;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -435,7 +435,7 @@ export default {
                     this.sharingData = resp.data.result.list;
                 } else if (resp.data.status === '49999') {
                     this.sharingData = [];
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
@@ -443,14 +443,14 @@ export default {
             })
         },
         // 获取项目分红详情
-        openSharing(row,index) {
+        openSharing(row, index) {
             getParticipationDetail(row.id).then(resp => {
-                console.log('打开编辑项目分红: '+JSON.stringify(resp.data));
-                if(resp.data.status == '200'){
+                console.log('打开编辑项目分红: ' + JSON.stringify(resp.data));
+                if (resp.data.status == '200') {
                     this.sharingForm1 = resp.data.result.projectParticipation;
                     this.fundData3 = resp.data.result.participationDetails;
                     this.sharingDetails = !this.sharingDetails;
-                }else{
+                } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {

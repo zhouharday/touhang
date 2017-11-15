@@ -6,6 +6,7 @@
         <el-col :span="23">
           <div class="industry-ul">
             <ul ref="industry">
+              <span>项目类型 : </span>
               <li class="cursor" v-for="(item,index) in projectTypeList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==ind}" @click="changeActive(index,item)">
                 {{item.dicName}}
               </li>
@@ -256,6 +257,9 @@ section {
     }
     .industry-ul {
       > ul {
+        >span {
+          float: left;
+        }
         > li {
           float: left;
           margin: 0 10px;

@@ -116,8 +116,8 @@
                             <el-dialog title="转项目池" :visible.sync="dialogVisible" size="tiny">
                                 <span>确认将该项目转入项目池？</span>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button type="default"  @click="dialogVisible=false">取 消</el-button>
-                                    <el-button type="danger"  @click="jumpPool">确 定</el-button>
+                                    <el-button type="default" @click="dialogVisible=false">取 消</el-button>
+                                    <el-button type="danger" @click="jumpPool">确 定</el-button>
                                 </span>
                             </el-dialog>
                         </template>
@@ -204,6 +204,15 @@ export default {
         }
     },
     methods: {
+        // 设置table间隔行的background-color
+        tableRowClassName(row, index) {
+            if ((index % 2) == 0) {
+                return 'info-row';
+            } else {
+                return 'positive-row';
+            }
+            return '';
+        },
         handleIconClick() { //搜索
             // alert(11);
             this.selectCompany();
@@ -277,7 +286,7 @@ export default {
                 console.log(item);
                 this.currentIndex1 = index;
                 return;
-            } else if (ind == 2 && item.id!= '0') { //轮次
+            } else if (ind == 2 && item.id != '0') { //轮次
                 this.phase = item.id;
                 this.selectCompany();
                 console.log(item);
@@ -285,7 +294,7 @@ export default {
                 // this.currentIndex1 = '';
                 // this.currentIndex3 = '';
                 return;
-            } else if (ind == 3 && item.id!= '0') { //所在地
+            } else if (ind == 3 && item.id != '0') { //所在地
                 console.log(item);
                 this.citystr = item.id;
                 this.selectCompany();
@@ -501,8 +510,7 @@ export default {
 .uptriangle {
     display: inline-block;
     position: relative;
-    bottom: 2px;
-    // top: 3px;
+    bottom: 2px; // top: 3px;
     width: 0;
     height: 0;
     border: 6px solid transparent;

@@ -11,7 +11,7 @@
                 <el-date-picker type="date" placeholder="选择日期" v-model="eventForm.issuesDate" style="width:100%;"></el-date-picker>
             </el-form-item>
             <el-form-item label="事项内容" prop="issuesContent">
-                <el-input type="textarea" :rows="3" placeholder="请输入内容" v-model="eventForm.issuesContent">
+                <el-input type="textarea" :autosize="{ minRows: 2}" maxlength="500" placeholder="请输入内容(限500字)..." v-model="eventForm.issuesContent">
                 </el-input>
             </el-form-item>
             <el-form-item label="相关文档">
@@ -27,7 +27,7 @@
                         <p>
                             <span>{{item.issuesType | key2value(eventOptions, item.issuesType)}}</span>
                             <span style="margin-right:50px">{{item.issuesDate | formatDate}}</span>
-                            <span v-for="doc in item.documentInfo">
+                            <span v-for="doc in item.documentInfo" :key="doc.index">
                                 <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a></span>
                             </span>
                             <el-button v-if="checkProjectAuth('ZDSX-shanchu')" type="text" class="delbtn" @click="delEvent(item.id)">删除</el-button>
