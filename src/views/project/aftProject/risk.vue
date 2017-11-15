@@ -166,7 +166,6 @@
                             <span v-for="doc in item.documentInfo" :key="doc.index">
                                 <a :href="doc.filePath" style="font-size:12px;" download="doc.fileName">{{doc.fileName}}</a>
                             </span>
-                            </span>
                         </p>
                     </div>
                 </div>

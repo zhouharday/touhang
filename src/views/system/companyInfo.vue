@@ -21,7 +21,7 @@
                                 <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过10M</div>
                             </div>
                         </div>
-                    </el-form-item>
+                    </el-form-item> 
                     <el-form-item class="btn_wrapper">
                         <el-button class="changeWidth" type="danger" @click="onSubmitOver">立即创建</el-button>
                         <el-button type="default" class="changeWidth">取消</el-button>
