@@ -125,7 +125,7 @@
                         </el-col>
                         <el-col>
                             <el-form-item label="附件" prop="documentInfo">
-                                <div style="width:983px;padding:10px 15px; background: #eef1f6;">
+                                <div class="appendixBox">
                                     <p v-for="doc in viewForm.documentInfo" :key="doc.index">
                                         <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
                                     </p>
@@ -875,17 +875,33 @@ export default {
     }
 }
 
+.appendixBox {
+    width: 983px;
+    min-height: 35px;
+    padding: 3px 10px;
+    background: #eef1f6;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    >p{
+       height: 20px;
+       line-height: 20px;
+    }
+}
+
 .operationBox {
     width: 1102px;
     display: flex;
     border-top: none;
     .left {
         width: 122px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 36px;
+        text-align: right;
+        vertical-align: middle;
+        color: #48576a;
         font-size: 14px;
-        color: #1f2d3d;
+        line-height: 1;
+        padding: 11px 12px 11px 0;
+        box-sizing: border-box;
     }
     .right {
         width: 983px;
