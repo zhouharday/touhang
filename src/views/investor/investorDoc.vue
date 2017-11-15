@@ -53,16 +53,16 @@
     </el-row>
     <!-- 预览 -->
     <show-pdf :pdfurl="pdfurl" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
-    <!-- 上传基金设立报表-->
-    <Modal v-model="modalAdd" title="基金设立报告" :mask-closable="false">
-        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
+    <!-- 上传投资者文档-->
+    <Modal v-model="modalAdd" title="投资者文档" :mask-closable="false" :closable="false">
+        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" :show-upload-list="showList">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
             </div>
         </Upload>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalAdd = false">取 消</el-button>
+            <el-button @click="hiddenModalBox">取 消</el-button>
         </div>
     </Modal>
     <!-- 删除确认模态框 -->
@@ -111,13 +111,15 @@ export default {
             this.uploadInfo.stageId = row.stageId
             this.uploadInfo.fileId = row.fileId
         },
+        hiddenModalBox() {
+            this.modalAdd = false
+        },
         deleteInvestorDoc(index, row) { // 删除投资者文档
             this.reminders = true
             this.deleteId = row.id
         },
         previewInvestorDoc(index, row) { // 预览投资者文档
             this.pdfurl = row.previewPath
-            this.modalAdd = true
             this.showOrhiddren = true
         },
         closepdf() { // 关闭预览

@@ -1,6 +1,6 @@
 <template>
     <div class="deleteReminders">
-        <Modal v-model="deleteReminders" width="360">
+        <Modal v-model="deleteReminders" width="360" :closable="false">
             <p slot="header">
                 <span>{{message_title}}</span>
             </p>
