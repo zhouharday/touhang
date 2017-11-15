@@ -1,6 +1,6 @@
 <template>
     <div class="zpoolMessage">
-        <div class="title">
+        <div class="top-title">
             <div class="left">
                 <span class="desc">{{title}}</span>
                 <el-button size="small" class="state">{{state}}</el-button>
@@ -11,29 +11,32 @@
                 <el-button v-show="show_s" type="danger" size="small" @click="observeDialog=true">{{observe}}</el-button>
                 <el-button v-show="show_t" type="danger" size="small" @click="eliminateDialog=true">{{eliminate}}</el-button>
             </div>
+        </div>
+        <!-- 三个项目状态对话框 -->
+        <div class="dialogs-box">
             <!-- 确认转项目池 dialog -->
             <el-dialog title="转投资" :visible.sync="investDialog" size="tiny">
-                    <span>确认将该项目转投资？</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="default" @click="investDialog=false">取 消</el-button>
-                        <el-button type="danger" @click="jumpPre">确 定</el-button>
-                    </span>
+                <span>确认将该项目转投资？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="investDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpPre">确 定</el-button>
+                </span>
             </el-dialog>
             <!-- 确认转观察 dialog -->
             <el-dialog title="转观察" :visible.sync="observeDialog" size="tiny">
-                    <span>确认将该项目转观察？</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="default" @click="observeDialog=false">取 消</el-button>
-                        <el-button type="danger" @click="jumpObserve">确 定</el-button>
-                    </span>
+                <span>确认将该项目转观察？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="observeDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpObserve">确 定</el-button>
+                </span>
             </el-dialog>
             <!-- 确认转淘汰 dialog -->
             <el-dialog title="转淘汰" :visible.sync="eliminateDialog" size="tiny">
-                    <span>确认将该项目转淘汰？</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
-                        <el-button type="danger" @click="jumpEliminate">确 定</el-button>
-                    </span>
+                <span>确认将该项目转淘汰？</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="eliminateDialog=false">取 消</el-button>
+                    <el-button type="danger" @click="jumpEliminate">确 定</el-button>
+                </span>
             </el-dialog>
         </div>
         <div class="tabs">
@@ -44,8 +47,8 @@
                     <table-form :projectData="projectData"></table-form>
                 </el-tab-pane>
                 <!-- <el-tab-pane label="工商信息" name="industry" class="tab_list">
-                                    <industry-form :industryForm="industryForm"></industry-form>
-                                </el-tab-pane> -->
+                                                <industry-form :industryForm="industryForm"></industry-form>
+                                            </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
                     <capital-table :tabs="tabs" :projectData="projectData"></capital-table>
                 </el-tab-pane>
@@ -70,7 +73,7 @@ import capitalTable from './capital'
 import recordForm from './record'
 import fileTable from './file'
 
-import { getProDetail,transPro,setProjectStatus } from 'api/project'
+import { getProDetail, transPro, setProjectStatus } from 'api/project'
 
 
 export default {
@@ -82,7 +85,7 @@ export default {
             observe: '观察',
             eliminate: '淘汰',
             tabs: {
-                tabList:[true, false, false, false]
+                tabList: [true, false, false, false]
             },
             isShow: true,
             show_f: true,
@@ -107,15 +110,15 @@ export default {
             projectData: {}     // 项目池详情信息
         }
     },
-    created() { 
+    created() {
         this.init();
     },
     watch: {
-        '$route' (to, from) {
-            if(to.name == 'zprojectPoolMessage'){
+        '$route'(to, from) {
+            if (to.name == 'zprojectPoolMessage') {
                 this.init()      //再次调起我要执行的函数
             }
-         }
+        }
     },
     methods: {
         ...mapActions([
@@ -130,18 +133,18 @@ export default {
             let projectPoolId = href.substr(href.lastIndexOf('/') + 1, href.length);
             this.projectPoolId = projectPoolId;
         },
-        handleClick(val){
+        handleClick(val) {
             let idx = val.index;
             let _tabList = this.tabs.tabList;
-            if(!_tabList[idx]){
-                for(var i = 0; i < _tabList.length; i++){
-                    if(i == idx){
+            if (!_tabList[idx]) {
+                for (var i = 0; i < _tabList.length; i++) {
+                    if (i == idx) {
                         _tabList[i] = true;
-                    }else{
+                    } else {
                         _tabList[i] = false;
                     }
                 }
-                let _tabs = {tabList:_tabList}
+                let _tabs = { tabList: _tabList }
                 this.tabs = _tabs;
             }
         },
@@ -153,7 +156,7 @@ export default {
             let projectPoolId = this.projectPoolId;
             getProDetail(projectPoolId).then(resp => {
                 let data = resp.data.result;
-                let { projectInfo, projectInvestmentInfo,enterpriseInfo,listOwnershipStructure } = data;
+                let { projectInfo, projectInvestmentInfo, enterpriseInfo, listOwnershipStructure } = data;
                 this.getProjectData(data);
                 this.title = projectInfo.projectName;
                 if (projectInfo) {
@@ -162,21 +165,21 @@ export default {
                 if (enterpriseInfo) {
                     this.companyForm = Object.assign({}, this.companyForm, enterpriseInfo);
                 } else {
-                    this.companyForm = {registerDate: '', flag: true};
+                    this.companyForm = { registerDate: '', flag: true };
                 }
-                if(listOwnershipStructure){
+                if (listOwnershipStructure) {
                     this.structureForm = Object.assign({}, this.structureForm, listOwnershipStructure);
                 }
-                if(projectInfo.projectType === '4'){
+                if (projectInfo.projectType === '4') {
                     this.show_t = false;
                     this.state = "淘汰";
-                }else if(projectInfo.projectType === '3'){
+                } else if (projectInfo.projectType === '3') {
                     // this.show_s = false;
                     this.state = "终止";
-                }else if(projectInfo.projectType === '2'){
+                } else if (projectInfo.projectType === '2') {
                     this.show_s = false;
                     this.state = "观察";
-                }else {
+                } else {
                     this.isShow = false;
                     this.state = "正常";
                 }
@@ -187,19 +190,19 @@ export default {
         jumpPre() {
             let projectId = this.projectPoolId;
             transPro(projectId).then(resp => {
-                if(resp.data.status === '200'){
+                if (resp.data.status === '200') {
                     this.addTab('投前项目', '/home/preProject', 'preProject');
                     this.$router.push({ name: 'preProject' });
                 }
-                this.investDialog=false;
+                this.investDialog = false;
             }).catch(e => {
                 console.log('jumpPre error: ', e);
-                this.investDialog=false;
+                this.investDialog = false;
             });
         },
         jumpObserve() {
-            setProjectStatus(this.projectPoolId, '2').then(resp =>{
-                if(resp.data.status === '200'){
+            setProjectStatus(this.projectPoolId, '2').then(resp => {
+                if (resp.data.status === '200') {
                     this.show_f = false;
                     this.show_s = false;
                     this.isShow = true;
@@ -208,27 +211,27 @@ export default {
                 this.observeDialog = !this.observeDialog;
             }).catch(e => {
                 console.log('jumpObserve error: ', e);
-                this.observeDialog=false;
+                this.observeDialog = false;
             });
 
         },
         jumpEliminate() {
-            setProjectStatus(this.projectPoolId, '4').then(resp =>{
-                if(resp.data.status === '200'){
+            setProjectStatus(this.projectPoolId, '4').then(resp => {
+                if (resp.data.status === '200') {
                     this.show_f = false;
                     this.show_t = false,
-                    this.isShow = true;
+                        this.isShow = true;
                     this.state = "淘汰";
                 }
                 this.eliminateDialog = !this.eliminateDialog;
             }).catch(e => {
                 console.log('jumpEliminate error: ', e);
-                this.eliminateDialog=false;
+                this.eliminateDialog = false;
             });
         },
         changeNormal() {
-            setProjectStatus(this.projectPoolId, '1').then(resp =>{
-                if(resp.data.status === '200'){
+            setProjectStatus(this.projectPoolId, '1').then(resp => {
+                if (resp.data.status === '200') {
                     this.isShow = false;
                     this.show_f = true;
                     this.show_s = true;
@@ -262,7 +265,7 @@ export default {
     min-height: 100%;
     background-color: #fff;
     padding: 24px;
-    .title {
+    .top-title {
         width: 100%;
         height: 64px;
         line-height: 64px;
