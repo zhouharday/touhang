@@ -135,7 +135,7 @@ export default {
       // },
       option: {
         title: {
-          text: "漏斗图",
+          text: "项目投资统计表",
           // subtext: "纯属虚构"
         },
         tooltip: {
@@ -150,7 +150,7 @@ export default {
           }
         },
         legend: {
-          data: ["展现", "点击", "访问", "咨询", "订单"]
+          // data: ["展现", "点击", "访问", "咨询", "订单"]
         },
         series: [
           {
@@ -160,7 +160,7 @@ export default {
             width: "80%",
             label: {
               normal: {
-                formatter: "{b}预期"
+                // formatter: "{b}预期"
               },
               emphasis: {
                 position: "inside",
@@ -201,7 +201,7 @@ export default {
               },
               emphasis: {
                 position: "inside",
-                formatter: "{b}实际: {c}%"
+                // formatter: "{b}实际: {c}%"
               }
             },
             itemStyle: {
