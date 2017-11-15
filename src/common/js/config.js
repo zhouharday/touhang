@@ -135,3 +135,44 @@ export function checkFundAuth(code) {
     if (!result) console.log("CODE: " + code + '无权限');
     return result;
 }
+
+export function toThousands(num) { //js千分位 num为整型类型
+    //整型转字符串
+    var number = new Number(num);
+    var str = number.toString();
+    //正则匹配
+    var newstr = str.replace(/\d{1,3}(?=(\d{3})+$)/g, function (s) {
+        return s + ','
+    })
+    return newstr;
+}
+
+export function formatNum(str) {
+    var newStr = "";
+    var count = 0;
+    if (str.indexOf(".") == -1) {
+        for (var i = str.length - 1; i >= 0; i--) {
+            if (count % 3 == 0 && count != 0) {
+                newStr = str.charAt(i) + "," + newStr;
+            } else {
+                newStr = str.charAt(i) + newStr;
+            }
+            count++;
+        }
+        str = newStr + ".00"; //自动补小数点后两位
+        console.log(str)
+        return str;
+    } else {
+        for (var i = str.indexOf(".") - 1; i >= 0; i--) {
+            if (count % 3 == 0 && count != 0) {
+                newStr = str.charAt(i) + "," + newStr; //碰到3的倍数则加上“,”号
+            } else {
+                newStr = str.charAt(i) + newStr; //逐个字符相接起来
+            }
+            count++;
+        }
+        str = newStr + (str + "00").substr((str + "00").indexOf("."), 3);
+        console.log(str);
+        return str;
+    }
+}

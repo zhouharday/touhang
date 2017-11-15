@@ -254,20 +254,33 @@ export default {
             this.$store.commit({ type: 'addTab', title: th, url: url, name: name });
         },
         changeActive(index, ind, item) { //按条件查询
-            // console.log(ind);
-            console.log(index);
-            if (item.id == '0') {
-                console.log('全部');
-                this.industry = '';
-                this.phase = '';
-                this.citystr = '';
-                this.currentIndex1 = index;
-                this.currentIndex2 = index;
-                this.currentIndex3 = index;
-                this.selectCompany();
-                return;
-            };
-            if (ind == 1 && item.id != '0') { //行业
+        console.log(ind);
+        console.log(index);
+        if(ind == 1 && index == 0){
+            this.industry = '';
+            this.currentIndex1 = index;
+            this.selectCompany();
+        } else if(ind == 2 && index == 0){
+            this.phase = '';
+            this.currentIndex2 = index;
+            this.selectCompany();
+        } else if(ind == 3 && index == 0){
+            this.citystr = '';
+            this.currentIndex3 = index;
+            this.selectCompany();
+        };
+            // if(item.id == '0'){
+            //     console.log('全部');
+            //     this.industry = '';
+            //     this.phase = '';
+            //     this.citystr = '';
+            //     // this.currentIndex1 = index;
+            //     // this.currentIndex2 = index;
+            //     // this.currentIndex3 = index;
+            //     this.selectCompany();
+            //     return;
+            // };
+            if (ind == 1 && item.id!= '0') { //行业
                 this.industry = item.id;
                 this.selectCompany();
                 console.log(item);
@@ -351,7 +364,7 @@ export default {
                             this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
                             this.$Message.success(res.data.message);
                             return;
-                        } else if (res.data.status == '403') {
+                        } else {
                             this.$Message.error(res.data.message);
                         }
                     }

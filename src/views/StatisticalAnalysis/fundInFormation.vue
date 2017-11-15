@@ -6,6 +6,7 @@
                 <el-col :span="23">
                         <div class="industry-ul">
                             <ul ref="industry">
+                              <span>基金投向 : </span>
                                 <li class="cursor" v-for="(item,index) in projectTypeList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==ind}" @click="changeActive(index,item)">
                                     {{item.dicName}}
                                 </li>
@@ -92,6 +93,7 @@
 </template>
 
 <script>
+import {formatNum} from"../../common/js/config";
 export default {
   computed: {
     user() {
@@ -177,10 +179,24 @@ export default {
               console.log(res.data.result);
               res.data.result.list.map((item,index)=> {
                 // res.data.result.list[index].map((ele,index)=> {
-                  if(res.data.result.list[index].fundAppraisement == 'null'){
-                    res.data.result.list[index].fundAppraisement = '';
+                  if(item.fundAppraisement == null || item.fundFuying == null || item.fundScale == null || item.investAmount == null || item.placementSum == null || item.remainAmount == null){
+                    item.fundAppraisement = '';
+                    item.fundFuying = '';
+                    item.fundScale = '';
+                    item.investAmount = '';
+                    item.placementSum = '';
+                    item.remainAmount = '';
+                  } else {
+                    item.fundAppraisement = formatNum(String(item.fundAppraisement));
+                    item.fundFuying = formatNum(String(item.fundFuying));
+                    item.fundScale = formatNum(String(item.fundScale));
+                    item.investAmount = formatNum(String(item.investAmount));
+                    item.placementSum = formatNum(String(item.placementSum));
+                    item.remainAmount = formatNum(String(item.remainAmount));
                   }
+
               });
+
               this.fundTabData = res.data.result.list;
               this.pages_1.pageNum = res.data.result.pageNum; //当前页码
               this.pages_1.total = res.data.result.total; //数据总数
@@ -309,6 +325,9 @@ section {
     }
     .industry-ul {
       > ul {
+        >span {
+          float: left;
+        }
         > li {
           float: left;
           margin: 0 10px;

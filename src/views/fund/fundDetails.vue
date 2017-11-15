@@ -233,7 +233,7 @@ export default {
             modalUpload: false, // 显示或隐藏模态框
             uploadInfo: {
                 file: null,
-                stageId: this.currentStep || sessionStorage.getItem('currentStep'),
+                stageId: '',
                 uploadTypeId: this.$route.params.id,
                 fileId: this.stepId || sessionStorage.getItem('stepId'),
                 type: 1,
@@ -388,6 +388,8 @@ export default {
             this.listIndex = index
             // console.log(this.uploadInfo)
             this.modalUpload = true
+            this.uploadInfo.stageId = this.currentStep
+            console.log('上传时数据' + this.uploadInfo)
         },
         cancelModal() { //隐藏上传模态框
             this.modalUpload = false
@@ -398,9 +400,10 @@ export default {
             this.modalUpload = false
         },
         getDataStageAddUpload() { // 获取小双，阶段数据
+            sessionStorage.removeItem('currentStep')
             selectStageUploadDocument(this.$route.params.id, NUM).then((res) => {
                 if (res.status == '200') {
-                    // console.log(res)
+                    console.log('获取时阶段stageId' + res.data.stageId)
                     this.module = res.data.result
                     this.currentStep = res.data.stageId
                     if (res.data.result[0] === undefined) {
@@ -430,7 +433,8 @@ export default {
         //         return true
         //     }
         // },
-        stopSuppression() { //
+        stopSuppression() {
+            this.message_title = '是否确认中止该基金？'
             this.deleteReminders = true
         },
         confirmSuppression() { // 确认中止
@@ -745,6 +749,7 @@ export default {
                 height: 36px;
                 margin-left: 24px;
                 line-height: 36px;
+                overflow: hidden;
                 .count,
                 .desc,
                 .state {

@@ -1,84 +1,90 @@
 <template>
-    <section class="projecInfor">
-        <!-- 这是项目信息统计表 -->
-        <div>
-            <el-row style="margin-bottom: 20px;">
-                <el-col :span="23">
-                        <div class="industry-ul">
-                            <ul ref="industry">
-                                <li class="cursor" v-for="(item,index) in projectTypeList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==ind}" @click="changeActive(index,item)">
-                                    {{item.dicName}}
-                                </li>
-                            </ul>
-                        </div>
-                    </el-col>
-            </el-row>
-            <el-row class="customerMang">
-                <el-col :span="6">
-                    <div class="grid-content bg-purple-dark">
-                        <el-input placeholder="" icon="search" v-model="input2" @keyup.enter.native="handleIconClick" :on-icon-click="handleIconClick">
-                        </el-input>
-                    </div>
-                </el-col>
-                <el-col :span="10">
-                    <div class="grid-content bg-purple-dark"></div>
-                </el-col>
-                <el-col :span="8" class="searchIpt">
-                    <div class="grid-content bg-purple-dark">
-                        <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
-                            <!-- <el-button class="searchIpt" type="danger" size="small">
+  <section class="projecInfor">
+    <!-- 这是项目信息统计表 -->
+    <div>
+      <el-row style="margin-bottom: 20px;">
+        <el-col :span="23">
+          <div class="industry-ul">
+            <ul ref="industry">
+              <span>项目类型 : </span>
+              <li class="cursor" v-for="(item,index) in projectTypeList" :label="item.dicName" :value="item.id" :key="item.id" :class="{active: index==ind}" @click="changeActive(index,item)">
+                {{item.dicName}}
+              </li>
+            </ul>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row class="customerMang">
+        <el-col :span="6">
+          <div class="grid-content bg-purple-dark">
+            <el-input placeholder="" icon="search" v-model="input2" @keyup.enter.native="handleIconClick" :on-icon-click="handleIconClick">
+            </el-input>
+          </div>
+        </el-col>
+        <el-col :span="10">
+          <div class="grid-content bg-purple-dark"></div>
+        </el-col>
+        <el-col :span="8" class="searchIpt">
+          <div class="grid-content bg-purple-dark">
+            <a href="/static/source/投行接口文档1.7.xlsx" download="出资统计表.xls">
+              <!-- <el-button class="searchIpt" type="danger" size="small">
                                 导出统计表
                             </el-button> -->
-                        </a>
-                    </div>
-                </el-col>
-            </el-row>
-            <el-table :data="projectInforTabData" stripe style="width: 100%">
-                <el-table-column fixed="left" prop="projectName" label="项目名称" width="200" align="center">
-                </el-table-column>
-                <el-table-column prop="projectType" label="项目类型" width="150" align="center">
-                </el-table-column>
-                <el-table-column prop="industry" label="所属行业" width="150" align="center">
-                </el-table-column>
-                <!-- <el-table-column prop="projectLeader" label="项目负责人" width="150" align="center">
+            </a>
+          </div>
+        </el-col>
+      </el-row>
+      <el-table :data="projectInforTabData" stripe style="width: 100%">
+        <el-table-column fixed="left" prop="projectName" label="项目名称" width="200" align="center">
+        </el-table-column>
+        <el-table-column prop="projectType" label="项目类型" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="industry" label="所属行业" width="150" align="center">
+        </el-table-column>
+        <!-- <el-table-column prop="projectLeader" label="项目负责人" width="150" align="center">
                 </el-table-column> -->
-                <el-table-column prop="payDate" label="投资时间" width="250" align="center">
-                </el-table-column>
-                <el-table-column prop="investAmount" label="投资金额(元)" width="200" align="center">
-                </el-table-column>
-                <el-table-column prop="newAppraisement" label="最新估值" width="150" align="center">
-                </el-table-column>
-                <el-table-column prop="floatProfit" label="最新浮盈" width="150" align="center">
-                </el-table-column>
-                <el-table-column prop="exitIncome" label="退出收益" width="150" align="center">
-                </el-table-column>
-                <el-table-column prop="incomeRatio" label="收益率(%)" width="150" align="center">
-                </el-table-column>
-                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资主体" width="200" align="center">
-                    <template scope="scope">
-                        <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.investmentSubject}}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资金额(元)" width="200" align="center">
-                    <template scope="scope">
-                        <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.investmentAmount}}</div>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="股权占比(%)" width="150" align="center">
-                    <template scope="scope">
-                        <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.stock}}</div>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div class="pagination">
-                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
-                </el-pagination>
-            </div>
-        </div>
-    </section>
+        <el-table-column label="投资时间" prop="payDate" width="250" align="center">
+          <!-- <template scope='scope'>
+            <div>{{scope.row.payDate}}</div>
+          </template> -->
+        </el-table-column>
+        <el-table-column prop="investAmount" label="投资金额(元)" width="200" align="center">
+        </el-table-column>
+        <el-table-column prop="newAppraisement" label="最新估值" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="floatProfit" label="最新浮盈" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="exitIncome" label="退出收益" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="incomeRatio" label="收益率(%)" width="150" align="center">
+        </el-table-column>
+        <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资主体" width="200" align="center">
+          <template scope="scope">
+            <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.investmentSubject}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="出资金额(元)" width="200" align="center">
+          <template scope="scope">
+            <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.investmentAmount}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="projectInfoStatisticsDetails" fixed="right" label="股权占比(%)" width="150" align="center">
+          <template scope="scope">
+            <div v-for="(item,index) in scope.row.projectInfoStatisticsDetails" :key="item.index">{{ item.stock}}</div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="pagination">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+        </el-pagination>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
+import "../../common/js/filter";
+import { formatNum } from "../../common/js/config";
 export default {
   computed: {
     user() {
@@ -101,7 +107,7 @@ export default {
       this.from = 1;
       this.to = this.projectInforTabData.length;
       this.altogether = this.projectInforTabData.length;
-    };
+    }
     // console.log(this.projectInforTabData.length);
     this.projectMessage("", this.input2);
     this.projectType();
@@ -152,6 +158,27 @@ export default {
           if (res.status == "200") {
             if (res.data.status == "200") {
               console.log(res.data.result);
+              res.data.result.list.map(item => {
+                if (item.investAmount == null || item.floatProfit == null || item.newAppraisement == null ) {
+                  item.investAmount = "";
+                  item.floatProfit = "";
+                  item.newAppraisement = "";
+                } else {
+                  item.investAmount = formatNum(String(item.investAmount));
+                  item.floatProfit = formatNum(String(item.floatProfit));
+                  item.newAppraisement = formatNum(String(item.newAppraisement));
+                }
+                item.projectInfoStatisticsDetails.map(ele => {
+                  if (ele.investmentAmount == null) {
+                    ele.investmentAmount = "";
+                  } else {
+                    ele.investmentAmount = formatNum(
+                      String(ele.investmentAmount)
+                    );
+                  }
+                });
+                // console.log(item.paidAmount)
+              });
               this.projectInforTabData = res.data.result.list;
               this.pages.pageNum = res.data.result.pageNum; //当前页码
               this.pages.total = res.data.result.total; //数据总数
@@ -230,6 +257,9 @@ section {
     }
     .industry-ul {
       > ul {
+        >span {
+          float: left;
+        }
         > li {
           float: left;
           margin: 0 10px;
