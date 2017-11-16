@@ -8,7 +8,7 @@ import loginCard from '../../components/loginCard.vue'
 
 const state = {
     TitleList: [],
-    userInfor: {}, //save user login infor
+    userInfor: {} || JSON.parse(sessionStorage.getItem('userInfor')), //save user login infor
     merchants: [], //save 组织列表
     menus: [],
     logoSrc: {
@@ -33,7 +33,8 @@ const state = {
     projectPermissions: false, //是否存在项目权限按钮
     fundPermissions: false, //是否存在基金权限按钮
     fund: [],
-    token: '' || JSON.parse(sessionStorage.getItem('userInfor')).token
+    token: '',
+    // token: '' || JSON.parse(sessionStorage.getItem('userInfor'))
 };
 
 const mutations = {
