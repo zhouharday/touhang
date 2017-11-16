@@ -26,17 +26,9 @@ var vm = new Vue({
     render: h => h(App)
 }).$mount('#app');
 // axios.defaults.withCredentials=true;
-
-// const token = localStorage.getItem('userInfor').token;
-// const userInfor = sessionStorage.getItem('userInfor') || {};
-// console.log(userInfor);
-// if (userInfor !== {}) {
     axios.interceptors.request.use(
         config => {
-            // alert(555);  
             config.headers = config.headers || {};
-            // console.log(store.state.login.token);
-            // let token = '' || sessionStorage.getItem('userInfor').token;
             if (store.state.login.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
                 config.headers.Authorization = store.state.login.token;
             };
@@ -45,11 +37,10 @@ var vm = new Vue({
         err => {
             return Promise.reject(err);
         });
-// }
 
 Vue.prototype.$http = axios;
 
 // Vue.prototype.$http = axios.create();
-// Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
-// Vue.prototype.$http.defaults.baseURL = 'http://sdwlyxgs.imwork.net:16380';
+Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
+Vue.prototype.$http.defaults.baseURL = 'http://sdwlyxgs.imwork.net:16380';
 // Vue.prototype.api = ''; //上线时 URL
