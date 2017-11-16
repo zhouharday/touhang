@@ -10,10 +10,10 @@
                 </el-input>
             </tableHeader>
         </div>
-        <el-table :data="myFund" border style="width: 100%">
+        <el-table :data="myFund" style="width: 100%">
             <el-table-column fixed prop="fundName" label="基金名称" width="150" align="center">
                 <template scope = "scope">
-                    <a @click="JumpOther(scope.row)">{{scope.row.fundName}}</a>
+                    <a style="color:#f05e5e" @click="JumpOther(scope.row)">{{scope.row.fundName}}</a>
                 </template>
             </el-table-column>
             <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
@@ -34,10 +34,9 @@
             </el-table-column>
             <el-table-column prop="fundStatus" label="状态" width="200" align="center">
             </el-table-column>
-
         </el-table>
-
-        <div class="pagination">
+         <!-- 分页 -->
+        <div class="pageStyle">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
             </el-pagination>
         </div>
@@ -196,8 +195,6 @@
                 this.myFund.forEach(function (item) {
                     item.createDate = item.createDate.substring(0,10)
                 })
-
-
                 this.page.pageNum = res.data.result.pageNum; //当前页码
                 this.page.total = res.data.result.total; //数据总数
                 this.page.pageSize = res.data.result.pageSize; //每页条数
@@ -218,7 +215,7 @@
 
 .fundLibrary {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     padding: 24px;
     background: @color-base;
     .addPadding {

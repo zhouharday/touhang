@@ -229,7 +229,8 @@ export default {
   width: 100%;
   padding: 24px;
   background: #fff;
-  min-height: 820px;
+  // min-height: 820px;
+  // min-height: 95%;
   .roleBtn,
   .limitBtn {
     margin-bottom: 15px;

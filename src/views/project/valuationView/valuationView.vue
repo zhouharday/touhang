@@ -13,15 +13,14 @@
             </el-col>
         </el-row>
         <!--项目table -->
-        <el-table :data="tableData" highlight-current-row @current-change="handleRowChange" style="width:100%" max-height="700" class="table-item" >
+        <el-table :data="tableData" highlight-current-row @current-change="handleRowChange" style="width:100%" max-height="700" class="table-item">
             <el-table-column prop="projectName" label="项目名称" align="center">
                 <template scope="scope">
                     <el-button type="text" style="color:#f05e5e" @click="viewHistory(scope.row.projectId)">{{ scope.row.projectName }}</el-button>
                 </template>
             </el-table-column>
             <el-table-column label="估值参数" align="center">
-                <template scope="scope">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}}  
-                {{ scope.row.appraisementParamer}} x {{scope.row.appraisementParamerTwo}} x {{scope.row.stockRatio}}%</template>
+                <template scope="scope">{{scope.row.arithmeticType | key2value(typeOptions, scope.row.arithmeticType)}} {{ scope.row.appraisementParamer}} x {{scope.row.appraisementParamerTwo}} x {{scope.row.stockRatio}}%</template>
             </el-table-column>
             <el-table-column prop="appraisementValue" label="估值（元）" align="center">
                 <template scope="scope">{{scope.row.appraisementValue | toMoney}}</template>
@@ -35,10 +34,10 @@
                 <template scope="scope">{{scope.row.appraisementStatus == '1' ? '已估值' : '未估值'}}</template>
             </el-table-column>
         </el-table>
-
-        <div class="pagination">
+        <!-- 分页 -->
+        <div class="pageStyle">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-                    </el-pagination>
+            </el-pagination>
         </div>
         <!-- 估值重置 dialog -->
         <div class="reset">
@@ -88,7 +87,7 @@ export default {
     data() {
         return {
             projectId: '',
-            appraisementStatus:'',
+            appraisementStatus: '',
             projectName: '',
             currentIndex: 0,
             resetDialog: false,
@@ -135,7 +134,7 @@ export default {
                 note1: '市现率',
                 note2: 'EDITDA'
             }],
-            historyData:[]
+            historyData: []
         }
     },
     created() {
@@ -155,7 +154,7 @@ export default {
             };
             getAppraisementList(params).then(resp => {
                 if (resp.data.status == '200') {
-                    let dataList = resp.data.result.list.forEach(function(item, index){
+                    let dataList = resp.data.result.list.forEach(function(item, index) {
                         item.editFlag = false;
                     });
                     this.tableData = resp.data.result.list || [];
@@ -170,7 +169,7 @@ export default {
                 console.log('getProjectValuation() exists error: ', e);
             });
         },
-        clickState(index, id){
+        clickState(index, id) {
             this.appraisementStatus = index == 0 ? '' : id;
             this.getDatas();
         },
@@ -191,14 +190,14 @@ export default {
             this.historyDialog = true;
             this.getHistory();
         },
-        getHistory(){
+        getHistory() {
             let params = {
                 projectId: this.projectId,
                 page: this.page2,
                 pageSize: this.pageSize2
             }
             getAppraisementRec(params).then(resp => {
-                console.log("历史数据"+JSON.stringify(resp.data));
+                console.log("历史数据" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.historyData = resp.data.result.list || [];
                     this.total2 = resp.data.result.total || 0;
@@ -220,16 +219,16 @@ export default {
             this.pageSize2 = pageSize;
             this.getHistory();
         },
-        handleRowChange(row){
-            if(row){
+        handleRowChange(row) {
+            if (row) {
                 this.currentId = row.id;
-            }else{
+            } else {
                 this.currentId = '';
             }
         },
         resetValue() { //估值重置 确定按钮的方法
             resetAppraisement(this.currentId).then(resp => {
-                console.log("估值重置 "+JSON.stringify(resp.data));
+                console.log("估值重置 " + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.getDatas();
                     this.resetDialog = false;
@@ -250,7 +249,7 @@ export default {
 <style lang="less" scoped>
 .valueView {
     width: 100%;
-    min-height: 100%;
+    // min-height: 100%;
     position: relative;
     font-size: 14px;
     padding: 20px 30px;

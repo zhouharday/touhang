@@ -39,8 +39,7 @@
                     <el-col :span="18">
                         <div class="f_right">权限</div>
                     </el-col>
-
-                    <div v-for="item in allData.permissions"  :key="item">
+                    <div v-for="item in allData.permissions" :key="item.index">
                         <el-col :span="24" style="border: 1px solid #dfe6ec;">
                         <el-col :span="6">
                             <div class="left">
@@ -69,7 +68,7 @@
                                 </div>
                                 <div v-if="!item.children "style=" margin-left: 15px">
                                     <el-checkbox-group v-model="clickMenu" @change="a">
-                                        <el-checkbox v-for="(text, index) of item.buttons"  :key="text"  :label="text.path" >{{text.permissionName}}</el-checkbox>
+                                        <el-checkbox v-for="(text, index) of item.buttons"  :key="text.index" :label="text.path" >{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
                                 </div>
                             </div>
@@ -221,7 +220,7 @@ export default {
     width: 100%;
     padding: 24px;
     background: #fff;
-    min-height: 820px;
+    // min-height: 820px;
     .roleBtn,
     .limitBtn {
         margin-bottom: 15px;

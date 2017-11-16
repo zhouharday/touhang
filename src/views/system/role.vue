@@ -8,7 +8,7 @@
                 </div>
                 <div class="roleContent">
                     <el-table :data="roleInfo" border style="width: 100%"   highlight-current-row @current-change="handleCurrentChange" >
-                        <el-table-column label="角色名称" prop="roleName" width="160" >
+                        <el-table-column label="角色名称" prop="roleName" width="160" align="center">
                             <template scope="scope">
                                 <span  v-if="!scope.row.editFlag">
                                     {{scope.row.roleName}}
@@ -18,12 +18,12 @@
                                 </span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="操作">
+                        <el-table-column label="操作" align="center">
                             <template scope="scope">
-                                <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"v-if="!scope.row.editFlag">
+                                <el-button size="mini" type="text" @click="handleEdit(scope.$index, scope.row)"v-if="!scope.row.editFlag">
                                     编辑
                                 </el-button>
-                                <el-button  size="mini" @click="handleEdit(scope.$index, scope.row)"v-if="scope.row.editFlag">
+                                <el-button  size="mini" type="text" @click="handleEdit(scope.$index, scope.row)"v-if="scope.row.editFlag">
                                     保存
                                 </el-button>
                                 <el-button size="mini" type="text" @click="handleDelete(scope.$index, scope.row)">
@@ -51,7 +51,7 @@
                                 <el-row>
                                     <el-col :span="24" >
                                         <!--<my-tree :model="treeData"></my-tree>-->
-                                        <div v-for="item in treeData" >
+                                        <div v-for="item in treeData" :key="item.index">
                                             <el-col :span="24" style="border: 1px solid #dfe6ec;">
                                                 <el-col :span="6" >
                                                     <div class="left">
@@ -64,7 +64,7 @@
                                                 <el-col :span="18">
                                                     <div  class="right" >
                                                         <el-col>
-                                                            <el-row :span = "18" v-for="nextItem in item.children" style="flex-direction: row; display: flex ;border-bottom: 1px solid #dfe6ec;padding-left: 10px">
+                                                            <el-row :span = "18" v-for="nextItem in item.children" :key="nextItem.index" style="flex-direction: row; display: flex ;border-bottom: 1px solid #dfe6ec;padding-left: 10px">
                                                                 <!--<el-col :span="8" style=" padding-left: 10px; border-right: 1px solid #dfe6ec;">-->
                                                                     <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
                                                                         <el-checkbox :label="nextItem.path" >{{nextItem.menuName}}</el-checkbox>

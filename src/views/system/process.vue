@@ -1,37 +1,42 @@
 <template>
-<div class="process">
-    <div class="searchBox">
-        <el-input placeholder="查询条件（标题、流程类别、申请人 、申请时间）" icon="search" v-model="input2" :on-icon-click="handleIconClick">
-        </el-input>
+    <div class="process">
+        <div class="searchBox">
+            <el-input placeholder="查询条件（标题、流程类别、申请人 、申请时间）" icon="search" v-model="input2" style="width:30%;" :on-icon-click="handleIconClick">
+            </el-input>
+        </div>
+        <div class="table">
+            <el-table :data="processData" style="width: 100%">
+                <el-table-column prop="title" label="标题" width="240" align="center">
+                </el-table-column>
+                <el-table-column prop="type" label="流程类别" align="center">
+                </el-table-column>
+                <el-table-column prop="applicant" label="申请人" align="center">
+                </el-table-column>
+                <el-table-column prop="startDate" label="申请时间" width="240" align="center">
+                </el-table-column>
+                <el-table-column prop="endDate" label="完成时间" width="240" align="center">
+                </el-table-column>
+                <el-table-column prop="state" label="状态" align="center">
+                </el-table-column>
+                <el-table-column prop="address" label="用时" align="center">
+                </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <!-- <div class="pageStyle">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div> -->
+            <!-- <el-row>
+                <el-col :span="24">
+                    <el-row>
+                        <el-col v-for="(item, index) of title">
+                                {{item.label}}
+                        </el-col>
+                    </el-row>
+                </el-col>
+            </el-row> -->
+        </div>
     </div>
-    <div class="table">
-        <el-table :data="processData" border style="width: 100%">
-            <el-table-column prop="title" label="标题" width="240">
-            </el-table-column>
-            <el-table-column prop="type" label="流程类别">
-            </el-table-column>
-            <el-table-column prop="applicant" label="申请人">
-            </el-table-column>
-            <el-table-column prop="startDate" label="申请时间" width="240">
-            </el-table-column>
-            <el-table-column prop="endDate" label="完成时间" width="240">
-            </el-table-column>
-            <el-table-column prop="state" label="状态">
-            </el-table-column>
-            <el-table-column prop="address" label="用时">
-            </el-table-column>
-        </el-table>
-        <!-- <el-row>
-            <el-col :span="24">
-                <el-row>
-                    <el-col v-for="(item, index) of title">
-                            {{item.label}}
-                    </el-col>
-                </el-row>
-            </el-col>
-        </el-row> -->
-    </div>
-</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -69,7 +74,7 @@ export default {
         _setSpan(arr) {
             const span = 24
             // console.log(Math.floor(span/arr.length))
-            return this.count = Math.floor(span/arr.length)
+            return this.count = Math.floor(span / arr.length)
         }
     },
     created() {
@@ -85,7 +90,8 @@ export default {
     .searchBox {
         width: 100%;
         height: 42px;
-        padding-bottom: 12px;
+        // padding-bottom: 12px;
+        margin-bottom: 10px;
     }
 }
 </style>
