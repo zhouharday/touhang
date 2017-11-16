@@ -34,7 +34,7 @@ const state = {
     fundPermissions: false, //是否存在基金权限按钮
     fund: [],
     token: '',
-    // token: '' || JSON.parse(sessionStorage.getItem('userInfor'))
+    // token: '' || JSON.parse(sessionStorage.getItem('userInfor')).token
 };
 
 const mutations = {
@@ -157,6 +157,9 @@ const mutations = {
                 console.log(error);
             })
     },
+    authToken(state, token){
+        state.token = token;
+    }
 };
 
 const actions = {
@@ -210,8 +213,10 @@ const actions = {
                 state.approvelType.isLogged = true;
                 // console.log(user);
                 commit('pushUserInfor', data.data.result);
+                commit('authToken', state.userInfor.token);
                 window.sessionStorage.setItem('userInfor', JSON.stringify(state.userInfor));
-                state.token = state.userInfor.token;
+                window.sessionStorage.setItem('token', JSON.stringify(state.userInfor.token));
+                // state.token = state.userInfor.token;
                 console.log(state.token);
                 // console.log(data.data);
                 if (data.data.result.userInfo.isMerchant >= '1') { //有组织

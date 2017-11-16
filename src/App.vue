@@ -8,8 +8,13 @@
 import Vuex from 'vuex';
 import store from './store';
 import axios from 'axios';
+import {mapState} from 'vuex';
 export default {
-    
+    computed: {
+        ...mapState({
+            token: state => store.state.login.token = JSON.parse(sessionStorage.getItem('userInfor')).token || ''
+        })
+    }
 }
 </script>
 
