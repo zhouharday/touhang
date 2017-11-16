@@ -265,8 +265,6 @@
                 <el-table-column label="状态" prop="warningStatus" align="center">
                     <template scope="scope">{{scope.row.warningStatus | key2value(resultOptions, scope.row.warningStatus)}}</template>
                 </el-table-column>
-                <el-table-column label="预警" prop="alarm" align="center">
-                </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getWarningDetail(scope.row.id, '2')">查看详情</el-button>
