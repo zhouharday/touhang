@@ -115,9 +115,11 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="合同附件">
-                            <span v-for="doc in contractForm1.documentInfo" :key="doc.index">
-                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                            </span>
+                            <div class="appendixBox">
+                                <p v-for="doc in contractForm1.documentInfo" :key="doc.index">
+                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                </p>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -179,9 +181,11 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="相关附件">
-                            <span v-for="doc in paidForm1.documentInfo" :key="doc.index">
-                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                            </span>
+                            <div class="appendixBox">
+                                <p v-for="doc in paidForm1.documentInfo" :key="doc.index">
+                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                </p>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -241,9 +245,11 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="相关附件">
-                            <span v-for="doc in sharingForm1.documentInfo" :key="doc.index">
-                                <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
-                            </span>
+                            <div class="appendixBox">
+                                <p v-for="doc in sharingForm1.documentInfo" :key="doc.index">
+                                    <a :href="doc.filePath" style="font-size:12px;" :download="doc.fileName">{{doc.fileName}}</a>
+                                </p>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -471,6 +477,20 @@ export default {
 .fileTable {
     width: 100%;
     height: 100%;
+}
+
+// 附件样式
+.appendixBox {
+    width: 100%;
+    min-height: 35px;
+    padding: 3px 10px;
+    background: #eef1f6;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    >p {
+        height: 20px;
+        line-height: 20px;
+    }
 }
 
 .table_title {

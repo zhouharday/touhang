@@ -357,9 +357,11 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="合同附件">
-                            <span v-for="item in contractDocument" :key="item.index">
-                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
-                            </span>
+                            <div class="appendixBox">
+                                <p v-for="item in contractDocument" :key="item.index">
+                                    <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                </p>
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -434,9 +436,11 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="合同附件" prop="contractAppendix">
-                            <span v-for="item in contractDocument" :key="item.index">
-                                <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
-                            </span>
+                            <div class="appendixBox">
+                                <p v-for="item in contractDocument" :key="item.index">
+                                    <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                </p>
+                            </div>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -1581,6 +1585,20 @@ export default {
 .fileTable {
     width: 100%;
     height: 100%;
+}
+
+// 附件样式
+.appendixBox {
+    width: 100%;
+    min-height: 35px;
+    padding: 3px 10px;
+    background: #eef1f6;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    >p {
+        height: 20px;
+        line-height: 20px;
+    }
 }
 
 .table_title {
