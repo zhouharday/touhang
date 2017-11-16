@@ -595,7 +595,7 @@
         width: 100%;
         padding: 24px;
         background: #fff;
-        min-height: 820px;
+        // min-height: 820px;
         .rightAdd_btn,
         .leftAdd_btn {
             padding-left: 15px;

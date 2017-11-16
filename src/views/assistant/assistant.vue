@@ -123,7 +123,8 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <div class="pagination">
+                <!-- 分页 -->
+                <div class="pageStyle">
                     <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="pages" :page-sizes="[10, 20, 30, 40]" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
                     </el-pagination>
                 </div>

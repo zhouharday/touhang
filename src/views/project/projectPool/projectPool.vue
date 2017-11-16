@@ -107,7 +107,8 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <div class="pagination">
+                <!-- 分页 -->
+                <div class="pageStyle">
                     <el-pagination @size-change="pageSizeChanged" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                     </el-pagination>
                 </div>

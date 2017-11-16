@@ -46,11 +46,11 @@
                     </template>
                 </el-table-column>
             </el-table>
-        </div>
-        <!-- 分页 -->
-        <div class="pagination">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
+            <!-- 分页 -->
+            <div class="pageStyle">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
         </div>
         <!-- 添加项目成员 对话框-->
         <div class="teamBox">
@@ -84,7 +84,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getDicChildrenII } from 'common/js/dictionary'
-import {changeDate} from 'common/js/config'
+import { changeDate } from 'common/js/config'
 import { getPres, addInsertProjectTeam } from 'api/projectPre';
 import { getProjectUsers } from 'api/projectSys';
 import { queryList } from 'api/fund'
@@ -95,8 +95,8 @@ const PROJECT_TYPE = 0; // 项目角色列表参数: 0，是项目角色 1是基
 export default {
     name: 'preProject',
     computed: mapGetters({
-        typeOptionsII:'getTypeOptionsII',       // 获取项目类型
-        stageOptionsII:'getStageOptionsII'      // 获取项目阶段
+        typeOptionsII: 'getTypeOptionsII',       // 获取项目类型
+        stageOptionsII: 'getStageOptionsII'      // 获取项目阶段
     }),
     data() {
         return {
@@ -111,12 +111,12 @@ export default {
             message: '是否确认从投资项目中删除该项目？',
             projectName: '',
             projectTypeId: '',
-            projectType:{
+            projectType: {
                 title: '项目类型：',
                 details: []
             },
             projectStageId: '',
-            projectStage:{
+            projectStage: {
                 title: '项目阶段：',
                 details: []
             },
@@ -153,7 +153,7 @@ export default {
     },
     watch: {
         '$route'(to, from) {
-            if(to.name == 'preProject'){
+            if (to.name == 'preProject') {
                 this.init();
             }
         }
@@ -228,7 +228,7 @@ export default {
         },
         ShowPreMessage(projectId, investProjectId, title, idx) {
             this.addTab('投资项目-' + title, '/home/preProjectMessage/' + projectId + '/' + investProjectId, 'preProjectMessage/' + projectId + '/' + investProjectId);
-            this.$router.push({name: 'preProjectMessage', params: { userId: projectId, investProjectId: investProjectId}});
+            this.$router.push({ name: 'preProjectMessage', params: { userId: projectId, investProjectId: investProjectId } });
         },
         addTab(th, url, name) {
             this.$store.commit({
@@ -268,16 +268,16 @@ export default {
                 console.log('获取项目角色列表 error: ', e);
             });
         },
-        goAddTeam(investId){
+        goAddTeam(investId) {
             this.teamForm.investProjectId = investId
-            this.modalAdd=true;
+            this.modalAdd = true;
         },
         confirmAdd(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.teamForm.createDate= changeDate(new Date());
+                    this.teamForm.createDate = changeDate(new Date());
                     addInsertProjectTeam(this.teamForm).then((res) => {
-                        if(res.status == '200') {
+                        if (res.status == '200') {
                             this.$Message.success(res.data.message || '添加成功！')
                             this.modalAdd = !this.modalAdd;
                             this.teamForm = {
@@ -307,8 +307,7 @@ export default {
 <style lang="less" scoped>
 .preContent {
     position: relative;
-    width: 100%;
-    min-height: 100%;
+    width: 100%; // min-height: 100%;
     font-size: 14px;
     padding: 20px 30px;
     background: #fff;
@@ -319,8 +318,7 @@ export default {
             display: flex;
             justify-content: flex-end;
             .importProject {
-                width: 115px;
-                height: 100%;
+                width: 115px; // height: 100%;
                 position: relative;
                 a {
                     position: absolute;

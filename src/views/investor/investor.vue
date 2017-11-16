@@ -1,27 +1,27 @@
 <template>
-<div class="investor">
-    <myFilter :chooseInfo="chooseInfo" @getIdInfo="investorFilter"></myFilter>
-    <tableHeader :data="dataTitle" :theme="theme" class="addPadding" @add="showModel">
-        <el-input placeholder="请输入搜索内容" icon="search" v-model="investorName" :on-icon-click="handleIconClick" :autofocus="true" style="width: 320px;" @click="investorSearch" @blur="investorSearch">
-        </el-input>
-    </tableHeader>
-    <div class="tables">
-        <el-table :data="investorData" v-loading="loading" style="width: 100%;">
-            <el-table-column label="投资者名称" align="center">
-                <template scope="scope">
+    <div class="investor">
+        <myFilter :chooseInfo="chooseInfo" @getIdInfo="investorFilter"></myFilter>
+        <tableHeader :data="dataTitle" :theme="theme" class="addPadding" @add="showModel">
+            <el-input placeholder="请输入搜索内容" icon="search" v-model="investorName" :on-icon-click="handleIconClick" :autofocus="true" style="width: 320px;" @click="investorSearch" @blur="investorSearch">
+            </el-input>
+        </tableHeader>
+        <div class="tables">
+            <el-table :data="investorData" v-loading="loading" style="width: 100%;">
+                <el-table-column label="投资者名称" align="center">
+                    <template scope="scope">
                         <div class="name" @click="handleRouter(scope.$index, scope.row)">
                             <span class="investorName">{{ scope.row.investorName }}</span>
                         </div>
                     </template>
-            </el-table-column>
-            <el-table-column label="类型" prop="investorType" align="center">
-            </el-table-column>
-            <el-table-column label="投资经理" prop="investmentManagerName" align="center">
-            </el-table-column>
-            <el-table-column label="累计投资额" prop="sumPaidAmount" align="center">
-            </el-table-column>
-            <el-table-column label="操作" align="center">
-                <template scope="scope">
+                </el-table-column>
+                <el-table-column label="类型" prop="investorType" align="center">
+                </el-table-column>
+                <el-table-column label="投资经理" prop="investmentManagerName" align="center">
+                </el-table-column>
+                <el-table-column label="累计投资额" prop="sumPaidAmount" align="center">
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template scope="scope">
                         <el-button type="text" @click="handleEdit(scope.$index, scope.row)">
                             签约
                         </el-button>
@@ -29,33 +29,34 @@
                             删除
                         </el-button>
                     </template>
-            </el-table-column>
-        </el-table>
-    </div>
-    <div class="page">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
-        </el-pagination>
-    </div>
-    <!-- 添加投资者 -->
-    <!-- :ref="addInvestor" -->
-    <el-dialog title="新增投资者" :visible.sync="modelInvestor" :close-on-click-modal="false">
-        <investor-form :investorForm="addInvestor" ref="addInvestor"></investor-form>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="modelInvestor = false">取 消</el-button>
-            <el-button type="danger" @click="confirmIncome(addInvestor)">确 定</el-button>
+                </el-table-column>
+            </el-table>
+            <!-- 分页 -->
+            <div class="pageStyle">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
+                </el-pagination>
+            </div>
         </div>
-    </el-dialog>
-    <!-- 确认删除模态框 -->
-    <delete-reminders :deleteReminders="deleteReminders" @del="comfirmDel" @cancel="comfirmCancel"></delete-reminders>
-    <!-- 签约模态框 -->
-    <Modal v-model="modelSign" title="签约" width="800">
-        <protocol-details :AgreementInfo="signInfo" ref="protocolInfo"></protocol-details>
-        <div slot="footer">
-            <Button type="text" @click="cancelSign">取消</Button>
-            <Button type="primary" @click="confirmSign">确认</Button>
-        </div>
-    </Modal>
-</div>
+        <!-- 添加投资者 -->
+        <!-- :ref="addInvestor" -->
+        <el-dialog title="新增投资者" :visible.sync="modelInvestor" :close-on-click-modal="false">
+            <investor-form :investorForm="addInvestor" ref="addInvestor"></investor-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="modelInvestor = false">取 消</el-button>
+                <el-button type="danger" @click="confirmIncome(addInvestor)">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 确认删除模态框 -->
+        <delete-reminders :deleteReminders="deleteReminders" @del="comfirmDel" @cancel="comfirmCancel"></delete-reminders>
+        <!-- 签约模态框 -->
+        <Modal v-model="modelSign" title="签约" width="800">
+            <protocol-details :AgreementInfo="signInfo" ref="protocolInfo"></protocol-details>
+            <div slot="footer">
+                <Button type="text" @click="cancelSign">取消</Button>
+                <Button type="primary" @click="confirmSign">确认</Button>
+            </div>
+        </Modal>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -305,7 +306,7 @@ export default {
 @import '../../common/styles/mixin.less';
 .investor {
     width: 100%;
-    min-height: 100%;
+    // min-height: 100%;
     padding: 24px;
     background: @color-base;
     position: relative;
@@ -314,7 +315,7 @@ export default {
         padding-bottom: 12px;
     }
     .tables {
-        padding-bottom: @height-large;
+        // padding-bottom: @height-large;
     }
     .page {
         width: 100%;

@@ -30,9 +30,9 @@
             </el-table>
         </div>
         <!-- table_content end-->
-        <div class="page">
+        <div class="pageStyle">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                           :current-page="currentPage" :page-sizes="[10, 20, 50]" :page-size="10"
+                           :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10"
                            layout="total, sizes, prev, pager, next, jumper" :total="totalPage">
             </el-pagination>
         </div>
@@ -305,7 +305,7 @@
     @import "../../common/styles/variable.less";
     .cooperative {
         width: 100%;
-        min-height: 100%;
+        // min-height: 100%;
         position: relative;
         padding: 24px;
         background: #fff;
@@ -314,7 +314,7 @@
         }
         .table_content {
             width: 100%;
-            padding-bottom: @height-large;
+            // padding-bottom: @height-large;
         }
         .page {
             width: 100%;
