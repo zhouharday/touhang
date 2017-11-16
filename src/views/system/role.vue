@@ -130,8 +130,8 @@
     import {saveRole} from 'api/system'
     import {authorization} from 'api/system'
     import {getUpdata} from "api/system"
-    import ElRow from "element-ui/packages/row/src/row";
-    import ElCol from "element-ui/packages/col/src/col";
+    // import ElRow from "element-ui/packages/row/src/row";
+    // import ElCol from "element-ui/packages/col/src/col";
 
 export default {
 
@@ -153,8 +153,8 @@ export default {
             }
         },
         components: {
-            ElCol,
-            ElRow,
+            // ElCol,
+            // ElRow,
             roleLimits,
             roleUser
         },
@@ -262,9 +262,6 @@ export default {
                     })
                 })
             }
-
-
-
         },
         created(){
             //角色列表
@@ -283,8 +280,6 @@ export default {
                     }
                 })
                 console.log(this.yunXiangMuId)
-
-
             })
         }
     }

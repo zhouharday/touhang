@@ -48,7 +48,6 @@
                                     <el-checkbox :label="item.path" >{{item.permissionName}}</el-checkbox>
                                 </el-checkbox-group>
                             </div>
-
                         </el-col>
                         <el-col :span="18">
                             <div class="right">
@@ -110,15 +109,12 @@ import { permissionlistByRoleId } from "api/system";
 import { permissionqueryList } from "api/system";
 import { getUpdataFund } from "api/system";
 import { roleBindPermission } from "api/system";
-import ElCol from "element-ui/packages/col/src/col";
-import { mapState } from "vuex";
-import { filtersPermissionCode_fund } from "common/js/config";
+
+// import ElCol from "element-ui/packages/col/src/col";
+// import { mapState } from "vuex";
+// import { filtersPermissionCode_fund } from "common/js/config";
 export default {
-  computed: {
-    ...mapState({
-      // str: state => state.login.fund
-    })
-  },
+  
   data() {
     return {
       clickMenu: [],
@@ -198,9 +194,9 @@ export default {
         });
       });
     },
-    isShowFundBtn(permissionCode) {
-      return filtersPermissionCode_fund(permissionCode);
-    }
+    // isShowFundBtn(permissionCode) {
+    //   return filtersPermissionCode_fund(permissionCode);
+    // }
   },
   created() {
     //获取角色列表
@@ -218,7 +214,7 @@ export default {
     });
   },
   components: {
-    ElCol,
+    // ElCol,
     deleteReminders
   }
 };

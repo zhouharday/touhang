@@ -39,7 +39,6 @@
                     <el-col :span="18">
                         <div class="f_right">权限</div>
                     </el-col>
-
                     <div v-for="item in allData.permissions" :key="item.index">
                         <el-col :span="24" style="border: 1px solid #dfe6ec;">
                         <el-col :span="6">
