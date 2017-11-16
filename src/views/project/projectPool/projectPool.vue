@@ -341,7 +341,7 @@ export default {
 <style lang="less" scoped>
 .poolContent {
     width: 100%;
-    min-height: 100%;
+    // min-height: 100%;
     position: relative;
     font-size: 14px;
     background: #fff;
