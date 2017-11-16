@@ -28,34 +28,23 @@ var vm = new Vue({
 }).$mount('#app');
 // axios.defaults.withCredentials=true;
 // http request 拦截器
-computed: {
-    mapState({
-        // token: state => store.state.login.token = JSON.parse(sessionStorage.getItem('token')) || ''
-    })
-};
 axios.interceptors.request.use(
     config => {
         config.headers = config.headers || {};
-        console.log('/////////********token*******///////////');
-        console.log(store.state.login.token);
-        console.log(JSON.parse(sessionStorage.getItem('token')));
+        // console.log('/////////********token*******///////////');
+        // console.log(store.state.login.token);
+        // console.log(JSON.parse(sessionStorage.getItem('token')));
         store.state.login.token = JSON.parse(sessionStorage.getItem('token')) || '';
-        // const auth = JSON.parse(sessionStorage.getItem('userInfor')).token;
-        // store.state.login.token = '' || JSON.parse(sessionStorage.getItem('userInfor')).token;
         if (store.state.login.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-            // alert(666);
             config.headers.Authorization = store.state.login.token;
         };
-        // if (store.state.login.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-        //     config.headers.Authorization = store.state.login.token;
-        // };
         return config;
     },
     err => {
         return Promise.reject(err);
     });
 // http response 拦截器
-axios.interceptors.response.use((response) =>{
+axios.interceptors.response.use((response) => {
     console.log(response);
     if (response.status == 1000) { //具体的判断token失效的参数
         // alert(555);
@@ -71,11 +60,13 @@ axios.interceptors.response.use((response) =>{
     } else {
         return response;
     }
-}, (error)=> {
+}, (error) => {
     return Promise.reject(error);
 });
 Vue.prototype.$http = axios;
+/**************************************************************/
 
+/***************************************************************/
 // Vue.prototype.$http = axios.create();
 // Vue.prototype.api = '/api'; //公司IP请求时 URL
 Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
