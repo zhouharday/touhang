@@ -15,7 +15,7 @@
                                 </span>
                                 <form>
                                     <el-button class="changeWidth" type="default" @click="getFile($event)">点击选择上传文件</el-button>
-                                    <input type="file" style="display:none" @change="changeImage($event)" ref="avatarInput">
+                                    <input type="file" style="display:none" @change="changeImage($event)" ref="avatarInput" id="avatarInput">
                                     <span>{{file.name}}</span>
                                 </form>
                                 <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过10M</div>
@@ -54,7 +54,9 @@ export default {
     },
     changeImage(e) {
       //上传文件input
-      this.file = event.target.files[0];
+      // this.file = event.target.files[0];
+      this.file = document.querySelector("#avatarInput").files[0];
+      console.log(this.file);
       this.onSubmit(e);
     },
     onSubmit(event) {
@@ -62,8 +64,8 @@ export default {
       let loadingInstance = Loading.service({ fullscreen: true });
       event.preventDefault();
       let formData = new FormData();
-      // formData.append('file', this.file);
-      formData.append("files", this.$refs.avatarInput.files[0]);
+      // formData.append("files", this.$refs.avatarInput.files[0]);
+      formData.append("files", document.querySelector("#avatarInput").files[0]);
       let config = {
         headers: {
           "Content-Type": "multipart/form-data"

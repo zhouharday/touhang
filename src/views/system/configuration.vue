@@ -8,7 +8,7 @@
                 <!--<el-button  type="danger"  style="width:80px"  @click="openProject">添加</el-button>-->
                 <!--</div>-->
                 <!--<b  style="padding-left:15px;">项目阶段配置</b>-->
-                <div  v-for="item  in  leftList">
+                <div  v-for="item in leftList" :key="item">
                     <div  class="project_config">
                         <div  class="menu_title">
                             <div  style="justify-content:  space-between;flex-direction:  row;display:  flex">
@@ -652,7 +652,8 @@
         }
         .dialog-footer {
             text-align: center;
-            margin-top: 40px;
+            // margin-top: 20px;
+            margin-bottom: 20px;
         }
         .dialogBtn_active {
             width: 150px;
