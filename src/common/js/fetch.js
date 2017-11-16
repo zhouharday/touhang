@@ -2,6 +2,7 @@ import Vue from 'vue'
 import axios from 'axios'
 import {Message} from 'iview'
 import {API_ROOT} from '../../config'
+import store from '../../store';
 
 const service = axios.create({
     timeout: 8000,
@@ -14,6 +15,11 @@ const service = axios.create({
 // 拦截器
 service.interceptors.request.use(config => {
     config.headers = config.headers || {};
+    store.state.login.token = JSON.parse(sessionStorage.getItem('token')) || '';
+    if (store.state.login.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
+        // alert(666);
+        config.headers.Authorization = store.state.login.token;
+    };
     // const token = localStorage.getItem('token')
     // if (token) {
     //     config.headers.Authorization = `Bearer ${token}`

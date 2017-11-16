@@ -58,7 +58,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use((response) =>{
     console.log(response);
     if (response.status == 1000) { //具体的判断token失效的参数
-        alert(555);
+        // alert(555);
         store.state.login.token = '';
         this.delCook();
         sessionStorage.clear();
@@ -77,7 +77,7 @@ axios.interceptors.response.use((response) =>{
 Vue.prototype.$http = axios;
 
 // Vue.prototype.$http = axios.create();
-Vue.prototype.api = '/api'; //公司IP请求时 URL
-// Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
-// Vue.prototype.$http.defaults.baseURL = 'http://sdwlyxgs.imwork.net:16380';
+// Vue.prototype.api = '/api'; //公司IP请求时 URL
+Vue.prototype.api = 'http://sdwlyxgs.imwork.net:16380'; //外网请求时 URL
+Vue.prototype.$http.defaults.baseURL = 'http://sdwlyxgs.imwork.net:16380';
 // Vue.prototype.api = ''; //上线时 URL
