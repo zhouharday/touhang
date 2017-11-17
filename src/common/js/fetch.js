@@ -15,7 +15,7 @@ const service = axios.create({
 // 拦截器
 service.interceptors.request.use(config => {
     config.headers = config.headers || {};
-    const token = JSON.parse(sessionStorage.getItem('userInfo')).token
+    const token = JSON.parse(sessionStorage.getItem('token'))
     if (token) {
         config.headers.Authorization = `${token}`
     }
