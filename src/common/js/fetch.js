@@ -15,18 +15,10 @@ const service = axios.create({
 // 拦截器
 service.interceptors.request.use(config => {
     config.headers = config.headers || {};
-<<<<<<< HEAD
     const token = JSON.parse(sessionStorage.getItem('userInfo')).token
     if (token) {
         config.headers.Authorization = `${token}`
     }
-=======
-    store.state.login.token = JSON.parse(sessionStorage.getItem('token')) || '';
-    if (store.state.login.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
-        config.headers.Authorization = store.state.login.token;
-    };
- 
->>>>>>> 9fbf411de42cfa51d71bc7eceaf4df4a2fbbf440
     return config
 }, error => {
     return Promise.reject(error)
