@@ -83,12 +83,11 @@
                 <el-input :disabled="true" v-model="addTaskForm1.createDate" class="el_input" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
-
             <el-col :span="12">
               <el-form-item prop="endTime" label="完成时间" :label-width="formLabelWidth">
                 <!-- <el-date-picker :picker-options="pickerOptions0" @change="getDateValue" v-model="addTaskForm1.endTime" type="datetime" auto-complete="off" placeholder="选择日期时间">
                 </el-date-picker> -->
-                <el-date-picker type="date" v-model="addTaskForm1.endTime" style="width:100%">
+                <el-date-picker type="date" v-model="addTaskForm1.endTime" @change="getDateValue" style="width:100%">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -543,10 +542,10 @@ export default {
           { required: true, message: "请输入开始时间", trigger: "blur" }
           // { min: 1, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
         ],
-        endTime: [
-          { required: true, message: "请输入完成时间", trigger: "blur" }
-          // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
-        ],
+        // endTime: [
+        //   { required: true, message: "请输入完成时间", trigger: "blur" }
+        //   // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
+        // ],
         receiveUserName: [
           { required: true, message: "请输入接收人", trigger: "blur" }
           // { min: 3, max: 30, message: '长度在 3 到 30 个字符', trigger: 'blur' }
@@ -1079,7 +1078,6 @@ export default {
     getDateValue(val) {
       //获取完成时间的值
       // console.log(val);
-      alert();
       this.addTaskForm1.endTime = val;
       return val;
     },
