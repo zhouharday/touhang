@@ -27,6 +27,7 @@ var vm = new Vue({
 // axios.defaults.withCredentials=true;
 axios.interceptors.request.use(config => {
     config.headers = config.headers || {};
+    store.state.login.token = JSON.parse(sessionStorage.getItem('token')) || '';
     if (store.state.login.token) { // 判断是否存在token，如果存在的话，则每个http header都加上token
         config.headers.Authorization = store.state.login.token;
     };
@@ -34,6 +35,26 @@ axios.interceptors.request.use(config => {
 }, err => {
     return Promise.reject(err);
 });
+axios.interceptors.response.use((response) => {
+    console.log(response);
+    if (response.status == 1000) { //具体的判断token失效的参数
+        // alert(555);
+        store.state.login.token = '';
+        this.delCook();
+        sessionStorage.clear();
+        localStorage.clear();
+        let href = location.href;
+        let index = href.indexOf('#');
+        let url = href.substr(0, index);
+        window.location.href = url + '#/login'; //需求方要求一旦出错立即跳转登录，所以采取这种侵入式的手段。
+        store.state.login.loading = false;
+    } else {
+        return response;
+    }
+}, (error) => {
+    return Promise.reject(error);
+});
+
 
 Vue.prototype.$http = axios;
 /**************************************************************/
