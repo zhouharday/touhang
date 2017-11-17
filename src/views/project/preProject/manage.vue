@@ -587,7 +587,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="分红金额（元）" prop="contractAmount">
+                        <el-form-item label="分红金额（元）" prop="shareAmount">
                             <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
                         </el-form-item>
                     </el-col>
@@ -608,25 +608,26 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-            </el-form>
-            <div class="table_title">
-                <div class="left" style="width:20.3%">
-                    <span class="desc">{{ table_title }}</span>
+                <div class="table_title">
+                    <div class="left" style="width:20.3%">
+                        <span class="desc">{{ table_title }}</span>
+                    </div>
                 </div>
-            </div>
-            <el-table :data="fundData3" border style="width: 100%" align="center">
-                <el-table-column label="基金名称" prop="fundName" align="center">
-                </el-table-column>
-                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                </el-table-column>
-                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                </el-table-column>
-                <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
-                    <template scope="scope">
-                        <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
-                    </template>
-                </el-table-column>
-            </el-table>
+                <el-table :data="fundData3" border style="width: 100%" align="center">
+                    <el-table-column label="基金名称" prop="fundName" align="center">
+                    </el-table-column>
+                    <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                    </el-table-column>
+                    <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                    </el-table-column>
+                    <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                        <template scope="scope">
+                            <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum"></el-input>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form>
+
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
                 <el-button type="danger" @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
@@ -779,11 +780,9 @@ export default {
                     { required: true, message: '请选择支付日期', trigger: 'change' }
                 ]
             },
-            paidDetailRule: {
-                payAmount: [
-                    { type: 'number', message: '支付金额必须是数字', trigger: 'change' }
-                ]
-            },
+            amountRule:[
+                { type: 'number', message: '金额必须是数字', trigger: 'blur, change' }
+            ],
             paidData: [],
             _headerInfo_paid: {
                 desc: '投资支付',

@@ -159,9 +159,8 @@ export default {
                         item.exitAmount = parseFloat((parseFloat(item.exitAmount) || 0.0).toFixed(2));
                         console.log(typeof(item.exitAmount));
                     });
-                    this.outingData2 = exitList;
                     this.outingForm.outingData2 = exitList;
-                    console.log(this.outingData2);
+                    this.sumExit();
                 }
             }).catch(e => {
                 console.log('获取退出单 error: ', e);
@@ -183,11 +182,11 @@ export default {
                     // this.outingForm.documentInfo = this.documentInfo;
                     let data = {
                         projectExit: this.outingForm,
-                        projectExitList: this.outingData2
+                        projectExitList: this.outingForm.outingData2
                     };
 
                     // console.log('保存退出单: ' + JSON.stringify(data));
-                    saveExit(this.outingForm, this.outingData2).then(resp => {
+                    saveExit(this.outingForm, this.outingForm.outingData2).then(resp => {
                         if (resp.data.status == '200') {
                             // this.getExitDetail();
                             this.controlEdit = true;
@@ -202,10 +201,11 @@ export default {
         },
         sumExit() {
             let sum = 0.0;
-            for (let i = 0; i < this.outingData2.length; i++) {
-                sum += parseFloat(this.outingData2[i].exitAmount );
+            for (let i = 0; i < this.outingForm.outingData2.length; i++) {
+                sum += parseFloat(this.outingForm.outingData2[i].exitAmount );
             }
-            this.outingForm.exitAmount = sum;
+            // this.outingForm.exitAmount = sum;
+            this.$set(this.$data.outingForm, 'exitAmount', sum);
         },
         setExitDate(val) {
             this.$set(this.$data.outingForm, 'exitDate', '' + val);
