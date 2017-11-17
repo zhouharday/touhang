@@ -9,10 +9,10 @@
             </el-input>
         </tableHeader>
     </div>
-    <el-table :data="investorData" border style="width: 100%">
+    <el-table :data="investorData" style="width: 100%">
         <el-table-column prop="investorName" label="投资者名称" align="center">
             <template scope = "scope">
-                <a @click="JumpOther(scope.row)">{{scope.row.investorName}}</a>
+                <a style="color:#f05e5e" @click="JumpOther(scope.row)">{{scope.row.investorName}}</a>
             </template>
         </el-table-column>
         <el-table-column prop="investorType" label="类型" align="center">
@@ -22,8 +22,8 @@
         <el-table-column prop="sumPaidAmount" label="累计投资额" align="center">
         </el-table-column>
     </el-table>
-
-    <div class="pagination">
+    <!-- 分页 -->
+    <div class="pageStyle">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
         </el-pagination>
     </div>
@@ -143,12 +143,11 @@ export default {
 @import '../../common/styles/variable.less';
 .investorLibrary {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     padding: 24px;
     background: @color-base;
     .header {
         padding: 12px 0 0;
-
         .addPadding {
             padding-bottom: 12px;
         }

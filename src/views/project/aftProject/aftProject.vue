@@ -18,7 +18,7 @@
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="mananger" label="项目创建人" align="center">
-                </el-table-column> -->
+                    </el-table-column> -->
                 <el-table-column prop="industry" label="所属行业" align="center">
                 </el-table-column>
                 <el-table-column prop="projectType" label="项目类型" align="center">
@@ -32,11 +32,11 @@
                 <el-table-column prop="warnStatus" label="状态" align="center">
                 </el-table-column>
             </el-table>
-        </div>
-        <!-- 分页 -->
-        <div class="pagination">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
+            <!-- 分页 -->
+            <div class="pageStyle">
+                <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
         </div>
     </section>
 </template>
@@ -49,7 +49,7 @@ import 'common/js/filter'
 import { getAfters } from 'api/projectAfter';
 export default {
     computed: mapGetters({
-        typeOptionsII:'getTypeOptionsII',       // 获取项目类型
+        typeOptionsII: 'getTypeOptionsII',       // 获取项目类型
     }),
     data() {
         return {
@@ -59,14 +59,14 @@ export default {
             projectName: '',
             currentIndex: 0,
             projectTypeId: '',
-            projectType:{
+            projectType: {
                 title: '项目类型：',
                 details: []
             },
             tableData: []
         }
     },
-    created() {        
+    created() {
         this.$store.dispatch('getTypeOptionsII').then(() => {
             this.projectType.details = this.typeOptionsII
         });
@@ -74,8 +74,8 @@ export default {
     },
     watch: {
         '$route'(to, from) {
-            if(to.name == '')
-            this.init();
+            if (to.name == '')
+                this.init();
         }
     },
     methods: {
@@ -157,12 +157,13 @@ export default {
 <style lang="less" scoped>
 .aftProject {
     width: 100%;
-    min-height: 100%;
+    // min-height: 100%;
     position: relative;
     font-size: 14px;
     padding: 20px 30px;
     background: #fff;
 }
+
 .search-box {
     margin: 20px 0;
 }
@@ -171,6 +172,7 @@ export default {
     color: #F05E5E;
     border-bottom: 1px solid #F05E5E;
 }
+
 .page {
     width: 100%;
     padding: 15px 30px;

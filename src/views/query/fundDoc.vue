@@ -35,7 +35,7 @@
                             <span>操作</span>
                         </div>
                     </div>
-                    <div v-for="item in dataArr">
+                    <div v-for="item in dataArr" :key="item.index">
                         <el-table :data="item.dataDocumentResult" border style="width: 100%" align="center">
                             <el-table-column :label=item.title prop="allocationDocumentName" align="center">
                             </el-table-column>

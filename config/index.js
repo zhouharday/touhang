@@ -32,9 +32,16 @@ module.exports = {
                 // target: 'http://192.168.0.198:9091',
                 // target: 'http://18f46963j4.iok.la',
                 // target:'http://192.168.0.118:9091',// 文军凡IP
+<<<<<<< HEAD
                 // target: 'http://192.168.0.101:9091', // 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
                 target:'http://sdwlyxgs.imwork.net:16380',
+=======
+                target: 'http://192.168.0.118:9091', // 文格阳IP
+                // target: 'http://192.168.0.101:9091', // 蔡永亮 IP
+                // target:'http://100.64.33.181:9091',
+                // target: 'http://sdwlyxgs.imwork.net:16380',
+>>>>>>> 9fbf411de42cfa51d71bc7eceaf4df4a2fbbf440
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: {

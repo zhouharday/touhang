@@ -2,33 +2,32 @@
     <div class="proLibrary">
         <myFilter :chooseInfo="chooseInfo" @getIdInfo = "changeList"></myFilter>
         <div class="title">
-
             <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
                 <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
                 </el-input>
             </tableHeader>
         </div>
-        <el-table :data="proLibrary" border style="width: 100%">
+        <el-table :data="proLibrary" style="width: 100%">
             <el-table-column prop="projectName" label="项目名称">
                 <template scope = "scope">
-                    <a @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
+                    <a style="color:#f05e5e" @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="createUserName" label="项目创建人">
+            <el-table-column prop="createUserName" label="项目创建人" align="center">
             </el-table-column>
-            <el-table-column prop="industryId" label="所属行业">
+            <el-table-column prop="industryId" label="所属行业" align="center">
             </el-table-column>
-            <el-table-column prop="projectTypeId" label="项目类型">
+            <el-table-column prop="projectTypeId" label="项目类型" align="center">
             </el-table-column>
-            <el-table-column prop="projectStage" label="项目阶段">
+            <el-table-column prop="projectStage" label="项目阶段" align="center">
             </el-table-column>
-            <el-table-column prop="payDate" label="投资日期">
+            <el-table-column prop="payDate" label="投资日期" align="center">
             </el-table-column>
-            <el-table-column prop="paySumAmount" label="投资金额（元）">
+            <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
             </el-table-column>
         </el-table>
-
-        <div class="pagination">
+        <!-- 分页 -->
+        <div class="pageStyle">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
         </el-pagination>
         </div>
@@ -175,7 +174,7 @@
     @import '../../common/styles/variable.less';
     .proLibrary {
         width: 100%;
-        height: 100%;
+        // height: 100%;
         padding: 24px;
         background: @color-base;
         .addPadding {

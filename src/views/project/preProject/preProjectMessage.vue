@@ -1,92 +1,94 @@
 <template>
-    <div class="preProjectMessage">
-        <div class="title">
-            <div class="left">
-                <span class="desc">{{title}}</span>
-            </div>
-            <div class="right">
-                <el-button type="danger" :disabled="nextStageDisabled" @click="changeStep">下一阶段</el-button>
-                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
-                </el-button>
-            </div>
-        </div>
-        <div class="step">
-            <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
-                                                             'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
-                                                             'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
-                                                             'step_third':index==(stepLists.length-1)}">
-                <span>{{item.stageName}}</span>
-            </div>
-        </div>
-        <div class="picture">
-            <div class="img_wrapper">
-                <img src="/static/img/double.png">
-            </div>
-            <!-- 小双助手 -->
-            <div class="prompt_message">
-                <span class="prompt">{{prompt}}</span>
-                <div class="item_wrapper">
-                    <div class="item" v-for="(item,index) in module" :key="item.index">
-                        <span class="count">{{index +1}}</span>
-                        <p class="desc" v-if="item.type == 1">{{item.title}}</p>
-                        <p class="desc" v-if="item.type == 2">{{item.title}}</p>
-                        <p class="desc" v-if="item.type == 3">{{item.title}}</p>
-                        <span v-if="item.status == 1" class="state">已完成</span>
-                        <!-- 立即上传 -->
-                        <div v-if="item.type == 1 && item.status == 0" style="float: left;position:relative;">
-                            <span @click="showModalUpload(index, item.id, item.title)"
-                                  v-if="item.status == '0'" style="color:#f05e5e;cursor: pointer;">
-                                  立即上传
-                            </span>
-                        </div>
-                        <!-- 发起申请 -->
-                        <el-button v-if="item.type == 2" type="text" class="state" @click="openDialog(1, item.id)">立即审批</el-button>
-                        <!-- 查看进度 -->
-                        <el-button v-if="item.type == 3" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tabs">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
-                    <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                    </detail-form>
-                    <table-form :tabs="tabs" :companyForm="companyForm" :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
-                    <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :proUsers="proUsers" :proRoles="proRoles">
-                    </team-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
-                    <record-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></record-form>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-                    <approve-table :tabs="tabs" :isInTeam="isInTeam" :projectId="projectId"></approve-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
-                    <file-table :tabs="tabs" :isInTeam="isInTeam" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
-                    <risk-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId" :proUsers="proUsers"></risk-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
-                    <manage-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></manage-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('GL-XMTC')" v-if="isExit" label="退出" name="outing" class="tab_list">
-                    <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
-        <!-- 中止确认弹框 -->
-        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
-        </delete-reminders>
-        <my-upload :modalUpload="modalUpload" :title="uploadTitle" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
-        <!-- 发起申请 对话框-->
-        <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
-        <!-- 查看进度 对话框 -->
-        <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock="isBlock" :documentInfo="documentInfo" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval" @closeShowModal="closeShowModal"></progress-forms>
+  <div class="preProjectMessage">
+    <div class="title">
+      <div class="left">
+        <span class="desc">{{title}}</span>
+      </div>
+      <div class="right">
+        <el-button type="danger" :disabled="nextStageDisabled" @click="changeStep">下一阶段</el-button>
+        <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="deleteReminders=true">中止
+        </el-button>
+      </div>
     </div>
+    <div class="step">
+      <div v-for="(item,index) in stepLists" :key="item.index" class="step_span" :class="{'step_span_change  step_first step_first_change':(index==0)&&(item.id == stageId),
+                                                               'step_first':index==0 ,'step_span_change step_second step_second_change':(index!=0)&&(index!=stepLists.length-1)&&(item.id == stageId),
+                                                               'step_second':(index!=0)&&(index!=stepLists.length-1),'step_span_change step_third step_third_change':index==(stepLists.length-1)&&(item.id == stageId),
+                                                               'step_third':index==(stepLists.length-1)}">
+        <span>{{item.stageName}}</span>
+      </div>
+    </div>
+    <div class="picture">
+      <div class="img_wrapper">
+        <img src="/static/img/double.png">
+      </div>
+      <!-- 小双助手 -->
+      <div class="prompt_message">
+        <span class="prompt">{{prompt}}</span>
+        <div class="item_wrapper">
+          <div class="item" v-for="(item,index) in module" :key="item.index">
+            <span class="count">{{index +1}}</span>
+            <p class="desc" v-if="item.type == 1">{{item.title}}</p>
+            <p class="desc" v-if="item.type == 2">{{item.title}}</p>
+            <p class="desc" v-if="item.type == 3">{{item.title}}</p>
+            <span v-if="item.status == 1" class="state">已完成</span>
+            <!-- 立即上传 -->
+            <div v-if="item.type == 1 && item.status == 0" style="float: left;position:relative;">
+              <span @click="showModalUpload(index, item.id, item.title)" v-if="item.status == '0'" style="color:#f05e5e;cursor: pointer;">
+                立即上传
+              </span>
+            </div>
+            <!-- 发起申请 -->
+            <el-button v-if="item.type == 2" type="text" class="state" @click="openDialog(1, item.id)">立即审批</el-button>
+            <!-- 查看进度 -->
+            <el-button v-if="item.type == 3" type="text" class="state" @click="openDialog(2, item.id)">查看进度</el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tabs">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
+          <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+          </detail-form>
+          <table-form :tabs="tabs" :companyForm="companyForm" :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
+          <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :proUsers="proUsers" :proRoles="proRoles">
+          </team-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
+          <record-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></record-form>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
+          <approve-table :tabs="tabs" :isInTeam="isInTeam" :projectId="projectId"></approve-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
+          <file-table :tabs="tabs" :isInTeam="isInTeam" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
+          <risk-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId" :proUsers="proUsers"></risk-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
+          <manage-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></manage-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('GL-XMTC')" v-if="isExit" label="退出" name="outing" class="tab_list">
+          <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
+        </el-tab-pane>
+        <el-tab-pane label="日志" name="log" class="tab_list">
+            <log-table></log-table>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <!-- 中止确认弹框 -->
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
+    </delete-reminders>
+    <my-upload :modalUpload="modalUpload" :title="uploadTitle" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
+    <!-- 发起申请 对话框-->
+    <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
+    <!-- 查看进度 对话框 -->
+    <progress-forms :progressModal="progressModal" :dialogTitle="dialogTitle" :isBlock="isBlock" :documentInfo="documentInfo" :table2="progressTable" :approvalForm="approvalForm" :auditorOptions="auditorOptions" @submit="submitApproval" @cancle="cancleApproval" @closeShowModal="closeShowModal"></progress-forms>
+  </div>
 </template>
 
 <script type="text/javascript">
@@ -105,6 +107,7 @@ import MyUpload from 'components/upload'
 import deleteReminders from "components/deleteReminders";
 import applyForms from "components/applyDialog";
 import progressForms from "components/progressDialog";
+import logTable from "components/log";
 import { checkProjectAuth } from "common/js/config";
 import {
   getPreDetail,
@@ -247,7 +250,8 @@ export default {
     outingForm,
     applyForms,
     progressForms,
-    MyUpload
+    MyUpload,
+    logTable
   },
   created() {
     this.investProjectId = this.$route.params.investProjectId;
@@ -559,19 +563,19 @@ export default {
       });
     },
     showModalUpload(index, id, title) { // 显示上传模态框
-        this.uploadInfo.fileId = id;
-        this.uploadInfo.stageId = this.stageId;
-        this.uploadInfo.uploadTypeId = this.projectId;
-        this.uploadTitle = title;
-        this.modalUpload = true;
+      this.uploadInfo.fileId = id;
+      this.uploadInfo.stageId = this.stageId;
+      this.uploadInfo.uploadTypeId = this.projectId;
+      this.uploadTitle = title;
+      this.modalUpload = true;
     },
     cancelModal() { //隐藏上传模态框
-        this.modalUpload = false;
+      this.modalUpload = false;
     },
     uploadSuccess() { // 上传成功隐藏模态框
-        this.getStageUploadDocument();
-        this.modalUpload = false;
-        this.uploaded = true;
+      this.getStageUploadDocument();
+      this.modalUpload = false;
+      this.uploaded = true;
     },
     // 发起申请表单
     submitApply(applyForm) {
