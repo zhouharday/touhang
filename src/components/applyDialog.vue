@@ -3,7 +3,7 @@
     <div class="applyBox">
         <el-dialog title="发起申请" :visible.sync="applyModal">
             <i class="bottomLine"></i>
-            <el-form :model="applyForm" ref="applyForm" label-width="60px">
+            <el-form :model="applyForm" :rules="applyRule" ref="applyForm" label-width="60px">
                 <el-row>
                     <el-col :span="13">
                         <el-form-item label="标题" prop="approveTitle">
@@ -47,10 +47,14 @@ export default {
             type: Array
         }
     },
-    watch: {
-        'applyModal':function (to,from){
-            console.log(123);
-        }
+    data(){
+        return {
+            applyRule:{
+                approveUserId: [
+                    { required: true, message: '请选择审批人' }
+                ]
+            }
+        };
     },
     methods: {
         submitHandler(event) {
