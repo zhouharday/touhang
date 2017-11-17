@@ -434,7 +434,8 @@ export default {
         //     }
         // },
         stopSuppression() {
-            this.message_title = '是否确认中止该基金？'
+            this.message_title = '确认中止'
+            this.message = '是否确认中止该基金？'
             this.deleteReminders = true
         },
         confirmSuppression() { // 确认中止
