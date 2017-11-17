@@ -76,7 +76,7 @@
           <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-            <log-table></log-table>
+          <log-table></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -103,7 +103,7 @@ import riskTable from "./risk";
 import manageTable from "./manage";
 import outingForm from "./outing";
 import Loading from "element-ui";
-import MyUpload from 'components/upload'
+import MyUpload from "components/upload";
 import deleteReminders from "components/deleteReminders";
 import applyForms from "components/applyDialog";
 import progressForms from "components/progressDialog";
@@ -134,11 +134,11 @@ export default {
       file: "",
       uploadInfo: {
         file: null,
-        stageId: '',
-        uploadTypeId: '',
-        fileId: '',
+        stageId: "",
+        uploadTypeId: "",
+        fileId: "",
         type: 3,
-        userId: JSON.parse(sessionStorage.getItem('userInfor')).id
+        userId: JSON.parse(sessionStorage.getItem("userInfor")).id
       },
       modalUpload: false,
       stepLists: [],
@@ -386,7 +386,7 @@ export default {
             // console.log('项目详情-企业信息为空 result: '+JSON.stringify(resp.data.result));
             console.log("项目详情-企业信息为空");
             this.companyForm = {
-              registerDate: '',
+              registerDate: "",
               flag: true
             };
           } else {
@@ -562,17 +562,20 @@ export default {
         name: name
       });
     },
-    showModalUpload(index, id, title) { // 显示上传模态框
+    showModalUpload(index, id, title) {
+      // 显示上传模态框
       this.uploadInfo.fileId = id;
       this.uploadInfo.stageId = this.stageId;
       this.uploadInfo.uploadTypeId = this.projectId;
       this.uploadTitle = title;
       this.modalUpload = true;
     },
-    cancelModal() { //隐藏上传模态框
+    cancelModal() {
+      //隐藏上传模态框
       this.modalUpload = false;
     },
-    uploadSuccess() { // 上传成功隐藏模态框
+    uploadSuccess() {
+      // 上传成功隐藏模态框
       this.getStageUploadDocument();
       this.modalUpload = false;
       this.uploaded = true;

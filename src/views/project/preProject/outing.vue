@@ -214,7 +214,7 @@ export default {
     padding: 20px 10px;
     border: 2px solid #dfe6ec;
     border-radius: 10px;
-    display: flex;
+    // display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
