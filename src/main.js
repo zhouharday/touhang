@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import 'babel-polyfill';
-import {Promise} from 'es6-promise-polyfill';
+import {
+    Promise
+} from 'es6-promise-polyfill';
 import Vuex from 'vuex';
 import iView from 'iview';
 import md5 from 'js-md5';
