@@ -1,6 +1,4 @@
-import {
-    Notification
-} from 'element-ui'
+import {Notification} from 'element-ui'
 // import request from 'superagent'
 import * as types from '../mutations-type'
 import loginBox from '../../components/loginBox.vue'
