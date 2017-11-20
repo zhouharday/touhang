@@ -1,91 +1,94 @@
 <template>
-    <div class="aftProjectMessage">
-        <div class="title">
-            <div class="left">
-                <span class="desc">{{title}}</span>
-            </div>
-        </div>
-        <div class="firstLayer">
-            <el-row :gutter="40">
-                <el-col :span="12">
-                    <div class="tableTitle">出资主体</div>
-                    <el-table :data="fundTable" style="width:100%;overflow:hidden;" :row-class-name="tableRowClassName">
-                        <el-table-column prop="fundName" label="基金名称" align="center">
-                        </el-table-column>
-                        <el-table-column prop="investAmount" label="投资金额（元）" align="center">
-                            <template scope="scope">{{scope.row.investAmount | toMoney}}</template>
-                        </el-table-column>
-                        <el-table-column prop="stockRatio" label="股权占比（%）" align="center">
-                        </el-table-column>
-                        <el-table-column prop="sumPayAmount" label="支付金额（元）" align="center">
-                            <template scope="scope">{{scope.row.sumPayAmount | toMoney}}</template>
-                        </el-table-column>
-                    </el-table>
-                </el-col>
-                <el-col :span="12">
-                    <my-echarts class="chart" :opinion="opinion" :opinionData="opinionData"></my-echarts>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="secondLayer">
-            <el-row :gutter="40">
-                <el-col :span="12">
-                    <table-show :data="tableData"></table-show>
-                </el-col>
-                <el-col :span="12">
-                    <div class="prompt_message">
-                        <span class="prompt">{{prompt}}</span>
-                        <div class="item_wrapper">
-                            <div class="item" v-for="(item, index) in message" :key="item.index">
-                                <span class="count">{{index + 1}}</span>
-                                <p class="desc">{{item.message}}</p>
-                                <!-- <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="modalAlarm=true">
-                                        {{item.info}}
-                                    </el-button> -->
-                            </div>
-                        </div>
-                        <Page class="page" show-sizer="true" :page-size="pageSize" :current="page" :total="total" simple @on-change="getWarning"></Page>
-                        <div class="img_wrapper">
-                            <img src="/static/img/double-02.png">
-                        </div>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="tabs">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
-                    <detail-form :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
-                    </detail-form>
-                    <table-form :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-                    <approve-table :isInTeam="isInTeam" :projectId="projectId" :tabs="tabs"></approve-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
-                    <file-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></file-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" label="管理" name="manage" class="tab_list">
-                    <manage-table :isInTeam="isInTeam" :tabs="tabs" :proId="projectId"></manage-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
-                    <record-form :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></record-form>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险管理" name="risk" class="tab_list">
-                    <risk-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-zhongdashixiang')" label="重大事项" name="event" class="tab_list">
-                    <event-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></event-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-shujutianbao')" label="数据填报" name="data" class="tab_list">
-                    <data-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></data-table>
-                </el-tab-pane>
-                <el-tab-pane :disabled="!checkProjectAuth('XM-jiankongshezhi')" label="监控设置" name="monitor" class="tab_list">
-                    <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
+  <div class="aftProjectMessage">
+    <div class="title">
+      <div class="left">
+        <span class="desc">{{title}}</span>
+      </div>
     </div>
+    <div class="firstLayer">
+      <el-row :gutter="40">
+        <el-col :span="12">
+          <div class="tableTitle">出资主体</div>
+          <el-table :data="fundTable" style="width:100%;overflow:hidden;" :row-class-name="tableRowClassName">
+            <el-table-column prop="fundName" label="基金名称" align="center">
+            </el-table-column>
+            <el-table-column prop="investAmount" label="投资金额（元）" align="center">
+              <template scope="scope">{{scope.row.investAmount | toMoney}}</template>
+            </el-table-column>
+            <el-table-column prop="stockRatio" label="股权占比（%）" align="center">
+            </el-table-column>
+            <el-table-column prop="sumPayAmount" label="支付金额（元）" align="center">
+              <template scope="scope">{{scope.row.sumPayAmount | toMoney}}</template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="12">
+          <my-echarts class="chart" :opinion="opinion" :opinionData="opinionData"></my-echarts>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="secondLayer">
+      <el-row :gutter="40">
+        <el-col :span="12">
+          <table-show :data="tableData"></table-show>
+        </el-col>
+        <el-col :span="12">
+          <div class="prompt_message">
+            <span class="prompt">{{prompt}}</span>
+            <div class="item_wrapper">
+              <div class="item" v-for="(item, index) in message" :key="item.index">
+                <span class="count">{{index + 1}}</span>
+                <p class="desc">{{item.message}}</p>
+                <!-- <el-button type="text" :disabled=item.state :class="{ complete:item.state === true,state:item.state === false}" @click="modalAlarm=true">
+                                          {{item.info}}
+                                      </el-button> -->
+              </div>
+            </div>
+            <Page class="page" show-sizer="true" :page-size="pageSize" :current="page" :total="total" simple @on-change="getWarning"></Page>
+            <div class="img_wrapper">
+              <img src="/static/img/double-02.png">
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="tabs">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
+          <detail-form :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+          </detail-form>
+          <table-form :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
+          <approve-table :isInTeam="isInTeam" :projectId="projectId" :tabs="tabs"></approve-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
+          <file-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></file-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" label="管理" name="manage" class="tab_list">
+          <manage-table :isInTeam="isInTeam" :tabs="tabs" :proId="projectId"></manage-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
+          <record-form :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></record-form>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险管理" name="risk" class="tab_list">
+          <risk-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-zhongdashixiang')" label="重大事项" name="event" class="tab_list">
+          <event-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></event-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-shujutianbao')" label="数据填报" name="data" class="tab_list">
+          <data-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></data-table>
+        </el-tab-pane>
+        <el-tab-pane :disabled="!checkProjectAuth('XM-jiankongshezhi')" label="监控设置" name="monitor" class="tab_list">
+          <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
+        </el-tab-pane>
+        <el-tab-pane label="日志" name="log" class="tab_list">
+          <log-table ></log-table>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </div>
 </template>
     
 
@@ -103,7 +106,7 @@ import riskTable from "./risk";
 import eventTable from "./event";
 import dataTable from "./data";
 import monitorTable from "./monitor";
-
+import logTable from "components/log";
 import { getProjectUsers } from "api/projectSys";
 import { getTeams, getPreDetail } from "api/projectPre";
 import { checkProjectAuth, changeDate } from "common/js/config";
@@ -127,7 +130,8 @@ export default {
     riskTable,
     eventTable,
     dataTable,
-    monitorTable
+    monitorTable,
+    logTable
   },
   data() {
     return {
@@ -292,7 +296,7 @@ export default {
           this.structureData = resp.data.result.listOwnershipStructure;
           this.title = resp.data.result.projectInfo.projectName;
         })
-        .catch(e => {});
+        .catch(e => { });
     },
     //获取预警提醒
     getWarnMessageList() {

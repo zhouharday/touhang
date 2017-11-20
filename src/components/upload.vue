@@ -6,6 +6,7 @@
                 :action="actionUrl"
                 :on-success="handleSuccess"
                 :data="uploadInfo"
+                :headers= 'headers'
                 name="file">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
@@ -40,7 +41,10 @@ export default {
     data() {
         return {
             file: null,
-            actionUrl: API_ROOT + '/files/uploadProjectDocument'
+            actionUrl: API_ROOT + '/files/uploadProjectDocument',
+            headers: {
+                Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
+            }
         }
     },
     methods: {
