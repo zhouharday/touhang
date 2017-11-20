@@ -60,10 +60,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {
-    mapMutations,
-    mapGetters
-} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 import investorForm from 'components/investorForm'
 import myFilter from 'components/myFilter'
 import tableHeader from 'components/tabelHeader'

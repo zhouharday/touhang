@@ -30,7 +30,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="机构净资产 (元)" :label-width="formLabelWidth" width="100" prop="organizationProperty">
+                <el-form-item label="机构净资产 (元)" :label-width="formLabelWidth" width="100">
                     <el-input v-model="investorForm.organizationProperty" :disabled="variable" auto-complete="off"></el-input>
                 </el-form-item>
             </el-col>
