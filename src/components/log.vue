@@ -57,7 +57,7 @@ export default {
         if (item) {
           this.init();
         } else {
-        //   this.init();
+          //   this.init();
         }
       });
     }
@@ -84,8 +84,8 @@ export default {
       default: ""
     },
     type: {
-        type: Number,
-        default: ''
+      type: Number,
+      default: ""
     }
   },
   methods: {
@@ -111,7 +111,7 @@ export default {
             if (res.data.status == "200") {
               console.log(res.data);
               res.data.result.list.map((item, index) => {
-                res.data.result.list[index].index = index;
+                res.data.result.list[index].index = index+1;
               });
               this.tableData = res.data.result.list;
               this.pages.pageNum = res.data.result.pageNum; //当前页码
