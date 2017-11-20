@@ -69,19 +69,23 @@ export default {
         // flex-shrink: 0;
         // justify-content: center;
         text-align: center;
-        width: 30%;
+        width: 31%;
         float: left;
         font-size: 14px;
+        height: 70px;
+        line-height: 70px;
       }
       .list_content {
         // flex: 1 32%;
         // flex-shrink: 0;
         // display: flex;
         // align-items: center;
-        width: 20%;
+        width: 19%;
         float: left;
         text-align: center;
         font-size: 14px;
+        height: 70px;
+        line-height: 70px;
       }
       .up {
         color: #f05e5e;

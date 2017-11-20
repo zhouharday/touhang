@@ -41,7 +41,7 @@ axios.interceptors.request.use(config => {
 });
 //添加拦截器
 axios.interceptors.response.use((response) => {
-    console.log(response);
+    // console.log(response);
     if (response.status == 1000) { //具体的判断token失效的参数
         // alert(555);
         store.state.login.token = '';

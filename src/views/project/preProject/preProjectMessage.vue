@@ -76,7 +76,7 @@
           <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :tabs="tabs"></log-table>
+          <log-table :tabs="tabs" :typeId="projectId"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -130,6 +130,10 @@ export default {
   name: "preProjectMessage",
   data() {
     return {
+      page: 1,
+      pageSize: 10,
+      totalPage: 10,
+      typeId: "",
       userId: "",
       file: "",
       uploadInfo: {
@@ -169,7 +173,7 @@ export default {
       structureData: [], // 股权结构
       uploaded: false,
       tabs: {
-        tabList: [true, false, false, false, false, false, false, false,false]
+        tabList: [true, false, false, false, false, false, false, false, false, false, false]
       },
       capitalForm: {
         startInvestDate: "",
@@ -315,7 +319,7 @@ export default {
           } else {
             _tabList[i] = false;
           }
-        }
+        };
         let _tabs = { tabList: _tabList };
         this.tabs = _tabs;
       }

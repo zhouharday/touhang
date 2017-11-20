@@ -84,7 +84,7 @@
           <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table ></log-table>
+          <log-table :tabs="tabs" :typeId="projectId"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -149,7 +149,7 @@ export default {
       message: [],
       tableData: {},
       tabs: {
-        tabList: [true, false, false, false, false, false, false, false, false]
+        tabList: [true, false, false, false, false, false, false, false, false, false, false]
       },
       basicForm: {}, // 基本信息
       companyForm: {}, // 企业信息
