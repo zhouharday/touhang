@@ -82,8 +82,8 @@
     </el-dialog>
 
     <!-- 添加收益分配-->
-    <el-dialog title="收益分配" :visible.sync="modalIncome" :close-on-click-modal="false">
-        <el-form :model="modeIncome">
+    <el-dialog title="收益分配" ref="incomeDialog" :visible.sync="modalIncome" :close-on-click-modal="false">
+        <el-form :model="formIncome" :rules="rules" ref="formIncome">
             <el-row :gutter="10">
                 <el-col :span="12">
                     <el-form-item label="标题" :label-width="formLabelWidth">
@@ -92,7 +92,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="基金名称" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="formIncome.fundName" auto-complete="off"></el-input>
+                        <el-input :disabled="true" v-model="formIncome.fundName" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -103,7 +103,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="分配总额" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="formIncome.allocationMoney" auto-complete="off"></el-input>
+                        <el-input v-model="formIncome.allocationMoney" @change="CalculationAmount" auto-complete="off"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -113,7 +113,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="经办日期" :label-width="formLabelWidth">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="formIncome.handleDate" style="width: 100%;">
+                        <el-date-picker type="date" placeholder="选择日期" v-model="formIncome.handleDate" :disabled="true" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -147,9 +147,7 @@
 
 <script type="text/ecmascript-6">
 import 'common/js/filter'
-import {
-    checkFundAuth
-} from 'common/js/config'
+import {checkFundAuth} from 'common/js/config'
 import tabelHeader from 'components/tabelHeader'
 import deleteReminders from 'components/deleteReminders'
 import {
@@ -158,11 +156,12 @@ import {
     costType,
     addFundFee,
     getFundFeeList,
-    getInvestorByFund,
+    addAllocationInfo,
     addAllocation,
     getFundAllocationDetails,
     updateAllocation,
-    deleteAllocation
+    deleteAllocation,
+    deleteFundFee
 } from 'api/fund'
 export default {
     props: {
@@ -189,6 +188,8 @@ export default {
             },
             addOrEdit: true,
             profit: true,
+            name: '', // 删除时维护数据
+            fundCostId: '', // 删除时id
             fundValue: this.$route.params.id,
             formIncome: {
                 fundName: '',
@@ -204,7 +205,15 @@ export default {
             params: [],
             costTypes: [] || JSON.parse(sessionStorage.getItem('costTypes')),
             paramsId: '', // 当前id
-            deleteReminders: false // 确认删除模态框
+            deleteReminders: false, // 确认删除模态框
+            // rules: {
+            //     shareDate: [{
+            //         type: 'date',
+            //         required: true,
+            //         message: '请选择日期',
+            //         trigger: 'change'
+            //     }]
+            // }
         }
     },
     methods: {
@@ -219,28 +228,23 @@ export default {
             this.formIncome.handleDate = new Date()
             this.formIncome.allocationName = this.fundName + '收益分配申请表'
             this.formIncome.fundName = this.fundName
-            getInvestorByFund(this.$route.params.id).then((res) => {
-                if (res.status == '200') {
-                    // console.log(res.data.result) // 投资者数据为空
-                    this.tableData = res.data.result
-                    this.tableData.map((x) => {
-                        x.shareMoney = x.earningsSum
-                    })
-                }
-            })
+            this._getAssignmentDetails()
         },
         editIncomeDis(index, row) {
             var arr = []
             this.modalIncome = true
             this.profit = false
             this.formIncome.fundName = this.fundName
+            this.formIncome.allocationName = `${this.fundName}收益分配申请表`
+            this.formIncome.shareDate = new Date(this.formIncome.shareDate)
             this.tableData = arr.concat(this.tableData)
             this.formIncome = Object.assign({}, this.formIncome, row)
+            // console.log(Date.parse(this.formIncome.shareDate))
         },
         confirmIncome() {
             this.tableData.map((x) => {
                 this.params.push({
-                    agreementId: x.agreementId || x.id,
+                    // agreementId: x.agreementId || x.id,
                     id: x.id,
                     shareMoney: x.shareMoney
                 })
@@ -254,8 +258,8 @@ export default {
                         this.$Message.success(res.data.message || '添加成功！')
                         this.modalIncome = false
                         this._getAllocationList()
-                        this.formIncome = ''
-                        this.tableData = ''
+                        // this.formIncome = ''
+                        // this.tableData = ''
                     }
                 })
             } else {
@@ -287,18 +291,35 @@ export default {
             this.addOrEdit = false
             this.formCost = Object.assign({}, row)
         },
+        handleDelete(index, row) { // 删除基金费用
+            this.name = 'fundCost' // 确认那个组件调用删除模态框
+            this.fundCostId = row.id
+            this.deleteReminders = true
+        },
         delIncomeDis(index, row) { // 删除收益分配
+            this.name = 'income' // 确认那个组件调用删除模态框
             this.paramsId = row.id
             this.deleteReminders = true
         },
         comfirmDel() {
-            deleteAllocation(this.paramsId).then((res) => {
-                if (res.status == '200') {
-                    this.$Message.success(res.data.message || '删除成功！')
-                    this.deleteReminders = false
-                    this._getAllocationList()
-                }
-            })
+            if (this.name === 'income') {
+                deleteAllocation(this.paramsId).then((res) => {
+                    if (res.status == '200') {
+                        this.$Message.success(res.data.message || '删除成功！')
+                        this.deleteReminders = false
+                        this._getAllocationList()
+                    }
+                })
+            } else {
+                deleteFundFee(this.fundCostId).then((res) => {
+                    if (res.status === 200) {
+                        this.$Message.success(res.data.message || '删除成功！')
+                        this.deleteReminders = false
+                        this._getFundFeeList()
+                    }
+                })
+            }
+            this.name = ''
         },
         comfirCancel() {
             this.deleteReminders = false
@@ -338,6 +359,15 @@ export default {
         cancelCost() { // 基金费用取消
             this.modalCost = false
         },
+        CalculationAmount(value) {
+            if (value && this.tableData) {
+                console.log(value)
+                this.tableData.forEach((item) => {
+                    item.shareMoney = value * (item.contributiveRatio / 100).toFixed(2)
+                })
+                console.log(this.tableData)
+            }
+        },
         _getFundFeeList() {
             getFundFeeList(this.$route.params.id).then((res) => {
                 if (res.status == '200') {
@@ -346,12 +376,12 @@ export default {
             })
         },
         _getAssignmentDetails() { // 获取收益明细
-            getInvestorByFund(this.$route.params.id).then((res) => {
+            addAllocationInfo(this.$route.params.id).then((res) => {
                 if (res.status == '200') {
                     // console.log(res.data.result) // 投资者数据为空
                     this.tableData = res.data.result
                     this.tableData.map((x) => {
-                        x.shareMoney = x.earningsSum
+                        x.shareMoney = ''
                     })
                 }
             })

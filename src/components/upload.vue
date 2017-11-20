@@ -34,7 +34,7 @@ export default {
         },
         title: {
             type: String,
-            default: '基金设立报告'
+            default: '基金文档'
         }
     },
     data() {

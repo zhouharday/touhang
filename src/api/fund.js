@@ -268,6 +268,20 @@ export function updateFundFee(fundData) {
     const data = fundData
     return service({url: '/fund/updateFundFee', method: 'post', data})
 }
+// 删除某一个费用 /fund/deleteFundFee
+export function deleteFundFee(fundId) {
+    const data = {
+        id: fundId
+    }
+    return service({url: '/fund/deleteFundFee', method: 'post', data})
+}
+// 运营管理（收益分配）获取一个基金几个投资者分红 /fund/addAllocationInfo
+export function addAllocationInfo(id) {
+    const data = {
+        fundId: id
+    }
+    return service({url: '/fund/addAllocationInfo', method: 'post', data})
+}
 // 添加收益分配 /fund/addAllocation
 export function addAllocation(allocation) {
     const data = allocation
