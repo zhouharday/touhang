@@ -12,10 +12,10 @@
                 </el-date-picker>
             </p>
             <p>
-                <el-button type="text" size="large" class="el-icon-search" @clcik="searchHandler($event)">搜索</el-button>
+                <el-button type="primary" size="large" class="el-icon-search" @clcik="searchHandler($event)">搜索</el-button>
             </p>
             <p>
-                <el-button type="text" size="large" class="el-icon-refresh" @clcik="refreshHandler($event)">刷新</el-button>
+                <el-button type="primary" size="large" class="el-icon-refresh" @clcik="refreshHandler($event)">刷新</el-button>
             </p>
         </div>
         <el-table :data="tableData" border style="width:100%">
