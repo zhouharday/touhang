@@ -1,6 +1,6 @@
 <template>
     <div class="logTable">
-        <div class="searchBox ">
+        <!-- <div class="searchBox ">
             <p>
                 <span>起始日期</span>
                 <el-date-picker v-model="startDate" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
@@ -12,24 +12,24 @@
                 </el-date-picker>
             </p>
             <p>
-                <el-button type="text" size="large" class="el-icon-search" @clcik="searchHandler($event)">搜索</el-button>
+                <el-button  size="large" class="el-icon-search" @clcik="searchHandler($event)">搜索</el-button>
             </p>
             <p>
-                <el-button type="text" size="large" class="el-icon-refresh" @clcik="refreshHandler($event)">刷新</el-button>
+                <el-button size="large" class="el-icon-refresh" @clcik="refreshHandler($event)">刷新</el-button>
             </p>
-        </div>
+        </div> -->
         <el-table :data="tableData" border style="width:100%">
-            <el-table-column prop="num" label="序号" align="center">
+            <el-table-column prop="num" label="序号" align="center" width="120">
             </el-table-column>
-            <el-table-column prop="date" label="操作时间" align="center">
+            <el-table-column prop="date" label="操作时间" align="center"  width="300">
             </el-table-column>
-            <el-table-column prop="person" label="操作人" align="center">
+            <el-table-column prop="person" label="操作人" align="center"  width="300">
             </el-table-column>
             <el-table-column prop="detail" label="日志详情" align="center">
             </el-table-column>
         </el-table>
         <div class="pageStyle">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalPage">
             </el-pagination>
         </div>
     </div>
@@ -40,33 +40,53 @@
 <script>
 export default {
     props: {
-        endingDate: {
-            type: Date
-        },
-        startDate: {
-            type: Date
-        },
         tableData: {
             type: Array
         },
-        pickerOptions0: {
-            disabledDate(time) {
-                return time.getTime() > Date.now();
-            }
+        currentPage: {
+            type: String,
+            default: 1
         },
-        pickerOptions1: {
-            disabledDate(time) {
-                return time.getTime() > Date.now();
-            }
+        pageSize: {
+            type: String,
+            default: 10
+        },
+        totalPage: {
+            type: String,
+            default: 40
         }
+        // ,
+        // endingDate: {
+        //     type: String
+        // },
+        // startDate: {
+        //     type: String
+        // },
+        // pickerOptions0: {
+        //     disabledDate(time) {
+        //         return time.getTime() > Date.now();
+        //     }
+        // },
+        // pickerOptions1: {
+        //     disabledDate(time) {
+        //         return time.getTime() > Date.now();
+        //     }
+        // }
     },
     methods: {
-        searchHandler(event) {
-           this.$emit('search')
+        handleSizeChange() {
+            this.$emit('sizeChange')
         },
-        refreshHandler(event) {
-           this.$emit('refresh')
+        handleCurrentChange() {
+            this.$emit('currentChange')
         }
+        // ,
+        //  searchHandler(event) {
+        //    this.$emit('search')
+        // },
+        // refreshHandler(event) {
+        //    this.$emit('refresh')
+        // }
     }
 }
 </script>
@@ -76,8 +96,9 @@ export default {
 <style lang="less" scoped>
 .logTable {
     margin: 0 auto;
-    width: 800px;
-    border: 1px solid #ddd;
+    // width: 1200px;
+    width: 100%;
+    // border: 1px solid #ddd;
     border-radius: 4px;
     padding-bottom: 20px;
     .searchBox {
