@@ -84,13 +84,12 @@
           <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :tabs="tabs" :typeId="projectId"></log-table>
+          <log-table :tabs="tabs" :typeId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
-    
 
 <script>
 import "common/js/filter";
@@ -135,6 +134,7 @@ export default {
   },
   data() {
     return {
+      type: 1,
       opinion: [],
       opinionData: [],
       projectId: "",
@@ -162,7 +162,7 @@ export default {
         appendix: ""
       },
       isInTeam: false
-    };
+    }
   },
   created() {
     this.investProjectId = this.$route.params.investProjectId;

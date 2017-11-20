@@ -56,8 +56,8 @@ export default {
       to.tabList.map((item, index) => {
         if (item) {
           this.init();
-        } else if (to.tabList[9]) {
-          this.init();
+        } else {
+        //   this.init();
         }
       });
     }
@@ -82,6 +82,10 @@ export default {
     typeId: {
       type: String,
       default: ""
+    },
+    type: {
+        type: Number,
+        default: ''
     }
   },
   methods: {
@@ -96,7 +100,7 @@ export default {
     init() {
       this.$http
         .post(this.api + "/businessLogRecord/selectBusinessLogRecordPageList", {
-          type: 1,
+          type: this.type,
           type_id: this.typeId,
           page: this.page,
           pageSize: this.pageSize

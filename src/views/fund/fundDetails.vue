@@ -87,7 +87,7 @@
                     <manage :costData="costData" :fundName="formDetails.fundName"></manage>
                 </el-tab-pane>
                 <el-tab-pane label="日志" name="log" class="tab_list">
-                    <log-table :tabs="tabs" :typeId="projectId"></log-table>
+                    <log-table :tabs="tabs" :typeId="projectId" :type="type"></log-table>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -142,6 +142,7 @@ export default {
   },
   data() {
     return {
+      type: 2,
       tabs: {
         tabList: [false, false, false, false, false, false, false, false, false]
       },
@@ -270,7 +271,7 @@ export default {
           } else {
             _tabList[i] = false;
           }
-        };
+        }
         let _tabs = { tabList: _tabList };
         this.tabs = _tabs;
       }
