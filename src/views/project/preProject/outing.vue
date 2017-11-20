@@ -157,7 +157,6 @@ export default {
                     let exitList = resp.data.result.projectExitList;
                     exitList.forEach((item)=>{
                         item.exitAmount = parseFloat((parseFloat(item.exitAmount) || 0.0).toFixed(2));
-                        console.log(typeof(item.exitAmount));
                     });
                     this.outingForm.outingData2 = exitList;
                     this.sumExit();

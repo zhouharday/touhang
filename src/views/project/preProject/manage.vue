@@ -498,7 +498,7 @@
         </el-dialog>
         <!-- 添加项目分红 对话框-->
         <el-dialog title="添加项目分红" :visible.sync="sharingAdd1" :close-on-click-modal="false">
-            <el-form :model="sharingForm1" :rules="rules4" ref="sharingForm1" label-position="right" label-width="110px">
+            <el-form :model="sharingForm1" ref="sharingForm1" label-position="right" label-width="120px">
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="标题" prop="shareTitle">
@@ -506,7 +506,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="项目合同" prop="contractId">
+                        <el-form-item label="项目合同" prop="contractId" :rules="selContractRule">
                             <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
                                 <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
                                 </el-option>
@@ -529,75 +529,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="分红日期" prop="shareDate">
-                            <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-col>
-                        <el-form-item label="相关附件">
-                            <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <div class="table_title">
-                <div class="left" style="width:20.3%">
-                    <span class="desc">{{ table_title }}</span>
-                </div>
-            </div>
-            <el-table :data="fundData3" border style="width: 100%" align="center">
-                <el-table-column label="基金名称" prop="fundName" align="center">
-                </el-table-column>
-                <el-table-column label="投资金额（元）" prop="investAmount" align="center">
-                </el-table-column>
-                <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
-                </el-table-column>
-                <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
-                    <template scope="scope">
-                        <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum">{{ scope.row.shareAmount | 0}}</el-input>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="sharingAdd1 = false">取 消</el-button>
-                <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
-            </div>
-        </el-dialog>
-        <!-- 编辑项目分红 对话框-->
-        <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
-            <el-form :model="sharingForm1" ref="sharingForm1" :rules="rules4" label-position="right" label-width="110px">
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="标题" prop="shareTitle">
-                            <el-input v-model="sharingForm1.shareTitle" auto-complete="off"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="项目合同" prop="contractId">
-                            <el-select @change="selShareContract" v-model="sharingForm1.contractId" placeholder="请选择合同" style="width: 100%;">
-                                <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="合同金额（元）" prop="contractAmount">
-                            <el-input v-model="sharingForm1.contractAmount" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="分红金额（元）" prop="shareAmount">
-                            <el-input v-model="sharingForm1.shareAmount" auto-complete="off" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="经办人">
-                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="分红日期" prop="shareDate">
+                        <el-form-item label="分红日期" prop="shareDate" :rules="dateRule">
                             <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                             </el-date-picker>
                         </el-form-item>
@@ -613,7 +545,7 @@
                         <span class="desc">{{ table_title }}</span>
                     </div>
                 </div>
-                <el-table :data="fundData3" border style="width: 100%" align="center">
+                <el-table :data="sharingForm1.fundData3" border style="width: 100%" align="center">
                     <el-table-column label="基金名称" prop="fundName" align="center">
                     </el-table-column>
                     <el-table-column label="投资金额（元）" prop="investAmount" align="center">
@@ -622,7 +554,79 @@
                     </el-table-column>
                     <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.shareAmount" placeholder="0" @input="valueSum"></el-input>
+                            <el-form-item prop="shareAmount" :rules="amountRule" label-width="0px" height="100%">
+                                <el-input v-model.number="scope.row.shareAmount" placeholder="请输入分红金额" @input="valueSum"></el-input>
+                            </el-form-item>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="sharingAdd1 = false">取 消</el-button>
+                <el-button type="danger" @click="confirmSharingAdd1">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 编辑项目分红 对话框-->
+        <el-dialog title="编辑项目分红" :visible.sync="sharingAdd2" :close-on-click-modal="false">
+            <el-form :model="sharingForm2" ref="sharingForm2" label-position="right" label-width="120px">
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="标题" prop="shareTitle">
+                            <el-input v-model="sharingForm2.shareTitle" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="项目合同" prop="contractId" :rules="selContractRule">
+                            <el-select @change="selShareContract" v-model="sharingForm2.contractId" placeholder="请选择合同" style="width: 100%;" disabled>
+                                <el-option v-for="item in contractData" :key="item.id" :label="item.contractName" :value="item.id" :disabled="item.status == 1">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="合同金额（元）" prop="contractAmount">
+                            <el-input v-model="sharingForm2.contractAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红金额（元）" prop="shareAmount">
+                            <el-input v-model="sharingForm2.shareAmount" auto-complete="off" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="经办人">
+                            <el-input v-model="userName" placeholder="默认当前登录用户" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="分红日期" prop="shareDate" :rules="dateRule">
+                            <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm2.shareDate" style="width: 100%;">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col>
+                        <el-form-item label="相关附件">
+                            <upload-files @uploadSuccess="uploadSuccess($event, 'shareDocInfo')" @removeSucess="removeSucess($event, 'shareDocInfo')" :documentInfo="shareDocInfo"></upload-files>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <div class="table_title">
+                    <div class="left" style="width:20.3%">
+                        <span class="desc">{{ table_title }}</span>
+                    </div>
+                </div>
+                <el-table :data="sharingForm2.fundData3" border style="width: 100%" align="center">
+                    <el-table-column label="基金名称" prop="fundName" align="center">
+                    </el-table-column>
+                    <el-table-column label="投资金额（元）" prop="investAmount" align="center">
+                    </el-table-column>
+                    <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
+                    </el-table-column>
+                    <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
+                        <template scope="scope">
+                            <el-form-item prop="shareAmount" :rules="amountRule" label-width="0px" height="100%">
+                                <el-input v-model.number="scope.row.shareAmount" placeholder="请输入分红金额" @input="valueSum"></el-input>
+                            </el-form-item>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -630,7 +634,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" @click="sharingAdd2 = false">取 消</el-button>
-                <el-button type="danger" @click="confirmSharingAdd2(sharingForm1.id)">确 定</el-button>
+                <el-button type="danger" @click="confirmSharingAdd2(sharingForm2.id)">确 定</el-button>
             </div>
         </el-dialog>
     </section>
@@ -780,9 +784,6 @@ export default {
                     { required: true, message: '请选择支付日期', trigger: 'change' }
                 ]
             },
-            amountRule:[
-                { type: 'number', message: '金额必须是数字', trigger: 'blur, change' }
-            ],
             paidData: [],
             _headerInfo_paid: {
                 desc: '投资支付',
@@ -802,7 +803,18 @@ export default {
                 shareTitle: '',
                 shareAmount: 0,
                 handlerUserId: '',
-                shareDate: ''
+                shareDate: '',
+                fundData3: []
+            },
+            // 项目分红
+            sharingForm2: {
+                id: '',
+                contractId: '',
+                shareTitle: '',
+                shareAmount: 0,
+                handlerUserId: '',
+                shareDate: '',
+                fundData3: []
             },
             rules4: {
                 contractId: [
@@ -810,8 +822,20 @@ export default {
                 ],
                 shareDate: [
                     { required: true, message: '请选择分红日期', trigger: 'change' }
+                ],
+                shareAmount: [
+                    { type: 'number', message: '分红金额必须是数字', trigger: 'blur, change' }
                 ]
             },
+            selContractRule: [
+                { required: true, message: '请选择项目合同', trigger: 'blur' }
+            ],
+            dateRule: [
+                { required: true, message: '请选择分红日期', trigger: 'blur' }
+            ],
+            amountRule:[
+                { type: 'number', message: '金额必须是数字' }
+            ],
             sharingData: [],
             headerInfo_sharing: {
                 desc: '项目分红',
@@ -1346,7 +1370,7 @@ export default {
             let sum = 0.0, sumSurplus = 0.0;
             for (let i = 0; i < this.fundData2.length; i++) {
                 sum += (parseFloat(this.fundData2[i].payAmount | 0));
-                this.fundData2[i].surplusAmount = this.fundData2[i].investAmount - (this.fundData2[i].payAmount | 0.0);
+                this.fundData2[i].surplusAmount = this.fundData2[i].investAmount - (this.fundData2[i].payAmount || 0.0);
                 sumSurplus += this.fundData2[i].surplusAmount;
             }
             this.paidForm1.surplusAmount = sumSurplus;
@@ -1354,10 +1378,17 @@ export default {
         // 分红金额合计
         valueSum() {
             let sum = 0.0;
-            for (let i = 0; i < this.fundData3.length; i++) {
-                sum += (parseFloat(this.fundData3[i].shareAmount | 0));
+            for (let i = 0; i < this.sharingForm1.fundData3.length; i++) {
+                sum += parseFloat(this.sharingForm1.fundData3[i].shareAmount || 0);
             }
-            this.sharingForm1.shareAmount = sum;
+            // this.sharingForm1.shareAmount = sum;
+            this.$set(this.$data.sharingForm1, 'shareAmount', sum);
+            sum = 0.0;
+            for (let i = 0; i < this.sharingForm2.fundData3.length; i++) {
+                sum += parseFloat(this.sharingForm2.fundData3[i].shareAmount || 0);
+            }
+            // this.sharingForm2.shareAmount = sum;
+            this.$set(this.$data.sharingForm2, 'shareAmount', sum);
         },
         //选择项目分红的合同
         selShareContract(value) {
@@ -1366,22 +1397,24 @@ export default {
                 this.isEditShare = false;
                 return false;
             }
-            // this.sharingForm1.shareTitle = "项目分红-" + value.contractName;
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
-                    this.fundData3 = resp.data.result.fundInfo;
+                    let _fundData3 = resp.data.result.fundInfo;
                     this.$set(this.$data.sharingForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
-                    this.fundData3.forEach(function(item, index) {
+                    this.$set(this.$data.sharingForm2, 'contractAmount', resp.data.result.projectContract.contractAmount);
+                    _fundData3.forEach(function(item, index) {
                         item.contractFundId = item.id;
+                        item.shareAmount = '';
                         item.id = '';
                     });
+                    this.sharingForm1.fundData3 = _fundData3;
                     this.valueSum();
                 } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('selShareContract() exists error: ', e);
+                console.log('选择项目分红的合同 error: ', e);
             })
         },
         //打开添加项目分红
@@ -1389,13 +1422,14 @@ export default {
             this.sharingForm1 = {
                 shareTitle: '',
                 contractId: '',
-                contractAmount: '',
-                shareAmount: '',
-                shareDate: ''
+                contractAmount: 0,
+                shareAmount: 0.0,
+                shareDate: changeDate(new Date()),
+                fundData3: []
             };
             this.shareDocInfo = [];
             this.sharingAdd1 = true;
-            this.fundData3 = [];
+            this.isEditShare = false;
         },
         // 添加 项目分红 确定按钮
         confirmSharingAdd1() {
@@ -1413,19 +1447,26 @@ export default {
                     };
                     let data = {
                         projectParticipation: projectParticipation,
-                        participationDetails: this.fundData3
+                        participationDetails: this.sharingForm1.fundData3
                     }
-                    addParticipation(projectParticipation, this.fundData3).then(resp => {
+                    addParticipation(projectParticipation, this.sharingForm1.fundData3).then(resp => {
                         if (resp.data.status == '200') {
                             this.init();
-                            this.sharingForm1 = {};
+                            this.sharingForm1 = {
+                                shareTitle: '',
+                                contractId: '',
+                                contractAmount: 0,
+                                shareAmount: 0.0,
+                                shareDate: changeDate(new Date()),
+                                fundData3: []
+                            };
                             this.sharingAdd1 = false;
                             this.shareDocInfo = [];
                         } else {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
-                        console.log('addContractPay() exists error: ', e);
+                        console.log('添加 项目分红 error: ', e);
                     })
                 }
             });
@@ -1435,8 +1476,7 @@ export default {
             getParticipationDetail(id).then(resp => {
                 if (resp.data.status == '200') {
                     this.isEditShare = true;
-                    this.sharingForm1 = resp.data.result.projectParticipation;
-                    this.fundData3 = resp.data.result.participationDetails;
+                    this.sharingForm2 = resp.data.result.projectParticipation;
 
                     let documentInfo = resp.data.result.projectParticipation.documentInfo;
                     documentInfo.forEach(item => {
@@ -1444,38 +1484,44 @@ export default {
                         item.url = item.url == null ? item.filePath : item.url;
                     });
                     this.shareDocInfo = documentInfo;
-
+                    let shareList = resp.data.result.participationDetails
+                    shareList.forEach((item)=>{
+                        item.shareAmount = parseFloat((parseFloat(item.shareAmount) || 0.0).toFixed(2));
+                        console.log(typeof(item.shareAmount));
+                    });
+                    this.sharingForm2.fundData3 = shareList;
+                    // this.valueSum();
                     this.sharingAdd2 = !this.sharingAdd2;
                 } else {
                     this.$message.error(resp.data.message);
                 }
             }).catch(e => {
-                console.log('getParticipationDetail() exists error: ', e);
+                console.log('打开编辑 项目分红 error: ', e);
             })
         },
         // 编辑 项目分红 确定按钮
         confirmSharingAdd2(id) {
-            this.$refs["sharingForm1"].validate((valid) => {
+            this.$refs["sharingForm2"].validate((valid) => {
                 if (valid) {
                     let projectParticipation = {
                         id: id,
                         projectId: this.proId,
-                        shareTitle: this.sharingForm1.shareTitle,
-                        shareAmount: this.sharingForm1.shareAmount,
-                        handlerUserId: (this.sharingForm1.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
-                            ? this.sharingForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
-                        shareDate: changeDate(this.sharingForm1.shareDate),
+                        shareTitle: this.sharingForm2.shareTitle,
+                        shareAmount: this.sharingForm2.shareAmount,
+                        handlerUserId: (this.sharingForm2.handlerUserId != '' && this.sharingForm1.handlerUserId != undefined)
+                            ? this.sharingForm2.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
+                        shareDate: changeDate(this.sharingForm2.shareDate),
                         documentInfo: this.shareDocInfo
                     };
                     let data = {
                         projectParticipation: projectParticipation,
-                        participationDetails: this.fundData3
+                        participationDetails: this.sharingForm2.fundData3
                     }
-                    editParticipation(projectParticipation, this.fundData3).then(resp => {
+                    editParticipation(projectParticipation, this.sharingForm2.fundData3).then(resp => {
                         console.log('editParticipation resp: ', resp.data);
                         if (resp.data.status == '200') {
                             this.init();
-                            this.sharingForm1 = {};
+                            this.sharingForm2 = {};
                             this.fundData3 = [];
                             this.sharingAdd2 = !this.sharingAdd2;
                             this.shareDocInfo = [];
@@ -1483,7 +1529,7 @@ export default {
                             this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
-                        console.log('editParticipation() exists error: ', e);
+                        console.log('编辑 项目分红 error: ', e);
                     })
                 }
             });

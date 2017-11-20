@@ -43,11 +43,13 @@
                 </div>
             </el-dialog>
         </div>
+        <delete-reminders @cancel="cancelDel" @del="comfirmDel" :deleteReminders="deleteReminders"></delete-reminders>
     </div>
 </template>
 
 <script>
 import tabelHeader from 'components/tabelHeader'
+import deleteReminders from "components/deleteReminders";
 import { changeDate,checkProjectAuth } from 'common/js/config'
 import { getTeams, addInsertProjectTeam, delTeam } from 'api/projectPre'
 
@@ -74,9 +76,15 @@ export default {
             default: false
         }
     },
+    components: {
+        tabelHeader,
+        deleteReminders
+    },
     data() {
         return {
             modalAdd: false,
+            deleteId: '',
+            deleteReminders: false,
             teamData: [],
             teamForm: {
                 userId: '',
@@ -162,16 +170,22 @@ export default {
         },
         //删除当前行
         handleDelete(index, rows) {
-            delTeam(rows[index].id).then((res) => {
+            this.deleteId = rows[index].id;
+            this.deleteReminders = true;
+        },
+        comfirmDel() {
+            this.deleteReminders = false;
+            delTeam(this.deleteId).then((res) => {
                 if (res.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！');
                     this.getDatas();
                 }
             });
+        },
+        cancelDel(){
+            this.deleteId = '';
+            this.deleteReminders = false;
         }
-    },
-    components: {
-        tabelHeader
     }
 }
 </script>
