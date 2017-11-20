@@ -1,6 +1,6 @@
 <template>
     <section class="outing">
-        <el-form :model="outingForm" ref="outingForm" label-width="110px">
+        <el-form :model="outingForm" ref="outingForm" label-width="120px">
             <el-row>
                 <el-col>
                     <el-form-item label="标题">
@@ -55,7 +55,7 @@
         </el-form>
         
         <el-row>
-            <el-col style="margin-top:10px;">
+            <el-col style="margin-top:10px; text-align: center">
                 <el-button v-if="checkProjectAuth('GL-XMTC-BJ')" type="default" v-show="isShow" @click="editForm">编 辑</el-button>
                 <el-button v-if="checkProjectAuth('GL-XMTC-BJ')" type="danger" v-show="isShow" @click="confirmSave">保 存</el-button>
             </el-col>
@@ -222,7 +222,7 @@ export default {
 
 <style lang="less" scoped>
 .outing {
-    width: 60%;
+    width: 70%;
     margin: 0 auto;
     padding: 20px 10px;
     border: 2px solid #dfe6ec;
