@@ -111,7 +111,7 @@ export default {
             if (res.data.status == "200") {
               console.log(res.data);
               res.data.result.list.map((item, index) => {
-                res.data.result.list[index].index = index+1;
+                res.data.result.list[index].index = index + 1;
               });
               this.tableData = res.data.result.list;
               this.pages.pageNum = res.data.result.pageNum; //当前页码
