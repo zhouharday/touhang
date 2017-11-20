@@ -1934,8 +1934,8 @@ function webViewerInitialized() {
   var queryString = document.location.search.substring(1);
   var params = (0, _ui_utils.parseQueryString)(queryString);
   file = 'file' in params ? params.file : appConfig.defaultUrl;
-  //是否验证同源(跨域)
-  var isCheckOrigin = true;
+  //是否验证同源(跨域) CJ 2017-11-20 
+  var isCheckOrigin = false;
   if(isCheckOrigin){
     validateFileURL(file);
   }
