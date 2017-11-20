@@ -1,6 +1,6 @@
 <template>
     <div class="logTable">
-        <div class="searchBox ">
+        <!-- <div class="searchBox ">
             <p>
                 <span>起始日期</span>
                 <el-date-picker v-model="startDate" type="date" placeholder="选择日期" :picker-options="pickerOptions0">
@@ -17,7 +17,7 @@
             <p>
                 <el-button type="primary" size="large" class="el-icon-refresh" @clcik="refreshHandler($event)">刷新</el-button>
             </p>
-        </div>
+        </div> -->
         <el-table :data="tableData" border style="width:100%">
             <el-table-column prop="num" label="序号" align="center">
             </el-table-column>
@@ -39,6 +39,13 @@
 
 <script>
 export default {
+    watch: {
+        'tabs': function(to, from) {
+            if (to.tabList[7]) {
+                this.init();
+            }
+        }
+    },
     props: {
         endingDate: {
             type: Date
@@ -48,6 +55,10 @@ export default {
         },
         tableData: {
             type: Array
+        },
+        isInTeam: {
+            type: Boolean,
+            default: false
         },
         pickerOptions0: {
             disabledDate(time) {
@@ -66,6 +77,9 @@ export default {
         },
         refreshHandler(event) {
            this.$emit('refresh')
+        },
+        init(){
+            
         }
     }
 }
