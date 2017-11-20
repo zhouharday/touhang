@@ -1,6 +1,6 @@
 <template>
     <div class="uploadFiles">
-        <Upload multiple type="drag" name="files" :action="actionUrl" :default-file-list="documentInfo" :show-upload-list="true" :on-success="handleSuccess" :on-remove="handleRemove" class="upload">
+        <Upload multiple type="drag" name="files" :action="actionUrl" :default-file-list="documentInfo" :show-upload-list="true" :on-success="handleSuccess" :on-remove="handleRemove" :on-error="handleError" class="upload">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
@@ -40,7 +40,6 @@ export default {
                 });
                 this.documentInfo = fileList;
                 this.$emit('uploadSuccess', fileList);
-                // console.log("handleSuccess fileList-"+JSON.stringify(fileList));
             }
         },
         handleRemove(file, fileList) {
@@ -49,8 +48,10 @@ export default {
                     item.type = '2';
                 }
             });
-            // console.log("remove documentInfo ***"+JSON.stringify(this.documentInfo));
             this.$emit('uploadSuccess', this.documentInfo);
+        },
+        handleError(error, file, fileList){
+            this.$message.error("上传失败");
         }
     }
 }

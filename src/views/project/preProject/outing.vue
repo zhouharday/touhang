@@ -1,6 +1,6 @@
 <template>
     <section class="outing">
-        <el-form :model="outingForm" label-width="110px">
+        <el-form :model="outingForm" ref="outingForm" label-width="110px">
             <el-row>
                 <el-col>
                     <el-form-item label="标题">
@@ -8,7 +8,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="退出类型">
+                    <el-form-item label="退出类型" prop="exitType" :rules="exitTypeRule">
                         <el-select v-model="outingForm.exitType" placeholder="请选择退出类型" :disabled="controlEdit" style="width:100%;">
                             <el-option v-for="item in outingSortOptions" :key="item.id" :label="item.dicName" :value="item.id" :disabled="controlEdit">
                             </el-option>
@@ -16,7 +16,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="退出金额（元）">
+                    <el-form-item label="退出金额（元）" prop="exitAmount">
                         <el-input v-model="outingForm.exitAmount" auto-complete="off" disabled></el-input>
                     </el-form-item>
                 </el-col>
@@ -31,13 +31,13 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="经办日期">
-                        <el-date-picker type="date" placeholder="选择日期" v-model="outingForm.exitDate" :disabled="controlEdit" style="width: 100%;">
+                    <el-form-item label="经办日期" prop="exitDate" :rules="exitDateRule">
+                        <el-date-picker type="date" @input="setExitDate" :editable="false" placeholder="选择日期" v-model="outingForm.exitDate" :disabled="controlEdit" style="width: 100%;">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-table :data="outingData2" border>
+            <el-table :data="outingForm.outingData2" border>
                 <el-table-column label="基金名称" prop="fundName" align="center">
                 </el-table-column>
                 <el-table-column label="投资金额（元）" prop="investAmount" align="center">
@@ -46,7 +46,7 @@
                 </el-table-column>
                 <el-table-column label="回款金额（元）" prop="exitAmount" align="center">
                     <template scope="scope">
-                        <el-form-item prop="exitAmount" label-width="0px" :rules="exitRule" height="100%">
+                        <el-form-item prop="exitAmount" :rules="amountRule" label-width="0px" height="100%">
                             <el-input v-model.number="scope.row.exitAmount" @input="sumExit" placeholder="请输入回款金额" :disabled="controlEdit"></el-input>
                         </el-form-item>
                     </template>
@@ -68,7 +68,7 @@
 import { mapGetters } from 'vuex'
 import { getDicChildren } from 'common/js/dictionary'
 import uploadFiles from 'components/uploadFiles'
-import { checkProjectAuth } from 'common/js/config'
+import { changeDate, checkProjectAuth } from 'common/js/config'
 
 import {
     getExitDetail, saveExit
@@ -107,10 +107,16 @@ export default {
                 exitAmount: '',
                 relativedAppendix: '',
                 handlerUserId: '',
-                exitDate: '',
+                exitDate: ''
             },
-            exitRule: [
-                { type: 'number', message: '回款金额必须是数字' }
+            exitTypeRule: [
+                { required: true, message: '请选择退出类型', trigger: 'blur' }
+            ],
+            exitDateRule: [
+                { required: true, message: '请选择日期', trigger: 'blur' }
+            ],
+            amountRule:[
+                { type: 'number', message: '回款金额必须是数字', trigger: 'blur, change' }
             ],
             outingData2: [],
             documentInfo:[]
@@ -139,7 +145,7 @@ export default {
             getExitDetail(this.proId).then(resp => {
                 if (resp.data.status === '200') {
                     this.outingForm = resp.data.result.projectExit;
-
+                    this.outingForm.exitDate = this.outingForm.exitDate ? this.outingForm.exitDate : changeDate(new Date());
                     let documentInfo = resp.data.result.projectExit.documentInfo;
                     if(documentInfo != null){
                         documentInfo.forEach(item => {
@@ -149,13 +155,12 @@ export default {
                     }
                     this.$set(this.$data.outingForm,'documentInfo',documentInfo);
                     let exitList = resp.data.result.projectExitList;
-                    console.log(exitList);
                     exitList.forEach((item)=>{
-                        item.exitAmount = parseFloat(item.exitAmount) || 0.0;
+                        item.exitAmount = parseFloat((parseFloat(item.exitAmount) || 0.0).toFixed(2));
                         console.log(typeof(item.exitAmount));
                     });
-                    this.outingData2 = exitList;
-                    console.log(this.outingData2);
+                    this.outingForm.outingData2 = exitList;
+                    this.sumExit();
                 }
             }).catch(e => {
                 console.log('获取退出单 error: ', e);
@@ -167,35 +172,43 @@ export default {
         },
         // 保存退出单
         confirmSave() {
-            this.outingForm.projectId = this.proId;
-            this.outingForm.investBeforeId = this.$route.params.investProjectId;
-            this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
-                ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
+            this.$refs["outingForm"].validate((valid) => {
+                if (valid) {
+                    this.outingForm.projectId = this.proId;
+                    this.outingForm.investBeforeId = this.$route.params.investProjectId;
+                    this.outingForm.handlerUserId = (this.outingForm.handlerUserId != undefined && this.outingForm.handlerUserId != '')
+                        ? this.outingForm.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id;
 
-            // this.outingForm.documentInfo = this.documentInfo;
-            let data = {
-                projectExit: this.outingForm,
-                projectExitList: this.outingData2
-            };
+                    // this.outingForm.documentInfo = this.documentInfo;
+                    let data = {
+                        projectExit: this.outingForm,
+                        projectExitList: this.outingForm.outingData2
+                    };
 
-            // console.log('保存退出单: ' + JSON.stringify(data));
-            saveExit(this.outingForm, this.outingData2).then(resp => {
-                if (resp.data.status == '200') {
-                    this.getExitDetail();
-                    this.controlEdit = true;
-                }else{
-                    this.$Message.error(resp.data.message);
+                    // console.log('保存退出单: ' + JSON.stringify(data));
+                    saveExit(this.outingForm, this.outingForm.outingData2).then(resp => {
+                        if (resp.data.status == '200') {
+                            // this.getExitDetail();
+                            this.controlEdit = true;
+                        }else{
+                            this.$Message.error(resp.data.message);
+                        }
+                    }).catch(e => {
+                        console.log('保存退出单 error: ', e);
+                    })
                 }
-            }).catch(e => {
-                console.log('保存退出单 error: ', e);
-            })
+            });
         },
         sumExit() {
             let sum = 0.0;
-            for (let i = 0; i < this.outingData2.length; i++) {
-                sum += (parseFloat(this.outingData2[i].exitAmount | 0));
+            for (let i = 0; i < this.outingForm.outingData2.length; i++) {
+                sum += parseFloat(this.outingForm.outingData2[i].exitAmount );
             }
-            this.outingForm.exitAmount = sum;
+            // this.outingForm.exitAmount = sum;
+            this.$set(this.$data.outingForm, 'exitAmount', sum);
+        },
+        setExitDate(val) {
+            this.$set(this.$data.outingForm, 'exitDate', '' + val);
         },
         uploadSuccess(documentInfo, dataName){
             this.$set(this.$data.outingForm, dataName, documentInfo);
@@ -214,7 +227,7 @@ export default {
     padding: 20px 10px;
     border: 2px solid #dfe6ec;
     border-radius: 10px;
-    display: flex;
+    // display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;

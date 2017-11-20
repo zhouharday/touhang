@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import 'babel-polyfill';
-import {Promise} from 'es6-promise-polyfill';
+import {
+    Promise
+} from 'es6-promise-polyfill';
 import Vuex from 'vuex';
 import iView from 'iview';
 import md5 from 'js-md5';
@@ -25,6 +27,8 @@ var vm = new Vue({
     render: h => h(App)
 }).$mount('#app');
 // axios.defaults.withCredentials=true;
+/****************************************************************/
+//添加拦截器
 axios.interceptors.request.use(config => {
     config.headers = config.headers || {};
     store.state.login.token = JSON.parse(sessionStorage.getItem('token')) || '';
@@ -35,6 +39,7 @@ axios.interceptors.request.use(config => {
 }, err => {
     return Promise.reject(err);
 });
+//添加拦截器
 axios.interceptors.response.use((response) => {
     console.log(response);
     if (response.status == 1000) { //具体的判断token失效的参数
@@ -54,7 +59,7 @@ axios.interceptors.response.use((response) => {
 }, (error) => {
     return Promise.reject(error);
 });
-
+/****************************************************************/
 
 Vue.prototype.$http = axios;
 /**************************************************************/

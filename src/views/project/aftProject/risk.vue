@@ -268,7 +268,7 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button type="text" @click="getWarningDetail(scope.row.id, '2')">查看详情</el-button>
-                        <el-button type="text" @click="getWarningDetail(scope.row.id, '1')">立即处理</el-button>
+                        <el-button type="text" v-if="scope.row.warningStatus!='2'" @click="getWarningDetail(scope.row.id, '1')">立即处理</el-button>
                     </template>
                 </el-table-column>
             </el-table>
