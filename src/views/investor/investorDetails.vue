@@ -1,38 +1,43 @@
 <template>
-<div class="investorDetails">
-    <div class="header">
-        <el-row class="info">
-            <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
-            <el-col class="total" :span="21">
-                <el-row :gutter="20">
-                    <el-col :xs="8" :sm="12" :md="10" :lg="6" v-for="(item, index) of titleInfo.total" :key="item.index">
-                        <p class="desc">{{item.desc}}</p>
-                        <p class="amount">{{item.amount | toMoney}}<span class="unit">元</span></p>
-                    </el-col>
-                </el-row>
-            </el-col>
-        </el-row>
+    <div class="investorDetails">
+        <div class="header">
+            <el-row class="info">
+                <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
+                <el-col class="total" :span="21">
+                    <el-row :gutter="20">
+                        <el-col :xs="8" :sm="12" :md="10" :lg="6" v-for="(item, index) of titleInfo.total" :key="item.index">
+                            <p class="desc">{{item.desc}}</p>
+                            <p class="amount">{{item.amount | toMoney}}
+                                <span class="unit">元</span>
+                            </p>
+                        </el-col>
+                    </el-row>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="tabs">
+            <el-tabs v-model="detailsName" type="card" @tab-click="getTabs">
+                <el-tab-pane label="基本信息" name="info">
+                    <baseInfo @investorDetailsInfo="investorDetailsInfo"></baseInfo>
+                </el-tab-pane>
+                <el-tab-pane label="投资者文档" name="invDoc">
+                    <investorDoc :investmentData="investmentData"></investorDoc>
+                </el-tab-pane>
+                <el-tab-pane label="投资协议" name="agree">
+                    <agreement :agreementData="agreementData"></agreement>
+                </el-tab-pane>
+                <el-tab-pane label="资金明细" name="funddet" class="tab_list">
+                    <investment :investorData="investorData"></investment>
+                </el-tab-pane>
+                <el-tab-pane label="拜访记录" name="visiting">
+                    <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
+                </el-tab-pane>
+                <el-tab-pane label="日志" name="log" class="tab_list">
+                    <log-table></log-table>
+                </el-tab-pane>
+            </el-tabs>
+        </div>
     </div>
-    <div class="tabs">
-        <el-tabs v-model="detailsName" type="card" @tab-click="getTabs">
-            <el-tab-pane label="基本信息" name="info">
-                <baseInfo @investorDetailsInfo="investorDetailsInfo"></baseInfo>
-            </el-tab-pane>
-            <el-tab-pane label="投资者文档" name="invDoc">
-                <investorDoc :investmentData="investmentData"></investorDoc>
-            </el-tab-pane>
-            <el-tab-pane label="投资协议" name="agree">
-                <agreement :agreementData="agreementData"></agreement>
-            </el-tab-pane>
-            <el-tab-pane label="资金明细" name="funddet" class="tab_list">
-                <investment :investorData="investorData"></investment>
-            </el-tab-pane>
-            <el-tab-pane label="拜访记录" name="visiting">
-                <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
-            </el-tab-pane>
-        </el-tabs>
-    </div>
-</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -42,7 +47,8 @@ import investorDoc from './investorDoc'
 import agreement from "./agreement"
 import visitingRecord from "./visitingRecord"
 import investment from './investment'
-import {selectProjectOrFundDocument} from 'api/fund'
+import logTable from "components/log"
+import { selectProjectOrFundDocument } from 'api/fund'
 import {
     GetProtocolsList,
     getVisitingRecordList,
@@ -130,7 +136,8 @@ export default {
         investorDoc,
         agreement,
         investment,
-        visitingRecord
+        visitingRecord,
+        logTable
     }
 }
 </script>
@@ -168,7 +175,6 @@ export default {
                     color: @color-base;
                 }
             }
-
         }
     }
     .tabs {
