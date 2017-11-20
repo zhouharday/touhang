@@ -39,6 +39,12 @@
 
 <script>
 export default {
+    data(){
+        return {
+            page: page,
+            pageSize: pageSize,
+        }
+    },
     watch: {
         'tabs': function(to, from) {
             if (to.tabList[7]) {
@@ -48,22 +54,16 @@ export default {
     },
     props: {
         tableData: {
-            type: Array
+            type: Array,
+            default: []
         },
-<<<<<<< HEAD
-        isInTeam: {
-            type: Boolean,
-            default: false
+        tabs: {
+            type: Object,
+            default: {}
         },
-        pickerOptions0: {
-            disabledDate(time) {
-                return time.getTime() > Date.now();
-            }
-=======
         currentPage: {
             type: String,
             default: 1
->>>>>>> daec7211ac3d64bc322b5a1a44c9bf516fa8e688
         },
         pageSize: {
             type: String,
@@ -95,16 +95,8 @@ export default {
         handleSizeChange() {
             this.$emit('sizeChange')
         },
-<<<<<<< HEAD
-        refreshHandler(event) {
-           this.$emit('refresh')
-        },
-        init(){
-            
-=======
         handleCurrentChange() {
             this.$emit('currentChange')
->>>>>>> daec7211ac3d64bc322b5a1a44c9bf516fa8e688
         }
         // ,
         //  searchHandler(event) {
