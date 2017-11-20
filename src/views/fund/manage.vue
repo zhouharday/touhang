@@ -206,14 +206,6 @@ export default {
             costTypes: [] || JSON.parse(sessionStorage.getItem('costTypes')),
             paramsId: '', // 当前id
             deleteReminders: false, // 确认删除模态框
-            // rules: {
-            //     shareDate: [{
-            //         type: 'date',
-            //         required: true,
-            //         message: '请选择日期',
-            //         trigger: 'change'
-            //     }]
-            // }
         }
     },
     methods: {
@@ -224,27 +216,34 @@ export default {
         methodIncome() { // 添加
             this.modalIncome = true
             this.profit = true
-            this.formIncome = Object.assign({}, this.formIncome)
             this.formIncome.handleDate = new Date()
             this.formIncome.allocationName = this.fundName + '收益分配申请表'
             this.formIncome.fundName = this.fundName
             this._getAssignmentDetails()
+            this.formIncome = Object.assign({}, this.formIncome)
+            // console.log(this.formIncome)
         },
         editIncomeDis(index, row) {
-            var arr = []
+            // var arr = []
             this.modalIncome = true
             this.profit = false
-            this.formIncome.fundName = this.fundName
-            this.formIncome.allocationName = `${this.fundName}收益分配申请表`
-            this.formIncome.shareDate = new Date(this.formIncome.shareDate)
-            this.tableData = arr.concat(this.tableData)
-            this.formIncome = Object.assign({}, this.formIncome, row)
-            // console.log(Date.parse(this.formIncome.shareDate))
+            console.log(row)
+            getFundAllocationDetails(row.id).then((res) => {
+                if (res.status === 200) {
+                    // console.log(res)
+                    if (res.data.fundAllocation) {
+                        this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
+                    }
+                    if (res.data.params) {
+                        this.tableData = res.data.params
+                    }
+                }
+            })
         },
         confirmIncome() {
             this.tableData.map((x) => {
                 this.params.push({
-                    // agreementId: x.agreementId || x.id,
+                    agreementId: x.agreementId || x.id,
                     id: x.id,
                     shareMoney: x.shareMoney
                 })
@@ -259,7 +258,7 @@ export default {
                         this.modalIncome = false
                         this._getAllocationList()
                         // this.formIncome = ''
-                        // this.tableData = ''
+                        this.tableData = ''
                     }
                 })
             } else {
@@ -377,12 +376,13 @@ export default {
         },
         _getAssignmentDetails() { // 获取收益明细
             addAllocationInfo(this.$route.params.id).then((res) => {
-                if (res.status == '200') {
-                    // console.log(res.data.result) // 投资者数据为空
+                if (res.status === 200) {
+                    // console.log(res) // 投资者数据为空
                     this.tableData = res.data.result
                     this.tableData.map((x) => {
                         x.shareMoney = ''
                     })
+                    // console.log(this.tableData)
                 }
             })
         },

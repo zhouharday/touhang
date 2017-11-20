@@ -33,7 +33,7 @@ module.exports = {
                 // target: 'http://18f46963j4.iok.la',
                 // target:'http://192.168.0.118:9091',// 文军凡IP
                 // target: 'http://192.168.0.118:9091', // 文格阳IP
-                target: 'http://192.168.0.100:9091', // 蔡永亮 IP
+                target: 'http://192.168.0.105:9091', // 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
                 // target: 'http://sdwlyxgs.imwork.net:16380',
                 changeOrigin: true,
