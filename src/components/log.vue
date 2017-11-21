@@ -133,8 +133,6 @@ export default {
 };
 </script>
 
-
-
 <style lang="less" scoped>
 .logTable {
   margin: 0 auto;
