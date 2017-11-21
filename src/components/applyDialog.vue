@@ -3,7 +3,7 @@
     <div class="applyBox">
         <el-dialog title="发起申请" :visible.sync="applyModal">
             <i class="bottomLine"></i>
-            <el-form :model="applyForm" :rules="applyRule" ref="applyForm" label-width="60px">
+            <el-form :model="applyForm" :rules="applyRule" ref="applyForm" label-width="100px">
                 <el-row>
                     <el-col :span="13">
                         <el-form-item label="标题" prop="approveTitle">
@@ -16,6 +16,7 @@
                                 <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                                 </el-option>
                             </el-select>
+                            <Alert type="warning" v-if="noApproveUser" style="width: 50%" show-icon>此项目中没有属于该角色的成员！</Alert>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
@@ -44,11 +45,13 @@ export default {
             type: Object
         },
         auditorOptions: {
-            type: Array
+            type: Array,
+            default: []
         }
     },
     data(){
         return {
+            noApproveUser: false,
             applyRule:{
                 approveUserId: [
                     { required: true, message: '请选择审批人' }
@@ -56,9 +59,20 @@ export default {
             }
         };
     },
+    watch: {
+        'auditorOptions':function (to,from){
+            if(to.length == 0){
+                this.noApproveUser = true;
+            }
+        },
+    },
     methods: {
         submitHandler(event) {
-            this.$emit('submit', this.applyForm)
+            this.$refs["applyForm"].validate((valid) => {
+                if (valid) {
+                    this.$emit('submit', this.applyForm)
+                }
+            });
         },
         cancleHandler(event) {
             this.applyForm = {};

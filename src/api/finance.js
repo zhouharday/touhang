@@ -27,6 +27,7 @@ export function editFinance(params) {
 	let { id, projectTurnId, financingWay, financingMoney, financingDate } = params;
     const data = {
         id,
+        projectId,      // 项目id
         projectTurnId,
         financingWay,
         financingMoney,
@@ -36,9 +37,10 @@ export function editFinance(params) {
 }
 
 // 删除融资信息
-export function delFinance(id = undefined) {
+export function delFinance(id = undefined, projectId) {
     const data = {
-        id
+        id,
+        projectId      // 项目id
     }
     return service({url: '/financing/deleteFinancingInfo', method: 'post', data})
 }
