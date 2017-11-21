@@ -89,8 +89,8 @@ export default {
     }
   },
   methods: {
-    handleSizeChange(pageSizes) {
-      this.pageSizes = pageSizes;
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
       this.init();
     },
     handleCurrentChange(page) {

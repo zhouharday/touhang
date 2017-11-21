@@ -1159,7 +1159,7 @@ export default {
     handleCurrentChange3(page) {
       //获取tabList3 分页数据
       // this.page = '';
-      this.page3s = page;
+      this.pages3 = page;
       this.getTaskList3(this.pages3, this.pageSizes3);
     },
     handleSizeChange1(pageSize) {
