@@ -30,7 +30,7 @@
                     </el-form-item>
                     <el-form-item label="上传文件">
                         <!-- action 上传的地址，必填 -->
-                        <Upload ref="upload" multiple type="drag":on-success="handleSuccess" :data="uploadInfo" :action="actionUrl">
+                        <Upload ref="upload" multiple type="drag":on-success="handleSuccess" :headers ='headers':data="uploadInfo" :action="actionUrl">
                             <div style="padding: 20px 0">
                                 <Icon type="ios-cloud-upload" size="52"></Icon>
                                 <p>点击或将文件拖拽到这里上传</p>
@@ -85,7 +85,11 @@ export default {
             },
             createDate: changeDate(new Date()),
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name, //当前用户
-            actionUrl: this.api + '/files/uploadProjectDocument',
+            // actionUrl: this.api + '/files/uploadProjectDocument',
+            actionUrl: 'http://192.168.0.118:9091' + '/files/uploadProjectDocument',
+            headers: {
+                Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
+            },
             uploadInfo: {
                 file: '',
                 stageId: '1',

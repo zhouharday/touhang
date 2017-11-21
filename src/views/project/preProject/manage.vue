@@ -1109,7 +1109,7 @@ export default {
         goEditContract(id) {
             this.contractAdd2 = !this.contractAdd2;
             getContractDetail(id).then(resp => {
-                console.log("打开编辑 项目合同：" + JSON.stringify(resp.data));
+                // console.log("打开编辑 项目合同：" + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.contractForm2 = resp.data.result.projectContract;
 
@@ -1225,6 +1225,8 @@ export default {
                 //获得合同中的投资主体(基金)列表
                 getContractDetail(contract.id).then(resp => {
                     if (resp.data.status == '200') {
+                        this.$set(this.$data.paidForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
+                        this.contractDocument = resp.data.result.projectContract.documentInfo;
                         this.fundData2 = resp.data.result.fundInfo;
 
                         this.fundData2.forEach(function(item, index) {

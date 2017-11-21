@@ -384,7 +384,6 @@ export function editContract(projectContract = {}, fundInfo = []) {
         projectContract : projectContract,
         fundInfo : fundInfo
     }
-    console.log("编辑项目合同 参数："+JSON.stringify(data));
 	return service({url: '/projectContract/updateProjectContract', method: 'post', data});
 }
 

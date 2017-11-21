@@ -42,7 +42,7 @@
         <!-- 估值重置 dialog -->
         <div class="reset">
             <el-dialog title="估值重置" :visible.sync="resetDialog" size="tiny">
-                <span>确认将所有项目的估值清空重置？</span>
+                <span>{{resetTitle}}</span>
                 <span slot="footer" class="dialog-footer">
                     <el-button type="default" @click="resetDialog=false">取 消</el-button>
                     <el-button type="danger" @click="resetValue">确 定</el-button>
@@ -99,6 +99,7 @@ export default {
             pageSize2: 5,
             total2: 0,
             currentId: '',
+            resetTitle: '确认将所有项目的估值清空重置？',
             stateList: { //筛选选项
                 title: '状态：',
                 details: [{
@@ -222,6 +223,7 @@ export default {
         handleRowChange(row) {
             if (row) {
                 this.currentId = row.id;
+                this.resetTitle = '确认将项目:'+row.projectName+'的估值清空重置？'
             } else {
                 this.currentId = '';
             }
