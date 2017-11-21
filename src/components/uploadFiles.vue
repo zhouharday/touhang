@@ -1,6 +1,6 @@
 <template>
     <div class="uploadFiles">
-        <Upload multiple type="drag" name="files" :action="actionUrl" :default-file-list="documentInfo" :show-upload-list="true" :on-success="handleSuccess" :on-remove="handleRemove" :on-error="handleError" class="upload">
+        <Upload multiple type="drag" name="files" :action="actionUrl" :default-file-list="documentInfo" :headers="headers" :show-upload-list="true" :on-success="handleSuccess" :on-remove="handleRemove" :on-error="handleError" class="upload">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
@@ -19,6 +19,9 @@ export default {
     },
     data() {
         return {
+            headers: {
+                Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
+            },
             actionUrl: this.api + '/files/upload'
         }
     },

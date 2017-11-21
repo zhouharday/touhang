@@ -121,7 +121,7 @@ const mutations = {
             })
             .then(res => {
                 if (res.status == "200") {
-                    if (res.data.state == "200") {
+                    if (res.data.status == "200") {
                         if (res.data.result.length == 0) {
                             console.log('没有项目基金权限数据');
                             return;
