@@ -55,7 +55,7 @@ export default {
     .list {
       // display: flex;
       .default {
-        padding: 4px 18px;
+        padding: 4px 0px;
         line-height: 40px;
         border-right: 1px solid #ccc;
         border-bottom: 1px solid #ccc;
@@ -69,7 +69,7 @@ export default {
         // flex-shrink: 0;
         // justify-content: center;
         text-align: center;
-        width: 31%;
+        width: 28%;
         float: left;
         font-size: 14px;
         height: 70px;
@@ -80,7 +80,7 @@ export default {
         // flex-shrink: 0;
         // display: flex;
         // align-items: center;
-        width: 19%;
+        width: 22%;
         float: left;
         text-align: center;
         font-size: 14px;
