@@ -554,7 +554,7 @@
                     </el-table-column>
                     <el-table-column label="分红金额（元）" prop="shareAmount" align="center">
                         <template scope="scope">
-                            <el-form-item prop="shareAmount" :rules="amountRule" label-width="0px" height="100%">
+                            <el-form-item prop="shareAmount" :rules="amountRule" label-width="0px" height="100%" style="margin-bottom: 0;">
                                 <el-input v-model.number="scope.row.shareAmount" placeholder="请输入分红金额" @input="valueSum"></el-input>
                             </el-form-item>
                         </template>
