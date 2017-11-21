@@ -240,6 +240,7 @@ export default {
                 let projectData = this.projectData;
                 editFinance({
                     id: row.id,
+                    projectId: row.projectId,
                     projectTurnId: row.projectTurnId,
                     financingWay: row.financingWay,
                     financingMoney: row.financingMoney,
@@ -255,10 +256,11 @@ export default {
         // 删除当前行
         handleDelete(index, rows = []) {
             let row = rows[index] || {};
-            delFinance(row.id)
+            delFinance(row.id, row.projectId)
             .then(resp => {
                 console.log('del resp: ', resp.data.message);
-                rows.splice(index, 1);
+                this.getData();
+                // rows.splice(index, 1);
             }).catch(e => {
                 console.log('delFinance exists error: ', e);
             });
