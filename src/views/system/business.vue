@@ -58,7 +58,7 @@
                                             <el-checkbox :label="nextItem.path" >{{nextItem.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
                                         </div>
-                                        <div style=" margin-left: 15px;"> 
+                                        <div style=" margin-left: 15px;">
                                             <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
                                             <el-checkbox v-for="(text, index) of nextItem.buttons" :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
@@ -147,6 +147,7 @@ export default {
             var String = getUpdataFund(this.clickMenu,this.allData.data )
             roleBindPermission(this.userId,String).then((res)=>{
                 console.log(res)
+                this.$Message.success(res.data.message);
             })
 
         },

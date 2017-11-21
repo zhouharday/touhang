@@ -59,7 +59,7 @@
                                             <el-checkbox :label="nextItem.path" >{{nextItem.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
                                         </div>
-                                        <div style=" margin-left: 15px;"> 
+                                        <div style=" margin-left: 15px;">
                                             <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
                                             <el-checkbox v-for="(text, index) of nextItem.buttons" :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
@@ -114,7 +114,7 @@ import { roleBindPermission } from "api/system";
 // import { mapState } from "vuex";
 // import { filtersPermissionCode_fund } from "common/js/config";
 export default {
-  
+
   data() {
     return {
       clickMenu: [],
@@ -153,6 +153,7 @@ export default {
       }
       roleBindPermission(this.userId, String).then(res => {
         console.log(res);
+          this.$Message.success(res.data.message);
       });
     },
     // 添加角色 的方法

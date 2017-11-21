@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div v-for="item in dataArr">
-                    <el-table :data="item.dataDocumentResult" border style="width: 100%" align="center">
+                    <el-table :data="item.dataDocumentResult"  align="center">
                         <el-table-column :label=item.title prop="allocationDocumentName" align="center">
                         </el-table-column>
                         <el-table-column  prop="documentName" align="center">

@@ -323,12 +323,14 @@
                     this.changeList = []
                     if(item.data.length == 0 && this.deleteList.length == 0){
                     }else {
+                        console.log(item.data)
+                        console.log(this.deleteList)
                         SetConfig(item.data, this.deleteList).then((res) => {
                             if (res.data.status == '9024') {
                                 alert(res.data.message)
                                 getConfigLeftList().then((res) => {
                                     this.leftList = reloadData(res.data.result)
-                                })                            
+                                })
                             } else {
                                 getConfigLeftList().then((res) => {
                                     this.leftList = reloadData(res.data.result)
@@ -366,7 +368,6 @@
                 SetConfig(newList, this.deleteList).then((res) => {
                     if (res.data.status == '9024') {
                         alert(res.data.message)
-                        
                     } else {
                         getConfigLeftList().then((res) => {
                             this.leftList = reloadData(res.data.result)
@@ -414,7 +415,10 @@
                 });
                 console.log(shenpidata);
                 addStageApprove(id,stageId,stageName,shenpidata).then((res)=>{
+                    console.log('&^^^%^%^$$%^#^')
+
                     getConfigLeftList().then((res) => {
+
                         this.leftList = reloadData(res.data.result)
                         this.nowId = this.leftList[0].data[0].id
                         GetrightList(this.leftList[0].data[0].id).then((res) => {
@@ -494,14 +498,6 @@
                         nodeName2: arr[1],
                         nodeName3: arr[2],
                     }
-//                    if(data.data[0])
-//                        this.projectForm.nodeName1 = data.data[0].roleName
-//                    if(data.data[1])
-//                        this.projectForm.nodeName2 = data.data[1].roleName
-//                    if(data.data[2])
-//                        this.projectForm.nodeName3 = data.data[2].roleName
-
-
                     this.showRole = []
                     if(item.stageType == '3')
                         this.showshenpi = false
@@ -576,11 +572,31 @@
             }),
 
             queryList(1).then((res)=>{
+                console.log('*****')
+                console.log(res)
                 this.fundRole = res.data.result
+                var nilRole = {
+                    'id' : '',
+                    'merchantId' : '',
+                    'roleName' : '无审批人',
+                    'roleType' : '1'
+                }
+                this.fundRole.push(nilRole)
             }),
 
             queryList(0).then((res)=>{
+                console.log('***000000')
+
                 this.businessRole = res.data.result
+                console.log(this.businessRole)
+                var nilRole = {
+                    'id' : '',
+                    'merchantId' : '',
+                    'roleName' : '无审批人',
+                    'roleType' : '0'
+                }
+                this.businessRole.push(nilRole)
+
             })
         }
     }

@@ -250,6 +250,7 @@ export default {
                 console.log(string)
                 authorization(this.nowId,string).then((res)=>{
                     console.log(res.data)
+                    this.$Message.success(res.data.message);
                     getUserRole(this.nowId).then((res)=>{
                         var arr = res.data.result
                         var userRole = res.data.result

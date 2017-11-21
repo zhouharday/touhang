@@ -3,7 +3,7 @@
         <el-row :gutter="20">
             <!-- 树形控件 -->
             <el-col :span="4">
-                <div class="table-title">阿里巴巴</div>
+                <div class="table-title">{{companyName}}</div>
                 <el-tree :data="structure" :props="defaultProps" accordion :default-expand-all="true" class="tree" @node-click="handleNodeClick">
                 </el-tree>
             </el-col>
@@ -11,7 +11,7 @@
             <el-col :span="20">
                 <div class="title">
                     <div class="filter">
-                        <el-form :inline="true" class="demo-form-inline">
+                        <el-form :inline="true" >
                             <el-form-item>
                                 <el-input placeholder="请输入搜索内容" icon="search" v-model="input2" :on-icon-click="handleIconClick">
                                 </el-input>
@@ -178,6 +178,7 @@ export default {
           value: "启用"
         }
       ],
+
       value2: "",
       subscriberData: [],
       addSubscriber: {
@@ -252,7 +253,8 @@ export default {
       ],
       input2: "",
       newOrChange: false,
-      biaoti: ""
+      biaoti: "",
+        companyName:""
     };
   },
   methods: {
@@ -296,7 +298,7 @@ export default {
 
       //            this.addSubscriber.sex = row.six
       this.addSubscriber.birthday = row.age;
-      this.addSubscriber.cellphone = row.telephone;
+      this.addSubscriber.cellphone = row.phone;
       this.addSubscriber.email = row.emil;
       this.addSubscriber.account = row.number;
       this.modelSubscriber = true;
@@ -371,6 +373,9 @@ export default {
     }
   },
   created() {
+      this.companyName = JSON.parse(
+          sessionStorage.getItem("merchants")
+      )[0].merchant_name;
     getDepartmentList().then(res => {
       var dataList = res.data.result;
       this.allDepartmentList = dataList;
@@ -413,11 +418,11 @@ export default {
     display: flex;
     background: none;
     .filter {
-      flex: 0 0 50%;
+      flex: 0 0 80%;
       padding-top: 25px;
     }
     .btn {
-      flex: 0 0 50%;
+      flex: 0 0 20%;
       text-align: right;
     }
   }
