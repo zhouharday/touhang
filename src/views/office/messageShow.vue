@@ -1,134 +1,142 @@
 <template>
-    <section>
-        <!-- 这是消息公告页内容 -->
-        <div class="messageShow">
-            <el-tabs @tab-click="tableDatasss">
-                <!-- 公司公告 Tab -->
-                <el-tab-pane value="1" label="公司公告">
-                    <el-table stripe :data="tableData1" style="width: 100%">
-                        <el-table-column prop="noticeTitle" label="主题" align="center">
-                        </el-table-column>
-                        <el-table-column prop="seedUserName" label="发布人" align="center">
-                        </el-table-column>
-                        <el-table-column prop="seedNoticeDate" label="发布日期" align="center">
-                        </el-table-column>
-                        <el-table-column prop="noticeType" label="状态" align="center">
-                        </el-table-column>
-                        <el-table-column label="操作" align="center">
-                            <template scope="scope">
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNoticeBtn(scope.row)" type="text" size="small">编辑</el-button>
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
-                                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="delModal1Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
-                                <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <div style="margin: 10px;overflow: hidden">
-                        <div style="float: right;">
-                            <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page1.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
-                            </el-pagination>
-                        </div>
-                    </div>
-                </el-tab-pane>
-                <!-- 删除公司公告提示弹框 -->
-                <Modal v-model="delModal1" width="360">
-                    <p slot="header" style="color:#f60;text-align:center">
-                        <Icon type="information-circled"></Icon>
-                        <span>删除确认</span>
-                    </p>
-                    <div style="text-align:center">
-                        <p>此操作将会永久删除当前公告</p>
-                        <p>是否继续删除？</p>
-                    </div>
-                    <div slot="footer">
-                        <Button type="error" size="large" long :loading="modal_loading1" @click="del1">删除</Button>
-                    </div>
-                </Modal>
-                <!-- 系统消息 Tab -->
-                <el-tab-pane value="2" label="系统消息">
-                    <el-table stripe :data="tableData2" style="width: 100%">
-                        <el-table-column prop="assistMessage.msgTitle" label="主题" width="550" align="center">
-                        </el-table-column>
-                        <el-table-column prop="assistMessage.seedUserName" label="发布人" width="" align="center">
-                        </el-table-column>
-                        <el-table-column prop="assistMessage.seedMsgDate" label="时间" width="" align="center">
-                        </el-table-column>
-                        <el-table-column label="操作" width="" align="center">
-                            <template scope="scope">
-                                <!-- <el-button @click="remove" type="text" size="small">删除</el-button> -->
-                                <el-button @click.native.prevent="delModal2Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <div style="margin: 10px;overflow: hidden">
-                        <div style="float: right;">
-                            <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
-                            </el-pagination>
-                        </div>
-                    </div>
-                </el-tab-pane>
-                <!-- 删除系统消息提示弹框 -->
-                <Modal v-model="delModal2" width="360">
-                    <p slot="header" style="color:#f60;text-align:center">
-                        <Icon type="information-circled"></Icon>
-                        <span>删除确认</span>
-                    </p>
-                    <div style="text-align:center">
-                        <p>此操作将会永久删除当前消息</p>
-                        <p>是否继续删除？</p>
-                    </div>
-                    <div slot="footer">
-                        <Button type="error" size="large" long :loading="modal_loading2" @click="del2">删除</Button>
-                    </div>
-                </Modal>
-            </el-tabs>
-            <!-- 发布新公告 btn -->
-            <el-button v-show="isAddMsg" type="danger" size="small" @click="realseBtn" class="messageBtn">发布新公告</el-button>
-            <!-- 发布新公告 dialog -->
-            <el-dialog style="width:1100px" title="发布新公告" :visible.sync="dialogFormVisible">
-                <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
-                    <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
-                        <el-input v-model="sendNoticeform.noticeTitle" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
-                        <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
-                        <el-input :disabled="1" v-model="sendNoticeform.seedUserId" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
-                        <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button v-show="cancles" type="default" size="small" @click="cancle">取 消</el-button>
-                    <el-button v-show="saves" type="danger" size="small" @click="saveORrealse(1)">保 存</el-button>
-                    <el-button v-show="realses" type="danger" size="small" @click="saveORrealse(2)">发 布</el-button>
-                </div>
-            </el-dialog>
-            <!-- 查看公司公告 dialog -->
-            <el-dialog style="width:1100px" title="查看公司公告" :visible.sync="viewModal">
-                <el-form style="width:500px" :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
-                    <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
-                        <el-input v-model="sendNoticeform.noticeTitle" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
-                        <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" disabled>
-                        </el-input>
-                    </el-form-item>
-                    <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
-                        <el-input :disabled="1" v-model="sendNoticeform.seedUserId" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
-                        <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
+  <section>
+    <!-- 这是消息公告页内容 -->
+    <div class="messageShow">
+      <el-tabs @tab-click="tableDatasss">
+        <!-- 公司公告 Tab -->
+        <el-tab-pane value="1" label="公司公告">
+          <el-table stripe :data="tableData1" style="width: 100%">
+            <el-table-column prop="noticeTitle" label="主题" align="center">
+            </el-table-column>
+            <el-table-column prop="seedUserName" label="发布人" align="center">
+            </el-table-column>
+            <el-table-column prop="seedNoticeDate" label="发布日期" align="center">
+            </el-table-column>
+            <el-table-column prop="noticeType" label="状态" align="center">
+            </el-table-column>
+            <el-table-column label="操作" align="center">
+              <template scope="scope">
+                <el-button v-show="scope.row.noticeType == '未发布'" @click="editNoticeBtn(scope.row)" type="text" size="small">编辑</el-button>
+                <el-button v-show="scope.row.noticeType == '未发布'" @click="releaseNotice(scope.row)" type="text" size="small">发布</el-button>
+                <el-button v-show="scope.row.noticeType == '未发布'" @click.native.prevent="delModal1Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
+                <el-button v-show="scope.row.noticeType == '已发布'" @click="lookNotice(scope.row)" type="text" size="small">查看</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+              <el-pagination @size-change="handleSizeChange1" @current-change="handleCurrentChange1" :current-page="page1.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page1.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page1.total">
+              </el-pagination>
+            </div>
+          </div>
+        </el-tab-pane>
+        <!-- 删除公司公告提示弹框 -->
+        <Modal v-model="delModal1" width="360">
+          <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>删除确认</span>
+          </p>
+          <div style="text-align:center">
+            <p>此操作将会永久删除当前公告</p>
+            <p>是否继续删除？</p>
+          </div>
+          <div slot="footer">
+            <Button type="error" size="large" long :loading="modal_loading1" @click="del1">删除</Button>
+          </div>
+        </Modal>
+        <!-- 系统消息 Tab -->
+        <el-tab-pane value="2" label="系统消息">
+          <el-table stripe :data="tableData2" style="width: 100%">
+            <el-table-column prop="assistMessage.msgTitle" label="主题" width="550" align="center">
+            </el-table-column>
+            <el-table-column prop="assistMessage.seedUserName" label="发布人" width="" align="center">
+            </el-table-column>
+            <el-table-column prop="assistMessage.seedMsgDate" label="时间" width="" align="center">
+            </el-table-column>
+            <el-table-column label="操作" width="" align="center">
+              <template scope="scope">
+                <!-- <el-button @click="remove" type="text" size="small">删除</el-button> -->
+                <el-button @click.native.prevent="delModal2Btn(scope.$index,scope.row)" type="text" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div style="margin: 10px;overflow: hidden">
+            <div style="float: right;">
+              <el-pagination @size-change="handleSizeChange2" @current-change="handleCurrentChange2" :current-page="page2.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page2.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page2.total">
+              </el-pagination>
+            </div>
+          </div>
+        </el-tab-pane>
+        <!-- 删除系统消息提示弹框 -->
+        <Modal v-model="delModal2" width="360">
+          <p slot="header" style="color:#f60;text-align:center">
+            <Icon type="information-circled"></Icon>
+            <span>删除确认</span>
+          </p>
+          <div style="text-align:center">
+            <p>此操作将会永久删除当前消息</p>
+            <p>是否继续删除？</p>
+          </div>
+          <div slot="footer">
+            <Button type="error" size="large" long :loading="modal_loading2" @click="del2">删除</Button>
+          </div>
+        </Modal>
+      </el-tabs>
+      <!-- 发布新公告 btn -->
+      <el-button v-show="isAddMsg" type="danger" size="small" @click="realseBtn" class="messageBtn">发布新公告</el-button>
+      <!-- 发布新公告 dialog -->
+      <el-dialog title="发布新公告" :visible.sync="dialogFormVisible">
+        <el-row>
+          <el-col :span="24">
+            <el-form :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
+              <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
+                <el-input v-model="sendNoticeform.noticeTitle" auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
+                <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容">
+                </el-input>
+              </el-form-item>
+              <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
+                <el-input :disabled="1" v-model="sendNoticeform.seedUserId" auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
+                <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
+                </el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+        <div slot="footer" class="dialog-footer">
+          <el-button v-show="cancles" type="default" size="small" @click="cancle">取 消</el-button>
+          <el-button v-show="saves" type="danger" size="small" @click="saveORrealse(1)">保 存</el-button>
+          <el-button v-show="realses" type="danger" size="small" @click="saveORrealse(2)">发 布</el-button>
         </div>
-    </section>
+      </el-dialog>
+      <!-- 查看公司公告 dialog -->
+      <el-dialog title="查看公司公告" :visible.sync="viewModal">
+        <el-row>
+          <el-col>
+            <el-form :model="sendNoticeform" ref="sendNoticeform" :label-position="labelPosition">
+              <el-form-item porp="noticeTitle" label="主题" :label-width="formLabelWidth">
+                <el-input v-model="sendNoticeform.noticeTitle" disabled></el-input>
+              </el-form-item>
+              <el-form-item porp="noticeContent" label="内容" :label-width="formLabelWidth">
+                <el-input v-model="sendNoticeform.noticeContent" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" disabled>
+                </el-input>
+              </el-form-item>
+              <el-form-item porp="seedUserId" label="发布人" :label-width="formLabelWidth">
+                <el-input :disabled="1" v-model="sendNoticeform.seedUserId" disabled></el-input>
+              </el-form-item>
+              <el-form-item porp="seedNoticeDate" label="发布日期" :label-width="formLabelWidth">
+                <el-input @change="getDateValue" v-model="sendNoticeform.seedNoticeDate" placeholder="默认当前时间" disabled>
+                </el-input>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
+      </el-dialog>
+    </div>
+  </section>
 </template>
 
 <style lang="less" scoped>
@@ -143,6 +151,9 @@
     position: absolute;
     top: 25px;
     right: 30px;
+  }
+  .el-dialog--small {
+    width: 30%;
   }
 }
 </style>
@@ -310,7 +321,7 @@ export default {
         console.log(this.sendNoticeform);
         this.editNotice(num);
         return;
-      };
+      }
       // alert(2);
       this.$http
         .post(this.api + "/work/addNotice", {
@@ -388,12 +399,12 @@ export default {
             // alert(565);
             if (res.data.status == "200") {
               console.log(res.data);
-            };
+            }
             this.getNoticeUserList1(1, 10);
             if (res.data.status == "49996") {
               //数据为空
               console.log("传入参数非法");
-            };
+            }
           } else if (res.data.status == "403") {
             console.log(res.data.message);
           }
