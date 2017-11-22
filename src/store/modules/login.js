@@ -94,7 +94,7 @@ const mutations = {
             type: msg.type
         })
     },
-    getUserButton(state, option) {
+    getUserButton_permission(state, option) {
         option.this.$http
             .post(option.this.api + "/role/getUserButton", {
                 "userId": state.userInfor.id,
@@ -306,7 +306,7 @@ const actions = {
             console.log(error);
         })
     },
-    getUserButton(state, option) {
+    getUserButton_permission(state, option) {
         option.this.$http
             .post(option.this.api + "/role/getUserButton", {
                 "userId": state.userInfor.id,
@@ -337,6 +337,7 @@ const actions = {
             })
             .then(res => {
                 if (res.status == "200") {
+                    console.log(res);
                     if (res.data.status == "200") {
                         commit('getPermissionButton_permission', data.data.result);
                         //         if (res.data.result.length == 0) {
