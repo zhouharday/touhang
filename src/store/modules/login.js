@@ -95,7 +95,7 @@ const mutations = {
         })
     },
     getUserButton(state, option) {
-        user.this.$http
+        option.this.$http
             .post(option.this.api + "/role/getUserButton", {
                 "userId": state.userInfor.id,
                 "merchantId": state.merchants[0].id
