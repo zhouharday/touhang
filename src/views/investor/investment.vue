@@ -11,7 +11,7 @@
     </Tabs>
     <!-- 添加出资模态框 -->
     <Modal v-model="InvDetails" title="添加出资明细" width="800px">
-        <funds-modal :fundsInfo="InvInfo" ref="fundsModal"></funds-modal>
+        <funds-modal :fundsInfo="InvInfo" ref="fundsModal" :editOrAdd="add"></funds-modal>
         <div slot="footer">
             <Button type="text" @click="cancelInvDetails">取消</Button>
             <Button type="primary" @click="addInvDetails">确认</Button>
@@ -52,6 +52,7 @@ export default {
     data() {
         return {
             InvDetails: false,
+            add: false,
             bonusDetails: false,
             tabsName: 'contribution',
             InvInfo: {
@@ -103,6 +104,7 @@ export default {
                     handlingDate: new Date()
                 }
                 this.InvDetails = true
+                this.add = true
                 this.InvInfo = invInfo
             } else {
                 let invbonusInfo = {
@@ -141,6 +143,7 @@ export default {
                     return false
                 }
             })
+            this.add = false
         },
         cancelInvBonus() {
             var quitApplyInfo = this.$refs.bonusModal.$refs.quitApplyInfo

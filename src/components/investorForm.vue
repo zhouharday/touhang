@@ -35,7 +35,7 @@
                 </el-form-item>
             </el-col>
             <el-col :span="12">
-                <el-form-item label="年收入 (元)" :label-width="formLabelWidth" prop="personalAssets">
+                <el-form-item label="年收入 (元)" :label-width="formLabelWidth">
                     <el-input placeholder="请输入内容" v-model="investorForm.personalAssets" :disabled="variable">
                     </el-input>
                 </el-form-item>
