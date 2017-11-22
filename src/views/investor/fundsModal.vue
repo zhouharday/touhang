@@ -77,6 +77,10 @@ export default {
         fundsInfo: {
             type: Object,
             default: {}
+        },
+        editOrAdd: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -106,17 +110,19 @@ export default {
     },
     methods: {
         getItemData(val) {
-            var current = ''
-            this.agreementList = val
-            this.fundsInfo.investorName = val
-            this.fundsInfo.fundName = val
-            this.allAgreement.forEach(elem => {
-                if (elem.id === val) {
-                    current = elem
-                }
-            })
-            this.fundsInfo.subscribeAmount = current.subscribeAmount
-            this.fundsInfo.residueAmount = current.residueAmount
+            if (this.editOrAdd) {
+                var current = ''
+                this.agreementList = val
+                this.fundsInfo.investorName = val
+                this.fundsInfo.fundName = val
+                this.allAgreement.forEach(elem => {
+                    if (elem.id === val) {
+                        current = elem
+                    }
+                })
+                this.fundsInfo.subscribeAmount = current.subscribeAmount
+                this.fundsInfo.residueAmount = current.residueAmount
+            }
         },
         uploadSuccess(list) {
             this.fundsInfo.documentInfo = list

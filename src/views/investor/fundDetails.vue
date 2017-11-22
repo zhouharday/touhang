@@ -80,17 +80,18 @@ export default {
     },
     methods: {
         handleEdit(index, row) {
+            console.log(row)
+            this.fundsDetailsModal = true
+            row.paidAmount = parseFloat(row.paidAmount)
+            row.paidDate = new Date(row.paidDate)
             row.documentInfo.map((x) => {
                 x.name = x.fileName,
                 x.url = x.filePath
             })
             // console.log(row)
             // console.log(typeof(row.paidDate))
-            this.fundsDetailsModal = true
-            row.paidAmount = parseFloat(row.paidAmount)
-            row.paidDate = new Date(row.paidDate)
-            this.fundsInfo = Object.assign({}, row)
-            // console.log(typeof(this.fundsInfo.paidDate))
+            this.fundsInfo = this._.assign({}, row)
+            console.log()
         },
         handleDelete(index, row) {
             this.deleteReminders = true
