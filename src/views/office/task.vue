@@ -178,7 +178,7 @@
                 <!-- <el-input v-model="addTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" disabled>
                   </el-input> -->
                 <div class="el-form-item_div1">
-                  <div v-for="(item,index) of viewTaskForm1.recording" :key="item">{{item.recordDetails}}</div>
+                  <div v-for="(item,index) of viewTaskForm1.recording" :key="item">{{item.createDate}} &nbsp;{{item.recordDetails}}</div>
                 </div>
               </el-form-item>
             </el-col>
@@ -315,7 +315,7 @@
                 <!-- <el-input v-model="doneTaskForm1.recording" type="textarea" :autosize="{ minRows: 2, maxRows: 4}" disabled>
                   </el-input> -->
                 <div class="el-form-item_div1">
-                  <div v-for="(item,index) of doneTaskForm1.recording" :key="item">{{item.recordDetails}}</div>
+                  <div v-for="(item,index) of doneTaskForm1.recording" :key="item">{{item.createDate}} &nbsp;{{item.recordDetails}}</div>
                 </div>
               </el-form-item>
             </el-col>
