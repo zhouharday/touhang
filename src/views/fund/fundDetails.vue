@@ -1,100 +1,100 @@
 <template>
-    <div class="fund">
-        <div class="title">
-            <div class="left">
-                <span class="desc">{{formDetails.fundName}}</span>
-            </div>
-            <div class="right">
-                <!-- :disabled="judgementFundStage" -->
-                <el-button type="danger" @click="changeStep">下一阶段</el-button>
-                <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="stopSuppression">中止
-                </el-button>
-            </div>
-        </div>
-        <el-row class="step">
-            <div class="step_lists" v-for="(step, index) of steps" :key="index" :class="{step_one: index == '0',
+  <div class="fund">
+    <div class="title">
+      <div class="left">
+        <span class="desc">{{formDetails.fundName}}</span>
+      </div>
+      <div class="right">
+        <!-- :disabled="judgementFundStage" -->
+        <el-button type="danger" @click="changeStep">下一阶段</el-button>
+        <el-button type="danger" :class="{bgc:suspend}" :disabled="suspend" @click="stopSuppression">中止
+        </el-button>
+      </div>
+    </div>
+    <el-row class="step">
+      <div class="step_lists" v-for="(step, index) of steps" :key="index" :class="{step_one: index == '0',
                          step_third: index == steps.length-1,
                          step_second:index > 0 && index < steps.length-1,
                          current_border: step.id == currentStep}">
-                <span class="step_content">{{step.stageName}}</span>
-            </div>
-        </el-row>
-        <div class="picture">
-            <div class="img_wrapper">
-                <img src="../../../static/img/double.png" alt="">
-            </div>
-            <div class="prompt_message">
-                <span class="prompt">{{prompt}}</span>
-                <div class="item_wrapper">
-                    <div v-for="(item, index) in module" class="item" :key="item.index">
-                        <span class="count">{{index + 1}}</span>
-                        <p class="desc">{{item.title}}</p>
-                        <span class="state" v-if="item.type == '1'">
-                            <span @click="showModalUpload(index, item.id)" v-if="item.status == '0'">
-                                立即上传
-                            </span>
-                            <span v-else="item.status !== '0'">已完成</span>
-                        </span>
-                        <!-- {{item}} -->
-                        <span class="state" v-if="item.type == '2'">
-                            <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">立即审批</span>
-                            <span v-else="item.status !== '0'">已完成</span>
-                        </span>
-                        <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
-                            <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">查看进度</span>
-                            <span v-else="item.status !== '0'">已完成</span>
-                        </span>
-                    </div>
-                </div>
-                <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
-                <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="confirmApplyModal" @cancle="cancleApplyModal"></apply-dialog>
-                <progress-dialog :progressModal="progressModal" :documentInfo="documentInfo" :table2="approveStageNodeData" :approvalForm="approvalForm" :isBlock="whichClick" :auditorOptions="auditorOptions" :dialogTitle="dialogTitle" @submit="confirmProgress" @cancle="cancalProgress" @closeShowModal="closeShowModal"></progress-dialog>
-            </div>
+        <span class="step_content">{{step.stageName}}</span>
+      </div>
+    </el-row>
+    <div class="picture">
+      <div class="img_wrapper">
+        <img src="../../../static/img/double.png" alt="">
+      </div>
+      <div class="prompt_message">
+        <span class="prompt">{{prompt}}</span>
+        <div class="item_wrapper">
+          <div v-for="(item, index) in module" class="item" :key="item.index">
+            <span class="count">{{index + 1}}</span>
+            <p class="desc">{{item.title}}</p>
+            <span class="state" v-if="item.type == '1'">
+              <span @click="showModalUpload(index, item.id)" v-if="item.status == '0'">
+                立即上传
+              </span>
+              <span v-else="item.status !== '0'">已完成</span>
+            </span>
+            <!-- {{item}} -->
+            <span class="state" v-if="item.type == '2'">
+              <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">立即审批</span>
+              <span v-else="item.status !== '0'">已完成</span>
+            </span>
+            <span class="state" :class="{complete:item.status == '0'}" v-if="item.type == '3'">
+              <span v-if="item.status == '0'" @click="showProgressModal(item.id, item.type)">查看进度</span>
+              <span v-else="item.status !== '0'">已完成</span>
+            </span>
+          </div>
         </div>
-        <div class="chart">
-            <el-row :gutter="10" style="width: 100%; height: 100%">
-                <el-col :span="12">
-                    <tableInfo :data="tableData"></tableInfo>
-                </el-col>
-                <el-col :span="12">
-                    <echarts></echarts>
-                </el-col>
-            </el-row>
-        </div>
-        <!-- <div class="tabs" v-if="existPermissions"> -->
-        <div class="tabs">
-            <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-                <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
-                    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
-                    </my-details>
-                </el-tab-pane>
-                <el-tab-pane label="团队" name="team" class="tab_list">
-                    <team :teamData="teamData"></team>
-                </el-tab-pane>
-                <el-tab-pane label="审批" name="examine" class="tab_list">
-                    <examine :examineData="examineData"></examine>
-                </el-tab-pane>
-                <el-tab-pane label="投资者" name="Investor" class="tab_list">
-                    <investor :investorData="investorData"></investor>
-                </el-tab-pane>
-                <el-tab-pane label="投资项目" name="project" class="tab_list">
-                    <projects :projectsData="projectsData"></projects>
-                </el-tab-pane>
-                <el-tab-pane label="文档" name="file" class="tab_list" v-if="haveJurisdiction('GL-JJWD')">
-                    <my-file :fileListData="fileListData"></my-file>
-                </el-tab-pane>
-                <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
-                    <manage :costData="costData" :fundName="formDetails.fundName"></manage>
-                </el-tab-pane>
-                <el-tab-pane label="日志" name="log" class="tab_list">
-                    <log-table :tabs="tabs" :typeId="projectId" :type="type"></log-table>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
-        <!-- 中止确认弹框 -->
-        <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="confirmSuppression" @cancel="deleteReminders=false">
-        </delete-reminders>
+        <my-upload :modalUpload="modalUpload" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
+        <apply-dialog :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="confirmApplyModal" @cancle="cancleApplyModal"></apply-dialog>
+        <progress-dialog :progressModal="progressModal" :documentInfo="documentInfo" :table2="approveStageNodeData" :approvalForm="approvalForm" :isBlock="whichClick" :auditorOptions="auditorOptions" :dialogTitle="dialogTitle" @submit="confirmProgress" @cancle="cancalProgress" @closeShowModal="closeShowModal"></progress-dialog>
+      </div>
     </div>
+    <div class="chart">
+      <el-row :gutter="10" style="width: 100%; height: 100%">
+        <el-col :span="12">
+          <tableInfo :data="tableData"></tableInfo>
+        </el-col>
+        <el-col :span="12">
+          <echarts></echarts>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- <div class="tabs" v-if="existPermissions"> -->
+    <div class="tabs">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+        <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
+          <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
+          </my-details>
+        </el-tab-pane>
+        <el-tab-pane label="团队" name="team" class="tab_list">
+          <team :teamData="teamData"></team>
+        </el-tab-pane>
+        <el-tab-pane label="审批" name="examine" class="tab_list">
+          <examine :examineData="examineData"></examine>
+        </el-tab-pane>
+        <el-tab-pane label="投资者" name="Investor" class="tab_list">
+          <investor :investorData="investorData"></investor>
+        </el-tab-pane>
+        <el-tab-pane label="投资项目" name="project" class="tab_list">
+          <projects :projectsData="projectsData"></projects>
+        </el-tab-pane>
+        <el-tab-pane label="文档" name="file" class="tab_list" v-if="haveJurisdiction('GL-JJWD')">
+          <my-file :fileListData="fileListData"></my-file>
+        </el-tab-pane>
+        <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
+          <manage :costData="costData" :fundName="formDetails.fundName"></manage>
+        </el-tab-pane>
+        <el-tab-pane label="日志" name="log" class="tab_list">
+          <log-table :table-data="tableData" :page="page" :page-size="pageSize" :pages="pages"></log-table>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+    <!-- 中止确认弹框 -->
+    <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="confirmSuppression" @cancel="deleteReminders=false">
+    </delete-reminders>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -142,6 +142,16 @@ export default {
   },
   data() {
     return {
+      page: 1,
+      pageSize: 10,
+      pages: {
+        pageNum: "", //当前页码
+        total: "", //数据总数
+        pageSize: "", //每页条数
+        navigatepageNums: "", //页数
+        current: "" //当前页码
+      },
+      tableData: [],
       type: 2,
       tabs: {
         tabList: [false, false, false, false, false, false, false, false, false]
@@ -257,10 +267,44 @@ export default {
         fileId: this.stepId || sessionStorage.getItem("stepId"),
         type: 1,
         userId: JSON.parse(sessionStorage.getItem("userInfor")).id
-      }
+      },
+      log: false
     };
   },
   methods: {
+    initLog() {
+      alert(111);
+      this.$http
+        .post(this.api + "/businessLogRecord/selectBusinessLogRecordPageList", {
+          type: this.type,
+          type_id: this.typeId,
+          page: this.page,
+          pageSize: this.pageSize
+        })
+        .then(res => {
+          if (res.status == "200") {
+            // console.log(res);
+            if (res.data.status == "200") {
+              console.log(res.data);
+              res.data.result.list.map((item, index) => {
+                res.data.result.list[index].index = index + 1;
+              });
+              this.tableData = res.data.result.list;
+              this.pages.pageNum = res.data.result.pageNum; //当前页码
+              this.pages.total = res.data.result.total; //数据总数
+              this.pages.pageSize = res.data.result.pageSize; //每页条数
+              this.pages.navigatepageNums =
+                res.data.result.navigatepageNums.length; //页数长度
+              this.$Message.success(res.data.message);
+            } else {
+              this.$Message.error(res.data.message);
+            }
+          }
+        })
+        .catch(error => {
+          this.$Message.error("请求超时");
+        });
+    },
     handleClick(val) {
       let idx = val.index;
       let _tabList = this.tabs.tabList;
@@ -274,7 +318,7 @@ export default {
         }
         let _tabs = { tabList: _tabList };
         this.tabs = _tabs;
-      }
+      };
       if (this.activeName == "team") {
         getFundTeamList(this.$route.params.id).then(res => {
           if (res.status == "200") {
@@ -317,8 +361,12 @@ export default {
             this.costData = res.data.result;
           }
         });
+      } else if (this.activeName == "log") {
+        // this.log = false;
+        this.initLog();  
       }
     },
+
     // 转至下一阶段 的方法
     changeStep() {
       nextStage(this.$route.params.id, NUM, this.currentStep).then(res => {

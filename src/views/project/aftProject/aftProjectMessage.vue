@@ -84,7 +84,7 @@
           <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :tabs="tabs" :typeId="projectId" :type="type"></log-table>
+          <log-table :log="log" :tabs="tabs" :typeId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -149,7 +149,19 @@ export default {
       message: [],
       tableData: {},
       tabs: {
-        tabList: [true, false, false, false, false, false, false, false, false, false, false]
+        tabList: [
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
       },
       basicForm: {}, // 基本信息
       companyForm: {}, // 企业信息
@@ -161,8 +173,9 @@ export default {
         content: "",
         appendix: ""
       },
-      isInTeam: false
-    }
+      isInTeam: false,
+      log: false
+    };
   },
   created() {
     this.investProjectId = this.$route.params.investProjectId;
@@ -205,6 +218,9 @@ export default {
         }
         let _tabs = { tabList: _tabList };
         this.tabs = _tabs;
+      }
+      if (this.activeName == "log") {
+        this.log = true;
       }
     },
     initInfo() {
@@ -302,7 +318,7 @@ export default {
           this.structureData = resp.data.result.listOwnershipStructure;
           this.title = resp.data.result.projectInfo.projectName;
         })
-        .catch(e => { });
+        .catch(e => {});
     },
     //获取预警提醒
     getWarnMessageList() {
