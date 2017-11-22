@@ -337,7 +337,6 @@ const actions = {
             })
             .then(res => {
                 if (res.status == "200") {
-                    console.log(res);
                     if (res.data.status == "200") {
                         commit('getPermissionButton_permission', res.data.result);
                         //         if (res.data.result.length == 0) {
