@@ -1,4 +1,6 @@
-import {Notification} from 'element-ui'
+import {
+    Notification
+} from 'element-ui'
 // import request from 'superagent'
 import * as types from '../mutations-type'
 import loginBox from '../../components/loginBox.vue'
@@ -113,11 +115,12 @@ const mutations = {
                 console.log(error);
             });
     },
-    getPermissionButton(state, user) { //获取客户端系统项目、基金按钮
+    getPermissionButton(state, option) { //获取客户端系统项目、基金按钮
         user.this.$http
             .post(user.this.api + "/permission/getPermissionButton", {
-                "userId": state.userInfor.id,
-                "merchantId": state.merchants[0].id
+                userId: state.userInfor.id,
+                merchantId: state.merchants[0].id,
+                typeId: option.typeId
             })
             .then(res => {
                 if (res.status == "200") {
@@ -155,7 +158,7 @@ const mutations = {
                 console.log(error);
             })
     },
-    authToken(state, token){
+    authToken(state, token) {
         state.token = token;
     }
 };
@@ -274,9 +277,9 @@ const actions = {
                             user.self.$router.push({ //审核已通过
                                 name: 'homeContent'
                             });
-                            commit('getPermissionButton', {
-                                this: user.self
-                            });
+                            // commit('getPermissionButton', {
+                            //     this: user.self
+                            // });
                             commit('getUserButton', {
                                 this: user.self
                             });
