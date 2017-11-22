@@ -115,48 +115,31 @@ const mutations = {
                 console.log(error);
             });
     },
-    getPermissionButton(state, option) { //获取客户端系统项目、基金按钮
-        user.this.$http
-            .post(option.this.api + "/permission/getPermissionButton", {
-                userId: state.userInfor.id,
-                merchantId: state.merchants[0].id,
-                typeId: option.typeId
-            })
-            .then(res => {
-                if (res.status == "200") {
-                    if (res.data.status == "200") {
-                        if (res.data.result.length == 0) {
-                            console.log('没有项目基金权限数据');
-                            return;
-                        };
-                        state.permissionCode = res.data.result; //保存所有权限按钮数据
-                        window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
-                        // console.log(state.permissionCode);
-                        state.permissionCode_project = [];
-                        state.permissionCode_fund = [];
-                        state.permissionCode.map((item, index) => {
-                            if (state.permissionCode[index].permissionType == 0) { //项目按钮
-                                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
-                                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
-                            };
-                            if (state.permissionCode[index].permissionType == 1) { //基金按钮
-                                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
-                                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
-                            };
-                        });
-                        console.log('项目按钮权限');
-                        console.log(state.permissionCode_project);
-                        console.log('基金按钮权限');
-                        console.log(state.permissionCode_fund);
-                        // console.log(res.data.message);
-                    } else {
-                        console.log(res.data.message);
-                    }
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            })
+    getPermissionButton(state, permissList) { //获取客户端系统项目、基金按钮
+        if (permissList.length == 0) {
+            console.log('没有项目基金权限数据');
+            return;
+        };
+        state.permissionCode = permissList; //保存所有权限按钮数据
+        window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
+        // console.log(state.permissionCode);
+        state.permissionCode_project = [];
+        state.permissionCode_fund = [];
+        state.permissionCode.map((item, index) => {
+            if (state.permissionCode[index].permissionType == 0) { //项目按钮
+                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
+                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
+            };
+            if (state.permissionCode[index].permissionType == 1) { //基金按钮
+                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
+                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
+            };
+        });
+        console.log('项目按钮权限');
+        console.log(state.permissionCode_project);
+        console.log('基金按钮权限');
+        console.log(state.permissionCode_fund);
+        // console.log(res.data.message);
     },
     authToken(state, token) {
         state.token = token;
@@ -331,13 +314,14 @@ const actions = {
             })
             .then(res => {
                 if (res.status == "200") {
-                    if (res.data.state == "200") {
-                        console.log('其他模块按钮权限数据');
-                        console.log(res.data);
+                    commit('getUserButton', data.data.result);
+                    // if (res.data.state == "200") {
+                    //     console.log('其他模块按钮权限数据');
+                    //     console.log(res.data);
 
-                    } else {
-                        console.log(res.data.message);
-                    }
+                    // } else {
+                    //     console.log(res.data.message);
+                    // }
                 }
             })
             .catch(error => {
@@ -354,32 +338,33 @@ const actions = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.status == "200") {
-                        if (res.data.result.length == 0) {
-                            console.log('没有项目基金权限数据');
-                            return;
-                        };
-                        state.permissionCode = res.data.result; //保存所有权限按钮数据
-                        window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
-                        // console.log(state.permissionCode);
-                        state.permissionCode_project = [];
-                        state.permissionCode_fund = [];
-                        state.permissionCode.map((item, index) => {
-                            if (state.permissionCode[index].permissionType == 0) { //项目按钮
-                                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
-                                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
-                            };
-                            if (state.permissionCode[index].permissionType == 1) { //基金按钮
-                                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
-                                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
-                            };
-                        });
-                        console.log('项目按钮权限');
-                        console.log(state.permissionCode_project);
-                        console.log('基金按钮权限');
-                        console.log(state.permissionCode_fund);
-                        // console.log(res.data.message);
-                    } else {
-                        console.log(res.data.message);
+                        commit('getPermissionButton', data.data.result);
+                        //         if (res.data.result.length == 0) {
+                        //             console.log('没有项目基金权限数据');
+                        //             return;
+                        //         };
+                        //         state.permissionCode = res.data.result; //保存所有权限按钮数据
+                        //         window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
+                        //         // console.log(state.permissionCode);
+                        //         state.permissionCode_project = [];
+                        //         state.permissionCode_fund = [];
+                        //         state.permissionCode.map((item, index) => {
+                        //             if (state.permissionCode[index].permissionType == 0) { //项目按钮
+                        //                 state.permissionCode_project.push(state.permissionCode[index].permissionCode);
+                        //                 window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
+                        //             };
+                        //             if (state.permissionCode[index].permissionType == 1) { //基金按钮
+                        //                 state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
+                        //                 window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
+                        //             };
+                        //         });
+                        //         console.log('项目按钮权限');
+                        //         console.log(state.permissionCode_project);
+                        //         console.log('基金按钮权限');
+                        //         console.log(state.permissionCode_fund);
+                        //         // console.log(res.data.message);
+                        //     } else {
+                        //         console.log(res.data.message);
                     }
                 }
             })

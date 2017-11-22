@@ -90,11 +90,11 @@ export default {
             this.addTab({
                 type: 'addTab',
                 title: row.investorName +'详情',
-                url: '/home/investorDetails/:' + row.id,
+                url: '/home/investorDetails/' + row.id,
                 name: 'investorDetails/' + row.id
             })
 
-            this.$router.push('/home/investorDetails/:' + row.id)
+            this.$router.push('/home/investorDetails/' + row.id)
         },
         handleIconClick(){
             console.log(this.input2)
