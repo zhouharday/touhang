@@ -262,6 +262,11 @@ export default {
     this.investProjectId = this.$route.params.investProjectId;
     this.projectId = this.$route.params.userId;
     this.init();
+    this.$store.dispatch({
+        type: "getPermissionButton",
+        this: this,
+        typeId: this.$route.params.investProjectId
+      });
   },
   watch: {
     $route(to, from) {

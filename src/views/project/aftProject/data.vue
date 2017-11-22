@@ -236,7 +236,7 @@
             <!--  添加财务数据明细 对话框-->
             <el-dialog :title="finacial_title" :visible.sync="financialModal2" :close-on-click-modal="false">
                 <div class="importModal" v-show="!readControl">
-                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" :show-upload-list="showList" :data="importData">
+                    <el-upload class="upload-demo" name="files" :before-upload="handleBeforeUpload" ref="import" :on-success="handleSuccess" :action="importUrl" :headers="headers" :show-upload-list="showList" :data="importData">
                         <el-button type="text">导入</el-button>
                     </el-upload>
                     <el-button class="downBtn">
@@ -359,6 +359,9 @@ export default {
             file: null,
             loadingStatus: false,
             activeName: 'first',
+            headers:{
+                Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
+            },
             importUrl:this.api+'/excel//financial',
             importTemplateUrl: 'http://47.90.120.190:8086/group1/M00/00/07/rB9VtFnzFBKASpbiAACAAJtI_yo077.xls?filename=财务数据导入模板.xls',
             showList: false,
