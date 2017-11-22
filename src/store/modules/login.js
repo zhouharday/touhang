@@ -306,7 +306,7 @@ const actions = {
             console.log(error);
         })
     },
-    getUserButton_permission(state, option) {
+    getUserButton({state,commit}, option) {
         option.this.$http
             .post(option.this.api + "/role/getUserButton", {
                 "userId": state.userInfor.id,
@@ -314,7 +314,7 @@ const actions = {
             })
             .then(res => {
                 if (res.status == "200") {
-                    commit('getUserButton', data.data.result);
+                    commit('getUserButton_permission', res.data.result);
                     // if (res.data.state == "200") {
                     //     console.log('其他模块按钮权限数据');
                     //     console.log(res.data);
@@ -328,7 +328,7 @@ const actions = {
                 console.log(error);
             });
     },
-    getPermissionButton(state, option) { //获取客户端系统项目、基金按钮
+    getPermissionButton({state,commit}, option) { //获取客户端系统项目、基金按钮
         option.this.$http
             .post(option.this.api + "/permission/getPermissionButton", {
                 userId: state.userInfor.id,
@@ -339,7 +339,7 @@ const actions = {
                 if (res.status == "200") {
                     console.log(res);
                     if (res.data.status == "200") {
-                        commit('getPermissionButton_permission', data.data.result);
+                        commit('getPermissionButton_permission', res.data.result);
                         //         if (res.data.result.length == 0) {
                         //             console.log('没有项目基金权限数据');
                         //             return;
