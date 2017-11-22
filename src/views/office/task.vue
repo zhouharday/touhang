@@ -236,7 +236,7 @@
                                       <span v-for="(item,index) of form1.recording" :key="item">{{item.recordDetails}}</span>
                                     </el-input> -->
                 <div class="el-form-item_div1">
-                  <div v-for="(item,index) of form1.recording" :key="item">{{item.recordDetails}}</div>
+                  <div v-for="(item,index) of form1.recording" :key="item">{{item.createDate}} &nbsp;{{item.recordDetails}}</div>
                 </div>
               </el-form-item>
             </el-col>

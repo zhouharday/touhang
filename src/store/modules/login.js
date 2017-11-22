@@ -329,7 +329,7 @@ const actions = {
             });
     },
     getPermissionButton(state, option) { //获取客户端系统项目、基金按钮
-        user.this.$http
+        option.this.$http
             .post(option.this.api + "/permission/getPermissionButton", {
                 userId: state.userInfor.id,
                 merchantId: state.merchants[0].id,
