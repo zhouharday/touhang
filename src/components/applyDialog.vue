@@ -12,7 +12,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="审批人" prop="approveUserId">
-                            <el-select v-model="applyForm.approveUserId" filterable placeholder="请选择" style="width: 50%">
+                            <el-select v-model="applyForm.approveUserId" filterable no-data-text="该角色无用户" placeholder="请选择" style="width: 50%">
                                 <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                                 </el-option>
                             </el-select>

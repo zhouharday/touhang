@@ -51,7 +51,7 @@
                         </el-redio-group>
                     </el-form-item>
                     <el-form-item v-if="approvalForm.roleId && approvalForm.disposeResult == '1'" prop="approveUserId" label="审  批  人">
-                        <el-select v-model="approvalForm.approveUserId" placeholder="请选择审批人">
+                        <el-select v-model="approvalForm.approveUserId" placeholder="请选择审批人" no-data-text="该角色无用户">
                             <el-option v-for="item in auditorOptions" :key="item.userId" :label="item.userName" :value="item.userId">
                             </el-option>
                         </el-select>

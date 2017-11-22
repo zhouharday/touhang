@@ -194,21 +194,7 @@ export default {
         orderValue: "",
         remark: ""
       },
-      auditorOptions: [
-        {
-          //发起申请对话框 审批人列表
-          userId: "选项1",
-          userName: "张三"
-        },
-        {
-          userId: "选项2",
-          userName: "李四"
-        },
-        {
-          userId: "选项3",
-          userName: "王二"
-        }
-      ],
+      auditorOptions: [],
       documentInfo: {
         progressName: "AAA项目XX申请",
         appendixList: [
