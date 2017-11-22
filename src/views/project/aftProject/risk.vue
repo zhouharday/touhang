@@ -911,8 +911,8 @@ export default {
     .el-form-item__content {
       line-height: 0 !important;
     }
-    .el-input{
-        display: block;
+    .el-input {
+      display: block;
     }
   }
 }

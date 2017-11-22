@@ -43,7 +43,8 @@ module.exports = {
                 }
             },
             '/file': {
-                target: 'http://www.cp-cp88.com:8086',
+                // target: 'http://www.cp-cp88.com:8086',
+                target: 'http://192.168.0.198:9091',
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: {
