@@ -266,7 +266,7 @@ export default {
         type: "getPermissionButton",
         this: this,
         typeId: this.$route.params.investProjectId
-      });
+    });
   },
   watch: {
     $route(to, from) {
