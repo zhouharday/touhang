@@ -115,7 +115,7 @@ const mutations = {
                 console.log(error);
             });
     },
-    getPermissionButton(state, permissList) { //获取客户端系统项目、基金按钮
+    getPermissionButton_permission(state, permissList) { //获取客户端系统项目、基金按钮
         if (permissList.length == 0) {
             console.log('没有项目基金权限数据');
             return;
@@ -338,7 +338,7 @@ const actions = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.status == "200") {
-                        commit('getPermissionButton', data.data.result);
+                        commit('getPermissionButton_permission', data.data.result);
                         //         if (res.data.result.length == 0) {
                         //             console.log('没有项目基金权限数据');
                         //             return;
