@@ -55,7 +55,7 @@
     <show-pdf :pdfurl="pdfurl" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
     <!-- 上传投资者文档-->
     <Modal v-model="modalAdd" title="投资者文档" :mask-closable="false" :closable="false">
-        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" :show-upload-list="showList">
+        <Upload ref="upload" multiple type="drag" :headers="headerInfo" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess" :show-upload-list="showList" :default-file-list="defaultList">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
@@ -100,6 +100,10 @@ export default {
                 type: 2,
                 userId: JSON.parse(sessionStorage.getItem('userInfor')).id
             },
+            headerInfo: {
+                Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
+            },
+            defaultList: [],
             deleteId: '',
             reminders: false, // 确认删除模态框
         }
@@ -135,6 +139,7 @@ export default {
                 this.modalAdd = false
                 this._getInvestDoc()
             }
+            this.defaultList = []
         },
         confirmDel() {
             console.log(this.deleteId)

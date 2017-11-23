@@ -174,7 +174,19 @@ export default {
       structureData: [], // 股权结构
       uploaded: false,
       tabs: {
-        tabList: [true, false, false, false, false, false, false, false, false, false, false]
+        tabList: [
+          true,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ]
       },
       capitalForm: {
         startInvestDate: "",
@@ -248,12 +260,12 @@ export default {
   created() {
     this.investProjectId = this.$route.params.investProjectId;
     this.projectId = this.$route.params.userId;
-    this.init();
-    this.$store.dispatch({
-        type: "getPermissionButton",
-        this: this,
-        typeId: this.$route.params.investProjectId
+    this.$store.commit({
+      type: "getPermissionButton",
+      this: this,
+      typeId: this.$route.params.investProjectId
     });
+    this.init();
   },
   watch: {
     $route(to, from) {
@@ -312,10 +324,10 @@ export default {
           } else {
             _tabList[i] = false;
           }
-        };
+        }
         let _tabs = { tabList: _tabList };
         this.tabs = _tabs;
-      };
+      }
       if (this.activeName == "log") {
         this.$refs.logTab.initLog();
       }

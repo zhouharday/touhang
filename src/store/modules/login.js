@@ -116,6 +116,7 @@ const mutations = {
             });
     },
     getPermissionButton_permission(state, permissList) { //获取客户端系统项目、基金按钮
+        console.log(222);
         if (permissList.length == 0) {
             console.log('没有项目基金权限数据');
             return;
@@ -140,6 +141,53 @@ const mutations = {
         console.log('基金按钮权限');
         console.log(state.permissionCode_fund);
         // console.log(res.data.message);
+    },
+    getPermissionButton(state, option) { //获取客户端系统项目、基金按钮
+        option.this.$http
+            .post(option.this.api + "/permission/getPermissionButton", {
+                userId: state.userInfor.id,
+                merchantId: state.merchants[0].id,
+                typeId: option.typeId
+            })
+            .then(res => {
+                if (res.status == "200") {
+                    if (res.data.status == "200") {
+                        // commit('getPermissionButton_permission', res.data.result);
+                        if (res.data.result.length == 0) {
+                            alert('000');
+                            console.log('没有项目基金权限数据');
+                            return;
+                        };
+                        state.permissionCode = res.data.result; //保存所有权限按钮数据
+                        window.sessionStorage.setItem('permissionCode', JSON.stringify(state.permissionCode));
+                        // console.log(state.permissionCode);
+                        state.permissionCode_project = [];
+                        state.permissionCode_fund = [];
+                        state.permissionCode.map((item, index) => {
+                            if (state.permissionCode[index].permissionType == 0) { //项目按钮
+                                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
+                                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
+                            };
+                            if (state.permissionCode[index].permissionType == 1) { //基金按钮
+                                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
+                                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
+                            };
+                        });
+                        console.log('项目按钮权限');
+                        console.log(state.permissionCode_project);
+                        console.log('基金按钮权限');
+                        console.log(state.permissionCode_fund);
+                        // console.log(111);
+                        alert('111');
+                        // console.log(res.data.message);
+                    } else {
+                        console.log(res.data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
     },
     authToken(state, token) {
         state.token = token;
@@ -306,7 +354,10 @@ const actions = {
             console.log(error);
         })
     },
-    getUserButton({state,commit}, option) {
+    getUserButton({
+        state,
+        commit
+    }, option) {
         option.this.$http
             .post(option.this.api + "/role/getUserButton", {
                 "userId": state.userInfor.id,
@@ -328,7 +379,10 @@ const actions = {
                 console.log(error);
             });
     },
-    getPermissionButton({state,commit}, option) { //获取客户端系统项目、基金按钮
+    getPermissionButton({
+        state,
+        commit
+    }, option) { //获取客户端系统项目、基金按钮
         option.this.$http
             .post(option.this.api + "/permission/getPermissionButton", {
                 userId: state.userInfor.id,
@@ -338,6 +392,7 @@ const actions = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.status == "200") {
+                        console.log(111);
                         commit('getPermissionButton_permission', res.data.result);
                         //         if (res.data.result.length == 0) {
                         //             console.log('没有项目基金权限数据');
