@@ -154,7 +154,6 @@ export default {
         // current: "" //当前页码
       },
       // pageSizes: [10,20,30,40],
-      tableData: [],
       type: 2,
       tabs: {
         tabList: [false, false, false, false, false, false, false, false, false]
