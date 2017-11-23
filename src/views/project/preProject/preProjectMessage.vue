@@ -48,12 +48,12 @@
     </div>
     <div class="tabs">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
+        <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing', authStatus)" label="详情" name="details" class="tab_list">
           <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
           </detail-form>
           <table-form :tabs="tabs" :companyForm="companyForm" :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
         </el-tab-pane>
-        <el-tab-pane :disabled="!checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
+        <el-tab-pane :disabled="!checkProjectAuth('XMTD', authStatus)" label="团队" name="team" class="tab_list">
           <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :proUsers="proUsers" :proRoles="proRoles">
           </team-table>
         </el-tab-pane>
@@ -238,6 +238,8 @@ export default {
       },
       isInTeam: false,
       log: false
+      // authList: [],
+      // authStatus: false
     };
   },
   components: {
@@ -260,11 +262,6 @@ export default {
   created() {
     this.investProjectId = this.$route.params.investProjectId;
     this.projectId = this.$route.params.userId;
-    this.$store.commit({
-      type: "getPermissionButton",
-      this: this,
-      typeId: this.$route.params.investProjectId
-    });
     this.init();
   },
   watch: {
@@ -278,7 +275,10 @@ export default {
   },
   methods: {
     checkProjectAuth(code) {
-      return checkProjectAuth(code) && this.isInTeam;
+      if (!this.authStatus || !this.authList) {
+        return false;
+      }
+      return checkProjectAuth(code, this.authList) && this.isInTeam;
     },
     checkTeamUser() {
       getTeams(this.investProjectId)
@@ -309,6 +309,11 @@ export default {
       }
     },
     init() {
+      this.$store.commit({
+        type: "getPermissionButton",
+        this: this,
+        typeId: this.$route.params.investProjectId
+      });
       this.initInfo();
       this.getPreProDetail();
       this.getStageUploadDocument(); //获取当前阶段及任务小助
