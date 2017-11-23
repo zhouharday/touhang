@@ -94,7 +94,6 @@
 import tableHeader from 'components/tabelHeader'
 import myFilter from 'components/myFilter'
 import deleteReminders from 'components/deleteReminders'
-import Service from 'common/js/fetch'
 import '../../common/js/filter.js' //时间格式过滤器
 import {
     mapMutations,

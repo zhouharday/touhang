@@ -1,43 +1,43 @@
 <template>
-    <div class="investorDetails">
-        <div class="header">
-            <el-row class="info">
-                <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
-                <el-col class="total" :span="21">
-                    <el-row :gutter="20">
-                        <el-col :xs="8" :sm="12" :md="10" :lg="6" v-for="(item, index) of titleInfo.total" :key="item.index">
-                            <p class="desc">{{item.desc}}</p>
-                            <p class="amount">{{item.amount | toMoney}}
-                                <span class="unit">元</span>
-                            </p>
-                        </el-col>
-                    </el-row>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="tabs">
-            <el-tabs v-model="detailsName" type="card" @tab-click="getTabs">
-                <el-tab-pane label="基本信息" name="info">
-                    <baseInfo @investorDetailsInfo="investorDetailsInfo"></baseInfo>
-                </el-tab-pane>
-                <el-tab-pane label="投资者文档" name="invDoc">
-                    <investorDoc :investmentData="investmentData"></investorDoc>
-                </el-tab-pane>
-                <el-tab-pane label="投资协议" name="agree">
-                    <agreement :agreementData="agreementData"></agreement>
-                </el-tab-pane>
-                <el-tab-pane label="资金明细" name="funddet" class="tab_list">
-                    <investment :investorData="investorData"></investment>
-                </el-tab-pane>
-                <el-tab-pane label="拜访记录" name="visiting">
-                    <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
-                </el-tab-pane>
-                <el-tab-pane label="日志" name="log" class="tab_list">
-                    <log-table :tabs="tabs" :typeId="projectId" :type="type"></log-table>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
+  <div class="investorDetails">
+    <div class="header">
+      <el-row class="info">
+        <el-col class="name" :span="3">{{titleInfo.name}}</el-col>
+        <el-col class="total" :span="21">
+          <el-row :gutter="20">
+            <el-col :xs="8" :sm="12" :md="10" :lg="6" v-for="(item, index) of titleInfo.total" :key="item.index">
+              <p class="desc">{{item.desc}}</p>
+              <p class="amount">{{item.amount | toMoney}}
+                <span class="unit">元</span>
+              </p>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
     </div>
+    <div class="tabs">
+      <el-tabs v-model="detailsName" type="card" @tab-click="getTabs">
+        <el-tab-pane label="基本信息" name="info">
+          <baseInfo @investorDetailsInfo="investorDetailsInfo"></baseInfo>
+        </el-tab-pane>
+        <el-tab-pane label="投资者文档" name="invDoc">
+          <investorDoc :investmentData="investmentData"></investorDoc>
+        </el-tab-pane>
+        <el-tab-pane label="投资协议" name="agree">
+          <agreement :agreementData="agreementData"></agreement>
+        </el-tab-pane>
+        <el-tab-pane label="资金明细" name="funddet" class="tab_list">
+          <investment :investorData="investorData"></investment>
+        </el-tab-pane>
+        <el-tab-pane label="拜访记录" name="visiting">
+          <visitingRecord :visitingRecord="visitingRecord"></visitingRecord>
+        </el-tab-pane>
+        <el-tab-pane label="日志" name="log" class="tab_list">
+          <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -67,21 +67,6 @@ export default {
   data() {
     return {
       type: 3,
-      tabs: {
-        tabList: [
-          true,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false,
-          false
-        ]
-      },
       projectId: "",
       titleInfo: {
         name: "双子金服",
@@ -107,19 +92,6 @@ export default {
   methods: {
     getTabs(tab, event) {
       console.log(tab);
-      let idx = tab.index;
-      let _tabList = this.tabs.tabList;
-      if (!_tabList[idx]) {
-        for (var i = 0; i < _tabList.length; i++) {
-          if (i == idx) {
-            _tabList[i] = true;
-          } else {
-            _tabList[i] = false;
-          }
-        }
-        let _tabs = { tabList: _tabList };
-        this.tabs = _tabs;
-      }
       if (tab.name == "agree") {
         GetProtocolsList(this.$route.params.userId)
           .then(res => {
@@ -163,6 +135,8 @@ export default {
             this.investmentData = res.data.result;
           }
         });
+      } else if (tab.name == "log") {
+        this.$refs.logTab.initLog();
       }
     },
     investorDetailsInfo(value) {

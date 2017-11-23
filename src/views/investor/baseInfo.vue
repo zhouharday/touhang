@@ -2,7 +2,7 @@
 <div class="baseInfo">
     <tableHeader :data="dataTitle" @add="editInvestorForm"></tableHeader>
     <div class="form_wrapper">
-        <investor-form :investorForm="baseInfo" :variable="variable"></investor-form>
+        <investor-form :investorForm="baseInfoData" :variable="variable"></investor-form>
         <el-row :gutter="10" v-show="!variable">
             <el-col :span="24" class="group">
                 <el-button type="default" class="btn" @click="handlerCancel" :disabled="variable">取消</el-button>
@@ -33,15 +33,18 @@ export default {
                 id: JSON.parse(sessionStorage.getItem('userInfor')).id
             }],
             baseInfo: {},
+            baseInfoData: {},
             variable: true
         }
     },
     methods: {
         handlerCancel() {
             this.variable = true
+            this.baseInfoData = this.baseInfo
         },
         handlerConfirm() {
-            updateInvestor(this.baseInfo).then((res) => {
+            var formDate = Object.assign({}, this.baseInfo)
+            updateInvestor(formDate).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '提交成功！')
                     this._getInvDetails()
@@ -55,8 +58,9 @@ export default {
         _getInvDetails() {
             getInvestorDetails(this.$route.params.userId).then((res) => {
                 if (res.status == '200') {
-                    // console.log(res)
+                    console.log(res.data.record.length)
                     this.baseInfo = res.data.record
+                    this.baseInfoData = Object.assign({}, this.baseInfo)
                     this.$emit('investorDetailsInfo', res.data.record)
                 }
             }).catch(err => {
