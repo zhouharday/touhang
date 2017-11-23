@@ -237,7 +237,7 @@ export default {
         approvalNotes: ""
       },
       isInTeam: false,
-      log: false,
+      log: false
       // authList: [],
       // authStatus: false
     };
@@ -273,15 +273,12 @@ export default {
       }
     }
   },
-  computed: {
-
-  },
   methods: {
     checkProjectAuth(code) {
-        if((!this.authStatus || !this.authList )) {
-          return false; 
-        }
-        return checkProjectAuth(code, this.authList) && this.isInTeam;
+      if (!this.authStatus || !this.authList) {
+        return false;
+      }
+      return checkProjectAuth(code, this.authList) && this.isInTeam;
     },
     checkTeamUser() {
       getTeams(this.investProjectId)
@@ -312,7 +309,6 @@ export default {
       }
     },
     init() {
-      
       this.$store.commit({
         type: "getPermissionButton",
         this: this,

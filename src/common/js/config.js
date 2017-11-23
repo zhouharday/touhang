@@ -128,14 +128,14 @@ export function checkProjectAuth(code, authList = []) {
 
 export function checkFundAuth(code) {
     // setTimeout(()=> {
-        // console.log('333');
-        if (sessionStorage.getItem('permissionCode_fund') == null) {
-            console.log("基金权限为空, CODE: " + code + '无权限');
-            return false;
-        }
-        let result = sessionStorage.getItem('permissionCode_fund').includes(code);
-        if (!result) console.log("CODE: " + code + '无权限');
-        return result;
+    // console.log('333');
+    if (sessionStorage.getItem('permissionCode_fund') == null) {
+        console.log("基金权限为空, CODE: " + code + '无权限');
+        return false;
+    }
+    let result = sessionStorage.getItem('permissionCode_fund').includes(code);
+    if (!result) console.log("CODE: " + code + '无权限');
+    return result;
     // });
 }
 
