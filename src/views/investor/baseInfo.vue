@@ -40,11 +40,10 @@ export default {
     methods: {
         handlerCancel() {
             this.variable = true
-            this.baseInfoData = this.baseInfo
+            this.baseInfoData = this._.cloneDeepWith(this.baseInfo)
         },
         handlerConfirm() {
-            var formDate = Object.assign({}, this.baseInfo)
-            updateInvestor(formDate).then((res) => {
+            updateInvestor(this.baseInfoData).then((res) => {
                 if(res.status == '200') {
                     this.$Message.success(res.data.message || '提交成功！')
                     this._getInvDetails()
@@ -56,12 +55,17 @@ export default {
             this.variable = !this.variable
         },
         _getInvDetails() {
+            function customizer(value) {
+                if (this._.isElement(value)) {
+                    return value
+                 }
+            }
             getInvestorDetails(this.$route.params.userId).then((res) => {
-                if (res.status == '200') {
-                    console.log(res.data.record.length)
+                if (res.status == '200' && res.data.record) {
                     this.baseInfo = res.data.record
-                    this.baseInfoData = Object.assign({}, this.baseInfo)
+                    this.baseInfoData = this._.cloneDeepWith(res.data.record)
                     this.$emit('investorDetailsInfo', res.data.record)
+                    console.log(this.baseInfoData)
                 }
             }).catch(err => {
                 let response = err.response
