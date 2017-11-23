@@ -116,7 +116,7 @@ export function filtersPermissionCode_fund(permissionCode) { //check 基金权�
 
 export function checkProjectAuth(code, authList = []) {
     if (authList.length == 0) {
-        console.log("项目权限为空, CODE: " + code + '无权限');
+        // console.log("项目权限为空, CODE: " + code + '无权限');
         return false;
     }
     let result = authList.includes(code);
@@ -126,17 +126,15 @@ export function checkProjectAuth(code, authList = []) {
     return result;
 }
 
-export function checkFundAuth(code) {
-    // setTimeout(()=> {
-    // console.log('333');
-    if (sessionStorage.getItem('permissionCode_fund') == null) {
-        console.log("基金权限为空, CODE: " + code + '无权限');
+export function checkFundAuth(code, authList = []) {
+    if (authList.length == 0) {
         return false;
     }
-    let result = sessionStorage.getItem('permissionCode_fund').includes(code);
-    if (!result) console.log("CODE: " + code + '无权限');
+    let result = authList.includes(code);
+    if (!result) {
+        console.log("CODE: " + code + '无权限')
+    };
     return result;
-    // });
 }
 
 export function toThousands(num) { //js千分位 num为整型类型
