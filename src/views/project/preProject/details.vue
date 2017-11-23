@@ -228,6 +228,10 @@ export default {
         isInTeam: {
             type: Boolean,
             default: false
+        },
+        authList: {
+            type: Array,
+            default: []
         }
     },
     data() {
@@ -310,8 +314,11 @@ export default {
     },
     watch: {},
     methods: {
-        checkProjectAuth(code) {
-            return checkProjectAuth(code) && this.isInTeam;
+        checkProjectAuth(code){
+            if (!this.authList) {
+                return false;
+            }
+            return checkProjectAuth(code, this.authList) && this.isInTeam;
         },
         // 编辑按钮
         disable(name, headerInfo) {

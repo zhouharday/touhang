@@ -238,8 +238,6 @@ export default {
       },
       isInTeam: false,
       log: false
-      // authList: [],
-      // authStatus: false
     };
   },
   components: {
@@ -275,7 +273,7 @@ export default {
   },
   methods: {
     checkProjectAuth(code) {
-      if (!this.authStatus || !this.authList) {
+      if (!this.authList) {
         return false;
       }
       return checkProjectAuth(code, this.authList) && this.isInTeam;
@@ -309,11 +307,13 @@ export default {
       }
     },
     init() {
-      this.$store.commit({
-        type: "getPermissionButton",
-        this: this,
-        typeId: this.$route.params.investProjectId
-      });
+      if(!this.authList){
+          this.$store.commit({
+            type: "getPermissionButton",
+            this: this,
+            typeId: this.$route.params.investProjectId
+          });
+      }
       this.initInfo();
       this.getPreProDetail();
       this.getStageUploadDocument(); //获取当前阶段及任务小助

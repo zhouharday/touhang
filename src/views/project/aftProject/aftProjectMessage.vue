@@ -55,33 +55,33 @@
     <div class="tabs">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
-          <detail-form :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+          <detail-form :isInTeam="isInTeam" :authList="authList" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
           </detail-form>
-          <table-form :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
+          <table-form :isInTeam="isInTeam" :authList="authList" :memberData="memberData" :structureData="structureData"></table-form>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-          <approve-table :isInTeam="isInTeam" :projectId="projectId" :tabs="tabs"></approve-table>
+          <approve-table :isInTeam="isInTeam" :authList="authList" :projectId="projectId" :tabs="tabs"></approve-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
-          <file-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></file-table>
+          <file-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId"></file-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" label="管理" name="manage" class="tab_list">
-          <manage-table :isInTeam="isInTeam" :tabs="tabs" :proId="projectId"></manage-table>
+          <manage-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :proId="projectId"></manage-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
-          <record-form :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></record-form>
+          <record-form :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId"></record-form>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险管理" name="risk" class="tab_list">
-          <risk-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
+          <risk-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId" :proUsers="proUsers"></risk-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-zhongdashixiang')" label="重大事项" name="event" class="tab_list">
-          <event-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></event-table>
+          <event-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId"></event-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-shujutianbao')" label="数据填报" name="data" class="tab_list">
-          <data-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></data-table>
+          <data-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId"></data-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-jiankongshezhi')" label="监控设置" name="monitor" class="tab_list">
-          <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
+          <monitor-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId"></monitor-table>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
           <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
@@ -180,11 +180,6 @@ export default {
   created() {
     this.investProjectId = this.$route.params.investProjectId;
     this.projectId = this.$route.params.projectId;
-    this.$store.dispatch({
-        type: "getPermissionButton",
-        this: this,
-        typeId: this.$route.params.investProjectId
-    });
     this.init();
 
   },
@@ -198,10 +193,20 @@ export default {
     }
   },
   methods: {
-    checkProjectAuth(code) {
-      return checkProjectAuth(code) && this.isInTeam;
-    },
+        checkProjectAuth(code){
+            if (!this.authList) {
+                return false;
+            }
+            return checkProjectAuth(code, this.authList) && this.isInTeam;
+        },
     init() {
+      if(!this.authList){
+          this.$store.commit({
+            type: "getPermissionButton",
+            this: this,
+            typeId: this.$route.params.investProjectId
+          });
+      }
       this.initInfo();
       this.initData();
     },

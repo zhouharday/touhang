@@ -161,6 +161,10 @@ export default {
         isInTeam: {
             type: Boolean,
             default: false
+        },
+        authList: {
+            type: Array,
+            default: []
         }
     },
     data() {
@@ -263,7 +267,10 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code) && this.isInTeam;
+            if (!this.authList) {
+                return false;
+            }
+            return checkProjectAuth(code, this.authList) && this.isInTeam;
         },
         //添加 董事会成员的方法
         addMember() {
