@@ -86,9 +86,9 @@
         <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
           <manage :costData="costData" :fundName="formDetails.fundName"></manage>
         </el-tab-pane>
-        <el-tab-pane label="日志" name="log" class="tab_list">
+        <!-- <el-tab-pane label="日志" name="log" class="tab_list">
           <log-table :table-data="tableData" :pages="pageSize" :total="total" :page="page"></log-table>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
     <!-- 中止确认弹框 -->
@@ -368,7 +368,7 @@ export default {
         });
       } else if (this.activeName == "log") {
         // this.log = false;
-        this.initLog();  
+        this.initLog();
       }
     },
 

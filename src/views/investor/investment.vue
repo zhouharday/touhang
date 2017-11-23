@@ -72,7 +72,7 @@ export default {
                 agreementName: '', // 协议名称v
                 investorName: '', // 投资者v
                 fundName: '', // 基金名称v
-                handlingDate: '', // 经办日期v
+                handlingDate: new Date(), // 经办日期v
                 shareMoney: '', //退出金额v
                 shareDate: '', //退出日期v
                 managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, //投资经理ID（当前登录用户ID）v
@@ -112,7 +112,7 @@ export default {
                     investorName: '', // 投资者v
                     documentInfo: [],
                     fundName: '', // 基金名称v
-                    handlingDate: '', // 经办日期v
+                    handlingDate: new Date(), // 经办日期v
                     shareMoney: '', //退出金额v
                     shareDate: '', //退出日期v
                     managerId: JSON.parse(sessionStorage.getItem('userInfor')).id, //投资经理ID（当前登录用户ID）v
