@@ -187,6 +187,10 @@ export default {
         isInTeam: {
             type: Boolean,
             default: false
+        },
+        authList: {
+            type: Array,
+            default: []
         }
     },
     data() {

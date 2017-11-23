@@ -64,6 +64,10 @@ export default {
         isInTeam: {
             type: Boolean,
             default: false
+        },
+        authList: {
+            type: Array,
+            default: []
         }
     },
     components: {
@@ -139,7 +143,10 @@ export default {
     },
     methods: {
         checkProjectAuth(code){
-            return checkProjectAuth(code) && this.isInTeam;
+            if (!this.authList) {
+                return false;
+            }
+            return checkProjectAuth(code, this.authList) && this.isInTeam;
         },
         init() {
             this.getEventList();

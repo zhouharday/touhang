@@ -299,6 +299,10 @@ export default {
         proId: {
             type: String,
             default: ''
+        },
+        authList: {
+            type: Array,
+            default: []
         }
     },
     data() {
