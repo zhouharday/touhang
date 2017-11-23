@@ -87,7 +87,7 @@
           <manage :costData="costData" :fundName="formDetails.fundName"></manage>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :table-data="<tableData></tableData>" :pages="pageSize" :total="total" :page="page"></log-table>
+          <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
