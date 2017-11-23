@@ -167,17 +167,18 @@ const mutations = {
                         state.permissionCode_fund = [];
                         var authList = [];
                         state.permissionCode.map((item, index) => {
-                            if (state.permissionCode[index].permissionType == 0) { //项目按钮
+                            // if (state.permissionCode[index].permissionType == 0) { //项目按钮
                                 authList.push(state.permissionCode[index].permissionCode);
                                 // option.this.authList.push(state.permissionCode[index].permissionCode);
                                 option.this.authList = authList;
                                 option.this.authStatus = true;
-                                window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
-                            };
-                            if (state.permissionCode[index].permissionType == 1) { //基金按钮
-                                state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
-                                window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
-                            };
+                                // window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
+                            // };
+                            // if (state.permissionCode[index].permissionType == 1) { //基金按钮
+                                
+                            //     state.permissionCode_fund.push(state.permissionCode[index].permissionCode);
+                            //     window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
+                            // };
                         });
                         // option.this.$set(option.this.$data, 'authList', authList);
                         console.log('项目按钮权限');
