@@ -85,7 +85,8 @@ export default {
             },
             createDate: changeDate(new Date()),
             userName: JSON.parse(sessionStorage.getItem('userInfor')).name, //当前用户
-            actionUrl: this.api + '/files/uploadProjectDocument',
+            // actionUrl: this.api + '/files/uploadProjectDocument',
+             actionUrl: "//192.168.0.118:9091"+ '/files/uploadProjectDocument',
             headers: {
                 Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
             },

@@ -225,10 +225,6 @@ export default {
       file: ""
     };
   },
-  mounted() {
-    // // 上传 企业LOGO
-    // this.uploadList = this.$refs.upload.fileList;
-  },
   created() {
     this.$store.dispatch("getTypeOptions");
     this.$store.dispatch("getIndustryOptions");
@@ -334,6 +330,8 @@ export default {
                   this.addTab("项目池", "/home/projectPool", "projectPool");
                 this.$router.push({ name: "projectPool" });
                 store.isSubmit = false;
+              }else{
+                this.$Message.error(resp.data.message);
               }
             })
             .catch(e => {
