@@ -165,7 +165,6 @@ export default {
   watch: {},
   data() {
     return {
-      uploadUrl: this.api + "/files/upload",
       dataNum: 3,
       basicForm: {
         projectName: "",
