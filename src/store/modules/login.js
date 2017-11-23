@@ -34,6 +34,7 @@ const state = {
     fundPermissions: false, //是否存在基金权限按钮
     fund: [],
     token: '',
+    permissionStatus: false
     // token: '' || JSON.parse(sessionStorage.getItem('userInfor')).token
 };
 
@@ -152,9 +153,10 @@ const mutations = {
             .then(res => {
                 if (res.status == "200") {
                     if (res.data.status == "200") {
+
                         // commit('getPermissionButton_permission', res.data.result);
                         if (res.data.result.length == 0) {
-                            alert('000');
+                            // alert('000');
                             console.log('没有项目基金权限数据');
                             return;
                         };
@@ -163,9 +165,13 @@ const mutations = {
                         // console.log(state.permissionCode);
                         state.permissionCode_project = [];
                         state.permissionCode_fund = [];
+                        var authList = [];
                         state.permissionCode.map((item, index) => {
                             if (state.permissionCode[index].permissionType == 0) { //项目按钮
-                                state.permissionCode_project.push(state.permissionCode[index].permissionCode);
+                                authList.push(state.permissionCode[index].permissionCode);
+                                // option.this.authList.push(state.permissionCode[index].permissionCode);
+                                option.this.authList = authList;
+                                option.this.authStatus = true;
                                 window.sessionStorage.setItem('permissionCode_project', JSON.stringify(state.permissionCode_project));
                             };
                             if (state.permissionCode[index].permissionType == 1) { //基金按钮
@@ -173,16 +179,19 @@ const mutations = {
                                 window.sessionStorage.setItem('permissionCode_fund', JSON.stringify(state.permissionCode_fund));
                             };
                         });
+                        // option.this.$set(option.this.$data, 'authList', authList);
                         console.log('项目按钮权限');
                         console.log(state.permissionCode_project);
                         console.log('基金按钮权限');
                         console.log(state.permissionCode_fund);
-                        // console.log(111);
-                        alert('111');
+                        state.permissionStatus = true;
+                        // alert('111');
                         // console.log(res.data.message);
                     } else {
                         console.log(res.data.message);
                     }
+                    
+                    console.log('项目按钮权限更新了');
                 }
             })
             .catch(error => {

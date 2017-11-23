@@ -48,7 +48,7 @@ export default {
       this.$http
         .post(this.api + "/businessLogRecord/selectBusinessLogRecordPageList", {
           type: this.type,
-          type_id: this.typeId,
+          typeId: this.typeId,
           page: this.page,
           pageSize: this.pageSize
         })
