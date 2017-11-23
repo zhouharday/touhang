@@ -71,7 +71,7 @@
 </template>
 
 
-<script>
+<script type="text/ecmascript-6">
 import 'common/js/filter'
 import showPdf from 'components/showPdf'
 export default {
