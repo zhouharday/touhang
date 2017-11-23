@@ -84,7 +84,7 @@
           <monitor-table :isInTeam="isInTeam" :tabs="tabs" :projectId="projectId"></monitor-table>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :log="log" :tabs="tabs" :typeId="projectId" :type="type"></log-table>
+          <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -220,7 +220,7 @@ export default {
         this.tabs = _tabs;
       }
       if (this.activeName == "log") {
-        this.log = true;
+        this.$refs.logTab.initLog();
       }
     },
     initInfo() {

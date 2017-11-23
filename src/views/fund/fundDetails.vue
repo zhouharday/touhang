@@ -87,7 +87,7 @@
           <manage :costData="costData" :fundName="formDetails.fundName"></manage>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :table-data="tableData" :pages="pageSize" :total="total" :page="page"></log-table>
+          <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -157,7 +157,7 @@ export default {
       tableData: [],
       type: 2,
       tabs: {
-        tabList: [false, false, false, false, false, false, false, false, false]
+        tabList: [true, false, false, false, false, false, false, false, false]
       },
       projectId: "",
       steps: JSON.parse(sessionStorage.getItem("steps")) || [],
@@ -275,41 +275,6 @@ export default {
     };
   },
   methods: {
-    initLog() {
-      alert(111);
-      this.$http
-        .post(this.api + "/businessLogRecord/selectBusinessLogRecordPageList", {
-          type: this.type,
-          type_id: this.typeId,
-          page: this.page,
-          pageSize: this.pageSizes
-        })
-        .then(res => {
-          if (res.status == "200") {
-            // console.log(res);
-            if (res.data.status == "200") {
-              console.log(res.data);
-              res.data.result.list.map((item, index) => {
-                res.data.result.list[index].index = index + 1;
-              });
-              this.tableData = res.data.result.list;
-              // this.pages.pageNum = res.data.result.pageNum; //当前页码
-              // this.pages.total = res.data.result.total; //数据总数
-              this.total = res.data.result.total; //数据总数
-              // this.pages.pageSize = res.data.result.pageSize; //每页条数
-              this.pageSize = res.data.result.pageSize; //每页条数
-              // this.pages.navigatepageNums =
-              //   res.data.result.navigatepageNums.length; //页数长度
-              this.$Message.success(res.data.message);
-            } else {
-              this.$Message.error(res.data.message);
-            }
-          }
-        })
-        .catch(error => {
-          this.$Message.error("请求超时");
-        });
-    },
     handleClick(val) {
       let idx = val.index;
       let _tabList = this.tabs.tabList;
@@ -367,8 +332,7 @@ export default {
           }
         });
       } else if (this.activeName == "log") {
-        // this.log = false;
-        this.initLog();  
+        this.$refs.logTab.initLog();
       }
     },
 
