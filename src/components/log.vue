@@ -11,7 +11,7 @@
       </el-table-column>
     </el-table>
     <div class="pageStyle">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pages.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="pages.total">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -19,10 +19,12 @@
 
 <script>
 export default {
-  beforeCreate(){
+  beforeCreate() {
     // this.init();
   },
-  created(){
+
+  created() {
+    console.log(this.pages);
     this.init();
   },
   data() {
@@ -46,51 +48,29 @@ export default {
     //   }
     // }
   },
+  // props: ["tableData"],
+  // props: ["page","pages","tableData"],
   props: {
-    // tableData: {
-    //   type: Array,
-    //   default: []
-    // },
     page: {
       type: Number,
       default: 1
     },
     pageSize: {
-      type: Number,
-      default: 10
+      type: String,
+      default: '0'
     },
-    pages: {
-      type: Object,
-      default: {}
+    total: {
+      type: String,
+      default: '0'
     },
+    // pages: {
+    //   type: Object,
+    //   // default: {}
+    // },
     tableData: {
       type: Array,
       default: []
-    },
-    // log: {
-    //   type: Boolean,
-    //   default: true
-    // },
-    // tabs: {
-    //   type: Object,
-    //   default: {}
-    // },
-    // currentPage: {
-    //   type: String,
-    //   default: 1
-    // },
-    // totalPage: {
-    //   type: String,
-    //   default: 10
-    // },
-    // typeId: {
-    //   type: String,
-    //   default: ""
-    // },
-    // type: {
-    //   type: Number,
-    //   default: ""
-    // }
+    }
   },
   methods: {
     // handleSizeChange(pageSize) {
@@ -102,7 +82,7 @@ export default {
     //   this.init();
     // },
     init() {
-     this.$emit("initLog");
+      this.$emit("initLog");
     }
   }
 };

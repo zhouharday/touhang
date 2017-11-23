@@ -87,7 +87,7 @@
           <manage :costData="costData" :fundName="formDetails.fundName"></manage>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table :table-data="tableData" :page="page" :page-size="pageSize" :pages="pages"></log-table>
+          <log-table :table-data="tableData" :pages="pageSize" :total="total" :page="page"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -143,14 +143,17 @@ export default {
   data() {
     return {
       page: 1,
-      pageSize: 10,
+      pageSizes: 10,
+      total: '0',
+      pageSize: '0',
       pages: {
-        pageNum: "", //当前页码
-        total: "", //数据总数
-        pageSize: "", //每页条数
-        navigatepageNums: "", //页数
-        current: "" //当前页码
+        // pageNum: "", //当前页码
+        total: '0', //数据总数
+        pageSize: "0", //每页条数
+        // navigatepageNums: "", //页数
+        // current: "" //当前页码
       },
+      // pageSizes: [10,20,30,40],
       tableData: [],
       type: 2,
       tabs: {
@@ -279,7 +282,7 @@ export default {
           type: this.type,
           type_id: this.typeId,
           page: this.page,
-          pageSize: this.pageSize
+          pageSize: this.pageSizes
         })
         .then(res => {
           if (res.status == "200") {
@@ -290,11 +293,13 @@ export default {
                 res.data.result.list[index].index = index + 1;
               });
               this.tableData = res.data.result.list;
-              this.pages.pageNum = res.data.result.pageNum; //当前页码
-              this.pages.total = res.data.result.total; //数据总数
-              this.pages.pageSize = res.data.result.pageSize; //每页条数
-              this.pages.navigatepageNums =
-                res.data.result.navigatepageNums.length; //页数长度
+              // this.pages.pageNum = res.data.result.pageNum; //当前页码
+              // this.pages.total = res.data.result.total; //数据总数
+              this.total = res.data.result.total; //数据总数
+              // this.pages.pageSize = res.data.result.pageSize; //每页条数
+              this.pageSize = res.data.result.pageSize; //每页条数
+              // this.pages.navigatepageNums =
+              //   res.data.result.navigatepageNums.length; //页数长度
               this.$Message.success(res.data.message);
             } else {
               this.$Message.error(res.data.message);

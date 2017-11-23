@@ -62,7 +62,7 @@
         </el-row>
         <!-- 添加人员 -->
         <el-dialog :title=biaoti :visible.sync="modelSubscriber" :close-on-click-modal="false">
-            <el-form :rules="rules1" :model="addSubscriber" label-position="left">
+            <el-form :rules="rules1" :model="addSubscriber" label-position="left" ref="cooperativeInfo">
                 <el-row :gutter="10">
                     <el-col :span="24" class="formTitle">基本信息</el-col>
                     <el-col :span="11">
@@ -75,7 +75,7 @@
                     </el-col>
                     <el-col :span="11" :offset="2">
                         <el-form-item prop="name" label="姓名" :label-width="formLabelWidth" width="100">
-                            <el-input placeholder="请输入账号" v-model="addSubscriber.name"></el-input>
+                            <el-input placeholder="请输入姓名" v-model="addSubscriber.name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="11">
@@ -152,16 +152,16 @@ export default {
     };
     return {
       rules1: {
-        account: [{ validator: validatePhone, trigger: "blur" }],
+        account: [{ validator: validatePhone, trigger: "blur" ,required: true}],
         name: [
           { required: true, message: "请输入姓名", trigger: "blur" },
           { min: 1, max: 20, message: "长度在 2 到 20 个字符", trigger: "blur" }
         ],
-        department: [{ required: true, message: "请选择部门", trigger: "blur" }],
-        sex: [{ required: true, message: "请选择性别", trigger: "blur" }],
-        birthday: [{ required: true, message: "请选择生日", trigger: "blur" }],
-        cellphone: [{ validator: validatePhone, trigger: "blur" }],
-        email: [{ validator: validateEmail, trigger: "blur" }]
+        department: [{ required: true, message: "请选择部门", trigger: "change" }],
+        sex: [{ required: true, message: "请选择性别", trigger: "change" }],
+        birthday: [{ required: true, message: "请选择生日", trigger: "blur" ,type: 'number'}],
+        cellphone: [{ validator: validatePhone, trigger: "blur" ,required: true}],
+        email: [{ validator: validateEmail, trigger: "blur",required: true }]
       },
       structure: [],
       options: [
@@ -196,61 +196,7 @@ export default {
       formLabelWidth: "50px",
       addId: "",
       allDepartmentList: [],
-      allAge: [
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31,
-        32,
-        33,
-        34,
-        35,
-        36,
-        37,
-        38,
-        39,
-        40,
-        41,
-        42,
-        43,
-        44,
-        45,
-        46,
-        47,
-        48,
-        49,
-        50,
-        51,
-        52,
-        53,
-        54,
-        55,
-        56,
-        57,
-        58,
-        59,
-        60,
-        61,
-        62,
-        63,
-        64,
-        65,
-        66,
-        67,
-        68,
-        69,
-        70
-      ],
+      allAge:[18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70],
       input2: "",
       newOrChange: false,
       biaoti: "",
@@ -313,30 +259,44 @@ export default {
     },
     confirmIncome() {
       // this.addSubscriber.cellphone = this.md5(this.addSubscriber.cellphone,32);
-      if (this.checkMobile(this.addSubscriber.cellphone) == false) return;
-      else {
-        if (this.checkEmail(this.addSubscriber.email) == false) return;
-        else {
-          if (this.addSubscriber.sex == "女") this.addSubscriber.sex = 1;
-          else this.addSubscriber.sex = 0;
-          var depArr = this.allDepartmentList;
-          depArr.forEach(item => {
-            if (item.deptName == this.addSubscriber.department)
-              this.addSubscriber.department = item.id;
-          });
-          //                    console.log(this.addSubscriber)
-          var LockStatus;
-          addNewUser(this.addSubscriber, this.newOrChange).then(res => {
-            console.log(res);
-            getUserlist("", LockStatus, this.input2).then(res => {
-              this.subscriberData = [];
-              this.subscriberData = res.data.result;
-            });
-          });
-          //确认添加
-          this.modelSubscriber = false;
-        }
-      }
+//      if (this.checkMobile(this.addSubscriber.cellphone) == false) return;
+//      else {
+//        if (this.checkEmail(this.addSubscriber.email) == false) return;
+//        else {
+//
+//        }
+//      }
+        this.$refs.cooperativeInfo.validate((valid) => {
+            if (valid) {
+                if (this.addSubscriber.sex == "女"){
+                    this.addSubscriber.sex = 1;}
+                else{ this.addSubscriber.sex = 0;}
+//                this.addSubscriber.age = Number(this.addSubscriber.age);
+                var depArr = this.allDepartmentList;
+                depArr.forEach(item => {
+                    if (item.deptName == this.addSubscriber.department)
+                        this.addSubscriber.department = item.id;
+                });
+                //                    console.log(this.addSubscriber)
+                var LockStatus;
+                addNewUser(this.addSubscriber, this.newOrChange).then(res => {
+                    console.log(res);
+                    if(res.data.status == '200'){
+                    getUserlist("", LockStatus, this.input2).then(res => {
+                        this.subscriberData = [];
+                        this.subscriberData = res.data.result;
+                    });
+                    }else {
+                        this.$Message.error(res.data.message);
+                    }
+                });
+                //确认添加
+                this.modelSubscriber = false;
+            } else {
+                console.log('error submit!!');
+                return false;
+            }
+        });
     },
     checkMobile(phone) {
       var sMobile = phone;
@@ -351,12 +311,14 @@ export default {
         return true;
       } else {
         alert("请输入正确的邮箱");
+
         return false;
       }
     },
     modalIncome() {
       //取消
       this.modelSubscriber = false;
+
     },
     handleIconClick() {
       //        alert(this.value2)
@@ -377,6 +339,7 @@ export default {
           sessionStorage.getItem("merchants")
       )[0].merchant_name;
     getDepartmentList().then(res => {
+        console.log(res)
       var dataList = res.data.result;
       this.allDepartmentList = dataList;
       var treeList = getNodes(dataList);
@@ -384,7 +347,7 @@ export default {
     });
     getUserlist().then(res => {
       this.subscriberData = res.data.result;
-      console.log(this.subscriberData);
+      //console.log(this.subscriberData);
     });
   }
 };

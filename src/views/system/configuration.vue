@@ -305,11 +305,14 @@
 
             },
             moveDown(item,index){
-                if (index !=   item.data.length - 1 ){
-                    var dataArr = item.data[index + 1];
-                    item.data[index + 1] = item.data[index];
-                    item.data[index] = dataArr;
-                };
+                console.log(item)
+                if (item.data[index + 1].stageStatus != 2){
+                    if (index !=   item.data.length - 1 ){
+                        var dataArr = item.data[index + 1];
+                        item.data[index + 1] = item.data[index];
+                        item.data[index] = dataArr;
+                    };
+                }
             },
             refreshList(item) {
                 this.nowId = item.id
