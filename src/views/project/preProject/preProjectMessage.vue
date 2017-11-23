@@ -91,7 +91,7 @@
   </div>
 </template>
 
-<script type="text/javascript">
+<script type="text/ecmascript-6">
 import detailForm from "./details";
 import tableForm from "./tables";
 import teamTable from "./team";
