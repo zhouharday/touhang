@@ -31,7 +31,11 @@ module.exports = {
             '/api': {
                 // target: 'http://192.168.0.198:9091',
                 // target: 'http://18f46963j4.iok.la',
+<<<<<<< HEAD
                 // target:'http://192.168.0.118:9091',// 文军凡IP
+=======
+                // target: 'http://192.168.0.118:9091', // 文军凡IP
+>>>>>>> c0e9f62907ef70e08344da1432fb07fd84929ecc
                 // target: 'http://192.168.0.118:9091', // 文格阳IP
                 // target: 'http://192.168.0.105:9091', // 蔡永亮 IP
                 // target:'http://100.64.33.181:9091',
