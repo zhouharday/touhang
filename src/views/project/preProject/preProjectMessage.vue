@@ -48,32 +48,32 @@
     </div>
     <div class="tabs">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing', authStatus)" label="详情" name="details" class="tab_list">
-          <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
+        <el-tab-pane :disabled="!checkProjectAuth('XM-xiangqing')" label="详情" name="details" class="tab_list">
+          <detail-form :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :authList="authList" :basicForm="basicForm" :companyForm="companyForm" :capitalForm="capitalForm">
           </detail-form>
           <table-form :tabs="tabs" :companyForm="companyForm" :isInTeam="isInTeam" :memberData="memberData" :structureData="structureData"></table-form>
         </el-tab-pane>
-        <el-tab-pane :disabled="!checkProjectAuth('XMTD', authStatus)" label="团队" name="team" class="tab_list">
-          <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :proUsers="proUsers" :proRoles="proRoles">
+        <el-tab-pane :disabled="!checkProjectAuth('XMTD')" label="团队" name="team" class="tab_list">
+          <team-table :tabs="tabs" :proId="projectId" :isInTeam="isInTeam" :authList="authList" :proUsers="proUsers" :proRoles="proRoles">
           </team-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-jilu')" label="记录" name="record" class="tab_list">
-          <record-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></record-form>
+          <record-form :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :proId="projectId"></record-form>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-shenpi')" label="审批" name="approve" class="tab_list">
-          <approve-table :tabs="tabs" :isInTeam="isInTeam" :projectId="projectId"></approve-table>
+          <approve-table :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :projectId="projectId"></approve-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-wendang')" label="文档" name="file" class="tab_list">
-          <file-table :tabs="tabs" :isInTeam="isInTeam" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
+          <file-table :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :uploaded="uploaded" v-on:listenUploaded="listenUploaded" :proId="projectId"></file-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-fengxianguanli')" label="风险登记" name="risk" class="tab_list">
-          <risk-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId" :proUsers="proUsers"></risk-table>
+          <risk-table :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :proId="projectId" :proUsers="proUsers"></risk-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('XM-guanli')" v-if="isManage || isExit" label="管理" name="manage" class="tab_list">
-          <manage-table :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></manage-table>
+          <manage-table :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :proId="projectId"></manage-table>
         </el-tab-pane>
         <el-tab-pane :disabled="!checkProjectAuth('GL-XMTC')" v-if="isExit" label="退出" name="outing" class="tab_list">
-          <outing-form :tabs="tabs" :isInTeam="isInTeam" :proId="projectId"></outing-form>
+          <outing-form :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :proId="projectId"></outing-form>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
           <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
