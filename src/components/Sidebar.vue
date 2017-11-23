@@ -3,7 +3,7 @@
         <div class="sidebar">
             <div class="portrait">
                 <div class="portrait-top">
-                    <img src="/static/img/默认头像.png" @click="jumpPersonal()">
+                    <img src="/static/img/defultImg.png" @click="jumpPersonal()">
                 </div>
                 <div class="user">
                     <div style="margin-top:55px;">
