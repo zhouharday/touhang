@@ -33,7 +33,8 @@
           </el-select>
         </div>
       </div>
-      <button type="button" class="register-btn active" @click="submitForm">确 定</button>
+      <!-- <button type="button" class="register-btn active" ondbclick="return false;" @click="submitForm">确 定</button> -->
+      <Button type="button" class="register-btn active" ondbclick="return false;" @click="submitForm">确 定</Button>
       <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
     </div>
   </div>
