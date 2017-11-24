@@ -155,7 +155,9 @@
                     </el-col>
                     <el-col>
                         <el-form-item label="合同附件">
-                            <el-input v-model="paidForm1.contractAppendix" disabled></el-input>
+                                <p v-for="item in contractDocument" :key="item.index">
+                                    <a :href="item.filePath" style="font-size:12px;" download="item.fileName">{{item.fileName}}</a>
+                                </p>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
@@ -330,6 +332,7 @@ export default {
             },
             paidData: [],
             paidForm1: {},
+            contractDocument: [],
             fundData2: [],
             // 项目分红
             headerInfo_sharing: {
@@ -429,6 +432,7 @@ export default {
                 console.log('打开编辑投资支付: ' + JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
+                    this.contractDocument = resp.data.result.projectInvestPay.contractDocument;
                     this.fundData2 = resp.data.result.payDetails;
                     this.paidDetails = !this.paidDetails;
                 } else {

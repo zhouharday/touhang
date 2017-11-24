@@ -197,13 +197,11 @@ export default {
             if (industryId) params.industryId = industryId;
 
             getPros(params).then(resp => {
-                // alert(888);
                 let info = resp.data.listMapProjectInfo;
                 let data = info.list;
                 this.tableData = [];
                 this.tableData = this.handleDatas(data);
                 this.total = info.total || 0;
-                // this.tableData.push();
             })
         },
         handleCurrentChange(page) {
@@ -311,10 +309,13 @@ export default {
             let id = row.id;
             let projectType = row.project_type;
             delPro(id, projectType).then(resp => {
-                let data = resp.data;
-                if (!data.message) {
-                    rows.splice(index, 1);
+                if(resp.data.status == '200'){
+                    this.getDatas();
+                    this.$Message.success(resp.data.message || "删除成功");
+                }else{
+                    this.$Message.error(resp.data.message);
                 }
+                
             }).catch(e => {
                 console.log('deleteRow exists error: ', e);
             });
