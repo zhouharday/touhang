@@ -34,7 +34,7 @@
         </div>
       </div>
       <!-- <button type="button" class="register-btn active" ondbclick="return false;" @click="submitForm">确 定</button> -->
-      <Button type="button" class="register-btn active" ondbclick="return false;" @click="submitForm">确 定</Button>
+      <Button type="button" class="register-btn active" :loading="loading" @dblclick.prevent="cancel($event)" @click="submitForm">确 定</Button>
       <!-- <router-link to="/registerphone" type="button" class="register-btn" @click="submitForm" :class="{ active:valueData }">确定</router-link> -->
     </div>
   </div>
@@ -48,6 +48,7 @@ import md5 from "js-md5";
 export default {
   data() {
     return {
+      dbClick: false,
       // plsSelect: 0,
       userName: "",
       valueData: false,
@@ -66,8 +67,6 @@ export default {
       }
     };
   },
-
-  mounted() {},
   created() {
     this.$http
       .post(this.api + "/dictionaryController/select2Menu", {
@@ -124,14 +123,23 @@ export default {
     //         console.log(error2);
     //     }))
   },
-  computed: mapState({
-    registers(state) {
-      state.register.register =
-        JSON.parse(sessionStorage.getItem("register")) || {};
-      return state.register.register;
-    }
-  }),
+  computed: {
+    ...mapState({
+      registers(state) {
+        state.register.register =
+          JSON.parse(sessionStorage.getItem("register")) || {};
+        return state.register.register;
+      },
+      loading: state => state.login.loading
+    })
+  },
   methods: {
+    cancel(e) {
+      // alert(222);
+      this.dbClick = true;
+      event.preventDefault();
+      return;
+    },
     checkVata(province) {
       //选择省份回调
       if (
@@ -147,57 +155,51 @@ export default {
       this.$Message.warning("请输入必填项");
     },
     submitForm() {
-      this.checkVata();
-      //最后一步提交所有注册数据
-      if (this.valueData) {
-        console.log(this.register);
-        this.$store.state.login.loading = true;
-        // this.$store.state.register.register.merchantName = this.register.merchantName;
-        // this.$store.state.register.register.industry = this.register.industry;
-        // this.$store.state.register.register.province = this.register.province;
-        // this.$store.state.register.register.contactUser = this.register.contactUser;
-        // // window.sessionStorage.setItem('register', JSON.stringify(this.$store.state.register.register));
-        // this.$store.state.register.register = JSON.parse(sessionStorage.getItem('register')) || {};
-        console.log(this.$store.state.register.register);
-        this.$http
-          .post(this.api + "/merchant/register", {
-            validationCode: this.registers.validationCode,
-            contactPhone: this.registers.contactPhone,
-            industry: this.register.industry,
-            province: this.register.province,
-            contactUser: this.register.contactUser,
-            merchantName: this.register.merchantName
-          })
-          .then(res => {
-            if (res.data.status == "200") {
-              //注册数据验证通过
-              // this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页
-              // this.$store.state.login.show_OR_hide.isShowSidebar = true; //只显示通讯录菜单列表
-              let number = this.$store.state.register.register.contactPhone;
-              let pass = md5("123456", 32);
-              this.$store.dispatch({
-                //登录
-                type: "loginAPI",
-                name: number,
-                pwd: pass,
-                self: this
-              });
-              // this.$router.push({ name: 'contacts' }); //进入通讯录页面
-              // console.log(res.data);
-            } else {
-              //网络异常
-              // console.log(res.data);
-              // alert(res.data.message);
-              this.$store.state.login.loading = false;
-              this.$Message.warning(res.data.message);
-            }
-          })
-          .catch(error => {
-            // alert(222);
-            console.log(error);
-          });
+      event.preventDefault();
+      // alert(111);
+      if (this.dbClick == 0) {
+        //单击
+        this.checkVata();
+        if (this.valueData) {
+          this.$store.state.login.loading = true;
+          console.log(this.register);
+          console.log(this.$store.state.register.register);
+          this.$http
+            .post(this.api + "/merchant/register", {
+              validationCode: this.registers.validationCode,
+              contactPhone: this.registers.contactPhone,
+              industry: this.register.industry,
+              province: this.register.province,
+              contactUser: this.register.contactUser,
+              merchantName: this.register.merchantName
+            })
+            .then(res => {
+              if (res.data.status == "200") {
+                //注册数据验证通过
+                // this.$store.state.login.show_OR_hide.isVshowYe = false; //首次登陆用户不显示首页
+                // this.$store.state.login.show_OR_hide.isShowSidebar = true; //只显示通讯录菜单列表
+                let number = this.$store.state.register.register.contactPhone;
+                let pass = md5("123456", 32);
+                this.$store.dispatch({
+                  //登录
+                  type: "loginAPI",
+                  name: number,
+                  pwd: pass,
+                  self: this
+                });
+              } else {
+                this.$store.state.login.loading = false;
+                this.$Message.warning(res.data.message);
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          this.$Message.warning("请输入必填项");
+        }
       } else {
-        this.$Message.warning("请输入必填项");
+        return;
       }
     }
   }
@@ -306,7 +308,7 @@ input::-webkit-input-placeholder {
   font-size: 24px;
   color: #fff;
   text-align: center;
-  line-height: 45px;
+  // line-height: 45px;
   background: #f05e5e;
   border: none;
   border-radius: 30px;

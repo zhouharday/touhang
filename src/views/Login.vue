@@ -16,7 +16,7 @@
         <component :is="CardBox" @goBack="goBack" @checkVata="checkVataa" @changePassword="getPwd" @changeName="getName" @sendVal="getval" @keyup.enter.native="submitForm">
         </component>
         <div class="login_btn">
-          <Button type="button" :loading="loading" class="login-btn" @click="submitForm" :class="{ active : valueData }">登录</Button>
+          <button type="button" :loading="loading" class="login-btn" ondbclick="dbClick" @click="submitForm" :class="{ active : valueData }">登 录</button>
         </div>
         <hr class="hr" />
         <div class="login-right-bottom">
@@ -81,6 +81,10 @@ export default {
     };
   },
   methods: {
+    dbClick(){
+      alert(555);
+      return false;
+    },
     getName(val) {
       this.userName = val;
     },
@@ -96,6 +100,7 @@ export default {
     },
     submitForm() {
       if (this.valueData) {
+        event.preventDefault();
         this.$store.state.login.loading = true;
         sessionStorage.clear();
         // this.$router.push({ name: 'homeContent' });
