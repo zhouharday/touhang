@@ -61,17 +61,17 @@
           <el-row :gutter="40">
             <el-col :span="13">
               <el-form-item label="请输入当前密码" prop="currentPwd">
-                <el-input v-model="form2.currentPwd" @input="checkVata" auto-complete="off"></el-input>
+                <el-input type="password" v-model="form2.currentPwd" @input="checkVata" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="13">
               <el-form-item label="请输入新密码" prop="newPwd">
-                <el-input v-model="form2.newPwd" @input="checkVata" auto-complete="off"></el-input>
+                <el-input type="password" v-model="form2.newPwd" @input="checkVata" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="13">
               <el-form-item label="请确认新密码" prop="newPwd2">
-                <el-input v-model="form2.newPwd2" @input="checkVata" auto-complete="off"></el-input>
+                <el-input type="password" v-model="form2.newPwd2" @input="checkVata" auto-complete="off"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="13">

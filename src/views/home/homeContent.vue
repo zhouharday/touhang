@@ -477,7 +477,8 @@
       > div:nth-child(1) {
         position: relative;
         float: left;
-        width: 60px;
+        // width: 60px;
+        padding: 0 5px;
         height: 23px;
         line-height: 25px;
         color: #fff;
