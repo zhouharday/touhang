@@ -50,7 +50,7 @@
                                                 <industry-form :industryForm="industryForm"></industry-form>
                                             </el-tab-pane> -->
                 <el-tab-pane label="融资信息" name="capital" class="tab_list">
-                    <capital-table :tabs="tabs" :projectData="projectData"></capital-table>
+                    <capital-table :tabs="tabs" :projectData="projectData" :companyForm="companyForm"></capital-table>
                 </el-tab-pane>
                 <el-tab-pane label="记录" name="record" class="tab_list">
                     <record-form :tabs="tabs"></record-form>

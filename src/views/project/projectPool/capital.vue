@@ -105,13 +105,7 @@ export default {
     data() {
         return {
             modalAdd: false,
-            capitalData: [{
-                projectTurnId: '天使轮',
-                financingWay: '',
-                financingMoney: '',
-                financingDate: '',
-                editFlag: false
-            }],
+            capitalData: [],
             capitalForm: {
                 projectTurnId: '',
                 financingWay: '',
@@ -181,6 +175,9 @@ export default {
                     if (!message) {
 
                     } else {
+                        data.result.forEach((item)=>{
+                            item.editFlag = false;
+                        });
                         this.capitalData = data.result || [];
                         //Message.info(message);
                     }
@@ -246,7 +243,12 @@ export default {
                     financingMoney: row.financingMoney,
                     financingDate: row.financingDate
                 }).then(resp => {
-
+                    if(resp.data.status == '200'){
+                       this.getData();
+                       this.$Message.success(resp.data.message || "操作成功");
+                    }else{
+                        this.$Message.error(resp.data.message || "操作失败");
+                    }
                 }).catch(e => {
                     console.log('checkEdit exists error: ', e);
                 })

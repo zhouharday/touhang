@@ -211,14 +211,14 @@ export default {
             this.disableForm();
         },
         disableForm() {
-            this.disable(this.basicForm,headerInfo_basic);
-            this.disable(this.companyForm,headerInfo_company);
+            this.able(this.basicForm, this.headerInfo_basic);
+            this.able(this.companyForm, this.headerInfo_company);
             // this.disable(this.basicForm);
             // this.disable(this.companyForm);
         },
         // 编辑按钮
         disable(name, headerInfo) {
-            name.flag = false;
+            name.flag = !name.flag;
             headerInfo.btnGroup[0].show = true;
             headerInfo.btnGroup[1].show = false;
             headerInfo.btnGroup[2].show = false;

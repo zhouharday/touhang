@@ -284,9 +284,7 @@ export default {
             this.modalAdd1 = !this.modalAdd1;
         },
         confirmAdd1(formName) {
-            if(this.companyForm == undefined 
-                || this.companyForm.id == undefined 
-                || this.companyForm.id == ''){
+            if(this.companyForm.id == null || this.companyForm.id == ''){
                 this.$Message.error("企业信息走丢了，请刷新再试");
                 return;
             }

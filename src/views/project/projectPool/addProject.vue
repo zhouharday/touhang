@@ -329,10 +329,10 @@ export default {
                   }),
                   this.addTab("项目池", "/home/projectPool", "projectPool");
                 this.$router.push({ name: "projectPool" });
-                store.isSubmit = false;
               }else{
                 this.$Message.error(resp.data.message);
               }
+              store.isSubmit = false;
             })
             .catch(e => {
               console.log(e);
