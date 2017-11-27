@@ -44,6 +44,7 @@ export default {
       this.initLog();
     },
     initLog() {
+      console.log(this.projectId);
       // alert(111);
       this.$http
         .post(this.api + "/businessLogRecord/selectBusinessLogRecordPageList", {
