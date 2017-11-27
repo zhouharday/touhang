@@ -85,6 +85,10 @@ export default {
         fileListData: {
             type: Array,
             default: []
+        },
+        authList: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -179,10 +183,14 @@ export default {
             this.reminders = false
         },
         haveJurisdiction(str) {
-            if (checkFundAuth(str)) {
-                return true
-            } else {
+            if (!this.authList) {
                 return false
+            } else {
+                if (checkFundAuth(str, this.authList)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         },
         _getFundDoc() {
@@ -192,6 +200,9 @@ export default {
                 }
             })
         }
+    },
+    mounted() {
+        console.log(this.authList)
     },
     components: {
         deleteReminders,

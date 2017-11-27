@@ -172,6 +172,10 @@ export default {
         fundName: {
             type: String,
             default: JSON.parse(sessionStorage.getItem('FUNDNAME'))
+        },
+        authList: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -394,10 +398,14 @@ export default {
             })
         },
         haveJurisdiction(str) {
-            if (checkFundAuth(str)) {
-                return true
-            } else {
+            if (!this.authList) {
                 return false
+            } else {
+                if (checkFundAuth(str, this.authList)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     },
