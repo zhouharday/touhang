@@ -88,7 +88,7 @@
                 <manage :costData="costData" :fundName="formDetails.fundName"></manage>
             </el-tab-pane>
             <el-tab-pane label="日志" name="log" class="tab_list">
-                <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
+                <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -147,11 +147,11 @@ export default {
         return {
             page: 1,
             pageSizes: 10,
-            total: '0',
-            pageSize: '0',
+            total: "0",
+            pageSize: "0",
             pages: {
-                total: '0', //数据总数
-                pageSize: "0", //每页条数
+                total: "0", //数据总数
+                pageSize: "0" //每页条数
             },
             type: 2,
             tabs: {
@@ -287,7 +287,7 @@ export default {
                     tabList: _tabList
                 };
                 this.tabs = _tabs;
-            };
+            }
             if (this.activeName == "team") {
                 getFundTeamList(this.$route.params.id).then(res => {
                     if (res.status == "200") {
