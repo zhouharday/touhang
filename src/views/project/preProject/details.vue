@@ -1,7 +1,7 @@
 <template>
     <div class="form">
         <!-- 基本信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_basic : _headerInfo_basic" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('JBXQ-bianji')? headerInfo_basic : _headerInfo_basic" @add="disable(basicForm,headerInfo_basic)" @show="able(basicForm,headerInfo_basic)" @down="changeProjectInfo()" class="title"></tabel-header>
         <div class="basicForm">
             <el-form ref="basicForm" :model="basicForm" label-width="170px">
                 <el-row>
@@ -59,7 +59,7 @@
             </el-form>
         </div>
         <!-- 企业信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_company : _headerInfo_company" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('JBXQ-bianji')? headerInfo_company : _headerInfo_company" @add="disable(companyForm,headerInfo_company)" @show="able(companyForm,headerInfo_company)" @down="changeEnterpriseInfo()" class="title"></tabel-header>
         <div class="companyForm">
             <el-form ref="companyForm" :model="companyForm" label-width="170px">
                 <el-row>
@@ -118,7 +118,7 @@
             </el-form>
         </div>
         <!-- 投资信息 -->
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_capital : _headerInfo_capital" @add="disable(capitalForm,headerInfo_capital)" @show="able(capitalForm,headerInfo_capital)" @down="changeCapitalInfo()" class="title"></tabel-header>
+        <tabel-header :data="checkProjectAuth('JBXQ-bianji')? headerInfo_capital : _headerInfo_capital" @add="disable(capitalForm,headerInfo_capital)" @show="able(capitalForm,headerInfo_capital)" @down="changeCapitalInfo()" class="title"></tabel-header>
         <div class="capitalForm">
             <el-form ref="capitalForm" :model="capitalForm" label-width="170px">
                 <el-row>

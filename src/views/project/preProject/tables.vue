@@ -2,7 +2,7 @@
 <div class="tables">
     <!-- 董事会成员 -->
     <div class="memberTable">
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_member : _headerInfo_member" @add="addMember"></tabel-header>
+        <tabel-header :data="checkProjectAuth('JBXQ-bianji')? headerInfo_member : _headerInfo_member" @add="addMember"></tabel-header>
         <el-table :data="memberData" border style="width: 100%">
             <el-table-column label="姓名" prop="name" align="center">
                 <template scope="scope">
@@ -30,11 +30,11 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                        <el-button v-if="checkProjectAuth('XQ-bianji') && !scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('JBXQ-bianji') && !scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">编辑
                         </el-button>
                         <el-button v-if="scope.row.editFlag" type="text" size="small" @click="checkEditOwer(scope.row)">保存
                         </el-button>
-                        <el-button v-if="checkProjectAuth('XQ-bianji')" type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('JBXQ-bianji')" type="text" size="small" @click="handleDeleteMember(scope.$index,memberData)">删除</el-button>
                     </template>
             </el-table-column>
         </el-table>
@@ -59,7 +59,7 @@
     </div>
     <!-- 股权结构 -->
     <div class="structureTable">
-        <tabel-header :data="checkProjectAuth('XQ-bianji')? headerInfo_structure: _headerInfo_structure" @add="addStructure" class="structureHeader"></tabel-header>
+        <tabel-header :data="checkProjectAuth('JBXQ-bianji')? headerInfo_structure: _headerInfo_structure" @add="addStructure" class="structureHeader"></tabel-header>
         <el-table :data="structureData" border style="width: 100%">
             <el-table-column label="股东姓名" prop="stockholderName" align="center">
                 <template scope="scope">
@@ -103,11 +103,11 @@
             </el-table-column>
             <el-table-column label="操作" align="center">
                 <template scope="scope">
-                        <el-button v-if="checkProjectAuth('XQ-bianji') && !scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('JBXQ-bianji') && !scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="checkProjectAuth('XQ-bianji') && scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">保存
+                        <el-button v-if="checkProjectAuth('JBXQ-bianji') && scope.row.editFlag" type="text" size="small" @click="checkEditGu(scope.row)">保存
                         </el-button>
-                        <el-button v-if="checkProjectAuth('XQ-bianji')" type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
+                        <el-button v-if="checkProjectAuth('JBXQ-bianji')" type="text" size="small" @click="handleDeleteOwner(scope.$index,structureData)">删除</el-button>
                     </template>
             </el-table-column>
         </el-table>
