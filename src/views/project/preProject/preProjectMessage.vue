@@ -76,7 +76,7 @@
           <outing-form :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :proId="projectId"></outing-form>
         </el-tab-pane>
         <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
+          <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
     </div>
