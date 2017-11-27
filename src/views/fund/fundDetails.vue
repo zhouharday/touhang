@@ -64,7 +64,6 @@
     </div>
     <!-- <div class="tabs" v-if="existPermissions"> -->
     <div class="tabs">
-<<<<<<< HEAD
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
                 <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
@@ -92,35 +91,6 @@
                 <log-table ref="logTab" :typeId="projectId" :type="type"></log-table>
             </el-tab-pane>
         </el-tabs>
-=======
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
-          <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
-          </my-details>
-        </el-tab-pane>
-        <el-tab-pane label="团队" name="team" class="tab_list">
-          <team :teamData="teamData"></team>
-        </el-tab-pane>
-        <el-tab-pane label="审批" name="examine" class="tab_list">
-          <examine :examineData="examineData"></examine>
-        </el-tab-pane>
-        <el-tab-pane label="投资者" name="Investor" class="tab_list">
-          <investor :investorData="investorData"></investor>
-        </el-tab-pane>
-        <el-tab-pane label="投资项目" name="project" class="tab_list">
-          <projects :projectsData="projectsData"></projects>
-        </el-tab-pane>
-        <el-tab-pane label="文档" name="file" class="tab_list" v-if="haveJurisdiction('GL-JJWD')">
-          <my-file :fileListData="fileListData"></my-file>
-        </el-tab-pane>
-        <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
-          <manage :costData="costData" :fundName="formDetails.fundName"></manage>
-        </el-tab-pane>
-        <el-tab-pane label="日志" name="log" class="tab_list">
-          <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
-        </el-tab-pane>
-      </el-tabs>
->>>>>>> 5255db225859c3f4ec856c95a4c5cb2ee108290f
     </div>
     <!-- 中止确认弹框 -->
     <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="confirmSuppression" @cancel="deleteReminders=false">
@@ -167,213 +137,11 @@ import {
 } from "api/fund";
 const NUM = 2;
 export default {
-<<<<<<< HEAD
     $route(to, from) {
         this.projectId = this.$route.params.id;
         if (to.name == "fundDetails") {
           this.init(); //再次调起我要执行的函数
         }
-=======
-  $route(to, from) {
-    this.projectId = this.$route.params.id;
-    // if (to.name == "preProjectMessage") {
-    //   this.init(); //再次调起我要执行的函数
-    // }
-  },
-  data() {
-    return {
-      page: 1,
-      pageSizes: 10,
-      total: "0",
-      pageSize: "0",
-      pages: {
-        // pageNum: "", //当前页码
-        total: "0", //数据总数
-        pageSize: "0" //每页条数
-        // navigatepageNums: "", //页数
-        // current: "" //当前页码
-      },
-      // pageSizes: [10,20,30,40],
-      type: 2,
-      tabs: {
-        tabList: [false, false, false, false, false, false, false, false, false]
-      },
-      projectId: "",
-      steps: JSON.parse(sessionStorage.getItem("steps")) || [],
-      currentStep: "" || sessionStorage.getItem("currentStep"),
-      stepId: "", // 当前显示列表id
-      deleteReminders: false,
-      message_title: "确认中止",
-      message: "是否确认中止该项目？",
-      btnText: "中止",
-      modal_loading: false,
-      prompt: "任务助手小双温馨提示:",
-      module: [],
-      tableData: {},
-      activeName: "details",
-      showOrhiddren: true,
-      applyModal: false, // 发起申请对话框
-      roleId: "0",
-      auditorOptions: [], // 审批人员列表
-      progressModal: false, // 立即审批对话框
-      existPermissions: false, // 当前用户是否拥有权限
-      approvalForm: {
-        disposeResult: "1",
-        approveUserId: "",
-        remark: ""
-      },
-      applyForm: {},
-      formDetails: {
-        fundName: "",
-        fundNo: "",
-        fundScale: "",
-        createUserId: "",
-        manageTypeId: "",
-        orgTypeId: "",
-        fundInvestId: "",
-        fundOrg: "",
-        fundOrgValue: "", //基金结构选2的时候的比例值
-        fundTerm: "",
-        startDate: "",
-        endDate: "",
-        businessDeptId: "",
-        yearsDaynum: "",
-        merchantId: "",
-        versionRecord: "",
-        fundStatus: "",
-        fundType: "",
-        mainInvestField: "",
-        incomeDis: "",
-        fundRemarks: "",
-        flag: true
-      }, //详情 - 基本信息
-      formMIS: {
-        fundStratorId: "", //基金管理人
-        fundCustodianId: "", //基金托管人
-        fundSupervisorId: "", // 基金监管人
-        fundSuperintId: "", // 基金监理人
-        fundAdvisorId: "", // 基金投资顾问
-        fundOrganizationId: "", // 第三方合作机构
-        flag: true
-      }, //详情 - 管理信息
-      formRegistration: {
-        regDate: "",
-        regAddress: "",
-        recordStatus: "",
-        recordDate: "",
-        recordNo: "",
-        flag: true
-      }, //详情 - 备案注册
-      formAccountInfo: [
-        {
-          username: "",
-          openingBank: "",
-          accountNumber: "",
-          accountType: 1,
-          accountTypeName: "基本户"
-        },
-        {
-          username: "",
-          openingBank: "",
-          accountNumber: "",
-          accountType: 2,
-          accountTypeName: "托管户"
-        },
-        {
-          username: "",
-          openingBank: "",
-          accountNumber: "",
-          accountType: 3,
-          accountTypeName: "募集结算账户"
-        }
-      ], //详情 - 账户信息
-      fundLevel: {
-        priority: "",
-        intermediateStage: "",
-        generalLevel: ""
-      },
-      teamData: [], //团队列表
-      investorData: [], // 投资者列表
-      fileListData: [], // 文档列表
-      projectsData: [], // 投资项目
-      costData: [], // 基金费用
-      examineData: [], // 审批数据
-      file: null,
-      listIndex: 0, // 当前点击id
-      loadingStatus: false,
-      modalUpload: false, // 显示或隐藏模态框
-      uploadInfo: {
-        file: null,
-        stageId: "",
-        uploadTypeId: this.$route.params.id,
-        fileId: this.stepId || sessionStorage.getItem("stepId"),
-        type: 1,
-        userId: JSON.parse(sessionStorage.getItem("userInfor")).id
-      },
-      log: false
-    };
-  },
-  methods: {
-    handleClick(val) {
-      let idx = val.index;
-      let _tabList = this.tabs.tabList;
-      if (!_tabList[idx]) {
-        for (var i = 0; i < _tabList.length; i++) {
-          if (i == idx) {
-            _tabList[i] = true;
-          } else {
-            _tabList[i] = false;
-          }
-        }
-        let _tabs = { tabList: _tabList };
-        this.tabs = _tabs;
-      }
-      if (this.activeName == "team") {
-        getFundTeamList(this.$route.params.id).then(res => {
-          if (res.status == "200") {
-            // console.log(res.data.result)
-            this.teamData = res.data.result;
-          }
-        });
-      } else if (this.activeName == "Investor") {
-        getInvestorByFund(this.$route.params.id).then(res => {
-          if (res.status == "200") {
-            // console.log(res.data.result) // 投资者数据为空
-            this.investorData = res.data.result;
-          }
-        });
-      } else if (this.activeName === "examine") {
-        getApproveList(this.$route.params.id).then(res => {
-          if (res.status === 200) {
-            // console.log(res)
-            this.examineData = res.data.result.list;
-          }
-        });
-      } else if (this.activeName == "project") {
-        getProjectContractByFund(this.$route.params.id).then(res => {
-          if (res.status == "200") {
-            // console.log(res) // 投资项目数据为空
-            this.projectsData = res.data.result;
-          }
-        });
-      } else if (this.activeName == "file") {
-        selectProjectOrFundDocument(this.$route.params.id, 2).then(res => {
-          if (res.status == "200") {
-            // console.log(res.data.result)
-            this.fileListData = res.data.result;
-          }
-        });
-      } else if (this.activeName == "manage") {
-        getFundFeeList(this.$route.params.id).then(res => {
-          if (res.status == "200") {
-            // console.log(res)
-            this.costData = res.data.result;
-          }
-        });
-      } else if (this.activeName == "log") {
-        this.$refs.logTab.initLog();
-      }
->>>>>>> 5255db225859c3f4ec856c95a4c5cb2ee108290f
     },
     data() {
         return {
