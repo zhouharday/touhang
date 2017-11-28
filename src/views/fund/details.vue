@@ -262,7 +262,7 @@
     <!-- 账户信息 end -->
     <div class="btnList" v-if="!showOrhiddren">
         <el-button class="btn success" :disabled="formDetails.flag" @click="preservation">保存</el-button>
-        <el-button class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
+        <el-button :loading="loading" class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
     </div>
 </div>
 </template>
@@ -317,7 +317,11 @@ export default {
         authList: {
             type: Array,
             default: () => []
-        }
+        },
+        loading: {
+            type: Boolean,
+            default: false
+        },
     },
     data() {
         return {
@@ -482,7 +486,7 @@ export default {
                 }
             })
             if (judgeDetails && judgeMis) {
-                this.$emit('confirmSubmission')
+                this.$emit('confirmSubmission', false);
             }
         },
         cancel() {
@@ -569,6 +573,9 @@ export default {
         this.OrgTypeList = JSON.parse(sessionStorage.getItem('ORGTYPE')) || this.OrgType
     },
     computed: {
+        // loading: function(){
+        //     return this.$store.state.login.loading
+        // },
         headerInfo_details: function() {
             if (checkFundAuth('GL-JJXQ-BJ', this.authList)) {
                 return {

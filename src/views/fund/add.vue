@@ -1,12 +1,13 @@
 <template>
 <div class="add">
-    <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :editInfo="editInfo" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
+    <my-details :loading="loading" :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :editInfo="editInfo" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
     </my-details>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Details from './details'
+import {mapState} from 'vuex'
 import {
     addFund
 } from 'api/fund'
@@ -73,7 +74,7 @@ export default {
         }
     },
     methods: {
-        confirmSubmission() {
+        confirmSubmission(data) {
             this.formData = {
                 fundBaseInfo: this.formDetails,
                 fundManageInfo: this.formMIS,
@@ -82,6 +83,7 @@ export default {
             this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
             addFund(this.formData).then((res) => {
                 if (res.status == '200') {
+                    this.loading = data;
                     this.$Message.success(res.data.message || '添加成功！')
                     this.$store.dispatch('getFundLists').then(() => {
                         this.$router.push('/home/myfund')
@@ -146,7 +148,15 @@ export default {
     },
     components: {
         myDetails: Details
-    }
+    },
+    created(){
+        this.loading = false;
+    },
+    computed: {
+    ...mapState({
+      loading: state => state.login.loading
+    })
+  },
 }
 </script>
 
