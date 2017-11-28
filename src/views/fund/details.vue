@@ -541,8 +541,19 @@ export default {
         {
           value: "中国国家开发银行"
         },
+<<<<<<< HEAD
         {
           value: "中国农业发展银行"
+=======
+        handlerPreservation() { // 修改基本信息
+            this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
+            updateFundInfo(this.formDetails).then((res) => {
+                if (res.status === 200) {
+                    this.$Message.success(res.data.message || '基金名称已存在！')
+                    this._getFundList()
+                }
+            })
+>>>>>>> 4e160a790bf5d4a0ce1fd8b5d27d5285efde6439
         },
         {
           value: "中国进出口银行"

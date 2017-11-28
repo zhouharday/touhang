@@ -79,7 +79,7 @@ export default {
                 fundId: this.$route.params.id,
                 userId: '',
                 autId: '',
-                addTime: ''
+                addTime: new Date()
             },
             headerInfo: {
                 desc: '当前成员',
@@ -120,7 +120,7 @@ export default {
                 fundId: this.$route.params.id,
                 userId: '',
                 autId: '',
-                addTime: ''
+                addTime: new Date()
             }
         },
         confirmAdd() {

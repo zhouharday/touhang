@@ -136,7 +136,7 @@
             </el-row>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button @click="modalIncome = false">取 消</el-button>
+            <el-button @click="cancelIncomeModel">取 消</el-button>
             <el-button type="danger" @click="confirmIncome">确 定</el-button>
         </div>
     </el-dialog>
@@ -281,6 +281,23 @@ export default {
                     }
                 })
             }
+        },
+        cancelIncomeModel() { // 取消编辑收益分配
+            this.modalIncome = false
+            this.formIncome = {
+                fundName: '',
+                allocationName: '', //分配标题
+                shareDate: '', //分配日期
+                allocationMoney: '', //分配金额
+                handleUserId: JSON.parse(sessionStorage.getItem('userInfor')).id, //经办人ID 当前登录用户ID
+                documentInfo: [],
+                handleUser: JSON.parse(sessionStorage.getItem('userInfor')).name,
+                fundId: this.$route.params.id, //基金id
+                handleDate: new Date()
+            }
+            this.tableData.map((x) => {
+                x.shareMoney = ''
+            })
         },
         changeTabs(name) {
             if (name == 'income') {
