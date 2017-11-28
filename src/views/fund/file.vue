@@ -59,7 +59,7 @@
     <show-pdf :pdfurl="pdfurl" class="showpdf" v-show="showOrhiddren" @pdferr="errorHaddle" @closepdf="closepdf"></show-pdf>
     <!-- 上传基金设立报表-->
     <el-dialog title="基金文档" :visible.sync="modalAdd" :close-on-click-modal="false" :show-close="false">
-        <Upload ref="upload" multiple type="drag" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
+        <Upload ref="upload" multiple type="drag" :headers="headerData" :action="actionUrl" :data="uploadInfo" :on-success="handleSuccess">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
@@ -100,6 +100,9 @@ export default {
                     icon: 'upload',
                     explain: '上传'
                 }]
+            },
+            headerData: {
+                Authorization: JSON.parse(sessionStorage.getItem('token')) || ''
             },
             modalAdd: false,
             file: null, // 上传

@@ -313,6 +313,10 @@ export default {
         showOrhiddren: {
             type: Boolean,
             default: false
+        },
+        authList: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -566,7 +570,7 @@ export default {
     },
     computed: {
         headerInfo_details: function() {
-            if (checkFundAuth('GL-JJXQ-BJ')) {
+            if (checkFundAuth('GL-JJXQ-BJ', this.authList)) {
                 return {
                     desc: '基本信息',
                     haveJurisdiction: true
@@ -579,7 +583,7 @@ export default {
             }
         },
         headerInfo_MIS: function() {
-            if (checkFundAuth('GL-JJXQ-BJ')) {
+            if (checkFundAuth('GL-JJXQ-BJ', this.authList)) {
                 return {
                     desc: '管理信息',
                     haveJurisdiction: true
@@ -592,7 +596,7 @@ export default {
             }
         },
         headerInfo_Registration: function() {
-            if (checkFundAuth('GL-JJXQ-BJ')) {
+            if (checkFundAuth('GL-JJXQ-BJ', this.authList)) {
                 return {
                     desc: '备案注册',
                     haveJurisdiction: true
@@ -605,7 +609,7 @@ export default {
             }
         },
         headerInfo_Accountinfo: function() {
-            if (checkFundAuth('GL-JJXQ-BJ')) {
+            if (checkFundAuth('GL-JJXQ-BJ', this.authList)) {
                 return {
                     desc: '账户信息',
                     haveJurisdiction: true

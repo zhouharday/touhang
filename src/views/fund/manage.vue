@@ -411,7 +411,7 @@ export default {
     },
     computed: {
         costInfo: function() {
-            if (checkFundAuth('GL-JJXQ-JJFY-TJ')) {
+            if (checkFundAuth('GL-JJXQ-JJFY-TJ', this.authList)) {
                 return {
                     desc: '基金费用',
                     btnGroup: [{
@@ -426,7 +426,7 @@ export default {
             }
         },
         incomeInfo() {
-            if (checkFundAuth('GL-JJXQ-SYFP-TJ')) {
+            if (checkFundAuth('GL-JJXQ-SYFP-TJ', this.authList)) {
                 return {
                     desc: '收益分配',
                     btnGroup: [{
@@ -442,7 +442,6 @@ export default {
         }
     },
     mounted() {
-        // console.log(this.haveJurisdiction('GL-JJXQ-SYFP'))
         costType().then((res) => {
             if (res.status == '200') {
                 this.costTypes = res.data.result

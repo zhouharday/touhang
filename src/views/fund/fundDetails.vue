@@ -66,7 +66,7 @@
     <div class="tabs">
         <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
-                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren">
+                <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :authList="authList">
                 </my-details>
             </el-tab-pane>
             <el-tab-pane label="团队" name="team" class="tab_list">
@@ -85,7 +85,7 @@
                 <my-file :fileListData="fileListData" :authList="authList"></my-file>
             </el-tab-pane>
             <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
-                <manage :costData="costData" :fundName="formDetails.fundName"></manage>
+                <manage :costData="costData" :fundName="formDetails.fundName" :authList="authList"></manage>
             </el-tab-pane>
             <el-tab-pane label="日志" name="log" class="tab_list">
                 <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
