@@ -184,6 +184,11 @@ export default {
       )
         .then(res => {
           console.log(res);
+            if (res.data.status == 200){
+
+            } else {
+                this.$Message.error(res.data.message);
+            }
           getDepartmentList().then(res => {
             var dataList = addEdit(res.data.result);
             var treeList = getNodes(dataList);
@@ -205,7 +210,21 @@ export default {
         /***********************/
         SetDepartment(item.deptName, item.parentId, item.id)
           .then(res => {
-            console.log(res);
+              if (res.data.status == 200){
+
+              } else {
+                  this.$Message.error(res.data.message);
+              }
+              getDepartmentList()
+                  .then(res => {
+                      var dataList = addEdit(res.data.result);
+                      var treeList = getNodes(dataList);
+                      this.currentData = treeList;
+                      this._getDepartmentName(this.currentData);
+                  })
+                  .catch(error => {
+                      this.$Message.error("请求超时");
+                  });
           })
           .catch(error => {
             this.$Message.error("请求超时");

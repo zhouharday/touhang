@@ -168,6 +168,11 @@ export default {
                 if (this.fundDialog){
                 this.fundDialog = false;
                 saveRole(this.fundForm.fundName).then((res)=>{
+                    if (res.data.status == 200){
+
+                    } else {
+                        this.$Message.error(res.data.message);
+                    }
                     getRoleList().then((res)=>{
                         this.fundForm.fundName = ''
                         res.data.result.list.forEach(function (item,index) {
@@ -204,6 +209,11 @@ export default {
                 row.editFlag = !row.editFlag
                 if (!row.editFlag){
                     updataRole(row).then((res)=>{
+                        if (res.data.status == 200){
+
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
                         getRoleList().then((res)=>{
 
                             res.data.result.list.forEach(function (item,index) {
