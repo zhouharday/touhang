@@ -151,14 +151,6 @@ export default {
     components: {
         myDetails: Details
     },
-    created(){
-        this.loading = false;
-    },
-    computed: {
-    ...mapState({
-      loading: state => state.login.loading
-    })
-  },
 }
 </script>
 

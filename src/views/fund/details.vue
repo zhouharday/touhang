@@ -254,7 +254,7 @@
         <!-- 账户信息 end -->
         <div class="btnList" v-if="!showOrhiddren">
             <el-button class="btn success" :disabled="formDetails.flag" @dblclick.prevent="cancel($event)" @click="preservation">保存</el-button>
-            <el-button :loading="loading" class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
+            <el-button class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
         </div>
     </div>
 </template>
