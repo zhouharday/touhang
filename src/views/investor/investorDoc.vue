@@ -31,18 +31,19 @@
                         </el-button>
                         <a :href="scope.row.documentUrl"
                             style="font-size:12px;color: #F05E5E;"
-                            v-if="haveJurisdiction('GL-JJWD-XZ')"
                             v-show="scope.row.id"
                             class="scopeBtn">
                             下载
                         </a>
                         <el-button type="text"
                                    size="small"
+                                   v-show="scope.row.id"
                                    class="btn_border scopeBtn" @click="previewInvestorDoc(scope.$index, scope.row)">
                                    预览
                         </el-button>
                         <el-button type="text"
                                    size="small"
+                                   v-show="scope.row.id"
                                    class="scopeBtn" @click="deleteInvestorDoc(scope.$index, scope.row)">
                                    删除
                         </el-button>
@@ -75,7 +76,6 @@
 import {API_ROOT} from '../../config'
 import showPdf from 'components/showPdf'
 import deleteReminders from 'components/deleteReminders'
-import {checkFundAuth} from 'common/js/config'
 import {deleteDocument, selectProjectOrFundDocument} from 'api/fund'
 export default {
     props: {
@@ -162,13 +162,6 @@ export default {
         confirmCancel() {
             this.reminders = false
         },
-        haveJurisdiction(str) {
-            if (checkFundAuth(str)) {
-                return true
-            } else {
-                return false
-            }
-        },
         _getInvestDoc() {
             selectProjectOrFundDocument(this.$route.params.userId, 3).then((res) => {
                 if (res.status == '200') {
@@ -210,8 +203,8 @@ export default {
             border-radius: 0;
         }
         .btn_border {
-            border-left: 1px solid #ddd;
             border-right: 1px solid #ddd;
+            border-left: 1px solid #ddd;
         }
     }
     .title {

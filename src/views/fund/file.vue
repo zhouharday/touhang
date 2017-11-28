@@ -47,6 +47,7 @@
                             <el-button type="text"
                                        size="small"
                                        v-if="haveJurisdiction('GL-JJWD-SC')"
+                                       v-show="scope.row.id"
                                        class="scopeBtn" @click="deleteFundDoc(scope.$index, scope.row)">
                                        删除
                             </el-button>

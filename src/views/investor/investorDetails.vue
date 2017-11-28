@@ -56,9 +56,6 @@ import {
 } from "api/investor";
 
 export default {
-  created() {
-    this.projectId = this.$route.params.userId;
-  },
   watch: {
     $route(to, from) {
       this.projectId = this.$route.params.userId;
@@ -153,6 +150,9 @@ export default {
         this.titleInfo.total[1].amount = value.earningsAmountSum;
       }
     }
+  },
+  created() {
+    this.projectId = this.$route.params.userId;
   },
   components: {
     baseInfo,
