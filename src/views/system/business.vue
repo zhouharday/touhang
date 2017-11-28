@@ -155,6 +155,11 @@ export default {
         addRole() {
             if(this.roleDialog == true){
                 projectRoleSave(0,this.roleForm.roleName).then((res)=>{
+                    if (res.data.status == 200){
+
+                    } else {
+                        this.$Message.error(res.data.message);
+                    }
                     queryList(0).then((res)=>{
                         this.roleData = reloadQueryData(res.data.result)
                         this.roleDialog = false;
@@ -164,13 +169,24 @@ export default {
         },
         //编辑
         checkEdit(index, row) {
-            console.log(row)
             row.editFlag = !row.editFlag;
             if (!row.editFlag) {
-                projectRoleEdit(row.id, row.roleName).then((res) => {
-                    queryList(0).then((res)=>{
-                        this.roleData = reloadQueryData(res.data.result)
-                    })
+                projectRoleEdit(row.id, row.roleName,row.roleType).then((res) => {
+                    if (res.data.status == 200){
+                        console.log(res.data)
+                        queryList(0).then((res)=>{
+                            if (res.status == 200) {
+                                this.roleData = reloadQueryData(res.data.result)
+                            }
+                        })
+                    }else {
+                        this.$Message.error(res.data.message);
+                        queryList(0).then((res)=>{
+                            if (res.status == 200) {
+                                this.roleData = reloadQueryData(res.data.result)
+                            }
+                        })
+                    }
                 })
             }
         },

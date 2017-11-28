@@ -61,7 +61,7 @@
                                         </div>
                                         <div style=" margin-left: 15px;">
                                             <el-checkbox-group v-model="clickMenu" @change="handleCheckedCitiesChange">
-                                            <el-checkbox v-for="(text, index) of nextItem.buttons" :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
+                                            <el-checkbox v-for="(text, index) in nextItem.buttons" :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
                                             </el-checkbox-group>
                                         </div>
                                         </div>
@@ -69,7 +69,7 @@
                                 </div>
                                 <div v-if="!item.children" style=" margin-left: 15px">
                                     <el-checkbox-group v-model="clickMenu" @change="a">
-                                        <el-checkbox v-for="(text, index) of item.buttons"   :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
+                                        <el-checkbox v-for="(text, index) in item.buttons"   :label="text.path" :key="text">{{text.permissionName}}</el-checkbox>
                                     </el-checkbox-group>
                                 </div>
                             </div>
@@ -110,9 +110,6 @@ import { permissionqueryList } from "api/system";
 import { getUpdataFund } from "api/system";
 import { roleBindPermission } from "api/system";
 
-// import ElCol from "element-ui/packages/col/src/col";
-// import { mapState } from "vuex";
-// import { filtersPermissionCode_fund } from "common/js/config";
 export default {
 
   data() {
@@ -160,6 +157,12 @@ export default {
     addRole() {
       if (this.roleDialog == true) {
         projectRoleSave(1, this.roleForm.roleName).then(res => {
+            console.log(res);
+            if (res.data.status == 200){
+
+            } else {
+                this.$Message.error(res.data.message);
+            }
           queryList(1).then(res => {
             this.roleData = reloadQueryData(res.data.result);
             this.roleDialog = false;
@@ -172,10 +175,21 @@ export default {
       console.log(row);
       row.editFlag = !row.editFlag;
       if (!row.editFlag) {
-        projectRoleEdit(row.id, row.roleName).then(res => {
-          queryList(1).then(res => {
-            this.roleData = reloadQueryData(res.data.result);
-          });
+        projectRoleEdit(row.id, row.roleName,row.roleType).then(res => {
+            if (res.data.status == 200){
+                queryList(1).then((res)=>{
+                    if (res.status == 200) {
+                        this.roleData = reloadQueryData(res.data.result)
+                    }
+                })
+            }else {
+                this.$Message.error(res.data.message);
+                queryList(1).then((res)=>{
+                    if (res.status == 200) {
+                        this.roleData = reloadQueryData(res.data.result)
+                    }
+                })
+            }
         });
       }
     },

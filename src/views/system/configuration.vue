@@ -326,19 +326,16 @@
                     this.changeList = []
                     if(item.data.length == 0 && this.deleteList.length == 0){
                     }else {
-                        console.log(item.data)
-                        console.log(this.deleteList)
                         SetConfig(item.data, this.deleteList).then((res) => {
-                            if (res.data.status == '9024') {
-                                alert(res.data.message)
-                                getConfigLeftList().then((res) => {
-                                    this.leftList = reloadData(res.data.result)
-                                })
+                            if (res.data.status == 200) {
+
                             } else {
-                                getConfigLeftList().then((res) => {
-                                    this.leftList = reloadData(res.data.result)
-                                })
+                                this.$Message.error(res.data.message);
                             }
+                            getConfigLeftList().then((res) => {
+                                this.leftList = reloadData(res.data.result)
+                            })
+
                         })
                     }
                 } else {
@@ -358,7 +355,7 @@
                 this.projectDialog = !this.projectDialog;
             },
             addProject() {
-                console.log(this.changeList)
+//                console.log(this.changeList)
                 var stageType ;
                 if (!this.changeList[0]){
                     stageType = '3';
@@ -366,17 +363,35 @@
                     stageType = this.changeList[0].stageType
                 var a = [{ "stageName": this.projectForm.stageName, "stageType": stageType, "merchantId": JSON.parse(sessionStorage.getItem('merchants'))[0].id }];
                 var b = this.changeList;
-                var newList = a.concat(b)
-                //            console.log(newList)
-                SetConfig(newList, this.deleteList).then((res) => {
-                    if (res.data.status == '9024') {
-                        alert(res.data.message)
-                    } else {
+                var c = 1;
+                b.forEach(function (item,index) {
+                    console.log(index)
+                  if (a[0].stageName == item.stageName){
+                      console.log('***')
+                      c = 2;
+                  }
+                })
+                var newList
+                if (c == 1){
+                    newList = a.concat(b)
+                    SetConfig(newList, this.deleteList).then((res) => {
+
+                        if (res.data.status == 200) {
+
+                        } else {
+                            this.$Message.error(res.data.message);
+                        }
                         getConfigLeftList().then((res) => {
                             this.leftList = reloadData(res.data.result)
                         })
-                    }
-                })
+
+                    })
+                }else {
+                    newList = b;
+                    this.$Message.error('已配置该阶段');
+                }
+
+
 
 
                 //            newList.push(this.projectForm)
@@ -418,8 +433,11 @@
                 });
                 console.log(shenpidata);
                 addStageApprove(id,stageId,stageName,shenpidata).then((res)=>{
-                    console.log('&^^^%^%^$$%^#^')
+                    if (res.data.status == 200) {
 
+                    } else {
+                        this.$Message.error(res.data.message);
+                    }
                     getConfigLeftList().then((res) => {
 
                         this.leftList = reloadData(res.data.result)
@@ -465,15 +483,15 @@
                     this.fileForm.needUpload = '2';
 
                 changeRightList(this.nowId, this.fileForm).then((res) => {
-                    if (res.data.status == '9024') {
-                        alert(res.data.message)
-                    } else {
+                    if (res.data.status == 200) {
 
-                        GetrightList(this.nowId).then((res) => {
-                            this.fileData = RightListData(res.data.result)
-                            this.fileDialog = !this.fileDialog;
-                        })
+                    } else {
+                        this.$Message.error(res.data.message);
                     }
+                    GetrightList(this.nowId).then((res) => {
+                        this.fileData = RightListData(res.data.result)
+                        this.fileDialog = !this.fileDialog;
+                    })
                 })
             },
             //
@@ -530,15 +548,14 @@
                         row.needUpload = 2
 
                     changeRightList(this.nowId, row).then((res) => {
-                        if (res.data.status == '9024') {
-                            alert(res.data.message)
-                        } else {
+                        if (res.data.status == 200) {
 
-                            GetrightList(this.nowId).then((res) => {
-                                this.fileData = RightListData(res.data.result)
-                                //                            this.fileDialog = !this.fileDialog;
-                            })
+                        } else {
+                            this.$Message.error(res.data.message);
                         }
+                        GetrightList(this.nowId).then((res) => {
+                            this.fileData = RightListData(res.data.result)
+                        })
                     })
                 }
             },
@@ -551,15 +568,16 @@
             handleDelete(index, rows) {
                 //            console.log(rows)
                 DeleteRightList(rows[index]).then((res) => {
-                    //                console.log(res.data)
-                    if (res.data.status == '9024') {
-                        alert(res.data.message)
+                    if (res.data.status == 200) {
+
                     } else {
-                        GetrightList(this.nowId).then((res) => {
-                            this.fileData = RightListData(res.data.result)
-                            //                        console.log(this.fileData)
-                        })
+                        this.$Message.error(res.data.message);
                     }
+                    GetrightList(this.nowId).then((res) => {
+                        this.fileData = RightListData(res.data.result)
+                        //                        console.log(this.fileData)
+                    })
+
                 })
             }
         },
