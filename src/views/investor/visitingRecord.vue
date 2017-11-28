@@ -48,11 +48,11 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="24">
+<!--                 <el-col :span="24">
                     <el-form-item label="拜访记录附件">
                         <upload-files @uploadSuccess="handleSuccess" :documentInfo="addVisiting.documentInfo"></upload-files>
                     </el-form-item>
-                </el-col>
+                </el-col> -->
             </el-row>
         </el-form>
         <div slot="footer">
@@ -69,7 +69,7 @@
 import 'common/js/filter'
 import tableHeader from "components/tabelHeader"
 import deleteReminders from "components/deleteReminders"
-import uploadFiles from "components/uploadFiles"
+/* import uploadFiles from "components/uploadFiles" */
 import {
     getVisitingRecordList,
     addVisitingRecord,
@@ -106,7 +106,7 @@ export default {
                 seeContent: [{
                     required: true,
                     message: '请输入拜访内容',
-                    trigger: 'blur,change'
+                    trigger: 'blur'
                 }],
             },
             addOrEdit: true // 用来判断点击了添加还是编辑
@@ -126,12 +126,9 @@ export default {
         },
         editRow(index, row) {
             this.modelVisiting = true
+            row.seeDate = new Date(row.seeDate)
             this.addVisiting = Object.assign({}, row)
             this.addOrEdit = false
-            row.documentInfo.map((x) => {
-                x.name = x.fileName,
-                    x.url = x.filePath
-            })
         },
         deleteRow(index, row) {
             this.deleteModal = !this.deleteModal
@@ -142,10 +139,9 @@ export default {
             this.modelVisiting = false
         },
         confirmVisiting() {
-            console.log(this.addVisiting)
             this.$refs.addVisiting.validate((valid) => {
                 if (valid) {
-                    if (this.addOrEdit == true) {
+                    if (this.addOrEdit === true) {
                         addVisitingRecord(this.addVisiting).then((res) => {
                             this.$Message.success(res.data.message || '添加拜访记录成功')
                             this._visitingRecordList()
@@ -197,8 +193,7 @@ export default {
         }
     },
     components: {
-        deleteReminders,
-        uploadFiles
+        deleteReminders
     }
 }
 </script>

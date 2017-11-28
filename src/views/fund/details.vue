@@ -426,7 +426,7 @@ export default {
             this.formDetails.fundOrgValue = this.fundLevel.priority + ':' + this.fundLevel.intermediateStage + ':' + this.fundLevel.generalLevel
             updateFundInfo(this.formDetails).then((res) => {
                 if (res.status === 200) {
-                    this.$Message.error(res.data.message || '基金名称已存在！')
+                    this.$Message.success(res.data.message || '基金名称已存在！')
                     this._getFundList()
                 }
             })
