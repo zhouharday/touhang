@@ -11,8 +11,8 @@
   "dependencies": {
     "axios": "^0.15.3",
     "babel-polyfill": "^6.26.0",
-    "element-ui": "^1.4.7",
     "echarts": "^3.7.1",
+    "element-ui": "^1.4.7",
     "es6-promise-polyfill": "^1.2.0",
     "eventsource-polyfill": "^0.9.6",
     "extract-text-webpack-plugin": "^2.1.2",

@@ -306,14 +306,14 @@ export default {
       type: Array,
       default: () => []
     },
-    loading: {
+    dbClick: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data() {
     return {
-      dbClick: false,
+      // dbClick: true,
       managementCompany: [],
       managementType: [], // 管理类型
       OrgTypeList: [], // 组织类型
@@ -512,9 +512,10 @@ export default {
           return false;
         }
       });
-      if (judgeDetails && judgeMis && this.dbClick == 0) {
+      if (judgeDetails && judgeMis && this.dbClick) {
         event.preventDefault();
-        this.$emit("confirmSubmission", false);
+        this.$emit("confirmSubmission");
+        this.dbClick = false;
       }
     },
     cancel() {

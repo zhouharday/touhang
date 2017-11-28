@@ -76,7 +76,7 @@ import {
 export default {
   data() {
     return {
-      dbClick: false,
+      dbClick: true,
       chooseInfo: {
         title: "投资者类型：",
         details: [
@@ -201,13 +201,12 @@ export default {
       // console.log(this.showModel());
       event.preventDefault();
       this.$refs.addInvestor.$refs.addInvestor.validate(valid => {
-        if (valid && this.dbClick == 0) {
-          this.loading = true;
+        if (valid && this.dbClick) {
           console.log(this.loading);
           addInvestor(this.addInvestor).then(res => {
             if (res.data.status == "200") {
               this.modelInvestor = false;
-              //   this.loading = false;
+              this.dbClick = true;
               this.getInvList();
               this.addInvestor = {};
             }
@@ -216,6 +215,7 @@ export default {
           return false;
         }
       });
+      this.dbClick = false;
     },
     comfirmDel() {
       deleteInvestor(this.id).then(res => {
