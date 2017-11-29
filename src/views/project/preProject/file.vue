@@ -149,28 +149,23 @@ export default {
             this.isshowpdf = true;
         },
         pdferr(err){
-            console.log("pdferr!! ", err);
             this.$Message.error('读取预览文件出错！');
         },
         closepdf(){
-            console.log("closepdf");
             this.isshowpdf = false;
         },
         handleDelete(docId) {
-            console.log('删除文档ID: ' + JSON.stringify(docId));
             delDocument(docId).then((res) => {
-                console.log('删除文档: ' + JSON.stringify(res.data));
                 if (res.data.status == '200') {
                     this.$Message.success(res.data.message || '删除成功！');
-                    
-                    this.uploaded = true;
+
+                    this.getProjectDocument();
                     this.$emit("listenUploaded",true);
                 }
             });
         },
         changeFile(event, fileId, stageId) { //上传文件input
             event.preventDefault();
-            console.log("fileId"+fileId);
             let userId = JSON.parse(sessionStorage.getItem('userInfor')).id;
             let formData = new FormData();
             formData.append('file', event.target.files[0]);
@@ -178,7 +173,6 @@ export default {
             formData.append('userId', userId);
             formData.append('type', 3);
             formData.append('uploadTypeId', this.projectId);
-            // formData.append('fileId', '');
             formData.append('fileId', fileId);
             let config = {
                 headers: {
@@ -188,11 +182,8 @@ export default {
             // this.$http.post('http://192.168.0.136:9091' + '/files/uploadProjectDocument', formData, config)
             this.$http.post(this.api + '/files/uploadProjectDocument', formData, config)
             .then((res)=> {
-                console.log("上传文件结果:"+ JSON.stringify(res.data));
                 if (res.data.status == '200') {
-                    // this.getProjectDocument();
-
-                    this.uploaded = true;
+                    this.getProjectDocument();
                     this.$emit("listenUploaded",true);
                 } else {
                     this.$Message.error(res.data.message);

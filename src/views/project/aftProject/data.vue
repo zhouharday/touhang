@@ -38,6 +38,7 @@
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
                         <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑数据</el-button>
                     </template>
                 </el-table-column>
             </el-table>
