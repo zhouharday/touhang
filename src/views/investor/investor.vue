@@ -43,7 +43,8 @@
             <investor-form :investorForm="addInvestor" ref="addInvestor" :loading="loading"></investor-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="modelInvestor = false">取 消</el-button>
-                <el-button :loading="loading" type="danger" @dblclick.prevent="cancel($event)" @click="confirmIncome(addInvestor)">确 定</el-button>
+                <!-- <el-button :loading="loading" type="danger" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</el-button> -->
+                <Button :loading="loading" type="button" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</Button>
             </div>
         </el-dialog>
         <!-- 确认删除模态框 -->
@@ -140,9 +141,9 @@ export default {
   },
   methods: {
     cancel(e) {
-      // alert(222);
+      alert(222);
       this.dbClick = true;
-      event.preventDefault();
+      e.preventDefault();
       return;
     },
     handleRouter(index, rowList) {
@@ -198,21 +199,23 @@ export default {
       this.signInfo.investorName = row.investorName;
     },
     confirmIncome(formName) {
-      // console.log(this.showModel());
+      //   alert(111);
       event.preventDefault();
+      // console.log(this.showModel());
+        //   this.loading = true;
       this.$refs.addInvestor.$refs.addInvestor.validate(valid => {
         if (valid && this.dbClick == 0) {
-          this.loading = true;
-          console.log(this.loading);
+            this.$store.state.login.loading = true;
           addInvestor(this.addInvestor).then(res => {
             if (res.data.status == "200") {
               this.modelInvestor = false;
-              //   this.loading = false;
               this.getInvList();
               this.addInvestor = {};
             }
           });
         } else {
+          this.loading = false;
+          //   this.$store.state.login.loading = true;
           return false;
         }
       });
