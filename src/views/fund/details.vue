@@ -429,7 +429,7 @@ export default {
     cancel(e) {
       // alert(222);
       this.dbClick = true;
-      event.preventDefault();
+      e.preventDefault();
       return;
     },
     disable(name) {
@@ -513,7 +513,7 @@ export default {
         }
       });
       if (judgeDetails && judgeMis && this.dbClick) {
-        event.preventDefault();
+        // event.preventDefault();
         this.$emit("confirmSubmission");
         this.dbClick = false;
       }
