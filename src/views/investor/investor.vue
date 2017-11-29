@@ -43,8 +43,8 @@
             <investor-form :investorForm="addInvestor" ref="addInvestor" :loading="loading"></investor-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="modelInvestor = false">取 消</el-button>
-                <el-button :loading="loading" type="danger" @click="confirmIncome(addInvestor)">确 定</el-button>
-                <!-- <Button :loading="loading" type="button" @click="confirmIncome(addInvestor)">确 定</Button> -->
+                <el-button type="danger" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</el-button>
+                <!-- <Button type="button" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</Button> -->
             </div>
         </el-dialog>
         <!-- 确认删除模态框 -->
@@ -77,7 +77,7 @@ import {
 export default {
   data() {
     return {
-      dbClick: false,
+      dbClick: true,
       chooseInfo: {
         title: "投资者类型：",
         details: [
@@ -140,6 +140,12 @@ export default {
     };
   },
   methods: {
+    cancel(e) {
+      alert(222);
+      this.dbClick = true;
+      e.preventDefault();
+      return;
+    },
     handleRouter(index, rowList) {
       this.addTab({
         type: "addTab",
@@ -193,15 +199,17 @@ export default {
       this.signInfo.investorName = row.investorName;
     },
     confirmIncome(formName) {
+      //   alert(111);
+      event.preventDefault();
       // console.log(this.showModel());
+        //   this.loading = true;
       this.$refs.addInvestor.$refs.addInvestor.validate(valid => {
-        if (valid) {
-          this.loading = true;
+        if (valid && this.dbClick) {
           console.log(this.loading);
           addInvestor(this.addInvestor).then(res => {
             if (res.data.status == "200") {
               this.modelInvestor = false;
-            //   this.loading = false;
+              this.dbClick = true;
               this.getInvList();
               this.addInvestor = {};
             }
@@ -210,6 +218,7 @@ export default {
           return false;
         }
       });
+      this.dbClick = false;
     },
     comfirmDel() {
       deleteInvestor(this.id).then(res => {
