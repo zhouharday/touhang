@@ -43,8 +43,8 @@
             <investor-form :investorForm="addInvestor" ref="addInvestor" :loading="loading"></investor-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="modelInvestor = false">取 消</el-button>
-                <!-- <el-button :loading="loading" type="danger" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</el-button> -->
-                <Button :loading="loading" type="button" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</Button>
+                <el-button type="danger" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</el-button>
+                <!-- <Button type="button" @dblclick.prevent="cancel($event)" @click.prevent="confirmIncome(addInvestor)">确 定</Button> -->
             </div>
         </el-dialog>
         <!-- 确认删除模态框 -->
@@ -215,8 +215,6 @@ export default {
             }
           });
         } else {
-          this.loading = false;
-          //   this.$store.state.login.loading = true;
           return false;
         }
       });
