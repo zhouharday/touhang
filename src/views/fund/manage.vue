@@ -228,13 +228,12 @@ export default {
             // console.log(this.formIncome)
         },
         editIncomeDis(index, row) {
-            // var arr = []
-            this.modalIncome = true
-            this.profit = false
             console.log(row)
             getFundAllocationDetails(row.id).then((res) => {
                 if (res.status === 200) {
                     // console.log(res)
+                    this.modalIncome = true
+                    this.profit = false
                     if (res.data.fundAllocation) {
                         this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
                     }
