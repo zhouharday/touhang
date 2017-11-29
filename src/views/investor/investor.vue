@@ -141,7 +141,6 @@ export default {
   },
   methods: {
     cancel(e) {
-      alert(222);
       this.dbClick = true;
       e.preventDefault();
       return;
@@ -200,7 +199,7 @@ export default {
     },
     confirmIncome(formName) {
       //   alert(111);
-      event.preventDefault();
+      // event.preventDefault();
       // console.log(this.showModel());
         //   this.loading = true;
       this.$refs.addInvestor.$refs.addInvestor.validate(valid => {
