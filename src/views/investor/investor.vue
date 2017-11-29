@@ -204,20 +204,12 @@ export default {
       // console.log(this.showModel());
         //   this.loading = true;
       this.$refs.addInvestor.$refs.addInvestor.validate(valid => {
-<<<<<<< HEAD
-        if (valid && this.dbClick == 0) {
-            this.$store.state.login.loading = true;
-          addInvestor(this.addInvestor).then(res => {
-            if (res.data.status == "200") {
-              this.modelInvestor = false;
-=======
         if (valid && this.dbClick) {
           console.log(this.loading);
           addInvestor(this.addInvestor).then(res => {
             if (res.data.status == "200") {
               this.modelInvestor = false;
               this.dbClick = true;
->>>>>>> 656d92e7ace7c287625719874806c24d429b1647
               this.getInvList();
               this.addInvestor = {};
             }
