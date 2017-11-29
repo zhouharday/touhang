@@ -254,7 +254,7 @@
         <!-- 账户信息 end -->
         <div class="btnList" v-if="!showOrhiddren">
             <el-button class="btn success" :disabled="formDetails.flag" @dblclick.prevent="cancel($event)" @click="preservation">保存</el-button>
-            <el-button :loading="loading" class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
+            <el-button class="btn danger" :disabled="formDetails.flag" @click="cancel">取消</el-button>
         </div>
     </div>
 </template>
@@ -306,14 +306,14 @@ export default {
       type: Array,
       default: () => []
     },
-    loading: {
+    dbClick: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data() {
     return {
-      dbClick: false,
+      // dbClick: true,
       managementCompany: [],
       managementType: [], // 管理类型
       OrgTypeList: [], // 组织类型
@@ -512,9 +512,10 @@ export default {
           return false;
         }
       });
-      if (judgeDetails && judgeMis && this.dbClick == 0) {
+      if (judgeDetails && judgeMis && this.dbClick) {
         event.preventDefault();
-        this.$emit("confirmSubmission", false);
+        this.$emit("confirmSubmission");
+        this.dbClick = false;
       }
     },
     cancel() {

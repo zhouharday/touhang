@@ -1,6 +1,6 @@
 <template>
 <div class="add">
-    <my-details :loading="loading" :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :editInfo="editInfo" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
+    <my-details :dbClick="dbClick" :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :editInfo="editInfo" @confirmSubmission="confirmSubmission" @confirmCancel="confirmCancel">
     </my-details>
 </div>
 </template>
@@ -71,6 +71,7 @@ export default {
             },
             formData: {},
             editInfo: false,
+            dbClick: true
         }
     },
     methods: {
@@ -84,12 +85,13 @@ export default {
             addFund(this.formData).then((res) => {
                 if (res.status == '200') {
                     this.loading = data;
-                    this.$Message.success(res.data.message || '添加成功！')
+                    this.$Message.success(res.data.message || '添加成功！');
+                    this.dbClick = true;
                     this.$store.dispatch('getFundLists').then(() => {
                         this.$router.push('/home/myfund')
-                        this.formDetails = lnitFormDetails,
-                        this.formMIS = lnitformMIS
-                        this.formAccountInfo = lnitformAccountInfo
+                        this.formDetails = lnitFormDetails;
+                        this.formMIS = lnitformMIS;
+                        this.formAccountInfo = lnitformAccountInfo;
                     })
                 }
             })
@@ -149,14 +151,6 @@ export default {
     components: {
         myDetails: Details
     },
-    created(){
-        this.loading = false;
-    },
-    computed: {
-    ...mapState({
-      loading: state => state.login.loading
-    })
-  },
 }
 </script>
 
