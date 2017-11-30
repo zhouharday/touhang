@@ -20,8 +20,8 @@
             </div>
           </el-form-item>
           <el-form-item class="btn_wrapper">
-            <el-button class="changeWidth" type="danger" @click="onSubmitOver">立即创建</el-button>
-            <el-button type="default" class="changeWidth">取消</el-button>
+            <el-button class="changeWidth" type="danger" @click="onSubmitOver">保 存</el-button>
+            <!-- <el-button type="default" class="changeWidth">取消</el-button> -->
           </el-form-item>
         </el-form>
       </el-col>
@@ -41,7 +41,7 @@ export default {
       headers: {
         Authorization: JSON.parse(sessionStorage.getItem("token"))
       },
-      imgDataUrl: "", // the datebase64 url of created image
+      imgDataUrl: JSON.parse(sessionStorage.getItem("logoSrc")).logo, // the datebase64 url of created image
 
       companyInfo: {
         name: JSON.parse(sessionStorage.getItem("merchants"))[0].merchant_name,
