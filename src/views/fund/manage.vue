@@ -82,7 +82,7 @@
     </el-dialog>
 
     <!-- 添加收益分配-->
-    <el-dialog title="收益分配" ref="incomeDialog" :visible.sync="modalIncome" :close-on-click-modal="false">
+    <el-dialog title="收益分配" ref="incomeDialog" :visible.sync="modalIncome" :close-on-click-modal="false" :show-close="false">
         <el-form :model="formIncome" :rules="rules" ref="formIncome">
             <el-row :gutter="10">
                 <el-col :span="12">
@@ -210,6 +210,7 @@ export default {
             costTypes: [] || JSON.parse(sessionStorage.getItem('costTypes')),
             paramsId: '', // 当前id
             deleteReminders: false, // 确认删除模态框
+            constTableDate: [] // 临时数据
         }
     },
     methods: {
@@ -228,22 +229,23 @@ export default {
             // console.log(this.formIncome)
         },
         editIncomeDis(index, row) {
-            console.log(row)
             getFundAllocationDetails(row.id).then((res) => {
                 if (res.status === 200) {
-                    // console.log(res)
+                    console.log(res)
                     this.modalIncome = true
                     this.profit = false
                     if (res.data.fundAllocation) {
                         this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
                     }
                     if (res.data.params) {
-                        this.tableData = res.data.params
+                        var formdata = res.data.params
+                        this.tableData = formdata.concat()
                     }
                 }
             })
         },
         confirmIncome() {
+            this.params = []
             this.tableData.map((x) => {
                 this.params.push({
                     agreementId: x.agreementId || x.id,
@@ -261,7 +263,7 @@ export default {
                         this.modalIncome = false
                         this._getAllocationList()
                         // this.formIncome = ''
-                        this.tableData = ''
+                        this.tableData = this.constTableDate.concat()
                     }
                 })
             } else {
@@ -278,6 +280,7 @@ export default {
                         this.$Message.success(res.data.message || '有投资者退出,无法更改!')
                         this.modalIncome = false
                     }
+                    this.tableData = this.constTableDate.concat()
                 })
             }
         },
@@ -398,10 +401,12 @@ export default {
             addAllocationInfo(this.$route.params.id).then((res) => {
                 if (res.status === 200) {
                     // console.log(res) // 投资者数据为空
-                    this.tableData = res.data.result
-                    this.tableData.map((x) => {
+                    var tableData = res.data.result
+                    tableData.map((x) => {
                         x.shareMoney = ''
                     })
+                    this.tableData = tableData
+                    this.constTableDate = tableData
                     // console.log(this.tableData)
                 }
             })
