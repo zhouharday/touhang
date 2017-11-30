@@ -72,6 +72,7 @@
 <script type="text/ecmascript-6">
 import {mapGetters, mapActions} from 'vuex'
 import uploadFiles from 'components/uploadFiles'
+import {GetProtocolsList} from 'api/investor'
 export default {
     props: {
         fundsInfo: {
@@ -110,6 +111,7 @@ export default {
     },
     methods: {
         getItemData(val) {
+            this._getAgreementList()
             if (this.editOrAdd) {
                 var current = ''
                 this.agreementList = val
@@ -123,6 +125,15 @@ export default {
                 this.fundsInfo.subscribeAmount = current.subscribeAmount
                 this.fundsInfo.residueAmount = current.residueAmount
             }
+        },
+        _getAgreementList() {
+            GetProtocolsList(this.$route.params.userId).then((res) => {
+                if (res.status == '200') {
+                    this.getAgreementInfo(res.data.result.list)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
         },
         uploadSuccess(list) {
             this.fundsInfo.documentInfo = list
