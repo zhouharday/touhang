@@ -83,7 +83,7 @@
         <el-tab-pane :disabled="!checkProjectAuth('XM-jiankongshezhi')" label="监控设置" name="monitor" class="tab_list">
           <monitor-table :isInTeam="isInTeam" :authList="authList" :tabs="tabs" :projectId="projectId"></monitor-table>
         </el-tab-pane>
-        <el-tab-pane label="日志" name="log" class="tab_list">
+        <el-tab-pane :disabled="!checkProjectAuth('XMRZ')" label="日志" name="log" class="tab_list">
           <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>

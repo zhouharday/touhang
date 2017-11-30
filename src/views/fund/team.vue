@@ -1,6 +1,6 @@
 <template>
 <div class="team">
-    <tabel-header :data="headerInfo" @add="addTeam"></tabel-header>
+    <tabel-header :data="haveJurisdiction('TD-tianjia') ? headerInfo : _headerInfo" @add="addTeam"></tabel-header>
     <el-table :data="teamData" style="width: 100%">
         <el-table-column label="姓名" prop="userName" align="center">
         </el-table-column>
@@ -62,11 +62,16 @@
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 import deleteReminders from 'components/deleteReminders'
+import { checkFundAuth } from "common/js/config";
 import {queryUserList, queryList, addFundTeam, deleteTeamMembers, getFundTeamList} from 'api/fund'
 const FUND_ROLE = 1 // 基金角色
 export default {
     props: {
         teamData: {
+            type: Array,
+            default: []
+        },
+        authList: {
             type: Array,
             default: []
         }
@@ -87,6 +92,10 @@ export default {
                     icon: 'plus-round',
                     explain: '添加'
                 }]
+            },
+            _headerInfo: {
+                desc: '当前成员',
+                btnGroup: []
             },
             userNameList: [],
             roleList: [],
@@ -114,6 +123,17 @@ export default {
         }
     },
     methods: {
+        haveJurisdiction(str) {
+            if (!this.authList) {
+                return false;
+            } else {
+                if (checkFundAuth(str, this.authList)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
         addTeam() {
             this.modalAdd = true
             this.formTeam = {

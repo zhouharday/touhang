@@ -4,9 +4,10 @@
     <el-table :data="examineData" style="width: 100%">
         <el-table-column label="审批主题" align="center">
             <template scope="scope">
-                <div @click="showExamineModal(scope.$index, scope.row)" class="title">
+                <div v-if="haveJurisdiction('SP-chakanshenpi')" @click="showExamineModal(scope.$index, scope.row)" class="title">
                     <span>{{scope.row.approveTitle}}</span>
                 </div>
+                <span v-else>{{scope.row.approveTitle}}</span>
             </template>
         </el-table-column>
         <el-table-column label="申请人" prop="userName" align="center">
@@ -30,6 +31,7 @@
 <script type="text/ecmascript-6">
 import tabelHeader from 'components/tabelHeader'
 import progressDialog from 'components/progressDialog'
+import { checkFundAuth } from 'common/js/config'
 import {
     getApproveInfo
 } from 'api/fund'
@@ -38,6 +40,10 @@ export default {
         examineData: {
             type: Array,
             default: () => []
+        },
+        authList: {
+            type: Array,
+            default: []
         }
     },
     data() {
@@ -52,6 +58,17 @@ export default {
         }
     },
     methods: {
+        haveJurisdiction(str) {
+            if (!this.authList) {
+                return false;
+            } else {
+                if (checkFundAuth(str, this.authList)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
         showExamineModal(index, row) {
             getApproveInfo(row.id).then((res) => {
                 if (res.status === 200 && res.data.result) {

@@ -1,7 +1,7 @@
 <template>
     <section class="manage">
         <Tabs value="cost" @on-click="changeTabs">
-            <TabPane label="项目费用" name="cost">
+            <TabPane label="项目费用" name="cost" :disabled="!checkProjectAuth('GL-XMFY')">
                 <!-- 项目费用 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="checkProjectAuth('GL-XMFY-XZ') ? headerInfo_cost : _headerInfo_cost" @add="costAdd1=true"></tabel-header>
@@ -20,7 +20,7 @@
                     </el-table>
                 </div>
             </TabPane>
-            <TabPane label="项目合同" name="contract">
+            <TabPane label="项目合同" name="contract" :disabled="!checkProjectAuth('GL-XMHT')">
                 <!-- 项目合同 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="checkProjectAuth('GL-XMHT-XZ') ? headerInfo_contract: _headerInfo_contract" @add="goAddContract"></tabel-header>
@@ -44,7 +44,7 @@
                     </el-table>
                 </div>
             </TabPane>
-            <TabPane label="投资支付" name="paid">
+            <TabPane label="投资支付" name="paid" :disabled="!checkProjectAuth('GL-TZZF')">
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
@@ -71,7 +71,7 @@
                     </el-table>
                 </div>
             </TabPane>
-            <TabPane label="项目分红" name="sharing">
+            <TabPane label="项目分红" name="sharing" :disabled="!checkProjectAuth('GL-XMFH')">
                 <!--  项目分红 部分-->
                 <div class="fileTable sharingDialog">
                     <tabel-header :data="checkProjectAuth('GL-XMFH-XZ') ? headerInfo_sharing : _headerInfo_sharing" @add="goAddShare"></tabel-header>
@@ -404,12 +404,14 @@
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                 </el-table-column>
-                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                <el-table-column label="已支付金额（元）" prop="paidAmount" align="center">
                 </el-table-column>
                 <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                     <template scope="scope">
                         <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
                     </template>
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
@@ -483,12 +485,14 @@
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                 </el-table-column>
-                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                <el-table-column label="已支付金额（元）" prop="paidAmount" align="center">
                 </el-table-column>
                 <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                     <template scope="scope">
                         <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
                     </template>
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
@@ -1204,15 +1208,15 @@ export default {
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
-
                     this.$set(this.$data.paidForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
                     this.contractDocument = resp.data.result.projectContract.documentInfo;
-                    this.fundData2 = resp.data.result.fundInfo;
-
-                    this.fundData2.forEach(function(item, index) {
+                    let _fundData2 = resp.data.result.fundInfo;
+                    _fundData2.forEach((item) =>{
                         item.contractFundId = item.id;
                         item.id = '';
+                        item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
                     });
+                    this.fundData2 = _fundData2;
                     this.calcSurplusAmount();
                 } else {
                     this.$message.error(resp.data.message);
@@ -1239,6 +1243,7 @@ export default {
                         this.fundData2.forEach(function(item, index) {
                             item.contractFundId = item.id;
                             item.id = '';
+                            item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
                         });
                         this.sumPay();
                         this.calcSurplusAmount();
@@ -1316,7 +1321,11 @@ export default {
                     });
                     this.payDocInfo = documentInfo;
 
-                    this.fundData2 = resp.data.result.payDetails;
+                    let _fundData2 = resp.data.result.payDetails;
+                    _fundData2.forEach(function(item, index) {
+                        item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
+                    });
+                    this.fundData2 = _fundData2;
                     this.paidAdd2 = !this.paidAdd2;
                     this.sumPay();
                     this.calcSurplusAmount();
@@ -1334,9 +1343,10 @@ export default {
                     let projectInvestPay = {
                         id: id,
                         projectId: this.proId,
-                        paidInMoney: 0,
+                        paidInMoney: 0, //支付金额，页面不展示，后台计算 0值没意义
                         payTitle: this.paidForm1.payTitle,
                         surplusAmount: this.paidForm1.surplusAmount,
+                        contractId: this.paidForm1.contractId,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                         // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),
@@ -1366,8 +1376,8 @@ export default {
         changeInvestAmount() {
             let sumAmount = 0.0, sumStockRatio = 0.0;
             for (let i = 0; i < this.fundData1.length; i++) {
-                sumAmount += (parseFloat(this.fundData1[i].investAmount | 0));
-                sumStockRatio += (parseFloat(this.fundData1[i].stockRatio | 0));
+                sumAmount += (parseFloat(this.fundData1[i].investAmount || 0));
+                sumStockRatio += (parseFloat(this.fundData1[i].stockRatio || 0));
             }
             this.$set(this.$data.contractForm1, 'contractAmount', sumAmount);
             this.$set(this.$data.contractForm1, 'stockRatio', sumStockRatio);
@@ -1378,8 +1388,8 @@ export default {
         sumPay() {
             let sum = 0.0, sumSurplus = 0.0;
             for (let i = 0; i < this.fundData2.length; i++) {
-                sum += (parseFloat(this.fundData2[i].payAmount | 0));
-                this.fundData2[i].surplusAmount = this.fundData2[i].investAmount - (this.fundData2[i].payAmount || 0.0);
+                sum += (parseFloat(this.fundData2[i].payAmount || 0));
+                this.fundData2[i].surplusAmount = this.fundData2[i].investAmount - (this.fundData2[i].payAmount || 0.0) - (this.fundData2[i].paidAmount || 0.0);
                 sumSurplus += this.fundData2[i].surplusAmount;
             }
             this.paidForm1.surplusAmount = sumSurplus;
