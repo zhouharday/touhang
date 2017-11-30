@@ -4,7 +4,10 @@
             <tabel-header :data="headerInfo_file"></tabel-header>
             <el-table :data="approvalData" border style="width: 100%" align="center">
                 <el-table-column label="审批主题" prop="approveTitle" align="center">
-                    <template scope="scope"><el-button type="text" style="color:#f05e5e" @click="openApproval(scope.row.id)">{{scope.row.approveTitle}}</el-button></template>
+                    <template  scope="scope">
+                        <el-button type="text" v-if="checkProjectAuth('SP-chakanshenpi')" style="color:#f05e5e" @click="openApproval(scope.row.id)">{{scope.row.approveTitle}}</el-button>
+                        <span v-else>{{scope.row.approveTitle}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="申请人" prop="userName" align="center">
                 </el-table-column>

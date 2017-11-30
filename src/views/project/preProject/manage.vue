@@ -1,7 +1,7 @@
 <template>
     <section class="manage">
         <Tabs value="cost" @on-click="changeTabs">
-            <TabPane label="项目费用" name="cost">
+            <TabPane label="项目费用" name="cost" :disabled="!checkProjectAuth('GL-XMFY')">
                 <!-- 项目费用 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="checkProjectAuth('GL-XMFY-XZ') ? headerInfo_cost : _headerInfo_cost" @add="costAdd1=true"></tabel-header>
@@ -20,7 +20,7 @@
                     </el-table>
                 </div>
             </TabPane>
-            <TabPane label="项目合同" name="contract">
+            <TabPane label="项目合同" name="contract" :disabled="!checkProjectAuth('GL-XMHT')">
                 <!-- 项目合同 部分 -->
                 <div class="fileTable">
                     <tabel-header :data="checkProjectAuth('GL-XMHT-XZ') ? headerInfo_contract: _headerInfo_contract" @add="goAddContract"></tabel-header>
@@ -44,7 +44,7 @@
                     </el-table>
                 </div>
             </TabPane>
-            <TabPane label="投资支付" name="paid">
+            <TabPane label="投资支付" name="paid" :disabled="!checkProjectAuth('GL-TZZF')">
                 <!-- 投资支付 部分 -->
                 <div class="fileTable capitalDialog">
                     <tabel-header :data="checkProjectAuth('GL-TZZF-XZ') ? headerInfo_paid : _headerInfo_paid" @add="goAddPaid"></tabel-header>
@@ -71,7 +71,7 @@
                     </el-table>
                 </div>
             </TabPane>
-            <TabPane label="项目分红" name="sharing">
+            <TabPane label="项目分红" name="sharing" :disabled="!checkProjectAuth('GL-XMFH')">
                 <!--  项目分红 部分-->
                 <div class="fileTable sharingDialog">
                     <tabel-header :data="checkProjectAuth('GL-XMFH-XZ') ? headerInfo_sharing : _headerInfo_sharing" @add="goAddShare"></tabel-header>
@@ -1334,9 +1334,10 @@ export default {
                     let projectInvestPay = {
                         id: id,
                         projectId: this.proId,
-                        paidInMoney: 0,
+                        paidInMoney: 0, //支付金额，页面不展示，后台计算 0值没意义
                         payTitle: this.paidForm1.payTitle,
                         surplusAmount: this.paidForm1.surplusAmount,
+                        contractId: this.paidForm1.contractId,
                         handlerUserId: (this.paidForm1.handlerUserId != '' && this.paidForm1.handlerUserId != undefined)
                             ? this.paidForm1.handlerUserId : JSON.parse(sessionStorage.getItem('userInfor')).id,
                         // payDate: changeDate(this.paidForm1.payDate == '' ? new Date(): this.paidForm1.payDate),

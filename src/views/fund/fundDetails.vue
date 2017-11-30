@@ -64,15 +64,15 @@
     <!-- <div class="tabs" v-if="existPermissions"> -->
     <div class="tabs">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="详情" name="details" class="tab_list" v-if="haveJurisdiction('GL-JJXQ')">
+        <el-tab-pane label="详情" name="details" class="tab_list" :disabled="!haveJurisdiction('GL-JJXQ')">
           <my-details :formDetails="formDetails" :formMIS="formMIS" :formRegistration="formRegistration" :formAccountInfo="formAccountInfo" :fundLevel="fundLevel" :showOrhiddren="showOrhiddren" :authList="authList">
           </my-details>
         </el-tab-pane>
-        <el-tab-pane label="团队" name="team" class="tab_list">
-          <team :teamData="teamData"></team>
+        <el-tab-pane label="团队" name="team" class="tab_list" :disabled="!haveJurisdiction('JJ-tuandui')">
+          <team :teamData="teamData" :authList="authList"></team>
         </el-tab-pane>
-        <el-tab-pane label="审批" name="examine" class="tab_list">
-          <examine :examineData="examineData"></examine>
+        <el-tab-pane label="审批" name="examine" class="tab_list" :disabled="!haveJurisdiction('JJ-shenpi')">
+          <examine :examineData="examineData" :authList="authList"></examine>
         </el-tab-pane>
         <el-tab-pane label="投资者" name="Investor" class="tab_list">
           <investor :investorData="investorData"></investor>
@@ -80,13 +80,13 @@
         <el-tab-pane label="投资项目" name="project" class="tab_list">
           <projects :projectsData="projectsData"></projects>
         </el-tab-pane>
-        <el-tab-pane label="文档" name="file" class="tab_list" v-if="haveJurisdiction('GL-JJWD')">
+        <el-tab-pane label="文档" name="file" class="tab_list" :disabled="!haveJurisdiction('GL-JJWD')">
           <my-file :fileListData="fileListData" :authList="authList"></my-file>
         </el-tab-pane>
-        <el-tab-pane label="运营管理" name="manage" class="tab_list" v-if="haveJurisdiction('GL-YYGL')">
+        <el-tab-pane label="运营管理" name="manage" class="tab_list" :disabled="!haveJurisdiction('GL-YYGL')">
           <manage :costData="costData" :fundName="formDetails.fundName" :authList="authList"></manage>
         </el-tab-pane>
-        <el-tab-pane label="日志" name="log" class="tab_list">
+        <el-tab-pane label="日志" name="log" class="tab_list" :disabled="!haveJurisdiction('JJRZ')">
           <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>

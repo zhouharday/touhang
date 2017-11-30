@@ -263,7 +263,10 @@
                 <el-table-column label="基准日" prop="baseDay" align="center">
                 </el-table-column>
                 <el-table-column label="状态" prop="warningStatus" align="center">
-                    <template scope="scope">{{scope.row.warningStatus | key2value(resultOptions, scope.row.warningStatus)}}</template>
+                    <template scope="scope">
+                        <span v-if="!scope.row.warningStatus">未处理</span>
+                        <span v-else>{{scope.row.warningStatus | key2value(resultOptions, scope.row.warningStatus)}}</span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
@@ -586,6 +589,7 @@ export default {
       ],
       //处理结果列表
       resultOptions: [
+
         {
           key: "1",
           value: "处理中"
