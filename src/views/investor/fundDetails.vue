@@ -17,7 +17,7 @@
             </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
-            <template scope="scope">
+            <template scope="scope" v-if="scope.$index === 0">
               <el-button type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑

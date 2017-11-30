@@ -103,7 +103,7 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="分配总额" :label-width="formLabelWidth" width="100">
-                        <el-input v-model="formIncome.allocationMoney" @change="CalculationAmount" auto-complete="off"></el-input>
+                        <el-input v-model="formIncome.allocationMoney" @change="CalculationAmount" auto-complete="off" autofocus></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -210,7 +210,7 @@ export default {
             costTypes: [] || JSON.parse(sessionStorage.getItem('costTypes')),
             paramsId: '', // 当前id
             deleteReminders: false, // 确认删除模态框
-            constTableDate: [] // 临时数据
+            constTableDate: [], // 临时数据
         }
     },
     methods: {
@@ -253,35 +253,39 @@ export default {
                     shareMoney: x.shareMoney
                 })
             })
-            if (this.profit === true) {
-                addAllocation({
-                    fundAllocation: this.formIncome,
-                    params: this.params
-                }).then((res) => {
-                    if (res.status == '200') {
-                        this.$Message.success(res.data.message || '添加成功！')
-                        this.modalIncome = false
-                        this._getAllocationList()
-                        // this.formIncome = ''
+            if (this.formIncome.allocationMoney !== '') {
+                if (this.profit === true) {
+                    addAllocation({
+                        fundAllocation: this.formIncome,
+                        params: this.params
+                    }).then((res) => {
+                        if (res.status == '200') {
+                            this.$Message.success(res.data.message || '添加成功！')
+                            this.modalIncome = false
+                            this._getAllocationList()
+                            // this.formIncome = ''
+                            this.tableData = this.constTableDate.concat()
+                        }
+                    })
+                } else {
+                    updateAllocation({
+                        fundAllocation: this.formIncome,
+                        params: this.params
+                    }).then((res) => {
+                        if (res.status == '200') {
+                            this.$Message.success(res.data.message || '编辑成功！')
+                            this.modalIncome = false
+                            this._getAllocationList()
+                            this.formIncome = ''
+                        } else if (res.status == '9004') {
+                            this.$Message.success(res.data.message || '有投资者退出,无法更改!')
+                            this.modalIncome = false
+                        }
                         this.tableData = this.constTableDate.concat()
-                    }
-                })
+                    })
+                }
             } else {
-                updateAllocation({
-                    fundAllocation: this.formIncome,
-                    params: this.params
-                }).then((res) => {
-                    if (res.status == '200') {
-                        this.$Message.success(res.data.message || '编辑成功！')
-                        this.modalIncome = false
-                        this._getAllocationList()
-                        this.formIncome = ''
-                    } else if (res.status == '9004') {
-                        this.$Message.success(res.data.message || '有投资者退出,无法更改!')
-                        this.modalIncome = false
-                    }
-                    this.tableData = this.constTableDate.concat()
-                })
+                this.$Message.error('请输入分配金额')
             }
         },
         cancelIncomeModel() { // 取消编辑收益分配

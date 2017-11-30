@@ -33,7 +33,8 @@
                       编辑
               </el-button>
               <el-button type="text" size="small" style="color:#f05e5e"
-                      @click="handleDelete(scope.$index, scope.row)">
+                      @click="handleDelete(scope.$index, scope.row)"
+                      v-if="scope.$index == 0">
                       删除
               </el-button>
             </template>
