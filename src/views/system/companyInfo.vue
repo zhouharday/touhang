@@ -9,7 +9,7 @@
           <el-form-item label="企业logo:">
             <div>
               <div class="el-upload__text">
-                <my-upload field="files" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" v-model="show" :width="300" :height="300" :url=u pDataUrl :params="params" :headers="headers" img-format="png">
+                <my-upload field="files" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" v-model="show" :width="300" :height="300" :url='upDataUrl' :params="params" :headers="headers" img-format="png">
                 </my-upload>
                 <span><img :src="imgDataUrl"></span>
                 <div>
@@ -20,8 +20,8 @@
             </div>
           </el-form-item>
           <el-form-item class="btn_wrapper">
-            <el-button class="changeWidth" type="danger" @click="onSubmitOver">立即创建</el-button>
-            <el-button type="default" class="changeWidth">取消</el-button>
+            <el-button class="changeWidth" type="danger" @click="onSubmitOver">保 存</el-button>
+            <!-- <el-button type="default" class="changeWidth">取消</el-button> -->
           </el-form-item>
         </el-form>
       </el-col>
@@ -41,7 +41,7 @@ export default {
       headers: {
         Authorization: JSON.parse(sessionStorage.getItem("token"))
       },
-      imgDataUrl: "", // the datebase64 url of created image
+      imgDataUrl: JSON.parse(sessionStorage.getItem("logoSrc")).logo, // the datebase64 url of created image
 
       companyInfo: {
         name: JSON.parse(sessionStorage.getItem("merchants"))[0].merchant_name,
@@ -102,12 +102,13 @@ export default {
     onSubmitOver() {
       companyInfo(this.fileAddress).then(res => {
         console.log(res);
-        if (res.data.status == 200) {
+        if (res.data.status == '200') {
           this.$store.state.login.logoSrc.logo = this.fileAddress;
           window.sessionStorage.setItem(
             "logoSrc",
             JSON.stringify(this.$store.state.login.logoSrc)
           );
+          this.$Message.success(res.data.message);
         } else {
           this.$Message.error(res.data.message);
         }

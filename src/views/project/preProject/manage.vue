@@ -404,12 +404,14 @@
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                 </el-table-column>
-                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                <el-table-column label="已支付金额（元）" prop="paidAmount" align="center">
                 </el-table-column>
                 <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                     <template scope="scope">
                         <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
                     </template>
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
@@ -483,12 +485,14 @@
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                 </el-table-column>
-                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                <el-table-column label="已支付金额（元）" prop="paidAmount" align="center">
                 </el-table-column>
                 <el-table-column label="支付金额（元）" prop="payAmount" align="center">
                     <template scope="scope">
                         <el-input v-model="scope.row.payAmount" placeholder="0" @change="sumPay">{{ scope.row.payAmount }}</el-input>
                     </template>
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
                 </el-table-column>
             </el-table>
             <div slot="footer" class="dialog-footer">
@@ -1204,15 +1208,15 @@ export default {
             //获得合同中的投资主体(基金)列表
             getContractDetail(value).then(resp => {
                 if (resp.data.status == '200') {
-
                     this.$set(this.$data.paidForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
                     this.contractDocument = resp.data.result.projectContract.documentInfo;
-                    this.fundData2 = resp.data.result.fundInfo;
-
-                    this.fundData2.forEach(function(item, index) {
+                    let _fundData2 = resp.data.result.fundInfo;
+                    _fundData2.forEach((item) =>{
                         item.contractFundId = item.id;
                         item.id = '';
+                        item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
                     });
+                    this.fundData2 = _fundData2;
                     this.calcSurplusAmount();
                 } else {
                     this.$message.error(resp.data.message);
@@ -1239,6 +1243,7 @@ export default {
                         this.fundData2.forEach(function(item, index) {
                             item.contractFundId = item.id;
                             item.id = '';
+                            item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
                         });
                         this.sumPay();
                         this.calcSurplusAmount();
@@ -1316,7 +1321,11 @@ export default {
                     });
                     this.payDocInfo = documentInfo;
 
-                    this.fundData2 = resp.data.result.payDetails;
+                    let _fundData2 = resp.data.result.payDetails;
+                    _fundData2.forEach(function(item, index) {
+                        item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
+                    });
+                    this.fundData2 = _fundData2;
                     this.paidAdd2 = !this.paidAdd2;
                     this.sumPay();
                     this.calcSurplusAmount();
@@ -1367,8 +1376,8 @@ export default {
         changeInvestAmount() {
             let sumAmount = 0.0, sumStockRatio = 0.0;
             for (let i = 0; i < this.fundData1.length; i++) {
-                sumAmount += (parseFloat(this.fundData1[i].investAmount | 0));
-                sumStockRatio += (parseFloat(this.fundData1[i].stockRatio | 0));
+                sumAmount += (parseFloat(this.fundData1[i].investAmount || 0));
+                sumStockRatio += (parseFloat(this.fundData1[i].stockRatio || 0));
             }
             this.$set(this.$data.contractForm1, 'contractAmount', sumAmount);
             this.$set(this.$data.contractForm1, 'stockRatio', sumStockRatio);
@@ -1379,8 +1388,8 @@ export default {
         sumPay() {
             let sum = 0.0, sumSurplus = 0.0;
             for (let i = 0; i < this.fundData2.length; i++) {
-                sum += (parseFloat(this.fundData2[i].payAmount | 0));
-                this.fundData2[i].surplusAmount = this.fundData2[i].investAmount - (this.fundData2[i].payAmount || 0.0);
+                sum += (parseFloat(this.fundData2[i].payAmount || 0));
+                this.fundData2[i].surplusAmount = this.fundData2[i].investAmount - (this.fundData2[i].payAmount || 0.0) - (this.fundData2[i].paidAmount || 0.0);
                 sumSurplus += this.fundData2[i].surplusAmount;
             }
             this.paidForm1.surplusAmount = sumSurplus;

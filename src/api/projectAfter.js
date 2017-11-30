@@ -209,9 +209,9 @@ export function saveDataSubject(projectData = {}) {
 
 //数据填报--数据填报主体编辑
 export function updDataSubject(params = {}) {
-	let {id, baseDate, dataType, operator, currentDeta,operatorName } = params;
+	let {id, projectId, baseDate, dataCat, dataType, operator, currentDeta,operatorName } = params;
 	const data = {
-		id, baseDate, dataType, operator, currentDeta,operatorName
+		id, projectId, baseDate, dataCat, dataType, operator, currentDeta,operatorName
 	};
 	return service({url: '/projectData/updeat', method: 'post', data});
 }

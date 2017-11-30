@@ -13,7 +13,7 @@
             <el-table :data="operatingData" border style="width: 100%">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                     <template scope="scope">
-                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="goAddData(scope.row.id, '2', true)">{{ scope.row.baseDate }}</span>
+                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="goAddData(scope.row.id, '1', true)">{{ scope.row.baseDate }}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
                             </el-date-picker>
@@ -25,19 +25,34 @@
                         <span v-if="!scope.row.editFlag">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</span>
                         <span v-if="scope.row.editFlag" class="cell-edit-input">
                             <el-select v-model="scope.row.dataType" placeholder="请选择类型">
-                                <el-option v-for="item in sortOptions" :key="item.value" :label="item.label" :value="item.value">
+                                <el-option v-for="item in sortOptions" :key="item.ley" :label="item.value" :value="item.key">
                                 </el-option>
                             </el-select>
                         </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="填报人" prop="operatorName" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.operatorName }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="userName" placeholder="" disabled>
+                            </el-input> 
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="填报日期" prop="currentDeta" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.currentDeta }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="currentDeta" placeholder="" disabled>
+                            </el-input> 
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="checkEdit(scope.row)">编辑</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && scope.row.editFlag" type="text" @click="checkEdit(scope.row, true)">保存</el-button>
                         <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="goAddData(scope.row.id, '1', false)">编辑数据</el-button>
                     </template>
                 </el-table-column>
@@ -140,28 +155,28 @@
                     </el-table-column>
                     <el-table-column label="经营目标" prop="simple_value" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.simple_value" placeholder="">{{ scope.row.simple_value }}</el-input>
+                            <el-input v-model="scope.row.simple_value" placeholder="" :disabled="readControl">{{ scope.row.simple_value }}</el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="截止基准日实际情况" prop="complex_value" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.complex_value" placeholder="">{{ scope.row.complex_value }}</el-input>
+                            <el-input v-model="scope.row.complex_value" placeholder="" :disabled="readControl">{{ scope.row.complex_value }}</el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="完成率" prop="value1" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.value1" placeholder="">{{ scope.row.value1 }}</el-input>
+                            <el-input v-model="scope.row.value1" placeholder="" :disabled="readControl">{{ scope.row.value1 }}</el-input>
                         </template>
                     </el-table-column>
                     <el-table-column label="下半年计划" prop="value2" align="center">
                         <template scope="scope">
-                            <el-input v-model="scope.row.value2" placeholder="">{{ scope.row.value2 }}</el-input>
+                            <el-input v-model="scope.row.value2" placeholder="" :disabled="readControl">{{ scope.row.value2 }}</el-input>
                         </template>
                     </el-table-column>
                 </el-table>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="operatingModal2 = false">取 消</el-button>
-                    <el-button type="danger" @click="operatingEdit">保 存</el-button>
+                    <el-button @click="operatingModal2 = false" v-show="!readControl">取 消</el-button>
+                    <el-button type="danger" @click="operatingEdit" v-show="!readControl">保 存</el-button>
                 </div>
             </el-dialog>
             <delete-reminders :deleteReminders="operatingDelete" :message="operatingMessage" :modal_loading="modal_loading" @del="operatingDelete=false" @cancel="operatingDelete=false">
@@ -172,23 +187,49 @@
             <el-table :data="financialData" border style="width: 100%" align="center">
                 <el-table-column label="基准日" prop="baseDate" align="center">
                     <template scope="scope">
-                         <span style="color:#f05e5e;cursor:pointer" @click="goAddData(scope.row.id, '2', true)">{{ scope.row.baseDate }}</span>
+                        <span v-if="!scope.row.editFlag" style="color:#f05e5e;cursor:pointer" @click="goAddData(scope.row.id, '2', true)">{{ scope.row.baseDate }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-date-picker v-model="scope.row.baseDate" type="date" placeholder="选择日期">
+                            </el-date-picker>
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column label="类型" prop="dataType" align="center">
-                    <template scope="scope">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</template>
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{scope.row.dataType | key2value(sortOptions, scope.row.dataType)}}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-select v-model="scope.row.dataType" placeholder="请选择类型">
+                                <el-option v-for="item in sortOptions" :key="item.ley" :label="item.value" :value="item.key">
+                                </el-option>
+                            </el-select>
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="填报人" prop="operatorName" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.operatorName }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="userName" placeholder="" disabled>
+                            </el-input> 
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="填报日期" prop="currentDeta" align="center">
+                    <template scope="scope">
+                        <span v-if="!scope.row.editFlag">{{ scope.row.currentDeta }}</span>
+                        <span v-if="scope.row.editFlag" class="cell-edit-input">
+                            <el-input v-model="currentDeta" placeholder="" disabled>
+                            </el-input> 
+                        </span>
+                    </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template scope="scope">
-                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="EditOperating(scope.row)">编辑
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && !scope.row.editFlag" type="text" @click="checkEdit(scope.row)">编辑
                         </el-button>
-                        <el-button v-if="checkProjectAuth('SJTB-bianji') && scope.row.editFlag" type="text" @click="EditOperating(scope.row)">保存
+                        <el-button v-if="checkProjectAuth('SJTB-bianji') && scope.row.editFlag" type="text" @click="checkEdit(scope.row, true)">保存
                         </el-button>
-                        <el-button v-if="checkProjectAuth('SJTB-bianji')" type="text" @click="goAddData(scope.row.id, '2', false)">添加数据</el-button>
+                        <el-button v-if="checkProjectAuth('SJTB-bianji')" type="text" @click="goAddData(scope.row.id, '2', false)">编辑数据</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -478,19 +519,38 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
-        // 查看经营数据详情
-        openDetails1(index) {
-            this.detailsDialog = true;
-        },
-        // 编辑经营数据
-        EditOperating(row) {
-            row.editFlag = !row.editFlag;
+        // 编辑数据表头
+        checkEdit(row, isSave=false) {
+            //保存表头
+            if(isSave){
+                let _data = row;
+                _data.baseDate = changeDate(_data.baseDate);
+                _data.operator = JSON.parse(sessionStorage.getItem('userInfor')).id;
+                _data.currentDeta = changeDate(new Date());
+                _data.operatorName = JSON.parse(sessionStorage.getItem('userInfor')).name;
+                updDataSubject(_data).then(resp => {
+                    if (resp.data.status == '200') {
+                        this.$message.success(resp.data.message || "操作成功");
+                        row.editFlag = !row.editFlag;
+                    } else {
+                        this.$message.error(resp.data.message || "操作失败");
+                    }
+                }).catch(e => {
+                    console.log('getFee() exists error: ', e);
+                })
+            }else{
+                row.editFlag = !row.editFlag;
+            }
         },
         //获取财务数据主体
         getFinancialSubject() {
             getDataSubjectList(this.projectId, 1).then(resp => {
                 if (resp.data.status == '200') {
-                    this.financialData = resp.data.result;
+                    let dataList = resp.data.result;
+                    dataList.forEach(function(item, index){
+                        item.editFlag = false;
+                    });
+                    this.financialData = dataList;
                 } else if (resp.data.status == '49999') {
                     this.financialData = [];
                 } else {
@@ -500,12 +560,13 @@ export default {
                 console.log('getFee() exists error: ', e);
             })
         },
-        //打开添加数据明细表单
+        //打开数据明细表单 
+        //dataType(1:经营数据; 2:财务数据) 
+        //readControl(true: 详情只读，false: 默认可编辑)
         goAddData(subjectId, dataType, readControl = false) {
             this.readControl = readControl;
             this.finacial_title = '财务数据明细';
             getDataFormBody(subjectId).then(resp => {
-                // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
                     let formBody = resp.data.result.dataInfos;
                     //填充表单
@@ -547,7 +608,6 @@ export default {
         },
         // 经营数据-添加数据 保存按钮的方法
         operatingEdit() {
-            this.operatingModal2 = false;
             let operateData = {
                 dataInfo: this.operateInfo,
                 operations: this.operatingData1
@@ -559,7 +619,8 @@ export default {
             fillDataForm(params).then(resp => {
                 // console.log("财务数据-保存数据 结果："+JSON.stringify(resp.data));
                 if (resp.data.status == '200') {
-                    this.financialModal2 = false;
+                    this.operatingModal2 = false;
+                    // this.financialModal2 = false;
                     this.clearData();
                 } else {
                     this.$message.error(resp.data.message);
@@ -567,12 +628,6 @@ export default {
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
             });
-        },
-        // 查看财务数据详情
-        openDetails2(row,index) {
-            this.financialModal2 = true;
-            this.finacial_title = '查看财务数据详情';
-            this.readControl = true;
         },
         // 财务数据-保存数据 的方法
         financialEdit() {
@@ -676,9 +731,6 @@ export default {
                 }
             });
         },
-        checkEdit(index, row) { //编辑
-            row.editFlag = !row.editFlag;
-        },
         // 删除当前行
         handleDelete(index, rows) {
             rows.splice(index, 1);
@@ -691,7 +743,7 @@ export default {
             // console.log("导入数据"+JSON.stringify(this.importData));
         },
         handleSuccess(){
-            this.$Message.info("数据导入成功");
+            this.$message.info("数据导入成功");
             this.$refs['import'].clearFiles();
             getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
@@ -721,7 +773,7 @@ export default {
                         }
                     }
                 }else{
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('导入后获取数据 error: ', e);
