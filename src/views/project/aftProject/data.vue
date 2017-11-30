@@ -513,15 +513,14 @@ export default {
                 } else if (resp.data.status == '49999') {
                     this.operatingData = [];
                 } else {
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
             })
         },
-        // 编辑经营数据表头
+        // 编辑数据表头
         checkEdit(row, isSave=false) {
-            row.editFlag = !row.editFlag;
             //保存表头
             if(isSave){
                 let _data = row;
@@ -531,13 +530,16 @@ export default {
                 _data.operatorName = JSON.parse(sessionStorage.getItem('userInfor')).name;
                 updDataSubject(_data).then(resp => {
                     if (resp.data.status == '200') {
-                        this.$Message.success(resp.data.message || "操作成功");
+                        this.$message.success(resp.data.message || "操作成功");
+                        row.editFlag = !row.editFlag;
                     } else {
-                        this.$Message.error(resp.data.message || "操作失败");
+                        this.$message.error(resp.data.message || "操作失败");
                     }
                 }).catch(e => {
                     console.log('getFee() exists error: ', e);
                 })
+            }else{
+                row.editFlag = !row.editFlag;
             }
         },
         //获取财务数据主体
@@ -552,7 +554,7 @@ export default {
                 } else if (resp.data.status == '49999') {
                     this.financialData = [];
                 } else {
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -598,7 +600,7 @@ export default {
                     }
 
                 }else{
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -621,7 +623,7 @@ export default {
                     // this.financialModal2 = false;
                     this.clearData();
                 } else {
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -655,7 +657,7 @@ export default {
                     this.financialModal2 = false;
                     this.clearData();
                 } else {
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('getFee() exists error: ', e);
@@ -718,7 +720,7 @@ export default {
                                 this.financialModal1 = false;
                             }
                         } else {
-                            this.$Message.error(resp.data.message);
+                            this.$message.error(resp.data.message);
                         }
                     }).catch(e => {
                         console.log('getFee() exists error: ', e);
@@ -741,7 +743,7 @@ export default {
             // console.log("导入数据"+JSON.stringify(this.importData));
         },
         handleSuccess(){
-            this.$Message.info("数据导入成功");
+            this.$message.info("数据导入成功");
             this.$refs['import'].clearFiles();
             getDataFormBody(this.balanceInfo.projectDataId).then(resp => {
                 // console.log("打开数据明细表单 结果："+JSON.stringify(resp.data));
@@ -771,7 +773,7 @@ export default {
                         }
                     }
                 }else{
-                    this.$Message.error(resp.data.message);
+                    this.$message.error(resp.data.message);
                 }
             }).catch(e => {
                 console.log('导入后获取数据 error: ', e);
