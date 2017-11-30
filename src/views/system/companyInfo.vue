@@ -102,12 +102,13 @@ export default {
     onSubmitOver() {
       companyInfo(this.fileAddress).then(res => {
         console.log(res);
-        if (res.data.status == 200) {
+        if (res.data.status == '200') {
           this.$store.state.login.logoSrc.logo = this.fileAddress;
           window.sessionStorage.setItem(
             "logoSrc",
             JSON.stringify(this.$store.state.login.logoSrc)
           );
+          this.$Message.success(res.data.message);
         } else {
           this.$Message.error(res.data.message);
         }
