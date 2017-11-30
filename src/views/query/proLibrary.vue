@@ -1,6 +1,6 @@
 <template>
     <div class="proLibrary">
-        <myFilter :chooseInfo="chooseInfo" @getIdInfo = "changeList"></myFilter>
+        <myFilter :chooseInfo="chooseInfo" @getIdInfo="changeList"></myFilter>
         <div class="title">
             <tableHeader :theme="theme" :data="titleInfo" class="addPadding">
                 <el-input placeholder="请输入搜索内容" icon="search" v-model="input" :on-icon-click="handleIconClick" style="width: 320px;">
@@ -9,7 +9,7 @@
         </div>
         <el-table :data="proLibrary" style="width: 100%">
             <el-table-column prop="projectName" label="项目名称">
-                <template scope = "scope">
+                <template scope="scope">
                     <a style="color:#f05e5e" @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
                 </template>
             </el-table-column>
@@ -29,160 +29,149 @@
         <!-- 分页 -->
         <div class="pageStyle">
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.pageNum" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
-        </el-pagination>
+            </el-pagination>
         </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    import tableHeader from 'components/tabelHeader'
-    import myFilter from 'components/myFilter'
-    import {getProjectList} from 'api/search'
-    import {getSelectIndex} from 'api/search'
-    import {mapMutations, mapGetters} from 'vuex'
+import tableHeader from "components/tabelHeader";
+import myFilter from "components/myFilter";
+import { getProjectList } from "api/search";
+import { getSelectIndex } from "api/search";
+import { mapMutations, mapGetters } from "vuex";
 
-    export default {
-        data() {
-            return {
-                theme: '#fff',
-                titleInfo: {
+export default {
+  data() {
+    return {
+      theme: "#fff",
+      titleInfo: {},
+      chooseInfo: {
+        title: "项目类型:",
+        details: ["全部", "PE", "VC", "定增"]
+      },
+      proLibrary: [],
+      type: "",
+      seartext: "",
+      input: "",
+      page: {
+        pageNum: "1", //当前页码
+        total: "", //数据总数
+        pageSize: "10", //每页条数
+        navigatepageNums: "", //页数
+        current: "" //当前页码
+      }
+    };
+  },
+  components: {
+    tableHeader,
+    myFilter
+  },
+  methods: {
+    JumpOther(row) {
+      console.log(row);
+      this.addTab({
+        type: "addTab",
+        title: row.projectName + "详情",
+        url: "/home/aftProjectMessage/" + row.projectId + "/" + row.id,
+        name: "aftProjectMessage/" + row.projectId + "/" + row.id
+      });
+      this.$router.push(
+        "/home/aftProjectMessage/" + row.projectId + "/" + row.id
+      );
+      //
+      //                this.addTab('投后项目-' + row.projectName,
+      //                    '/home/aftProjectMessage/' +  row.id + '/' +row.projectId,
+      //                    'aftProjectMessage/' + row.id + '/' + row.projectId);
+      //                this.$router.push({ name: 'aftProjectMessage', params: { projectId: row.id, investProjectId: row.projectId } });
+    },
 
-                },
-                chooseInfo: {
-                    title: '项目类型:',
-                    details: ['全部', 'PE', 'VC', '定增']
-                },
-                proLibrary: [],
-                type:'',
-                seartext:'',
-                input:'',
-                page: {
-                    pageNum: '1', //当前页码
-                    total: '', //数据总数
-                    pageSize: '10', //每页条数
-                    navigatepageNums: '', //页数
-                    current: '', //当前页码
-                },
-            }
-        },
-        components: {
-            tableHeader,
-            myFilter
-        },
-        methods:{
-            JumpOther(row){
-                console.log(row)
-                this.addTab({
-                    type: 'addTab',
-                    title: row.projectName +'详情',
-                    url: '/home/aftProjectMessage/' + row.projectId + '/' + row.id,
-                    name: 'aftProjectMessage/' + row.projectId + '/' + row.id
-                })
-                this.$router.push('/home/aftProjectMessage/' + row.projectId + '/' + row.id)
-//
-//                this.addTab('投后项目-' + row.projectName,
-//                    '/home/aftProjectMessage/' +  row.id + '/' +row.projectId,
-//                    'aftProjectMessage/' + row.id + '/' + row.projectId);
-//                this.$router.push({ name: 'aftProjectMessage', params: { projectId: row.id, investProjectId: row.projectId } });
-            },
+    handleIconClick() {
+      this.seartext = this.input;
+      getProjectList("", this.type, this.seartext, this.page).then(res => {
+        this.proLibrary = res.data.result.list;
+        this.proLibrary.forEach(function(item) {
+          if (item.payDate) item.payDate = item.payDate.substring(0, 10);
+        });
+      });
+    },
 
-            handleIconClick(){
-                this.seartext = this.input
-                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
-                    this.proLibrary = res.data.result.list
-                    this.proLibrary.forEach(function (item) {
-                        if (item.payDate)
-                            item.payDate = item.payDate.substring(0,10)
-                    })
-                })
-            },
+    changeList(index, id) {
+      this.type = id;
+      if (id == 0) {
+        this.type = null;
+      }
+      getProjectList("", this.type, this.seartext, this.page).then(res => {
+        this.proLibrary = res.data.result.list;
+        this.proLibrary.forEach(function(item) {
+          if (item.payDate) item.payDate = item.payDate.substring(0, 10);
+        });
+        this.page.pageNum = res.data.result.pageNum; //当前页码
+        this.page.total = res.data.result.total; //数据总数
+        this.page.pageSize = res.data.result.pageSize; //每页条数
+        this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+      });
+    },
+    handleSizeChange(x) {
+      this.page.pageSize = x;
 
-            changeList(index,id){
-                this.type = id
-                if(id == 0 ){
-                    this.type = null;
-                }
-                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
-                    this.proLibrary = res.data.result.list
-                    this.proLibrary.forEach(function (item) {
-                        if (item.payDate)
-                            item.payDate = item.payDate.substring(0,10)
-                    })
-                    this.page.pageNum = res.data.result.pageNum; //当前页码
-                    this.page.total = res.data.result.total; //数据总数
-                    this.page.pageSize = res.data.result.pageSize; //每页条数
-                    this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+      getProjectList("", this.type, this.seartext, this.page).then(res => {
+        console.log(res.data);
+        this.proLibrary = res.data.result.list;
+        this.proLibrary.forEach(function(item) {
+          if (item.payDate) item.payDate = item.payDate.substring(0, 10);
+        });
+      });
+    },
+    handleCurrentChange(x) {
+      this.page.pageNum = x;
+      getProjectList("", this.type, this.seartext, this.page).then(res => {
+        console.log(res.data);
+        this.proLibrary = res.data.result.list;
+        this.proLibrary.forEach(function(item) {
+          if (item.payDate) item.payDate = item.payDate.substring(0, 10);
+        });
+      });
+    },
 
-                })
-            },
-            handleSizeChange(x){
-                this.page.pageSize = x
-
-                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
-                    console.log(res.data)
-                    this.proLibrary = res.data.result.list
-                    this.proLibrary.forEach(function (item) {
-                        if (item.payDate)
-                            item.payDate = item.payDate.substring(0,10)
-                    })
-                })
-            },
-            handleCurrentChange(x){
-                this.page.pageNum =  x
-                getProjectList('',this.type,this.seartext,this.page).then((res)=>{
-                    console.log(res.data)
-                    this.proLibrary = res.data.result.list
-                    this.proLibrary.forEach(function (item) {
-                        if (item.payDate)
-                            item.payDate = item.payDate.substring(0,10)
-                    })
-                })
-            },
-
-            ...mapMutations([
-                'addTab'
-            ]),
-        },
-        created(){
-
-            getProjectList('',this.type,this.seartext,this.page).then((res)=>{
-
-                this.proLibrary = res.data.result.list
-                this.proLibrary.forEach(function (item) {
-                    if (item.payDate)
-                        item.payDate = item.payDate.substring(0,10)
-                })
-            })
-            getSelectIndex('202').then((res)=>{
-
-                this.chooseInfo.details = res.data.result
-            })
-
-        },
-        computed:{
-            ...mapGetters([
-                'getProStatus'
-            ])
-        }
-
-    }
+    ...mapMutations(["addTab"])
+  },
+  created() {
+    getProjectList("", this.type, this.seartext, this.page).then(res => {
+      this.proLibrary = res.data.result.list;
+      this.proLibrary.forEach(function(item) {
+        if (item.payDate) item.payDate = item.payDate.substring(0, 10);
+      });
+      this.page.pageNum = res.data.result.pageNum; //当前页码
+      this.page.total = res.data.result.total; //数据总数
+      this.page.pageSize = res.data.result.pageSize; //每页条数
+      this.page.navigatepageNums = res.data.result.navigatepageNums.length; //页数长度
+    });
+    getSelectIndex("202").then(res => {
+      this.chooseInfo.details = res.data.result;
+    });
+  },
+  computed: {
+    ...mapGetters(["getProStatus"])
+  }
+};
 </script>
 
 
 
 <style lang="less" scoped>
-    @import '../../common/styles/variable.less';
-    .proLibrary {
-        width: 100%;
-        // height: 100%;
-        padding: 24px;
-        background: @color-base;
-        .addPadding {
-            padding-bottom: 12px;
-        }
-        .page {
-            padding: 24px 0;
-            text-align: right;
-        }
-    }
+@import "../../common/styles/variable.less";
+.proLibrary {
+  width: 100%;
+  // height: 100%;
+  padding: 24px;
+  background: @color-base;
+  .addPadding {
+    padding-bottom: 12px;
+  }
+  .page {
+    padding: 24px 0;
+    text-align: right;
+  }
+}
 </style>
