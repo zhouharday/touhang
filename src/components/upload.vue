@@ -6,8 +6,9 @@
                 :action="actionUrl"
                 :on-success="handleSuccess"
                 :data="uploadInfo"
-                :headers= 'headers'
-                name="file">
+                :headers= "headers"
+                name="file"
+                :default-file-list="defaultFileList">
             <div style="padding: 20px 0">
                 <Icon type="ios-cloud-upload" size="52"></Icon>
                 <p>点击或将文件拖拽到这里上传</p>
@@ -36,6 +37,10 @@ export default {
         title: {
             type: String,
             default: '基金文档'
+        },
+        defaultFileList:{
+            type: Array,
+            default: []
         }
     },
     data() {

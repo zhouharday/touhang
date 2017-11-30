@@ -1,107 +1,115 @@
 <template>
-    <div class="companyInfo">
-        <el-row style="width: 100%;" class="row">
-            <el-col :span="16" :offset="4" class="col">
-                <el-form :model="companyInfo" label-position="left" label-width="120px">
-                    <el-form-item label="企业名称:">
-                        <el-input v-model="companyInfo.name" disabled></el-input>
-                        <!--<div>{{companyInfo.name}}</div>-->
-                    </el-form-item>
-                    <el-form-item label="企业logo:">
-                        <div>
-                            <div class="el-upload__text">
-                                <span>
-                                    <img style="width: 200px;height: 200px;" :src='companyInfo.image' />
-                                </span>
-                                <form>
-                                    <el-button class="changeWidth" type="default" @click="getFile($event)">点击选择上传文件</el-button>
-                                    <input type="file" style="display:none" @change="changeImage($event)" ref="avatarInput" id="avatarInput">
-                                    <span>{{file.name}}</span>
-                                </form>
-                                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过10M</div>
-                            </div>
-                        </div>
-                    </el-form-item> 
-                    <el-form-item class="btn_wrapper">
-                        <el-button class="changeWidth" type="danger" @click="onSubmitOver">立即创建</el-button>
-                        <el-button type="default" class="changeWidth">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-col>
-        </el-row>
-    </div>
+  <div class="companyInfo">
+    <el-row style="width: 100%;" class="row">
+      <el-col :span="16" :offset="4" class="col">
+        <el-form :model="companyInfo" label-position="left" label-width="120px">
+          <el-form-item label="企业名称:">
+            <el-input v-model="companyInfo.name" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="企业logo:">
+            <div>
+              <div class="el-upload__text">
+                <my-upload field="files" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" v-model="show" :width="300" :height="300" :url=u pDataUrl :params="params" :headers="headers" img-format="png">
+                </my-upload>
+                <span><img :src="imgDataUrl"></span>
+                <div>
+                  <el-button class="changeWidth" type="default" @click="toggleShow">点击选择上传文件</el-button>
+                </div>
+                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过10M</div>
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item class="btn_wrapper">
+            <el-button class="changeWidth" type="danger" @click="onSubmitOver">立即创建</el-button>
+            <el-button type="default" class="changeWidth">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
 import { companyInfo } from "api/system";
-import { Loading } from "element-ui";
-import { mapState } from "vuex";
+import myUpload from "vue-image-crop-upload";
+
 export default {
   data() {
     return {
+      show: false,
+      params: {},
+      headers: {
+        Authorization: JSON.parse(sessionStorage.getItem("token"))
+      },
+      imgDataUrl: "", // the datebase64 url of created image
+
       companyInfo: {
         name: JSON.parse(sessionStorage.getItem("merchants"))[0].merchant_name,
         image: JSON.parse(sessionStorage.getItem("logoSrc")).logo
       },
-      fileAddress: "lll",
-      file: "" //上传文件url
+      fileAddress: this.$store.state.login.logoSrc.logo,
+      file: "", //上传文件url
+      upDataUrl: this.api + "/files/upload"
     };
   },
+  components: {
+    "my-upload": myUpload
+  },
   methods: {
-    getFile(event) {
-      //点击上传文件图像
-      this.$refs.avatarInput.click();
+    toggleShow() {
+      this.show = !this.show;
     },
-    changeImage(e) {
-      //上传文件input
-      // this.file = event.target.files[0];
-      this.file = document.querySelector("#avatarInput").files[0];
-      console.log(this.file);
-      this.onSubmit(e);
+    /**
+       * crop success
+       *
+       * [param] imgDataUrl
+       * [param] field
+       */
+    cropSuccess(imgDataUrl, field) {
+      console.log("-------- crop success --------");
+      this.imgDataUrl = imgDataUrl;
     },
-    onSubmit(event) {
-      //提交上传文件到服务器
-      let loadingInstance = Loading.service({ fullscreen: true });
-      event.preventDefault();
-      let formData = new FormData();
-      // formData.append("files", this.$refs.avatarInput.files[0]);
-      formData.append("files", document.querySelector("#avatarInput").files[0]);
-      let config = {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      };
-
-      this.$http
-        .post(this.api + "/files/upload", formData, config)
-        .then(res => {
-          console.log(res);
-          if (res.status == "200") {
-            if (res.data.status == "200") {
-              this.fileAddress = res.data.filePath;
-              this.companyInfo.image = res.data.filePath;
-              loadingInstance.close();
-            } else if (res.data.status == "403") {
-              this.$Message.error(res.data.message);
-              loadingInstance.close();
-            }
-          }
-        })
-        .catch(error => {
-          this.$Message.error("请求超时");
-          loadingInstance.close();
-        });
+    /**
+       * upload success
+       *
+       * [param] jsonData   服务器返回数据，已进行json转码
+       * [param] field
+       */
+    cropUploadSuccess(jsonData, field) {
+      console.log("-------- upload success --------");
+      console.log(jsonData);
+      if (jsonData.status == "200") {
+        this.fileAddress = jsonData.filePath;
+        this.companyInfo.image = jsonData.filePath;
+      } else if (jsonData.status == "403") {
+        this.$Message.error(jsonData.message);
+      }
+      console.log("field: " + field);
+    },
+    /**
+       * upload fail
+       *
+       * [param] status    server api return error status, like 500
+       * [param] field
+       */
+    cropUploadFail(status, field) {
+      console.log("-------- upload fail --------");
+      console.log(status);
+      this.imgDataUrl = "";
+      console.log("field: " + field);
     },
 
     onSubmitOver() {
       companyInfo(this.fileAddress).then(res => {
         console.log(res);
-        if (res.status == 200) {
+        if (res.data.status == 200) {
           this.$store.state.login.logoSrc.logo = this.fileAddress;
           window.sessionStorage.setItem(
             "logoSrc",
             JSON.stringify(this.$store.state.login.logoSrc)
           );
+        } else {
+          this.$Message.error(res.data.message);
         }
       });
     }

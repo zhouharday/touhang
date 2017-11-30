@@ -75,7 +75,7 @@
         <el-tab-pane :disabled="!checkProjectAuth('GL-XMTC')" v-if="isExit" label="退出" name="outing" class="tab_list">
           <outing-form :tabs="tabs" :isInTeam="isInTeam" :authList="authList" :proId="projectId"></outing-form>
         </el-tab-pane>
-        <el-tab-pane label="日志" name="log" class="tab_list">
+        <el-tab-pane :disabled="!checkProjectAuth('XMRZ')" label="日志" name="log" class="tab_list">
           <log-table ref="logTab" :projectId="projectId" :type="type"></log-table>
         </el-tab-pane>
       </el-tabs>
@@ -83,7 +83,7 @@
     <!-- 中止确认弹框 -->
     <delete-reminders :deleteReminders="deleteReminders" :modal_loading="modal_loading" :message_title="message_title" :message="message" :btnText="btnText" @del="jumpPool" @cancel="deleteReminders=false">
     </delete-reminders>
-    <my-upload :modalUpload="modalUpload" :title="uploadTitle" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
+    <my-upload :modalUpload="modalUpload" :title="uploadTitle" :defaultFileList="defaultFileList" :uploadInfo="uploadInfo" @cancelModal="cancelModal" @uploadSuccess="uploadSuccess"></my-upload>
     <!-- 发起申请 对话框-->
     <apply-forms :applyModal="applyModal" :applyForm="applyForm" :auditorOptions="auditorOptions" @submit="submitApply" @cancle="cancleApply"></apply-forms>
     <!-- 查看进度 对话框 -->
@@ -173,6 +173,7 @@ export default {
       memberData: [], // 董事会成员
       structureData: [], // 股权结构
       uploaded: false,
+      defaultFileList: [],
       tabs: {
         tabList: [
           true,
@@ -585,6 +586,7 @@ export default {
       this.uploadInfo.stageId = this.stageId;
       this.uploadInfo.uploadTypeId = this.projectId;
       this.uploadTitle = title;
+      this.defaultFileList = [];
       this.modalUpload = true;
     },
     cancelModal() {
