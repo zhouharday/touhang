@@ -138,17 +138,15 @@ export default {
 
         openDialog() {
             //获取部门列表
-            this.chazhao()
+            this.teamForm.department = '';
+            this.teamForm.name = '';
+            this.chazhao();
             getDepartmentList().then((res)=>{
-
-                var dataList = addEdit(res.data.result)
-                var treeList = getNodes(dataList)
-                console.log(res.data.result)
-                this._getDepartmentName(treeList)
+                var dataList = addEdit(res.data.result);
+                var treeList = getNodes(dataList);
+                console.log(res.data.result);
+                this._getDepartmentName(treeList);
             })
-
-
-
             let new_teamForm = {
                 department: '',
                 name: '',
