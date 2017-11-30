@@ -204,9 +204,11 @@
                 </el-table-column>
                 <el-table-column label="股权占比（%）" prop="stockRatio" align="center">
                 </el-table-column>
-                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
+                <el-table-column label="已支付金额（元）" prop="paidAmount" align="center">
                 </el-table-column>
                 <el-table-column label="支付金额（元）" prop="payAmount" align="center">
+                </el-table-column>
+                <el-table-column label="剩余金额（元）" prop="surplusAmount" align="center">
                 </el-table-column>
             </el-table>
         </el-dialog>
@@ -433,7 +435,11 @@ export default {
                 if (resp.data.status == '200') {
                     this.paidForm1 = resp.data.result.projectInvestPay;
                     this.contractDocument = resp.data.result.projectInvestPay.contractDocument;
-                    this.fundData2 = resp.data.result.payDetails;
+                    let _fundData2 = resp.data.result.payDetails;
+                    _fundData2.forEach((item) =>{
+                        item.paidAmount = item.investAmount - item.surplusAmount - item.payAmount;
+                    });
+                    this.fundData2 = _fundData2;
                     this.paidDetails = !this.paidDetails;
                 } else {
                     this.$message.error(resp.data.message);
