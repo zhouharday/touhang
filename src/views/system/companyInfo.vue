@@ -9,7 +9,7 @@
           <el-form-item label="企业logo:">
             <div>
               <div class="el-upload__text">
-                <my-upload field="files" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" v-model="show" :width="300" :height="300" :url=u pDataUrl :params="params" :headers="headers" img-format="png">
+                <my-upload field="files" @crop-success="cropSuccess" @crop-upload-success="cropUploadSuccess" @crop-upload-fail="cropUploadFail" v-model="show" :width="300" :height="300" :url='upDataUrl' :params="params" :headers="headers" img-format="png">
                 </my-upload>
                 <span><img :src="imgDataUrl"></span>
                 <div>
