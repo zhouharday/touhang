@@ -137,7 +137,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="cancelIncomeModel">取 消</el-button>
-            <el-button type="danger" @click="confirmIncome">确 定</el-button>
+            <el-button type="danger" @click="confirmIncome" :loading="loadingIncome">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 确认删除模态框 -->
@@ -211,6 +211,7 @@ export default {
             paramsId: '', // 当前id
             deleteReminders: false, // 确认删除模态框
             constTableDate: [], // 临时数据
+            loadingIncome: false // loading 效果防止多次点击
         }
     },
     methods: {
@@ -219,25 +220,33 @@ export default {
             this.addOrEdit = true
         },
         methodIncome() { // 添加
-            this.modalIncome = true
-            this.profit = true
-            this.formIncome.handleDate = new Date()
+            this.formIncome.allocationMoney = ''
             this.formIncome.allocationName = this.fundName + '收益分配申请表'
             this.formIncome.fundName = this.fundName
-            this._getAssignmentDetails()
             this.formIncome = Object.assign({}, this.formIncome)
-            // console.log(this.formIncome)
+            addAllocationInfo(this.$route.params.id).then((res) => {
+                if (res.status === 200) {
+                    var tableData = res.data.result
+                    tableData.map((x) => {
+                        x.shareMoney = ''
+                    })
+                    this.tableData = tableData
+                    this.constTableDate = tableData
+                    this.modalIncome = true
+                    this.profit = true
+                }
+            })
         },
         editIncomeDis(index, row) {
             getFundAllocationDetails(row.id).then((res) => {
                 if (res.status === 200) {
-                    console.log(res)
                     this.modalIncome = true
                     this.profit = false
                     if (res.data.fundAllocation) {
                         this.formIncome = Object.assign({}, this.formIncome, res.data.fundAllocation)
                     }
                     if (res.data.params) {
+                        console.log(res.data.params)
                         var formdata = res.data.params
                         this.tableData = formdata.concat()
                     }
@@ -245,14 +254,18 @@ export default {
             })
         },
         confirmIncome() {
+            this.loadingIncome = true
             this.params = []
+            console.log(this.tableData)
             this.tableData.map((x) => {
                 this.params.push({
-                    agreementId: x.agreementId || x.id,
+                    agreementId: x.agreementId || "",
                     id: x.id,
                     shareMoney: x.shareMoney
                 })
             })
+            console.log(this.tableData)
+            console.log(typeof(this.formIncome.shareDate))
             if (this.formIncome.allocationMoney !== '') {
                 if (this.profit === true) {
                     addAllocation({
@@ -265,6 +278,7 @@ export default {
                             this._getAllocationList()
                             // this.formIncome = ''
                             this.tableData = this.constTableDate.concat()
+                            this.loadingIncome = false
                         }
                     })
                 } else {
@@ -282,10 +296,13 @@ export default {
                             this.modalIncome = false
                         }
                         this.tableData = this.constTableDate.concat()
+                        this.loadingIncome = false
+                        console.log(typeof(this.formIncome.handleDate));
                     })
                 }
             } else {
                 this.$Message.error('请输入分配金额')
+                this.loadingIncome = false
             }
         },
         cancelIncomeModel() { // 取消编辑收益分配
@@ -404,14 +421,13 @@ export default {
         _getAssignmentDetails() { // 获取收益明细
             addAllocationInfo(this.$route.params.id).then((res) => {
                 if (res.status === 200) {
-                    // console.log(res) // 投资者数据为空
                     var tableData = res.data.result
                     tableData.map((x) => {
                         x.shareMoney = ''
                     })
                     this.tableData = tableData
                     this.constTableDate = tableData
-                    // console.log(this.tableData)
+                    console.log(tableData)
                 }
             })
         },
