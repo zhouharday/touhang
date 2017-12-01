@@ -7,7 +7,7 @@
       </el-button>
     </div>
     <div class="table_wrapper">
-      <el-table :data="currentData" style="width: 100%">
+      <el-table :data="currentData" style="width: 100%" default-expand-all="true">
         <el-table-column type="expand">
           <template scope="props">
             <el-row>

@@ -185,6 +185,7 @@ export default {
         width: 100%;
         .listsWrapper {
             border: 1px solid #eef1f6;
+            font-size: 14px;
         }
         .menu {
             width: 100%;
@@ -248,6 +249,7 @@ export default {
     height: 42px;
     display: flex;
     align-items: center;
+    font-size: 14px;
     .desc {
         width: 20%;
         flex: 1;

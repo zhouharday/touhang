@@ -11,16 +11,16 @@
             </tableHeader>
         </div>
         <el-table :data="myFund" style="width: 100%">
-            <el-table-column fixed prop="fundName" label="基金名称" width="150" align="center">
+            <el-table-column fixed prop="fundName" label="基金名称" width="250" align="center">
                 <template scope = "scope">
                     <a style="color:#f05e5e" @click="JumpOther(scope.row)">{{scope.row.fundName}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="fundNo" label="基金编号" width="200" align="center">
+            <el-table-column prop="fundNo" label="基金编号" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="orgType" label="组织类型" width="200" align="center">
+            <el-table-column prop="orgType" label="组织类型" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="manageType" label="管理类型" width="200" align="center">
+            <el-table-column prop="manageType" label="管理类型" width="150" align="center">
             </el-table-column>
             <el-table-column prop="fundScale" label="基金规模（元）" width="200" align="center">
             </el-table-column>
@@ -30,9 +30,9 @@
             </el-table-column>
             <el-table-column prop="surplusLimit" label="剩余额度（元）" width="200" align="center">
             </el-table-column>
-            <el-table-column prop="createDate" label="成立日期" width="200" align="center">
+            <el-table-column prop="createDate" label="成立日期" width="150" align="center">
             </el-table-column>
-            <el-table-column prop="fundStatus" label="状态" width="200" align="center">
+            <el-table-column prop="fundStatus" label="状态" width="150" align="center">
             </el-table-column>
         </el-table>
          <!-- 分页 -->
