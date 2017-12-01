@@ -1,79 +1,79 @@
 <template>
-    <div class="c_left">
-        <h1>{{ title }}</h1>
-        <div id="month">
-            <div class="title">
-                <div class="date">
-                    <i class="el-icon-d-arrow-left i1" @click="backyear"></i>
-                    <i class="el-icon-arrow-left i2" @click="backmounth"></i>
-                    <span>{{date.year}}年{{ (date.month+1)<10?("0"+(date.month+1)):(date.month+1) }}月</span>
-                    <i class="el-icon-arrow-right i3" @click="nextmounth"></i>
-                    <i class="el-icon-d-arrow-right i4" @click="nextyear"></i>
-                </div>
-                <div class="week_title">
-                    <span class="actives">Sun</span>
-                    <span>Mon</span>
-                    <span>Tue</span>
-                    <span>Wed</span>
-                    <span>Thu</span>
-                    <span>Fri</span>
-                    <span class="actives">Sat</span>
-                </div>
-                <div>
-                    <span class="monthDateSpan">
-                        <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.time)">
-                            <el-tooltip placement="top" v-if="list.item.length>0">
-                                <div slot="content">
-                                    <div v-for="(item,index) in list.item" :key="item">
-                                        <p>{{item.startTime}}&nbsp;&nbsp;{{item.scheduleTitle}}</p>
-                                    </div>
-                                </div>
-                                <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
-                                    {{list.day}}
-                                </span>
-                            </el-tooltip>
-                            <span v-else :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
-                                {{list.day}}
-                            </span>
-                        </span>
-                        <!-- <div class="haveDate" v-show="have">
-                            <div v-for="(item,index) in spanScheduleTitle" :key="item">
-                                <p>{{item.startTime}}&nbsp;&nbsp;{{item.scheduleTitle}}</p>
-                            </div>
-                        </div> -->
-                    </span>
-                </div>
-            </div>
+  <div class="c_left">
+    <h1>{{ title }}</h1>
+    <div id="month">
+      <div class="title">
+        <div class="date">
+          <i class="el-icon-d-arrow-left i1" @click="backyear"></i>
+          <i class="el-icon-arrow-left i2" @click="backmounth"></i>
+          <span>{{date.year}}年{{ (date.month+1)
+            <10?( "0"+(date.month+1)):(date.month+1) }}月</span>
+              <i class="el-icon-arrow-right i3" @click="nextmounth"></i>
+              <i class="el-icon-d-arrow-right i4" @click="nextyear"></i>
         </div>
-        <!-- 添加日程模态框 -->
-        <div class="scheduleBox">
-            <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
-                <el-form :model="scheduleForm" label-position="top">
-                    <el-row>
-                        <el-col>
-                            <el-form-item label="主题：" prop="theme">
-                                <el-input placeholder="请输入日程主题" v-model="scheduleForm.title"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <el-form-item label="时间：" prop="time">
-                                <el-time-select v-model="scheduleForm.time" :picker-options="{ start: '08:30',step: '00:15',end: '18:30'}" placeholder="选择时间" style="width:100%">
-                                </el-time-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col>
-                            <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
-                <div slot="footer" class="dialog-footer">
-                    <el-button type="default" @click="scheduleDialog = false">取消</el-button>
-                    <el-button type="danger" @click="getScheduleListBtn">保存</el-button>
-                </div>
-            </el-dialog>
+        <div class="week_title">
+          <span class="actives">Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span class="actives">Sat</span>
         </div>
+        <div>
+          <span class="monthDateSpan">
+            <span v-for="(list,index) in monthDate" :key="list.index" @click="clickDate(index,list.time)">
+              <el-tooltip placement="top" v-if="list.item.length>0" :popper-class="contents">
+                <div slot="content">
+                  <div v-for="(item,index) in list.item" :key="item">
+                    <p>{{item.startTime}} &nbsp;&nbsp;
+                      <span class="scheduleTitle">
+                        {{item.scheduleTitle}}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+                <span @mouseover="getDate(list.have,list.time)" :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
+                  {{list.day}}
+                </span>
+              </el-tooltip>
+              <span v-else :class="{active:list.have,click:clickN==index,actives:list.week == 0 || list.week == 6,after: date}">
+                {{list.day}}
+              </span>
+            </span>
+          </span>
+        </div>
+      </div>
     </div>
+    <!-- 添加日程模态框 -->
+    <div class="scheduleBox">
+      <el-dialog :title="checkTime" :visible.sync="scheduleDialog" :before-close="handleClose">
+        <el-form :model="scheduleForm" label-position="top">
+          <el-row>
+            <el-col>
+              <el-form-item label="主题：" prop="theme">
+                <el-input placeholder="请输入日程主题" v-model="scheduleForm.title"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="时间：" prop="time">
+                <el-time-select v-model="scheduleForm.time" :picker-options="{ start: '08:30',step: '00:15',end: '18:30'}" placeholder="选择时间" style="width:100%">
+                </el-time-select>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <i style="width:100%;height:1px;border-bottom: 1px solid #f05e5e"></i>
+            </el-col>
+          </el-row>
+        </el-form>
+        <p style="border-bottom: 1px solid #f05e5e;margin-top:80px;"></p>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="default" @click="scheduleDialog = false">取消</el-button>
+          <el-button type="danger" @click="getScheduleListBtn">保存</el-button>
+        </div>
+      </el-dialog>
+    </div>
+  </div>
 </template>
 <script>
 export default {
@@ -364,6 +364,16 @@ export default {
 .monthDateSpan {
   position: relative;
   overflow: hidden;
+  .contents {
+    width: 100px;
+    height: 100px;
+    .scheduleTitle {
+      width: 100px;
+      height: 100px;
+      display: block;
+      word-wrap: break-word;
+    }
+  }
   .haveDate {
     border-radius: 10px;
     z-index: 999;

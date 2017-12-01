@@ -13,17 +13,17 @@
                     <a style="color:#f05e5e" @click="JumpOther(scope.row)">{{scope.row.projectName}}</a>
                 </template>
             </el-table-column>
-            <el-table-column prop="createUserName" label="项目创建人" align="center">
+            <el-table-column prop="createUserName" label="项目创建人" align="center" width="220">
             </el-table-column>
-            <el-table-column prop="industryId" label="所属行业" align="center">
+            <el-table-column prop="industryId" label="所属行业" align="center" width="220">
             </el-table-column>
-            <el-table-column prop="projectTypeId" label="项目类型" align="center">
+            <el-table-column prop="projectTypeId" label="项目类型" align="center" width="220">
             </el-table-column>
-            <el-table-column prop="projectStage" label="项目阶段" align="center">
+            <el-table-column prop="projectStage" label="项目阶段" align="center" width="220">
             </el-table-column>
-            <el-table-column prop="payDate" label="投资日期" align="center">
+            <el-table-column prop="payDate" label="投资日期" align="center" width="220">
             </el-table-column>
-            <el-table-column prop="paySumAmount" label="投资金额（元）" align="center">
+            <el-table-column prop="paySumAmount" label="投资金额（元）" align="center" width="220">
             </el-table-column>
         </el-table>
         <!-- 分页 -->

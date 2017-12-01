@@ -2,7 +2,7 @@
   "name": "manage-system",
   "version": "1.0.0",
   "description": "基于Vue.js 2.x系列 + element-ui 股权投资管理系统解决方案",
-  "author": "",
+  "author": "zh-harday <719588366@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
