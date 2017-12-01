@@ -381,7 +381,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="支付日期" prop="payDate">
-                            <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
+                            <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false" :clearable="false">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -462,7 +462,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="支付日期" prop="payDate">
-                            <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false">
+                            <el-date-picker @input="setPayDate" type="date" placeholder="选择日期" v-model="paidForm1.payDate" style="width: 100%;" :editable="false" :clearable="false">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -534,7 +534,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="分红日期" prop="shareDate" :rules="dateRule">
-                            <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
+                            <el-date-picker @input="setShareDate" :editable="false" :clearable="false" type="date" placeholder="选择日期" v-model="sharingForm1.shareDate" style="width: 100%;">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -604,7 +604,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="分红日期" prop="shareDate" :rules="dateRule">
-                            <el-date-picker @input="setShareDate" :editable="false" type="date" placeholder="选择日期" v-model="sharingForm2.shareDate" style="width: 100%;">
+                            <el-date-picker @input="setShareDate" :editable="false" :clearable="false" type="date" placeholder="选择日期" v-model="sharingForm2.shareDate" style="width: 100%;">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -1201,7 +1201,6 @@ export default {
         selContract(value) {
             if (!value) return false;
             if (this.isEditPay) {
-                this.isEditPay = false;
                 return false;
             }
             // this.paidForm1.payTitle = "投资支付-" + value.contractName;
@@ -1214,7 +1213,8 @@ export default {
                     _fundData2.forEach((item) =>{
                         item.contractFundId = item.id;
                         item.id = '';
-                        item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
+                        // 已支付金额 = 投资金额 - 剩余金额(默认未支付，剩余金额为投资金额) - 支付金额
+                        item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || item.investAmount || 0) - (item.payAmount || 0);
                     });
                     this.fundData2 = _fundData2;
                     this.calcSurplusAmount();
@@ -1227,23 +1227,27 @@ export default {
         },
         //打开添加投资支付
         goAddPaid() {
+            this.isEditPay = false;
             if (this.contractData.length == 1) {
                 let contract = this.contractData[0];
-                this.paidForm1.contractAmount = contract.contractAmount;
-                this.paidForm1.contractId = contract.id;
                 this.paidForm1.payTitle = '';
                 this.paidForm1.payDate = '';
+                console.log(this.paidForm1.payDate);
+                this.paidForm1.contractAmount = contract.contractAmount;
+                this.paidForm1.contractId = contract.id;
+                // this.$set(this.$data.paidForm1, 'payDate', '');
                 //获得合同中的投资主体(基金)列表
                 getContractDetail(contract.id).then(resp => {
                     if (resp.data.status == '200') {
                         this.$set(this.$data.paidForm1, 'contractAmount', resp.data.result.projectContract.contractAmount);
                         this.contractDocument = resp.data.result.projectContract.documentInfo;
-                        this.fundData2 = resp.data.result.fundInfo;
 
+                        this.fundData2 = resp.data.result.fundInfo;
                         this.fundData2.forEach(function(item, index) {
                             item.contractFundId = item.id;
                             item.id = '';
-                            item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || 0) - (item.payAmount || 0);
+                            // 已支付金额 = 投资金额 - 剩余金额(默认未支付，剩余金额为投资金额) - 支付金额
+                            item.paidAmount = (item.investAmount || 0) - (item.surplusAmount || item.investAmount || 0) - (item.payAmount || 0);
                         });
                         this.sumPay();
                         this.calcSurplusAmount();
@@ -1261,7 +1265,7 @@ export default {
                     contractAmount: '',
                     surplusAmount: '',
                     stockRatio: '',
-                    payDate: ''
+                    payDate: changeDate(new Date())
                 };
                 this.fundData2 = [];
                 this.fundData2.push();
@@ -1272,6 +1276,9 @@ export default {
         },
         // 添加 投资支付 确定按钮
         confirmPaidAdd1() {
+            if(this.paidForm1.payDate == undefined || this.paidForm1.payDate == 'undefined'){
+                this.paidForm1.payDate = "";
+            }
             this.$refs["paidForm1"].validate((valid) => {
                 if (valid) {
                     let projectInvestPay = {
@@ -1294,7 +1301,9 @@ export default {
                     addContractPay(projectInvestPay, this.fundData2).then(resp => {
                         if (resp.data.status == '200') {
                             this.init();
-                            this.paidForm1 = {};
+                            this.paidForm1 = {
+                                payDate: ""
+                            };
                             this.fundData2 = [];
                             this.paidAdd1 = false;
                             this.payDocInfo = [];
@@ -1309,9 +1318,9 @@ export default {
         },
         //打开编辑投资支付
         goEditPay(id) {
+            this.isEditPay = true;
             getContractPayDetail(id).then(resp => {
                 if (resp.data.status == '200') {
-                    this.isEditPay = true;
                     this.paidForm1 = resp.data.result.projectInvestPay;
                     this.contractDocument = resp.data.result.projectInvestPay.contractDocument;
                     let documentInfo = resp.data.result.projectInvestPay.documentInfo;
@@ -1360,7 +1369,9 @@ export default {
                     editContractPay(projectInvestPay, this.fundData2).then(resp => {
                         if (resp.data.status == '200') {
                             this.init();
-                            this.paidForm1 = {};
+                            this.paidForm1 = {
+                                payDate: ""
+                            };
                             this.fundData2 = [];
                             this.paidAdd2 = !this.paidAdd2;
                             this.payDocInfo = [];
@@ -1570,11 +1581,9 @@ export default {
             let row = rows[index];
             if (!row) return console.warn('del row was null', row);
             let id = row.id;
-            console.log("DEL_ID" + id);
             switch (type) {
                 case 'fee': // 删除费用
                     delFee(id).then(resp => {
-                        console.log('delFee resp: ', resp);
                         if (resp.data.status == '200') {
                             this.getFee();
                         } else {
@@ -1586,7 +1595,6 @@ export default {
                     break;
                 case 'contract': // 删除合同
                     delContract(id).then(resp => {
-                        console.log('delContract resp: ', resp);
                         if (resp.data.status == '200') {
                             this.init();
                         } else {
@@ -1601,7 +1609,6 @@ export default {
                     break;
                 case 'pay':      // 删除投资支付
                     delPay(id).then(resp => {
-                        console.log('delPay resp: ', resp);
                         if (resp.data.status == '200') {
                             this.init();
                         } else {
@@ -1613,7 +1620,6 @@ export default {
                     break;
                 case 'share':    // 删除项目分红
                     delShare(id).then(resp => {
-                        console.log('delShare resp: ', resp);
                         if (resp.data.status == '200') {
                             this.init();
                         } else {
