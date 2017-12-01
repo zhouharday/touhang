@@ -17,12 +17,12 @@
             </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
-            <template scope="scope" v-if="scope.$index === 0">
-              <el-button type="text" size="small" style="color:#f05e5e"
+            <template scope="scope" >
+              <el-button v-if="scope.$index === 0" type="text" size="small" style="color:#f05e5e"
                       @click="handleEdit(scope.$index, scope.row)">
                       编辑
               </el-button>
-              <el-button type="text" size="small" style="color:#f05e5e"
+              <el-button v-if="scope.$index === 0" type="text" size="small" style="color:#f05e5e"
                       @click="handleDelete(scope.$index, scope.row)">
                       删除
               </el-button>
