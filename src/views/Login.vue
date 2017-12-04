@@ -19,7 +19,7 @@
           <button type="button" :loading="loading" class="login-btn" ondbclick="dbClick" @click="submitForm" :class="{ active : valueData }">登 录</button>
         </div>
         <hr class="hr" />
-        <div class="login-right-bottom">
+        <!-- <div class="login-right-bottom">
           <p>
             <img src="/static/img/联系我们.png">
           </p>
@@ -34,7 +34,7 @@
           <p>联系我们</p>
           <p>关于我们</p>
           <p>APP下载</p>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@ export default {
     };
   },
   methods: {
-    dbClick(){
+    dbClick() {
       return false;
     },
     getName(val) {
