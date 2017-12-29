@@ -100,7 +100,7 @@
                     </el-table-column>
                     <el-table-column label="截止基准日实际情况" prop="realSituation" align="center">
                     </el-table-column>
-                    <el-table-column label="完成率" prop="completionRate" align="center">
+                    <el-table-column label="完成率%" prop="completionRate" align="center">
                     </el-table-column>
                     <el-table-column label="下半年计划" prop="secondPlan" align="center">
                     </el-table-column>

@@ -6,8 +6,8 @@
         </el-table-column>
         <el-table-column label="角色" prop="roleName" align="center">
         </el-table-column>
-        <el-table-column label="添加日期" prop="addTime" align="center">
-        </el-table-column>
+        <!-- <el-table-column label="添加日期" prop="addTime" align="center">
+        </el-table-column> -->
         <el-table-column label="操作" align="center">
             <template scope="scope">
                 <el-button type="text" v-if="haveJurisdiction('TD-shanchu')" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -37,13 +37,13 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="添加日期" :label-width="formLabelWidth">
+            <!-- <el-form-item label="添加日期" :label-width="formLabelWidth">
                 <el-date-picker type="date"
                                 placeholder="选择日期"
                                 v-model="formTeam.addTime"
                                 style="width: 100%;">
                 </el-date-picker>
-            </el-form-item>
+            </el-form-item>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="modalAdd = false">取 消</el-button>

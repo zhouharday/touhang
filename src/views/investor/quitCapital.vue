@@ -13,7 +13,7 @@
                 <div v-else-if="scope.row.earningsType == '2'">分红</div>
             </template>
         </el-table-column>
-        <el-table-column label="分红金额" prop="shareMoney" align="center">
+        <el-table-column label="分红金额（元）" prop="shareMoney" align="center">
         </el-table-column>
         <el-table-column label="日期" align="center">
             <template scope="scope">
