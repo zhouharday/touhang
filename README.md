@@ -45,10 +45,10 @@ npm run dev //运行项目
 来源：知乎
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
-├── index.html                              入口页面  
-        ├── build                           构建脚本目录  
-        │   ├── build-server.js             运行本地构建服务器以访问构建后的页面  
-        │   ├── build.js                        生产环境构建脚本  
+├── index.html                              入口页面     
+        ├── build                           构建脚本目录     
+        │   ├── build-server.js             运行本地构建服务器以访问构建后的页面      
+        │   ├── build.js                        生产环境构建脚本      
         │   ├── dev-client.js                   开发服务器热重载脚本，主要用来实现开发阶段的页面自动刷新  
         │   ├── dev-server.js                   运行本地开发服务器  
         │   ├── utils.js                        构建相关工具方法  
