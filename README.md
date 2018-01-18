@@ -40,10 +40,7 @@ npm run dev //运行项目
         |-- README.md                             // 项目的说明文档  
         |-- server.js                             // 启动本地代理服务文件
 ## Project module ##
-        作者：阿安
-链接：https://www.zhihu.com/question/38213423/answer/128155176
-来源：知乎
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
 
 ├── index.html                              入口页面     
    ├── build                                构建脚本目录     
